@@ -1,0 +1,4 @@
+name 'inkling-postgresql'
+version '0.0.1'
+project_page "https://github.com/inkling/puppet-postgresql"
+description "PostgreSQL resources"
