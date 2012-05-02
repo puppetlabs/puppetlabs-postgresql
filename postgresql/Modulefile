@@ -1,4 +1,8 @@
 name 'inkling-postgresql'
 version '0.0.1'
-project_page "https://github.com/inkling/puppet-postgresql"
-description "PostgreSQL resources"
+source 'git://github.com/inkling/puppet-postgresql.git'
+author 'Inkling'
+description 'PostgreSQL defined resource types'
+summary 'PostgreSQL defined resource types'
+license 'Apache'
+project_page 'https://github.com/inkling/puppet-postgresql'
