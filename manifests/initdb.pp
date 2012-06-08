@@ -16,20 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-define postgresql::initdb(
-  $directory = $title,
-  $version = '9.1',
+class postgresql::initdb(
+  $datadir = $postgresql::params::datadir,
+  $initdb_path = $postgresql::params::initdb_path,
   $user = 'postgres',
   $group = 'postgres',
   $encoding = 'UTF8',
-  $options='') {
+  $options=''
+) inherits postgresql::params {
 
-  # TODO: This should be found based on the operating system; currently hardcoded to Ubuntu's path choice
-  exec {"/usr/lib/postgresql/${version}/bin/initdb --encoding '$encoding' --pgdata '$directory'":
-    command => "/usr/lib/postgresql/${version}/bin/initdb --encoding '$encoding' --pgdata '$directory'",
-    creates => "$directory",
+  exec {"${initdb_path} --encoding '$encoding' --pgdata '$datadir'":
+    creates => "${datadir}/PG_VERSION",
     user    => "$user",
     group   => "$group",
-    require => Package["postgresql-$version"],
   }
 }
