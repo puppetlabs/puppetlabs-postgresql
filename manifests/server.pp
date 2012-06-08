@@ -25,9 +25,17 @@ class postgresql::server (
     ensure => $package_ensure,
   }
 
+  $config_class = {}
+  $config_class['postgresql::config'] = $config_hash
+
+  create_resources( 'class', $config_class )
+
+  Package['postgresql-server'] -> Class['postgresql::config']
+
   if ($needs_initdb) {
     include postgresql::initdb
 
+    Class['postgresql::initdb'] -> Class['postgresql::config']
     Class['postgresql::initdb'] -> Service['postgresqld']
   }
 
