@@ -16,14 +16,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-define postgresql::user($username=$title, $password, $version='9.1', $db = 'postgres', $createdb=false, $superuser=false, $createrole=false) {
+define postgresql::database_user(
+    $username=$title,
+    $password_hash,
+    $db = 'postgres',
+    $createdb=false,
+    $superuser=false,
+    $createrole=false
+) {
   postgresql::role {$username:
-    db         => $db,
-    password   => $password,
-    version    => $version,
-    login      => true,
-    createdb   => $createdb,
-    superuser  => $superuser,
-    createrole => $createrole,
+    db              => $db,
+    password_hash   => $password_hash,
+    login           => true,
+    createdb        => $createdb,
+    superuser       => $superuser,
+    createrole      => $createrole,
   }
 }

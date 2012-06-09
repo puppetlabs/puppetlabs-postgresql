@@ -11,8 +11,6 @@
 # Sample Usage:
 #
 class postgresql::params {
-
-
   $user                     = 'postgres'
   $group                    = 'postgres'
   $ip_mask_postgres_user    = '127.0.0.1/32'
@@ -37,6 +35,8 @@ class postgresql::params {
       $server_package_name      = 'postgresql-server'
       $needs_initdb             = true
       $initdb_path              = '/usr/bin/initdb'
+      $createdb_path            = '/usr/bin/createdb'
+      $psql_path                = '/usr/bin/psql'
       $datadir                  = '/var/lib/pgsql/data/'
       $pg_hba_conf_path         = '/var/lib/pgsql/data/pg_hba.conf'
       $postgresql_conf_path     = '/var/lib/pgsql/data/postgresql.conf'
@@ -50,6 +50,8 @@ class postgresql::params {
       $server_package_name      = 'postgresql'
       $needs_initdb             = false
       $initdb_path              = "/usr/lib/postgresql/${::postgres_default_version}/bin/initdb"
+      $createdb_path            = "/usr/lib/postgresql/${::postgres_default_version}/bin/createdb"
+      $psql_path                = "/usr/lib/postgresql/${::postgres_default_version}/bin/psql"
       $datadir                  = "/var/lib/postgresql/${::postgres_default_version}/main"
       $pg_hba_conf_path         = "/etc/postgresql/${::postgres_default_version}/main/pg_hba.conf"
       $postgresql_conf_path     = "/etc/postgresql/${::postgres_default_version}/main/postgresql.conf"

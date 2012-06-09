@@ -16,19 +16,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-define postgresql::psql($command = $title, $unless, $db, $user = 'postgres', $version='9.1') {
+define postgresql::psql($command = $title, $unless, $db, $user = 'postgres') {
 
-  # FIXME: shellquote does not work, and this regex works for trivial things but not nested escaping.
+  require postgresql::params
+
+  # TODO: FIXME: shellquote does not work, and this regex works for trivial things but not nested escaping.
   # Need a lexer, preferably a ruby SQL parser to catch errors at catalog time
   # Possibly https://github.com/omghax/sql ?
 
-  $psql = "/usr/lib/postgresql/$version/bin/psql --no-password --tuples-only --quiet --dbname $db"
+  $psql = "${postgresql::params::psql_path} --no-password --tuples-only --quiet --dbname $db"
   $quoted_command = regsubst($command, '"', '\\"')
   $quoted_unless  = regsubst($unless,  '"', '\\"')
 
-  exec {"/bin/echo \"$quoted_command\" | $psql":
-    unless  => "/bin/echo \"$quoted_$unless\" | $psql | egrep -v -q '^$'",
-    user    => $user,
+  exec {"/bin/echo \"$quoted_command\" | $psql |egrep -v -q '^$'":
+    cwd         => '/tmp',
+    user        => $user,
+    returns     => 1,
+    unless      => "/bin/echo \"$quoted_$unless\" | $psql | egrep -v -q '^$'",
   }
 }
 

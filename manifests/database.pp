@@ -16,15 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-define postgresql::db(
+# TODO: in order to match up more closely with the mysql module, this probably
+#  needs to be moved over to ruby, and add support for ensurable.
+
+define postgresql::database(
   $dbname = $title,
-  $version = '9.1',
-  $encoding = 'UTF8',
-  $options='' )
+  $charset = 'UTF8')
 {
-  # TODO: This should be found based on the operating system; currently hardcoded to Ubuntu's path choice
-  exec {"/usr/lib/postgresql/${version}/bin/createdb --encoding '$encoding' '$dbname'":
-    unless  => "/usr/lib/postgresql/${version}/bin/psql --command=\"SELECT datname FROM pg_database WHERE datname=\'$dbname\' \" --pset=tuples_only | grep -q $dbname",
+  require postgresql::params
+
+
+  exec {"${postgresql::params::createdb_path} --template=template0 --encoding '$charset' --locale=C '$dbname'":
+    unless  => "${postgresql::params::psql_path} --command=\"SELECT datname FROM pg_database WHERE datname=\'$dbname\' \" --pset=tuples_only | grep -q $dbname",
     user    => 'postgres',
   }
 }
