@@ -38,7 +38,7 @@ define postgresql::database_grant(
 
   # TODO: this is a terrible hack; if they pass "ALL" as the desired privilege,
   #  we need a way to test for it--and has_database_privilege does not recognize
-  #  'ALL' as a valid privelege name.  So we probably need to hard-code a mapping
+  #  'ALL' as a valid privilege name.  So we probably need to hard-code a mapping
   #  between 'ALL' and the list of actual privileges that it entails, and loop
   #  over them to check them.  That sort of thing will probably need to wait until
   #  we port this over to ruby, so, for now, we're just going to assume that if

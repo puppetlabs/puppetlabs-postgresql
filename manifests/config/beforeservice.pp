@@ -2,9 +2,10 @@
 #
 # Parameters:
 #
-#   [*ip_mask_postgres_user*]   - ip mask for allowing remote access for postgres user; defaults to '127.0.0.1/32'
-#   [*ip_mask_all_users*]       - ip mask for allowing remote access for other users (besides postgres);
-#                                    defaults to '127.0.0.1/32'
+#   [*ip_mask_deny_postgres_user*]   - ip mask for denying remote access for postgres user; defaults to '0.0.0.0/0',
+#                                       meaning that all TCP access for postgres user is denied.
+#   [*ip_mask_allow_all_users*]      - ip mask for allowing remote access for other users (besides postgres);
+#                                       defaults to '127.0.0.1/32', meaning only allow connections from localhost
 #   [*listen_addresses*]        - what IP address(es) to listen on; comma-separated list of addresses; defaults to
 #                                    'localhost', '*' = all
 #   [*pg_hba_conf_path*]        - path to pg_hba.conf file
@@ -25,16 +26,16 @@
 #   has been started up.
 #
 #   class { 'postgresql::config::before_service':
-#     ip_mask_other_user    => '127.0.0.1/32',
+#     ip_mask_allow_all_users    => '0.0.0.0/0',
 #   }
 #
 class postgresql::config::beforeservice(
-  $ip_mask_postgres_user    = $postgresql::params::ip_mask_postgres_user,
-  $ip_mask_all_users        = $postgresql::params::ip_mask_all_users,
-  $listen_addresses         = $postgresql::params::listen_addresses,
-  $pg_hba_conf_path         = $postgresql::params::pg_hba_conf_path,
-  $postgresql_conf_path     = $postgresql::params::postgresql_conf_path,
-  $manage_redhat_firewall   = $postgresql::params::manage_redhat_firewall,
+  $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
+  $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
+  $listen_addresses             = $postgresql::params::listen_addresses,
+  $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
+  $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
+  $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall,
 ) inherits postgresql::params {
 
   File {

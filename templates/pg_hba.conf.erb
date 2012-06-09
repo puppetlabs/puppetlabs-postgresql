@@ -81,8 +81,8 @@ local   all         postgres                          ident
 # "local" is for Unix domain socket connections only
 local   all         all                               ident
 # IPv4 local connections:
-host    all         postgres    <%= @ip_mask_postgres_user + "\t" %>      md5
-host    all         all         <%= @ip_mask_all_users + "\t" %>      md5
+host    all         postgres    <%= @ip_mask_deny_postgres_user + "\t" %>      reject
+host    all         all         <%= @ip_mask_allow_all_users + "\t" %>      md5
 # IPv6 local connections:
 host    all         all         ::1/128               md5
 

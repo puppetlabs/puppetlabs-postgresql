@@ -16,7 +16,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-define postgresql::psql($command = $title, $unless, $db, $user = 'postgres') {
+define postgresql::psql(
+    $command = $title,
+    $unless,
+    $db,
+    $user = 'postgres',
+    $refreshonly = false
+) {
 
   require postgresql::params
 
@@ -33,6 +39,7 @@ define postgresql::psql($command = $title, $unless, $db, $user = 'postgres') {
     user        => $user,
     returns     => 1,
     unless      => "/bin/echo \"$quoted_$unless\" | $psql | egrep -v -q '^$'",
+    refreshonly => $refreshonly,
   }
 }
 
