@@ -25,7 +25,11 @@ define postgresql::database(
 {
   require postgresql::params
 
-  $createdb_command = "${postgresql::params::createdb_path} --template=template0 --encoding '$charset' --locale=C '$dbname'"
+  if ($::postgres_default_version != "8.1") {
+    $locale_option = "--locale=C"
+  }
+
+  $createdb_command = "${postgresql::params::createdb_path} --template=template0 --encoding '$charset' $locale_option '$dbname'"
 
   exec { $createdb_command :
     unless  => "${postgresql::params::psql_path} --command=\"SELECT datname FROM pg_database WHERE datname=\'$dbname\' \" --pset=tuples_only | grep -q $dbname",

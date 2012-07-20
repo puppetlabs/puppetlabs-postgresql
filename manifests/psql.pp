@@ -30,7 +30,11 @@ define postgresql::psql(
   # Need a lexer, preferably a ruby SQL parser to catch errors at catalog time
   # Possibly https://github.com/omghax/sql ?
 
-  $psql = "${postgresql::params::psql_path} --no-password --tuples-only --quiet --dbname $db"
+  if ($::postgres_default_version != "8.1") {
+    $no_password_option = "--no-password"
+  }
+
+  $psql = "${postgresql::params::psql_path} $no_password_option --tuples-only --quiet --dbname $db"
   $quoted_command = regsubst($command, '"', '\\"')
   $quoted_unless  = regsubst($unless,  '"', '\\"')
 
