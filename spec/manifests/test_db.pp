@@ -16,20 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class postgresql_tests::test_db($db, $version = '8.4') {
+class postgresql_tests::test_db($db) {
 
-  package {"postgresql-$version": 
-    ensure => present,
-  }
-
-  service {"postgresql-$version":
-    ensure  => running,
-    require => Package["postgresql-$version"],
-  }
+  include postgresql::server
 
   postgresql::db { $db:
-    version  => $version,
-    encoding => 'SQL_ASCII', # Unfortunately, this puppet module will not make the package install with UTF-8 encoding
-    require  => Service["postgresql-$version"],
+    user        => $db,
+    password    => $db,
   }
 }
