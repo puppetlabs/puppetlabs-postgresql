@@ -33,7 +33,7 @@
 # Sample Usage:
 #
 #  postgresql::database_user { 'frank':
-#    password_hash => postgresql_passowrd('password'),
+#    password_hash => postgresql_password('frank', 'password'),
 #  }
 #
 

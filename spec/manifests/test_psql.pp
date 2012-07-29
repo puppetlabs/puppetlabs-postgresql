@@ -16,23 +16,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class postgresql_tests::test_psql($command = $title, $unless, $version = '8.4') {
+class postgresql_tests::test_psql($command = $title, $unless) {
 
-  package {"postgresql-$version": 
-    ensure => present,
-  }
-
-  service {"postgresql-$version":
-    ensure  => running,
-    require => Package["postgresql-$version"],
-  }
+  include postgresql::server
 
   postgresql::psql { $title:
     db       => 'postgres',
     user     => 'postgres',
     command  => $command,
     unless   => $unless,
-    version  => $version,
-    require  => Service["postgresql-$version"],
+    require  => Class['postgresql::server'],
   }
 }
