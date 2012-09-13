@@ -20,9 +20,6 @@ class postgresql::params {
   $manage_redhat_firewall       = false
 
   case $::operatingsystem {
-    "Ubuntu": {
-      $service_provider = upstart
-    }
     default: {
       $service_provider = undef
     }
