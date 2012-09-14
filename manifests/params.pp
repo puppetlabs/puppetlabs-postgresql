@@ -19,6 +19,16 @@ class postgresql::params {
   # TODO: figure out a way to make this not platform-specific
   $manage_redhat_firewall       = false
 
+  # This is a bit hacky, but if the puppet nodes don't have pluginsync enabled,
+  # they will fail with a not-so-helpful error message.  Here we are explicitly
+  # verifying that the custom fact exists (which implies that pluginsync is
+  # enabled and succeeded).  If not, we fail with a hint that tells the user
+  # that pluginsync might not be enabled.  Ideally this would be handled directly
+  # in puppet.
+  if ($::postgres_default_version == undef) {
+    fail "No value for postgres_default_version facter fact; it's possible that you don't have pluginsync enabled."
+  }
+
   case $::operatingsystem {
     "Ubuntu": {
       $service_provider = upstart
@@ -51,7 +61,11 @@ class postgresql::params {
         }
 
         'Ubuntu': {
-            $service_name       = "postgresql-${::postgres_default_version}"
+            case $::lsbmajdistrelease {
+                # thanks, ubuntu
+                '10':       { $service_name = "postgresql-${::postgres_default_version}" }
+                default:    { $service_name = "postgresql" }
+            }
         }
       }
 

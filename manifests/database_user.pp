@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Define: mysql::db
+# Define: postgresql::database_user
 #
 # This type creates a postgres database user.
 #
