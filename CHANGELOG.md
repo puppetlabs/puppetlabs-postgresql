@@ -1,3 +1,5 @@
+2012-09-17 - Version 0.3.0 released
+
 2012-09-14 - Chris Price <chris@puppetlabs.com>
  * Add a type for validating a postgres connection (ce4a049)
 
