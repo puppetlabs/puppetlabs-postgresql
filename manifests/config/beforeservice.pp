@@ -67,13 +67,13 @@ class postgresql::config::beforeservice(
   #        an out-of-the-box firewall configuration that seems trickier to manage
   # TODO: get rid of hard-coded port
   if ($manage_redhat_firewall and $firewall_supported) {
-      exec { "persist-firewall":
+      exec { "postgresql-persist-firewall":
         command => $persist_firewall_command,
         refreshonly => true,
       }
 
       Firewall {
-        notify => Exec["persist-firewall"]
+        notify => Exec["postgresql-persist-firewall"]
       }
 
       firewall { '5432 accept - postgres':
