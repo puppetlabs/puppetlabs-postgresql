@@ -17,6 +17,7 @@ class postgresql::server (
   $package_ensure   = 'present',
   $service_name     = $postgresql::params::service_name,
   $service_provider = $postgresql::params::service_provider,
+  $service_status   = $postgresql::params::service_status,
   $config_hash      = {}
 ) inherits postgresql::params {
 
@@ -45,6 +46,7 @@ class postgresql::server (
     enable   => true,
     require  => Package['postgresql-server'],
     provider => $service_provider,
+    status   => $service_status,
   }
 
 
