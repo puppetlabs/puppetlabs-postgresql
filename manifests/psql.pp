@@ -42,7 +42,7 @@ define postgresql::psql(
     cwd         => '/tmp',
     user        => $user,
     returns     => 1,
-    unless      => "/bin/echo \"$quoted_$unless\" | $psql | egrep -v -q '^$'",
+    unless      => "/bin/echo \"$quoted_unless\" | $psql | egrep -v -q '^$'",
     refreshonly => $refreshonly,
   }
 }
