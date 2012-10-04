@@ -30,8 +30,8 @@
 #
 class postgresql::config(
   $postgres_password            = undef,
-  $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_postgres_user,
-  $ip_mask_allow_all_users      = $postgresql::params::ip_mask_all_users,
+  $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
+  $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
   $listen_addresses             = $postgresql::params::listen_addresses,
   $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
   $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
