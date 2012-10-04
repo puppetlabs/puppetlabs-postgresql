@@ -50,7 +50,7 @@ define postgresql::validate_db_connection(
     $database_username,
     $database_password,
     $database_name,
-    $client_package_name = "",
+    $client_package_name = ""
 ) {
     include postgresql::params
 
