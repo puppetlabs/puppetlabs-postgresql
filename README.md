@@ -16,16 +16,40 @@ And the fallback, analogous to exec resources, only for SQL statements:
 Basic usage
 -----------
 
-    postgresql::user{'marmot':
-        password => 'foo',
-    }
+Manage a PostgreSQL server with sane defaults (login via `sudo -u postgres psql`):
 
-    postgresql::grant{'grant select to marmot':
-       grantee   => 'marmot',
-       on_object => 'my_table',
-       perm      => 'select',
-       require   => Postgresql::User['marmot'],
-    }
+```Puppet
+include postgresql::server
+```
+
+...or a custom configuration:
+
+```Puppet
+class { 'postgresql::server':
+    config_hash => {
+        'ip_mask_deny_postgres_user' => '0.0.0.0/32',
+        'ip_mask_allow_all_users'    => '0.0.0.0/0',
+        'listen_addresses'           => '*',
+        'manage_redhat_firewall'     => true,
+        'postgres_password'          => 'TPSrep0rt!',
+    },
+}
+```
+
+Manage users / roles and permissions:
+
+```Puppet
+postgresql::user{'marmot':
+    password => 'foo',
+}
+
+postgresql::grant{'grant select to marmot':
+   grantee   => 'marmot',
+   on_object => 'my_table',
+   perm      => 'select',
+   require   => Postgresql::User['marmot'],
+}
+```
 
 etc, etc.
 
