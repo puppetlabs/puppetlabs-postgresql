@@ -40,6 +40,7 @@ class postgresql::params {
       $service_name             = 'postgresql'
       $client_package_name      = 'postgresql'
       $server_package_name      = 'postgresql-server'
+      $devel_package_name       = 'postgresql-devel'
       $needs_initdb             = true
       $initdb_path              = '/usr/bin/initdb'
       $createdb_path            = '/usr/bin/createdb'
@@ -68,6 +69,7 @@ class postgresql::params {
 
       $client_package_name      = 'postgresql-client'
       $server_package_name      = 'postgresql'
+      $devel_package_name       = 'libpq-dev'
       $needs_initdb             = false
       $initdb_path              = "/usr/lib/postgresql/${::postgres_default_version}/bin/initdb"
       $createdb_path            = "/usr/lib/postgresql/${::postgres_default_version}/bin/createdb"
