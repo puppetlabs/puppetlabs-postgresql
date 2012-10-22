@@ -8,6 +8,10 @@
 #                                       defaults to '127.0.0.1/32', meaning only allow connections from localhost
 #   [*listen_addresses*]        - what IP address(es) to listen on; comma-separated list of addresses; defaults to
 #                                    'localhost', '*' = all
+#   [*ipv4acls*]                - list of strings for access control for connection method, users, databases, IPv4
+#                                    addresses; see postgresql documentation about pg_hba.conf for information
+#   [*ipv6acls*]                - list of strings for access control for connection method, users, databases, IPv6
+#                                    addresses; see postgresql documentation about pg_hba.conf for information
 #   [*pg_hba_conf_path*]        - path to pg_hba.conf file
 #   [*postgresql_conf_path*]    - path to postgresql.conf file
 #   [*manage_redhat_firewall*]  - boolean indicating whether or not the module should open a port in the firewall on
