@@ -33,6 +33,8 @@ class postgresql::config::beforeservice(
   $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
   $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
   $listen_addresses             = $postgresql::params::listen_addresses,
+  $ipv4acls                     = $postgresql::params::ipv4acls,
+  $ipv6acls                     = $postgresql::params::ipv6acls,
   $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
   $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
   $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
