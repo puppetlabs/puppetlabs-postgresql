@@ -1,3 +1,12 @@
+Transferred from Inkling
+========================
+
+This Puppet module was originally authored by Inkling Systems. The maintainer preferred
+that Puppet Labs take ownership of the module for future improvement and maintenance as
+Puppet Labs is using it in the PuppetDB module. Existing pull requests and issues were
+transferred over, please fork and continue to contribute here instead of Inkling.
+Previously: https://github.com/inkling/puppet-postgresql 
+
 Puppet module for PostgreSQL resources
 ======================================
 
