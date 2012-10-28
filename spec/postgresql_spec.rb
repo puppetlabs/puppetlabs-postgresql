@@ -34,6 +34,7 @@ describe "postgresql" do
     @logger.debug("Running command: '#{args[0]}'")
      @env.primary_vm.channel.sudo(args[0]) do |ch, data|
        @logger.debug(data)
+       data
      end
   end
 
@@ -144,8 +145,10 @@ describe "postgresql" do
       # Run again to check for idempotence
       sudo_and_log("puppet apply --detailed-exitcodes -e '#{test_class}'")
   
-      # Check that the user can select from the table in
+      # Check that the user can create a table in the database
       sudo_and_log('sudo -u psql_grant_tester psql --command="create table foo (foo int)" postgres')
+
+      sudo_and_log('sudo -u psql_grant_tester psql --command="drop table foo" postgres')
     end
   end
 end
