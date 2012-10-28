@@ -26,9 +26,9 @@ define postgresql::psql(
 
   require postgresql::params
 
-  # TODO: FIXME: shellquote does not work, and this regex works for trivial things but not nested escaping.
-  # Need a lexer, preferably a ruby SQL parser to catch errors at catalog time
-  # Possibly https://github.com/omghax/sql ?
+  # TODO: FIXME: shellquote does not work, and this regex works for trivial
+  # things but not nested escaping.  Need a lexer, preferably a ruby SQL parser
+  # to catch errors at catalog time.  Possibly https://github.com/omghax/sql ?
 
   if ($::postgres_default_version != "8.1") {
     $no_password_option = "--no-password"
@@ -38,7 +38,13 @@ define postgresql::psql(
   $quoted_command = regsubst($command, '"', '\\"')
   $quoted_unless  = regsubst($unless,  '"', '\\"')
 
-  exec {"/bin/echo \"$quoted_command\" | $psql |egrep -v -q '^$'":
+  $final_cmd = "/bin/echo \"$quoted_command\" | $psql |egrep -v -q '^$'"
+
+  notify { "deprecation warning: $final_cmd":
+    message => "postgresql::psql is deprecated ; please use postgresql_psql instead.",
+  } ->
+
+  exec { $final_cmd:
     cwd         => '/tmp',
     user        => $user,
     returns     => 1,

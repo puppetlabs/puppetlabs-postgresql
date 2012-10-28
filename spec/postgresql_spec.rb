@@ -32,10 +32,12 @@ describe "postgresql" do
 
   def sudo_and_log(*args)
     @logger.debug("Running command: '#{args[0]}'")
-     @env.primary_vm.channel.sudo(args[0]) do |ch, data|
-       @logger.debug(data)
-       data
-     end
+    result = ""
+    @env.primary_vm.channel.sudo(args[0]) do |ch, data|
+      result << data
+      @logger.debug(data)
+    end
+    result
   end
 
   before(:all) do
@@ -117,6 +119,15 @@ describe "postgresql" do
 
       # Check for exit code 0
       sudo_and_log("puppet apply --detailed-exitcodes -e '#{test_class}'")
+    end
+
+    it 'should emit a deprecation warning' do
+      test_class = 'class {"postgresql_tests::test_psql": command => "SELECT * FROM pg_datbase limit 1", unless => "SELECT 1 WHERE 1=1" }'
+
+      data = sudo_and_log("puppet apply --detailed-exitcodes -e '#{test_class}'; [ $? == 2 ]")
+
+      data.should match /postgresql::psql is deprecated/
+
     end
   end
 
