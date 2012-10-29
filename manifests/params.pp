@@ -16,6 +16,8 @@ class postgresql::params {
   $ip_mask_deny_postgres_user   = '0.0.0.0/0'
   $ip_mask_allow_all_users      = '127.0.0.1/32'
   $listen_addresses             = 'localhost'
+  $ipv4acls                     = []
+  $ipv6acls                     = []
   # TODO: figure out a way to make this not platform-specific
   $manage_redhat_firewall       = false
 

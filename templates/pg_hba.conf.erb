@@ -83,6 +83,12 @@ local   all         all                               ident <%= "sameuser" if @p
 # IPv4 local connections:
 host    all         postgres    <%= @ip_mask_deny_postgres_user + "\t" %>      reject
 host    all         all         <%= @ip_mask_allow_all_users + "\t" %>      md5
+<% @ipv4acls.each do |acl|; parts = acl.split -%>
+<%= parts[0] + "\t" + parts[1] + "\t" + parts[2] + "\t\t" + parts[3] + "\t\t" + parts[4] + "\t" + parts.last(parts.length - 5).join(" ") %>
+<% end -%>
 # IPv6 local connections:
 host    all         all         ::1/128               md5
+<% @ipv6acls.each do |acl|; parts = acl.split -%>
+<%= parts[0] + "\t" + parts[1] + "\t" + parts[2] + "\t\t" + parts[3] + "\t\t" + parts[4] + "\t" + parts.last(parts.length - 5).join(" ") %>
+<% end -%>
 
