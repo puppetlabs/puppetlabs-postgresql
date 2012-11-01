@@ -35,8 +35,8 @@ define postgresql::psql(
   }
 
   $psql = "${postgresql::params::psql_path} $no_password_option --tuples-only --quiet --dbname $db"
-  $quoted_command = regsubst($command, '"', '\\"')
-  $quoted_unless  = regsubst($unless,  '"', '\\"')
+  $quoted_command = regsubst($command, '"', '\\"', 'G')
+  $quoted_unless  = regsubst($unless,  '"', '\\"', 'G')
 
   exec {"/bin/echo \"$quoted_command\" | $psql |egrep -v -q '^$'":
     cwd         => '/tmp',
