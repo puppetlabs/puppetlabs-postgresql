@@ -20,25 +20,25 @@
 #  needs to be moved over to ruby, and add support for ensurable.
 
 define postgresql::database(
-  $dbname = $title,
+  $dbname  = $title,
   $charset = 'UTF8')
 {
   require postgresql::params
 
-  if ($::postgres_default_version != "8.1") {
-    $locale_option = "--locale=C"
+  if ($::postgres_default_version != '8.1') {
+    $locale_option = '--locale=C'
   }
 
-  $createdb_command = "${postgresql::params::createdb_path} --template=template0 --encoding '$charset' $locale_option '$dbname'"
+  $createdb_command = "${postgresql::params::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
 
   exec { $createdb_command :
-    unless  => "${postgresql::params::psql_path} --command=\"SELECT datname FROM pg_database WHERE datname=\'$dbname\' \" --pset=tuples_only | grep -q $dbname",
+    unless  => "${postgresql::params::psql_path} --command=\"SELECT datname FROM pg_database WHERE datname=\'${dbname}\' \" --pset=tuples_only | grep -q ${dbname}",
     user    => 'postgres',
   }
 
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
-  postgresql::psql {"REVOKE CONNECT ON DATABASE $dbname FROM public":
+  postgresql::psql {"REVOKE CONNECT ON DATABASE ${dbname} FROM public":
     db          => 'postgres',
     user        => 'postgres',
     unless      => 'SELECT 1 where 1 = 0',

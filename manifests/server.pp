@@ -22,8 +22,8 @@ class postgresql::server (
 ) inherits postgresql::params {
 
   package { 'postgresql-server':
-    name   => $package_name,
     ensure => $package_ensure,
+    name   => $package_name,
   }
 
   $config_class = {}
@@ -41,8 +41,8 @@ class postgresql::server (
   }
 
   service { 'postgresqld':
-    name     => $service_name,
     ensure   => running,
+    name     => $service_name,
     enable   => true,
     require  => Package['postgresql-server'],
     provider => $service_provider,

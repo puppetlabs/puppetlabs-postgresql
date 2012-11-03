@@ -46,11 +46,11 @@
 
 define postgresql::validate_db_connection(
     $database_host,
-    $database_port = 5432,
-    $database_username,
-    $database_password,
     $database_name,
-    $client_package_name = ""
+    $database_password,
+    $database_username,
+    $client_package_name = '',
+    $database_port       = 5432
 ) {
     include postgresql::params
 
@@ -65,18 +65,18 @@ define postgresql::validate_db_connection(
     # Make sure the postgres client package is installed; we need it for
     # `psql`.
     package { 'postgresql-client':
-        name   => $package_name,
         ensure => present,
+        name   => $package_name,
     }
 
     # TODO: port to ruby
-    $psql = "${postgresql::params::psql_path} --tuples-only --quiet -h $database_host -U $database_username -p $database_port --dbname $database_name"
+    $psql = "${postgresql::params::psql_path} --tuples-only --quiet -h ${database_host} -U ${database_username} -p ${database_port} --dbname ${database_name}"
 
-    $exec_name = "validate postgres connection for $database_host/$database_name"
-    exec {$exec_name:
-      command     => "/bin/echo \"SELECT 1\" | $psql",
+    $exec_name = "validate postgres connection for ${database_host}/${database_name}"
+    exec { $exec_name:
+      command     => "/bin/echo \"SELECT 1\" | ${psql}",
       cwd         => '/tmp',
-      environment => "PGPASSWORD=$database_password",
+      environment => "PGPASSWORD=${database_password}",
       logoutput   => 'on_failure',
       require     => Package['postgresql-client'],
     }
