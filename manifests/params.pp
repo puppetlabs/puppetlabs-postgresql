@@ -57,14 +57,14 @@ class postgresql::params {
     'Debian': {
       case $::operatingsystem {
         'Debian': {
-            $service_name       = "postgresql"
+            $service_name       = 'postgresql'
         }
 
         'Ubuntu': {
             case $::lsbmajdistrelease {
                 # thanks, ubuntu
                 '10':       { $service_name = "postgresql-${::postgres_default_version}" }
-                default:    { $service_name = "postgresql" }
+                default:    { $service_name = 'postgresql' }
             }
         }
       }
