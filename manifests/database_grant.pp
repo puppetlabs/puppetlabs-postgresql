@@ -30,8 +30,8 @@ define postgresql::database_grant(
     $privilege,
     $db,
     $role,
-    $psql_db = 'postgres',
-    $psql_user='postgres'
+    $psql_db   = 'postgres',
+    $psql_user ='postgres'
 ) {
 
   # TODO: FIXME: only works on databases, due to using has_database_privilege
@@ -49,10 +49,10 @@ define postgresql::database_grant(
     default => $privilege,
   }
 
-  postgresql::psql {"GRANT $privilege ON database $db TO \"$role\"":
+  postgresql::psql { "GRANT ${privilege} ON database ${db} TO \"${role}\"":
     db      => $psql_db,
     user    => $psql_user,
-    unless  => "SELECT 1 WHERE has_database_privilege('$role', '$db', '$unless_privilege')",
+    unless  => "SELECT 1 WHERE has_database_privilege('${role}', '${db}', '${unless_privilege}')",
   }
 }
 

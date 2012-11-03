@@ -17,8 +17,8 @@ class postgresql (
 ) inherits postgresql::params {
 
   package { 'postgresql_client':
-    name    => $package_name,
     ensure  => $package_ensure,
+    name    => $package_name,
   }
 
 }

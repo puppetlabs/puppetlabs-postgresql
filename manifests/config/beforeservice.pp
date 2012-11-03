@@ -55,7 +55,7 @@ class postgresql::config::beforeservice(
   file { 'pg_hba.conf':
     ensure      => file,
     path        => $pg_hba_conf_path,
-    content     => template("postgresql/pg_hba.conf.erb"),
+    content     => template('postgresql/pg_hba.conf.erb'),
     notify      => Service['postgresqld'],
   }
 
@@ -73,18 +73,18 @@ class postgresql::config::beforeservice(
   #        an out-of-the-box firewall configuration that seems trickier to manage
   # TODO: get rid of hard-coded port
   if ($manage_redhat_firewall and $firewall_supported) {
-      exec { "postgresql-persist-firewall":
-        command => $persist_firewall_command,
+      exec { 'postgresql-persist-firewall':
+        command     => $persist_firewall_command,
         refreshonly => true,
       }
 
       Firewall {
-        notify => Exec["postgresql-persist-firewall"]
+        notify => Exec['postgresql-persist-firewall']
       }
 
       firewall { '5432 accept - postgres':
-        port => '5432',
-        proto => 'tcp',
+        port   => '5432',
+        proto  => 'tcp',
         action => 'accept',
       }
   }

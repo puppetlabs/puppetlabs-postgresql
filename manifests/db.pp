@@ -46,7 +46,7 @@ define postgresql::db (
     require     => Class['postgresql::server'],
   }
 
-  postgresql::database_user { "${user}":
+  postgresql::database_user { $user:
     # TODO: ensure is not yet supported
     #ensure         => present,
     password_hash   => $password,
@@ -59,7 +59,7 @@ define postgresql::db (
     db              => $name,
     role            => $user,
     #provider       => 'postgresql',
-    require         => Postgresql::Database_user["${user}"],
+    require         => Postgresql::Database_user[$user],
   }
 
 }

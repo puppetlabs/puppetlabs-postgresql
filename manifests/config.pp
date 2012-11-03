@@ -48,7 +48,7 @@ class postgresql::config(
     #  to the "beforeservice" and "afterservice" classes, and ensure
     #  the proper ordering.
 
-    class { "postgresql::config::beforeservice":
+    class { 'postgresql::config::beforeservice':
       ip_mask_deny_postgres_user    => $ip_mask_deny_postgres_user,
       ip_mask_allow_all_users       => $ip_mask_allow_all_users,
       listen_addresses              => $listen_addresses,
@@ -59,7 +59,7 @@ class postgresql::config(
       manage_redhat_firewall        => $manage_redhat_firewall,
     }
 
-    class { "postgresql::config::afterservice":
+    class { 'postgresql::config::afterservice':
       postgres_password        => $postgres_password,
     }
 
