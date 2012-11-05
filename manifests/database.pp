@@ -31,19 +31,21 @@ define postgresql::database(
 
   $createdb_command = "${postgresql::params::createdb_path} --template=template0 --encoding '$charset' $locale_option '$dbname'"
 
+  postgresql_psql { "Check for existence of db '$dbname'":
+    command => "SELECT 1",
+    unless  => "SELECT datname FROM pg_database WHERE datname='$dbname'",
+  } ~>
+
   exec { $createdb_command :
-    unless  => "${postgresql::params::psql_path} --command=\"SELECT datname FROM pg_database WHERE datname=\'$dbname\' \" --pset=tuples_only | grep -q $dbname",
+    refreshonly => true,
     user    => 'postgres',
-  }
+  } ~>
 
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
-  postgresql::psql {"REVOKE CONNECT ON DATABASE $dbname FROM public":
+  postgresql_psql {"REVOKE CONNECT ON DATABASE $dbname FROM public":
     db          => 'postgres',
-    user        => 'postgres',
-    unless      => 'SELECT 1 where 1 = 0',
     refreshonly => true,
-    subscribe   => Exec[$createdb_command],
   }
 
 }
