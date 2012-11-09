@@ -16,9 +16,12 @@ class postgresql (
   $package_ensure = 'present'
 ) inherits postgresql::params {
 
+  include postgresql::repo
+
   package { 'postgresql_client':
     ensure  => $package_ensure,
     name    => $package_name,
+    require => Class['postgresql::repo'],
   }
 
 }

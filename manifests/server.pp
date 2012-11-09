@@ -1,10 +1,12 @@
 # Class: postgresql::server
 #
-# manages the installation of the postgresql server.  manages the package and service
+# == Class: postgresql::server
+# Manages the installation of the postgresql server.  manages the package and
+# service.
 #
-# Parameters:
-#   [*package_name*] - name of package
-#   [*service_name*] - name of service
+# === Parameters:
+# [*package_name*] - name of package
+# [*service_name*] - name of service
 #
 # Actions:
 #
@@ -21,9 +23,12 @@ class postgresql::server (
   $config_hash      = {}
 ) inherits postgresql::params {
 
+  include postgresql::repo
+
   package { 'postgresql-server':
-    ensure => $package_ensure,
-    name   => $package_name,
+    ensure  => $package_ensure,
+    name    => $package_name,
+    require => Class['postgresql::repo']
   }
 
   $config_class = {}
@@ -33,7 +38,7 @@ class postgresql::server (
 
   Package['postgresql-server'] -> Class['postgresql::config']
 
-  if ($needs_initdb) {
+  if ($postgresql::params::needs_initdb) {
     include postgresql::initdb
 
     Class['postgresql::initdb'] -> Class['postgresql::config']

@@ -48,13 +48,6 @@ class postgresql::params {
       
       case $version {
         '9.0': {         
-          yumrepo { "postgresql90":
-            baseurl     => 'http://yum.postgresql.org/9.0/redhat/rhel-$releasever-$basearch',
-            descr       => "Postgresql 9.0 Yum Repo",
-            enabled     => 1,
-            gpgcheck    => 0,
-            before      => Package['postgresql-server']
-          }
           $service_name             = 'postgresql-9.0'
           $client_package_name      = 'postgresql90'
           $server_package_name      = 'postgresql90-server'
