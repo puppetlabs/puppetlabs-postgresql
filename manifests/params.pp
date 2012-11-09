@@ -10,7 +10,10 @@
 #
 # Sample Usage:
 #
-class postgresql::params {
+class postgresql::params {  
+  include postgresql::version
+  
+  $version                      = $postgresql::version::version
   $user                         = 'postgres'
   $group                        = 'postgres'
   $ip_mask_deny_postgres_user   = '0.0.0.0/0'
@@ -39,19 +42,35 @@ class postgresql::params {
 
   case $::osfamily {
     'RedHat': {
-      $service_name             = 'postgresql'
-      $client_package_name      = 'postgresql'
-      $server_package_name      = 'postgresql-server'
-      $devel_package_name       = 'postgresql-devel'
       $needs_initdb             = true
-      $initdb_path              = '/usr/bin/initdb'
-      $createdb_path            = '/usr/bin/createdb'
-      $psql_path                = '/usr/bin/psql'
-      $datadir                  = '/var/lib/pgsql/data/'
-      $pg_hba_conf_path         = '/var/lib/pgsql/data/pg_hba.conf'
-      $postgresql_conf_path     = '/var/lib/pgsql/data/postgresql.conf'
       $firewall_supported       = true
       $persist_firewall_command = '/sbin/iptables-save > /etc/sysconfig/iptables'
+      
+      case $version {
+        '9.0': {         
+          yumrepo { "postgresql90":
+            baseurl     => 'http://yum.postgresql.org/9.0/redhat/rhel-$releasever-$basearch',
+            descr       => "Postgresql 9.0 Yum Repo",
+            enabled     => 1,
+            gpgcheck    => 0,
+            before      => Package['postgresql-server']
+          }
+          $service_name             = 'postgresql-9.0'
+          $client_package_name      = 'postgresql90'
+          $server_package_name      = 'postgresql90-server'
+          $devel_package_name       = 'postgresql90-devel'
+          $bindir                   = '/usr/pgsql-9.0/bin'
+          $datadir                  = '/var/lib/pgsql/9.0/data/'                
+        }
+        default: { 
+          $service_name             = 'postgresql'
+          $client_package_name      = 'postgresql'
+          $server_package_name      = 'postgresql-server'
+          $devel_package_name       = 'postgresql-devel'
+          $bindir                   = '/usr/bin'
+          $datadir                  = '/var/lib/pgsql/data/'
+        } 
+      } # case
     }
 
     'Debian': {
@@ -73,12 +92,8 @@ class postgresql::params {
       $server_package_name      = 'postgresql'
       $devel_package_name       = 'libpq-dev'
       $needs_initdb             = false
-      $initdb_path              = "/usr/lib/postgresql/${::postgres_default_version}/bin/initdb"
-      $createdb_path            = "/usr/lib/postgresql/${::postgres_default_version}/bin/createdb"
-      $psql_path                = "/usr/lib/postgresql/${::postgres_default_version}/bin/psql"
+      $bindir                   = "/usr/lib/postgresql/${::postgres_default_version}/bin"
       $datadir                  = "/var/lib/postgresql/${::postgres_default_version}/main"
-      $pg_hba_conf_path         = "/etc/postgresql/${::postgres_default_version}/main/pg_hba.conf"
-      $postgresql_conf_path     = "/etc/postgresql/${::postgres_default_version}/main/postgresql.conf"
       $firewall_supported       = false
       $service_status           = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
       # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
@@ -86,10 +101,16 @@ class postgresql::params {
 
     }
 
-
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
     }
+    
   }
+  $initdb_path          = "${bindir}/initdb"
+  $createdb_path        = "${bindir}/createdb"
+  $psql_path            = "${bindir}/psql"      
+  $pg_hba_conf_path     = "${datadir}pg_hba.conf"
+  $postgresql_conf_path = "${datadir}postgresql.conf"
+  
 
 }
