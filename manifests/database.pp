@@ -38,7 +38,7 @@ define postgresql::database(
 
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
-  postgresql::psql {"REVOKE CONNECT ON DATABASE ${dbname} FROM public":
+  postgresql::psql {"REVOKE CONNECT ON DATABASE \"${dbname}\" FROM public":
     db          => 'postgres',
     user        => 'postgres',
     unless      => 'SELECT 1 where 1 = 0',
