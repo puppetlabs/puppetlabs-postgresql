@@ -49,5 +49,8 @@ class postgresql::server (
     status   => $service_status,
   }
 
-
+  exec {'reload_postgresql':
+    refreshonly => true,
+    command => "/usr/bin/service ${postgresql::params::service_name} reload",
+  }
 }
