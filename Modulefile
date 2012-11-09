@@ -7,5 +7,5 @@ summary 'PostgreSQL defined resource types'
 license 'Apache'
 project_page 'https://github.com/puppetlabs/puppet-postgresql/issues'
 
-dependency 'puppetlabs/stdlib', '3.x'
+dependency 'puppetlabs/stdlib', '>= 2.0.0'
 dependency 'puppetlabs/firewall', '>= 0.0.4'
