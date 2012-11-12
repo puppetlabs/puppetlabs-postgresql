@@ -56,7 +56,7 @@ class postgresql::config::beforeservice(
     ensure      => file,
     path        => $pg_hba_conf_path,
     content     => template('postgresql/pg_hba.conf.erb'),
-    notify      => Service['postgresqld'],
+    notify      => Exec['reload_postgresql'],
   }
 
   # We must set a "listen_addresses" line in the postgresql.conf if we
