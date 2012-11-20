@@ -21,8 +21,6 @@ class postgresql::devel(
   
   $package_name_real = $package_name ? { undef => $postgresql::packages::devel_package_name, default => $package_name }
 
-  Class['postgresql::repo'] -> Package['postgresql_devel']
-
   package { 'postgresql_devel':
     ensure => $package_ensure,
     name   => $package_name_real,

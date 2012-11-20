@@ -33,14 +33,11 @@ class postgresql::server (
   include postgresql::paths
 
   $package_name_real = $package_name ? { undef => $postgresql::packages::server_package_name, default => $package_name }
-  
 
-  class { 'postgresql::repo': }
 
   package { 'postgresql-server':
     ensure  => $package_ensure,
     name    => $package_name_real,
-    require => Class['postgresql::repo']
   }
   
   $config_class = {}
