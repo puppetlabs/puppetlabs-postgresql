@@ -13,14 +13,16 @@
 # Sample Usage:
 #
 class postgresql::devel(
-  $package_name   = $postgresql::params::devel_package_name,
+  $package_name   = undef,
   $package_ensure = 'present'
-) inherits postgresql::params {
+) {
 
   require postgresql
+  
+  $package_name_real = $package_name ? { undef => $postgresql::packages::devel_package_name, default => $package_name }
 
   package { 'postgresql_devel':
     ensure => $package_ensure,
-    name   => $package_name,
+    name   => $package_name_real,
   }
 }
