@@ -10,29 +10,26 @@
 #
 # Etienne Pelletier <epelletier@maestrodev.com>
 #
-class postgresql::repo {
+class postgresql::repo($version = $postgresql::version::version) {
   include postgresql::version
+  
+  if $version != $::postgres_default_version {
 
-  case $::osfamily {
-    'RedHat': {
-      case $postgresql::version::version {
-        '9.0': {
-          yumrepo { 'postgresql90':
-            baseurl  => 'http://yum.postgresql.org/9.0/redhat/rhel-$releasever-$basearch',
-            descr    => 'Postgresql 9.0 Yum Repo',
-            enabled  => 1,
-            gpgcheck => 0,
-          }
+    case $::osfamily {      
+      'RedHat': {
+        $repo_name = "postgresql${version}"
+        yumrepo { 'postgresql-repo':
+          name     => $repo_name,
+          baseurl  => "http://yum.postgresql.org/${version}/redhat/rhel-\$releasever-\$basearch",
+          descr    => "Postgresql ${version} Yum Repo",
+          enabled  => 1,
+          gpgcheck => 0,
         }
-        default: {
-
-        }
-      } # case
+      }
+      default: {
+        # TODO add Debian apt repos.
+      }
     }
-    default: {
-
-    }
-
   }
 
 }
