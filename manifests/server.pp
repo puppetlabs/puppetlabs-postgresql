@@ -15,43 +15,56 @@
 # Sample Usage:
 #
 class postgresql::server (
-  $package_name     = $postgresql::params::server_package_name,
+  $version          = $::postgres_default_version,
+  $package_name     = undef,
   $package_ensure   = 'present',
-  $service_name     = $postgresql::params::service_name,
   $service_provider = $postgresql::params::service_provider,
   $service_status   = $postgresql::params::service_status,
   $config_hash      = {}
 ) inherits postgresql::params {
 
-  include postgresql::repo
+  if ! defined(Class['postgresql::version']) {
+    class { 'postgresql::version':
+      version => $version
+    }
+  }
+
+  include postgresql::packages
+  include postgresql::paths
+
+  $package_name_real = $package_name ? { undef => $postgresql::packages::server_package_name, default => $package_name }
+  
+
+  class { 'postgresql::repo': }
 
   package { 'postgresql-server':
     ensure  => $package_ensure,
-    name    => $package_name,
+    name    => $package_name_real,
     require => Class['postgresql::repo']
   }
-
+  
   $config_class = {}
   $config_class['postgresql::config'] = $config_hash
 
   create_resources( 'class', $config_class )
-
-  Package['postgresql-server'] -> Class['postgresql::config']
-
-  if ($postgresql::params::needs_initdb) {
-    include postgresql::initdb
-
-    Class['postgresql::initdb'] -> Class['postgresql::config']
-    Class['postgresql::initdb'] -> Service['postgresqld']
-  }
+  
 
   service { 'postgresqld':
     ensure   => running,
-    name     => $service_name,
+    name     => $postgresql::paths::service_name,
     enable   => true,
     require  => Package['postgresql-server'],
     provider => $service_provider,
     status   => $service_status,
+  }
+  
+  if ($postgresql::params::needs_initdb) {
+    include postgresql::initdb
+
+    Package['postgresql-server'] -> Class['postgresql::initdb'] -> Class['postgresql::config'] -> Service['postgresqld']
+  } 
+  else  {
+    Package['postgresql-server'] -> Class['postgresql::config'] -> Service['postgresqld']
   }
 
   exec { 'reload_postgresql':

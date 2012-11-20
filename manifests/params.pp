@@ -11,9 +11,6 @@
 # Sample Usage:
 #
 class postgresql::params {  
-  include postgresql::version
-  
-  $version                      = $postgresql::version::version
   $user                         = 'postgres'
   $group                        = 'postgres'
   $ip_mask_deny_postgres_user   = '0.0.0.0/0'
@@ -44,52 +41,10 @@ class postgresql::params {
     'RedHat': {
       $needs_initdb             = true
       $firewall_supported       = true
-      $persist_firewall_command = '/sbin/iptables-save > /etc/sysconfig/iptables'
-      
-      case $version {
-        '9.0': {         
-          $service_name             = 'postgresql-9.0'
-          $client_package_name      = 'postgresql90'
-          $server_package_name      = 'postgresql90-server'
-          $devel_package_name       = 'postgresql90-devel'
-          $bindir                   = '/usr/pgsql-9.0/bin'
-          $datadir                  = '/var/lib/pgsql/9.0/data'
-          $confdir                  = $datadir
-        }
-        default: { 
-          $service_name             = 'postgresql'
-          $client_package_name      = 'postgresql'
-          $server_package_name      = 'postgresql-server'
-          $devel_package_name       = 'postgresql-devel'
-          $bindir                   = '/usr/bin'
-          $datadir                  = '/var/lib/pgsql/data'
-          $confdir                  = $datadir
-        } 
-      } # case
+      $persist_firewall_command = '/sbin/iptables-save > /etc/sysconfig/iptables'      
     }
-
     'Debian': {
-      case $::operatingsystem {
-        'Debian': {
-            $service_name       = 'postgresql'
-        }
-
-        'Ubuntu': {
-            case $::lsbmajdistrelease {
-                # thanks, ubuntu
-                '10':       { $service_name = "postgresql-${::postgres_default_version}" }
-                default:    { $service_name = 'postgresql' }
-            }
-        }
-      }
-
-      $client_package_name      = 'postgresql-client'
-      $server_package_name      = 'postgresql'
-      $devel_package_name       = 'libpq-dev'
       $needs_initdb             = false
-      $bindir                   = "/usr/lib/postgresql/${::postgres_default_version}/bin"
-      $datadir                  = "/var/lib/postgresql/${::postgres_default_version}/main"
-      $confdir                  = "/etc/postgresql/${::postgres_default_version}/main"
       $firewall_supported       = false
       $service_status           = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
       # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
@@ -100,13 +55,5 @@ class postgresql::params {
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
     }
-    
   }
-  $initdb_path          = "${bindir}/initdb"
-  $createdb_path        = "${bindir}/createdb"
-  $psql_path            = "${bindir}/psql"      
-  $pg_hba_conf_path     = "${confdir}/pg_hba.conf"
-  $postgresql_conf_path = "${confdir}/postgresql.conf"
-  
-
 }

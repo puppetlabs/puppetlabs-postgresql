@@ -17,11 +17,12 @@
 # limitations under the License.
 
 class postgresql::initdb(
-  $datadir     = $postgresql::params::datadir,
+  $datadir     = $postgresql::paths::datadir,
   $encoding    = 'UTF8',
-  $user        = 'postgres'
   $group       = 'postgres',
-  $initdb_path = $postgresql::params::initdb_path,
+  $initdb_path = $postgresql::paths::initdb_path,
+  $options     = '',
+  $user        = 'postgres'
 ) inherits postgresql::params {
 
   $initdb_command = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
