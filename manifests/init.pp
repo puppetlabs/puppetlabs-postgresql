@@ -21,17 +21,13 @@ class postgresql (
       version => $version
     }
   }
-  include postgresql::repo
   include postgresql::packages
   
   $package_name_real = $package_name ? { undef => $postgresql::packages::client_package_name, default => $package_name }
 
-  Class['postgresql::repo'] -> Package['postgresql_client']
-
   package { 'postgresql_client':
     ensure  => $package_ensure,
     name    => $package_name_real,
-    require => Class['postgresql::repo'],
   }
 
 }
