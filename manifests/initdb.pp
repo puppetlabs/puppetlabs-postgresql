@@ -17,17 +17,20 @@
 # limitations under the License.
 
 class postgresql::initdb(
-  $datadir     = $postgresql::params::datadir,
+  $datadir     = $postgresql::paths::datadir,
   $encoding    = 'UTF8',
   $group       = 'postgres',
-  $initdb_path = $postgresql::params::initdb_path,
+  $initdb_path = $postgresql::paths::initdb_path,
   $options     = '',
   $user        = 'postgres'
 ) inherits postgresql::params {
-
+  
+  include postgresql::paths
+  
   exec { "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'":
     creates => "${datadir}/PG_VERSION",
     user    => $user,
     group   => $group,
+    require => Package['postgresql-server'],
   }
 }

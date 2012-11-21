@@ -39,11 +39,13 @@ class postgresql::config::beforeservice(
   $listen_addresses             = $postgresql::params::listen_addresses,
   $ipv4acls                     = $postgresql::params::ipv4acls,
   $ipv6acls                     = $postgresql::params::ipv6acls,
-  $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
-  $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
+  $pg_hba_conf_path             = $postgresql::paths::pg_hba_conf_path,
+  $postgresql_conf_path         = $postgresql::paths::postgresql_conf_path,
   $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
 ) inherits postgresql::params {
 
+  include postgresql::paths
+  
   File {
     owner  => $postgresql::params::user,
     group  => $postgresql::params::group,
