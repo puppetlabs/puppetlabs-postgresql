@@ -80,7 +80,7 @@ class postgresql::params {
       $pg_hba_conf_path         = "/etc/postgresql/${::postgres_default_version}/main/pg_hba.conf"
       $postgresql_conf_path     = "/etc/postgresql/${::postgres_default_version}/main/postgresql.conf"
       $firewall_supported       = false
-      $service_status           = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
+      $service_status           = "service ${service_name} status"
       # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
       #$persist_firewall_command = '/sbin/iptables-save > /etc/iptables/rules.v4'
 
