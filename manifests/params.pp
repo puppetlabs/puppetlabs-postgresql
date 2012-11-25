@@ -84,8 +84,9 @@ class postgresql::params(
     }
   }
 
+  # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $::osfamily {
-    'RedHat': {
+    'RedHat', 'Linux': {
       $needs_initdb             = true
       $firewall_supported       = true
       $persist_firewall_command = '/sbin/iptables-save > /etc/sysconfig/iptables'
