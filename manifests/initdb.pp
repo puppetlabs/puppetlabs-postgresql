@@ -29,5 +29,6 @@ class postgresql::initdb(
     creates => "${datadir}/PG_VERSION",
     user    => $user,
     group   => $group,
+    require => Package["$postgresql::params::server_package_name"],
   }
 }
