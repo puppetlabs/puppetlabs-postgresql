@@ -15,25 +15,23 @@
 # Sample Usage:
 #
 class postgresql::server (
-  $version          = $::postgres_default_version,
-  $package_name     = undef,
+  $package_name     = '',
   $package_ensure   = 'present',
   $service_provider = $postgresql::params::service_provider,
   $service_status   = $postgresql::params::service_status,
   $config_hash      = {}
 ) inherits postgresql::params {
 
-  if ! defined(Class['postgresql::version']) {
-    class { 'postgresql::version':
-      version => $version
-    }
-  }
-
-  include postgresql::packages
+  require postgresql
   include postgresql::paths
 
-  $package_name_real = $package_name ? { undef => $postgresql::packages::server_package_name, default => $package_name }
-
+  if ! $package_name {
+    include postgresql::packages
+    $package_name_real = $postgresql::packages::server_package_name
+  }
+  else {
+    $package_name_real = $package_name
+  }
 
   package { 'postgresql-server':
     ensure  => $package_ensure,
