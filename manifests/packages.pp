@@ -1,6 +1,7 @@
-# Class: postgresql::params
+# Class: postgresql::packages
 #
-#   The postgresql configuration settings.
+#   The postgresql packages. Figures out the package names based on
+#   the version parameter passed to the postgresql class.
 #
 # Parameters:
 #
@@ -10,10 +11,10 @@
 #
 # Sample Usage:
 #
-class postgresql::packages {  
-  include postgresql::version
+class postgresql::packages {
+  include postgresql
   
-  $version = $postgresql::version::version
+  $version = $postgresql::version
   
   case $::osfamily {
     'RedHat': {

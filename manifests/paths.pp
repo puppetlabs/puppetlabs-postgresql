@@ -1,6 +1,7 @@
-# Class: postgresql::params
+# Class: postgresql::path
 #
-#   The postgresql configuration settings.
+#   The postgresql paths. Figures out various paths based on
+#   the version parameter passed to the postgresql class.
 #
 # Parameters:
 #
@@ -11,9 +12,10 @@
 # Sample Usage:
 #
 class postgresql::paths {  
-  include postgresql::version
+  include postgresql
   
-  $version = $postgresql::version::version  
+  $version = $postgresql::version
+  
   case $::osfamily {
     'RedHat': {
       if $version == $::postgres_default_version {
@@ -33,7 +35,7 @@ class postgresql::paths {
     'Debian': {
       case $::operatingsystem {
         'Debian': {
-            $service_name       = 'postgresql'
+            $service_name = 'postgresql'
         }
 
         'Ubuntu': {

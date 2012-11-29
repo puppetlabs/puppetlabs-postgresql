@@ -13,13 +13,19 @@
 # Sample Usage:
 #
 class postgresql::devel(
-  $package_name   = undef,
+  $package_name   = '',
   $package_ensure = 'present'
 ) {
 
   require postgresql
-  
-  $package_name_real = $package_name ? { undef => $postgresql::packages::devel_package_name, default => $package_name }
+
+  if ! $package_name {
+    include postgresql::packages
+    $package_name_real = $postgresql::packages::devel_package_name
+  }
+  else {
+    $package_name_real = $package_name
+  }
 
   package { 'postgresql_devel':
     ensure => $package_ensure,
