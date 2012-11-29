@@ -68,6 +68,13 @@ class postgresql::config::beforeservice(
     notify      => Service['postgresqld'],
   }
 
+  file_line { 'postgresql.conf_krb5_keytab':
+    path   => $postgresql_conf_path,
+    match  => '^krb_server_keyfile\s*=.*$',
+    line   => "krb_server_keyfile = '${postgresql::params::datadir}/postgres.keytab'",
+    notify => Service['postgresqld'],
+  }
+
   # TODO: is this a reasonable place for this firewall stuff?
   # TODO: figure out a way to make this not platform-specific; debian and ubuntu have
   #        an out-of-the-box firewall configuration that seems trickier to manage
