@@ -34,18 +34,17 @@
 #   }
 #
 class postgresql::config::beforeservice(
+  $pg_hba_conf_path,
+  $postgresql_conf_path,
   $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
   $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
   $listen_addresses             = $postgresql::params::listen_addresses,
   $ipv4acls                     = $postgresql::params::ipv4acls,
   $ipv6acls                     = $postgresql::params::ipv6acls,
-  $pg_hba_conf_path             = $postgresql::paths::pg_hba_conf_path,
-  $postgresql_conf_path         = $postgresql::paths::postgresql_conf_path,
   $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
 ) inherits postgresql::params {
 
-  include postgresql::paths
-  
+
   File {
     owner  => $postgresql::params::user,
     group  => $postgresql::params::group,
