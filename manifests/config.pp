@@ -39,36 +39,50 @@ class postgresql::config(
   $listen_addresses             = $postgresql::params::listen_addresses,
   $ipv4acls                     = $postgresql::params::ipv4acls,
   $ipv6acls                     = $postgresql::params::ipv6acls,
-  $pg_hba_conf_path             = $postgresql::paths::pg_hba_conf_path,
-  $postgresql_conf_path         = $postgresql::paths::postgresql_conf_path,
+  $pg_hba_conf_path             = '',
+  $postgresql_conf_path         = '',
   $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
 ) inherits postgresql::params {
   
-  include postgresql::paths
+  if ! $pg_hba_conf_path {
+    include postgresql::paths
+    $pg_hba_conf_path_real     = $postgresql::paths::pg_hba_conf_path
+  } 
+  else {
+    $pg_hba_conf_path_real     = $pg_hba_conf_path
+  }
 
-    # Basically, all this class needs to handle is passing parameters on
-    #  to the "beforeservice" and "afterservice" classes, and ensure
-    #  the proper ordering.
+  if ! $postgresql_conf_path {
+    include postgresql::paths
+    $postgresql_conf_path_real = $postgresql::paths::postgresql_conf_path
+  } 
+  else {
+    $postgresql_conf_path_real = $postgresql_conf_path
+  }
 
-    class { 'postgresql::config::beforeservice':
-      ip_mask_deny_postgres_user    => $ip_mask_deny_postgres_user,
-      ip_mask_allow_all_users       => $ip_mask_allow_all_users,
-      listen_addresses              => $listen_addresses,
-      ipv4acls                      => $ipv4acls,
-      ipv6acls                      => $ipv6acls,
-      pg_hba_conf_path              => $pg_hba_conf_path,
-      postgresql_conf_path          => $postgresql_conf_path,
-      manage_redhat_firewall        => $manage_redhat_firewall,
-    }
+  # Basically, all this class needs to handle is passing parameters on
+  #  to the "beforeservice" and "afterservice" classes, and ensure
+  #  the proper ordering.
 
-    class { 'postgresql::config::afterservice':
-      postgres_password        => $postgres_password,
-    }
+  class { 'postgresql::config::beforeservice':
+    ip_mask_deny_postgres_user    => $ip_mask_deny_postgres_user,
+    ip_mask_allow_all_users       => $ip_mask_allow_all_users,
+    listen_addresses              => $listen_addresses,
+    ipv4acls                      => $ipv4acls,
+    ipv6acls                      => $ipv6acls,
+    pg_hba_conf_path              => $pg_hba_conf_path_real,
+    postgresql_conf_path          => $postgresql_conf_path_real,
+    manage_redhat_firewall        => $manage_redhat_firewall,
+  }
 
-    Class['postgresql::config'] ->
-        Class['postgresql::config::beforeservice'] ->
-        Service['postgresqld'] ->
-        Class['postgresql::config::afterservice']
+  class { 'postgresql::config::afterservice':
+    postgres_password        => $postgres_password,
+  }
+
+  Class['postgresql::config'] ->
+      Class['postgresql::config::beforeservice'] ->
+      Service['postgresqld'] ->
+      Class['postgresql::config::afterservice']
 
 
 }
