@@ -1,7 +1,8 @@
-# Class: postgresql::path
+# Class: postgresql::platform
 #
-#   The postgresql paths. Figures out various paths based on
-#   the version parameter passed to the postgresql class.
+#   An abstraction for the postgresql platform.  Based on the desired version of
+#   postgres, whether it is part of the OS distro, OS distro differences / defaults,
+#   etc., figures out the package names, service names, paths, etc.
 #
 # Parameters:
 #
@@ -11,7 +12,7 @@
 #
 # Sample Usage:
 #
-class postgresql::paths {  
+class postgresql::platform {
   include postgresql
   
   $version = $postgresql::version
@@ -21,24 +22,32 @@ class postgresql::paths {
       $service_provider = undef
     }
   }
-  
+
   case $::osfamily {
     'RedHat': {
       if $version == $::postgres_default_version {
+        $client_package_name = 'postgresql'
+        $server_package_name = 'postgresql-server'
+        $devel_package_name  = 'postgresql-devel'
         $service_name = 'postgresql'
         $bindir       = '/usr/bin'
         $datadir      = '/var/lib/pgsql/data'
         $confdir      = $datadir
-      }
-      else {
+      } else {
+        $version_parts       = split($version, '[.]')
+        $package_version     = "${version_parts[0]}${version_parts[1]}"
+        $client_package_name = "postgresql${package_version}"
+        $server_package_name = "postgresql${package_version}-server"
+        $devel_package_name  = "postgresql${package_version}-devel"
         $service_name = "postgresql-${version}"
         $bindir       = "/usr/pgsql-${version}/bin"
         $datadir      = "/var/lib/pgsql/${version}/data"
         $confdir      = $datadir
-      } # case
+      }
     }
 
     'Debian': {
+
       case $::operatingsystem {
         'Debian': {
             $service_name = 'postgresql'
@@ -53,10 +62,13 @@ class postgresql::paths {
         }
       }
 
-      $bindir                   = "/usr/lib/postgresql/${::postgres_default_version}/bin"
-      $datadir                  = "/var/lib/postgresql/${::postgres_default_version}/main"
-      $confdir                  = "/etc/postgresql/${::postgres_default_version}/main"
-      $service_status           = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
+      $client_package_name = 'postgresql-client'
+      $server_package_name = 'postgresql'
+      $devel_package_name  = 'libpq-dev'
+      $bindir              = "/usr/lib/postgresql/${::postgres_default_version}/bin"
+      $datadir             = "/var/lib/postgresql/${::postgres_default_version}/main"
+      $confdir             = "/etc/postgresql/${::postgres_default_version}/main"
+      $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
       # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
       #$persist_firewall_command = '/sbin/iptables-save > /etc/iptables/rules.v4'
 
@@ -67,11 +79,11 @@ class postgresql::paths {
     }
     
   }
+
   $initdb_path          = "${bindir}/initdb"
   $createdb_path        = "${bindir}/createdb"
-  $psql_path            = "${bindir}/psql"      
+  $psql_path            = "${bindir}/psql"
   $pg_hba_conf_path     = "${confdir}/pg_hba.conf"
   $postgresql_conf_path = "${confdir}/postgresql.conf"
-  
 
 }

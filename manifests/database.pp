@@ -23,13 +23,13 @@ define postgresql::database(
   $dbname  = $title,
   $charset = 'UTF8')
 {
-  include postgresql::paths
+  include postgresql::platform
 
   if ($::postgres_default_version != '8.1') {
     $locale_option = '--locale=C'
   }
 
-  $createdb_command = "${postgresql::paths::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
+  $createdb_command = "${postgresql::platform::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
 
   postgresql_psql { "Check for existence of db '$dbname'":
     command => "SELECT 1",

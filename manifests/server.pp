@@ -24,29 +24,28 @@ class postgresql::server (
 ) inherits postgresql::params {
 
   require postgresql
-  include postgresql::paths
-  include postgresql::packages
+  include postgresql::platform
 
   if ! $package_name {
-    $package_name_real = $postgresql::packages::server_package_name
+    $package_name_real = $postgresql::platform::server_package_name
   } else {
     $package_name_real = $package_name
   }
 
   if ! $service_name {
-      $service_name_real = $postgresql::paths::service_name
+      $service_name_real = $postgresql::platform::service_name
   } else {
       $service_name_real = $service_name
   }
 
   if ! $service_provider {
-      $service_provider_real = $postgresql::paths::service_provider
+      $service_provider_real = $postgresql::platform::service_provider
   } else {
       $service_provider_real = $service_provider
   }
 
   if ! $service_status {
-      $service_status_real = $postgresql::paths::service_status
+      $service_status_real = $postgresql::platform::service_status
   } else {
       $service_status_real = $service_status
   }

@@ -25,20 +25,17 @@ class postgresql::initdb(
   $user        = 'postgres'
 ) inherits postgresql::params {
 
+  include postgresql::platform
 
   if ! $datadir {
-    include postgresql::paths
-    $datadir_real = $postgresql::paths::datadir
-  }
-  else {
+    $datadir_real = $postgresql::platform::datadir
+  } else {
     $datadir_real = $datadir
   }
   
   if ! $initdb_path {
-    include postgresql::paths
-    $initdb_path_real = $postgresql::paths::initdb_path
-  }
-  else {
+    $initdb_path_real = $postgresql::platform::initdb_path
+  } else {
     $initdb_path_real = $initdb_path
   }
 

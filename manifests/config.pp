@@ -43,18 +43,18 @@ class postgresql::config(
   $postgresql_conf_path         = '',
   $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
 ) inherits postgresql::params {
-  
+
+  include postgresql::platform
+
   if ! $pg_hba_conf_path {
-    include postgresql::paths
-    $pg_hba_conf_path_real     = $postgresql::paths::pg_hba_conf_path
+    $pg_hba_conf_path_real     = $postgresql::platform::pg_hba_conf_path
   } 
   else {
     $pg_hba_conf_path_real     = $pg_hba_conf_path
   }
 
   if ! $postgresql_conf_path {
-    include postgresql::paths
-    $postgresql_conf_path_real = $postgresql::paths::postgresql_conf_path
+    $postgresql_conf_path_real = $postgresql::platform::postgresql_conf_path
   } 
   else {
     $postgresql_conf_path_real = $postgresql_conf_path

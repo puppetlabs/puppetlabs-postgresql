@@ -20,8 +20,8 @@ class postgresql::devel(
   require postgresql
 
   if ! $package_name {
-    include postgresql::packages
-    $package_name_real = $postgresql::packages::devel_package_name
+    include postgresql::platform
+    $package_name_real = $postgresql::platform::devel_package_name
   }
   else {
     $package_name_real = $package_name
