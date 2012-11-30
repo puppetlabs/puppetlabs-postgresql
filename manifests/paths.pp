@@ -15,6 +15,12 @@ class postgresql::paths {
   include postgresql
   
   $version = $postgresql::version
+
+  case $::operatingsystem {
+    default: {
+      $service_provider = undef
+    }
+  }
   
   case $::osfamily {
     'RedHat': {

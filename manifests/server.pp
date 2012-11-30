@@ -17,20 +17,38 @@
 class postgresql::server (
   $package_name     = '',
   $package_ensure   = 'present',
-  $service_provider = $postgresql::params::service_provider,
-  $service_status   = $postgresql::params::service_status,
+  $service_name     = '',
+  $service_provider = '',
+  $service_status   = '',
   $config_hash      = {}
 ) inherits postgresql::params {
 
   require postgresql
   include postgresql::paths
+  include postgresql::packages
 
   if ! $package_name {
-    include postgresql::packages
     $package_name_real = $postgresql::packages::server_package_name
-  }
-  else {
+  } else {
     $package_name_real = $package_name
+  }
+
+  if ! $service_name {
+      $service_name_real = $postgresql::paths::service_name
+  } else {
+      $service_name_real = $service_name
+  }
+
+  if ! $service_provider {
+      $service_provider_real = $postgresql::paths::service_provider
+  } else {
+      $service_provider_real = $service_provider
+  }
+
+  if ! $service_status {
+      $service_status_real = $postgresql::paths::service_status
+  } else {
+      $service_status_real = $service_status
   }
 
   package { 'postgresql-server':
@@ -46,11 +64,11 @@ class postgresql::server (
 
   service { 'postgresqld':
     ensure   => running,
-    name     => $postgresql::paths::service_name,
+    name     => $service_name_real,
     enable   => true,
     require  => Package['postgresql-server'],
-    provider => $service_provider,
-    status   => $service_status,
+    provider => $service_provider_real,
+    status   => $service_status_real,
   }
   
   if ($postgresql::params::needs_initdb) {

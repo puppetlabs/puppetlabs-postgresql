@@ -31,12 +31,6 @@ class postgresql::params {
     fail "No value for postgres_default_version facter fact; it's possible that you don't have pluginsync enabled."
   }
 
-  case $::operatingsystem {
-    default: {
-      $service_provider = undef
-    }
-  }
-
   case $::osfamily {
     'RedHat': {
       $needs_initdb             = true
@@ -46,7 +40,6 @@ class postgresql::params {
     'Debian': {
       $needs_initdb             = false
       $firewall_supported       = false
-      $service_status           = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
       # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
       #$persist_firewall_command = '/sbin/iptables-save > /etc/iptables/rules.v4'
 
