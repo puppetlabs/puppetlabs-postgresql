@@ -60,7 +60,8 @@ class postgresql::params {
           $server_package_name      = 'postgresql90-server'
           $devel_package_name       = 'postgresql90-devel'
           $bindir                   = '/usr/pgsql-9.0/bin'
-          $datadir                  = '/var/lib/pgsql/9.0/data/'                
+          $datadir                  = '/var/lib/pgsql/9.0/data'
+          $confdir                  = $datadir
         }
         default: { 
           $service_name             = 'postgresql'
@@ -68,7 +69,8 @@ class postgresql::params {
           $server_package_name      = 'postgresql-server'
           $devel_package_name       = 'postgresql-devel'
           $bindir                   = '/usr/bin'
-          $datadir                  = '/var/lib/pgsql/data/'
+          $datadir                  = '/var/lib/pgsql/data'
+          $confdir                  = $datadir
         } 
       } # case
     }
@@ -94,6 +96,7 @@ class postgresql::params {
       $needs_initdb             = false
       $bindir                   = "/usr/lib/postgresql/${::postgres_default_version}/bin"
       $datadir                  = "/var/lib/postgresql/${::postgres_default_version}/main"
+      $confdir                  = "/etc/postgresql/${::postgres_default_version}/main"
       $firewall_supported       = false
       $service_status           = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
       # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
@@ -109,8 +112,8 @@ class postgresql::params {
   $initdb_path          = "${bindir}/initdb"
   $createdb_path        = "${bindir}/createdb"
   $psql_path            = "${bindir}/psql"      
-  $pg_hba_conf_path     = "${datadir}pg_hba.conf"
-  $postgresql_conf_path = "${datadir}postgresql.conf"
+  $pg_hba_conf_path     = "${confdir}/pg_hba.conf"
+  $postgresql_conf_path = "${confdir}/postgresql.conf"
   
 
 }
