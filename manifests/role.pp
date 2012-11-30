@@ -17,13 +17,13 @@
 # limitations under the License.
 
 define postgresql::role(
-    $username=$title,
     $password_hash,
-    $db='postgres',
-    $login=false,
-    $createrole=false,
-    $createdb=false,
-    $superuser=false
+    $createdb   = false,
+    $createrole = false,
+    $db         = 'postgres',
+    $login      = false,
+    $superuser  = false,
+    $username   = $title
 ) {
 
   $login_sql      = $login      ? { true => 'LOGIN'     , default => 'NOLOGIN' }

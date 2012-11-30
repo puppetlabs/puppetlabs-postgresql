@@ -20,16 +20,16 @@
 #  needs to be moved over to ruby, and add support for ensurable.
 
 define postgresql::database(
-  $dbname = $title,
+  $dbname  = $title,
   $charset = 'UTF8')
 {
   require postgresql::params
 
-  if ($::postgres_default_version != "8.1") {
-    $locale_option = "--locale=C"
+  if ($::postgres_default_version != '8.1') {
+    $locale_option = '--locale=C'
   }
 
-  $createdb_command = "${postgresql::params::createdb_path} --template=template0 --encoding '$charset' $locale_option '$dbname'"
+  $createdb_command = "${postgresql::params::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
 
   postgresql_psql { "Check for existence of db '$dbname'":
     command => "SELECT 1",

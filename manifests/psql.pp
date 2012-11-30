@@ -17,11 +17,11 @@
 # limitations under the License.
 
 define postgresql::psql(
-    $command = $title,
-    $unless,
     $db,
-    $user = 'postgres',
-    $refreshonly = false
+    $unless,
+    $command     = $title,
+    $refreshonly = false,
+    $user        = 'postgres'
 ) {
 
   require postgresql::params
@@ -30,13 +30,13 @@ define postgresql::psql(
   # things but not nested escaping.  Need a lexer, preferably a ruby SQL parser
   # to catch errors at catalog time.  Possibly https://github.com/omghax/sql ?
 
-  if ($::postgres_default_version != "8.1") {
-    $no_password_option = "--no-password"
+  if ($::postgres_default_version != '8.1') {
+    $no_password_option = '--no-password'
   }
 
-  $psql = "${postgresql::params::psql_path} $no_password_option --tuples-only --quiet --dbname $db"
-  $quoted_command = regsubst($command, '"', '\\"')
-  $quoted_unless  = regsubst($unless,  '"', '\\"')
+  $psql = "${postgresql::params::psql_path} ${no_password_option} --tuples-only --quiet --dbname ${db}"
+  $quoted_command = regsubst($command, '"', '\\"', 'G')
+  $quoted_unless  = regsubst($unless,  '"', '\\"', 'G')
 
   $final_cmd = "/bin/echo \"$quoted_command\" | $psql |egrep -v -q '^$'"
 
@@ -48,7 +48,7 @@ define postgresql::psql(
     cwd         => '/tmp',
     user        => $user,
     returns     => 1,
-    unless      => "/bin/echo \"$quoted_unless\" | $psql | egrep -v -q '^$'",
+    unless      => "/bin/echo \"${quoted_unless}\" | ${psql} | egrep -v -q '^$'",
     refreshonly => $refreshonly,
   }
 }

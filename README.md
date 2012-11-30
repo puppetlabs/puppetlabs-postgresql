@@ -15,8 +15,8 @@ This module provides the following defined resource types for managing postgres:
  * `postgresql::initdb`
  * `postgresql::db`
  * `postgresql::role`
- * `postgresql::user` (just for clarity; users are roles in postgres)
- * `postgresql::grant`
+ * `postgresql::database_user` (just for clarity; users are roles in postgres)
+ * `postgresql::database_grant`
 
 And the fallback, analogous to exec resources, only for SQL statements:
 
@@ -39,6 +39,7 @@ class { 'postgresql::server':
         'ip_mask_deny_postgres_user' => '0.0.0.0/32',
         'ip_mask_allow_all_users'    => '0.0.0.0/0',
         'listen_addresses'           => '*',
+        'ipv4acls'                   => ['hostssl all johndoe 192.168.0.0/24 cert'],
         'manage_redhat_firewall'     => true,
         'postgres_password'          => 'TPSrep0rt!',
     },
@@ -48,11 +49,11 @@ class { 'postgresql::server':
 Manage users / roles and permissions:
 
 ```Puppet
-postgresql::user{'marmot':
+postgresql::database_user{'marmot':
     password => 'foo',
 }
 
-postgresql::grant{'grant select to marmot':
+postgresql::database_grant{'grant select to marmot':
    grantee   => 'marmot',
    on_object => 'my_table',
    perm      => 'select',

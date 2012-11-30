@@ -30,8 +30,8 @@ define postgresql::database_grant(
     $privilege,
     $db,
     $role,
-    $psql_db = 'postgres',
-    $psql_user='postgres'
+    $psql_db   = 'postgres',
+    $psql_user ='postgres'
 ) {
 
   # TODO: FIXME: only works on databases, due to using has_database_privilege

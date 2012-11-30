@@ -8,6 +8,10 @@
 #                                       defaults to '127.0.0.1/32', meaning only allow connections from localhost
 #   [*listen_addresses*]        - what IP address(es) to listen on; comma-separated list of addresses; defaults to
 #                                    'localhost', '*' = all
+#   [*ipv4acls*]                - list of strings for access control for connection method, users, databases, IPv4
+#                                    addresses; see postgresql documentation about pg_hba.conf for information
+#   [*ipv6acls*]                - list of strings for access control for connection method, users, databases, IPv6
+#                                    addresses; see postgresql documentation about pg_hba.conf for information
 #   [*pg_hba_conf_path*]        - path to pg_hba.conf file
 #   [*postgresql_conf_path*]    - path to postgresql.conf file
 #   [*manage_redhat_firewall*]  - boolean indicating whether or not the module should open a port in the firewall on
@@ -33,6 +37,8 @@ class postgresql::config::beforeservice(
   $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
   $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
   $listen_addresses             = $postgresql::params::listen_addresses,
+  $ipv4acls                     = $postgresql::params::ipv4acls,
+  $ipv6acls                     = $postgresql::params::ipv6acls,
   $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
   $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
   $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
@@ -49,8 +55,8 @@ class postgresql::config::beforeservice(
   file { 'pg_hba.conf':
     ensure      => file,
     path        => $pg_hba_conf_path,
-    content     => template("postgresql/pg_hba.conf.erb"),
-    notify      => Service['postgresqld'],
+    content     => template('postgresql/pg_hba.conf.erb'),
+    notify      => Exec['reload_postgresql'],
   }
 
   # We must set a "listen_addresses" line in the postgresql.conf if we
@@ -67,18 +73,18 @@ class postgresql::config::beforeservice(
   #        an out-of-the-box firewall configuration that seems trickier to manage
   # TODO: get rid of hard-coded port
   if ($manage_redhat_firewall and $firewall_supported) {
-      exec { "postgresql-persist-firewall":
-        command => $persist_firewall_command,
+      exec { 'postgresql-persist-firewall':
+        command     => $persist_firewall_command,
         refreshonly => true,
       }
 
       Firewall {
-        notify => Exec["postgresql-persist-firewall"]
+        notify => Exec['postgresql-persist-firewall']
       }
 
       firewall { '5432 accept - postgres':
-        port => '5432',
-        proto => 'tcp',
+        port   => '5432',
+        proto  => 'tcp',
         action => 'accept',
       }
   }
