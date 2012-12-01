@@ -21,9 +21,16 @@
 
 Vagrant::Config.run do |config|
 
-  # Test on 64 bit lucid
-  config.vm.box = "lucid64"
-  config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
+  config.vm.define :lucid do |lucid_config|
+      # Test on 64 bit lucid
+      lucid_config.vm.box = "lucid64"
+      lucid_config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
+  end
+
+  config.vm.define :cent6 do |cent_config|
+      cent_config.vm.box = "cent63_64"
+      cent_config.vm.box_url = "https://dl.dropbox.com/u/7225008/Vagrant/CentOS-6.3-x86_64-minimal.box"
+  end
 
   # Resolve DNS via NAT
   config.vm.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
