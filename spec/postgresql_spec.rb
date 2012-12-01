@@ -32,9 +32,12 @@ describe "postgresql" do
 
   def sudo_and_log(*args)
     @logger.debug("Running command: '#{args[0]}'")
-     @env.primary_vm.channel.sudo(args[0]) do |ch, data|
-       @logger.debug(data)
-     end
+    result = ""
+    @env.primary_vm.channel.sudo(args[0]) do |ch, data|
+      result << data
+      @logger.debug(data)
+    end
+    result
   end
 
   before(:all) do
@@ -47,7 +50,7 @@ describe "postgresql" do
     # Sahara ignores :cwd so we have to chdir for now, see https://github.com/jedi4ever/sahara/issues/9
     Dir.chdir(vagrant_dir)
 
-    # @env.cli("destroy") # Takes too long
+    @env.cli("destroy --force") # Takes too long
     @env.cli("up")
     
     # We are not testing the "package" resource type, so pull stuff in in advance
@@ -85,31 +88,46 @@ describe "postgresql" do
       
       # A bare-minimum class to add a DB to postgres, which will be running due to ubuntu
       test_class = 'class {"postgresql_tests::test_db": db => "postgresql_test_db" }'
-  
-      # Run once to check for crashes
-      sudo_and_log("puppet apply -e '#{test_class}'")
-  
-      # Run again to check for idempotence
-      sudo_and_log("puppet apply --detailed-exitcodes -e '#{test_class}'")
 
-      # Check that the database name is present
-      sudo_and_log('sudo -u postgres psql postgresql_test_db --command="select datname from pg_database limit 1"')
+      begin
+        # Run once to check for crashes
+        sudo_and_log("puppet apply --detailed-exitcodes -e '#{test_class}'; [ $? == 2 ]")
+
+        # Run again to check for idempotence
+        sudo_and_log("puppet apply --detailed-exitcodes -e '#{test_class}'")
+
+        # Check that the database name is present
+        sudo_and_log('sudo -u postgres psql postgresql_test_db --command="select datname from pg_database limit 1"')
+      ensure
+        sudo_and_log('sudo -u postgres psql --command="drop database postgresql_test_db" postgres')
+      end
     end
   end
 
   describe 'postgresql::psql' do
+    it 'should emit a deprecation warning' do
+      test_class = 'class {"postgresql_tests::test_psql": command => "SELECT * FROM pg_datbase limit 1", unless => "SELECT 1 WHERE 1=1" }'
+
+      data = sudo_and_log("puppet apply --detailed-exitcodes -e '#{test_class}'; [ $? == 2 ]")
+
+      data.should match /postgresql::psql is deprecated/
+
+    end
+  end
+
+  describe 'postgresql_psql' do
     it 'should run some SQL when the unless query returns no rows' do
-      test_class = 'class {"postgresql_tests::test_psql": command => "SELECT \'foo\'", unless => "SELECT 1 WHERE 1=2" }'
-      
+      test_class = 'class {"postgresql_tests::test_ruby_psql": command => "SELECT 1", unless => "SELECT 1 WHERE 1=2" }'
+
       # Run once to get all packages set up
       sudo_and_log("puppet apply -e '#{test_class}'")
-      
+
       # Check for exit code 2
       sudo_and_log("puppet apply --detailed-exitcodes -e '#{test_class}' ; [ $? == 2 ]")
     end
-    
+
     it 'should not run SQL when the unless query returns rows' do
-      test_class = 'class {"postgresql_tests::test_psql": command => "SELECT * FROM pg_datbase limit 1", unless => "SELECT 1 WHERE 1=1" }'
+      test_class = 'class {"postgresql_tests::test_ruby_psql": command => "SELECT * FROM pg_datbase limit 1", unless => "SELECT 1 WHERE 1=1" }'
 
       # Run once to get all packages set up
       sudo_and_log("puppet apply -e '#{test_class}'")
@@ -117,6 +135,7 @@ describe "postgresql" do
       # Check for exit code 0
       sudo_and_log("puppet apply --detailed-exitcodes -e '#{test_class}'")
     end
+
   end
 
   describe 'postgresql::user' do
@@ -144,8 +163,10 @@ describe "postgresql" do
       # Run again to check for idempotence
       sudo_and_log("puppet apply --detailed-exitcodes -e '#{test_class}'")
   
-      # Check that the user can select from the table in
+      # Check that the user can create a table in the database
       sudo_and_log('sudo -u psql_grant_tester psql --command="create table foo (foo int)" postgres')
+
+      sudo_and_log('sudo -u psql_grant_tester psql --command="drop table foo" postgres')
     end
   end
 end
