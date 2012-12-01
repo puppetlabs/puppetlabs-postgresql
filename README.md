@@ -20,7 +20,7 @@ This module provides the following defined resource types for managing postgres:
 
 And the fallback, analogous to exec resources, only for SQL statements:
 
- * `postgresql::psql`
+ * `postgresql_psql`
 
 Basic usage
 -----------
