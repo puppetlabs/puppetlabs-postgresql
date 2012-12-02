@@ -18,9 +18,6 @@
 
 class postgresql_tests::test_initdb {
 
-  include postgresql::server
+  include postgresql::initdb
 
-  class { "postgresql::initdb":
-    require => Class['postgresql::server']
-  }
 }
