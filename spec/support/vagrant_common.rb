@@ -11,7 +11,7 @@ def apply_common_vagrant_config(config)
   config.vm.share_folder "puppet-postgresql-module", "/usr/share/puppet/modules/postgresql", "../../.."
 
   # Share the module of test classes
-  config.vm.share_folder "puppet-postgresql-tests", "/usr/share/puppet/modules/postgresql_tests", "../.."
+  config.vm.share_folder "puppet-postgresql-tests", "/usr/share/puppet/modules/postgresql_tests", "../../test_module"
 
   # Provision with a base puppet config just so we don't have to repeat the puppet user/group
   config.vm.provision :puppet do |puppet|

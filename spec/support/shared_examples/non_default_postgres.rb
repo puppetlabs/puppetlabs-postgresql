@@ -7,8 +7,7 @@ shared_examples :non_default_postgres do
 
   # this method is required by the pg_vm shared context
   def install_postgres
-    #sudo_and_log(vm, 'puppet apply -e "include postgresql::server"')
-    # TODO: implement
+    sudo_and_log(vm, 'puppet apply -e "include postgresql_tests::non_default::test_install"')
   end
 
   it "doesn't have any tests yet'" do
