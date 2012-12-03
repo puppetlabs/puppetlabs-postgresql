@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class postgresql_tests::test_user($user, $password) {
+class postgresql_tests::system_default::test_grant_create($user, $password, $db) {
 
   include postgresql::server
 
@@ -29,5 +29,17 @@ class postgresql_tests::test_user($user, $password) {
     password_hash => postgresql_password($user, $password),
     require  => [ Class['postgresql::server'],
                   User[$user] ],
+  }
+
+  postgresql::database { $db:
+    require => Class['postgresql::server'],
+  }
+
+  postgresql::database_grant { "grant create test":
+    privilege   => 'CREATE',
+    db          => $db,
+    role        => $user,
+    require     => [ Postgresql::Database[$db],
+                     Postgresql::Database_user[$user] ],
   }
 }

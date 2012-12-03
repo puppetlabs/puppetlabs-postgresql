@@ -16,15 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class postgresql_tests::test_psql($command = $title, $unless) {
+class postgresql_tests::system_default::test_initdb {
 
-  include postgresql::server
+  include postgresql::initdb
 
-  postgresql::psql { $title:
-    db       => 'postgres',
-    user     => 'postgres',
-    command  => $command,
-    unless   => $unless,
-    require  => Class['postgresql::server'],
-  }
 }

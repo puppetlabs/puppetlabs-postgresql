@@ -16,30 +16,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class postgresql_tests::test_grant_create($user, $password, $db) {
+class postgresql_tests::system_default::test_psql($command = $title, $unless) {
 
   include postgresql::server
 
-  # Since we are not testing pg_hba or any of that, make a local user for ident auth
-  user { $user:
-    ensure => present,
-  }
-
-  postgresql::database_user { $user:
-    password_hash => postgresql_password($user, $password),
-    require  => [ Class['postgresql::server'],
-                  User[$user] ],
-  }
-
-  postgresql::database { $db:
-    require => Class['postgresql::server'],
-  }
-
-  postgresql::database_grant { "grant create test":
-    privilege   => 'CREATE',
-    db          => $db,
-    role        => $user,
-    require     => [ Postgresql::Database[$db],
-                     Postgresql::Database_user[$user] ],
+  postgresql::psql { $title:
+    db       => 'postgres',
+    user     => 'postgres',
+    command  => $command,
+    unless   => $unless,
+    require  => Class['postgresql::server'],
   }
 }
