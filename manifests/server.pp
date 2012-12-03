@@ -23,7 +23,6 @@ class postgresql::server (
   $config_hash      = {}
 ) inherits postgresql::params {
 
-  require postgresql
   include postgresql::platform
 
   if ! $package_name {
@@ -69,7 +68,7 @@ class postgresql::server (
     provider => $service_provider_real,
     status   => $service_status_real,
   }
-  
+
   if ($postgresql::params::needs_initdb) {
     include postgresql::initdb
 
@@ -81,7 +80,11 @@ class postgresql::server (
 
   exec { 'reload_postgresql':
     path        => '/usr/bin:/usr/sbin:/bin:/sbin',
-    command     => "service ${postgresql::params::service_name} reload",
+    command     => "service ${service_name_real} reload",
+    user        => $postgresql::params::user,
+    group       => $postgresql::params::group,
+    onlyif      => $service_status_real,
     refreshonly => true,
   }
+
 }

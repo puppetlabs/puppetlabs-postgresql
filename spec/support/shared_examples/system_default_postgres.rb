@@ -7,7 +7,7 @@ shared_examples :system_default_postgres do
 
   # this method is required by the pg_vm shared context
   def install_postgres
-    sudo_and_log(vm, 'puppet apply -e "include postgresql::server"')
+    sudo_and_log(vm, 'puppet apply --debug -e "include postgresql::server"')
   end
 
   describe 'postgresql::initdb' do

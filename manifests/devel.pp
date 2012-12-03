@@ -17,8 +17,6 @@ class postgresql::devel(
   $package_ensure = 'present'
 ) {
 
-  require postgresql
-
   if ! $package_name {
     include postgresql::platform
     $package_name_real = $postgresql::platform::devel_package_name

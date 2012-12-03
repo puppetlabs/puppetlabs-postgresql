@@ -21,7 +21,6 @@ class postgresql (
   $package_ensure = 'present'
 ) inherits postgresql::params {
 
-
   if ! $package_name {
     include postgresql::platform
     $package_name_real = $postgresql::platform::client_package_name

@@ -13,9 +13,9 @@
 # Sample Usage:
 #
 class postgresql::platform {
-  include postgresql
-  
-  $version = $postgresql::version
+
+  #$version = $postgresql::version
+  $version = $::postgres_default_version
 
   case $::operatingsystem {
     default: {
@@ -44,6 +44,8 @@ class postgresql::platform {
         $datadir      = "/var/lib/pgsql/${version}/data"
         $confdir      = $datadir
       }
+
+      $service_status = undef
     }
 
     'Debian': {
