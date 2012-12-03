@@ -14,8 +14,12 @@
 #
 class postgresql::platform {
 
-  #$version = $postgresql::version
-  $version = $::postgres_default_version
+  if defined(Class[Postgresql::Package_source_info]) {
+    $version = $postgresql::package_source_info::version
+  } else {
+    $version = $::postgres_default_version
+  }
+
 
   case $::operatingsystem {
     default: {
