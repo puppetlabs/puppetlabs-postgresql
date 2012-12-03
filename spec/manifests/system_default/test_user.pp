@@ -16,11 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class postgresql_tests::test_initdb {
+class postgresql_tests::system_default::test_user($user, $password) {
 
   include postgresql::server
 
-  class { "postgresql::initdb":
-    require => Class['postgresql::server']
+  # Since we are not testing pg_hba or any of that, make a local user for ident auth
+  user { $user:
+    ensure => present,
+  }
+
+  postgresql::database_user { $user:
+    password_hash => postgresql_password($user, $password),
+    require  => [ Class['postgresql::server'],
+                  User[$user] ],
   }
 }

@@ -25,10 +25,16 @@ class postgresql::initdb(
   $user        = 'postgres'
 ) inherits postgresql::params {
 
-  exec { "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'":
+  $initdb_command = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
+
+  exec { $initdb_command:
     creates => "${datadir}/PG_VERSION",
     user    => $user,
-    group   => $group,
-    require => Package["$postgresql::params::server_package_name"],
+    group   => $group
+  }
+
+  if defined(Package["$postgresql::params::server_package_name"]) {
+    Package["$postgresql::params::server_package_name"] ->
+        Exec[$initdb_command]
   }
 }
