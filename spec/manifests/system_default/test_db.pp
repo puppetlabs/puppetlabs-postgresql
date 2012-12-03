@@ -16,8 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class postgresql_tests::test_initdb {
+class postgresql_tests::system_default::test_db($db) {
 
-  include postgresql::initdb
+  include postgresql::server
 
+  postgresql::db { $db:
+    user        => $db,
+    password    => $db,
+  }
 }

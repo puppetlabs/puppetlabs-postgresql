@@ -16,15 +16,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class postgresql_tests::test_ruby_psql($command = $title, $unless) {
+class postgresql_tests::system_default::test_psql($command = $title, $unless) {
 
   include postgresql::server
 
-  postgresql_psql { $title:
-    db          => 'postgres',
-    psql_user   => 'postgres',
-    command     => $command,
-    unless      => $unless,
-    require     => Class['postgresql::server'],
+  postgresql::psql { $title:
+    db       => 'postgres',
+    user     => 'postgres',
+    command  => $command,
+    unless   => $unless,
+    require  => Class['postgresql::server'],
   }
 }

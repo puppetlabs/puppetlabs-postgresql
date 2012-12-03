@@ -22,4 +22,4 @@ instead do something like:
     rspec ./spec/distros/ubuntu_lucid_64
 
 For some options that might speed up the testing process a bit during development,
-please see `spec/support/test_config.rb`.
+please see `spec/support/postgres_test_config.rb`.
