@@ -16,24 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class postgresql::initdb(
-  $datadir     = $postgresql::params::datadir,
-  $encoding    = 'UTF8',
-  $group       = 'postgres',
-  $initdb_path = $postgresql::params::initdb_path,
-  $user        = 'postgres'
-) inherits postgresql::params {
+class postgresql_tests::non_default::test_db($db) {
 
-  $initdb_command = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
-  
-  exec { $initdb_command:
-    creates => "${datadir}/PG_VERSION",
-    user    => $user,
-    group   => $group
-  }
+  class { "postgresql::params":
+      version               => '9.2',
+      manage_package_repo   => true,
+      package_source        => 'yum.postgresql.org',
+  } ->
 
-  if defined(Package["$postgresql::params::server_package_name"]) {
-    Package["$postgresql::params::server_package_name"] ->
-        Exec[$initdb_command]
+  class { "postgresql::server": } ->
+
+  postgresql::db { $db:
+    user        => $db,
+    password    => $db,
   }
 }

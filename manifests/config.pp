@@ -44,29 +44,29 @@ class postgresql::config(
   $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
 ) inherits postgresql::params {
 
-    # Basically, all this class needs to handle is passing parameters on
-    #  to the "beforeservice" and "afterservice" classes, and ensure
-    #  the proper ordering.
+  # Basically, all this class needs to handle is passing parameters on
+  #  to the "beforeservice" and "afterservice" classes, and ensure
+  #  the proper ordering.
 
-    class { 'postgresql::config::beforeservice':
-      ip_mask_deny_postgres_user    => $ip_mask_deny_postgres_user,
-      ip_mask_allow_all_users       => $ip_mask_allow_all_users,
-      listen_addresses              => $listen_addresses,
-      ipv4acls                      => $ipv4acls,
-      ipv6acls                      => $ipv6acls,
-      pg_hba_conf_path              => $pg_hba_conf_path,
-      postgresql_conf_path          => $postgresql_conf_path,
-      manage_redhat_firewall        => $manage_redhat_firewall,
-    }
+  class { 'postgresql::config::beforeservice':
+    ip_mask_deny_postgres_user    => $ip_mask_deny_postgres_user,
+    ip_mask_allow_all_users       => $ip_mask_allow_all_users,
+    listen_addresses              => $listen_addresses,
+    ipv4acls                      => $ipv4acls,
+    ipv6acls                      => $ipv6acls,
+    pg_hba_conf_path              => $pg_hba_conf_path,
+    postgresql_conf_path          => $postgresql_conf_path,
+    manage_redhat_firewall        => $manage_redhat_firewall,
+  }
 
-    class { 'postgresql::config::afterservice':
-      postgres_password        => $postgres_password,
-    }
+  class { 'postgresql::config::afterservice':
+    postgres_password        => $postgres_password,
+  }
 
-    Class['postgresql::config'] ->
-        Class['postgresql::config::beforeservice'] ->
-        Service['postgresqld'] ->
-        Class['postgresql::config::afterservice']
+  Class['postgresql::config'] ->
+      Class['postgresql::config::beforeservice'] ->
+      Service['postgresqld'] ->
+      Class['postgresql::config::afterservice']
 
 
 }

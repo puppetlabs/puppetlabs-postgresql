@@ -23,7 +23,7 @@ define postgresql::database(
   $dbname  = $title,
   $charset = 'UTF8')
 {
-  require postgresql::params
+  include postgresql::params
 
   if ($::postgres_default_version != '8.1') {
     $locale_option = '--locale=C'
