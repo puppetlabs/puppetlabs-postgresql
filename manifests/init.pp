@@ -17,21 +17,13 @@
 #
 class postgresql (
   $version        = $::postgres_default_version,
-  $package_name   = '',
+  $package_name   = $postgresql::params::client_package_name,
   $package_ensure = 'present'
 ) inherits postgresql::params {
 
-  if ! $package_name {
-    include postgresql::platform
-    $package_name_real = $postgresql::platform::client_package_name
-  }
-  else {
-    $package_name_real = $package_name
-  }
-
   package { 'postgresql_client':
     ensure  => $package_ensure,
-    name    => $package_name_real,
+    name    => $package_name,
   }
 
 }

@@ -17,32 +17,17 @@
 # limitations under the License.
 
 class postgresql::initdb(
-  $datadir     = '',
+  $datadir     = $postgresql::params::datadir,
   $encoding    = 'UTF8',
   $group       = 'postgres',
-  $initdb_path = '',
-  $options     = '',
+  $initdb_path = $postgresql::params::initdb_path,
   $user        = 'postgres'
 ) inherits postgresql::params {
 
-  include postgresql::platform
-
-  if ! $datadir {
-    $datadir_real = $postgresql::platform::datadir
-  } else {
-    $datadir_real = $datadir
-  }
-  
-  if ! $initdb_path {
-    $initdb_path_real = $postgresql::platform::initdb_path
-  } else {
-    $initdb_path_real = $initdb_path
-  }
-
-  $initdb_command = "${initdb_path_real} --encoding '${encoding}' --pgdata '${datadir_real}'"
+  $initdb_command = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
   
   exec { $initdb_command:
-    creates => "${datadir_real}/PG_VERSION",
+    creates => "${datadir}/PG_VERSION",
     user    => $user,
     group   => $group
   }

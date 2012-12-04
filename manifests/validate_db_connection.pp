@@ -49,28 +49,19 @@ define postgresql::validate_db_connection(
     $database_name,
     $database_password,
     $database_username,
-    $client_package_name = '',
+    $client_package_name = $postgresql::params::client_package_name,
     $database_port       = 5432
-) {
-    include postgresql::platform
-
-    # This is a bit messy, but we need to use the correct client package name
-    # from the params class if the user did not explicitly provide one.
-    if (! $client_package_name) {
-        $package_name = $postgresql::platform::client_package_name
-    } else {
-        $package_name = $client_package_name
-    }
+) inherits postgresql::params {
 
     # Make sure the postgres client package is installed; we need it for
     # `psql`.
     package { 'postgresql-client':
         ensure => present,
-        name   => $package_name,
+        name   => $client_package_name,
     }
 
     # TODO: port to ruby
-    $psql = "${postgresql::platform::psql_path} --tuples-only --quiet -h ${database_host} -U ${database_username} -p ${database_port} --dbname ${database_name}"
+    $psql = "${postgresql::params::psql_path} --tuples-only --quiet -h ${database_host} -U ${database_username} -p ${database_port} --dbname ${database_name}"
 
     $exec_name = "validate postgres connection for ${database_host}/${database_name}"
     exec { $exec_name:

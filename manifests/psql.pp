@@ -24,7 +24,7 @@ define postgresql::psql(
     $user        = 'postgres'
 ) {
 
-  require postgresql::platform
+  include postgresql::params
 
   # TODO: FIXME: shellquote does not work, and this regex works for trivial
   # things but not nested escaping.  Need a lexer, preferably a ruby SQL parser
@@ -34,7 +34,7 @@ define postgresql::psql(
     $no_password_option = '--no-password'
   }
 
-  $psql = "${postgresql::platform::psql_path} ${no_password_option} --tuples-only --quiet --dbname ${db}"
+  $psql = "${postgresql::params::psql_path} ${no_password_option} --tuples-only --quiet --dbname ${db}"
   $quoted_command = regsubst($command, '"', '\\"', 'G')
   $quoted_unless  = regsubst($unless,  '"', '\\"', 'G')
 

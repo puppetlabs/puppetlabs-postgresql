@@ -13,20 +13,12 @@
 # Sample Usage:
 #
 class postgresql::devel(
-  $package_name   = '',
+  $package_name   = $postgresql::params::devel_package_name,
   $package_ensure = 'present'
-) {
-
-  if ! $package_name {
-    include postgresql::platform
-    $package_name_real = $postgresql::platform::devel_package_name
-  }
-  else {
-    $package_name_real = $package_name
-  }
+) inherits postgresql::params {
 
   package { 'postgresql_devel':
     ensure => $package_ensure,
-    name   => $package_name_real,
+    name   => $package_name,
   }
 }

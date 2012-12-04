@@ -39,26 +39,10 @@ class postgresql::config(
   $listen_addresses             = $postgresql::params::listen_addresses,
   $ipv4acls                     = $postgresql::params::ipv4acls,
   $ipv6acls                     = $postgresql::params::ipv6acls,
-  $pg_hba_conf_path             = '',
-  $postgresql_conf_path         = '',
+  $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
+  $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
   $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
 ) inherits postgresql::params {
-
-  include postgresql::platform
-
-  if ! $pg_hba_conf_path {
-    $pg_hba_conf_path_real     = $postgresql::platform::pg_hba_conf_path
-  } 
-  else {
-    $pg_hba_conf_path_real     = $pg_hba_conf_path
-  }
-
-  if ! $postgresql_conf_path {
-    $postgresql_conf_path_real = $postgresql::platform::postgresql_conf_path
-  } 
-  else {
-    $postgresql_conf_path_real = $postgresql_conf_path
-  }
 
   # Basically, all this class needs to handle is passing parameters on
   #  to the "beforeservice" and "afterservice" classes, and ensure
@@ -70,8 +54,8 @@ class postgresql::config(
     listen_addresses              => $listen_addresses,
     ipv4acls                      => $ipv4acls,
     ipv6acls                      => $ipv6acls,
-    pg_hba_conf_path              => $pg_hba_conf_path_real,
-    postgresql_conf_path          => $postgresql_conf_path_real,
+    pg_hba_conf_path              => $pg_hba_conf_path,
+    postgresql_conf_path          => $postgresql_conf_path,
     manage_redhat_firewall        => $manage_redhat_firewall,
   }
 

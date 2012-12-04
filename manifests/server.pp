@@ -15,43 +15,17 @@
 # Sample Usage:
 #
 class postgresql::server (
-  $package_name     = '',
+  $package_name     = $postgresql::params::server_package_name,
   $package_ensure   = 'present',
-  $service_name     = '',
-  $service_provider = '',
-  $service_status   = '',
+  $service_name     = $postgresql::params::service_name,
+  $service_provider = $postgresql::params::service_provider,
+  $service_status   = $postgresql::params::service_status,
   $config_hash      = {}
 ) inherits postgresql::params {
 
-  include postgresql::platform
-
-  if ! $package_name {
-    $package_name_real = $postgresql::platform::server_package_name
-  } else {
-    $package_name_real = $package_name
-  }
-
-  if ! $service_name {
-      $service_name_real = $postgresql::platform::service_name
-  } else {
-      $service_name_real = $service_name
-  }
-
-  if ! $service_provider {
-      $service_provider_real = $postgresql::platform::service_provider
-  } else {
-      $service_provider_real = $service_provider
-  }
-
-  if ! $service_status {
-      $service_status_real = $postgresql::platform::service_status
-  } else {
-      $service_status_real = $service_status
-  }
-
   package { 'postgresql-server':
     ensure  => $package_ensure,
-    name    => $package_name_real,
+    name    => $package_name,
   }
 
   if defined(Yumrepo['yum.postgresql.org']) {
@@ -66,11 +40,11 @@ class postgresql::server (
 
   service { 'postgresqld':
     ensure   => running,
-    name     => $service_name_real,
+    name     => $service_name,
     enable   => true,
     require  => Package['postgresql-server'],
-    provider => $service_provider_real,
-    status   => $service_status_real,
+    provider => $service_provider,
+    status   => $service_status,
   }
 
   if ($postgresql::params::needs_initdb) {
@@ -84,10 +58,10 @@ class postgresql::server (
 
   exec { 'reload_postgresql':
     path        => '/usr/bin:/usr/sbin:/bin:/sbin',
-    command     => "service ${service_name_real} reload",
+    command     => "service ${service_name} reload",
     user        => $postgresql::params::user,
     group       => $postgresql::params::group,
-    onlyif      => $service_status_real,
+    onlyif      => $service_status,
     refreshonly => true,
   }
 
