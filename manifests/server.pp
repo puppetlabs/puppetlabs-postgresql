@@ -26,12 +26,9 @@ class postgresql::server (
   package { 'postgresql-server':
     ensure  => $package_ensure,
     name    => $package_name,
+    tag     => 'postgresql',
   }
 
-  if defined(Yumrepo['yum.postgresql.org']) {
-    Yumrepo['yum.postgresql.org'] -> Package['postgresql-server']
-  }
-  
   $config_class = {}
   $config_class['postgresql::config'] = $config_hash
 

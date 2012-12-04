@@ -21,9 +21,10 @@ class postgresql (
   $package_ensure = 'present'
 ) inherits postgresql::params {
 
-  package { 'postgresql_client':
+  package { 'postgresql-client':
     ensure  => $package_ensure,
     name    => $package_name,
+    tag    => 'postgresql',
   }
 
 }

@@ -58,6 +58,7 @@ define postgresql::validate_db_connection(
     package { 'postgresql-client':
         ensure => present,
         name   => $client_package_name,
+        tag    => 'postgresql',
     }
 
     # TODO: port to ruby

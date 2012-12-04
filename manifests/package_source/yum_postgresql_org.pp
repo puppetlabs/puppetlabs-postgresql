@@ -17,7 +17,6 @@ class postgresql::package_source::yum_postgresql_org(
       gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}",
   }
 
-  if defined(Package['postgresql-server']) {
-     Yumrepo['yum.postgresql.org'] -> Package['postgresql-server']
-  }
+  Yumrepo["yum.postgresql.org"] -> Package<|tag == 'postgresql'|>
+
 }

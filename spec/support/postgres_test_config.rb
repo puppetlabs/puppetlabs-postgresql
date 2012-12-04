@@ -4,11 +4,11 @@ module PostgresTestConfig
   #  valuable for final testing.  This constant allows you to toggle between
   #  strict testing and less strict testing--the latter being useful for
   #  development purposes.
-  HardCoreTesting = false
+  HardCoreTesting = true
 
   # If this value is set to true, then each VM will be suspended after the tests
   # against it are completed.  This will slow things down a ton during
   # iterative development, but will save a lot of system resources by not
   # keeping all of the VMs running at the same time.
-  SuspendVMsAfterSuite = false
+  SuspendVMsAfterSuite = true
 end

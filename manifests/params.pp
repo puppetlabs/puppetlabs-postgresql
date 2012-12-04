@@ -10,7 +10,28 @@
 #
 # Sample Usage:
 #
-class postgresql::params {  
+
+# TODO: add real docs
+
+# This class allows you to use a newer version of postgres, rather than your
+# system's default version.
+#
+# If you want to do that, note that it is important that you use the '->',
+# or a before/require metaparameter to make sure that the `params`
+# class is evaluated before any of the other classes in the module.
+#
+# Also note that this class includes the ability to automatically manage
+# the yumrepo resource.  If you'd prefer to manage the repo yourself, simply pass
+# 'false' or omit the 'manage_repo' parameter--it defaults to 'false'.  You will
+# still need to use the 'params' class to specify the postgres version
+# number, though, in order for the other classes to be able to find the
+# correct paths to the postgres dirs.
+
+class postgresql::params(
+    $version               = $::postgres_default_version,
+    $manage_package_repo   = false,
+    $package_source        = undef,
+) {
   $user                         = 'postgres'
   $group                        = 'postgres'
   $ip_mask_deny_postgres_user   = '0.0.0.0/0'
@@ -21,6 +42,32 @@ class postgresql::params {
   # TODO: figure out a way to make this not platform-specific
   $manage_redhat_firewall       = false
 
+
+  if ($manage_package_repo) {
+      case $::osfamily {
+        'RedHat': {
+           $rh_pkg_source = pick($package_source, 'yum.postgresql.org')
+
+           case $rh_pkg_source {
+             'yum.postgresql.org': {
+                class { "postgresql::package_source::yum_postgresql_org":
+                  version => $version
+                }
+             }
+
+             default: {
+               fail("Unsupported package source '${rh_pkg_source}' for ${::osfamily} OS family. Currently the only supported source is 'yum.postgresql.org'")
+             }
+           }
+        }
+
+        default: {
+          fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
+        }
+      }
+    }
+
+
   # This is a bit hacky, but if the puppet nodes don't have pluginsync enabled,
   # they will fail with a not-so-helpful error message.  Here we are explicitly
   # verifying that the custom fact exists (which implies that pluginsync is
@@ -30,14 +77,6 @@ class postgresql::params {
   if ($::postgres_default_version == undef) {
     fail "No value for postgres_default_version facter fact; it's possible that you don't have pluginsync enabled."
   }
-
-
-  if defined(Class[Postgresql::Package_source_info]) {
-    $version = $postgresql::package_source_info::version
-  } else {
-    $version = $::postgres_default_version
-  }
-
 
   case $::operatingsystem {
     default: {
