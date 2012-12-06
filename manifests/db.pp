@@ -61,7 +61,7 @@ define postgresql::db (
     db              => $name,
     role            => $user,
     #provider       => 'postgresql',
-    require         => Postgresql::Database_user[$user],
+    require         => [Postgresql::Database[$name], Postgresql::Database_user[$user]],
   }
 
 }
