@@ -24,7 +24,7 @@ define postgresql::psql(
     $user        = 'postgres'
 ) {
 
-  require postgresql::params
+  include postgresql::params
 
   # TODO: FIXME: shellquote does not work, and this regex works for trivial
   # things but not nested escaping.  Need a lexer, preferably a ruby SQL parser

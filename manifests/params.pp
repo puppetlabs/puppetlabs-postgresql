@@ -10,7 +10,28 @@
 #
 # Sample Usage:
 #
-class postgresql::params {
+
+# TODO: add real docs
+
+# This class allows you to use a newer version of postgres, rather than your
+# system's default version.
+#
+# If you want to do that, note that it is important that you use the '->',
+# or a before/require metaparameter to make sure that the `params`
+# class is evaluated before any of the other classes in the module.
+#
+# Also note that this class includes the ability to automatically manage
+# the yumrepo resource.  If you'd prefer to manage the repo yourself, simply pass
+# 'false' or omit the 'manage_repo' parameter--it defaults to 'false'.  You will
+# still need to use the 'params' class to specify the postgres version
+# number, though, in order for the other classes to be able to find the
+# correct paths to the postgres dirs.
+
+class postgresql::params(
+    $version               = $::postgres_default_version,
+    $manage_package_repo   = false,
+    $package_source        = undef,
+) {
   $user                         = 'postgres'
   $group                        = 'postgres'
   $ip_mask_deny_postgres_user   = '0.0.0.0/0'
@@ -20,6 +41,32 @@ class postgresql::params {
   $ipv6acls                     = []
   # TODO: figure out a way to make this not platform-specific
   $manage_redhat_firewall       = false
+
+
+  if ($manage_package_repo) {
+      case $::osfamily {
+        'RedHat': {
+           $rh_pkg_source = pick($package_source, 'yum.postgresql.org')
+
+           case $rh_pkg_source {
+             'yum.postgresql.org': {
+                class { "postgresql::package_source::yum_postgresql_org":
+                  version => $version
+                }
+             }
+
+             default: {
+               fail("Unsupported package source '${rh_pkg_source}' for ${::osfamily} OS family. Currently the only supported source is 'yum.postgresql.org'")
+             }
+           }
+        }
+
+        default: {
+          fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
+        }
+      }
+    }
+
 
   # This is a bit hacky, but if the puppet nodes don't have pluginsync enabled,
   # they will fail with a not-so-helpful error message.  Here we are explicitly
@@ -39,25 +86,43 @@ class postgresql::params {
 
   case $::osfamily {
     'RedHat': {
-      $service_name             = 'postgresql'
-      $client_package_name      = 'postgresql'
-      $server_package_name      = 'postgresql-server'
-      $devel_package_name       = 'postgresql-devel'
       $needs_initdb             = true
-      $initdb_path              = '/usr/bin/initdb'
-      $createdb_path            = '/usr/bin/createdb'
-      $psql_path                = '/usr/bin/psql'
-      $datadir                  = '/var/lib/pgsql/data/'
-      $pg_hba_conf_path         = '/var/lib/pgsql/data/pg_hba.conf'
-      $postgresql_conf_path     = '/var/lib/pgsql/data/postgresql.conf'
       $firewall_supported       = true
       $persist_firewall_command = '/sbin/iptables-save > /etc/sysconfig/iptables'
+
+      if $version == $::postgres_default_version {
+        $client_package_name = 'postgresql'
+        $server_package_name = 'postgresql-server'
+        $devel_package_name  = 'postgresql-devel'
+        $service_name = 'postgresql'
+        $bindir       = '/usr/bin'
+        $datadir      = '/var/lib/pgsql/data'
+        $confdir      = $datadir
+      } else {
+        $version_parts       = split($version, '[.]')
+        $package_version     = "${version_parts[0]}${version_parts[1]}"
+        $client_package_name = "postgresql${package_version}"
+        $server_package_name = "postgresql${package_version}-server"
+        $devel_package_name  = "postgresql${package_version}-devel"
+        $service_name = "postgresql-${version}"
+        $bindir       = "/usr/pgsql-${version}/bin"
+        $datadir      = "/var/lib/pgsql/${version}/data"
+        $confdir      = $datadir
+      }
+
+      $service_status = undef
     }
 
     'Debian': {
+      $needs_initdb             = false
+      $firewall_supported       = false
+      # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
+      #$persist_firewall_command = '/sbin/iptables-save > /etc/iptables/rules.v4'
+
+
       case $::operatingsystem {
         'Debian': {
-            $service_name       = 'postgresql'
+            $service_name = 'postgresql'
         }
 
         'Ubuntu': {
@@ -69,27 +134,23 @@ class postgresql::params {
         }
       }
 
-      $client_package_name      = 'postgresql-client'
-      $server_package_name      = 'postgresql'
-      $devel_package_name       = 'libpq-dev'
-      $needs_initdb             = false
-      $initdb_path              = "/usr/lib/postgresql/${::postgres_default_version}/bin/initdb"
-      $createdb_path            = "/usr/lib/postgresql/${::postgres_default_version}/bin/createdb"
-      $psql_path                = "/usr/lib/postgresql/${::postgres_default_version}/bin/psql"
-      $datadir                  = "/var/lib/postgresql/${::postgres_default_version}/main"
-      $pg_hba_conf_path         = "/etc/postgresql/${::postgres_default_version}/main/pg_hba.conf"
-      $postgresql_conf_path     = "/etc/postgresql/${::postgres_default_version}/main/postgresql.conf"
-      $firewall_supported       = false
-      $service_status           = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
-      # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
-      #$persist_firewall_command = '/sbin/iptables-save > /etc/iptables/rules.v4'
-
+      $client_package_name = 'postgresql-client'
+      $server_package_name = 'postgresql'
+      $devel_package_name  = 'libpq-dev'
+      $bindir              = "/usr/lib/postgresql/${::postgres_default_version}/bin"
+      $datadir             = "/var/lib/postgresql/${::postgres_default_version}/main"
+      $confdir             = "/etc/postgresql/${::postgres_default_version}/main"
+      $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
     }
-
 
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
     }
   }
 
+  $initdb_path          = "${bindir}/initdb"
+  $createdb_path        = "${bindir}/createdb"
+  $psql_path            = "${bindir}/psql"
+  $pg_hba_conf_path     = "${confdir}/pg_hba.conf"
+  $postgresql_conf_path = "${confdir}/postgresql.conf"
 }

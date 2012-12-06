@@ -23,7 +23,7 @@ shared_context :pg_vm_context do
     @env.cli("up", vm.to_s)
 
     if PostgresTestConfig::HardCoreTesting
-      sudo_and_log(vm, '[ "$(facter osfamily)" == "Debian" ] && apt-get update')
+      sudo_and_log(vm, 'if [ "$(facter osfamily)" == "Debian" ] ; then apt-get update ; fi')
     end
 
     install_postgres
