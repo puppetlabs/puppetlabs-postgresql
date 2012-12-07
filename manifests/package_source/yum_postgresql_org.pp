@@ -6,7 +6,7 @@ class postgresql::package_source::yum_postgresql_org(
   $package_version     = "${version_parts[0]}${version_parts[1]}"
 
   file { "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}":
-      source => "puppet:///modules/postgresql_tests/RPM-GPG-KEY-PGDG-${package_version}"
+      source => "puppet:///modules/postgresql/RPM-GPG-KEY-PGDG"
   } ->
 
   yumrepo { "yum.postgresql.org":
