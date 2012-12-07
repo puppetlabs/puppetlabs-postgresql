@@ -25,7 +25,7 @@ define postgresql::database(
 {
   include postgresql::params
 
-  if ($::postgres_default_version != '8.1') {
+  if ($postgresql::params::version != '8.1') {
     $locale_option = '--locale=C'
   }
 
