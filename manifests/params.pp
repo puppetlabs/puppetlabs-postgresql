@@ -128,18 +128,18 @@ class postgresql::params(
         'Ubuntu': {
             case $::lsbmajdistrelease {
                 # thanks, ubuntu
-                '10':       { $service_name = "postgresql-${::postgres_default_version}" }
+                '10':       { $service_name = "postgresql-${version}" }
                 default:    { $service_name = 'postgresql' }
             }
         }
       }
 
-      $client_package_name = 'postgresql-client'
-      $server_package_name = 'postgresql'
+      $client_package_name = "postgresql-client-${version}"
+      $server_package_name = "postgresql-${version}"
       $devel_package_name  = 'libpq-dev'
-      $bindir              = "/usr/lib/postgresql/${::postgres_default_version}/bin"
-      $datadir             = "/var/lib/postgresql/${::postgres_default_version}/main"
-      $confdir             = "/etc/postgresql/${::postgres_default_version}/main"
+      $bindir              = "/usr/lib/postgresql/${version}/bin"
+      $datadir             = "/var/lib/postgresql/${version}/main"
+      $confdir             = "/etc/postgresql/${version}/main"
       $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
     }
 
