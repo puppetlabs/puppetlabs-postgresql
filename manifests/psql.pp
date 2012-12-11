@@ -30,7 +30,7 @@ define postgresql::psql(
   # things but not nested escaping.  Need a lexer, preferably a ruby SQL parser
   # to catch errors at catalog time.  Possibly https://github.com/omghax/sql ?
 
-  if ($::postgres_default_version != '8.1') {
+  if ($postgresql::params::version != '8.1') {
     $no_password_option = '--no-password'
   }
 

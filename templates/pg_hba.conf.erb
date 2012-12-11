@@ -74,12 +74,12 @@
 # (custom daily cronjobs, replication, and similar tasks).
 #
 # Database administrative login by UNIX sockets
-local   all         postgres                          ident  <%= "sameuser" if @postgres_default_version == "8.1" %>
+local   all         postgres                          ident  <%= "sameuser" if scope.lookupvar('postgresql::params::version') == "8.1" %>
 
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
 
 # "local" is for Unix domain socket connections only
-local   all         all                               ident <%= "sameuser" if @postgres_default_version == "8.1" %>
+local   all         all                               ident <%= "sameuser" if scope.lookupvar('postgresql::params::version') == "8.1" %>
 # IPv4 local connections:
 host    all         postgres    <%= @ip_mask_deny_postgres_user + "\t" %>      reject
 <% @ipv4acls.each do |acl|; parts = acl.split -%>

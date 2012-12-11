@@ -16,7 +16,6 @@
 # Sample Usage:
 #
 class postgresql (
-  $version        = $::postgres_default_version,
   $package_name   = $postgresql::params::client_package_name,
   $package_ensure = 'present'
 ) inherits postgresql::params {
