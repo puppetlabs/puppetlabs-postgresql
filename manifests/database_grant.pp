@@ -33,6 +33,7 @@ define postgresql::database_grant(
     $psql_db   = 'postgres',
     $psql_user ='postgres'
 ) {
+  include postgresql::params
 
   # TODO: FIXME: only works on databases, due to using has_database_privilege
 
@@ -53,6 +54,7 @@ define postgresql::database_grant(
     db           => $psql_db,
     psql_user    => $psql_user,
     unless       => "SELECT 1 WHERE has_database_privilege('$role', '$db', '$unless_privilege')",
+    cwd          => $postgresql::params::datadir,
   }
 }
 
