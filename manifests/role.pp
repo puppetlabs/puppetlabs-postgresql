@@ -25,6 +25,7 @@ define postgresql::role(
     $superuser  = false,
     $username   = $title
 ) {
+  include postgresql::params
 
   $login_sql      = $login      ? { true => 'LOGIN'     , default => 'NOLOGIN' }
   $createrole_sql = $createrole ? { true => 'CREATEROLE', default => 'NOCREATEROLE' }
@@ -36,5 +37,6 @@ define postgresql::role(
     db           => $db,
     psql_user    => 'postgres',
     unless       => "SELECT rolname FROM pg_roles WHERE rolname='$username'",
+    cwd          => $postgresql::params::datadir,
   }
 }
