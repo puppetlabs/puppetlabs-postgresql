@@ -59,6 +59,10 @@ Puppet::Type.newtype(:postgresql_psql) do
     defaultto("postgres")
   end
 
+  newparam(:cwd) do
+    desc "The working directory under which the psql command should be executed."
+  end
+
   newparam(:refreshonly) do
     desc "If 'true', then the SQL will only be executed via a notify/subscribe event."
 

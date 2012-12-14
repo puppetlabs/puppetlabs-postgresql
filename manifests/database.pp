@@ -34,11 +34,13 @@ define postgresql::database(
   postgresql_psql { "Check for existence of db '$dbname'":
     command => "SELECT 1",
     unless  => "SELECT datname FROM pg_database WHERE datname='$dbname'",
+    cwd     => $postgresql::params::datadir,
   } ~>
 
   exec { $createdb_command :
     refreshonly => true,
     user    => 'postgres',
+    cwd     => $postgresql::params::datadir,
   } ~>
 
   # This will prevent users from connecting to the database unless they've been
@@ -46,6 +48,7 @@ define postgresql::database(
   postgresql_psql {"REVOKE CONNECT ON DATABASE $dbname FROM public":
     db          => 'postgres',
     refreshonly => true,
+    cwd         => $postgresql::params::datadir,
   }
 
 }
