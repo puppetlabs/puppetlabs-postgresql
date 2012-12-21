@@ -21,12 +21,13 @@
 
 define postgresql::database(
   $dbname  = $title,
-  $charset = 'UTF8')
+  $charset = 'UTF8',
+  $locale  = 'C')
 {
   include postgresql::params
 
   if ($postgresql::params::version != '8.1') {
-    $locale_option = '--locale=C'
+    $locale_option = "--locale=${locale}"
   }
 
   $createdb_command = "${postgresql::params::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
@@ -35,6 +36,7 @@ define postgresql::database(
     command => "SELECT 1",
     unless  => "SELECT datname FROM pg_database WHERE datname='$dbname'",
     cwd     => $postgresql::params::datadir,
+	 psql_cmd => $postgresql::params::psql_path,
   } ~>
 
   exec { $createdb_command :
@@ -49,6 +51,7 @@ define postgresql::database(
     db          => 'postgres',
     refreshonly => true,
     cwd         => $postgresql::params::datadir,
+	 psql_cmd => $postgresql::params::psql_path,
   }
 
 }

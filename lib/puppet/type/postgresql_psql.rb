@@ -37,6 +37,10 @@ Puppet::Type.newtype(:postgresql_psql) do
       end
     end
   end
+  
+  newparam(:psql_cmd) do
+    desc "The path of the psql command."
+  end
 
   newparam(:unless) do
     desc "An optional SQL command to execute prior to the main :command; " +
