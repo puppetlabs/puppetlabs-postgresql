@@ -41,7 +41,8 @@ class postgresql::config::beforeservice(
   $listen_addresses             = $postgresql::params::listen_addresses,
   $ipv4acls                     = $postgresql::params::ipv4acls,
   $ipv6acls                     = $postgresql::params::ipv6acls,
-  $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
+  $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall,
+  $use_augeas                   = $postgresql::params::use_augeas,
 ) inherits postgresql::params {
 
 
@@ -50,15 +51,21 @@ class postgresql::config::beforeservice(
     group  => $postgresql::params::group,
   }
 
-  # We use a templated version of pg_hba.conf.  Our main needs are to
-  #  make sure that md5 authentication can be made available for
-  #  remote hosts.
-  file { 'pg_hba.conf':
-    ensure      => file,
-    path        => $pg_hba_conf_path,
-    content     => template('postgresql/pg_hba.conf.erb'),
-    notify      => Exec['reload_postgresql'],
+  if ($use_augeas){
+    notify{"Okay, master, I'll use augeas!":}
   }
+  else {
+      # We use a templated version of pg_hba.conf.  Our main needs are to
+      #  make sure that md5 authentication can be made available for
+      #  remote hosts.
+      file { 'pg_hba.conf':
+        ensure      => file,
+        path        => $pg_hba_conf_path,
+        content     => template('postgresql/pg_hba.conf.erb'),
+        notify      => Exec['reload_postgresql'],
+      }
+  }
+
 
   # We must set a "listen_addresses" line in the postgresql.conf if we
   #  want to allow any connections from remote hosts.
