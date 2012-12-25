@@ -33,6 +33,66 @@
 #     ip_mask_allow_all_users    => '0.0.0.0/0',
 #   }
 #
+
+
+define postgresql::config::pg_hba_conf($type, $database, $user, $address=undef, $method){
+    # guid of this entry
+    $key = "$type/$database/$user/$address/$method"
+
+    # validate parameters
+    if ($type == 'local' and $address) {
+        fail("'local' type can't have configured address!")
+    }
+
+    # configure filter and changes, depending on ACL type
+    if ($type == 'local'){
+        $filter = "type='$type' and database='$database' and user='$user' and method='$method'"
+        $changes = [
+            "set 01/type $type",
+            "set 01/database $database",
+            "set 01/user \"$user\"",
+            "set 01/method $method",
+        ]
+
+    }
+    else {
+        $filter = "type='$type' and database='$database' and user='$user' and address='$address' and method='$method'"
+
+        $changes = [
+            "set 01/type $type",
+            "set 01/database $database",
+            "set 01/user \"$user\"",
+            "set 01/address $address",
+            "set 01/method $method",
+        ]
+    }
+
+
+    augeas { $key:
+      lens      => "Pg_Hba.lns",
+      incl      => "$pg_hba_conf_path",
+      onlyif    => "match *[$filter] size != 1",
+      changes   => $changes,
+    }
+
+}
+
+define postgresql::config::postgresql_conf($value=undef){
+    if ($value){
+        $changes = "set .anon/$name $value"
+    } else {
+        $changes = "remove .anon/$name"
+    }
+
+    augeas { "postgresql_conf/$name":
+        lens      => "PHP.lns",
+        incl      => "$postgresql_conf_path",
+        changes   => $changes,
+        notify    => Service['postgresqld'],
+    }
+
+}
+
 class postgresql::config::beforeservice(
   $pg_hba_conf_path,
   $postgresql_conf_path,
@@ -42,7 +102,8 @@ class postgresql::config::beforeservice(
   $ipv4acls                     = $postgresql::params::ipv4acls,
   $ipv6acls                     = $postgresql::params::ipv6acls,
   $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall,
-  $use_augeas                   = $postgresql::params::use_augeas,
+  $au_pg_hba_conf               = $postgresql::params::au_pg_hba_conf,
+  $au_postgresql_conf           = $postgresql::params::au_postgresql_conf,
 ) inherits postgresql::params {
 
 
@@ -51,8 +112,8 @@ class postgresql::config::beforeservice(
     group  => $postgresql::params::group,
   }
 
-  if ($use_augeas){
-    notify{"Okay, master, I'll use augeas!":}
+  if !empty($au_pg_hba_conf){
+    create_resources('postgresql::config::pg_hba_conf', $au_pg_hba_conf)
   }
   else {
       # We use a templated version of pg_hba.conf.  Our main needs are to
@@ -67,13 +128,18 @@ class postgresql::config::beforeservice(
   }
 
 
-  # We must set a "listen_addresses" line in the postgresql.conf if we
-  #  want to allow any connections from remote hosts.
-  file_line { 'postgresql.conf':
-    path        => $postgresql_conf_path,
-    match       => '^listen_addresses\s*=.*$',
-    line        => "listen_addresses = '${listen_addresses}'",
-    notify      => Service['postgresqld'],
+  if ($au_postgresql_conf){
+    create_resources('postgresql::config::postgresql_conf', $au_postgresql_conf)
+  }
+  else {
+      # We must set a "listen_addresses" line in the postgresql.conf if we
+      #  want to allow any connections from remote hosts.
+      file_line { 'postgresql.conf':
+        path        => $postgresql_conf_path,
+        match       => '^listen_addresses\s*=.*$',
+        line        => "listen_addresses = '${listen_addresses}'",
+        notify      => Service['postgresqld'],
+      }
   }
 
   # TODO: is this a reasonable place for this firewall stuff?
