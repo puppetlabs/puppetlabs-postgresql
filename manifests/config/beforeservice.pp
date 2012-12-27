@@ -35,7 +35,7 @@
 #
 
 
-define postgresql::config::pg_hba_conf($type, $database, $user, $address=undef, $method){
+define postgresql::config::pg_hba_conf($ensure='present', $type, $database, $user, $address=undef, $method){
     # guid of this entry
     $key = "$type/$database/$user/$address/$method"
 
@@ -44,16 +44,20 @@ define postgresql::config::pg_hba_conf($type, $database, $user, $address=undef, 
         fail("'local' type can't have configured address!")
     }
 
+    if !($ensure in [present, absent]) {
+        fail('ensure parameter must be "present" or "absent"')
+    }
+
     # configure filter and changes, depending on ACL type
     if ($type == 'local'){
         $filter = "type='$type' and database='$database' and user='$user' and method='$method'"
+
         $changes = [
             "set 01/type $type",
             "set 01/database $database",
             "set 01/user \"$user\"",
             "set 01/method $method",
         ]
-
     }
     else {
         $filter = "type='$type' and database='$database' and user='$user' and address='$address' and method='$method'"
@@ -67,12 +71,21 @@ define postgresql::config::pg_hba_conf($type, $database, $user, $address=undef, 
         ]
     }
 
+    if $ensure == 'present'{
+        augeas { $key:
+          lens      => "Pg_Hba.lns",
+          incl      => "$pg_hba_conf_path",
+          onlyif    => "match *[$filter] size != 1",
+          changes   => $changes,
+        }
+    }
+    else {
+        augeas { $key:
+          lens      => "Pg_Hba.lns",
+          incl      => "$pg_hba_conf_path",
+          changes   => "rm *[$filter]",
+        }
 
-    augeas { $key:
-      lens      => "Pg_Hba.lns",
-      incl      => "$pg_hba_conf_path",
-      onlyif    => "match *[$filter] size != 1",
-      changes   => $changes,
     }
 
 }
