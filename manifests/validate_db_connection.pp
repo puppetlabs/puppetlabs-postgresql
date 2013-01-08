@@ -1,4 +1,4 @@
-# Define: postgresql::validate_db_connection
+# Class: postgresql::validate_db_connection
 #
 # This type validates that a successful postgres connection can be established
 # between the node on which this resource is run and a specified postgres
@@ -44,7 +44,7 @@
 #  }
 #
 
-define postgresql::validate_db_connection(
+class postgresql::validate_db_connection(
     $database_host,
     $database_name,
     $database_password,
