@@ -14,7 +14,7 @@ def get_debian_postgres_version
     # TODO: add more debian versions or better logic here
     when /^6\./
       "8.4"
-    when /^wheezy/
+    when /^wheezy/, /^7\./
       "9.1"
     else
       nil
