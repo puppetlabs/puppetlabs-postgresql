@@ -51,7 +51,7 @@ define postgresql::validate_db_connection(
     $database_username,
     $client_package_name = $postgresql::params::client_package_name,
     $database_port       = 5432
-) inherits postgresql::params {
+) {
 
     # Make sure the postgres client package is installed; we need it for
     # `psql`.
