@@ -61,6 +61,10 @@ class postgresql::params(
            }
         }
 
+        'Debian': {
+          class { "postgresql::package_source::apt_postgresql_org": }
+        }
+
         default: {
           fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
         }
@@ -127,11 +131,12 @@ class postgresql::params(
         }
 
         'Ubuntu': {
-            case $::lsbmajdistrelease {
-                # thanks, ubuntu
-                '10':       { $service_name = "postgresql-${version}" }
-                default:    { $service_name = 'postgresql' }
-            }
+           # thanks, ubuntu
+           if($::lsbmajdistrelease == '10' and !$manage_package_repo) {
+             $service_name = "postgresql-${version}"
+           } else {
+             $service_name = 'postgresql'
+           }
         }
       }
 
@@ -141,7 +146,14 @@ class postgresql::params(
       $bindir              = "/usr/lib/postgresql/${version}/bin"
       $datadir             = "/var/lib/postgresql/${version}/main"
       $confdir             = "/etc/postgresql/${version}/main"
-      $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
+      if($manage_package_repo) {
+        # The postgresql packages (official not distro) return a different
+        # string when checking status.
+        $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'online'"
+      } else {
+        # And this is what the Debian/Ubuntu packages return.
+        $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
+      }
     }
 
     default: {

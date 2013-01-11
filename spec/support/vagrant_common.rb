@@ -1,11 +1,11 @@
-
 def apply_common_vagrant_config(config)
   # Resolve DNS via NAT
   config.vm.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 
-  # Share the stdlib module
-  #  TODO: it would be better to install this via the puppet module tool
+  # Share the various required modules
+  # TODO: it would be better to install this via the puppet module tool
   config.vm.share_folder "puppetlabs-stdlib-module", "/usr/share/puppet/modules/stdlib", "../../../../puppetlabs-stdlib"
+  config.vm.share_folder "puppetlabs-apt-module", "/usr/share/puppet/modules/apt", "../../../../puppetlabs-apt"
 
   # Share the postgressql module
   config.vm.share_folder "puppet-postgresql-module", "/usr/share/puppet/modules/postgresql", "../../.."
