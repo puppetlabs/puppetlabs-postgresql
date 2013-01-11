@@ -44,7 +44,7 @@
 #  }
 #
 
-define postgresql::validate_db_connection(
+class postgresql::validate_db_connection(
     $database_host,
     $database_name,
     $database_password,
