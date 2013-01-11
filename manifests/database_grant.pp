@@ -55,6 +55,7 @@ define postgresql::database_grant(
     psql_user    => $psql_user,
     unless       => "SELECT 1 WHERE has_database_privilege('$role', '$db', '$unless_privilege')",
     cwd          => $postgresql::params::datadir,
+	 psql_cmd => $postgresql::params::psql_path,
   }
 }
 

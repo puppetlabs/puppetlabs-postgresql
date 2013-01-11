@@ -38,5 +38,7 @@ define postgresql::role(
     psql_user    => 'postgres',
     unless       => "SELECT rolname FROM pg_roles WHERE rolname='$username'",
     cwd          => $postgresql::params::datadir,
+	 psql_cmd => $postgresql::params::psql_path,
+
   }
 }

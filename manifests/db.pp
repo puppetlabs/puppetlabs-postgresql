@@ -35,13 +35,15 @@ define postgresql::db (
   $user,
   $password,
   $charset     = 'utf8',
-  $grant       = 'ALL'
+  $grant       = 'ALL',
+  $locale      = undef
 ) {
 
   postgresql::database { $name:
     # TODO: ensure is not yet supported
     #ensure     => present,
     charset     => $charset,
+	 locale      => $locale,
     #provider   => 'postgresql',
     require     => Class['postgresql::server'],
   }
