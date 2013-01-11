@@ -117,4 +117,21 @@ shared_examples :system_default_postgres do
     end
   end
 
+  describe 'postgresql::validate_db_connections' do
+    it 'should run puppet with no changes declared if database connectivity works' do
+      # Setup
+      setup_class = 'class {"postgresql_tests::system_default::test_db": db => "foo" }'
+      sudo_and_log(vm, "puppet apply --detailed-exitcodes -e '#{setup_class}'; [ $? == 2 ]")
+
+      # Run test
+      test_pp = "postgresql::validate_db_connection {'foo': database_host => 'localhost', database_name => 'foo', database_username => 'foo', database_password => 'foo' }"
+      sudo_and_log(vm, "puppet apply --detailed-exitcodes -e '#{test_pp}'")
+    end
+
+    it 'should fail catalogue if database connectivity fails' do
+      # Run test
+      test_pp = "postgresql::validate_db_connection {'foo': database_host => 'localhost', database_name => 'foo', database_username => 'foo', database_password => 'foo' }"
+      sudo_and_log(vm, "puppet apply --detailed-exitcodes -e '#{test_pp}'; [ $? == 4 ]")
+    end
+  end
 end
