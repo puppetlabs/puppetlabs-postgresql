@@ -66,7 +66,8 @@ define postgresql::validate_db_connection(
 
     $exec_name = "validate postgres connection for ${database_host}/${database_name}"
     exec { $exec_name:
-      command     => "/bin/echo \"SELECT 1\" | ${psql}",
+      command     => '/bin/false',
+      unless      => "/bin/echo \"SELECT 1\" | ${psql}",
       cwd         => '/tmp',
       environment => "PGPASSWORD=${database_password}",
       logoutput   => 'on_failure',
