@@ -15,8 +15,12 @@
 #
 class postgresql (
   $version = $::postgres_default_version,
+  $manage_package_repo = false,
+  $package_source      = undef
 ) {
   class { 'postgresql::params':
-    version => $version,
+    version             => $version,
+    manage_package_repo => $manage_package_repo,
+    package_source      => $package_source
   }
 }
