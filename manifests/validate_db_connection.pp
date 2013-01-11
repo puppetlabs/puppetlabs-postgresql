@@ -13,9 +13,6 @@
 #   [*database_password*]   - the postgres user's password
 #   [*database_name*]       - the database name that the connection should be
 #                             established against
-#   [*client_package_name*] - (optional) the name of the postgres client package
-#                             that provides the psql tool, if you aren't using
-#                             the default system package.
 #
 # NOTE: to some degree this type assumes that you've created the corresponding
 # postgres database instance that you are validating by using the
@@ -49,17 +46,9 @@ define postgresql::validate_db_connection(
     $database_name,
     $database_password,
     $database_username,
-    $client_package_name = $postgresql::params::client_package_name,
     $database_port       = 5432
-) inherits postgresql::params {
-
-    # Make sure the postgres client package is installed; we need it for
-    # `psql`.
-    package { 'postgresql-client':
-        ensure => present,
-        name   => $client_package_name,
-        tag    => 'postgresql',
-    }
+) {
+    require postgresql
 
     # TODO: port to ruby
     $psql = "${postgresql::params::psql_path} --tuples-only --quiet -h ${database_host} -U ${database_username} -p ${database_port} --dbname ${database_name}"
