@@ -20,7 +20,7 @@ class postgresql::server (
   $service_name     = $postgresql::params::service_name,
   $service_provider = $postgresql::params::service_provider,
   $service_status   = $postgresql::params::service_status,
-  $config_hash      = {}
+  $config_hash      = {},
 ) inherits postgresql::params {
 
   package { 'postgresql-server':

@@ -41,6 +41,8 @@ class postgresql::params(
   $ipv6acls                     = []
   # TODO: figure out a way to make this not platform-specific
   $manage_redhat_firewall       = false
+  $au_pg_hba_conf               = {}
+  $au_postgresql_conf           = {}
 
 
   if ($manage_package_repo) {
