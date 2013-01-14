@@ -74,21 +74,21 @@
 # (custom daily cronjobs, replication, and similar tasks).
 #
 # Database administrative login by UNIX sockets
+<% format = '%-8s%-12s%-12s%-22s%s' -%>
 local   all         postgres                          ident  <%= "sameuser" if scope.lookupvar('postgresql::params::version') == "8.1" %>
 
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
 
 # "local" is for Unix domain socket connections only
-local   all         all                               ident <%= "sameuser" if scope.lookupvar('postgresql::params::version') == "8.1" %>
-# IPv4 local connections:
-host    all         postgres    <%= @ip_mask_deny_postgres_user + "\t" %>      reject
-<% @ipv4acls.each do |acl|; parts = acl.split -%>
-<%= parts[0] + "\t" + parts[1] + "\t" + parts[2] + "\t\t" + parts[3] + "\t\t" + parts[4] + "\t" + parts.last(parts.length - 5).join(" ") %>
+<% @unixacls.each do |acl|; parts = acl.split -%>
+<%= sprintf(format, parts[0], parts[1], parts[2], '', parts[3]) %>
 <% end -%>
-host    all         all         <%= @ip_mask_allow_all_users + "\t" %>      md5
+# IPv4 local connections:
+<% @ipv4acls.each do |acl|; parts = acl.split -%>
+<%= sprintf(format, parts[0], parts[1], parts[2], parts[3], parts[4]) %>
+<% end -%>
 # IPv6 local connections:
-host    all         all         ::1/128               md5
 <% @ipv6acls.each do |acl|; parts = acl.split -%>
-<%= parts[0] + "\t" + parts[1] + "\t" + parts[2] + "\t\t" + parts[3] + "\t\t" + parts[4] + "\t" + parts.last(parts.length - 5).join(" ") %>
+<%= sprintf(format, parts[0], parts[1], parts[2], parts[3], parts[4]) %>
 <% end -%>
 

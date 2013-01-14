@@ -34,11 +34,13 @@ class postgresql::params(
 ) {
   $user                         = 'postgres'
   $group                        = 'postgres'
-  $ip_mask_deny_postgres_user   = '0.0.0.0/0'
-  $ip_mask_allow_all_users      = '127.0.0.1/32'
   $listen_addresses             = 'localhost'
-  $ipv4acls                     = []
-  $ipv6acls                     = []
+  $unixacls                     = [ 'local all all ident' ]
+  $ipv4acls                     = [
+                                   'host all postgres 0.0.0.0/0 reject',
+                                   'host all all 127.0.0.1/32 md5',
+                                  ]
+  $ipv6acls                     = [ 'host all all ::1/128 md5' ]
   # TODO: figure out a way to make this not platform-specific
   $manage_redhat_firewall       = false
 

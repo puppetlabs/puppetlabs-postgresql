@@ -3,12 +3,10 @@
 # Parameters:
 #
 #   [*postgres_password*]            - postgres db user password.
-#   [*ip_mask_deny_postgres_user*]   - ip mask for denying remote access for postgres user; defaults to '0.0.0.0/0',
-#                                       meaning that all TCP access for postgres user is denied.
-#   [*ip_mask_allow_all_users*]      - ip mask for allowing remote access for other users (besides postgres);
-#                                       defaults to '127.0.0.1/32', meaning only allow connections from localhost
 #   [*listen_addresses*]             - what IP address(es) to listen on; comma-separated list of addresses; defaults to
 #                                       'localhost', '*' = all
+#   [*unixacls*]                     - list of strings for access control for connection method, users, databases, UNIX
+#                                       addresses; see postgresql documentation about pg_hba.conf for information
 #   [*ipv4acls*]                     - list of strings for access control for connection method, users, databases, IPv4
 #                                       addresses; see postgresql documentation about pg_hba.conf for information
 #   [*ipv6acls*]                     - list of strings for access control for connection method, users, databases, IPv6
@@ -34,9 +32,8 @@
 #
 class postgresql::config(
   $postgres_password            = undef,
-  $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
-  $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
   $listen_addresses             = $postgresql::params::listen_addresses,
+  $unixacls                     = $postgresql::params::unixacls,
   $ipv4acls                     = $postgresql::params::ipv4acls,
   $ipv6acls                     = $postgresql::params::ipv6acls,
   $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
@@ -49,9 +46,8 @@ class postgresql::config(
   #  the proper ordering.
 
   class { 'postgresql::config::beforeservice':
-    ip_mask_deny_postgres_user    => $ip_mask_deny_postgres_user,
-    ip_mask_allow_all_users       => $ip_mask_allow_all_users,
     listen_addresses              => $listen_addresses,
+    unixacls                      => $unixacls,
     ipv4acls                      => $ipv4acls,
     ipv6acls                      => $ipv6acls,
     pg_hba_conf_path              => $pg_hba_conf_path,
