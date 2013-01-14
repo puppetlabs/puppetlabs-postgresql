@@ -150,4 +150,19 @@ shared_examples :system_default_postgres do
       sudo_psql_and_expect_result(vm, '--command="select ts.spcname from pg_database db, pg_tablespace ts where db.dattablespace = ts.oid and db.datname = \'"\'tablespacedb3\'"\'"', 'tablespace2')
     end
   end
+
+  describe 'postgresql.conf include' do
+    it "should support an 'include' directive at the end of postgresql.conf" do
+      test_class = 'class {"postgresql_tests::system_default::test_pgconf_include": }'
+
+      # Run once to check for crashes
+      sudo_and_log(vm, "puppet apply -e '#{test_class}'")
+
+      # Run again to check for idempotence
+      sudo_and_log(vm, "puppet apply --detailed-exitcodes -e '#{test_class}'")
+
+      # Check that the user can create a table in the database
+      sudo_psql_and_log(vm, '--command="SELECT 1" --port=5433')
+    end
+  end
 end
