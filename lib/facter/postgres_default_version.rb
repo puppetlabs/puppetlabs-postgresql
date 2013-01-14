@@ -48,18 +48,15 @@ end
 
 Facter.add("postgres_default_version") do
   setcode do
-    result =
-      case Facter.value('osfamily')
-        when 'RedHat'
-          get_redhatfamily_postgres_version()
-        when 'Debian'
-          get_debianfamily_postgres_version()
-        else
-          nil
-      end
-    if result == nil
-      result = "Unsupported OS!  Please check `postgres_default_version` fact."
+    case Facter.value('osfamily')
+      when 'RedHat'
+        get_redhatfamily_postgres_version()
+      when 'Linux'
+        get_redhatfamily_postgres_version()
+      when 'Debian'
+        get_debianfamily_postgres_version()
+      else
+        "Unsupported OS!  Please check `postgres_default_version` fact."
     end
-    result
   end
 end
