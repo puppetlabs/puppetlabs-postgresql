@@ -24,6 +24,8 @@ end
 def get_ubuntu_postgres_version
   case Facter.value('operatingsystemrelease')
     # TODO: add more ubuntu versions or better logic here
+    when "12.10"
+      "9.1"
     when "12.04"
       "9.1"
     when "10.04"
