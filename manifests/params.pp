@@ -28,9 +28,9 @@
 # correct paths to the postgres dirs.
 
 class postgresql::params(
-    $version               = $::postgres_default_version,
-    $manage_package_repo   = false,
-    $package_source        = undef
+    $version             = $::postgres_default_version,
+    $manage_package_repo = false,
+    $package_source      = undef,
 ) {
   $user                         = 'postgres'
   $group                        = 'postgres'
