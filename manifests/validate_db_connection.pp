@@ -48,7 +48,7 @@ define postgresql::validate_db_connection(
     $database_username,
     $database_port       = 5432
 ) {
-    require postgresql
+    require postgresql::client
 
     # TODO: port to ruby
     $psql = "${postgresql::params::psql_path} --tuples-only --quiet -h ${database_host} -U ${database_username} -p ${database_port} --dbname ${database_name}"

@@ -14,7 +14,7 @@
 # correct paths to the postgres dirs.
 
 
-class { "postgresql::params":
+class { "postgresql":
     version               => '9.2',
     manage_package_repo   => true,
     package_source        => 'yum.postgresql.org',
