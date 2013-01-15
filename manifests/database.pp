@@ -35,6 +35,7 @@ define postgresql::database(
     command => "SELECT 1",
     unless  => "SELECT datname FROM pg_database WHERE datname='$dbname'",
     cwd     => $postgresql::params::datadir,
+    require => Class['postgresql::server']
   } ~>
 
   exec { $createdb_command :
