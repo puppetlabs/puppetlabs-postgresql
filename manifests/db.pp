@@ -14,8 +14,8 @@
 #   [*user*]        - username to create and grant access.
 #   [*password*]    - user's password.  may be md5-encoded, in the format returned by the "postgresql_password"
 #                            function in this module
-#   [*charset*]     - database charset.
-#   [*grant*]       - privilege to grant user.
+#   [*charset*]     - database charset. defaults to 'utf8'
+#   [*grant*]       - privilege to grant user. defaults to 'all'.
 #
 # Actions:
 #
