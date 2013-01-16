@@ -146,14 +146,7 @@ class postgresql::params(
       $bindir              = "/usr/lib/postgresql/${version}/bin"
       $datadir             = "/var/lib/postgresql/${version}/main"
       $confdir             = "/etc/postgresql/${version}/main"
-      if($manage_package_repo) {
-        # The postgresql packages (official not distro) return a different
-        # string when checking status.
-        $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'online'"
-      } else {
-        # And this is what the Debian/Ubuntu packages return.
-        $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
-      }
+      $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
     }
 
     default: {
