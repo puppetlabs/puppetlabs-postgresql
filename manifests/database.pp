@@ -27,6 +27,10 @@ define postgresql::database(
 
   if ($postgresql::params::version != '8.1') {
     $locale_option = '--locale=C'
+    $public_revoke_privilege = "CONNECT"
+  } else {
+    $locale_option = ""
+    $public_revoke_privilege = "ALL"
   }
 
   $createdb_command = "${postgresql::params::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
@@ -46,7 +50,7 @@ define postgresql::database(
 
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
-  postgresql_psql {"REVOKE CONNECT ON DATABASE $dbname FROM public":
+  postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE $dbname FROM public":
     db          => 'postgres',
     refreshonly => true,
     cwd         => $postgresql::params::datadir,
