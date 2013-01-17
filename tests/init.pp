@@ -1,1 +1,1 @@
-include postgresql
+include postgresql::client

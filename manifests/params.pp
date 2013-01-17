@@ -28,9 +28,9 @@
 # correct paths to the postgres dirs.
 
 class postgresql::params(
-    $version               = $::postgres_default_version,
-    $manage_package_repo   = false,
-    $package_source        = undef
+    $version             = $::postgres_default_version,
+    $manage_package_repo = false,
+    $package_source      = undef,
 ) {
   $user                         = 'postgres'
   $group                        = 'postgres'
@@ -61,6 +61,10 @@ class postgresql::params(
            }
         }
 
+        'Debian': {
+          class { "postgresql::package_source::apt_postgresql_org": }
+        }
+
         default: {
           fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
         }
@@ -84,8 +88,9 @@ class postgresql::params(
     }
   }
 
+  # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $::osfamily {
-    'RedHat': {
+    'RedHat', 'Linux': {
       $needs_initdb             = true
       $firewall_supported       = true
       $persist_firewall_command = '/sbin/iptables-save > /etc/sysconfig/iptables'
@@ -126,11 +131,12 @@ class postgresql::params(
         }
 
         'Ubuntu': {
-            case $::lsbmajdistrelease {
-                # thanks, ubuntu
-                '10':       { $service_name = "postgresql-${version}" }
-                default:    { $service_name = 'postgresql' }
-            }
+           # thanks, ubuntu
+           if($::lsbmajdistrelease == '10' and !$manage_package_repo) {
+             $service_name = "postgresql-${version}"
+           } else {
+             $service_name = 'postgresql'
+           }
         }
       }
 
@@ -140,7 +146,7 @@ class postgresql::params(
       $bindir              = "/usr/lib/postgresql/${version}/bin"
       $datadir             = "/var/lib/postgresql/${version}/main"
       $confdir             = "/etc/postgresql/${version}/main"
-      $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+'"
+      $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
     }
 
     default: {

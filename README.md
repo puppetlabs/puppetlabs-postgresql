@@ -3,20 +3,23 @@ Transferred from Inkling
 
 This Puppet module was originally authored by Inkling Systems. The maintainer preferred
 that Puppet Labs take ownership of the module for future improvement and maintenance as
-Puppet Labs is using it in the PuppetDB module. Existing pull requests and issues were
+Puppet Labs is using it in the PuppetDB module.  Existing pull requests and issues were
 transferred over, please fork and continue to contribute here instead of Inkling.
 Previously: https://github.com/inkling/puppet-postgresql 
 
 Puppet module for PostgreSQL resources
 ======================================
 
-This module provides the following defined resource types for managing postgres:
+This module provides the following classes and types for managing postgres:
 
- * `postgresql::initdb`
+ * `postgresql::server`
+ * `postgresql::client`
  * `postgresql::db`
+ * `postgresql::database`
  * `postgresql::role`
  * `postgresql::database_user` (just for clarity; users are roles in postgres)
  * `postgresql::database_grant`
+ * `postgresql::initdb`
 
 And the fallback, analogous to exec resources, only for SQL statements:
 
@@ -43,6 +46,15 @@ class { 'postgresql::server':
         'manage_redhat_firewall'     => true,
         'postgres_password'          => 'TPSrep0rt!',
     },
+}
+```
+
+Simple management of a database and user:
+
+```Puppet
+postgresl::db { 'mydatabasename':
+   user     => 'mydatabaseuser',
+   password => 'mypassword'
 }
 ```
 
@@ -87,8 +99,9 @@ The test suite will snapshot the VM and rollback between each test.
 Next, take a look at the manifests used for the automated tests.
 
     spec/
-        manifests/
-            test_*.pp
+        test_module/
+            manifests/
+                test_*.pp
 
 
 Contributors
@@ -96,12 +109,28 @@ Contributors
 
  * Andrew Moon
  * [Kenn Knowles](https://github.com/kennknowles) ([@kennknowles](https://twitter.com/KennKnowles))
+ * Adrien Thebo
+ * Albert Koch
+ * Andreas Ntaflos
+ * Brett Porter
+ * Chris Price
+ * dharwood
+ * Etienne Pelletier
+ * Florin Broasca
+ * Henrik
+ * Hunter Haugen
+ * Jari Bakken
+ * Jordi Boggiano
+ * Ken Barber
+ * nzakaria
+ * Richard Arends
+ * Spenser Gilliland
+ * stormcrow
+ * William Van Hevelingen
 
 
 Copyright and License
 ---------------------
-
-Copyright 2012 Inkling Systems, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
