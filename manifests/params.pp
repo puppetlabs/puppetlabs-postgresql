@@ -116,6 +116,7 @@ class postgresql::params(
       }
 
       $service_status = undef
+      $python_package_name="python-psycopg2"
     }
 
     'Debian': {
