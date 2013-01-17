@@ -162,7 +162,10 @@ shared_examples :system_default_postgres do
       sudo_and_log(vm, "puppet apply --detailed-exitcodes -e '#{test_class}'")
 
       # Check that the user can create a table in the database
-      sudo_psql_and_log(vm, '--command="SELECT 1" --port=5433')
+      sudo_psql_and_log(vm, '--command="show max_connections" -t', 'postgres', ' |grep "1234"')
+
+      cleanup_class = 'class {"postgresql_tests::system_default::test_pgconf_include_cleanup": }'
+      sudo_and_log(vm, "puppet apply -e '#{cleanup_class}'")
     end
   end
 end

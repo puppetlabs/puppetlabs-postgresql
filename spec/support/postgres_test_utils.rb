@@ -9,8 +9,8 @@ module PostgresTestUtils
     result
   end
 
-  def sudo_psql_and_log(vm, psql_cmd, user = 'postgres')
-    sudo_and_log(vm, "su #{user} -c 'psql #{psql_cmd}'")
+  def sudo_psql_and_log(vm, psql_cmd, user = 'postgres', extras = '')
+    sudo_and_log(vm, "su #{user} -c 'psql #{psql_cmd}' #{extras}")
   end
 
   def sudo_psql_and_expect_result(vm, psql_cmd, expected, user = 'postgres')
