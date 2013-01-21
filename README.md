@@ -76,6 +76,17 @@ postgresql::database_grant{'grant select to marmot':
 etc, etc.
 
 
+Usage
+-----
+
+### postgresql::java
+Installs postgresql bindings for java.
+
+```Puppet
+class { 'postgresql::java': }
+```
+
+
 Automated testing
 -----------------
 
