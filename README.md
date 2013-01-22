@@ -41,18 +41,14 @@ The postgresql module offers many security configuration settings. Before gettin
 
 * Do you want/need to allow remote connections? 
     * If yes, what about TCP connections? 
-* Would you prefer to work around your current firewall setiings or overwrite some of them? 
-* How would you like to structure your superuser? 
+* Would you prefer to work around your current firewall settings or overwrite some of them? 
+* How restrictive do you want the database superuser's permissions to be? 
 
-Your answers to these questions will determine how many variables you will want to utilize in your configuration. 
+Your answers to these questions will determine which of the module's parameters you'll want to specify values for.
 
 ###Configuring the server
 
-The main configuration you’ll need to do will be around the `postgresql::server` class. The default parameters are reasonable, but fairly restrictive regarding permissions for who can connect and from where. To manage a PostgreSQL server with sane defaults, login via,
-    
-    $sudo -u postgres psql
-    
-Then:
+The main configuration you’ll need to do will be around the `postgresql::server` class. The default parameters are reasonable, but fairly restrictive regarding permissions for who can connect and from where. To manage a PostgreSQL server with sane defaults:
 
 	include postgresql::server    
 
@@ -62,7 +58,7 @@ For a more customized, less restrictive configuration:
       config_hash => {
         'ip_mask_deny_postgres_user' => '0.0.0.0/32',
         'ip_mask_allow_all_users'    => '0.0.0.0/0',
-    	'listen_addresses'           => '*',
+        'listen_addresses'           => '*',
         'ipv4acls'                   => ['hostssl all johndoe 192.168.0.0/24 cert'],
         'manage_redhat_firewall'     => true,
         'postgres_password'          => 'TPSrep0rt!',
@@ -217,7 +213,7 @@ The module provides a Facter fact that can be used to determine what the default
 Limitations
 ------------
 
-Works with versions of PostgreSQL from 8.1 through 9.1.
+Works with versions of PostgreSQL from 8.1 through 9.2.
 
 Development
 ------------
