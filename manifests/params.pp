@@ -31,8 +31,8 @@ class postgresql::params(
     $version             = $::postgres_default_version,
     $manage_package_repo = false,
     $package_source      = undef,
-    $datadir             = undef,
-    $confdir             = undef
+    $datadir_custom      = undef,
+    $confdir_custom      = undef
 ) {
   $user                         = 'postgres'
   $group                        = 'postgres'
@@ -103,11 +103,15 @@ class postgresql::params(
         $devel_package_name  = 'postgresql-devel'
         $service_name = 'postgresql'
         $bindir       = '/usr/bin'
-        if $datadir == undef {
-            $datadir    = '/var/lib/pgsql/data'
+        if $datadir_custom == undef {
+          $datadir = '/var/lib/pgsql/data'
+        } else {
+          $datadir = $datadir_custom
         }
-        if $confdir == undef {
-            $confdir    = $datadir
+        if $confdir_custom == undef {
+           $confdir = $datadir
+        } else {
+           $confdir = $confdir_custom
         }
       } else {
         $version_parts       = split($version, '[.]')
@@ -117,11 +121,15 @@ class postgresql::params(
         $devel_package_name  = "postgresql${package_version}-devel"
         $service_name = "postgresql-${version}"
         $bindir       = "/usr/pgsql-${version}/bin"
-        if $datadir == undef {
-            $datadir      = "/var/lib/pgsql/${version}/data"
+        if $datadir_custom == undef {
+           $datadir = "/var/lib/pgsql/${version}/data"
+        } else {
+            $datadir = $datadir_custom
         }
-        if $confdir == undef {
-            $confdir      = $datadir
+        if $confdir_custom == undef {
+           $confdir = $datadir
+        } else {
+           $confdir = $confdir_custom
         }
       }
 
@@ -154,11 +162,15 @@ class postgresql::params(
       $server_package_name = "postgresql-${version}"
       $devel_package_name  = 'libpq-dev'
       $bindir              = "/usr/lib/postgresql/${version}/bin"
-      if $datadir == undef {
+      if $datadir_custom == undef {
         $datadir             = "/var/lib/postgresql/${version}/main"
+      } else {
+        $datadir = $datadir_custom
       }
       if $confdir == undef {
         $confdir             = "/etc/postgresql/${version}/main"
+      } else {
+        $confdir = $confdir_custom
       }
       $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
     }

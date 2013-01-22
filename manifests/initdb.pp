@@ -24,6 +24,13 @@ class postgresql::initdb(
   $user        = 'postgres'
 ) inherits postgresql::params {
 
+  $datadirparts = split($datadir,'/')
+  file { "/${datadirparts[1]}":
+    ensure  => directory,
+    owner   => $user,
+    group   => $group;
+  }
+
   $initdb_command = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
   
   exec { $initdb_command:
