@@ -14,6 +14,7 @@
 #   [*ipv6acls*]                     - list of strings for access control for connection method, users, databases, IPv6
 #                                       addresses; see postgresql documentation about pg_hba.conf for information
 #   [*pg_hba_conf_path*]             - path to pg_hba.conf file
+#   [*pg_hba_conf_template*]         - template to use for pg_hba.conf; defaults to 'postgresql/pg_hba.conf.erb'
 #   [*postgresql_conf_path*]         - path to postgresql.conf file
 #   [*manage_redhat_firewall*]       - boolean indicating whether or not the module should open a port in the firewall on
 #                                       redhat-based systems; this parameter is likely to change in future versions.  Possible
@@ -40,6 +41,7 @@ class postgresql::config(
   $ipv4acls                     = $postgresql::params::ipv4acls,
   $ipv6acls                     = $postgresql::params::ipv6acls,
   $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
+  $pg_hba_conf_template         = $postgresql::params::pg_hba_conf_template,
   $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
   $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
 ) inherits postgresql::params {
@@ -55,6 +57,7 @@ class postgresql::config(
     ipv4acls                      => $ipv4acls,
     ipv6acls                      => $ipv6acls,
     pg_hba_conf_path              => $pg_hba_conf_path,
+    pg_hba_conf_template          => $pg_hba_conf_template,
     postgresql_conf_path          => $postgresql_conf_path,
     manage_redhat_firewall        => $manage_redhat_firewall,
   }

@@ -13,6 +13,7 @@
 #   [*ipv6acls*]                - list of strings for access control for connection method, users, databases, IPv6
 #                                    addresses; see postgresql documentation about pg_hba.conf for information
 #   [*pg_hba_conf_path*]        - path to pg_hba.conf file
+#   [*pg_hba_conf_template*]    - template to use for pg_hba.conf; defaults to 'postgresql/pg_hba.conf.erb'
 #   [*postgresql_conf_path*]    - path to postgresql.conf file
 #   [*manage_redhat_firewall*]  - boolean indicating whether or not the module should open a port in the firewall on
 #                                    redhat-based systems; this parameter is likely to change in future versions.  Possible
@@ -35,6 +36,7 @@
 #
 class postgresql::config::beforeservice(
   $pg_hba_conf_path,
+  $pg_hba_conf_template         = $postgresql::params::pg_hba_conf_template,
   $postgresql_conf_path,
   $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
   $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
@@ -56,7 +58,7 @@ class postgresql::config::beforeservice(
   file { 'pg_hba.conf':
     ensure      => file,
     path        => $pg_hba_conf_path,
-    content     => template('postgresql/pg_hba.conf.erb'),
+    content     => template($pg_hba_conf_template),
     notify      => Exec['reload_postgresql'],
   }
 
