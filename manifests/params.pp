@@ -32,7 +32,8 @@ class postgresql::params(
     $manage_package_repo = false,
     $package_source      = undef,
     $datadir_custom      = undef,
-    $confdir_custom      = undef
+    $confdir_custom      = undef,
+    $locale              = undef,
 ) {
   $user                         = 'postgres'
   $group                        = 'postgres'

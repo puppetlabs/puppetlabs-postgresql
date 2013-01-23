@@ -31,13 +31,19 @@ class postgresql::initdb(
     group   => $group;
   }
 
-  $initdb_command = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
+  if $postgresql::params::locale == undef {
+    $initdb_command = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
+  } else {
+    $initdb_command = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}' --locale '${postgresql::params::locale}'"
+  }
   
   exec { $initdb_command:
     creates => "${datadir}/PG_VERSION",
     user    => $user,
     group   => $group
   }
+
+  File["/${datadirparts[1]}"] -> Exec[$initdb_command]
 
   if defined(Package["$postgresql::params::server_package_name"]) {
     Package["$postgresql::params::server_package_name"] ->
