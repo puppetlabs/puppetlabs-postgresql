@@ -2,10 +2,12 @@
 #
 # Parameters:
 #
-#   [*ip_mask_deny_postgres_user*]   - ip mask for denying remote access for postgres user; defaults to '0.0.0.0/0',
-#                                       meaning that all TCP access for postgres user is denied.
-#   [*ip_mask_allow_all_users*]      - ip mask for allowing remote access for other users (besides postgres);
-#                                       defaults to '127.0.0.1/32', meaning only allow connections from localhost
+#   [*unix_domain_socket_auth_method*]  - Unix-domain socket connections authentication method; defaults to 'ident';
+#                                            does not affect authentication method for user postgres
+#   [*ip_mask_deny_postgres_user*]      - ip mask for denying remote access for postgres user; defaults to '0.0.0.0/0',
+#                                            meaning that all TCP access for postgres user is denied.
+#   [*ip_mask_allow_all_users*]         - ip mask for allowing remote access for other users (besides postgres);
+#                                            defaults to '127.0.0.1/32', meaning only allow connections from localhost
 #   [*listen_addresses*]        - what IP address(es) to listen on; comma-separated list of addresses; defaults to
 #                                    'localhost', '*' = all
 #   [*ipv4acls*]                - list of strings for access control for connection method, users, databases, IPv4
@@ -36,12 +38,13 @@
 class postgresql::config::beforeservice(
   $pg_hba_conf_path,
   $postgresql_conf_path,
-  $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
-  $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
-  $listen_addresses             = $postgresql::params::listen_addresses,
-  $ipv4acls                     = $postgresql::params::ipv4acls,
-  $ipv6acls                     = $postgresql::params::ipv6acls,
-  $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
+  $unix_domain_socket_auth_method = $postgresql::params::unix_domain_socket_auth_method,
+  $ip_mask_deny_postgres_user     = $postgresql::params::ip_mask_deny_postgres_user,
+  $ip_mask_allow_all_users        = $postgresql::params::ip_mask_allow_all_users,
+  $listen_addresses               = $postgresql::params::listen_addresses,
+  $ipv4acls                       = $postgresql::params::ipv4acls,
+  $ipv6acls                       = $postgresql::params::ipv6acls,
+  $manage_redhat_firewall         = $postgresql::params::manage_redhat_firewall
 ) inherits postgresql::params {
 
 
