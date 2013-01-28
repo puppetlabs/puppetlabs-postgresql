@@ -16,6 +16,7 @@
 #                            function in this module
 #   [*charset*]     - database charset. defaults to 'utf8'
 #   [*grant*]       - privilege to grant user. defaults to 'all'.
+#   [*tablespace*]  - database tablespace. default to use the template database's tablespace.
 #
 # Actions:
 #
@@ -35,13 +36,15 @@ define postgresql::db (
   $user,
   $password,
   $charset     = 'utf8',
-  $grant       = 'ALL'
-) {
+  $grant       = 'ALL',
+  $tablespace = undef)
+{
 
   postgresql::database { $name:
     # TODO: ensure is not yet supported
     #ensure     => present,
     charset     => $charset,
+    tablespace  => $tablespace,
     #provider   => 'postgresql',
     require     => Class['postgresql::server'],
   }
