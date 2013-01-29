@@ -30,24 +30,10 @@ class postgresql_tests::system_default::test_tablespace {
     mode   => 700,
     require => File['/tmp'],
   }
-  file { '/tmp/pg_tablespaces/space1':
-    ensure => 'directory',
-    owner  => 'postgres',
-    group  => 'postgres',
-    mode   => 700,
-    require => File['/tmp/pg_tablespaces'],
-  }
-  file { '/tmp/pg_tablespaces/space2':
-    ensure => 'directory',
-    owner  => 'postgres',
-    group  => 'postgres',
-    mode   => 700,
-    require => File['/tmp/pg_tablespaces'],
-  }
 
   postgresql::tablespace{ 'tablespace1':
     location => '/tmp/pg_tablespaces/space1',
-    require => [Class['postgresql::server'], File['/tmp/pg_tablespaces/space1']],
+    require => [Class['postgresql::server'], File['/tmp/pg_tablespaces']],
   }
   postgresql::database{ 'tablespacedb1':
     charset => 'utf8',
@@ -68,7 +54,7 @@ class postgresql_tests::system_default::test_tablespace {
   postgresql::tablespace{ 'tablespace2':
     location => '/tmp/pg_tablespaces/space2',
     owner => 'spcuser',
-    require => [Postgresql::Database_user['spcuser'], File['/tmp/pg_tablespaces/space2']],
+    require => [Postgresql::Database_user['spcuser'], File['/tmp/pg_tablespaces']],
   }
   postgresql::database{ 'tablespacedb3':
     charset => 'utf8',

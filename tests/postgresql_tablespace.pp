@@ -18,24 +18,10 @@ file { '/tmp/pg_tablespaces':
   mode   => 700,
   require => File['/tmp'],
 }
-file { '/tmp/pg_tablespaces/space1':
-  ensure => 'directory',
-  owner  => 'postgres',
-  group  => 'postgres',
-  mode   => 700,
-  require => File['/tmp/pg_tablespaces'],
-}
-file { '/tmp/pg_tablespaces/space2':
-  ensure => 'directory',
-  owner  => 'postgres',
-  group  => 'postgres',
-  mode   => 700,
-  require => File['/tmp/pg_tablespaces'],
-}
 
 postgresql::tablespace{ 'tablespace1':
   location => '/tmp/pg_tablespaces/space1',
-  require => [Class['postgresql::server'], File['/tmp/pg_tablespaces/space1']],
+  require => [Class['postgresql::server'], File['/tmp/pg_tablespaces']],
 }
 postgresql::database{ 'tablespacedb1':
   # TODO: ensure not yet supported
@@ -75,7 +61,7 @@ postgresql::database_user{ 'spcuser':
 postgresql::tablespace{ 'tablespace2':
   location => '/tmp/pg_tablespaces/space2',
   owner => 'spcuser',
-  require => [Postgresql::Database_user['spcuser'], File['/tmp/pg_tablespaces/space2']],
+  require => [Postgresql::Database_user['spcuser'], File['/tmp/pg_tablespaces']],
 }
 postgresql::database{ 'tablespacedb5':
   # TODO: ensure not yet supported

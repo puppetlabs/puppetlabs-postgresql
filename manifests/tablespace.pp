@@ -33,20 +33,22 @@ define postgresql::tablespace(
     $owner_section = ''
   }
   else {
-    $owner_section = "OWNER $owner"
+    $owner_section = "OWNER ${owner}"
   }
 
-  $create_tablespace_command = "CREATE TABLESPACE $spcname ${owner_section} LOCATION '$location'"
+  $create_tablespace_command = "CREATE TABLESPACE ${spcname} ${owner_section} LOCATION '${location}'"
 
-  postgresql_psql { "Check for existence of tablespace '$spcname'":
-    command => "SELECT 1",
-    unless  => "SELECT spcname FROM pg_tablespace WHERE spcname='$spcname'",
-    cwd     => $postgresql::params::datadir,
-    require => Class['postgresql::server']
-  } ~>
+  file { "${location}":
+    ensure => directory,
+    owner  => 'postgres',
+    group  => 'postgres',
+    mode => 700,
+  }
 
-  postgresql_psql { "Create tablespace '$spcname'":
+  postgresql_psql { "Create tablespace '${spcname}'":
     command => $create_tablespace_command,
+    unless  => "SELECT spcname FROM pg_tablespace WHERE spcname='${spcname}'",
     cwd     => $postgresql::params::datadir,
+    require => [Class['postgresql::server'], File["${location}"]],
   }
 }

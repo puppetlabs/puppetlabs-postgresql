@@ -146,8 +146,8 @@ shared_examples :system_default_postgres do
       sudo_and_log(vm, "puppet apply --detailed-exitcodes -e '#{test_class}'")
         
       # Check that databases use correct tablespaces
-      sudo_psql_and_log(vm, '--command="select 1 from pg_database db, pg_tablespace ts where db.dattablespace = ts.oid and db.datname = \'"\'tablespacedb1\'"\' and ts.spcname = \'"\'tablespace1\'"\'"')
-      sudo_psql_and_log(vm, '--command="select 1 from pg_database db, pg_tablespace ts where db.dattablespace = ts.oid and db.datname = \'"\'tablespacedb3\'"\' and ts.spcname = \'"\'tablespace2\'"\'"')
+      sudo_psql_and_expect_result(vm, '--command="select 1 from pg_database db, pg_tablespace ts where db.dattablespace = ts.oid and db.datname = \'"\'tablespacedb1\'"\' and ts.spcname = \'"\'tablespace1\'"\'"', '1')
+      sudo_psql_and_expect_result(vm, '--command="select 1 from pg_database db, pg_tablespace ts where db.dattablespace = ts.oid and db.datname = \'"\'tablespacedb3\'"\' and ts.spcname = \'"\'tablespace2\'"\'"', '1')
     end
   end
 end
