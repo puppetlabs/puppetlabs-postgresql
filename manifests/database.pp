@@ -21,7 +21,8 @@
 
 define postgresql::database(
   $dbname  = $title,
-  $charset = 'UTF8')
+  $charset = 'UTF8',
+  $tablespace = undef)
 {
   include postgresql::params
 
@@ -33,7 +34,14 @@ define postgresql::database(
     $public_revoke_privilege = "ALL"
   }
 
-  $createdb_command = "${postgresql::params::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
+  $createdb_command_tmp = "${postgresql::params::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
+
+  if($tablespace == undef) {
+    $createdb_command = $createdb_command_tmp
+  }
+  else {
+    $createdb_command = "${createdb_command_tmp} --tablespace='${tablespace}'"
+  }
 
   postgresql_psql { "Check for existence of db '$dbname'":
     command => "SELECT 1",
