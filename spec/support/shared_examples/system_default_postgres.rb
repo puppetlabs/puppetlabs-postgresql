@@ -134,4 +134,20 @@ shared_examples :system_default_postgres do
       sudo_and_log(vm, "puppet apply --detailed-exitcodes -e '#{test_pp}'; [ $? == 4 ]")
     end
   end
+
+  describe 'postgresql::tablespace' do
+    it 'should idempotently create tablespaces and databases that are using them' do
+      test_class = 'class {"postgresql_tests::system_default::test_tablespace": }'
+
+      # Run once to check for crashes
+      sudo_and_log(vm, "puppet apply -e '#{test_class}'")
+
+      # Run again to check for idempotence
+      sudo_and_log(vm, "puppet apply --detailed-exitcodes -e '#{test_class}'")
+        
+      # Check that databases use correct tablespaces
+      sudo_psql_and_expect_result(vm, '--command="select ts.spcname from pg_database db, pg_tablespace ts where db.dattablespace = ts.oid and db.datname = \'"\'tablespacedb1\'"\'"', 'tablespace1')
+      sudo_psql_and_expect_result(vm, '--command="select ts.spcname from pg_database db, pg_tablespace ts where db.dattablespace = ts.oid and db.datname = \'"\'tablespacedb3\'"\'"', 'tablespace2')
+    end
+  end
 end
