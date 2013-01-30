@@ -1,3 +1,14 @@
+2.0.1
+=======
+
+Minor bugfix release.
+
+2013-01-16 - Chris Price <chris@puppetlabs.com>
+ * Fix revoke command in database.pp to support postgres 8.1 (43ded42)
+
+2013-01-15 - Jordi Boggiano <j.boggiano@seld.be>
+ * Add support for ubuntu 12.10 status (3504405)
+
 2.0.0
 =======
 
