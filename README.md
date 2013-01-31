@@ -76,7 +76,7 @@ If you get an error message from these commands, it means that your permissions 
 
 There are many ways to set up a postgres database using the `postgresql::db` class. For instance, to set up a database for PuppetDB (this assumes you’ve already got the `postgresql::server` set up to your liking in your manifest, as discussed above):
 
-	postgresl::db { 'mydatabasename':
+	postgresql::db { 'mydatabasename':
       user     => 'mydatabaseuser',
       password => 'mypassword'
     }
