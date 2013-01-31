@@ -164,7 +164,7 @@ shared_examples :system_default_postgres do
       sudo_and_log(vm, "service #{service_name} restart")
 
       # Check that the user can create a table in the database
-      sudo_psql_and_log(vm, '--command="show max_connections" -t', 'postgres', ' |grep "123"')
+      sudo_psql_and_expect_result(vm, '--command="show max_connections" -t', '123', 'postgres')
 
       cleanup_class = 'class {"postgresql_tests::system_default::test_pgconf_include_cleanup": }'
       sudo_and_log(vm, "puppet apply -e '#{cleanup_class}'")
