@@ -161,8 +161,10 @@ shared_examples :system_default_postgres do
       # Run again to check for idempotence
       sudo_and_log(vm, "puppet apply --detailed-exitcodes -e '#{test_class}'")
 
+      sudo_and_log(vm, "service #{service_name} restart")
+
       # Check that the user can create a table in the database
-      sudo_psql_and_log(vm, '--command="show max_connections" -t', 'postgres', ' |grep "1234"')
+      sudo_psql_and_log(vm, '--command="show max_connections" -t', 'postgres', ' |grep "123"')
 
       cleanup_class = 'class {"postgresql_tests::system_default::test_pgconf_include_cleanup": }'
       sudo_and_log(vm, "puppet apply -e '#{cleanup_class}'")
