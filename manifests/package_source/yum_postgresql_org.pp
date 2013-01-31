@@ -17,6 +17,12 @@ class postgresql::package_source::yum_postgresql_org(
       gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}",
   }
 
+  exec {
+        "rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}":
+            subscribe   => File["/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}"],
+            refreshonly => true,
+  }
+
   Yumrepo["yum.postgresql.org"] -> Package<|tag == 'postgresql'|>
 
 }
