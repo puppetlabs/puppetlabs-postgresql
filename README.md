@@ -150,6 +150,15 @@ The name of the postgresql client package.
 ####`package_ensure`
 The ensure parameter passed on to postgresql client package resource. 
 
+###postgresql::java
+This class installs postgresql bindings for Java (JDBC). Alter the following parameters if you have a custom version you would like to install (Note: don't forget to make sure to add any necessary yum or apt repositories if specifying a custom version):
+
+####`package_name`
+The name of the postgresql java package.
+
+####`package_ensure`
+The ensure parameter passed on to postgresql java package resource.
+
 ### Custom Functions
 
 If you need to generate a postgres encrypted password, use `postgresql_password`. You can call it from your production manifests if you don’t mind them containing the clear text versions of your passwords, or you can call it from the command line and then copy and paste the encrypted password into your manifest:
