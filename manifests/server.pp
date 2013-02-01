@@ -8,6 +8,12 @@
 # [*package_name*] - name of package
 # [*service_name*] - name of service
 #
+# Configuration:
+#   Advanced configuration setting parameters can be placed into 'postgresql_puppet_extras.conf' (located in the same
+#   folder as 'postgresql.conf'). You can manage that file as a normal puppet file resource, or however you see fit;
+#   which gives you complete control over the settings. Any value you specify in that file will override any existing
+#   value set in the templated version.
+#
 # Actions:
 #
 # Requires:
@@ -61,5 +67,4 @@ class postgresql::server (
     onlyif      => $service_status,
     refreshonly => true,
   }
-
 }
