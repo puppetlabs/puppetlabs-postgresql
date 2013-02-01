@@ -27,3 +27,8 @@ instead do something like:
 
 For some options that might speed up the testing process a bit during development,
 please see `spec/support/postgres_test_config.rb`.
+
+By default the sahara gem restores VMs to a snapshot state after each test,
+to make sure that the individual tests aren't polluting the ones that are run later.
+If you want to disable this during development, you can set HardCoreTesting to false
+in `spec/support/postgres_test_config.rb`.

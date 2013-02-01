@@ -12,7 +12,7 @@ postgresql
 8. [Disclaimer - Licensing information](#disclaimer)
 9. [Transfer Notice - Notice of authorship change](#transfer-notice)
 10. [Contributors - List of module contributors](#contributors)
-8. [Release Notes - Notes on the most recent updates to the module](#release-notes)
+11. [Release Notes - Notes on the most recent updates to the module](#release-notes)
 
 
 Overview
@@ -71,6 +71,9 @@ Once you've completed your configuration of `postgresql::server`, you can test o
 	$ psql -h my.postgres.server -U
 
 If you get an error message from these commands, it means that your permissions are set in a way that restricts access from where you’re trying to connect. That might be a good thing or a bad thing, depending on your goals.
+
+Advanced configuration setting parameters can be placed into `postgresql_puppet_extras.conf` (located in the same folder as `postgresql.conf`). You can manage that file as a normal puppet file resource, or however you see fit; which gives you complete control over the settings. Any value you specify in that file will override any existing value set in the templated version.  
+For more details about server configuration parameters see http://www.postgresql.org/docs/9.2/static/runtime-config.html.
 
 ###Configuring the database
 
@@ -198,6 +201,10 @@ This class is used to manage the basic postgresql client packages (which include
 **postgresql::database** 
 
 This defined type can be used to create a database with no users and no permissions, which is a rare use case. 
+
+**postgresql::tablespace** 
+
+This defined type can be used to create a tablespace.
 
 **postgresql_psql**
 
