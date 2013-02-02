@@ -49,6 +49,25 @@ shared_examples :system_default_postgres do
         sudo_psql_and_log(vm, '--command="drop database postgresql_test_db" postgres')
       end
     end
+
+    it 'should take a locale parameter' do
+      manifest = <<-EOS
+        include postgresql::server
+        postgresql::db { 'test1':
+          user => 'test1',
+          password => 'test1',
+          charset => 'UTF8',
+          locale => 'en_NG',
+        }
+      EOS
+      sudo_and_log(vm, "puppet apply -e '#{manifest}'")
+
+      # Some basic tests here to check if the db indeed was created with the
+      #rr correct locale.
+      sudo_and_log(vm, 'su postgres -c \'psql -c "show lc_ctype" test1\'')
+      sudo_and_log(vm, 'su postgres -c \'psql -c "show lc_ctype" test1\' | grep en_NG')
+      sudo_and_log(vm, 'su postgres -c \'psql -c "show lc_collate" test1\' | grep en_NG')
+    end
   end
 
   describe 'postgresql::psql' do
