@@ -27,7 +27,11 @@ define postgresql::database(
   include postgresql::params
 
   if ($postgresql::params::version != '8.1') {
-    $locale_option = '--locale=C'
+    if $postgresql::params::locale == undef {
+      $locale_option = ''
+    } else {
+      $locale_option = "--locale=${postgresql::params::locale}"
+    }
     $public_revoke_privilege = "CONNECT"
   } else {
     $locale_option = ""
