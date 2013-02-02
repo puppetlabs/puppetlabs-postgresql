@@ -20,14 +20,20 @@
 #  needs to be moved over to ruby, and add support for ensurable.
 
 define postgresql::database(
-  $dbname  = $title,
-  $charset = 'UTF8',
-  $tablespace = undef)
-{
+  $dbname   = $title,
+  $tablespace = undef,
+  $charset  = $postgresql::params::charset,
+  $locale   = $postgresql::params::locale
+) {
   include postgresql::params
 
+  # Optionally set the locale switch. Older versions of createdb may not accept
+  # --locale, so if the parameter is undefined its safer not to pass it.
   if ($postgresql::params::version != '8.1') {
-    $locale_option = '--locale=C'
+    $locale_option = $locale ? {
+      undef   => '',
+      default => "--locale=${locale}",
+    }
     $public_revoke_privilege = "CONNECT"
   } else {
     $locale_option = ""
@@ -52,8 +58,9 @@ define postgresql::database(
 
   exec { $createdb_command :
     refreshonly => true,
-    user    => 'postgres',
-    cwd     => $postgresql::params::datadir,
+    user      => 'postgres',
+    cwd       => $postgresql::params::datadir,
+    logoutput => on_failure,
   } ~>
 
   # This will prevent users from connecting to the database unless they've been
