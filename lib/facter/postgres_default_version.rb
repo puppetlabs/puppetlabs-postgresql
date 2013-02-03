@@ -63,11 +63,9 @@ Facter.add("postgres_default_version") do
     # TODO: not sure if this is really a great idea, but elsewhere in the code
     # it is useful to be able to distinguish between the case where the fact
     # does not exist at all (e.g., if pluginsync is not enabled), and the case
-    # where the fact is not known for the OS in question.  It might be better
-    # to use a shorter sentinel value here and then check for it elsewhere,
-    # e.g. in the same place we're checking for nil and warning about pluginsync.
+    # where the fact is not known for the OS in question.
     if result == nil
-      result = "Unsupported OS!  Please check `postgres_default_version` fact."
+      result = 'unknown'
     end
     result
   end
