@@ -23,6 +23,10 @@
 #                 set to `true`.  It determines which package repository should
 #                 be used to install the postgres packages.  Currently supported
 #                 values include `yum.postgresql.org`.
+#   [*locale*] -  This setting defines the default locale for initdb and createdb
+#                 commands. This default to 'undef' which is effectively 'C'.
+#   [*charset*] - Sets the default charset to be used for initdb and createdb.
+#                 Defaults to 'UTF8'.
 # Actions:
 #
 # Requires:
@@ -30,13 +34,17 @@
 # Sample Usage:
 #
 class postgresql (
-  $version = $::postgres_default_version,
+  $version             = $::postgres_default_version,
   $manage_package_repo = false,
-  $package_source      = undef
+  $package_source      = undef,
+  $locale              = undef,
+  $charset             = 'UTF8'
 ) {
   class { 'postgresql::params':
     version             => $version,
     manage_package_repo => $manage_package_repo,
-    package_source      => $package_source
+    package_source      => $package_source,
+    locale              => $locale,
+    charset             => $charset,
   }
 }

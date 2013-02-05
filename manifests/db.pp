@@ -17,6 +17,7 @@
 #   [*charset*]     - database charset. defaults to 'utf8'
 #   [*grant*]       - privilege to grant user. defaults to 'all'.
 #   [*tablespace*]  - database tablespace. default to use the template database's tablespace.
+#   [*locale*]      - locale for database. defaults to 'undef' (effectively 'C').
 #
 # Actions:
 #
@@ -35,10 +36,12 @@
 define postgresql::db (
   $user,
   $password,
-  $charset     = 'utf8',
+  $charset     = $postgresql::params::charset,
+  $locale      = $postgresql::params::locale,
   $grant       = 'ALL',
-  $tablespace = undef)
-{
+  $tablespace = undef
+) {
+  include postgresql::params
 
   postgresql::database { $name:
     # TODO: ensure is not yet supported
@@ -47,6 +50,7 @@ define postgresql::db (
     tablespace  => $tablespace,
     #provider   => 'postgresql',
     require     => Class['postgresql::server'],
+    locale      => $locale,
   }
 
   if ! defined(Postgresql::Database_user[$user]) {
