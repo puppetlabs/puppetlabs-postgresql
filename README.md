@@ -158,36 +158,26 @@ If you need to generate a postgres encrypted password, use `postgresql_password`
 
 ### Tests
 
-There are two types of tests distributed with the module. The first set is the 
-“traditional” Puppet manifest-style smoke tests. You can use these to experiment with the module on a virtual machine or other test environment, via `puppet apply`. You should see the following files in the tests directory:
-
-* init.pp: just installs the postgres client packages
-
-* server.pp: installs the postgres server packages and starts the service; configures the service to accept connections from remote machines, and sets the password for the postgres database user account to ‘postgres’.
-
-* postgresql_database.pp: creates a few sample databases with different character sets. Does not create any users for the databases.
-
-* postgresql_database\_user.pp: creates a few sample users.
-
-* postgresql_database\_grant.pp: shows an example of granting a privilege on a database to a certain user/role.
-
-* postgresql_db.pp: creates several test databases, and creates database user accounts with full privileges for each of them.
+There are two types of tests distributed with the module. The first set is the “traditional” Puppet manifest-style smoke tests. You can use these to experiment with the module on a virtual machine or other test environment, via `puppet apply`. You should see the following files in the `tests` directory.
 
 In addition to these manifest-based smoke tests, there are some ruby rspec tests in the spec directory. These tests run against a VirtualBox VM, so they are actually testing the live application of the module on a real, running system. To do this, you must install and setup an [RVM](http://beginrescueend.com/) with [vagrant](http://vagrantup.com/), [sahara](https://github.com/jedi4ever/sahara), and [rspec](http://rspec.info/):
 
     $ curl -L get.rvm.io | bash -s stable
     $ rvm install 1.9.3
     $ rvm use --create 1.9.3@puppet-postgresql
-    $ gem install vagrant sahara rspec
+    $ bundle install 
 
-Run the tests:
+Run the system tests:
 
-    $ (cd spec; vagrant up)
-    $ rspec -f -d -c
+    $ rake spec:system
 
-The test suite will snapshot the VM and rollback between each test. Next, take a look at the manifests used for the automated tests.
+The system test suite will snapshot the VM and rollback between each test.
 
-	$ cat spec/manifests/test_*.pp
+We also have some unit tests that utilize rspec-puppet for faster iteration if required:
+
+    $ rake spec
+
+The unit tests are ran in Travis-CI as well, if you want to see the results of your own tests regsiter the service hook through Travis-CI via the accounts section for your Github clone of this project.
 
 Implementation
 ---------------
