@@ -73,15 +73,15 @@ class postgresql::config::beforeservice(
   # managing their own settings in a second conf file.
   file_line { 'postgresql.conf#include':
     path        => $postgresql_conf_path,
-    line        => "include 'postgresql_puppet_extras.conf'",
+    line        => 'include \'postgresql_puppet_extras.conf\'',
     notify      => Service['postgresqld'],
   }
 
   # Since we're adding an "include" for this extras config file, we need
   # to make sure it exists.
-  exec { "touch `dirname $postgresql_conf_path`/postgresql_puppet_extras.conf" :
-    path   => "/usr/bin:/bin",
-    unless => "[ -f `dirname $postgresql_conf_path`/postgresql_puppet_extras.conf ]"
+  exec { "touch `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf" :
+    path   => '/usr/bin:/bin',
+    unless => "[ -f `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf ]"
   }
 
   # TODO: is this a reasonable place for this firewall stuff?

@@ -38,10 +38,10 @@ define postgresql::psql(
   $quoted_command = regsubst($command, '"', '\\"', 'G')
   $quoted_unless  = regsubst($unless,  '"', '\\"', 'G')
 
-  $final_cmd = "/bin/echo \"$quoted_command\" | $psql |egrep -v -q '^$'"
+  $final_cmd = "/bin/echo \"${quoted_command}\" | ${psql} |egrep -v -q '^$'"
 
-  notify { "deprecation warning: $final_cmd":
-    message => "postgresql::psql is deprecated ; please use postgresql_psql instead.",
+  notify { "deprecation warning: ${final_cmd}":
+    message => 'postgresql::psql is deprecated ; please use postgresql_psql instead.',
   } ->
 
   exec { $final_cmd:

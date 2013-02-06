@@ -38,17 +38,17 @@ define postgresql::tablespace(
 
   $create_tablespace_command = "CREATE TABLESPACE ${spcname} ${owner_section} LOCATION '${location}'"
 
-  file { "${location}":
+  file { $location:
     ensure => directory,
     owner  => 'postgres',
     group  => 'postgres',
-    mode => 700,
+    mode   => '0700',
   }
 
   postgresql_psql { "Create tablespace '${spcname}'":
     command => $create_tablespace_command,
     unless  => "SELECT spcname FROM pg_tablespace WHERE spcname='${spcname}'",
     cwd     => $postgresql::params::datadir,
-    require => [Class['postgresql::server'], File["${location}"]],
+    require => [Class['postgresql::server'], File[$location]],
   }
 }

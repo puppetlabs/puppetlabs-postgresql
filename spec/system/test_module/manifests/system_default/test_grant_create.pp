@@ -35,7 +35,7 @@ class postgresql_tests::system_default::test_grant_create($user, $password, $db)
     require => Class['postgresql::server'],
   }
 
-  postgresql::database_grant { "grant create test":
+  postgresql::database_grant { 'grant create test':
     privilege   => 'CREATE',
     db          => $db,
     role        => $user,

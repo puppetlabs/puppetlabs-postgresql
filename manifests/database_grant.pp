@@ -50,10 +50,10 @@ define postgresql::database_grant(
     default => $privilege,
   }
 
-  postgresql_psql {"GRANT $privilege ON database $db TO $role":
+  postgresql_psql {"GRANT ${privilege} ON database ${db} TO ${role}":
     db           => $psql_db,
     psql_user    => $psql_user,
-    unless       => "SELECT 1 WHERE has_database_privilege('$role', '$db', '$unless_privilege')",
+    unless       => "SELECT 1 WHERE has_database_privilege('${role}', '${db}', '${unless_privilege}')",
     cwd          => $postgresql::params::datadir,
   }
 }
