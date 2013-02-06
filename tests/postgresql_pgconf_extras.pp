@@ -8,7 +8,7 @@ class { 'postgresql::server':
     },
 }
 
-include "postgresql::params"
+include 'postgresql::params'
 
 $pg_conf_include_file = "${postgresql::params::confdir}/postgresql_puppet_extras.conf"
 

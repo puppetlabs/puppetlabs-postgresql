@@ -6,10 +6,10 @@ class postgresql::package_source::yum_postgresql_org(
   $package_version     = "${version_parts[0]}${version_parts[1]}"
 
   file { "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}":
-      source => "puppet:///modules/postgresql/RPM-GPG-KEY-PGDG"
+      source => 'puppet:///modules/postgresql/RPM-GPG-KEY-PGDG'
   } ->
 
-  yumrepo { "yum.postgresql.org":
+  yumrepo { 'yum.postgresql.org':
       descr    => "PostgreSQL ${version} \$releasever - \$basearch",
       baseurl  => "http://yum.postgresql.org/${version}/redhat/rhel-\$releasever-\$basearch",
       enabled  => 1,
@@ -17,6 +17,6 @@ class postgresql::package_source::yum_postgresql_org(
       gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}",
   }
 
-  Yumrepo["yum.postgresql.org"] -> Package<|tag == 'postgresql'|>
+  Yumrepo['yum.postgresql.org'] -> Package<|tag == 'postgresql'|>
 
 }

@@ -28,7 +28,7 @@ user {'puppet':
 file {'/etc/sudoers.d/puppet_postgresql_tests':
   ensure  => file,
   content => 'vagrant ALL=(ALL) ALL',
-  mode    => 0440,
+  mode    => '0440',
   owner   => root,
   group   => root,
 }

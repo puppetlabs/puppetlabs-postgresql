@@ -12,8 +12,8 @@
 # still need to use the 'postgresql' class to specify the postgres version
 # number, though, in order for the other classes to be able to find the
 # correct paths to the postgres dirs.
-class { "postgresql":
+class { 'postgresql':
     version               => '9.2',
     manage_package_repo   => true,
 }->
-class { "postgresql::server": }
+class { 'postgresql::server': }

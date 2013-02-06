@@ -12,10 +12,10 @@ file { '/tmp':
   ensure => 'directory',
 }
 file { '/tmp/pg_tablespaces':
-  ensure => 'directory',
-  owner  => 'postgres',
-  group  => 'postgres',
-  mode   => 700,
+  ensure  => 'directory',
+  owner   => 'postgres',
+  group   => 'postgres',
+  mode    => '0700',
   require => File['/tmp'],
 }
 
