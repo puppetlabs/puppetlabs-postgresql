@@ -101,6 +101,7 @@ class postgresql::params(
         $client_package_name = 'postgresql'
         $server_package_name = 'postgresql-server'
         $devel_package_name  = 'postgresql-devel'
+        $java_package_name   = 'postgresql-jdbc'
         $service_name = 'postgresql'
         $bindir       = '/usr/bin'
         $datadir      = '/var/lib/pgsql/data'
@@ -111,6 +112,7 @@ class postgresql::params(
         $client_package_name = "postgresql${package_version}"
         $server_package_name = "postgresql${package_version}-server"
         $devel_package_name  = "postgresql${package_version}-devel"
+        $java_package_name   = "postgresql${package_version}-jdbc"
         $service_name = "postgresql-${version}"
         $bindir       = "/usr/pgsql-${version}/bin"
         $datadir      = "/var/lib/pgsql/${version}/data"
@@ -145,6 +147,7 @@ class postgresql::params(
       $client_package_name = "postgresql-client-${version}"
       $server_package_name = "postgresql-${version}"
       $devel_package_name  = 'libpq-dev'
+      $java_package_name   = 'libpostgresql-jdbc-java'
       $bindir              = "/usr/lib/postgresql/${version}/bin"
       $datadir             = "/var/lib/postgresql/${version}/main"
       $confdir             = "/etc/postgresql/${version}/main"
