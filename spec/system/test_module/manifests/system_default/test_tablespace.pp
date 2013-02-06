@@ -27,7 +27,7 @@ class postgresql_tests::system_default::test_tablespace {
     ensure => 'directory',
     owner  => 'postgres',
     group  => 'postgres',
-    mode   => 700,
+    mode   => '0700',
     require => File['/tmp'],
   }
 
@@ -61,5 +61,5 @@ class postgresql_tests::system_default::test_tablespace {
     tablespace => 'tablespace2',
     require => Postgresql::Tablespace['tablespace2'],
   }
-  
+
 }

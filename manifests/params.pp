@@ -52,7 +52,7 @@ class postgresql::params(
 
            case $rh_pkg_source {
              'yum.postgresql.org': {
-                class { "postgresql::package_source::yum_postgresql_org":
+                class { 'postgresql::package_source::yum_postgresql_org':
                   version => $version
                 }
              }
@@ -64,7 +64,7 @@ class postgresql::params(
         }
 
         'Debian': {
-          class { "postgresql::package_source::apt_postgresql_org": }
+          class { 'postgresql::package_source::apt_postgresql_org': }
         }
 
         default: {
@@ -81,7 +81,7 @@ class postgresql::params(
   # that pluginsync might not be enabled.  Ideally this would be handled directly
   # in puppet.
   if ($::postgres_default_version == undef) {
-    fail "No value for postgres_default_version facter fact; it's possible that you don't have pluginsync enabled."
+    fail 'No value for postgres_default_version facter fact; it\'s possible that you don\'t have pluginsync enabled.'
   }
 
   case $::operatingsystem {

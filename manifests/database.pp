@@ -34,10 +34,10 @@ define postgresql::database(
       undef   => '',
       default => "--locale=${locale}",
     }
-    $public_revoke_privilege = "CONNECT"
+    $public_revoke_privilege = 'CONNECT'
   } else {
-    $locale_option = ""
-    $public_revoke_privilege = "ALL"
+    $locale_option = ''
+    $public_revoke_privilege = 'ALL'
   }
 
   $createdb_command_tmp = "${postgresql::params::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
@@ -49,9 +49,9 @@ define postgresql::database(
     $createdb_command = "${createdb_command_tmp} --tablespace='${tablespace}'"
   }
 
-  postgresql_psql { "Check for existence of db '$dbname'":
-    command => "SELECT 1",
-    unless  => "SELECT datname FROM pg_database WHERE datname='$dbname'",
+  postgresql_psql { "Check for existence of db '${dbname}'":
+    command => 'SELECT 1',
+    unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
     cwd     => $postgresql::params::datadir,
     require => Class['postgresql::server']
   } ~>
@@ -65,7 +65,7 @@ define postgresql::database(
 
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
-  postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE $dbname FROM public":
+  postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE ${dbname} FROM public":
     db          => 'postgres',
     refreshonly => true,
     cwd         => $postgresql::params::datadir,
