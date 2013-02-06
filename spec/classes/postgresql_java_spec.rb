@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'postgresql::java' do
+describe 'postgresql::java', :type => :class do
 
   describe 'on a debian based os' do
     let :facts do {
@@ -26,10 +26,10 @@ describe 'postgresql::java' do
     )}
     describe 'when parameters are supplied' do
       let :params do
-        {:package_ensure => 'latest', :package_name => 'java-postgresql'}
+        {:package_ensure => 'latest', :package_name => 'somepackage'}
       end
       it { should contain_package('postgresql-jdbc').with(
-        :name   => 'java-postgresql',
+        :name   => 'somepackage',
         :ensure => 'latest'
       )}
     end

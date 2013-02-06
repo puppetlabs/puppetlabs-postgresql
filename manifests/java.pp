@@ -3,7 +3,8 @@
 # This class installs the postgresql jdbc connector.
 #
 # Parameters:
-#   [*java_package_name*]  - The name of the postgresql java package.
+#   [*package_name*]    - The name of the postgresql java package.
+#   [*package_ensure*]  - The ensure value of the package.
 #
 # Actions:
 #
