@@ -29,6 +29,11 @@ define postgresql::tablespace(
 {
   include postgresql::params
 
+  Postgresql_psql {
+    psql_user => $postgresql::params::user,
+    psql_group => $postgresql::params::group, 
+  }
+
   if ($owner == undef) {
     $owner_section = ''
   }
@@ -40,8 +45,8 @@ define postgresql::tablespace(
 
   file { $location:
     ensure => directory,
-    owner  => 'postgres',
-    group  => 'postgres',
+    owner  => $postgresql::params::user,
+    group  => $postgresql::params::group,
     mode   => '0700',
   }
 

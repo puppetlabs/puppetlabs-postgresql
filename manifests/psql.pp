@@ -21,7 +21,7 @@ define postgresql::psql(
     $unless,
     $command     = $title,
     $refreshonly = false,
-    $user        = 'postgres'
+    $user        = $postgresql::params::user
 ) {
 
   include postgresql::params

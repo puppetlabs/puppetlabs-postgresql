@@ -27,15 +27,20 @@ define postgresql::role(
 ) {
   include postgresql::params
 
+  Postgresql_psql {
+    psql_user => $postgresql::params::user,
+    psql_group => $postgresql::params::group, 
+  }
+
   $login_sql      = $login      ? { true => 'LOGIN'     , default => 'NOLOGIN' }
   $createrole_sql = $createrole ? { true => 'CREATEROLE', default => 'NOCREATEROLE' }
   $createdb_sql   = $createdb   ? { true => 'CREATEDB'  , default => 'NOCREATEDB' }
   $superuser_sql  = $superuser  ? { true => 'SUPERUSER' , default => 'NOSUPERUSER' }
 
   # TODO: FIXME: Will not correct the superuser / createdb / createrole / login status of a role that already exists
-  postgresql_psql {"CREATE ROLE ${username} ENCRYPTED PASSWORD '${password_hash}' ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql}":
+  postgresql_psql {"CREATE ROLE \"${username}\" ENCRYPTED PASSWORD '${password_hash}' ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql}":
     db           => $db,
-    psql_user    => 'postgres',
+    psql_user    => $postgresql::params::user,
     unless       => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
     cwd          => $postgresql::params::datadir,
   }
