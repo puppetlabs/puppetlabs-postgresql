@@ -81,7 +81,7 @@ class postgresql::params(
   # that pluginsync might not be enabled.  Ideally this would be handled directly
   # in puppet.
   if ($::postgres_default_version == undef) {
-    fail 'No value for postgres_default_version facter fact; it\'s possible that you don\'t have pluginsync enabled.'
+    fail "No value for postgres_default_version facter fact; it's possible that you don't have pluginsync enabled."
   }
 
   case $::operatingsystem {
