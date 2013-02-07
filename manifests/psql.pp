@@ -21,7 +21,7 @@ define postgresql::psql(
     $unless,
     $command     = $title,
     $refreshonly = false,
-    $user        = 'postgres'
+    $user        = $postgresql::params::user
 ) {
 
   include postgresql::params
@@ -34,7 +34,13 @@ define postgresql::psql(
     $no_password_option = '--no-password'
   }
 
-  $psql = "${postgresql::params::psql_path} ${no_password_option} --tuples-only --quiet --dbname ${db}"
+  $psql_core = "${postgresql::params::psql_path} ${no_password_option} --tuples-only --quiet --dbname ${db}"
+
+  $psql = $postgresql::params::library_path ? {
+    undef   => $psql_core,
+    default => "LD_LIBRARY_PATH=\"${postgresql::params::library_path}\" ${psql_core}"
+  }
+
   $quoted_command = regsubst($command, '"', '\\"', 'G')
   $quoted_unless  = regsubst($unless,  '"', '\\"', 'G')
 

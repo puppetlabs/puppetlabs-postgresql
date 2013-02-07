@@ -29,6 +29,13 @@ define postgresql::database(
 
   # Optionally set the locale switch. Older versions of createdb may not accept
   # --locale, so if the parameter is undefined its safer not to pass it.
+  Postgresql_psql {
+    psql_user    => $postgresql::params::user,
+    psql_group   => $postgresql::params::group,
+    psql_path    => $postgresql::params::psql_path,
+    library_path => $postgresql::params::library_path,
+  }
+
   if ($postgresql::params::version != '8.1') {
     $locale_option = $locale ? {
       undef   => '',
@@ -58,15 +65,15 @@ define postgresql::database(
 
   exec { $createdb_command :
     refreshonly => true,
-    user        => 'postgres',
-    cwd         => $postgresql::params::datadir,
-    logoutput   => on_failure,
+    user      => $postgresql::params::user,
+    cwd       => $postgresql::params::datadir,
+    logoutput => on_failure,
   } ~>
 
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
-  postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE ${dbname} FROM public":
-    db          => 'postgres',
+  postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
+    db          => $postgresql::params::user,
     refreshonly => true,
     cwd         => $postgresql::params::datadir,
   }
