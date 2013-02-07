@@ -73,7 +73,7 @@ class postgresql::config::beforeservice(
   # managing their own settings in a second conf file.
   file_line { 'postgresql.conf#include':
     path        => $postgresql_conf_path,
-    line        => 'include \'postgresql_puppet_extras.conf\'',
+    line        => "include 'postgresql_puppet_extras.conf'",
     notify      => Service['postgresqld'],
   }
 

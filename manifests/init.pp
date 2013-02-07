@@ -50,7 +50,6 @@ class postgresql (
   $charset             = 'UTF8'
 ) {
   class { 'postgresql::params':
-
     version             => $version,
     manage_package_repo => $manage_package_repo,
     package_source      => $package_source,
