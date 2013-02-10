@@ -6,13 +6,12 @@ postgresql
 2. [Module Description - What does the module do?](#module-description)
 3. [Setup - The basics of getting started with PostgreSQL module](#setup)
 4. [Usage - The classes and parameters available for configuration](#usage)
-5. [Implementation - An under-the-hood peek at what the module is doing](#implementation)
-6. [Limitations - OS compatibility, etc.](#limitations)
-7. [Development - Guide for contributing to the module](#development)
-8. [Disclaimer - Licensing information](#disclaimer)
-9. [Transfer Notice - Notice of authorship change](#transfer-notice)
-10. [Contributors - List of module contributors](#contributors)
-11. [Release Notes - Notes on the most recent updates to the module](#release-notes)
+5. [Limitations - OS compatibility, etc.](#limitations)
+6. [Development - Guide for contributing to the module](#development)
+7. [Disclaimer - Licensing information](#disclaimer)
+8. [Transfer Notice - Notice of authorship change](#transfer-notice)
+9. [Contributors - List of module contributors](#contributors)
+10. [Release Notes - Notes on the most recent updates to the module](#release-notes)
 
 
 Overview
@@ -105,7 +104,10 @@ Usage
 
 The postgresql module comes with many options for configuring the server. While you are unlikely to use all of the below settings, they allow you a decent amount of control over your security settings. 
 
-###postgresql::server
+###Class: postgresql
+This class is used to configure the cross-domain settings for this module.
+
+###Class: postgresql::server
 Here are the options that you can set in the `config_hash` parameter of `postgresql::server`:
 
 ####`postgres_password`	
@@ -140,7 +142,7 @@ List of strings for access control for connection method, users, databases, IPv4
 List of strings for access control for connection method, users, databases, IPv6
 addresses; see [postgresql documentation](http://www.postgresql.org/docs/9.2/static/auth-pg-hba-conf.html) about pg_hba.conf for information (please note that the link will take you to documentation for the most recent version of Postgres, however links for earlier versions can be found on that page).
 
-###postgresql::client
+###Class: postgresql::client
 
 This class installs postgresql client software. Alter the following parameters if you have a custom version you would like to install (Note: don't forget to make sure to add any necessary yum or apt repositories if specifying a custom version):
 
@@ -150,7 +152,7 @@ The name of the postgresql client package.
 ####`package_ensure`
 The ensure parameter passed on to postgresql client package resource. 
 
-###postgresql::java
+###Class: postgresql::java
 This class installs postgresql bindings for Java (JDBC). Alter the following parameters if you have a custom version you would like to install (Note: don't forget to make sure to add any necessary yum or apt repositories if specifying a custom version):
 
 ####`package_name`
@@ -159,63 +161,80 @@ The name of the postgresql java package.
 ####`package_ensure`
 The ensure parameter passed on to postgresql java package resource.
 
-### Custom Functions
+###Resource: postgresql::database
+This defined type can be used to create a database with no users and no permissions, which is a rare use case.
 
-If you need to generate a postgres encrypted password, use `postgresql_password`. You can call it from your production manifests if you don’t mind them containing the clear text versions of your passwords, or you can call it from the command line and then copy and paste the encrypted password into your manifest:
-
-	$ puppet apply --execute 'notify { "test": message => postgresql_password("username", "password") }'
-
-### Tests
-
-There are two types of tests distributed with the module. The first set is the “traditional” Puppet manifest-style smoke tests. You can use these to experiment with the module on a virtual machine or other test environment, via `puppet apply`. You should see the following files in the `tests` directory.
-
-In addition to these manifest-based smoke tests, there are some ruby rspec tests in the spec directory. These tests run against a VirtualBox VM, so they are actually testing the live application of the module on a real, running system. To do this, you must install and setup an [RVM](http://beginrescueend.com/) with [vagrant](http://vagrantup.com/), [sahara](https://github.com/jedi4ever/sahara), and [rspec](http://rspec.info/):
-
-    $ curl -L get.rvm.io | bash -s stable
-    $ rvm install 1.9.3
-    $ rvm use --create 1.9.3@puppet-postgresql
-    $ bundle install 
-
-Run the system tests:
-
-    $ rake spec:system
-
-The system test suite will snapshot the VM and rollback between each test.
-
-We also have some unit tests that utilize rspec-puppet for faster iteration if required:
-
-    $ rake spec
-
-The unit tests are ran in Travis-CI as well, if you want to see the results of your own tests regsiter the service hook through Travis-CI via the accounts section for your Github clone of this project.
-
-Implementation
----------------
-
-### Resource Overview
-
-**postgresql**
-
-This class is used to manage the basic postgresql client packages (which include the psql command line tool and other utilities). 
-
-**postgresql::database** 
-
-This defined type can be used to create a database with no users and no permissions, which is a rare use case. 
-
-**postgresql::tablespace** 
-
+###Resource: postgresql::tablespace
 This defined type can be used to create a tablespace.
 
-**postgresql_psql**
+###Resource: postgresql::pg_hba_rule
+This defined type allows you to create an access rule for pg_hba.conf. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/8.2/static/auth-pg-hba-conf.html).
 
-This defined type manages the command line tool for the postgresql module.
+For example:
 
- 
-### Custom Facts 
+    postgresql::pg_hba_rule { 'allow application network to access app database':
+      description => "Open up postgresql for access from 200.1.2.0/24",
+      type => 'host',
+      database => 'app',
+      user => 'app',
+      address => '200.1.2.0/24',
+      auth_method => 'md5',
+    }
 
-**postgres\_default\_version**
+This would create a ruleset in `pg_hba.conf` similar to:
 
+    # Rule Name: allow application network to access app database
+    # Description: Open up postgresql for access from 200.1.2.0/24
+    # Order: 150
+    host	app	app	200.1.2.0/24	md5
+
+####`namevar`
+A unique identifier or short description for this rule. The namevar doesn't provide any functional usage, but it is stored in the comments of the produced pg_hba.conf so the originating resource can be identified.
+
+####`description`
+A longer description for this rule if required. Defaults to `none`. This description is placed in the comments above the rule in `pg_hba.conf`.
+
+####`type`
+The type of rule, this is usually one of: local, host, hostssl or hostnossl.
+
+####`database`
+A comma separated list of databases that this rule matches.
+
+####`user`
+A comma separated list of database users that this rule matches.
+
+####`address`
+If the type is not 'local' you can provide a CIDR based address here for rule matching.
+
+####`auth_method`
+The auth_method is described further in the pg_hba.conf documentation, but it provides the method that is used for authentication for the connection that this rule matches.
+
+####`auth_option`
+For certain auth_methods there are extra options that can be passed. Consult the PostgreSQL `pg_hba.conf` documentation for further details.
+
+####`order`
+An order for placing the rule in pg_hba.conf. Defaults to `150`.
+
+####`target`
+This provides the target for the rule, and is generally an internal only property. Use with caution.
+
+###Resource: postgresql_psql**
+
+This type manages the command line tool for the postgresql module.
+
+###Function: postgresql_password
+If you need to generate a postgres encrypted password, use `postgresql_password`. You can call it from your production manifests if you don’t mind them containing the clear text versions of your passwords, or you can call it from the command line and then copy and paste the encrypted password into your manifest:
+
+    $ puppet apply --execute 'notify { "test": message => postgresql_password("username", "password") }'
+
+###Function: postgresql_acls_to_resources_hash(acl_array, id, order_offset)
+This internal function converts a list of pg_hba.conf based acls (passed in as an array of strings) to a format compatible with the `postgresql::pg_hba_rule` resource.
+
+**This function should only be used internally by the module**.
+
+###Fact: postgres_default_version
 The module provides a Facter fact that can be used to determine what the default version of postgres is for your operating system/distribution. Depending on the distribution, it might be 8.1, 8.4, 9.1, or possibly another version. This can be useful in a few cases, like when building path strings for the postgres directories.
- 
+
 Limitations
 ------------
 
@@ -229,6 +248,29 @@ Puppet Labs modules on the Puppet Forge are open projects, and community contrib
 We want to keep it as easy as possible to contribute changes so that our modules work in your environment. There are a few guidelines that we need contributors to follow so that we can have a chance of keeping on top of things.
 
 You can read the complete module contribution guide [on the Puppet Labs wiki.](http://projects.puppetlabs.com/projects/module-site/wiki/Module_contributing)
+
+### Tests
+
+There are two types of tests distributed with the module. The first set is the “traditional” Puppet manifest-style smoke tests. You can use these to experiment with the module on a virtual machine or other test environment, via `puppet apply`. You should see the following files in the `tests` directory.
+
+In addition to these manifest-based smoke tests, there are some ruby rspec tests in the spec directory. These tests run against a VirtualBox VM, so they are actually testing the live application of the module on a real, running system. To do this, you must install and setup an [RVM](http://beginrescueend.com/) with [vagrant](http://vagrantup.com/), [sahara](https://github.com/jedi4ever/sahara), and [rspec](http://rspec.info/):
+
+    $ curl -L get.rvm.io | bash -s stable
+    $ rvm install 1.9.3
+    $ rvm use --create 1.9.3@puppet-postgresql
+    $ bundle install
+
+Run the system tests:
+
+    $ rake spec:system
+
+The system test suite will snapshot the VM and rollback between each test.
+
+We also have some unit tests that utilize rspec-puppet for faster iteration if required:
+
+    $ rake spec
+
+The unit tests are ran in Travis-CI as well, if you want to see the results of your own tests regsiter the service hook through Travis-CI via the accounts section for your Github clone of this project.
 
 Disclaimer
 -----------

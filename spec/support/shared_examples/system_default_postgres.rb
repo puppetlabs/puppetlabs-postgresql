@@ -63,7 +63,7 @@ shared_examples :system_default_postgres do
       sudo_and_log(vm, "puppet apply -e '#{manifest}'")
 
       # Some basic tests here to check if the db indeed was created with the
-      #rr correct locale.
+      # correct locale.
       sudo_and_log(vm, 'su postgres -c \'psql -c "show lc_ctype" test1\'')
       sudo_and_log(vm, 'su postgres -c \'psql -c "show lc_ctype" test1\' | grep en_NG')
       sudo_and_log(vm, 'su postgres -c \'psql -c "show lc_collate" test1\' | grep en_NG')
@@ -167,6 +167,47 @@ shared_examples :system_default_postgres do
       # Check that databases use correct tablespaces
       sudo_psql_and_expect_result(vm, '--command="select ts.spcname from pg_database db, pg_tablespace ts where db.dattablespace = ts.oid and db.datname = \'"\'tablespacedb1\'"\'"', 'tablespace1')
       sudo_psql_and_expect_result(vm, '--command="select ts.spcname from pg_database db, pg_tablespace ts where db.dattablespace = ts.oid and db.datname = \'"\'tablespacedb3\'"\'"', 'tablespace2')
+    end
+  end
+
+  describe 'postgresql::pg_hba_rule' do
+    it 'should create a ruleset in pg_hba.conf' do
+      manifest = <<-EOS
+        include postgresql::server
+        postgresql::pg_hba_rule { "allow application network to access app database":
+          type => "host",
+          database => "app",
+          user => "app",
+          address => "200.1.2.0/24",
+          auth_method => md5,
+        }
+      EOS
+      sudo_and_log(vm, "puppet apply -e '#{manifest}'")
+      sudo_and_log(vm, "grep '200.1.2.0/24' /etc/postgresql/*/*/pg_hba.conf || grep '200.1.2.0/24' /var/lib/pgsql/data/pg_hba.conf")
+    end
+
+    it 'should create a ruleset in pg_hba.conf that denies db access to db test1' do
+      manifest = <<-EOS
+        include postgresql::server
+        postgresql::db { "test1":
+          user => "test1",
+          password => "test1",
+          grant => "all",
+        }
+        postgresql::pg_hba_rule { "allow anyone to have access to db test1":
+          type => "local",
+          database => "test1",
+          user => "test1",
+          auth_method => reject,
+          order => '001',
+        }
+        user { "test1":
+          shell => "/bin/bash",
+          managehome => true,
+        }
+      EOS
+      sudo_and_log(vm, "puppet apply -e '#{manifest}'")
+      sudo_and_log(vm, 'su - test1 -c \'psql -U test1 -c "\q" test1\'; [ $? == 2 ]')
     end
   end
 

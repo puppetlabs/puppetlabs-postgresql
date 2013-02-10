@@ -3,3 +3,4 @@
 # This is a library, so don't pin
 Gemfile.lock
 /metadata.json
+spec/fixtures
