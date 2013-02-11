@@ -74,7 +74,7 @@
 # (custom daily cronjobs, replication, and similar tasks).
 #
 # Database administrative login by UNIX sockets
-local   all         postgres                          ident  <%= "sameuser" if scope.lookupvar('postgresql::params::version') == "8.1" %>
+local   all         postgres                          <%= @unix_domain_socket_auth_method %>    <%= "sameuser" if scope.lookupvar('postgresql::params::version') == "8.1" %>
 
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
 
