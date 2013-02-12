@@ -40,10 +40,10 @@ define postgresql::tablespace(
     $owner_section = ''
   }
   else {
-    $owner_section = "OWNER ${owner}"
+    $owner_section = "OWNER \"${owner}\""
   }
 
-  $create_tablespace_command = "CREATE TABLESPACE ${spcname} ${owner_section} LOCATION '${location}'"
+  $create_tablespace_command = "CREATE TABLESPACE \"${spcname}\" ${owner_section} LOCATION '${location}'"
 
   file { $location:
     ensure => directory,
