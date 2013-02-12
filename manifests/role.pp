@@ -31,7 +31,7 @@ define postgresql::role(
     psql_user    => $postgresql::params::user,
     psql_group   => $postgresql::params::group,
     psql_path    => $postgresql::params::psql_path,
-    library_path => $postgresql::params::libdir,
+    library_path => $postgresql::params::library_path,
   }
 
   $login_sql      = $login      ? { true => 'LOGIN'     , default => 'NOLOGIN' }

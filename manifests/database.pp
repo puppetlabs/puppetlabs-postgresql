@@ -33,7 +33,7 @@ define postgresql::database(
     psql_user    => $postgresql::params::user,
     psql_group   => $postgresql::params::group,
     psql_path    => $postgresql::params::psql_path,
-    library_path => $postgresql::params::libdir,
+    library_path => $postgresql::params::library_path,
   }
 
   if ($postgresql::params::version != '8.1') {
