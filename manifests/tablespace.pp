@@ -30,10 +30,10 @@ define postgresql::tablespace(
   include postgresql::params
 
   Postgresql_psql {
-    psql_user => $postgresql::params::user,
-    psql_group => $postgresql::params::group,
-    psql_path  => $postgresql::params::psql_path,
-    libdir     => $postgresql::params::libdir,
+    psql_user    => $postgresql::params::user,
+    psql_group   => $postgresql::params::group,
+    psql_path    => $postgresql::params::psql_path,
+    library_path => $postgresql::params::libdir,
   }
 
   if ($owner == undef) {

@@ -30,10 +30,10 @@ define postgresql::database(
   # Optionally set the locale switch. Older versions of createdb may not accept
   # --locale, so if the parameter is undefined its safer not to pass it.
   Postgresql_psql {
-    psql_user => $postgresql::params::user,
-    psql_group => $postgresql::params::group,
-    psql_path  => $postgresql::params::psql_path,
-    libdir     => $postgresql::params::libdir,
+    psql_user    => $postgresql::params::user,
+    psql_group   => $postgresql::params::group,
+    psql_path    => $postgresql::params::psql_path,
+    library_path => $postgresql::params::libdir,
   }
 
   if ($postgresql::params::version != '8.1') {
