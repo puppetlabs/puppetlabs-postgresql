@@ -51,7 +51,12 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   end
 
   def run_sql_command(sql)
-    command = 'psql -t -c "' << sql.gsub('"', '\"') << '"'
+    if (resource[:library_path].nil? || resource[:library_path].empty?)
+      command = resource[:psql_path] + ' -t -c "' << sql.gsub('"', '\"') << '"'
+    else
+      command = 'LD_LIBRARY_PATH="' << resource[:library_path] + '" ' << resource[:psql_path] + ' -t -c "' << sql.gsub('"', '\"') << '"'
+    end
+
     if resource[:cwd]
       Dir.chdir resource[:cwd] do
         Puppet::Util::SUIDManager.run_and_capture(command, resource[:psql_user], resource[:psql_group])

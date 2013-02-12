@@ -48,6 +48,11 @@
 #    binaries directory for the target platform. If not
 #    specified, the module will use whatever directory is the
 #    default for your OS distro.
+# [*libdir*]
+#    This setting can be used to override the default postgresql
+#    lib directory for the target platform. If not
+#    specified, the module will assume that the libraries are
+#    loaded without the explicit library location.
 # [*client_package_name*]
 #    This setting can be used to override the default
 #    postgresql client package name. If not specified, the module
@@ -97,6 +102,7 @@ class postgresql (
   $datadir             = undef,
   $confdir             = undef,
   $bindir              = undef,
+  $libdir              = undef,
   $client_package_name = undef,
   $server_package_name = undef,
   $devel_package_name  = undef,
@@ -115,6 +121,7 @@ class postgresql (
     custom_datadir             => $datadir,
     custom_confdir             => $confdir,
     custom_bindir              => $bindir,
+    custom_libdir              => $libdir,
     custom_client_package_name => $client_package_name,
     custom_server_package_name => $server_package_name,
     custom_devel_package_name  => $devel_package_name,
