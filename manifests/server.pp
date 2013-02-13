@@ -62,8 +62,6 @@ class postgresql::server (
   exec { 'reload_postgresql':
     path        => '/usr/bin:/usr/sbin:/bin:/sbin',
     command     => "service ${service_name} reload",
-    user        => $postgresql::params::user,
-    group       => $postgresql::params::group,
     onlyif      => $service_status,
     refreshonly => true,
   }

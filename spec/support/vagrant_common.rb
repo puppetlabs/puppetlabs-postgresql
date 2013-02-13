@@ -6,6 +6,7 @@ def apply_common_vagrant_config(config)
   # TODO: it would be better to install this via the puppet module tool
   config.vm.share_folder "puppetlabs-stdlib-module", "/usr/share/puppet/modules/stdlib", "../../../../../puppetlabs-stdlib"
   config.vm.share_folder "puppetlabs-apt-module", "/usr/share/puppet/modules/apt", "../../../../../puppetlabs-apt"
+  config.vm.share_folder "ripienaar-concat-module", "/usr/share/puppet/modules/concat", "../../../../../puppet-concat"
 
   # Share the postgressql module
   config.vm.share_folder "puppet-postgresql-module", "/usr/share/puppet/modules/postgresql", "../../../.."
