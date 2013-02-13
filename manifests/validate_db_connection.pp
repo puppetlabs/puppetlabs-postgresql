@@ -51,7 +51,12 @@ define postgresql::validate_db_connection(
     require postgresql::client
 
     # TODO: port to ruby
-    $psql = "${postgresql::params::psql_path} --tuples-only --quiet -h ${database_host} -U ${database_username} -p ${database_port} --dbname ${database_name}"
+    $psql_core = "${postgresql::params::psql_path} --tuples-only --quiet -h ${database_host} -U ${database_username} -p ${database_port} --dbname ${database_name}"
+
+    $psql = $postgresql::params::library_path ? {
+      undef   => $psql_core,
+      default => "LD_LIBRARY_PATH=\"${postgresql::params::library_path}\" ${psql_core}"
+    }
 
     $exec_name = "validate postgres connection for ${database_host}/${database_name}"
     exec { $exec_name:

@@ -28,7 +28,7 @@ class postgresql::config::afterservice(
     #  for pg_hba.conf.
     exec { 'set_postgres_postgrespw':
         # This command works w/no password because we run it as postgres system user
-        command     => "psql -c \"ALTER ROLE postgres PASSWORD '${postgres_password}'\"",
+        command     => "psql -c \"ALTER ROLE ${postgresql::params::user} PASSWORD '${postgres_password}'\"",
         user        => $postgresql::params::user,
         group       => $postgresql::params::group,
         logoutput   => true,
