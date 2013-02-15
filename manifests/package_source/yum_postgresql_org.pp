@@ -1,5 +1,5 @@
 class postgresql::package_source::yum_postgresql_org(
- $version
+  $version
 ) {
 
   $version_parts       = split($version, '[.]')

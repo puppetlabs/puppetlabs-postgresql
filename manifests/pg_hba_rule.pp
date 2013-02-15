@@ -29,11 +29,11 @@ define postgresql::pg_hba_rule(
   # Create a rule fragment
   $fragname = "pg_hba_rule_${name}"
   concat::fragment { $fragname:
-    target => $target,
+    target  => $target,
     content => template('postgresql/pg_hba_rule.conf'),
-    order => $order,
-    owner => $::id,
-    mode => '0600',
+    order   => $order,
+    owner   => $::id,
+    mode    => '0600',
   }
 
   Class['concat::setup']->

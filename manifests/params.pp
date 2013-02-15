@@ -48,19 +48,19 @@ class postgresql::params(
   if ($manage_package_repo) {
       case $::osfamily {
         'RedHat': {
-           $rh_pkg_source = pick($package_source, 'yum.postgresql.org')
+          $rh_pkg_source = pick($package_source, 'yum.postgresql.org')
 
-           case $rh_pkg_source {
-             'yum.postgresql.org': {
-                class { 'postgresql::package_source::yum_postgresql_org':
-                  version => $version
-                }
-             }
+          case $rh_pkg_source {
+            'yum.postgresql.org': {
+              class { 'postgresql::package_source::yum_postgresql_org':
+                version => $version
+              }
+            }
 
-             default: {
-               fail("Unsupported package source '${rh_pkg_source}' for ${::osfamily} OS family. Currently the only supported source is 'yum.postgresql.org'")
-             }
-           }
+            default: {
+              fail("Unsupported package source '${rh_pkg_source}' for ${::osfamily} OS family. Currently the only supported source is 'yum.postgresql.org'")
+            }
+          }
         }
 
         'Debian': {
@@ -135,12 +135,12 @@ class postgresql::params(
         }
 
         'Ubuntu': {
-           # thanks, ubuntu
-           if($::lsbmajdistrelease == '10' and !$manage_package_repo) {
-             $service_name = "postgresql-${version}"
-           } else {
-             $service_name = 'postgresql'
-           }
+          # thanks, ubuntu
+          if($::lsbmajdistrelease == '10' and !$manage_package_repo) {
+            $service_name = "postgresql-${version}"
+          } else {
+            $service_name = 'postgresql'
+          }
         }
       }
 
