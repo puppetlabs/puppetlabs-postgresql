@@ -11,8 +11,8 @@ define postgresql::pg_hba(
   concat { $target:
     owner => $owner,
     group => $group,
-    mode => '0640',
-    warn => true,
+    mode  => '0640',
+    warn  => true,
   }
 
 }

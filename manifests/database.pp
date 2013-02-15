@@ -58,9 +58,9 @@ define postgresql::database(
 
   exec { $createdb_command :
     refreshonly => true,
-    user      => 'postgres',
-    cwd       => $postgresql::params::datadir,
-    logoutput => on_failure,
+    user        => 'postgres',
+    cwd         => $postgresql::params::datadir,
+    logoutput   => on_failure,
   } ~>
 
   # This will prevent users from connecting to the database unless they've been
