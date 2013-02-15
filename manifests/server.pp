@@ -35,11 +35,12 @@ class postgresql::server (
     tag     => 'postgresql',
   }
 
-  $config_class = {}
-  $config_class['postgresql::config'] = $config_hash
+  $config_class = {
+    'postgresql::config' => $config_hash,
+  }
 
   create_resources( 'class', $config_class )
-  
+
 
   service { 'postgresqld':
     ensure   => running,
