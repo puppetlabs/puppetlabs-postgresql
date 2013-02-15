@@ -54,7 +54,7 @@ class postgresql::server (
     include postgresql::initdb
 
     Package['postgresql-server'] -> Class['postgresql::initdb'] -> Class['postgresql::config'] -> Service['postgresqld']
-  } 
+  }
   else  {
     Package['postgresql-server'] -> Class['postgresql::config'] -> Service['postgresqld']
   }
