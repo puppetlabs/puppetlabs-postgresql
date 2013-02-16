@@ -1,5 +1,5 @@
 name 'puppetlabs-postgresql'
-version '2.0.1'
+version '2.2.0'
 source 'git://github.com/puppetlabs/puppet-postgresql.git'
 author 'Inkling/Puppet Labs'
 description 'PostgreSQL defined resource types'
