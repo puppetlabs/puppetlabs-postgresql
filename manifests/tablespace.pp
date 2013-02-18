@@ -33,7 +33,6 @@ define postgresql::tablespace(
     psql_user    => $postgresql::params::user,
     psql_group   => $postgresql::params::group,
     psql_path    => $postgresql::params::psql_path,
-    library_path => $postgresql::params::library_path,
   }
 
   if ($owner == undef) {
@@ -55,7 +54,6 @@ define postgresql::tablespace(
   postgresql_psql { "Create tablespace '${spcname}'":
     command => $create_tablespace_command,
     unless  => "SELECT spcname FROM pg_tablespace WHERE spcname='${spcname}'",
-    cwd     => $postgresql::params::datadir,
     require => [Class['postgresql::server'], File[$location]],
   }
 }

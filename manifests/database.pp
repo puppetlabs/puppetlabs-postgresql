@@ -27,15 +27,15 @@ define postgresql::database(
 ) {
   include postgresql::params
 
-  # Optionally set the locale switch. Older versions of createdb may not accept
-  # --locale, so if the parameter is undefined its safer not to pass it.
+  # Set the defaults for the postgresql_psql resource
   Postgresql_psql {
     psql_user    => $postgresql::params::user,
     psql_group   => $postgresql::params::group,
     psql_path    => $postgresql::params::psql_path,
-    library_path => $postgresql::params::library_path,
   }
 
+  # Optionally set the locale switch. Older versions of createdb may not accept
+  # --locale, so if the parameter is undefined its safer not to pass it.
   if ($postgresql::params::version != '8.1') {
     $locale_option = $locale ? {
       undef   => '',
@@ -59,15 +59,13 @@ define postgresql::database(
   postgresql_psql { "Check for existence of db '${dbname}'":
     command => 'SELECT 1',
     unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
-    cwd     => $postgresql::params::datadir,
     require => Class['postgresql::server']
   } ~>
 
   exec { $createdb_command :
     refreshonly => true,
-    user      => $postgresql::params::user,
-    cwd       => $postgresql::params::datadir,
-    logoutput => on_failure,
+    user        => $postgresql::params::user,
+    logoutput   => on_failure,
   } ~>
 
   # This will prevent users from connecting to the database unless they've been
@@ -75,7 +73,6 @@ define postgresql::database(
   postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
     db          => $postgresql::params::user,
     refreshonly => true,
-    cwd         => $postgresql::params::datadir,
   }
 
 }

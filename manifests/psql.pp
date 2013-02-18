@@ -34,12 +34,7 @@ define postgresql::psql(
     $no_password_option = '--no-password'
   }
 
-  $psql_core = "${postgresql::params::psql_path} ${no_password_option} --tuples-only --quiet --dbname ${db}"
-
-  $psql = $postgresql::params::library_path ? {
-    undef   => $psql_core,
-    default => "LD_LIBRARY_PATH=\"${postgresql::params::library_path}\" ${psql_core}"
-  }
+  $psql = "${postgresql::params::psql_path} ${no_password_option} --tuples-only --quiet --dbname ${db}"
 
   $quoted_command = regsubst($command, '"', '\\"', 'G')
   $quoted_unless  = regsubst($unless,  '"', '\\"', 'G')

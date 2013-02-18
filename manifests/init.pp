@@ -10,7 +10,7 @@
 # For examples, see the files in the `tests` directory; in particular,
 # `/server-yum-postgresql-org.pp`.
 #
-# Parameters:
+# === Parameters
 #
 # [*version*]
 #    The postgresql version to install.  If not specified, the
@@ -48,11 +48,6 @@
 #    binaries directory for the target platform. If not
 #    specified, the module will use whatever directory is the
 #    default for your OS distro.
-# [*libdir*]
-#    This setting can be used to override the default postgresql
-#    lib directory for the target platform. If not
-#    specified, the module will assume that the libraries are
-#    loaded without the explicit library location.
 # [*client_package_name*]
 #    This setting can be used to override the default
 #    postgresql client package name. If not specified, the module
@@ -61,6 +56,16 @@
 # [*server_package_name*]
 #    This setting can be used to override the default
 #    postgresql server package name. If not specified, the module
+#    will use whatever package name is the default for your
+#    OS distro.
+# [*devel_package_name*]
+#    This setting can be used to override the default
+#    postgresql devel package name. If not specified, the module
+#    will use whatever package name is the default for your
+#    OS distro.
+# [*java_package_name*]
+#    This setting can be used to override the default
+#    postgresql java package name. If not specified, the module
 #    will use whatever package name is the default for your
 #    OS distro.
 # [*service_name*]
@@ -79,13 +84,13 @@
 #    in the file system. If not specified, the module will use
 #    the group name 'postgres'.
 # [*run_initdb*]
-#    This setting can be used to explicitly call the inidb
+#    This setting can be used to explicitly call the initdb
 #    operation after server package is installed and before
 #    the postgresql service is started. If not specified, the
 #    module will decide whether to call initdb or not depending
 #    on your OS distro.
 #
-# === Examples:
+# === Examples
 #
 #   class { 'postgresql':
 #     version               => '9.2',
@@ -102,7 +107,6 @@ class postgresql (
   $datadir             = undef,
   $confdir             = undef,
   $bindir              = undef,
-  $libdir              = undef,
   $client_package_name = undef,
   $server_package_name = undef,
   $devel_package_name  = undef,
@@ -110,7 +114,8 @@ class postgresql (
   $service_name        = undef,
   $user                = undef,
   $group               = undef,
-  $run_initdb          = undef,) {
+  $run_initdb          = undef
+) {
 
   class { 'postgresql::params':
     version                    => $version,
@@ -121,7 +126,6 @@ class postgresql (
     custom_datadir             => $datadir,
     custom_confdir             => $confdir,
     custom_bindir              => $bindir,
-    custom_libdir              => $libdir,
     custom_client_package_name => $client_package_name,
     custom_server_package_name => $server_package_name,
     custom_devel_package_name  => $devel_package_name,

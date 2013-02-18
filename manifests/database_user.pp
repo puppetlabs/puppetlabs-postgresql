@@ -38,12 +38,12 @@
 #
 
 define postgresql::database_user(
-    $password_hash,
-    $createdb   = false,
-    $createrole = false,
-    $db         = $postgresql::params::user,
-    $superuser  = false,
-    $user       = $title
+  $password_hash,
+  $createdb   = false,
+  $createrole = false,
+  $db         = $postgresql::params::user,
+  $superuser  = false,
+  $user       = $title
 ) {
   postgresql::role { $user:
     db              => $db,

@@ -36,7 +36,6 @@ class postgresql::params(
   $custom_datadir             = undef,
   $custom_confdir             = undef,
   $custom_bindir              = undef,
-  $custom_libdir              = undef,
   $custom_client_package_name = undef,
   $custom_server_package_name = undef,
   $custom_devel_package_name  = undef,
@@ -58,32 +57,32 @@ class postgresql::params(
 
 
   if ($manage_package_repo) {
-      case $::osfamily {
-        'RedHat': {
-          $rh_pkg_source = pick($package_source, 'yum.postgresql.org')
+    case $::osfamily {
+      'RedHat': {
+        $rh_pkg_source = pick($package_source, 'yum.postgresql.org')
 
-          case $rh_pkg_source {
-            'yum.postgresql.org': {
-              class { 'postgresql::package_source::yum_postgresql_org':
-                version => $version
-              }
-            }
-
-            default: {
-              fail("Unsupported package source '${rh_pkg_source}' for ${::osfamily} OS family. Currently the only supported source is 'yum.postgresql.org'")
+        case $rh_pkg_source {
+          'yum.postgresql.org': {
+            class { 'postgresql::package_source::yum_postgresql_org':
+              version => $version
             }
           }
-        }
 
-        'Debian': {
-          class { 'postgresql::package_source::apt_postgresql_org': }
-        }
-
-        default: {
-          fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
+          default: {
+            fail("Unsupported package source '${rh_pkg_source}' for ${::osfamily} OS family. Currently the only supported source is 'yum.postgresql.org'")
+          }
         }
       }
+
+      'Debian': {
+        class { 'postgresql::package_source::apt_postgresql_org': }
+      }
+
+      default: {
+        fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
+      }
     }
+  }
 
 
   # This is a bit hacky, but if the puppet nodes don't have pluginsync enabled,
@@ -116,7 +115,6 @@ class postgresql::params(
         $java_package_name   = pick($custom_java_package_name, 'postgresql-jdbc')
         $service_name = pick($custom_service_name, 'postgresql')
         $bindir       = pick($custom_bindir, '/usr/bin')
-        $libdir       = $custom_libdir
         $datadir      = pick($custom_datadir, '/var/lib/pgsql/data')
         $confdir      = pick($custom_confdir, $datadir)
       } else {
@@ -128,7 +126,6 @@ class postgresql::params(
         $java_package_name   = pick($custom_java_package_name, "postgresql${package_version}-jdbc")
         $service_name = pick($custom_service_name, "postgresql-${version}")
         $bindir       = pick($custom_bindir, "/usr/pgsql-${version}/bin")
-        $libdir       = $custom_libdir
         $datadir      = pick($custom_datadir, "/var/lib/pgsql/${version}/data")
         $confdir      = pick($custom_confdir, $datadir)
       }
@@ -145,7 +142,7 @@ class postgresql::params(
 
       case $::operatingsystem {
         'Debian': {
-            $service_name = pick($custom_service_name, 'postgresql')
+          $service_name = pick($custom_service_name, 'postgresql')
         }
         'Ubuntu': {
           # thanks, ubuntu
@@ -162,7 +159,6 @@ class postgresql::params(
       $devel_package_name  = pick($custom_devel_package_name, 'libpq-dev')
       $java_package_name   = pick($custom_java_package_name, 'libpostgresql-jdbc-java')
       $bindir              = pick($custom_bindir, "/usr/lib/postgresql/${version}/bin")
-      $libdir              = $custom_libdir
       $datadir             = pick($custom_datadir, "/var/lib/postgresql/${version}/main")
       $confdir             = pick($custom_confdir, "/etc/postgresql/${version}/main")
       $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
@@ -176,7 +172,6 @@ class postgresql::params(
   $initdb_path          = "${bindir}/initdb"
   $createdb_path        = "${bindir}/createdb"
   $psql_path            = "${bindir}/psql"
-  $library_path         = $libdir
   $pg_hba_conf_path     = "${confdir}/pg_hba.conf"
   $postgresql_conf_path = "${confdir}/postgresql.conf"
 
