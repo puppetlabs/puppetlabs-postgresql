@@ -218,7 +218,7 @@ An order for placing the rule in pg_hba.conf. Defaults to `150`.
 ####`target`
 This provides the target for the rule, and is generally an internal only property. Use with caution.
 
-###Resource: postgresql_psql**
+###Resource: postgresql_psql
 
 This type manages the command line tool for the postgresql module.
 
@@ -272,21 +272,6 @@ We also have some unit tests that utilize rspec-puppet for faster iteration if r
 
 The unit tests are ran in Travis-CI as well, if you want to see the results of your own tests regsiter the service hook through Travis-CI via the accounts section for your Github clone of this project.
 
-Disclaimer
------------
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
 Transfer Notice
 ----------------
 
@@ -316,33 +301,3 @@ Contributors
  * Spenser Gilliland
  * stormcrow
  * William Van Hevelingen
- 
-Release Notes
--------------
-
-**2.0.1**
-
-Minor bugfix release.
-
-2013-01-16 - Chris Price chris@puppetlabs.com * Fix revoke command in database.pp to support postgres 8.1 (43ded42)
-
-2013-01-15 - Jordi Boggiano j.boggiano@seld.be * Add support for ubuntu 12.10 status (3504405)
-
-**2.0.0**
-
-Notable features:
-
-Add support for versions of postgres other than the system default version (which varies depending on OS distro). This includes optional support for automatically managing the package repo for the “official” postgres yum/apt repos. (Major thanks to Etienne Pelletier epelletier@maestrodev.com and Ken Barber ken@bob.sh for their tireless efforts and patience on this feature set!) For example usage see tests/official-postgresql-repos.pp.
-
-Add some support for Debian Wheezy and Ubuntu Quantal
-
-Add new postgres_psql type with a Ruby provider, to replace the old exec-based psql type. This gives us much more flexibility around executing SQL statements and controlling their logging / reports output.
-
-Major refactor of the “spec” tests–which are actually more like acceptance tests. We now support testing against multiple OS distros via vagrant, and the framework is in place to allow us to very easily add more distros. Currently testing against Cent6 and Ubuntu 10.04.
-
-Fixed a bug that was preventing multiple databases from being owned by the same user (9adcd182f820101f5e4891b9f2ff6278dfad495c - Etienne Pelletier epelletier@maestrodev.com)
-
-Add support for ACLs for finer-grained control of user/interface access (b8389d19ad78b4fb66024897097b4ed7db241930 - dharwood harwoodd@cat.pdx.edu)
-
-Many other bug fixes and improvements!
-
