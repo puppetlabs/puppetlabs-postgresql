@@ -20,15 +20,18 @@ class postgresql_tests::system_default::test_tablespace {
 
   include postgresql::server
 
-  file { '/tmp':
-    ensure => 'directory',
-  }
   file { '/tmp/pg_tablespaces':
-    ensure => 'directory',
-    owner  => 'postgres',
-    group  => 'postgres',
-    mode   => '0700',
-    require => File['/tmp'],
+    ensure  => 'directory',
+    owner   => 'postgres',
+    group   => 'postgres',
+    mode    => '0700',
+  }~>
+  # This works around rubies that lack Selinux support, I'm looking at you RHEL5
+  exec { "chcon system_u:object_r:postgresql_db_t /tmp/pg_tablespaces":
+    refreshonly => true,
+    path        => "/bin:/usr/bin",
+    onlyif      => "which chcon",
+    before      => File["/tmp/pg_tablespaces/space1", "/tmp/pg_tablespaces/space2"]
   }
 
   postgresql::tablespace{ 'tablespace1':

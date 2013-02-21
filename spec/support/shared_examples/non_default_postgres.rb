@@ -41,6 +41,7 @@ shared_examples :non_default_postgres do
 
     it 'with locale and charset, the postgres database should reflect that locale' do
       pending('no support for initdb with lucid', :if => vm == :lucid)
+      pending('no support for locale parameter with centos 5', :if => vm == :centos5)
 
       manifest = <<-EOS
         # Set global locale and charset option, and try installing postgres

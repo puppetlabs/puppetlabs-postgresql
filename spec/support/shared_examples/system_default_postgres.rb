@@ -51,6 +51,7 @@ shared_examples :system_default_postgres do
     end
 
     it 'should take a locale parameter' do
+      pending('no support for locale parameter with centos 5', :if => vm == :centos5)
       manifest = <<-EOS
         include postgresql::server
         postgresql::db { 'test1':
@@ -213,6 +214,8 @@ shared_examples :system_default_postgres do
 
   describe 'postgresql.conf include' do
     it "should support an 'include' directive at the end of postgresql.conf" do
+      pending('no support for include directive with centos 5', :if => vm == :centos5)
+
       test_class = 'class {"postgresql_tests::system_default::test_pgconf_include": }'
 
       # Run once to check for crashes
