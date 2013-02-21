@@ -51,6 +51,7 @@ shared_examples :system_default_postgres do
     end
 
     it 'should take a locale parameter' do
+      pending('no support for locale parameter with centos 5', :if => vm == :centos5)
       manifest = <<-EOS
         include postgresql::server
         postgresql::db { 'test1':
