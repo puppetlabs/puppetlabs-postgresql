@@ -120,19 +120,25 @@ class postgresql::config::beforeservice(
   }
 
   # Here we are adding an 'include' line so that users have the option of
-  # managing their own settings in a second conf file.
-  file_line { 'postgresql.conf#include':
-    path        => $postgresql_conf_path,
-    line        => "include 'postgresql_puppet_extras.conf'",
-    notify      => Service['postgresqld'],
+  # managing their own settings in a second conf file. This only works for
+  # postgresql 8.2 and higher.
+  if(versioncmp($postgresql::params::version, '8.2') >= 0) {
+    # Since we're adding an "include" for this extras config file, we need
+    # to make sure it exists.
+    exec { "create_postgresql_conf_path":
+      command => "touch `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf",
+      path    => '/usr/bin:/bin',
+      unless  => "[ -f `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf ]"
+    }
+
+    file_line { 'postgresql.conf#include':
+      path        => $postgresql_conf_path,
+      line        => "include 'postgresql_puppet_extras.conf'",
+      require     => Exec["create_postgresql_conf_path"],
+      notify      => Service['postgresqld'],
+    }
   }
 
-  # Since we're adding an "include" for this extras config file, we need
-  # to make sure it exists.
-  exec { "touch `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf" :
-    path   => '/usr/bin:/bin',
-    unless => "[ -f `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf ]"
-  }
 
   # TODO: is this a reasonable place for this firewall stuff?
   # TODO: figure out a way to make this not platform-specific; debian and ubuntu have
