@@ -213,6 +213,8 @@ shared_examples :system_default_postgres do
 
   describe 'postgresql.conf include' do
     it "should support an 'include' directive at the end of postgresql.conf" do
+      pending('no support for include directive with centos 5', :if => vm == :centos5)
+
       test_class = 'class {"postgresql_tests::system_default::test_pgconf_include": }'
 
       # Run once to check for crashes
