@@ -1,3 +1,22 @@
+2.1.1
+=====
+
+This release provides a bug fix for RHEL 5 and Centos 5 systems, or specifically systems using PostgreSQL 8.1 or older. On those systems one would have received the error:
+
+    Error: Could not start Service[postgresqld]: Execution of ‘/sbin/service postgresql start’ returned 1:
+
+And the postgresql log entry:
+
+    FATAL: unrecognized configuration parameter "include"
+
+This bug is due to a new feature we had added in 2.1.0, whereby the `include` directive in `postgresql.conf` was not compatible. As a work-around we have added checks in our code to make sure systems running PostgreSQL 8.1 or older do not have this directive added.
+
+#### Detailed Changes
+
+2013-01-21 - Ken Barber <ken@bob.sh>
+* Only install `include` directive and included file on PostgreSQL >= 8.2
+* Add system tests for Centos 5
+
 2.1.0
 =====
 
