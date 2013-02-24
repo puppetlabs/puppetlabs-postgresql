@@ -9,7 +9,7 @@ define postgresql::pg_hba_rule(
   $description = 'none',
   $auth_option = undef,
   $target = $postgresql::params::pg_hba_conf_path,
-  $order = '150',
+  $order = '150'
 ) {
   include postgresql::params
 
