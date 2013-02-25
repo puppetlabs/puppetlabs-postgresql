@@ -343,6 +343,9 @@ Weither to grant login capability for the new role. Defaults to `false`.
 ####`superuser`
 Weither to grant super user capability for the new role. Defaults to `false`.
 
+####`replication`
+If `true` provides replication capabilities for this role. Defaults to `false`.
+
 ###Resource: postgresql::tablespace
 This defined type can be used to create a tablespace. For example:
 
