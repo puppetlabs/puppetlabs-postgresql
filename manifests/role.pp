@@ -18,12 +18,13 @@
 
 define postgresql::role(
     $password_hash,
-    $createdb   = false,
-    $createrole = false,
-    $db         = 'postgres',
-    $login      = false,
-    $superuser  = false,
-    $username   = $title
+    $createdb    = false,
+    $createrole  = false,
+    $db          = 'postgres',
+    $login       = false,
+    $superuser   = false,
+    $replication = false,
+    $username    = $title
 ) {
   include postgresql::params
 
@@ -33,13 +34,14 @@ define postgresql::role(
     psql_path    => $postgresql::params::psql_path,
   }
 
-  $login_sql      = $login      ? { true => 'LOGIN'     , default => 'NOLOGIN' }
-  $createrole_sql = $createrole ? { true => 'CREATEROLE', default => 'NOCREATEROLE' }
-  $createdb_sql   = $createdb   ? { true => 'CREATEDB'  , default => 'NOCREATEDB' }
-  $superuser_sql  = $superuser  ? { true => 'SUPERUSER' , default => 'NOSUPERUSER' }
+  $login_sql       = $login       ? { true => 'LOGIN'       , default => 'NOLOGIN' }
+  $createrole_sql  = $createrole  ? { true => 'CREATEROLE'  , default => 'NOCREATEROLE' }
+  $createdb_sql    = $createdb    ? { true => 'CREATEDB'    , default => 'NOCREATEDB' }
+  $superuser_sql   = $superuser   ? { true => 'SUPERUSER'   , default => 'NOSUPERUSER' }
+  $replication_sql = $replication ? { true => 'REPLICATION' , default => '' }
 
-  # TODO: FIXME: Will not correct the superuser / createdb / createrole / login status of a role that already exists
-  postgresql_psql {"CREATE ROLE \"${username}\" ENCRYPTED PASSWORD '${password_hash}' ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql}":
+  # TODO: FIXME: Will not correct the superuser / createdb / createrole / login / replication status of a role that already exists
+  postgresql_psql {"CREATE ROLE \"${username}\" ENCRYPTED PASSWORD '${password_hash}' ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql}":
     db        => $db,
     psql_user => $postgresql::params::user,
     unless    => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
