@@ -25,6 +25,13 @@ user {'puppet':
   gid    => 'puppet',
 }
 
+file { '/etc/sudoers.d':
+  ensure => directory,
+  mode   => '0750',
+  owner   => root,
+  group   => root,
+}
+
 file {'/etc/sudoers.d/puppet_postgresql_tests':
   ensure  => file,
   content => 'vagrant ALL=(ALL) ALL',
