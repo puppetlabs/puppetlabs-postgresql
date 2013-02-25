@@ -21,7 +21,7 @@ define postgresql::psql(
     $unless,
     $command     = $title,
     $refreshonly = false,
-    $user        = 'postgres'
+    $user        = $postgresql::params::user
 ) {
 
   include postgresql::params
@@ -35,6 +35,7 @@ define postgresql::psql(
   }
 
   $psql = "${postgresql::params::psql_path} ${no_password_option} --tuples-only --quiet --dbname ${db}"
+
   $quoted_command = regsubst($command, '"', '\\"', 'G')
   $quoted_unless  = regsubst($unless,  '"', '\\"', 'G')
 

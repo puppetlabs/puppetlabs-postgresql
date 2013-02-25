@@ -27,6 +27,13 @@ define postgresql::database(
 ) {
   include postgresql::params
 
+  # Set the defaults for the postgresql_psql resource
+  Postgresql_psql {
+    psql_user    => $postgresql::params::user,
+    psql_group   => $postgresql::params::group,
+    psql_path    => $postgresql::params::psql_path,
+  }
+
   # Optionally set the locale switch. Older versions of createdb may not accept
   # --locale, so if the parameter is undefined its safer not to pass it.
   if ($postgresql::params::version != '8.1') {
@@ -52,23 +59,20 @@ define postgresql::database(
   postgresql_psql { "Check for existence of db '${dbname}'":
     command => 'SELECT 1',
     unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
-    cwd     => $postgresql::params::datadir,
     require => Class['postgresql::server']
   } ~>
 
   exec { $createdb_command :
     refreshonly => true,
-    user        => 'postgres',
-    cwd         => $postgresql::params::datadir,
+    user        => $postgresql::params::user,
     logoutput   => on_failure,
   } ~>
 
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
-  postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE ${dbname} FROM public":
-    db          => 'postgres',
+  postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
+    db          => $postgresql::params::user,
     refreshonly => true,
-    cwd         => $postgresql::params::datadir,
   }
 
 }
