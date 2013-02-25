@@ -164,6 +164,39 @@ This will set the default database locale for all databases created with this mo
 ####`charset`
 This will set the default charset for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `UTF8`.
 
+####`datadir`
+This setting can be used to override the default postgresql data directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
+
+####`confdir`
+This setting can be used to override the default postgresql configuration directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
+
+####`bindir`
+This setting can be used to override the default postgresql binaries directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
+
+####`client_package_name`
+This setting can be used to override the default postgresql client package name. If not specified, the module will use whatever package name is the default for your OS distro.
+
+####`server_package_name`
+This setting can be used to override the default postgresql server package name. If not specified, the module will use whatever package name is the default for your OS distro.
+
+####`devel_package_name`
+This setting can be used to override the default postgresql devel package name. If not specified, the module will use whatever package name is the default for your OS distro.
+
+####`java_package_name`
+This setting can be used to override the default postgresql java package name. If not specified, the module will use whatever package name is the default for your OS distro.
+
+####`service_name`
+This setting can be used to override the default postgresql service name. If not specified, the module will use whatever service name is the default for your OS distro.
+
+####`user`
+This setting can be used to override the default postgresql super user and owner of postgresql related files in the file system. If not specified, the module will use the user name 'postgres'.
+
+####`group`
+This setting can be used to override the default postgresql user group to be used for related files in the file system. If not specified, the module will use the group name 'postgres'.
+
+####`run_initdb`
+This setting can be used to explicitly call the initdb operation after server package is installed and before the postgresql service is started. If not specified, the module will decide whether to call initdb or not depending on your OS distro.
+
 ###Class: postgresql::server
 Here are the options that you can set in the `config_hash` parameter of `postgresql::server`:
 
