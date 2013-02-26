@@ -43,7 +43,7 @@ class postgresql::params(
   $custom_service_name        = undef,
   $custom_user                = undef,
   $custom_group               = undef,
-  $run_initdb                 = undef,
+  $run_initdb                 = undef
 ) {
   $user                         = pick($custom_user, 'postgres')
   $group                        = pick($custom_group, 'postgres')
