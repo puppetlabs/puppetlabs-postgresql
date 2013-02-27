@@ -346,6 +346,9 @@ Weither to grant super user capability for the new role. Defaults to `false`.
 ####`replication`
 If `true` provides replication capabilities for this role. Defaults to `false`.
 
+####`connection_limit`
+Specifies how many concurrent connections the role can make. Defaults to `-1` meaning no limit.
+
 ###Resource: postgresql::tablespace
 This defined type can be used to create a tablespace. For example:
 
