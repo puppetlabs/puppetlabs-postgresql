@@ -171,6 +171,7 @@ class postgresql::params(
 
   $initdb_path          = "${bindir}/initdb"
   $createdb_path        = "${bindir}/createdb"
+  $dropdb_path          = "${bindir}/dropdb"
   $psql_path            = "${bindir}/psql"
   $pg_hba_conf_path     = "${confdir}/pg_hba.conf"
   $postgresql_conf_path = "${confdir}/postgresql.conf"
