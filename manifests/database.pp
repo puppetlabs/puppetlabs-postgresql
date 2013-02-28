@@ -33,6 +33,7 @@ define postgresql::database(
     psql_user    => $postgresql::params::user,
     psql_group   => $postgresql::params::group,
     psql_path    => $postgresql::params::psql_path,
+    cwd          => $postgresql::params::datadir,
   }
 
   if ($ensure == 'present') {
@@ -62,15 +63,12 @@ define postgresql::database(
       command => 'SELECT 1',
       unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
       require => Class['postgresql::server'],
-      # Leave this here to avoid situations where your CWD as root does not allow the system 'postgres' user to hang out in.
-      cwd     => $postgresql::params::datadir,
     } ~>
   
     exec { $createdb_command :
       refreshonly => true,
       user        => $postgresql::params::user,
       logoutput   => on_failure,
-      # Leave this here to avoid situations where your CWD as root does not allow the system 'postgres' user to hang out in.
       cwd         => $postgresql::params::datadir,
     } ~>
   
@@ -79,8 +77,6 @@ define postgresql::database(
     postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
       db          => $postgresql::params::user,
       refreshonly => true,
-      # Leave this here to avoid situations where your CWD as root does not allow the system 'postgres' user to hang out in.
-      cwd         => $postgresql::params::datadir,
     }
   } else {
     # absent
@@ -90,15 +86,12 @@ define postgresql::database(
       command => 'SELECT 1',
       onlyif  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
       require => Class['postgresql::server'],
-      # Leave this here to avoid situations where your CWD as root does not allow the system 'postgres' user to hang out in.
-      cwd     => $postgresql::params::datadir,
     } ~>
  
     exec { $dropdb_command:
       refreshonly => true,
       user        => $postgresql::params::user,
       logoutput   => on_failure,
-      # Leave this here to avoid situations where your CWD as root does not allow the system 'postgres' user to hang out in.
       cwd         => $postgresql::params::datadir,
     }
   }

@@ -17,6 +17,7 @@
 # limitations under the License.
 
 define postgresql::role(
+    $ensure      = 'present',
     $password_hash,
     $createdb    = false,
     $createrole  = false,
@@ -32,6 +33,7 @@ define postgresql::role(
     psql_user    => $postgresql::params::user,
     psql_group   => $postgresql::params::group,
     psql_path    => $postgresql::params::psql_path,
+    cwd          => $postgresql::params::datadir,
   }
 
   $login_sql       = $login       ? { true => 'LOGIN'       , default => 'NOLOGIN' }
@@ -40,10 +42,25 @@ define postgresql::role(
   $superuser_sql   = $superuser   ? { true => 'SUPERUSER'   , default => 'NOSUPERUSER' }
   $replication_sql = $replication ? { true => 'REPLICATION' , default => '' }
 
-  # TODO: FIXME: Will not correct the superuser / createdb / createrole / login / replication status of a role that already exists
-  postgresql_psql {"CREATE ROLE \"${username}\" ENCRYPTED PASSWORD '${password_hash}' ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql}":
-    db        => $db,
-    psql_user => $postgresql::params::user,
-    unless    => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
+  if ( $ensure == 'present' ) {
+    # TODO: FIXME: Will not correct the superuser / createdb / createrole / login / replication status of a role that already exists
+    postgresql_psql {"CREATE ROLE \"${username}\" ENCRYPTED PASSWORD '${password_hash}' ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql}":
+      db        => $db,
+      psql_user => $postgresql::params::user,
+      unless    => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
+    }
+  } else {
+    # Absent: Need to re-assign all database objects owned by role to be dropped to superuser
+    postgresql_psql {"REASSIGN OWNED BY ${username} TO ${$postgresql::params::user}":
+      db        => $db,
+      psql_user => $postgresql::params::user,
+      onlyif    => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
+    } ~>
+
+    postgresql_psql {"DROP ROLE IF EXISTS \"${username}\"":
+      db          => $db,
+      refreshonly => true,
+      psql_user   => $postgresql::params::user,
+    }
   }
 }
