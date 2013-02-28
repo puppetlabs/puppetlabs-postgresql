@@ -1,9 +1,11 @@
 Puppet::Type.type(:postgresql_psql).provide(:ruby) do
 
   def command()
-    if ((! resource[:unless]) or (resource[:unless].empty?))
+    sync = true
+
+    if (((! resource[:unless]) or (resource[:unless].empty?)) and ((! resource[:onlyif]) or resource[:onlyif].empty?))
       if (resource[:refreshonly])
-        # So, if there's no 'unless', and we're in "refreshonly" mode,
+        # So, if there's no 'unless' or 'onlyif', and we're in "refreshonly" mode,
         # we need to return the target command here.  If we don't,
         # then Puppet will generate an event indicating that this
         # property has changed.
@@ -16,18 +18,32 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
       return nil
     end
 
-    output, status = run_unless_sql_command(resource[:unless])
+    if resource[:unless]
+      output, status = run_unless_sql_command(resource[:unless])
 
-    if status != 0
-      self.fail("Error evaluating 'unless' clause: '#{output}'")
+      if status != 0
+        self.fail("Error evaluating 'unless' clause: '#{output}'")
+      end
+      result_count = output.strip.to_i
+      if result_count > 0
+        # If the 'unless' query returned rows, then we don't want to execute
+        # the 'command'.  Returning the target 'command' here will cause
+        # Puppet to treat this property as already being 'insync?', so it
+        # won't call the setter to run the 'command' later.
+        return resource[:command]
+      end
     end
-    result_count = output.strip.to_i
-    if result_count > 0
-      # If the 'unless' query returned rows, then we don't want to execute
-      # the 'command'.  Returning the target 'command' here will cause
-      # Puppet to treat this property as already being 'insync?', so it
-      # won't call the setter to run the 'command' later.
-      return resource[:command]
+
+    if resource[:onlyif]
+      output, status = run_unless_sql_command(resource[:onlyif])
+
+      if status != 0
+        self.fail("Error evaluating 'onlyif' clause: '#{output}'")
+      end
+      result_count = output.strip.to_i
+      if result_count == 0
+        return resource[:command]
+      end
     end
 
     # Returning 'nil' here will cause Puppet to see this property

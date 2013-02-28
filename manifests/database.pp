@@ -20,6 +20,7 @@
 #  needs to be moved over to ruby, and add support for ensurable.
 
 define postgresql::database(
+  $ensure   = 'present',
   $dbname   = $title,
   $tablespace = undef,
   $charset  = $postgresql::params::charset,
@@ -32,47 +33,67 @@ define postgresql::database(
     psql_user    => $postgresql::params::user,
     psql_group   => $postgresql::params::group,
     psql_path    => $postgresql::params::psql_path,
+    cwd          => $postgresql::params::datadir,
   }
 
-  # Optionally set the locale switch. Older versions of createdb may not accept
-  # --locale, so if the parameter is undefined its safer not to pass it.
-  if ($postgresql::params::version != '8.1') {
-    $locale_option = $locale ? {
-      undef   => '',
-      default => "--locale=${locale}",
+  if ($ensure == 'present') {
+    # Optionally set the locale switch. Older versions of createdb may not accept
+    # --locale, so if the parameter is undefined its safer not to pass it.
+    if ($postgresql::params::version != '8.1') {
+      $locale_option = $locale ? {
+        undef   => '',
+        default => "--locale=${locale}",
+      }
+      $public_revoke_privilege = 'CONNECT'
+    } else {
+      $locale_option = ''
+      $public_revoke_privilege = 'ALL'
     }
-    $public_revoke_privilege = 'CONNECT'
+  
+    $createdb_command_tmp = "${postgresql::params::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
+  
+    if($tablespace == undef) {
+      $createdb_command = $createdb_command_tmp
+    }
+    else {
+      $createdb_command = "${createdb_command_tmp} --tablespace='${tablespace}'"
+    }
+  
+    postgresql_psql { "Check for existence of db '${dbname}'":
+      command => 'SELECT 1',
+      unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
+      require => Class['postgresql::server'],
+    } ~>
+  
+    exec { $createdb_command :
+      refreshonly => true,
+      user        => $postgresql::params::user,
+      logoutput   => on_failure,
+      cwd         => $postgresql::params::datadir,
+    } ~>
+  
+    # This will prevent users from connecting to the database unless they've been
+    #  granted privileges.
+    postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
+      db          => $postgresql::params::user,
+      refreshonly => true,
+    }
   } else {
-    $locale_option = ''
-    $public_revoke_privilege = 'ALL'
-  }
+    # absent
+    $dropdb_command = "${postgresql::params::dropdb_path} '${dbname}'"
 
-  $createdb_command_tmp = "${postgresql::params::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
-
-  if($tablespace == undef) {
-    $createdb_command = $createdb_command_tmp
-  }
-  else {
-    $createdb_command = "${createdb_command_tmp} --tablespace='${tablespace}'"
-  }
-
-  postgresql_psql { "Check for existence of db '${dbname}'":
-    command => 'SELECT 1',
-    unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
-    require => Class['postgresql::server']
-  } ~>
-
-  exec { $createdb_command :
-    refreshonly => true,
-    user        => $postgresql::params::user,
-    logoutput   => on_failure,
-  } ~>
-
-  # This will prevent users from connecting to the database unless they've been
-  #  granted privileges.
-  postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
-    db          => $postgresql::params::user,
-    refreshonly => true,
+    postgresql_psql { "Check for existence of db '${dbname}'":
+      command => 'SELECT 1',
+      onlyif  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
+      require => Class['postgresql::server'],
+    } ~>
+ 
+    exec { $dropdb_command:
+      refreshonly => true,
+      user        => $postgresql::params::user,
+      logoutput   => on_failure,
+      cwd         => $postgresql::params::datadir,
+    }
   }
 
 }
