@@ -24,7 +24,7 @@ Puppet::Type.newtype(:postgresql_psql) do
       # method, and then inside of the body of 'sync' we can tell
       # whether or not we're refreshing.
 
-      if ((@resource[:refreshonly] == :false) || refreshing)
+      if (!@resource[:refreshonly] || (@resource[:refreshonly] == :false) || refreshing)
         # If we're not in 'refreshonly' mode, or we're not currently
         # refreshing, then we just call the parent method.
         super()
