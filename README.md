@@ -143,7 +143,7 @@ This class is used to configure the main settings for this module, to be used by
 
 For example, if you wanted to overwrite the default `locale` and `charset` you could use the following combination:
 
-    class { 'postgres':
+    class { 'postgresql':
       charset => 'UTF8',
       locale  => 'en_NG',
     }->
