@@ -21,6 +21,7 @@ describe 'postgresql', :type => :class do
       :bindir => '/opt/pg/bin',
       :client_package_name => 'my-postgresql-client',
       :server_package_name => 'my-postgresql-server',
+      :contrib_package_name => 'my-postgresql-contrib',
       :devel_package_name => 'my-postgresql-devel',
       :java_package_name => 'my-postgresql-java',
       :service_name => 'my-postgresql',
