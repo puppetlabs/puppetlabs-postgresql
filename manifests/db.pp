@@ -34,6 +34,7 @@
 #  }
 #
 define postgresql::db (
+  $ensure      = 'present',
   $user,
   $password,
   $charset     = $postgresql::params::charset,
@@ -44,8 +45,7 @@ define postgresql::db (
   include postgresql::params
 
   postgresql::database { $name:
-    # TODO: ensure is not yet supported
-    #ensure     => present,
+    ensure      => $ensure,
     charset     => $charset,
     tablespace  => $tablespace,
     #provider   => 'postgresql',
@@ -55,20 +55,21 @@ define postgresql::db (
 
   if ! defined(Postgresql::Database_user[$user]) {
     postgresql::database_user { $user:
-      # TODO: ensure is not yet supported
-      #ensure         => present,
+      ensure          => $ensure,
       password_hash   => $password,
       #provider       => 'postgresql',
       require         => Postgresql::Database[$name],
     }
   }
 
-  postgresql::database_grant { "GRANT ${user} - ${grant} - ${name}":
-    privilege       => $grant,
-    db              => $name,
-    role            => $user,
-    #provider       => 'postgresql',
-    require         => [Postgresql::Database[$name], Postgresql::Database_user[$user]],
+  if ( $ensure == 'present' ) {
+    postgresql::database_grant { "GRANT ${user} - ${grant} - ${name}":
+      privilege       => $grant,
+      db              => $name,
+      role            => $user,
+      #provider       => 'postgresql',
+      require         => [Postgresql::Database[$name], Postgresql::Database_user[$user]],
+    }
   }
 
 }

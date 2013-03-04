@@ -38,6 +38,7 @@
 #
 
 define postgresql::database_user(
+  $ensure      = 'present',
   $password_hash,
   $createdb    = false,
   $createrole  = false,
@@ -47,6 +48,7 @@ define postgresql::database_user(
   $user        = $title
 ) {
   postgresql::role { $user:
+    ensure          => $ensure,
     db              => $db,
     password_hash   => $password_hash,
     login           => true,
