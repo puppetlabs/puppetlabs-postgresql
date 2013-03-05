@@ -116,6 +116,7 @@ Classes:
 * [postgresql](#class-postgresql)
 * [postgresql::server](#class-postgresqlserver)
 * [postgresql::client](#class-postgresqlclient)
+* [postgresql::contrib](#class-postgresqlcontrib)
 * [postgresql::devel](#class-postgresqldevel)
 * [postgresql::java](#class-postgresqljava)
 
@@ -179,6 +180,9 @@ This setting can be used to override the default postgresql client package name.
 ####`server_package_name`
 This setting can be used to override the default postgresql server package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
+####`contrib_package_name`
+This setting can be used to override the default postgresql contrib package name. If not specified, the module will use whatever package name is the default for your OS distro.
+
 ####`devel_package_name`
 This setting can be used to override the default postgresql devel package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
@@ -236,6 +240,15 @@ The name of the postgresql client package.
 
 ####`package_ensure`
 The ensure parameter passed on to postgresql client package resource.
+
+###Class: postgresql::contrib
+Installs the postgresql contrib package.
+
+####`package_name`
+The name of the postgresql client package.
+
+####`package_ensure`
+The ensure parameter passed on to postgresql contrib package resource.
 
 ###Class: postgresql::devel
 Installs the packages containing the development libraries for PostgreSQL.
