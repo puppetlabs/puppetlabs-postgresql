@@ -68,7 +68,6 @@ define postgresql::database_grant(
     postgresql_psql {"REVOKE ${unless_privilege} ON database \"${db}\" FROM \"${role}\"":
       db           => $psql_db,
       psql_user    => $psql_user,
-#      onlyif       => "SELECT 1 WHERE has_database_privilege('${role}', '${db}', '${unless_privilege}')",
       onlyif       => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
       cwd          => $postgresql::params::datadir,
     }
