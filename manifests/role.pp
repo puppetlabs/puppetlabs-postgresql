@@ -57,6 +57,15 @@ define postgresql::role(
       onlyif    => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
     } ~>
 
+    # Now that all objects are re-assigned, we need to drop the privileges.
+    # We do a very specific unless check to make sure NO databases are owned by this user/role! Let's be safe here.
+    postgresql_psql {"DROP OWNED BY ${username}":
+      db          => $db,
+      psql_user   => $postgresql::params::user,
+      refreshonly => true,
+      unless      => "SELECT '${username}', datname, array(select privs from unnest(ARRAY[( CASE WHEN has_database_privilege('${username}',c.oid,'CONNECT') THEN 'CONNECT' ELSE NULL END), (CASE WHEN has_database_privilege('${username}',c.oid,'CREATE') THEN 'CREATE' ELSE NULL END), (CASE WHEN has_database_privilege('${username}',c.oid,'TEMPORARY') THEN 'TEMPORARY' ELSE NULL END), (CASE WHEN has_database_privilege('${username}',c.oid,'TEMP') THEN 'CONNECT' ELSE NULL END)])foo(privs) WHERE privs IS NOT NULL) FROM pg_database c WHERE has_database_privilege('${username}',c.oid,'CONNECT,CREATE,TEMPORARY,TEMP') AND datname != 'template0'",
+    } ~>
+
     postgresql_psql {"DROP ROLE IF EXISTS \"${username}\"":
       db          => $db,
       refreshonly => true,
