@@ -27,6 +27,7 @@
 define postgresql::database_grant(
   # TODO: mysql supports an array of privileges here.  We should do that if we
   #  port this to ruby.
+  $ensure = 'present',
   $privilege,
   $db,
   $role,
@@ -56,9 +57,19 @@ define postgresql::database_grant(
     default => $privilege,
   }
 
-  postgresql_psql {"GRANT ${privilege} ON database \"${db}\" TO \"${role}\"":
-    db           => $psql_db,
-    psql_user    => $psql_user,
-    unless       => "SELECT 1 WHERE has_database_privilege('${role}', '${db}', '${unless_privilege}')",
+  if ( $ensure == 'present' ) {
+    postgresql_psql {"GRANT ${unless_privilege} ON database \"${db}\" TO \"${role}\"":
+      db           => $psql_db,
+      psql_user    => $psql_user,
+      unless       => "SELECT 1 WHERE has_database_privilege('${role}', '${db}', '${unless_privilege}')",
+      cwd          => $postgresql::params::datadir,
+    }
+  } elsif ( $ensure == 'absent' ) {
+    postgresql_psql {"REVOKE ${unless_privilege} ON database \"${db}\" FROM \"${role}\"":
+      db           => $psql_db,
+      psql_user    => $psql_user,
+      onlyif       => "SELECT 1 WHERE has_database_privilege('${role}', '${db}', '${unless_privilege}')",
+      cwd          => $postgresql::params::datadir,
+    }
   }
 }
