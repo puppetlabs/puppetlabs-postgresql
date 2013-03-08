@@ -26,7 +26,8 @@ class postgresql::server (
   $service_name     = $postgresql::params::service_name,
   $service_provider = $postgresql::params::service_provider,
   $service_status   = $postgresql::params::service_status,
-  $config_hash      = {}
+  $config_hash      = {},
+  $manage_service   = true
 ) inherits postgresql::params {
 
   package { 'postgresql-server':
@@ -41,14 +42,15 @@ class postgresql::server (
 
   create_resources( 'class', $config_class )
 
-
-  service { 'postgresqld':
-    ensure   => running,
-    name     => $service_name,
-    enable   => true,
-    require  => Package['postgresql-server'],
-    provider => $service_provider,
-    status   => $service_status,
+  if $manage_service {
+    service { 'postgresqld':
+      ensure   => running,
+      name     => $service_name,
+      enable   => true,
+      require  => Package['postgresql-server'],
+      provider => $service_provider,
+      status   => $service_status,
+    }
   }
 
   if ($postgresql::params::needs_initdb) {
