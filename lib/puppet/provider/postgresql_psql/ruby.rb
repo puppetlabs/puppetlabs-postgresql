@@ -3,7 +3,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   def command()
     sync = true
 
-    if (((! resource[:unless]) or (resource[:unless].empty?)) and ((! resource[:onlyif]) or resource[:onlyif].empty?))
+    if (((! resource[:unless]) or (resource[:unless].empty?)) or ((! resource[:onlyif]) or resource[:onlyif].empty?))
       if (resource[:refreshonly])
         # So, if there's no 'unless' or 'onlyif', and we're in "refreshonly" mode,
         # we need to return the target command here.  If we don't,
@@ -14,7 +14,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
 
       # if we're not in refreshonly mode, then we return nil,
       # which will cause Puppet to sync this property.  This
-      # is what we want if there is no 'unless' value specified.
+      # is what we want if there is no 'unless'  or 'onlyif' value specified.
       return nil
     end
 
