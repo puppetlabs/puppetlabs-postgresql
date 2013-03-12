@@ -28,7 +28,7 @@ define postgresql::database(
 ) {
   include postgresql::params
 
-  # Set the defaults for the postgresql_psql resource
+  # Set the defaults for the postgresql::psql resource
   Postgresql_psql {
     psql_user    => $postgresql::params::user,
     psql_group   => $postgresql::params::group,
@@ -59,7 +59,7 @@ define postgresql::database(
       $createdb_command = "${createdb_command_tmp} --tablespace='${tablespace}'"
     }
   
-    postgresql_psql { "Check for existence of db '${dbname}'":
+    postgresql::psql { "Check for existence of db in database '${dbname}'":
       command => 'SELECT 1',
       unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
       require => Class['postgresql::server'],
@@ -74,7 +74,7 @@ define postgresql::database(
   
     # This will prevent users from connecting to the database unless they've been
     #  granted privileges.
-    postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
+    postgresql::psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
       db          => $postgresql::params::user,
       refreshonly => true,
     }
@@ -82,7 +82,7 @@ define postgresql::database(
     # absent
     $dropdb_command = "${postgresql::params::dropdb_path} '${dbname}'"
 
-    postgresql_psql { "Check for existence of db '${dbname}'":
+    postgresql::psql { "Check for existence of db in database '${dbname}'":
       command => 'SELECT 1',
       onlyif  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
       require => Class['postgresql::server'],

@@ -1,56 +1,54 @@
-# puppet-postgresql
-# For all details and documentation:
-# http://github.com/inkling/puppet-postgresql
-#
-# Copyright 2012- Inkling Systems, Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Leverage the exec command to do all the dirty work and provide us with all the fancy features.
+define postgresql::psql (
+  $command      = $title,
+  $require      = undef,
+  $subscribe    = undef,
+  $unless       = undef,
+  $onlyif       = undef,
+  $refreshonly  = undef,
+  $db           = undef,
+  $cwd          = $postgresql::params::datadir,
+  $psql_path    = $postgresql::params::psql_path,
+  $psql_user    = $postgresql::params::user,
+  $tag          = "postgresql",
+)
+{
+  # Build the command
+  if ($db != undef) {
+    $psql_db = "-d $db"
+  } else {
+    $psql_db = ""
+  }
+  
+  # main command
+  $main_cmd = regsubst("$command", '"', '\"', 'G')
+  $sql_command = "$psql_path $psql_db -t -c \"$main_cmd\""
 
-define postgresql::psql(
-    $db,
-    $unless,
-    $command     = $title,
-    $refreshonly = false,
-    $user        = $postgresql::params::user
-) {
-
-  include postgresql::params
-
-  # TODO: FIXME: shellquote does not work, and this regex works for trivial
-  # things but not nested escaping.  Need a lexer, preferably a ruby SQL parser
-  # to catch errors at catalog time.  Possibly https://github.com/omghax/sql ?
-
-  if ($postgresql::params::version != '8.1') {
-    $no_password_option = '--no-password'
+  # unless
+  if $unless {
+    $unless_cmd = regsubst("SELECT COUNT(*) FROM ($unless) count", '"', '\"', 'G')
+    $sql_unless = "[ `$psql_path $psql_db -t -c \"$unless_cmd\" 2> /dev/null | head -1 | tr -d ' '` -gt 0 ]"
+  } else {
+    $sql_unless = undef
   }
 
-  $psql = "${postgresql::params::psql_path} ${no_password_option} --tuples-only --quiet --dbname ${db}"
+  # onlyif
+  if $onlyif {
+    $onlyif_cmd = regsubst("SELECT COUNT(*) FROM ($onlyif) count", '"', '\"', 'G')
+    $sql_onlyif = "[ `$psql_path $psql_db -t -c \"$onlyif_cmd\" 2> /dev/null | head -1 | tr -d ' '` -gt 0 ]"
+  } else {
+    $sql_onlyif = undef
+  }
 
-  $quoted_command = regsubst($command, '"', '\\"', 'G')
-  $quoted_unless  = regsubst($unless,  '"', '\\"', 'G')
-
-  $final_cmd = "/bin/echo \"${quoted_command}\" | ${psql} |egrep -v -q '^$'"
-
-  notify { "deprecation warning: ${final_cmd}":
-    message => 'postgresql::psql is deprecated ; please use postgresql_psql instead.',
-  } ->
-
-  exec { $final_cmd:
-    cwd         => '/tmp',
-    user        => $user,
-    returns     => 1,
-    unless      => "/bin/echo \"${quoted_unless}\" | ${psql} | egrep -v -q '^$'",
+  exec { $title:
+    command     => $sql_command,
+    unless      => $sql_unless,
+    onlyif      => $sql_onlyif,
+    require     => $require,
+    subscribe   => $subscribe,
     refreshonly => $refreshonly,
+    cwd         => $cwd,
+    user        => $psql_user,
+    tag         => $tag,
   }
 }
-

@@ -29,13 +29,6 @@ define postgresql::role(
 ) {
   include postgresql::params
 
-  Postgresql_psql {
-    psql_user    => $postgresql::params::user,
-    psql_group   => $postgresql::params::group,
-    psql_path    => $postgresql::params::psql_path,
-    cwd          => $postgresql::params::datadir,
-  }
-
   $login_sql       = $login       ? { true => 'LOGIN'       , default => 'NOLOGIN' }
   $createrole_sql  = $createrole  ? { true => 'CREATEROLE'  , default => 'NOCREATEROLE' }
   $createdb_sql    = $createdb    ? { true => 'CREATEDB'    , default => 'NOCREATEDB' }
@@ -44,29 +37,31 @@ define postgresql::role(
 
   if ( $ensure == 'present' ) {
     # TODO: FIXME: Will not correct the superuser / createdb / createrole / login / replication status of a role that already exists
-    postgresql_psql {"CREATE ROLE \"${username}\" ENCRYPTED PASSWORD '${password_hash}' ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql}":
+    postgresql::psql {"CREATE ROLE \"${username}\" ENCRYPTED PASSWORD '${password_hash}' ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql}":
       db        => $db,
       psql_user => $postgresql::params::user,
       unless    => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
     }
   } else {
     # Absent: Need to re-assign all database objects owned by role to be dropped to superuser
-    postgresql_psql {"REASSIGN OWNED BY ${username} TO ${$postgresql::params::user}":
+    postgresql::psql {"REASSIGN OWNED BY ${username} TO ${$postgresql::params::user}":
       db        => $db,
       psql_user => $postgresql::params::user,
       onlyif    => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
     } ~>
 
+    # TODO: FIXME:
     # Now that all objects are re-assigned, we need to drop the privileges.
-    # We do a very specific unless check to make sure NO databases are owned by this user/role! Let's be safe here.
-    postgresql_psql {"DROP OWNED BY ${username}":
+    # This is really dangerous. It will only be executed once the objects are re-assigned, however,
+    # I'd like to do a check to make sure that ony privilege objects are left to be dropped.
+    postgresql::psql {"DROP OWNED BY ${username}":
       db          => $db,
       psql_user   => $postgresql::params::user,
       refreshonly => true,
-      unless      => "SELECT '${username}', datname, array(select privs from unnest(ARRAY[( CASE WHEN has_database_privilege('${username}',c.oid,'CONNECT') THEN 'CONNECT' ELSE NULL END), (CASE WHEN has_database_privilege('${username}',c.oid,'CREATE') THEN 'CREATE' ELSE NULL END), (CASE WHEN has_database_privilege('${username}',c.oid,'TEMPORARY') THEN 'TEMPORARY' ELSE NULL END), (CASE WHEN has_database_privilege('${username}',c.oid,'TEMP') THEN 'CONNECT' ELSE NULL END)])foo(privs) WHERE privs IS NOT NULL) FROM pg_database c WHERE has_database_privilege('${username}',c.oid,'CONNECT,CREATE,TEMPORARY,TEMP') AND datname != 'template0'",
+#      unless      => "SELECT '${username}', datname, array(select privs from unnest(ARRAY[( CASE WHEN has_database_privilege('${username}',c.oid,'CONNECT') THEN 'CONNECT' ELSE NULL END), (CASE WHEN has_database_privilege('${username}',c.oid,'CREATE') THEN 'CREATE' ELSE NULL END), (CASE WHEN has_database_privilege('${username}',c.oid,'TEMPORARY') THEN 'TEMPORARY' ELSE NULL END), (CASE WHEN has_database_privilege('${username}',c.oid,'TEMP') THEN 'CONNECT' ELSE NULL END)])foo(privs) WHERE privs IS NOT NULL) FROM pg_database c WHERE has_database_privilege('${username}',c.oid,'CONNECT,CREATE,TEMPORARY,TEMP') AND datname != 'template0'",
     } ~>
 
-    postgresql_psql {"DROP ROLE IF EXISTS \"${username}\"":
+    postgresql::psql {"DROP ROLE IF EXISTS \"${username}\"":
       db          => $db,
       refreshonly => true,
       psql_user   => $postgresql::params::user,

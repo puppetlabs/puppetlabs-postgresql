@@ -51,7 +51,7 @@ define postgresql::tablespace(
     mode   => '0700',
   }
 
-  postgresql_psql { "Create tablespace '${spcname}'":
+  postgresql::psql { "Create tablespace '${spcname}'":
     command => $create_tablespace_command,
     unless  => "SELECT spcname FROM pg_tablespace WHERE spcname='${spcname}'",
     require => [Class['postgresql::server'], File[$location]],

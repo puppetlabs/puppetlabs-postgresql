@@ -36,12 +36,6 @@ define postgresql::database_grant(
 ) {
   include postgresql::params
 
-  Postgresql_psql {
-    psql_user    => $postgresql::params::user,
-    psql_group   => $postgresql::params::group,
-    psql_path    => $postgresql::params::psql_path,
-  }
-
   # TODO: FIXME: only works on databases, due to using has_database_privilege
 
   # TODO: this is a terrible hack; if they pass "ALL" as the desired privilege,
@@ -58,17 +52,29 @@ define postgresql::database_grant(
   }
 
   if ( $ensure == 'present' ) {
-    postgresql_psql {"GRANT ${unless_privilege} ON database \"${db}\" TO \"${role}\"":
+    postgresql::psql { "Check for existence of db in database_grants '${db}'":
+      command => 'SELECT 1',
+      onlyif  => "SELECT datname FROM pg_database WHERE datname='${db}'",
+      require => Class['postgresql::server'],
+    } ~>
+
+    postgresql::psql {"GRANT ${unless_privilege} ON database \"${db}\" TO \"${role}\"":
       db           => $psql_db,
       psql_user    => $psql_user,
       unless       => "SELECT 1 WHERE has_database_privilege('${role}', '${db}', '${unless_privilege}')",
       cwd          => $postgresql::params::datadir,
     }
   } elsif ( $ensure == 'absent' ) {
-    postgresql_psql {"REVOKE ${unless_privilege} ON database \"${db}\" FROM \"${role}\"":
+    postgresql::psql { "Check for existence of db in database_grants '${db}'":
+      command => 'SELECT 1',
+      unless  => "SELECT datname FROM pg_database WHERE datname='${db}'",
+      require => Class['postgresql::server'],
+    } ~>
+
+    postgresql::psql {"REVOKE ${unless_privilege} ON database \"${db}\" FROM \"${role}\"":
       db           => $psql_db,
       psql_user    => $psql_user,
-      onlyif       => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
+      onlyif       => "SELECT rolname FROM pg_roles WHERE rolname='${role}'",
       cwd          => $postgresql::params::datadir,
     }
   }
