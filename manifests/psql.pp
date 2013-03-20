@@ -21,7 +21,7 @@ define postgresql::psql(
     $unless,
     $command     = $title,
     $refreshonly = false,
-    $user        = 'postgres'
+    $user        = $postgresql::params::user
 ) {
 
   include postgresql::params
@@ -35,13 +35,14 @@ define postgresql::psql(
   }
 
   $psql = "${postgresql::params::psql_path} ${no_password_option} --tuples-only --quiet --dbname ${db}"
+
   $quoted_command = regsubst($command, '"', '\\"', 'G')
   $quoted_unless  = regsubst($unless,  '"', '\\"', 'G')
 
-  $final_cmd = "/bin/echo \"$quoted_command\" | $psql |egrep -v -q '^$'"
+  $final_cmd = "/bin/echo \"${quoted_command}\" | ${psql} |egrep -v -q '^$'"
 
-  notify { "deprecation warning: $final_cmd":
-    message => "postgresql::psql is deprecated ; please use postgresql_psql instead.",
+  notify { "deprecation warning: ${final_cmd}":
+    message => 'postgresql::psql is deprecated ; please use postgresql_psql instead.',
   } ->
 
   exec { $final_cmd:

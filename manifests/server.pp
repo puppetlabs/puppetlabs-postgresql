@@ -8,6 +8,12 @@
 # [*package_name*] - name of package
 # [*service_name*] - name of service
 #
+# Configuration:
+#   Advanced configuration setting parameters can be placed into 'postgresql_puppet_extras.conf' (located in the same
+#   folder as 'postgresql.conf'). You can manage that file as a normal puppet file resource, or however you see fit;
+#   which gives you complete control over the settings. Any value you specify in that file will override any existing
+#   value set in the templated version.
+#
 # Actions:
 #
 # Requires:
@@ -29,11 +35,12 @@ class postgresql::server (
     tag     => 'postgresql',
   }
 
-  $config_class = {}
-  $config_class['postgresql::config'] = $config_hash
+  $config_class = {
+    'postgresql::config' => $config_hash,
+  }
 
   create_resources( 'class', $config_class )
-  
+
 
   service { 'postgresqld':
     ensure   => running,
@@ -48,7 +55,7 @@ class postgresql::server (
     include postgresql::initdb
 
     Package['postgresql-server'] -> Class['postgresql::initdb'] -> Class['postgresql::config'] -> Service['postgresqld']
-  } 
+  }
   else  {
     Package['postgresql-server'] -> Class['postgresql::config'] -> Service['postgresqld']
   }
@@ -56,10 +63,7 @@ class postgresql::server (
   exec { 'reload_postgresql':
     path        => '/usr/bin:/usr/sbin:/bin:/sbin',
     command     => "service ${service_name} reload",
-    user        => $postgresql::params::user,
-    group       => $postgresql::params::group,
     onlyif      => $service_status,
     refreshonly => true,
   }
-
 }

@@ -28,15 +28,26 @@
 # correct paths to the postgres dirs.
 
 class postgresql::params(
-    $version             = $::postgres_default_version,
-    $manage_package_repo = false,
-    $package_source      = undef,
-    $datadir_custom      = undef,
-    $confdir_custom      = undef,
-    $locale              = undef,
+  $version                     = $::postgres_default_version,
+  $manage_package_repo         = false,
+  $package_source              = undef,
+  $locale                      = undef,
+  $charset                     = 'UTF8',
+  $custom_datadir              = undef,
+  $custom_confdir              = undef,
+  $custom_bindir               = undef,
+  $custom_client_package_name  = undef,
+  $custom_server_package_name  = undef,
+  $custom_contrib_package_name = undef,
+  $custom_devel_package_name   = undef,
+  $custom_java_package_name    = undef,
+  $custom_service_name         = undef,
+  $custom_user                 = undef,
+  $custom_group                = undef,
+  $run_initdb                  = undef
 ) {
-  $user                         = 'postgres'
-  $group                        = 'postgres'
+  $user                         = pick($custom_user, 'postgres')
+  $group                        = pick($custom_group, 'postgres')
   $ip_mask_deny_postgres_user   = '0.0.0.0/0'
   $ip_mask_allow_all_users      = '127.0.0.1/32'
   $listen_addresses             = 'localhost'
@@ -47,32 +58,32 @@ class postgresql::params(
 
 
   if ($manage_package_repo) {
-      case $::osfamily {
-        'RedHat': {
-           $rh_pkg_source = pick($package_source, 'yum.postgresql.org')
+    case $::osfamily {
+      'RedHat': {
+        $rh_pkg_source = pick($package_source, 'yum.postgresql.org')
 
-           case $rh_pkg_source {
-             'yum.postgresql.org': {
-                class { "postgresql::package_source::yum_postgresql_org":
-                  version => $version
-                }
-             }
+        case $rh_pkg_source {
+          'yum.postgresql.org': {
+            class { 'postgresql::package_source::yum_postgresql_org':
+              version => $version
+            }
+          }
 
-             default: {
-               fail("Unsupported package source '${rh_pkg_source}' for ${::osfamily} OS family. Currently the only supported source is 'yum.postgresql.org'")
-             }
-           }
-        }
-
-        'Debian': {
-          class { "postgresql::package_source::apt_postgresql_org": }
-        }
-
-        default: {
-          fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
+          default: {
+            fail("Unsupported package source '${rh_pkg_source}' for ${::osfamily} OS family. Currently the only supported source is 'yum.postgresql.org'")
+          }
         }
       }
+
+      'Debian': {
+        class { 'postgresql::package_source::apt_postgresql_org': }
+      }
+
+      default: {
+        fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
+      }
     }
+  }
 
 
   # This is a bit hacky, but if the puppet nodes don't have pluginsync enabled,
@@ -94,51 +105,39 @@ class postgresql::params(
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $::osfamily {
     'RedHat', 'Linux': {
-      $needs_initdb             = true
+      $needs_initdb             = pick($run_initdb, true)
       $firewall_supported       = true
       $persist_firewall_command = '/sbin/iptables-save > /etc/sysconfig/iptables'
 
       if $version == $::postgres_default_version {
-        $client_package_name = 'postgresql'
-        $server_package_name = 'postgresql-server'
-        $devel_package_name  = 'postgresql-devel'
-        $service_name = 'postgresql'
-        $bindir       = '/usr/bin'
-        if $datadir_custom == undef {
-          $datadir = '/var/lib/pgsql/data'
-        } else {
-          $datadir = $datadir_custom
-        }
-        if $confdir_custom == undef {
-           $confdir = $datadir
-        } else {
-           $confdir = $confdir_custom
-        }
+        $client_package_name  = pick($custom_client_package_name, 'postgresql')
+        $server_package_name  = pick($custom_server_package_name, 'postgresql-server')
+        $contrib_package_name = pick($custom_contrib_package_name,'postgresql-contrib')
+        $devel_package_name   = pick($custom_devel_package_name, 'postgresql-devel')
+        $java_package_name    = pick($custom_java_package_name, 'postgresql-jdbc')
+        $service_name = pick($custom_service_name, 'postgresql')
+        $bindir       = pick($custom_bindir, '/usr/bin')
+        $datadir      = pick($custom_datadir, '/var/lib/pgsql/data')
+        $confdir      = pick($custom_confdir, $datadir)
       } else {
-        $version_parts       = split($version, '[.]')
-        $package_version     = "${version_parts[0]}${version_parts[1]}"
-        $client_package_name = "postgresql${package_version}"
-        $server_package_name = "postgresql${package_version}-server"
-        $devel_package_name  = "postgresql${package_version}-devel"
-        $service_name = "postgresql-${version}"
-        $bindir       = "/usr/pgsql-${version}/bin"
-        if $datadir_custom == undef {
-           $datadir = "/var/lib/pgsql/${version}/data"
-        } else {
-            $datadir = $datadir_custom
-        }
-        if $confdir_custom == undef {
-           $confdir = $datadir
-        } else {
-           $confdir = $confdir_custom
-        }
+        $version_parts        = split($version, '[.]')
+        $package_version      = "${version_parts[0]}${version_parts[1]}"
+        $client_package_name  = pick($custom_client_package_name, "postgresql${package_version}")
+        $server_package_name  = pick($custom_server_package_name, "postgresql${package_version}-server")
+        $contrib_package_name = pick($custom_contrib_package_name,"postgresql${package_version}-contrib")
+        $devel_package_name   = pick($custom_devel_package_name, "postgresql${package_version}-devel")
+        $java_package_name    = pick($custom_java_package_name, "postgresql${package_version}-jdbc")
+        $service_name = pick($custom_service_name, "postgresql-${version}")
+        $bindir       = pick($custom_bindir, "/usr/pgsql-${version}/bin")
+        $datadir      = pick($custom_datadir, "/var/lib/pgsql/${version}/data")
+        $confdir      = pick($custom_confdir, $datadir)
       }
 
       $service_status = undef
     }
 
     'Debian': {
-      $needs_initdb             = false
+      $needs_initdb             = pick($run_initdb, false)
       $firewall_supported       = false
       # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
       #$persist_firewall_command = '/sbin/iptables-save > /etc/iptables/rules.v4'
@@ -146,34 +145,27 @@ class postgresql::params(
 
       case $::operatingsystem {
         'Debian': {
-            $service_name = 'postgresql'
+          $service_name = pick($custom_service_name, 'postgresql')
         }
-
         'Ubuntu': {
-           # thanks, ubuntu
-           if($::lsbmajdistrelease == '10' and !$manage_package_repo) {
-             $service_name = "postgresql-${version}"
-           } else {
-             $service_name = 'postgresql'
-           }
+          # thanks, ubuntu
+          if($::lsbmajdistrelease == '10' and !$manage_package_repo) {
+            $service_name = pick($custom_service_name, "postgresql-${version}")
+          } else {
+            $service_name = pick($custom_service_name, 'postgresql')
+          }
         }
       }
 
-      $client_package_name = "postgresql-client-${version}"
-      $server_package_name = "postgresql-${version}"
-      $devel_package_name  = 'libpq-dev'
-      $bindir              = "/usr/lib/postgresql/${version}/bin"
-      if $datadir_custom == undef {
-        $datadir             = "/var/lib/postgresql/${version}/main"
-      } else {
-        $datadir = $datadir_custom
-      }
-      if $confdir == undef {
-        $confdir             = "/etc/postgresql/${version}/main"
-      } else {
-        $confdir = $confdir_custom
-      }
-      $service_status      = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
+      $client_package_name  = pick($custom_client_package_name, "postgresql-client-${version}")
+      $server_package_name  = pick($custom_server_package_name, "postgresql-${version}")
+      $contrib_package_name = pick($custom_contrib_package_name, "postgresql-contrib-${version}")
+      $devel_package_name   = pick($custom_devel_package_name, 'libpq-dev')
+      $java_package_name    = pick($custom_java_package_name, 'libpostgresql-jdbc-java')
+      $bindir               = pick($custom_bindir, "/usr/lib/postgresql/${version}/bin")
+      $datadir              = pick($custom_datadir, "/var/lib/postgresql/${version}/main")
+      $confdir              = pick($custom_confdir, "/etc/postgresql/${version}/main")
+      $service_status       = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
     }
 
     default: {
@@ -186,4 +178,5 @@ class postgresql::params(
   $psql_path            = "${bindir}/psql"
   $pg_hba_conf_path     = "${confdir}/pg_hba.conf"
   $postgresql_conf_path = "${confdir}/postgresql.conf"
+
 }
