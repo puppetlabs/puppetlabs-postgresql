@@ -24,7 +24,7 @@ define postgresql::role(
     $login            = false,
     $superuser        = false,
     $replication      = false,
-    $connection_limit = -1,
+    $connection_limit = '-1',
     $username         = $title
 ) {
   include postgresql::params

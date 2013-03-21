@@ -44,7 +44,7 @@ define postgresql::database_user(
   $db               = $postgresql::params::user,
   $superuser        = false,
   $replication      = false,
-  $connection_limit = -1,
+  $connection_limit = '-1',
   $user             = $title
 ) {
   postgresql::role { $user:
