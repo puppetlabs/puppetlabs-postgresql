@@ -43,12 +43,13 @@ class postgresql::server (
 
 
   service { 'postgresqld':
-    ensure   => running,
-    name     => $service_name,
-    enable   => true,
-    require  => Package['postgresql-server'],
-    provider => $service_provider,
-    status   => $service_status,
+    ensure    => running,
+    name      => $service_name,
+    enable    => true,
+    require   => Package['postgresql-server'],
+    provider  => $service_provider,
+    hasstatus => true,
+    status    => $service_status,
   }
 
   if ($postgresql::params::needs_initdb) {
