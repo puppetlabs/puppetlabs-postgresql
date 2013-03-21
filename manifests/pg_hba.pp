@@ -6,6 +6,7 @@ define postgresql::pg_hba(
   $group = $postgresql::params::group
 ) {
   include postgresql::params
+  include concat::setup
 
   # Collect file from fragments
   concat { $target:
