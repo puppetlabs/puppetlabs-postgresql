@@ -33,6 +33,7 @@ class postgresql::params(
   $package_source              = undef,
   $locale                      = undef,
   $charset                     = 'UTF8',
+  $db_template                 = 'template0',
   $custom_datadir              = undef,
   $custom_confdir              = undef,
   $custom_bindir               = undef,

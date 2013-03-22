@@ -20,12 +20,13 @@
 #  needs to be moved over to ruby, and add support for ensurable.
 
 define postgresql::database(
-  $dbname   = $title,
-  $owner = $postgresql::params::user,
-  $tablespace = undef,
-  $charset  = $postgresql::params::charset,
-  $locale   = $postgresql::params::locale,
-  $istemplate = false
+  $dbname      = $title,
+  $owner       = $postgresql::params::user,
+  $tablespace  = undef,
+  $charset     = $postgresql::params::charset,
+  $locale      = $postgresql::params::locale,
+  $db_template = $postgresql::params::db_template,
+  $istemplate  = false
 ) {
   include postgresql::params
 
@@ -49,7 +50,7 @@ define postgresql::database(
     $public_revoke_privilege = 'ALL'
   }
 
-  $createdb_command_tmp = "${postgresql::params::createdb_path} --owner='${owner}' --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
+  $createdb_command_tmp = "${postgresql::params::createdb_path} --owner='${owner}' --template=${db_template} --encoding '${charset}' ${locale_option} '${dbname}'"
 
   if($tablespace == undef) {
     $createdb_command = $createdb_command_tmp

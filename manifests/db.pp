@@ -15,9 +15,10 @@
 #   [*password*]    - user's password.  may be md5-encoded, in the format returned by the "postgresql_password"
 #                            function in this module
 #   [*charset*]     - database charset. defaults to 'utf8'
+#   [*locale*]      - locale for database. defaults to 'undef' (effectively 'C').
+#   [*db_template*] - database template used during database creation, defaults to 'template0'.
 #   [*grant*]       - privilege to grant user. defaults to 'all'.
 #   [*tablespace*]  - database tablespace. default to use the template database's tablespace.
-#   [*locale*]      - locale for database. defaults to 'undef' (effectively 'C').
 #   [*istemplate*]  - determines whether or not to define database as a template. defaults to false.
 #
 # Actions:
@@ -37,23 +38,25 @@
 define postgresql::db (
   $user,
   $password,
-  $charset    = $postgresql::params::charset,
-  $locale     = $postgresql::params::locale,
-  $grant      = 'ALL',
-  $tablespace = undef,
-  $istemplate = false
+  $charset     = $postgresql::params::charset,
+  $locale      = $postgresql::params::locale,
+  $db_template = $postgresql::params::db_template,
+  $grant       = 'ALL',
+  $tablespace  = undef,
+  $istemplate  = false
 ) {
   include postgresql::params
 
   postgresql::database { $name:
     # TODO: ensure is not yet supported
-    #ensure    => present,
-    charset    => $charset,
-    tablespace => $tablespace,
-    #provider  => 'postgresql',
-    require    => Class['postgresql::server'],
-    locale     => $locale,
-    istemplate => $istemplate,
+    #ensure     => present,
+    charset     => $charset,
+    tablespace  => $tablespace,
+    #provider   => 'postgresql',
+    require     => Class['postgresql::server'],
+    locale      => $locale,
+    db_template => $db_template,
+    istemplate  => $istemplate,
   }
 
   if ! defined(Postgresql::Database_user[$user]) {
