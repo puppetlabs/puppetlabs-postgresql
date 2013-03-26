@@ -34,6 +34,7 @@ class postgresql::params(
   $locale                      = undef,
   $charset                     = 'UTF8',
   $custom_datadir              = undef,
+  $custom_xlogdir              = undef,
   $custom_confdir              = undef,
   $custom_bindir               = undef,
   $custom_client_package_name  = undef,
@@ -118,6 +119,7 @@ class postgresql::params(
         $service_name = pick($custom_service_name, 'postgresql')
         $bindir       = pick($custom_bindir, '/usr/bin')
         $datadir      = pick($custom_datadir, '/var/lib/pgsql/data')
+        $xlogdir      = pick($custom_xlogdir, "${datadir}/pg_xlog")
         $confdir      = pick($custom_confdir, $datadir)
       } else {
         $version_parts        = split($version, '[.]')
@@ -130,6 +132,7 @@ class postgresql::params(
         $service_name = pick($custom_service_name, "postgresql-${version}")
         $bindir       = pick($custom_bindir, "/usr/pgsql-${version}/bin")
         $datadir      = pick($custom_datadir, "/var/lib/pgsql/${version}/data")
+        $xlogdir      = pick($custom_xlogdir, "${datadir}/pg_xlog")
         $confdir      = pick($custom_confdir, $datadir)
       }
 
@@ -164,6 +167,7 @@ class postgresql::params(
       $java_package_name    = pick($custom_java_package_name, 'libpostgresql-jdbc-java')
       $bindir               = pick($custom_bindir, "/usr/lib/postgresql/${version}/bin")
       $datadir              = pick($custom_datadir, "/var/lib/postgresql/${version}/main")
+      $xlogdir              = pick($custom_xlogdir, "${datadir}/pg_xlog")
       $confdir              = pick($custom_confdir, "/etc/postgresql/${version}/main")
       $service_status       = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
     }

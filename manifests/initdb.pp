@@ -18,6 +18,7 @@
 
 class postgresql::initdb(
   $datadir     = $postgresql::params::datadir,
+  $xlogdir     = $postgresql::params::xlogdir,
   $encoding    = $postgresql::params::charset,
   $group       = $postgresql::params::group,
   $initdb_path = $postgresql::params::initdb_path,
@@ -49,4 +50,32 @@ class postgresql::initdb(
     Package[$postgresql::params::server_package_name]->
       Exec['postgresql_initdb']
   }
+
+  # If the xlogdir has been updated we'll move stuff around
+  if ( $xlogdir != "${datadir}/pg_xlog" ) {
+    file { $xlogdir:
+      ensure  => directory,
+      owner   => $user,
+      group   => $group,
+      backup  => false,
+    }
+
+    exec { "mv ${datadir}/pg_xlog ${xlogdir} && rmdir ${datadir}/pg_xlog":
+      require => [
+        Exec['postgresql_initdb'],
+        File[$xlogdir],
+      ],
+      alias   => "mv_xlog",
+      creates => "$xlogdir/archive_status",
+      onlyif  => "test ! -h $xlogdir",
+    }
+    
+    file { "${datadir}/pg_xlog":
+      require => Exec["mv_xlog"],
+      ensure  => link,
+      target  => $xlogdir,
+      backup  => false,
+    }
+  }
+
 }

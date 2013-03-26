@@ -168,6 +168,9 @@ This will set the default charset for all databases created with this module. On
 ####`datadir`
 This setting can be used to override the default postgresql data directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
 
+####`xlogdir`
+This setting can be used to override the default postgresql xlog directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
+
 ####`confdir`
 This setting can be used to override the default postgresql configuration directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
 
