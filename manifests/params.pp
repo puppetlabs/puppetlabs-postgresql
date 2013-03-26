@@ -31,6 +31,7 @@ class postgresql::params(
   $version                     = $::postgres_default_version,
   $manage_package_repo         = false,
   $package_source              = undef,
+  $package_source_mirror       = undef,
   $locale                      = undef,
   $charset                     = 'UTF8',
   $custom_datadir              = undef,
@@ -62,11 +63,13 @@ class postgresql::params(
     case $::osfamily {
       'RedHat': {
         $rh_pkg_source = pick($package_source, 'yum.postgresql.org')
+        $rh_pkg_source_mirror = pick($package_source_mirror, 'http://yum.postgresql.org')
 
         case $rh_pkg_source {
           'yum.postgresql.org': {
             class { 'postgresql::package_source::yum_postgresql_org':
-              version => $version
+              version => $version,
+              mirror  => $rh_pkg_source_mirror
             }
           }
 
@@ -77,7 +80,10 @@ class postgresql::params(
       }
 
       'Debian': {
-        class { 'postgresql::package_source::apt_postgresql_org': }
+        $apt_source_mirror = pick($package_source_mirror, "http://apt.postgresql.org")
+        class { 'postgresql::package_source::apt_postgresql_org': 
+          mirror  => $apt_source_mirror
+        }
       }
 
       default: {
