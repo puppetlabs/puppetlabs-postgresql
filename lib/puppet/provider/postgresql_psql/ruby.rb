@@ -51,7 +51,9 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   end
 
   def run_sql_command(sql)
-    command = %{#{resource[:psql_path]} #{"-d #{resource[:db]}" if resource[:db]} -t -c "#{sql.gsub('"', '\"')}"}
+    command = [resource[:psql_path]]
+    command.push("-d", resource[:db]) if resource[:db]
+    command.push("-t", "-c", sql)
 
     if resource[:cwd]
       Dir.chdir resource[:cwd] do
