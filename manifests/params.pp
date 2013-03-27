@@ -37,6 +37,7 @@ class postgresql::params(
   $custom_datadir              = undef,
   $custom_xlogdir              = undef,
   $custom_confdir              = undef,
+  $custom_localconfpath        = undef,
   $custom_bindir               = undef,
   $custom_client_package_name  = undef,
   $custom_server_package_name  = undef,
@@ -130,16 +131,20 @@ class postgresql::params(
       } else {
         $version_parts        = split($version, '[.]')
         $package_version      = "${version_parts[0]}${version_parts[1]}"
+        # Since we can have multiple releases of a specific package version, we'll need to strip that
+        # off of the end of the version string so pathing all works right.
+        $package_version_dot  = "${version_parts[0]}.${version_parts[1]}"
+
         $client_package_name  = pick($custom_client_package_name, "postgresql${package_version}")
         $server_package_name  = pick($custom_server_package_name, "postgresql${package_version}-server")
         $contrib_package_name = pick($custom_contrib_package_name,"postgresql${package_version}-contrib")
         $devel_package_name   = pick($custom_devel_package_name, "postgresql${package_version}-devel")
         $java_package_name    = pick($custom_java_package_name, "postgresql${package_version}-jdbc")
-        $service_name = pick($custom_service_name, "postgresql-${version}")
-        $bindir       = pick($custom_bindir, "/usr/pgsql-${version}/bin")
-        $datadir      = pick($custom_datadir, "/var/lib/pgsql/${version}/data")
-        $xlogdir      = pick($custom_xlogdir, "${datadir}/pg_xlog")
-        $confdir      = pick($custom_confdir, $datadir)
+        $service_name         = pick($custom_service_name, "postgresql-${package_version_dot}")
+        $bindir               = pick($custom_bindir, "/usr/pgsql-${package_version_dot}/bin")
+        $datadir              = pick($custom_datadir, "/var/lib/pgsql/${package_version_dot}/data")
+        $xlogdir              = pick($custom_xlogdir, "${datadir}/pg_xlog")
+        $confdir              = pick($custom_confdir, $datadir)
       }
 
       $service_status = undef
@@ -188,5 +193,6 @@ class postgresql::params(
   $psql_path            = "${bindir}/psql"
   $pg_hba_conf_path     = "${confdir}/pg_hba.conf"
   $postgresql_conf_path = "${confdir}/postgresql.conf"
+  $local_conf_path        = pick($custom_localconfpath, "${confdir}/postgresql_puppet_extras.conf")
 
 }

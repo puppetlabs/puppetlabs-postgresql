@@ -1,5 +1,5 @@
 class postgresql::package_source::yum_postgresql_org(
-  $version
+  $version,
   $mirror
 ) {
 
@@ -11,8 +11,8 @@ class postgresql::package_source::yum_postgresql_org(
   } ->
 
   yumrepo { 'yum.postgresql.org':
-      descr    => "PostgreSQL ${version} \$releasever - \$basearch",
-      baseurl  => "${mirror}/${version}/redhat/rhel-\$releasever-\$basearch",
+      descr    => "PostgreSQL ${package_version} \$releasever - \$basearch",
+      baseurl  => "${mirror}/${package_version}/redhat/rhel-\$releasever-\$basearch",
       enabled  => 1,
       gpgcheck => 1,
       gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}",

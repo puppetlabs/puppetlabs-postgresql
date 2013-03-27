@@ -41,6 +41,7 @@ class postgresql::config(
   $ipv6acls                     = $postgresql::params::ipv6acls,
   $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
   $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
+  $local_conf_path              = $postgresql::params::local_conf_path,
   $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
 ) inherits postgresql::params {
 
@@ -56,6 +57,7 @@ class postgresql::config(
     ipv6acls                      => $ipv6acls,
     pg_hba_conf_path              => $pg_hba_conf_path,
     postgresql_conf_path          => $postgresql_conf_path,
+    local_conf_path               => $local_conf_path,
     manage_redhat_firewall        => $manage_redhat_firewall,
   }
 

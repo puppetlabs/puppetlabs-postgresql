@@ -36,6 +36,7 @@
 class postgresql::config::beforeservice(
   $pg_hba_conf_path,
   $postgresql_conf_path,
+  $local_conf_path,
   $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
   $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
   $listen_addresses             = $postgresql::params::listen_addresses,
@@ -124,18 +125,18 @@ class postgresql::config::beforeservice(
   # managing their own settings in a second conf file. This only works for
   # postgresql 8.2 and higher.
   if(versioncmp($postgresql::params::version, '8.2') >= 0) {
-    # Since we're adding an "include" for this extras config file, we need
+    # Since we're adding an "include" for this extras config ile, we need
     # to make sure it exists.
-    exec { "create_postgresql_conf_path":
-      command => "touch `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf",
-      path    => '/usr/bin:/bin',
-      unless  => "[ -f `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf ]"
+    file { $local_conf_path:
+      ensure  => "present",
+      mode    => 644,
+      replace => false,
     }
 
     file_line { 'postgresql.conf#include':
       path        => $postgresql_conf_path,
-      line        => "include 'postgresql_puppet_extras.conf'",
-      require     => Exec["create_postgresql_conf_path"],
+      line        => "include '${local_conf_path}'",
+      require     => File[$local_conf_path],
       notify      => Service['postgresqld'],
     }
   }

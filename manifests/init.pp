@@ -43,6 +43,9 @@
 #    configuration directory for the target platform. If not
 #    specified, the module will use whatever directory is the
 #    default for your OS distro.
+# [*localconfpath*]
+#    This setting can be used to override the location of the
+#    default local configuration file.
 # [*bindir*]
 #    This setting can be used to override the default postgresql
 #    binaries directory for the target platform. If not
@@ -104,35 +107,39 @@
 #
 #
 class postgresql (
-  $version              = $::postgres_default_version,
-  $manage_package_repo  = false,
-  $package_source       = undef,
-  $locale               = undef,
-  $charset              = 'UTF8',
-  $datadir              = undef,
-  $xlogdir              = undef,
-  $confdir              = undef,
-  $bindir               = undef,
-  $client_package_name  = undef,
-  $server_package_name  = undef,
-  $contrib_package_name = undef,
-  $devel_package_name   = undef,
-  $java_package_name    = undef,
-  $service_name         = undef,
-  $user                 = undef,
-  $group                = undef,
-  $run_initdb           = undef
+  $version                = $::postgres_default_version,
+  $manage_package_repo    = false,
+  $package_source         = undef,
+  $package_source_mirror  = undef,
+  $locale                 = undef,
+  $charset                = 'UTF8',
+  $datadir                = undef,
+  $xlogdir                = undef,
+  $confdir                = undef,
+  $localconfpath          = undef,
+  $bindir                 = undef,
+  $client_package_name    = undef,
+  $server_package_name    = undef,
+  $contrib_package_name   = undef,
+  $devel_package_name     = undef,
+  $java_package_name      = undef,
+  $service_name           = undef,
+  $user                   = undef,
+  $group                  = undef,
+  $run_initdb             = undef
 ) {
 
   class { 'postgresql::params':
     version                     => $version,
     manage_package_repo         => $manage_package_repo,
     package_source              => $package_source,
+    package_source_mirror       => $package_source_mirror,
     locale                      => $locale,
     charset                     => $charset,
     custom_datadir              => $datadir,
     custom_xlogdir              => $xlogdir,
     custom_confdir              => $confdir,
+    custom_localconfpath        => $localconfpath,
     custom_bindir               => $bindir,
     custom_client_package_name  => $client_package_name,
     custom_server_package_name  => $server_package_name,
