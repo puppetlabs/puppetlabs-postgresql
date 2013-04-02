@@ -27,6 +27,10 @@
 #    set to `true`.  It determines which package repository should
 #    be used to install the postgres packages.  Currently supported
 #    values include `yum.postgresql.org`.
+# [*package_source_mirror*]
+#    This setting is only useful if `manage_package_repo` is
+#    set to `true` and you're mirroring yum.postgresql.org.  The
+#    directory structure is expected to be the same.
 # [*locale*]
 #    This setting defines the default locale for initdb and createdb
 #    commands. This default to 'undef' which is effectively 'C'.

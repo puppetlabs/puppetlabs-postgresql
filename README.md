@@ -159,6 +159,9 @@ The version of PostgreSQL to install/manage. Defaults to your operating system d
 ####`manage_package_repo`
 If `true` this will setup the official PostgreSQL repositories on your host. Defaults to `false`.
 
+####`package_source_mirror`
+If `true` this will allow you to use whatever mirror of yum.postgresql.org you specify.
+
 ####`locale`
 This will set the default database locale for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `undef` which is effectively `C`.
 
