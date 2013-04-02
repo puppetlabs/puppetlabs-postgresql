@@ -38,6 +38,11 @@
 #    data directory for the target platform. If not specified, the
 #    module will use whatever directory is the default for your
 #    OS distro.
+# [*xlogdir*]
+#    This setting can be used to override the default postgresql
+#    xlog directory that lives under the datadir by default.  If
+#    specified, the contents of xlogdir will be moved to the
+#    location provided.
 # [*confdir*]
 #    This setting can be used to override the default postgresql
 #    configuration directory for the target platform. If not
@@ -46,6 +51,14 @@
 # [*localconfpath*]
 #    This setting can be used to override the location of the
 #    default local configuration file.
+# [*logpath*]
+#    This setting can be used to override the location of the
+#    default startup log file.  NOTE: This is only supported in
+#    pgrpms based distributions of Postgresql. at this time.
+# [*pidpath*]
+#    This setting can be used to override the location of the
+#    pid file.  NOTE: This is only supported in pgrpms based
+#    distributions of Postgresql. at this time.
 # [*bindir*]
 #    This setting can be used to override the default postgresql
 #    binaries directory for the target platform. If not
