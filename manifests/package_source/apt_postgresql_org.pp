@@ -1,19 +1,21 @@
-class postgresql::package_source::apt_postgresql_org {
+class postgresql::package_source::apt_postgresql_org (
+  $mirror
+) {
   # Here we have tried to replicate the instructions on the PostgreSQL site:
   #
   # http://www.postgresql.org/download/linux/debian/
   #
   apt::pin { 'apt.postgresql.org':
-    originator => 'apt.postgresql.org',
+    originator => $mirror,
     priority   => 500,
   }->
   apt::source { 'apt.postgresql.org':
-    location          => 'http://apt.postgresql.org/pub/repos/apt/',
+    location          => "${mirror}/pub/repos/apt/",
     release           => "${::lsbdistcodename}-pgdg",
     repos             => 'main',
     required_packages => 'pgdg-keyring',
     key               => 'ACCC4CF8',
-    key_source        => 'http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc',
+    key_source        => "${mirror}/pub/repos/apt/ACCC4CF8.asc",
     include_src       => false,
   }
 

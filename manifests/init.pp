@@ -27,6 +27,10 @@
 #    set to `true`.  It determines which package repository should
 #    be used to install the postgres packages.  Currently supported
 #    values include `yum.postgresql.org`.
+# [*package_source_mirror*]
+#    This setting is only useful if `manage_package_repo` is
+#    set to `true` and you're mirroring yum.postgresql.org.  The
+#    directory structure is expected to be the same.
 # [*locale*]
 #    This setting defines the default locale for initdb and createdb
 #    commands. This default to 'undef' which is effectively 'C'.
@@ -38,11 +42,27 @@
 #    data directory for the target platform. If not specified, the
 #    module will use whatever directory is the default for your
 #    OS distro.
+# [*xlogdir*]
+#    This setting can be used to override the default postgresql
+#    xlog directory that lives under the datadir by default.  If
+#    specified, the contents of xlogdir will be moved to the
+#    location provided.
 # [*confdir*]
 #    This setting can be used to override the default postgresql
 #    configuration directory for the target platform. If not
 #    specified, the module will use whatever directory is the
 #    default for your OS distro.
+# [*localconfpath*]
+#    This setting can be used to override the location of the
+#    default local configuration file.
+# [*logpath*]
+#    This setting can be used to override the location of the
+#    default startup log file.  NOTE: This is only supported in
+#    pgrpms based distributions of Postgresql. at this time.
+# [*pidpath*]
+#    This setting can be used to override the location of the
+#    pid file.  NOTE: This is only supported in pgrpms based
+#    distributions of Postgresql. at this time.
 # [*bindir*]
 #    This setting can be used to override the default postgresql
 #    binaries directory for the target platform. If not
@@ -104,33 +124,43 @@
 #
 #
 class postgresql (
-  $version              = $::postgres_default_version,
-  $manage_package_repo  = false,
-  $package_source       = undef,
-  $locale               = undef,
-  $charset              = 'UTF8',
-  $datadir              = undef,
-  $confdir              = undef,
-  $bindir               = undef,
-  $client_package_name  = undef,
-  $server_package_name  = undef,
-  $contrib_package_name = undef,
-  $devel_package_name   = undef,
-  $java_package_name    = undef,
-  $service_name         = undef,
-  $user                 = undef,
-  $group                = undef,
-  $run_initdb           = undef
+  $version                = $::postgres_default_version,
+  $manage_package_repo    = false,
+  $package_source         = undef,
+  $package_source_mirror  = undef,
+  $locale                 = undef,
+  $charset                = 'UTF8',
+  $datadir                = undef,
+  $xlogdir                = undef,
+  $confdir                = undef,
+  $localconfpath          = undef,
+  $logpath                = undef,
+  $pidpath                = undef,
+  $bindir                 = undef,
+  $client_package_name    = undef,
+  $server_package_name    = undef,
+  $contrib_package_name   = undef,
+  $devel_package_name     = undef,
+  $java_package_name      = undef,
+  $service_name           = undef,
+  $user                   = undef,
+  $group                  = undef,
+  $run_initdb             = undef,
 ) {
 
   class { 'postgresql::params':
     version                     => $version,
     manage_package_repo         => $manage_package_repo,
     package_source              => $package_source,
+    package_source_mirror       => $package_source_mirror,
     locale                      => $locale,
     charset                     => $charset,
     custom_datadir              => $datadir,
+    custom_xlogdir              => $xlogdir,
     custom_confdir              => $confdir,
+    custom_localconfpath        => $localconfpath,
+    custom_pglogpath            => $logpath,
+    custom_pgpidpath            => $pidpath,
     custom_bindir               => $bindir,
     custom_client_package_name  => $client_package_name,
     custom_server_package_name  => $server_package_name,
@@ -142,4 +172,5 @@ class postgresql (
     custom_group                => $group,
     run_initdb                  => $run_initdb,
   }
+
 }

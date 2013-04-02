@@ -159,6 +159,9 @@ The version of PostgreSQL to install/manage. Defaults to your operating system d
 ####`manage_package_repo`
 If `true` this will setup the official PostgreSQL repositories on your host. Defaults to `false`.
 
+####`package_source_mirror`
+If `true` this will allow you to use whatever mirror of yum.postgresql.org you specify.
+
 ####`locale`
 This will set the default database locale for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `undef` which is effectively `C`.
 
@@ -168,11 +171,32 @@ This will set the default charset for all databases created with this module. On
 ####`datadir`
 This setting can be used to override the default postgresql data directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
 
+####`xlogdir`
+This setting can be used to override the default postgresql xlog directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
+
 ####`confdir`
 This setting can be used to override the default postgresql configuration directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
 
 ####`bindir`
 This setting can be used to override the default postgresql binaries directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
+
+####`datadir`
+This setting can be used to override the default postgresql data directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
+
+####`xlogdir`
+This setting can be used to override the default postgresql xlog directory that lives under the datadir by default.  If specified, the contents of xlogdir will be moved to the location provided.
+
+####`confdir`
+This setting can be used to override the default postgresql configuration directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
+
+####`localconfpath`
+This setting can be used to override the location of the default local configuration file.
+
+####`logpath`
+This setting can be used to override the location of the default startup log file.  *[NOTE: This is only supported in pgrpms based distributions of Postgresql. at this time.]*
+
+####`pidpath`
+This setting can be used to override the location of the pid file.  *[NOTE: This is only supported in pgrpms based distributions of Postgresql. at this time.]*
 
 ####`client_package_name`
 This setting can be used to override the default postgresql client package name. If not specified, the module will use whatever package name is the default for your OS distro.

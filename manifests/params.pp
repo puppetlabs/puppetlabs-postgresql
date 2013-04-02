@@ -31,10 +31,15 @@ class postgresql::params(
   $version                     = $::postgres_default_version,
   $manage_package_repo         = false,
   $package_source              = undef,
+  $package_source_mirror       = undef,
   $locale                      = undef,
   $charset                     = 'UTF8',
   $custom_datadir              = undef,
+  $custom_xlogdir              = undef,
   $custom_confdir              = undef,
+  $custom_localconfpath        = undef,
+  $custom_pglogpath            = undef,
+  $custom_pgpidpath            = undef,
   $custom_bindir               = undef,
   $custom_client_package_name  = undef,
   $custom_server_package_name  = undef,
@@ -44,7 +49,7 @@ class postgresql::params(
   $custom_service_name         = undef,
   $custom_user                 = undef,
   $custom_group                = undef,
-  $run_initdb                  = undef
+  $run_initdb                  = undef,
 ) {
   $user                         = pick($custom_user, 'postgres')
   $group                        = pick($custom_group, 'postgres')
@@ -61,12 +66,15 @@ class postgresql::params(
     case $::osfamily {
       'RedHat': {
         $rh_pkg_source = pick($package_source, 'yum.postgresql.org')
+        $rh_pkg_source_mirror = pick($package_source_mirror, 'http://yum.postgresql.org')
 
         case $rh_pkg_source {
           'yum.postgresql.org': {
             class { 'postgresql::package_source::yum_postgresql_org':
-              version => $version
+              version => $version,
+              mirror  => $rh_pkg_source_mirror
             }
+
           }
 
           default: {
@@ -76,7 +84,10 @@ class postgresql::params(
       }
 
       'Debian': {
-        class { 'postgresql::package_source::apt_postgresql_org': }
+        $apt_source_mirror = pick($package_source_mirror, "http://apt.postgresql.org")
+        class { 'postgresql::package_source::apt_postgresql_org': 
+          mirror  => $apt_source_mirror
+        }
       }
 
       default: {
@@ -118,19 +129,35 @@ class postgresql::params(
         $service_name = pick($custom_service_name, 'postgresql')
         $bindir       = pick($custom_bindir, '/usr/bin')
         $datadir      = pick($custom_datadir, '/var/lib/pgsql/data')
+        $xlogdir      = pick($custom_xlogdir, "${datadir}/pg_xlog")
         $confdir      = pick($custom_confdir, $datadir)
+
+        if ( $custom_pglogpath != undef or $custom_pgpidpath != undef ) {
+          fail("Custom pglog and pid paths are currently only supported in pgrpms packages")
+        }
       } else {
         $version_parts        = split($version, '[.]')
         $package_version      = "${version_parts[0]}${version_parts[1]}"
+        # Since we can have multiple releases of a specific package version, we'll need to strip that
+        # off of the end of the version string so pathing all works right.
+        $package_version_dot  = "${version_parts[0]}.${version_parts[1]}"
+
         $client_package_name  = pick($custom_client_package_name, "postgresql${package_version}")
         $server_package_name  = pick($custom_server_package_name, "postgresql${package_version}-server")
         $contrib_package_name = pick($custom_contrib_package_name,"postgresql${package_version}-contrib")
         $devel_package_name   = pick($custom_devel_package_name, "postgresql${package_version}-devel")
         $java_package_name    = pick($custom_java_package_name, "postgresql${package_version}-jdbc")
-        $service_name = pick($custom_service_name, "postgresql-${version}")
-        $bindir       = pick($custom_bindir, "/usr/pgsql-${version}/bin")
-        $datadir      = pick($custom_datadir, "/var/lib/pgsql/${version}/data")
-        $confdir      = pick($custom_confdir, $datadir)
+        $service_name         = pick($custom_service_name, "postgresql-${package_version_dot}")
+        $bindir               = pick($custom_bindir, "/usr/pgsql-${package_version_dot}/bin")
+        $datadir              = pick($custom_datadir, "/var/lib/pgsql/${package_version_dot}/data")
+        $xlogdir              = pick($custom_xlogdir, "${datadir}/pg_xlog")
+        $confdir              = pick($custom_confdir, $datadir)
+        $pglogpath            = pick($custom_pglogpath, "${datadir}/pgstartup.log")
+        $pgpidpath            = pick($custom_pgpidpath, "/var/run/postmaster-${package_version_dot}.pid")
+
+        # Since the yum.postgresql.org packages use /etc/sysconfig to manage paths
+        # we need to keep it up to date if we deviate from the default datadir
+        $sysconfig_file = "/etc/sysconfig/pgsql/postgresql-${package_version_dot}"
       }
 
       $service_status = undef
@@ -164,8 +191,13 @@ class postgresql::params(
       $java_package_name    = pick($custom_java_package_name, 'libpostgresql-jdbc-java')
       $bindir               = pick($custom_bindir, "/usr/lib/postgresql/${version}/bin")
       $datadir              = pick($custom_datadir, "/var/lib/postgresql/${version}/main")
+      $xlogdir              = pick($custom_xlogdir, "${datadir}/pg_xlog")
       $confdir              = pick($custom_confdir, "/etc/postgresql/${version}/main")
       $service_status       = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
+
+      if ( $custom_pglogpath != undef or $custom_pgpidpath != undef ) {
+        fail("Custom pglog and pid paths are currently only supported on the RedHat OS family packages built by pgrpms.")
+      }
     }
 
     default: {
@@ -178,5 +210,6 @@ class postgresql::params(
   $psql_path            = "${bindir}/psql"
   $pg_hba_conf_path     = "${confdir}/pg_hba.conf"
   $postgresql_conf_path = "${confdir}/postgresql.conf"
+  $local_conf_path        = pick($custom_localconfpath, "${confdir}/postgresql_puppet_extras.conf")
 
 }
