@@ -42,7 +42,8 @@ class postgresql::config(
   $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
   $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
   $local_conf_path              = $postgresql::params::local_conf_path,
-  $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
+  $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall,
+  $datadir                      = $postgresql::params::datadir
 ) inherits postgresql::params {
 
   # Basically, all this class needs to handle is passing parameters on
@@ -59,6 +60,7 @@ class postgresql::config(
     postgresql_conf_path          => $postgresql_conf_path,
     local_conf_path               => $local_conf_path,
     manage_redhat_firewall        => $manage_redhat_firewall,
+    datadir                       => $datadir
   }
 
   class { 'postgresql::config::afterservice':

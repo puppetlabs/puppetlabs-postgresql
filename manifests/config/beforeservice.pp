@@ -42,7 +42,8 @@ class postgresql::config::beforeservice(
   $listen_addresses             = $postgresql::params::listen_addresses,
   $ipv4acls                     = $postgresql::params::ipv4acls,
   $ipv6acls                     = $postgresql::params::ipv6acls,
-  $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
+  $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall,
+  $datadir                      = $postgresql::params::custom_datadir
 ) inherits postgresql::params {
 
 
@@ -161,5 +162,45 @@ class postgresql::config::beforeservice(
         proto  => 'tcp',
         action => 'accept',
       }
+  }
+
+  # Deal with sysconfig
+  if ( $postgresql::params::manage_package_repo == true and $::osfamily == 'RedHat') {
+    file { "${postgresql::params::sysconfig_file}":
+      ensure  => present,
+      replace => false,
+      owner   => "root",
+      group   => "root",
+      mode    => 644,
+    }
+
+    # Data directory
+    if ( $postgresql::params::custom_datadir != undef ) {
+      file_line { "${$postgresql::params::sysconfig_file}#PGDATA":
+        path    => $sysconfig_file,
+        match   => '^PGDATA=.*$',
+        line    => "PGDATA=${datadir}",
+        notify  => Service['postgresqld'],
+      }
+    }
+
+     # PGLOG file path
+    if ( $postgresql::params::custom_pglogpath != undef ) {
+      file_line { "${sysconfig_file}#PGLOG":
+        path    => $sysconfig_file,
+        match   => '^PGLOG=.*$',
+        line    => "PGLOG=${postgresql::params::pglogpath}",
+        notify  => Service['postgresqld'],
+      }
+    }
+
+    if ($postgresql::params::custom_pgpidpath != undef ) {
+      file_line { "${sysconfig_file}#pidfile":
+        path    => $sysconfig_file,
+        match   => '^pidfile=.*$',
+        line    => "pidfile=${postgresql::params::pgpidpath}",
+        notify  => Service['postgresqld'],
+      }
+    }
   }
 }

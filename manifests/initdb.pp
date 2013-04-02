@@ -34,9 +34,17 @@ class postgresql::initdb(
     default => "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}' --locale '${postgresql::params::locale}'"
   }
 
+  file { $datadir:
+    ensure  => directory,
+    owner   => $user,
+    group   => $group,
+    backup  => false,
+  }
+
   # This runs the initdb command, we use the existance of the PG_VERSION file to
   # ensure we don't keep running this command.
   exec { 'postgresql_initdb':
+    require   => File["$datadir"],
     command   => $initdb_command,
     creates   => "${datadir}/PG_VERSION",
     user      => $user,
@@ -60,7 +68,7 @@ class postgresql::initdb(
       backup  => false,
     }
 
-    exec { "mv ${datadir}/pg_xlog ${xlogdir} && rmdir ${datadir}/pg_xlog":
+    exec { "mv ${datadir}/pg_xlog/* ${xlogdir}/ && rmdir ${datadir}/pg_xlog":
       require => [
         Exec['postgresql_initdb'],
         File[$xlogdir],

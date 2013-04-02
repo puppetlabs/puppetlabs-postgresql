@@ -117,6 +117,8 @@ class postgresql (
   $xlogdir                = undef,
   $confdir                = undef,
   $localconfpath          = undef,
+  $logpath                = undef,
+  $pidpath                = undef,
   $bindir                 = undef,
   $client_package_name    = undef,
   $server_package_name    = undef,
@@ -126,7 +128,7 @@ class postgresql (
   $service_name           = undef,
   $user                   = undef,
   $group                  = undef,
-  $run_initdb             = undef
+  $run_initdb             = undef,
 ) {
 
   class { 'postgresql::params':
@@ -140,6 +142,8 @@ class postgresql (
     custom_xlogdir              => $xlogdir,
     custom_confdir              => $confdir,
     custom_localconfpath        => $localconfpath,
+    custom_pglogpath            => $logpath,
+    custom_pgpidpath            => $pidpath,
     custom_bindir               => $bindir,
     custom_client_package_name  => $client_package_name,
     custom_server_package_name  => $server_package_name,
@@ -151,4 +155,5 @@ class postgresql (
     custom_group                => $group,
     run_initdb                  => $run_initdb,
   }
+
 }

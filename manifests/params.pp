@@ -38,6 +38,8 @@ class postgresql::params(
   $custom_xlogdir              = undef,
   $custom_confdir              = undef,
   $custom_localconfpath        = undef,
+  $custom_pglogpath            = undef,
+  $custom_pgpidpath            = undef,
   $custom_bindir               = undef,
   $custom_client_package_name  = undef,
   $custom_server_package_name  = undef,
@@ -47,7 +49,7 @@ class postgresql::params(
   $custom_service_name         = undef,
   $custom_user                 = undef,
   $custom_group                = undef,
-  $run_initdb                  = undef
+  $run_initdb                  = undef,
 ) {
   $user                         = pick($custom_user, 'postgres')
   $group                        = pick($custom_group, 'postgres')
@@ -72,6 +74,7 @@ class postgresql::params(
               version => $version,
               mirror  => $rh_pkg_source_mirror
             }
+
           }
 
           default: {
@@ -128,6 +131,10 @@ class postgresql::params(
         $datadir      = pick($custom_datadir, '/var/lib/pgsql/data')
         $xlogdir      = pick($custom_xlogdir, "${datadir}/pg_xlog")
         $confdir      = pick($custom_confdir, $datadir)
+
+        if ( $custom_pglogpath != undef or $custom_pgpidpath != undef ) {
+          fail("Custom pglog and pid paths are currently only supported in pgrpms packages")
+        }
       } else {
         $version_parts        = split($version, '[.]')
         $package_version      = "${version_parts[0]}${version_parts[1]}"
@@ -145,6 +152,12 @@ class postgresql::params(
         $datadir              = pick($custom_datadir, "/var/lib/pgsql/${package_version_dot}/data")
         $xlogdir              = pick($custom_xlogdir, "${datadir}/pg_xlog")
         $confdir              = pick($custom_confdir, $datadir)
+        $pglogpath            = pick($custom_pglogpath, "${datadir}/pgstartup.log")
+        $pgpidpath            = pick($custom_pgpidpath, "/var/run/postmaster-${package_version_dot}.pid")
+
+        # Since the yum.postgresql.org packages use /etc/sysconfig to manage paths
+        # we need to keep it up to date if we deviate from the default datadir
+        $sysconfig_file = "/etc/sysconfig/pgsql/postgresql-${package_version_dot}"
       }
 
       $service_status = undef
@@ -181,6 +194,10 @@ class postgresql::params(
       $xlogdir              = pick($custom_xlogdir, "${datadir}/pg_xlog")
       $confdir              = pick($custom_confdir, "/etc/postgresql/${version}/main")
       $service_status       = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
+
+      if ( $custom_pglogpath != undef or $custom_pgpidpath != undef ) {
+        fail("Custom pglog and pid paths are currently only supported on the RedHat OS family packages built by pgrpms.")
+      }
     }
 
     default: {
