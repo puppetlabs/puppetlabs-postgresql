@@ -38,7 +38,7 @@
 #
 
 define postgresql::database_user(
-  $password_hash,
+  $password_hash    = false,
   $createdb         = false,
   $createrole       = false,
   $db               = $postgresql::params::user,
