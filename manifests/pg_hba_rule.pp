@@ -16,7 +16,7 @@ define postgresql::pg_hba_rule(
   validate_re($type, '^(local|host|hostssl|hostnossl)$',
     "The type you specified [${type}] must be one of: local, host, hostssl, hostnosssl")
   validate_re($auth_method, '^(trust|reject|md5|crypt|password|gss|sspi|krb5|ident|peer|ldap|radius|cert|pam)$',
-    "The auth_method you specified [${auth_method}] must be one of: trust, reject, md5, crypt, password, krb5, ident, ldap, pam")
+    "The auth_method you specified [${auth_method}] must be a valid client authentication method")
 
   if($type =~ /^host/ and $address == undef) {
     fail('You must specify an address property when type is host based')

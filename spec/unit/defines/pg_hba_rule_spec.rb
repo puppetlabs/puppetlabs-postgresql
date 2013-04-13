@@ -97,7 +97,7 @@ describe 'postgresql::pg_hba_rule', :type => :define do
       end
       it 'should fail parsing when auth_method is not valid' do
         expect {subject}.to raise_error(Puppet::Error,
-          /The auth_method you specified \[invalid\] must be one of/)
+          /The auth_method you specified \[invalid\] must be a valid client authentication method/)
       end
     end
   end
