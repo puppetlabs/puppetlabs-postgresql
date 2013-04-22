@@ -167,6 +167,7 @@ class postgresql::params(
       $datadir              = pick($custom_datadir, "/var/lib/postgresql/${version}/main")
       $confdir              = pick($custom_confdir, "/etc/postgresql/${version}/main")
       $service_status       = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
+      $python_package_name  = "python-psycopg2"
     }
 
     default: {
