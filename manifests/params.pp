@@ -34,6 +34,7 @@ class postgresql::params(
   $locale                      = undef,
   $charset                     = 'UTF8',
   $custom_datadir              = undef,
+  $xlogdir                     = undef,
   $custom_confdir              = undef,
   $custom_bindir               = undef,
   $custom_client_package_name  = undef,

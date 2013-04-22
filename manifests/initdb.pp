@@ -25,12 +25,16 @@ class postgresql::initdb(
 ) inherits postgresql::params {
   # Build up the initdb command.
   #
+  $xlogdir_param = $postgresql::params::xlogdir ? {
+    undef   => '',
+    default => "--xlogdir '${postgresql::params::xlogdir}'"
+  }
   # We optionally add the locale switch if specified. Older versions of the
   # initdb command don't accept this switch. So if the user didn't pass the
   # parameter, lets not pass the switch at all.
   $initdb_command = $postgresql::params::locale ? {
-    undef   => "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'",
-    default => "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}' --locale '${postgresql::params::locale}'"
+    undef   => "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}' ${xlogdir_param}",
+    default => "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}' ${xlogdir_param} --locale '${postgresql::params::locale}'"
   }
 
   # This runs the initdb command, we use the existance of the PG_VERSION file to
