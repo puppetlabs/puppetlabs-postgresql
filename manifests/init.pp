@@ -94,6 +94,14 @@
 #    the postgresql service is started. If not specified, the
 #    module will decide whether to call initdb or not depending
 #    on your OS distro.
+# [*manage_postgresql_conf*]
+#    This determines whether or not the module should
+#    attempt to manage the postgres.conf file.
+#    Defaults to `true`.
+# [*manage_pg_hba_conf*]
+#    This determines whether or not the module should
+#    attempt to manage the pg_hba.conf file.
+#    Defaults to `true`.
 #
 # === Examples
 #
@@ -104,23 +112,25 @@
 #
 #
 class postgresql (
-  $version              = $::postgres_default_version,
-  $manage_package_repo  = false,
-  $package_source       = undef,
-  $locale               = undef,
-  $charset              = 'UTF8',
-  $datadir              = undef,
-  $confdir              = undef,
-  $bindir               = undef,
-  $client_package_name  = undef,
-  $server_package_name  = undef,
-  $contrib_package_name = undef,
-  $devel_package_name   = undef,
-  $java_package_name    = undef,
-  $service_name         = undef,
-  $user                 = undef,
-  $group                = undef,
-  $run_initdb           = undef
+  $version                = $::postgres_default_version,
+  $manage_package_repo    = false,
+  $package_source         = undef,
+  $locale                 = undef,
+  $charset                = 'UTF8',
+  $datadir                = undef,
+  $confdir                = undef,
+  $bindir                 = undef,
+  $client_package_name    = undef,
+  $server_package_name    = undef,
+  $contrib_package_name   = undef,
+  $devel_package_name     = undef,
+  $java_package_name      = undef,
+  $service_name           = undef,
+  $user                   = undef,
+  $group                  = undef,
+  $run_initdb             = undef,
+  $manage_postgresql_conf = true,
+  $manage_pg_hba_conf     = true
 ) {
 
   class { 'postgresql::params':
@@ -141,5 +151,7 @@ class postgresql (
     custom_user                 => $user,
     custom_group                => $group,
     run_initdb                  => $run_initdb,
+    manage_postgresql_conf      => $manage_postgresql_conf,
+    manage_pg_hba_conf          => $manage_pg_hba_conf,
   }
 }

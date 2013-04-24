@@ -19,6 +19,7 @@
 #                                    redhat-based systems; this parameter is likely to change in future versions.  Possible
 #                                    changes include support for non-RedHat systems and finer-grained control over the
 #                                    firewall rule (currently, it simply opens up the postgres port to all TCP connections).
+#   [*manage_postgresql_conf*]  - boolean indicating whether or not the module manages postgresql.conf file.
 #   [*manage_pg_hba_conf*]      - boolean indicating whether or not the module manages pg_hba.conf file.
 #   [*persist_firewall_command*] - Command to persist firewall connections.
 #
@@ -46,6 +47,7 @@ class postgresql::config::beforeservice(
   $ipv4acls                   = $postgresql::params::ipv4acls,
   $ipv6acls                   = $postgresql::params::ipv6acls,
   $manage_redhat_firewall     = $postgresql::params::manage_redhat_firewall,
+  $manage_postgresql_conf     = $postgresql::params::manage_postgresql_conf,
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $persist_firewall_command   = $postgresql::params::persist_firewall_command,
 ) inherits postgresql::params {
@@ -118,32 +120,35 @@ class postgresql::config::beforeservice(
     create_resources('postgresql::pg_hba_rule', $ipv6acl_resources)
   }
 
-  # We must set a "listen_addresses" line in the postgresql.conf if we
-  #  want to allow any connections from remote hosts.
-  file_line { 'postgresql.conf#listen_addresses':
-    path        => $postgresql_conf_path,
-    match       => '^listen_addresses\s*=.*$',
-    line        => "listen_addresses = '${listen_addresses}'",
-    notify      => Service['postgresqld'],
-  }
+  if ($manage_postgresql_conf) {
 
-  # Here we are adding an 'include' line so that users have the option of
-  # managing their own settings in a second conf file. This only works for
-  # postgresql 8.2 and higher.
-  if(versioncmp($postgresql::params::version, '8.2') >= 0) {
-    # Since we're adding an "include" for this extras config file, we need
-    # to make sure it exists.
-    exec { 'create_postgresql_conf_path':
-      command => "touch `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf",
-      path    => '/usr/bin:/bin',
-      unless  => "[ -f `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf ]"
+    # We must set a "listen_addresses" line in the postgresql.conf if we
+    #  want to allow any connections from remote hosts.
+    file_line { 'postgresql.conf#listen_addresses':
+      path        => $postgresql_conf_path,
+      match       => '^listen_addresses\s*=.*$',
+      line        => "listen_addresses = '${listen_addresses}'",
+      notify      => Service['postgresqld'],
     }
 
-    file_line { 'postgresql.conf#include':
-      path        => $postgresql_conf_path,
-      line        => 'include \'postgresql_puppet_extras.conf\'',
-      require     => Exec['create_postgresql_conf_path'],
-      notify      => Service['postgresqld'],
+    # Here we are adding an 'include' line so that users have the option of
+    # managing their own settings in a second conf file. This only works for
+    # postgresql 8.2 and higher.
+    if(versioncmp($postgresql::params::version, '8.2') >= 0) {
+      # Since we're adding an "include" for this extras config file, we need
+      # to make sure it exists.
+    exec { 'create_postgresql_conf_path':
+        command => "touch `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf",
+        path    => '/usr/bin:/bin',
+        unless  => "[ -f `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf ]"
+      }
+
+      file_line { 'postgresql.conf#include':
+        path        => $postgresql_conf_path,
+        line        => 'include \'postgresql_puppet_extras.conf\'',
+        require     => Exec['create_postgresql_conf_path'],
+        notify      => Service['postgresqld'],
+      }
     }
   }
 

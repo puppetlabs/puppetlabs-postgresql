@@ -228,6 +228,9 @@ This value defaults to `localhost`, meaning the postgres server will only accept
 ####`manage_redhat_firewall`
 This value defaults to `false`. Many RedHat-based distros ship with a fairly restrictive firewall configuration which will block the port that postgres tries to listen on. If you’d like for the puppet module to open this port for you (using the [puppetlabs-firewall](http://forge.puppetlabs.com/puppetlabs/firewall) module), change this value to true. *[This parameter is likely to change in future versions.  Possible changes include support for non-RedHat systems and finer-grained control over the firewall rule (currently, it simply opens up the postgres port to all TCP connections).]*
 
+####`manage_postgresql_conf`
+This value defaults to `true`. Whether or not manage the postgresql.conf. If set to `true`, puppet will add lines to this file and create the `postgresql_puppet_extras.conf` file in the same directory. If set to `false`, puppet will not modify the file.
+
 ####`manage_pg_hba_conf`
 This value defaults to `true`. Whether or not manage the pg_hba.conf. If set to `true`, puppet will overwrite this file. If set to `false`, puppet will not modify the file.
 
