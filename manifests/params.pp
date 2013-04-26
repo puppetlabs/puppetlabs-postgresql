@@ -138,22 +138,26 @@ class postgresql::params(
     }
 
     'Debian': {
-      $needs_initdb             = pick($run_initdb, false)
       $firewall_supported       = false
       # TODO: not exactly sure yet what the right thing to do for Debian/Ubuntu is.
       #$persist_firewall_command = '/sbin/iptables-save > /etc/iptables/rules.v4'
 
-
-      case $::operatingsystem {
-        'Debian': {
-          $service_name = pick($custom_service_name, 'postgresql')
-        }
-        'Ubuntu': {
-          # thanks, ubuntu
-          if($::lsbmajdistrelease == '10' and !$manage_package_repo) {
-            $service_name = pick($custom_service_name, "postgresql-${version}")
-          } else {
+      if $manage_package_repo == true {
+        $needs_initdb             = pick($run_initdb, true)
+        $service_name = pick($custom_service_name, 'postgresql')
+      } else {
+        $needs_initdb             = pick($run_initdb, false)
+        case $::operatingsystem {
+          'Debian': {
             $service_name = pick($custom_service_name, 'postgresql')
+          }
+          'Ubuntu': {
+            # thanks, ubuntu
+            if($::lsbmajdistrelease == '10') {
+              $service_name = pick($custom_service_name, "postgresql-${version}")
+            } else {
+              $service_name = pick($custom_service_name, 'postgresql')
+            }
           }
         }
       }
