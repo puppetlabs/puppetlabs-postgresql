@@ -1,3 +1,38 @@
+2.2.0
+=====
+
+This feature release introduces a number of new features and bug fixes.
+
+First of all it includes a new class named `postgresql::python` which provides you with a convenient way of install the python Postgresql client libraries.
+
+    class { 'postgresql::python':
+    }
+
+You are now able to use `postgresql::database_user` without having to specify a password_hash, useful for different authentication mechanisms that do not need passwords (ie. cert, local etc.).
+
+We've also provided a lot more advanced custom parameters now for greater control of your Postgresql installation. Consult the class documentation for PuppetDB in the README.
+
+This release in particular has largely been contributed by the community members below, a big thanks to one and all.
+
+#### Detailed Changes
+
+* Add support for psycopg installation (Flaper Fesp and Dan Prince)
+* Added default PostgreSQL version for Ubuntu 13.04 (Kamil Szymanski)
+* Add ability to create users without a password (Bruno Harbulot)
+* Three Puppet 2.6 fixes (Dominic Cleal)
+* Add explicit call to concat::setup when creating concat file (Dominic Cleal)
+* Fix readme typo (Jordi Boggiano)
+* Update postgres_default_version for Ubuntu (Kamil Szymanski)
+* Allow to set connection for noew role (Kamil Szymanski)
+* Fix pg_hba_rule for postgres local access (Kamil Szymanski)
+* Fix versions for travis-ci (Ken Barber)
+* Add replication support (Jordi Boggiano)
+* Cleaned up and added unit tests (Ken Barber)
+* Generalization to provide more flexability in postgresql configuration (Karel Brezina)
+* Create dependent directory for sudoers so tests work on Centos 5 (Ken Barber)
+* Allow SQL commands to be run against a specific DB (Carlos Villela)
+* Drop trailing comma to support Puppet 2.6 (Michael Arnold)
+
 2.1.1
 =====
 
@@ -60,7 +95,7 @@ A big thanks to all those listed below who made this feature release possible :-
 #### Detailed Changes
 
 2013-01-18 - Simão Fontes <simaofontes@gmail.com> & Flaper Fesp <flaper87@gmail.com>
-* Remove trailing commas from params.pp property definition for Puppet 2.6.0 compatibility 
+* Remove trailing commas from params.pp property definition for Puppet 2.6.0 compatibility
 
 2013-01-18 - Lauren Rother <lauren.rother@puppetlabs.com>
 * Updated README.md to conform with best practices template
