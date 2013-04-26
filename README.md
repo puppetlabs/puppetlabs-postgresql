@@ -119,6 +119,7 @@ Classes:
 * [postgresql::contrib](#class-postgresqlcontrib)
 * [postgresql::devel](#class-postgresqldevel)
 * [postgresql::java](#class-postgresqljava)
+* [postgresql::python](#class-postgresqlpython)
 
 Resources:
 
@@ -268,6 +269,15 @@ The name of the postgresql java package.
 ####`package_ensure`
 The ensure parameter passed on to postgresql java package resource.
 
+###Class: postgresql::python
+This class installs the postgresql Python libraries. For customer requirements you can customise the following parameters:
+
+####`package_name`
+The name of the postgresql python package.
+
+####`package_ensure`
+The ensure parameter passed on to postgresql python package resource.
+
 ###Resource: postgresql::db
 This is a convenience resource that creates a database, user and assigns necessary permissions in one go.
 
@@ -412,7 +422,7 @@ The name of the database you wish to test.
 Username to connect with.
 
 ####`database_password`
-Password to connect with.
+Password to connect with. Can be left blank, but that is not recommended.
 
 ###Resource: postgresql::pg\_hba\_rule
 This defined type allows you to create an access rule for `pg_hba.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/8.2/static/auth-pg-hba-conf.html).
