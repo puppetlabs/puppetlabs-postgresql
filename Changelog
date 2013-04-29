@@ -1,3 +1,18 @@
+2.2.1
+=====
+
+This release fixes a bug whereby one of our shell commands (psql) were not ran from a globally accessible directory. This was causing permission denied errors when the command attempted to change user without changing directory.
+
+Users of previous versions might have seen this error:
+
+    Error: Error executing SQL; psql returned 256: 'could not change directory to "/root"
+
+This patch should correct that.
+
+#### Detail Changes
+
+* Set /tmp as default CWD for postgresql_psql
+
 2.2.0
 =====
 
