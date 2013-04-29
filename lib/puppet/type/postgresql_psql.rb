@@ -66,6 +66,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
   newparam(:cwd, :parent => Puppet::Parameter::Path) do
     desc "The working directory under which the psql command should be executed."
+    defaultto("/tmp")
   end
 
   newparam(:refreshonly) do
