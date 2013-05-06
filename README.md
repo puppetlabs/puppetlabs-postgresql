@@ -517,9 +517,15 @@ Run the system tests:
 
     $ rake spec:system
 
+Note that these tests will fire up VirtualBox VMs, and set up shared folders for the module source code from your local working copy.  This means that you need to have all of the source code for the module dependencies (see the `Modulefile` for a complete list) checked out in the same parent directory where you've checked out the source for the `puppet-postgres` module.
+
 The system test suite will snapshot the VM and rollback between each test. If you want to only run the tests against an individual distro, you can do run:
 
     $ rspec spec/system/distros/ubuntu_lucid_64
+
+To run only a single specific test against a distro:
+
+    $ rspec spec/system/distros/ubuntu_lucid_64 -e "should idempotently create a user who can log in"
 
 We also have some unit tests that utilize rspec-puppet for faster iteration if required:
 
