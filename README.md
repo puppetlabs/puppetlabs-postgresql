@@ -519,7 +519,7 @@ Run the system tests:
 
 The system test suite will snapshot the VM and rollback between each test. If you want to only run the tests against an individual distro, you can do run:
 
-    $ rspec spec/distros/ubuntu_lucid_64
+    $ rspec spec/system/distros/ubuntu_lucid_64
 
 We also have some unit tests that utilize rspec-puppet for faster iteration if required:
 
