@@ -36,11 +36,12 @@ class postgresql::initdb(
   # This runs the initdb command, we use the existance of the PG_VERSION file to
   # ensure we don't keep running this command.
   exec { 'postgresql_initdb':
-    command   => $initdb_command,
-    creates   => "${datadir}/PG_VERSION",
-    user      => $user,
-    group     => $group,
-    logoutput => on_failure,
+    command     => $initdb_command,
+    creates     => "${datadir}/PG_VERSION",
+    user        => $user,
+    group       => $group,
+    environment => 'LANG=C',
+    logoutput   => on_failure,
   }
 
   # If we manage the package (which is user configurable) make sure the
