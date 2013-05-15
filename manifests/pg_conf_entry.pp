@@ -22,7 +22,7 @@
 define postgresql::pg_conf_entry (
     $ensure='present',
     $value=undef,
-    $path=false,
+    $path=false
 ) {
 
   include '::postgresql::params'
