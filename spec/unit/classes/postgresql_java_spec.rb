@@ -35,16 +35,4 @@ describe 'postgresql::java', :type => :class do
     end
   end
 
-  describe 'on any other os' do
-    let :facts do {
-      :osfamily                 => 'foo',
-      :postgres_default_version => 'foo',
-    }
-    end
-
-    it 'should fail' do
-      expect { subject }.to raise_error(/Unsupported osfamily: foo/)
-    end
-  end
-
 end

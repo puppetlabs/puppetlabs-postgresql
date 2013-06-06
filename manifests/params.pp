@@ -56,7 +56,6 @@ class postgresql::params(
   # TODO: figure out a way to make this not platform-specific
   $manage_redhat_firewall       = false
 
-
   if ($manage_package_repo) {
     case $::osfamily {
       'RedHat': {
@@ -175,7 +174,59 @@ class postgresql::params(
     }
 
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
+
+      $err_msg_prefix = "Module ${module_name} does not provide defaults for osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}; please specify a value for ${module_name}::params::"
+
+      if ($run_initdb != undef) {
+        $needs_initdb = $run_initdb
+      } else {
+        fail("${err_msg_prefix}run_initdb")
+      }
+
+      $firewall_supported = false
+
+      if ($custom_service_name) {
+        $service_name = $custom_service_name
+      } else {
+        fail("${err_msg_prefix}custom_service_name")
+      }
+
+      if ($custom_client_package_name) {
+        $client_package_name = $custom_client_package_name
+      } else {
+        fail("${err_msg_prefix}custom_client_package_name")
+      }
+
+      if ($custom_server_package_name) {
+        $server_package_name = $custom_server_package_name
+      } else {
+        fail("${err_msg_prefix}custom_server_package_name")
+      }
+
+
+      $contrib_package_name = $custom_contrib_package_name
+      $devel_package_name = $custom_devel_package_name
+      $java_package_name = $custom_java_package_name
+
+      if ($custom_bindir) {
+        $bindir = $custom_bindir
+      } else {
+        fail("${err_msg_prefix}custom_bindir")
+      }
+
+      if ($custom_datadir) {
+        $datadir = $custom_datadir
+      } else {
+        fail("${err_msg_prefix}custom_datadir")
+      }
+
+      if ($custom_confdir) {
+        $confdir = $custom_confdir
+      } else {
+        fail("${err_msg_prefix}custom_confdir")
+      }
+
+      $service_status = undef
     }
   }
 
