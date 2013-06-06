@@ -1,3 +1,15 @@
+2.3.0
+=====
+
+This feature release includes the following changes:
+
+* Add a new parameter `owner` to the `database` type.  This can be used to
+  grant ownership of a new database to a specific user.  (Bruno Harbulot)
+* Add support for operating systems other than Debian/RedHat, as long as the
+  user supplies custom values for all of the required paths, package names, etc.
+  (Chris Price)
+* Improved integration testing (Ken Barber)
+
 2.2.1
 =====
 
