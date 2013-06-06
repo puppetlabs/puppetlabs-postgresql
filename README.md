@@ -318,6 +318,9 @@ This defined type can be used to create a database with no users and no permissi
 ####`namevar`
 Name of the database to create.
 
+####`owner`
+Name of the database user who should be set as the owner of the database.  Defaults to `$postgresql::params::user`.
+
 ####`tablespace`
 Tablespace for where to create this database. Defaults to the defaults defined during PostgreSQL installation.
 
