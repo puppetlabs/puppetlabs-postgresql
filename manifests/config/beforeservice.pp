@@ -63,7 +63,7 @@ class postgresql::config::beforeservice(
   # Lets setup the base rules
   postgresql::pg_hba_rule { 'local access as postgres user':
     type        => 'local',
-    user        => 'postgres',
+    user        => $postgresql::params::user,
     auth_method => 'ident',
     auth_option => $postgresql::params::version ? {
       '8.1'   => 'sameuser',
@@ -82,7 +82,7 @@ class postgresql::config::beforeservice(
   }
   postgresql::pg_hba_rule { 'deny access to postgresql user':
     type        => 'host',
-    user        => 'postgres',
+    user        => $postgresql::params::user,
     address     => $ip_mask_deny_postgres_user,
     auth_method => 'reject',
     order       => '003',
