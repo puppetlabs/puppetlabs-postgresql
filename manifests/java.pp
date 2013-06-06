@@ -19,6 +19,8 @@ class postgresql::java (
   $package_ensure = 'present'
 ) inherits postgresql::params {
 
+  validate_string($package_name)
+
   package { 'postgresql-jdbc':
     ensure => $package_ensure,
     name   => $package_name,

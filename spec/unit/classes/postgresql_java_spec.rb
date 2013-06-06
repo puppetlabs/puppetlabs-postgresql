@@ -42,8 +42,8 @@ describe 'postgresql::java', :type => :class do
     }
     end
 
-    it 'should fail' do
-      expect { subject }.to raise_error(/Unsupported osfamily: foo/)
+    it 'should fail without all the necessary parameters' do
+      expect { subject }.to raise_error(/Module postgresql does not provide defaults for osfamily: foo/)
     end
   end
 

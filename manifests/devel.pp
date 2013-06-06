@@ -17,6 +17,8 @@ class postgresql::devel(
   $package_ensure = 'present'
 ) inherits postgresql::params {
 
+  validate_string($package_name)
+
   package { 'postgresql-devel':
     ensure => $package_ensure,
     name   => $package_name,
