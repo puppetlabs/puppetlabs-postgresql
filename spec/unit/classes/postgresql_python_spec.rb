@@ -33,8 +33,20 @@ describe 'postgresql::python', :type => :class do
     }
     end
 
+    it 'should fail without all the necessary parameters' do
+      expect { subject }.to raise_error(/Module postgresql does not provide defaults for osfamily: foo/)
+    end
+  end
+
+  describe 'on any other os without all the necessary parameters' do
+    let :facts do {
+      :osfamily                 => 'foo',
+      :postgres_default_version => 'foo',
+    }
+    end
+
     it 'should fail' do
-      expect { subject }.to raise_error(/Unsupported osfamily: foo/)
+      expect { subject }.to raise_error(/Module postgresql does not provide defaults for osfamily: foo/)
     end
   end
 
