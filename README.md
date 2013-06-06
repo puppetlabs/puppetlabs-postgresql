@@ -205,6 +205,9 @@ This setting can be used to explicitly call the initdb operation after server pa
 ###Class: postgresql::server
 Here are the options that you can set in the `config_hash` parameter of `postgresql::server`:
 
+####`ensure`
+This value default to `present`. When set to `absent` it will remove all packages, configuration and data so use this with extreme caution.
+
 ####`postgres_password`
 This value defaults to `undef`, meaning the super user account in the postgres database is a user called `postgres` and this account does not have a password. If you provide this setting, the module will set the password for the `postgres` user to your specified value.
 
@@ -504,34 +507,35 @@ You can read the complete module contribution guide [on the Puppet Labs wiki.](h
 
 ### Tests
 
-There are two types of tests distributed with the module. The first set is the 'traditional' Puppet manifest-style smoke tests. You can use these to experiment with the module on a virtual machine or other test environment, via `puppet apply`. You should see the following files in the `tests` directory.
+There are two types of tests distributed with the module. Unit tests with rspec-puppet and system tests using rspec-system.
 
-In addition to these manifest-based smoke tests, there are some ruby rspec tests in the spec directory. These tests run against a VirtualBox VM, so they are actually testing the live application of the module on a real, running system. To do this, you must install and setup an [RVM](http://beginrescueend.com/) with [vagrant](http://vagrantup.com/), [sahara](https://github.com/jedi4ever/sahara), and [rspec](http://rspec.info/):
+For unit testing, make sure you have:
 
-    $ curl -L get.rvm.io | bash -s stable
-    $ rvm install 1.9.3
-    $ rvm use --create 1.9.3@puppet-postgresql
-    $ bundle install
+* rake
+* bundler
 
-Run the system tests:
+Install the necessary gems:
 
-    $ rake spec:system
+    bundle install --path=vendor
 
-Note that these tests will fire up VirtualBox VMs, and set up shared folders for the module source code from your local working copy.  This means that you need to have all of the source code for the module dependencies (see the `Modulefile` for a complete list) checked out in the same parent directory where you've checked out the source for the `puppet-postgres` module.
+And then run the unit tests:
 
-The system test suite will snapshot the VM and rollback between each test. If you want to only run the tests against an individual distro, you can do run:
-
-    $ rspec spec/system/distros/ubuntu_lucid_64
-
-To run only a single specific test against a distro:
-
-    $ rspec spec/system/distros/ubuntu_lucid_64 -e "should idempotently create a user who can log in"
-
-We also have some unit tests that utilize rspec-puppet for faster iteration if required:
-
-    $ rake spec
+    bundle exec rake spec
 
 The unit tests are ran in Travis-CI as well, if you want to see the results of your own tests regsiter the service hook through Travis-CI via the accounts section for your Github clone of this project.
+
+If you want to run the system tests, make sure you also have:
+
+* vagrant > 1.2.x
+* Virtualbox > 4.2.10
+
+Then run the tests using:
+
+    bundle exec rake spec:system
+
+To run the tests on different operating systems, see the sets available in .nodeset.yml and run the specific set with the following syntax:
+
+    RSPEC_SET=debian-607-x64 bundle exec rake spec:system
 
 Transfer Notice
 ----------------
