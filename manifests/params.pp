@@ -79,7 +79,7 @@ class postgresql::params(
       }
 
       default: {
-        fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
+        fail("Unsupported osfamily for manage_package_repo: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports managing repos for osfamily RedHat and Debian")
       }
     }
   }
