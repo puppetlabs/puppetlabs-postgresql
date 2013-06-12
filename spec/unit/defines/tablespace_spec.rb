@@ -10,5 +10,10 @@ describe 'postgresql::tablespace', :type => :define do
   let :title do
     'test'
   end
+  let :params do
+    {
+      :location => '/srv/data/foo',
+    }
+  end
   it { should include_class("postgresql::params") }
 end
