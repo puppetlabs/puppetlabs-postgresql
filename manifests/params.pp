@@ -134,6 +134,7 @@ class postgresql::params(
 
       $service_status = undef
       $python_package_name="python-psycopg2"
+      $perl_package_name = 'perl-DBD-Pg' 
     }
 
     'Debian': {
@@ -171,6 +172,7 @@ class postgresql::params(
       $confdir              = pick($custom_confdir, "/etc/postgresql/${version}/main")
       $service_status       = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
       $python_package_name  = "python-psycopg2"
+      $perl_package_name    = 'libdbd-pg-perl'
     }
 
     default: {
