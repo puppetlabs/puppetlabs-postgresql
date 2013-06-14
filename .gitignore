@@ -4,3 +4,4 @@ Gemfile.lock
 metadata.json
 spec/fixtures
 pkg/
+.rspec_system/
