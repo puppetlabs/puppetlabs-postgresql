@@ -1,6 +1,22 @@
 require 'spec_helper_system'
 
 describe 'non defaults:' do
+  before :all do
+    puppet_apply(<<-EOS)
+      if($::operatingsystem =~ /Debian|Ubuntu/) {
+        # Need to make sure the correct utf8 locale is ready for our
+        # non-standard tests
+        file { '/etc/locale.gen':
+          content => "en_US ISO-8859-1\nen_NG UTF-8\nen_US UTF-8\n",
+        }~>
+        exec { '/usr/sbin/locale-gen':
+          logoutput => true,
+          refreshonly => true,
+        }
+      }
+    EOS
+  end
+
   context 'test installing non-default version of postgresql' do
     after :each do
       # Cleanup
@@ -23,8 +39,10 @@ describe 'non defaults:' do
         # Configure version and manage_package_repo globally, install postgres
         # and then try to install a new database.
         class { "postgresql":
-          version               => "9.2",
-          manage_package_repo   => true,
+          version              => "9.2",
+          manage_package_repo  => true,
+          charset              => 'UTF8',
+          locale               => 'en_US.UTF-8',
         }->
         class { "postgresql::server": }->
         postgresql::db { "postgresql_test_db":
