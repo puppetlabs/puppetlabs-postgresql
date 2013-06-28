@@ -48,7 +48,6 @@ define postgresql::role(
     require    => Postgresql_psql["CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}"],
   }
 
-  # TODO: FIXME: Will not correct the password of a role that already exists
   postgresql_psql {"CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}":
     unless  => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
     require => undef,
@@ -80,4 +79,7 @@ define postgresql::role(
     unless => "SELECT rolname FROM pg_roles WHERE rolname='${username}' and rolconnlimit=${connection_limit}",
   }
 
+  postgresql_psql {"ALTER ROLE \"${username}\" ${password_sql}":
+    unless => "SELECT usename FROM pg_shadow WHERE passwd='${password_hash}'",
+  }
 }
