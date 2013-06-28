@@ -70,7 +70,7 @@ define postgresql::role(
     unless => "SELECT rolname FROM pg_roles WHERE rolname='${username}' and rolcanlogin=${login}",
   }
 
-  if(versioncmp($postgresql::params::version, '9.0') >= 0) {
+  if(versioncmp($postgresql::params::version, '9.1') >= 0) {
     postgresql_psql {"ALTER ROLE \"${username}\" ${replication_sql}":
       unless => "SELECT rolname FROM pg_roles WHERE rolname='${username}' and rolreplication=${replication}",
     }
