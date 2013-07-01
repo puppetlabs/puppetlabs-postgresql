@@ -79,7 +79,9 @@ define postgresql::role(
     unless => "SELECT rolname FROM pg_roles WHERE rolname='${username}' and rolconnlimit=${connection_limit}",
   }
 
-  postgresql_psql {"ALTER ROLE \"${username}\" ${password_sql}":
-    unless => "SELECT usename FROM pg_shadow WHERE passwd='${password_hash}'",
+  if $password_hash {
+    postgresql_psql {"ALTER ROLE \"${username}\" ${password_sql}":
+      unless => "SELECT usename FROM pg_shadow WHERE usename='${username}' and passwd='${password_hash}'",
+    }
   }
 }
