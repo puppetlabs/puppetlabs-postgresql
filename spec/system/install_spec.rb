@@ -303,7 +303,7 @@ describe 'install:' do
 
         postgresql::db { $db:
           user        => $db,
-          password    => $db,
+          password    => postgresql_password($db, $db),
         }
       EOS
 
