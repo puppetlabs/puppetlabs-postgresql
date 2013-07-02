@@ -31,7 +31,7 @@ describe 'install:' do
 
           postgresql::db { $db:
             user        => $db,
-            password    => $db,
+            password    => postgresql_password($db, $db),
           }
         EOS
 
@@ -69,8 +69,8 @@ describe 'install:' do
             }
           }
           postgresql::db { 'test1':
-            user => 'test1',
-            password => 'test1',
+            user     => 'test1',
+            password => postgresql_password('test1', 'test1'),
             charset => 'UTF8',
             locale => 'en_NG',
           }
@@ -375,7 +375,7 @@ describe 'install:' do
         }
         postgresql::db{ 'tablespacedb2':
           user => 'dbuser2',
-          password => 'dbuser2',
+          password => postgresql_password('dbuser2', 'dbuser2'),
           tablespace => 'tablespace1',
           require => Postgresql::Tablespace['tablespace1'],
         }
@@ -450,7 +450,7 @@ describe 'install:' do
         include postgresql::server
         postgresql::db { "test1":
           user => "test1",
-          password => "test1",
+          password => postgresql_password('test1', 'test1'),
           grant => "all",
         }
         postgresql::pg_hba_rule { "allow anyone to have access to db test1":
