@@ -233,7 +233,7 @@ describe 'install:' do
       end
 
       # Check that the user can log in
-      psql('--command="select datname from pg_database" postgres', 'postgresql_test_user2') do |r|
+      psql('--command="select datname from pg_database" postgres', 'postgresql_test_user') do |r|
         r.stdout.should =~ /template1/
         r.stderr.should be_empty
         r.exit_code.should == 0
