@@ -47,7 +47,7 @@ describe 'non defaults:' do
         class { "postgresql::server": }->
         postgresql::db { "postgresql_test_db":
           user        => "foo1",
-          password    => "foo1",
+          password    => postgresql_password('foo1', 'foo1'),
         }
       EOS
 
