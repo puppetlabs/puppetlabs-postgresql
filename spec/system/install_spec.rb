@@ -31,7 +31,7 @@ describe 'install:' do
 
           postgresql::db { $db:
             user        => $db,
-            password    => $db,
+            password    => postgresql_password($db, $db),
           }
         EOS
 
@@ -69,8 +69,8 @@ describe 'install:' do
             }
           }
           postgresql::db { 'test1':
-            user => 'test1',
-            password => 'test1',
+            user     => 'test1',
+            password => postgresql_password('test1', 'test1'),
             charset => 'UTF8',
             locale => 'en_NG',
           }
@@ -204,6 +204,41 @@ describe 'install:' do
         r.exit_code.should == 0
       end
     end
+
+    it 'should idempotently alter a user who can log in' do
+      pp = <<-EOS
+        $user = "postgresql_test_user"
+        $password = "postgresql_test_password2"
+
+        include postgresql::server
+
+        # Since we are not testing pg_hba or any of that, make a local user for ident auth
+        user { $user:
+          ensure => present,
+        }
+
+        postgresql::database_user { $user:
+          password_hash => postgresql_password($user, $password),
+          require  => [ Class['postgresql::server'],
+                        User[$user] ],
+        }
+      EOS
+
+      puppet_apply(pp) do |r|
+        r.exit_code.should_not == 1
+      end
+
+      puppet_apply(pp) do |r|
+        r.exit_code.should be_zero
+      end
+
+      # Check that the user can log in
+      psql('--command="select datname from pg_database" postgres', 'postgresql_test_user') do |r|
+        r.stdout.should =~ /template1/
+        r.stderr.should be_empty
+        r.exit_code.should == 0
+      end
+    end
   end
 
   describe 'postgresql::grant' do
@@ -268,7 +303,7 @@ describe 'install:' do
 
         postgresql::db { $db:
           user        => $db,
-          password    => $db,
+          password    => postgresql_password($db, $db),
         }
       EOS
 
@@ -340,7 +375,7 @@ describe 'install:' do
         }
         postgresql::db{ 'tablespacedb2':
           user => 'dbuser2',
-          password => 'dbuser2',
+          password => postgresql_password('dbuser2', 'dbuser2'),
           tablespace => 'tablespace1',
           require => Postgresql::Tablespace['tablespace1'],
         }
@@ -415,7 +450,7 @@ describe 'install:' do
         include postgresql::server
         postgresql::db { "test1":
           user => "test1",
-          password => "test1",
+          password => postgresql_password('test1', 'test1'),
           grant => "all",
         }
         postgresql::pg_hba_rule { "allow anyone to have access to db test1":
