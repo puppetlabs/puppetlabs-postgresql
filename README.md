@@ -61,6 +61,7 @@ For a more customized, less restrictive configuration:
         'listen_addresses'           => '*',
         'ipv4acls'                   => ['hostssl all johndoe 192.168.0.0/24 cert'],
         'manage_redhat_firewall'     => true,
+        'manage_pg_hba_conf'         => false,
         'postgres_password'          => 'TPSrep0rt!',
       },
     }
@@ -216,6 +217,9 @@ This value defaults to `localhost`, meaning the postgres server will only accept
 
 ####`manage_redhat_firewall`
 This value defaults to `false`. Many RedHat-based distros ship with a fairly restrictive firewall configuration which will block the port that postgres tries to listen on. If you’d like for the puppet module to open this port for you (using the [puppetlabs-firewall](http://forge.puppetlabs.com/puppetlabs/firewall) module), change this value to true. *[This parameter is likely to change in future versions.  Possible changes include support for non-RedHat systems and finer-grained control over the firewall rule (currently, it simply opens up the postgres port to all TCP connections).]*
+
+####`manage_pg_hba_conf`
+This value defaults to `true`. Whether or not manage the pg_hba.conf. If set to `true`, puppet will overwrite this file. If set to `false`, puppet will not modify the file.
 
 ####`ip_mask_allow_all_users`
 This value defaults to `127.0.0.1/32`. By default, Postgres does not allow any database user accounts to connect via TCP from remote machines. If you’d like to allow them to, you can override this setting. You might set it to `0.0.0.0/0` to allow database users to connect from any remote machine, or `192.168.0.0/16` to allow connections from any machine on your local 192.168 subnet.
