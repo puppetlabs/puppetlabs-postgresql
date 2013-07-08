@@ -19,6 +19,7 @@
 #                                       redhat-based systems; this parameter is likely to change in future versions.  Possible
 #                                       changes include support for non-RedHat systems and finer-grained control over the
 #                                       firewall rule (currently, it simply opens up the postgres port to all TCP connections).
+#   [*manage_pg_hba_conf*]      - boolean indicating whether or not the module manages pg_hba.conf file.
 #
 #
 # Actions:
@@ -33,15 +34,16 @@
 #   }
 #
 class postgresql::config(
-  $postgres_password            = undef,
-  $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
-  $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
-  $listen_addresses             = $postgresql::params::listen_addresses,
-  $ipv4acls                     = $postgresql::params::ipv4acls,
-  $ipv6acls                     = $postgresql::params::ipv6acls,
-  $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
-  $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
-  $manage_redhat_firewall       = $postgresql::params::manage_redhat_firewall
+  $postgres_password          = undef,
+  $ip_mask_deny_postgres_user = $postgresql::params::ip_mask_deny_postgres_user,
+  $ip_mask_allow_all_users    = $postgresql::params::ip_mask_allow_all_users,
+  $listen_addresses           = $postgresql::params::listen_addresses,
+  $ipv4acls                   = $postgresql::params::ipv4acls,
+  $ipv6acls                   = $postgresql::params::ipv6acls,
+  $pg_hba_conf_path           = $postgresql::params::pg_hba_conf_path,
+  $postgresql_conf_path       = $postgresql::params::postgresql_conf_path,
+  $manage_redhat_firewall     = $postgresql::params::manage_redhat_firewall,
+  $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf
 ) inherits postgresql::params {
 
   # Basically, all this class needs to handle is passing parameters on
@@ -49,14 +51,15 @@ class postgresql::config(
   #  the proper ordering.
 
   class { 'postgresql::config::beforeservice':
-    ip_mask_deny_postgres_user    => $ip_mask_deny_postgres_user,
-    ip_mask_allow_all_users       => $ip_mask_allow_all_users,
-    listen_addresses              => $listen_addresses,
-    ipv4acls                      => $ipv4acls,
-    ipv6acls                      => $ipv6acls,
-    pg_hba_conf_path              => $pg_hba_conf_path,
-    postgresql_conf_path          => $postgresql_conf_path,
-    manage_redhat_firewall        => $manage_redhat_firewall,
+    ip_mask_deny_postgres_user => $ip_mask_deny_postgres_user,
+    ip_mask_allow_all_users    => $ip_mask_allow_all_users,
+    listen_addresses           => $listen_addresses,
+    ipv4acls                   => $ipv4acls,
+    ipv6acls                   => $ipv6acls,
+    pg_hba_conf_path           => $pg_hba_conf_path,
+    postgresql_conf_path       => $postgresql_conf_path,
+    manage_redhat_firewall     => $manage_redhat_firewall,
+    manage_pg_hba_conf         => $manage_pg_hba_conf,
   }
 
   class { 'postgresql::config::afterservice':
