@@ -54,6 +54,7 @@ class postgresql::params(
   $ipv4acls                     = []
   $ipv6acls                     = []
   $manage_pg_hba_conf           = true
+  $template                     = 'template0'
   # TODO: figure out a way to make this not platform-specific
   $manage_redhat_firewall       = false
 
