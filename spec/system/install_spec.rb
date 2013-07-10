@@ -196,7 +196,7 @@ describe 'install:' do
             password       => postgresql_password($db, $db),
             charset        => 'UTF8',
             update_charset => true,
-            istempalte     => true,
+            istemplate     => true,
           }
         EOS
 
