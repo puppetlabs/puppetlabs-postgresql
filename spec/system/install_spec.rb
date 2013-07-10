@@ -158,7 +158,8 @@ describe 'install:' do
           r.exit_code.should == 0
         end
       ensure
-        psql('--command="drop database template2" postgres')
+        psql('--command="drop database template2" postgres') do |r|
+          r.exit_code.should == 0
       end
     end
   end
