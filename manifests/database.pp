@@ -24,7 +24,8 @@ define postgresql::database(
   $owner = $postgresql::params::user,
   $tablespace = undef,
   $charset  = $postgresql::params::charset,
-  $locale   = $postgresql::params::locale
+  $locale   = $postgresql::params::locale,
+  $istemplate = false
 ) {
   include postgresql::params
 
@@ -76,4 +77,9 @@ define postgresql::database(
     refreshonly => true,
   }
 
+  Exec [ $createdb_command ] ->
+
+  postgresql_psql {"UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
+    unless => "SELECT datname FROM pg_database WHERE datname = '${dbname}' AND datistemplate = ${istemplate}",
+  }
 }
