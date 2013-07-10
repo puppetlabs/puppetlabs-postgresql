@@ -130,7 +130,6 @@ describe 'install:' do
         end
       end
     end
-  end
 
     it 'should update istemplate parameter' do
       begin
