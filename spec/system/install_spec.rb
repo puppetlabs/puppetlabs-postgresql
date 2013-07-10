@@ -53,6 +53,65 @@ describe 'install:' do
       end
     end
 
+    it 'should take a charset parameter' do
+      begin
+        pp = <<-EOS
+          $db = 'postgresql_test_db'
+          class { 'postgresql::server': }
+          postgresql::db { $db:
+            user     => $db,
+            password => postgresql_password($db, $db),
+            charset  => 'SQL_ASCII',
+          }
+        EOS
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should_not == 1
+        end
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should == 0
+        end
+
+        psql('--command="select datname from pg_database" postgresql_test_db') do |r|
+          r.stdout.should =~ /postgresql_test_db/
+          r.stderr.should be_empty
+          r.exit_code.should == 0
+        end
+      end
+    end
+
+    it 'should allow updating database charset' do
+      begin
+        pp = <<-EOS
+          $db = 'postgresql_test_db'
+          class { 'postgresql::server': }
+          postgresql::db { $db:
+            user           => $db,
+            password       => postgresql_password($db, $db),
+            charset        => 'UTF8',
+            update_charset => true,
+          }
+        EOS
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should_not == 1
+        end
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should == 0
+        end
+
+        psql('--command="select datname from pg_database" postgresql_test_db') do |r|
+          r.stdout.should =~ /postgresql_test_db/
+          r.stderr.should be_empty
+          r.exit_code.should == 0
+        end
+      ensure
+        psql('--command="drop database postgresql_test_db" postgres')
+      end
+    end
+
     it 'should take a locale parameter' do
       pending('no support for locale parameter with centos 5', :if => (node.facts['osfamily'] == 'RedHat' and node.facts['lsbmajdistrelease'] == '5'))
       begin
@@ -103,9 +162,41 @@ describe 'install:' do
           include postgresql::server
 
           postgresql::db { $db:
-            user        => $db,
-            password    => postgresql_password($db, $db),
-	    istemplate  => true,
+            user           => $db,
+            password       => postgresql_password($db, $db),
+            charset        => 'SQL_ASCII',
+            update_charset => true,
+            istemplate     => true,
+          }
+        EOS
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should_not == 1
+        end
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should == 0
+        end
+
+        psql('--command="select datname from pg_database" template2') do |r|
+          r.stdout.should =~ /template2/
+          r.stderr.should be_empty
+          r.exit_code.should == 0
+        end
+      end
+    end
+
+    it 'should allow updating template charset' do
+      begin
+        pp = <<-EOS
+          $db = 'template2'
+          class { 'postgresql::server': }
+          postgresql::db { $db:
+            user           => $db,
+            password       => postgresql_password($db, $db),
+            charset        => 'UTF8',
+            update_charset => true,
+            istempalte     => true,
           }
         EOS
 
