@@ -95,6 +95,75 @@ describe 'install:' do
         psql('--command="drop database test1" postgres')
       end
     end
+
+    it 'should take an istemplate parameter' do
+      begin
+        pp = <<-EOS
+          $db = 'template2'
+          include postgresql::server
+
+          postgresql::db { $db:
+            user        => $db,
+            password    => postgresql_password($db, $db),
+            istemplate  => true,
+          }
+        EOS
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should_not == 1
+        end
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should == 0
+        end
+
+        psql('--command="select datname from pg_database" template2') do |r|
+          r.stdout.should =~ /template2/
+          r.stderr.should be_empty
+          r.exit_code.should == 0
+        end
+      ensure
+        psql('--command="drop database template2" postgres') do |r|
+          r.stdout.should be_empty
+          r.stderr.should =~ /cannot drop a template database/
+          r.exit_code.should_not == 0
+        end
+      end
+    end
+  end
+
+    it 'should update istemplate parameter' do
+      begin
+        pp = <<-EOS
+          $db = 'template2'
+          include postgresql::server
+
+          postgresql::db { $db:
+            user        => $db,
+            password    => postgresql_password($db, $db),
+            istemplate  => false,
+          }
+        EOS
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should_not == 1
+        end
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should == 0
+        end
+
+        psql('--command="select datname from pg_database" template2') do |r|
+          r.stdout.should =~ /template2/
+          r.stderr.should be_empty
+          r.exit_code.should == 0
+        end
+      ensure
+        psql('--command="drop database template2" postgres') do |r|
+          r.exit_code.should == 0
+        end
+      end
+    end
   end
 
   describe 'postgresql::psql' do
