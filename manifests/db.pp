@@ -36,6 +36,7 @@
 define postgresql::db (
   $user,
   $password,
+  $template    = $postgresql::params::template,
   $charset     = $postgresql::params::charset,
   $locale      = $postgresql::params::locale,
   $grant       = 'ALL',
@@ -45,12 +46,13 @@ define postgresql::db (
 
   postgresql::database { $name:
     # TODO: ensure is not yet supported
-    #ensure     => present,
-    charset     => $charset,
-    tablespace  => $tablespace,
-    #provider   => 'postgresql',
-    require     => Class['postgresql::server'],
-    locale      => $locale,
+    #ensure    => present,
+    template   => $template,
+    charset    => $charset,
+    tablespace => $tablespace,
+    #provider  => 'postgresql',
+    require    => Class['postgresql::server'],
+    locale     => $locale,
   }
 
   if ! defined(Postgresql::Database_user[$user]) {

@@ -95,6 +95,37 @@ describe 'install:' do
         psql('--command="drop database test1" postgres')
       end
     end
+
+    it 'should take a template parameter' do
+      begin
+        pp = <<-EOS
+          $db = 'postgresql_test_db'
+          include postgresql::server
+
+          postgresql::db { $db:
+            user        => $db,
+            password    => postgresql_password($db, $db),
+	    template    => 'template1',
+          }
+        EOS
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should_not == 1
+        end
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should == 0
+        end
+
+        psql('--command="select datname from pg_database" postgresql_test_db') do |r|
+          r.stdout.should =~ /postgresql_test_db/
+          r.stderr.should be_empty
+          r.exit_code.should == 0
+        end
+      ensure
+        psql('--command="drop database postgresql_test_db" postgres')
+      end
+    end
   end
 
   describe 'postgresql::psql' do
