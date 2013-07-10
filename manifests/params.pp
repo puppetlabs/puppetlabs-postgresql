@@ -118,6 +118,10 @@ class postgresql::params(
         $bindir       = pick($custom_bindir, '/usr/bin')
         $datadir      = pick($custom_datadir, '/var/lib/pgsql/data')
         $confdir      = pick($custom_confdir, $datadir)
+        $plperl_package_name  = $::lsbmajdistrelease ? {
+          5 => 'postgresql84-plperl',
+          6 => 'postgresql-plperl',
+        }
       } else {
         $version_parts        = split($version, '[.]')
         $package_version      = "${version_parts[0]}${version_parts[1]}"
@@ -130,6 +134,7 @@ class postgresql::params(
         $bindir       = pick($custom_bindir, "/usr/pgsql-${version}/bin")
         $datadir      = pick($custom_datadir, "/var/lib/pgsql/${version}/data")
         $confdir      = pick($custom_confdir, $datadir)
+        $plperl_package_name  = "postgresql${package_version}-plperl"
       }
 
       $service_status = undef
@@ -171,6 +176,7 @@ class postgresql::params(
       $confdir              = pick($custom_confdir, "/etc/postgresql/${version}/main")
       $service_status       = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
       $python_package_name  = "python-psycopg2"
+      $plperl_package_name  = "postgresql-plperl-${version}"
     }
 
     default: {
