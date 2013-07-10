@@ -124,7 +124,7 @@ describe 'install:' do
         end
       ensure
         psql('--command="drop database template2" postgres') do |r|
-          r.stdout.should =~ /template2/
+          r.stdout.should be_empty
           r.stderr.should =~ /cannot drop a template database/
           r.exit_code.should_not == 0
       end
