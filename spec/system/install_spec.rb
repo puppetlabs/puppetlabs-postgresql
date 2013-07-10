@@ -105,7 +105,7 @@ describe 'install:' do
           postgresql::db { $db:
             user        => $db,
             password    => postgresql_password($db, $db),
-	    istemplate  => true,
+            istemplate  => true,
           }
         EOS
 
