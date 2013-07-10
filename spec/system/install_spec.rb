@@ -213,6 +213,37 @@ describe 'install:' do
           r.stderr.should be_empty
           r.exit_code.should == 0
         end
+      end
+    end
+
+    it 'should allow updating istemplate parameter' do
+      begin
+        pp = <<-EOS
+          $db = 'template2'
+          include postgresql::server
+
+          postgresql::db { $db:
+            user           => $db,
+            password       => postgresql_password($db, $db),
+            charset        => 'UTF8',
+            update_charset => true,
+            istemplate     => false,
+          }
+        EOS
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should_not == 1
+        end
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should == 0
+        end
+
+        psql('--command="select datname from pg_database" template2') do |r|
+          r.stdout.should =~ /template2/
+          r.stderr.should be_empty
+          r.exit_code.should == 0
+        end
       ensure
         psql('--command="drop database template2" postgres')
       end
