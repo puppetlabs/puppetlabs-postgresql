@@ -136,9 +136,22 @@ class postgresql::config::beforeservice(
       unless  => "[ -f `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf ]"
     }
 
+    exec { "create_postgresql_conf_path_reload":
+      command => "touch `dirname ${postgresql_conf_path}`/postgresql_puppet_extras_reload.conf",
+      path    => '/usr/bin:/bin',
+      unless  => "[ -f `dirname ${postgresql_conf_path}`/postgresql_puppet_extras_reload.conf ]"
+    }
+
     file_line { 'postgresql.conf#include':
       path        => $postgresql_conf_path,
       line        => "include 'postgresql_puppet_extras.conf'",
+      require     => Exec["create_postgresql_conf_path"],
+      notify      => Service['postgresqld'],
+    }
+
+    file_line { 'postgresql.conf#include reload':
+      path        => $postgresql_conf_path,
+      line        => "include 'postgresql_puppet_extras_reload.conf'",
       require     => Exec["create_postgresql_conf_path"],
       notify      => Service['postgresqld'],
     }
