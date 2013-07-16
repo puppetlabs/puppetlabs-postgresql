@@ -118,9 +118,9 @@ class postgresql::params(
         $bindir       = pick($custom_bindir, '/usr/bin')
         $datadir      = pick($custom_datadir, '/var/lib/pgsql/data')
         $confdir      = pick($custom_confdir, $datadir)
-        $plperl_package_name  = $::lsbmajdistrelease ? {
-          5 => 'postgresql84-plperl',
-          6 => 'postgresql-plperl',
+        $plperl_package_name  = $::operatingsystemrelease ? {
+          /^5\./ => 'postgresql84-plperl',
+          /^6\./ => 'postgresql-plperl',
         }
       } else {
         $version_parts        = split($version, '[.]')
