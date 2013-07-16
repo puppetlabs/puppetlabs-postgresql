@@ -241,7 +241,7 @@ describe 'install:' do
     end
   end
 
-  describe 'postgresql::grant' do
+  describe 'postgresql::database_grant' do
     it 'should grant access so a user can create in a database' do
       begin
         pp = <<-EOS
@@ -258,8 +258,10 @@ describe 'install:' do
 
           postgresql::database_user { $user:
             password_hash => postgresql_password($user, $password),
-            require  => [ Class['postgresql::server'],
-                          User[$user] ],
+            require       => [
+              Class['postgresql::server'],
+              User[$user],
+            ],
           }
 
           postgresql::database { $db:
@@ -267,11 +269,13 @@ describe 'install:' do
           }
 
           postgresql::database_grant { 'grant create test':
-            privilege   => 'CREATE',
-            db          => $db,
-            role        => $user,
-            require     => [ Postgresql::Database[$db],
-                             Postgresql::Database_user[$user] ],
+            privilege => 'CREATE',
+            db        => $db,
+            role      => $user,
+            require   => [
+              Postgresql::Database[$db],
+              Postgresql::Database_user[$user],
+            ],
           }
         EOS
 
