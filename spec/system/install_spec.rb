@@ -22,20 +22,6 @@ describe 'install:' do
     end
   end
 
-  it 'test postgresql::plperl' do
-    pp = <<-EOS
-      class { 'postgresql::plperl': }
-    EOS
-
-    puppet_apply(pp) do |r|
-      r.exit_code.should_not == 1
-    end
-
-    puppet_apply(pp) do |r|
-      r.exit_code.should be_zero
-    end
-  end
-
   describe 'postgresql::db' do
     it 'should idempotently create a db that we can connect to' do
       begin

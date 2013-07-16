@@ -41,6 +41,7 @@ class postgresql::params(
   $custom_contrib_package_name = undef,
   $custom_devel_package_name   = undef,
   $custom_java_package_name    = undef,
+  $custom_plperl_package_name  = undef,
   $custom_service_name         = undef,
   $custom_user                 = undef,
   $custom_group                = undef,
@@ -114,14 +115,11 @@ class postgresql::params(
         $contrib_package_name = pick($custom_contrib_package_name,'postgresql-contrib')
         $devel_package_name   = pick($custom_devel_package_name, 'postgresql-devel')
         $java_package_name    = pick($custom_java_package_name, 'postgresql-jdbc')
+        $plperl_package_name  = pick($custom_plperl_package_name, 'postgresql-plperl')
         $service_name = pick($custom_service_name, 'postgresql')
         $bindir       = pick($custom_bindir, '/usr/bin')
         $datadir      = pick($custom_datadir, '/var/lib/pgsql/data')
         $confdir      = pick($custom_confdir, $datadir)
-        $plperl_package_name  = $::operatingsystemrelease ? {
-          /^5\./  => 'postgresql84-plperl',
-          default => 'postgresql-plperl',
-        }
       } else {
         $version_parts        = split($version, '[.]')
         $package_version      = "${version_parts[0]}${version_parts[1]}"
@@ -130,11 +128,11 @@ class postgresql::params(
         $contrib_package_name = pick($custom_contrib_package_name,"postgresql${package_version}-contrib")
         $devel_package_name   = pick($custom_devel_package_name, "postgresql${package_version}-devel")
         $java_package_name    = pick($custom_java_package_name, "postgresql${package_version}-jdbc")
+        $plperl_package_name  = pick($custom_plperl_package_name, "postgresql${package_version}-plperl")
         $service_name = pick($custom_service_name, "postgresql-${version}")
         $bindir       = pick($custom_bindir, "/usr/pgsql-${version}/bin")
         $datadir      = pick($custom_datadir, "/var/lib/pgsql/${version}/data")
         $confdir      = pick($custom_confdir, $datadir)
-        $plperl_package_name  = "postgresql${package_version}-plperl"
       }
 
       $service_status = undef
