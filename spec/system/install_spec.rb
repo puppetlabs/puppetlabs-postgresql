@@ -295,6 +295,73 @@ describe 'install:' do
     end
   end
 
+  describe 'postgresql::table_grant' do
+    it 'should grant access so a user can insert in a table' do
+      begin
+        pp = <<-EOS
+          $db = 'table_grant'
+          $user = 'psql_table_tester'
+          $password = 'psql_table_pw'
+
+          include postgresql::server
+
+          # Since we are not testing pg_hba or any of that, make a local user for ident auth
+          user { $user:
+            ensure => present,
+          }
+
+          postgresql::database_user { $user:
+            password_hash => postgresql_password($user, $password),
+            require       => [
+              Class['postgresql::server'],
+              User[$user],
+            ],
+          }
+
+          postgresql::database { $db:
+            require => Class['postgresql::server'],
+          }
+
+          postgresql_psql { 'Create testing table':
+            command => 'CREATE TABLE "test_table" (field integer NOT NULL)',
+            db      => $db,
+            unless  => "SELECT * FROM pg_tables WHERE tablename = 'test_table'",
+            require => Postgresql::Database[$db],
+          }
+
+          postgresql::table_grant { 'grant insert test':
+            privilege => 'INSERT',
+            table     => 'test_table',
+            db        => $db,
+            role      => $user,
+            require   => [
+              Postgresql::Database[$db],
+              Postgresql::Database_user[$user],
+              Postgresql_psql['Create testing table'],
+            ],
+          }
+        EOS
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should_not == 1
+        end
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should be_zero
+        end
+
+        ## Check that the user can create a table in the database
+        #psql('--command="create table foo (foo int)" postgres', 'psql_grant_tester') do |r|
+        #  r.stdout.should =~ /CREATE TABLE/
+        #  r.stderr.should be_empty
+        #  r.exit_code.should == 0
+        #end
+      ensure
+        #psql('--command="drop table foo" postgres', 'psql_grant_tester')
+      end
+    end
+  end
+
   describe 'postgresql::validate_db_connections' do
     it 'should run puppet with no changes declared if database connectivity works' do
       pp = <<-EOS
