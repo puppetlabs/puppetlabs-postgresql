@@ -97,13 +97,21 @@ To manage users, roles and permissions:
       password_hash => 'foo',
     }
 
-    postgresql::database_grant{'test1':
-      privilege   => 'ALL',
-      db          => 'test1',
-      role        => 'dan',
+    postgresql::database_grant { 'test1':
+      privilege => 'ALL',
+      db        => 'test1',
+      role      => 'dan',
     }
 
-In this example, you would grant ALL privileges on the test1 database to the user or group specified by dan.
+    postgresql::table_grant { 'my_table of test2':
+      privilege => 'ALL',
+      table     => 'my_table',
+      db        => 'test2',
+      role      => 'dan',
+    }
+
+
+In this example, you would grant ALL privileges on the test1 database and on the `my_table` table of the test2 database to the user or group specified by dan.
 
 At this point, you would just need to plunk these database name/username/password values into your PuppetDB config files, and you are good to go.
 
@@ -127,6 +135,7 @@ Resources:
 * [postgresql::db](#resource-postgresqldb)
 * [postgresql::database](#resource-postgresqldatabase)
 * [postgresql::database_grant](#resource-postgresqldatabasegrant)
+* [postgresql::table_grant](#resource-postgresqltablegrant)
 * [postgresql::role](#resource-postgresqlrole)
 * [postgresql::tablespace](#resource-postgresqltablespace)
 * [postgresql::validate_db_connection](#resource-postgresqlvalidatedbconnection)
@@ -341,10 +350,34 @@ This defined type manages grant based access privileges for users. Consult the P
 Used to uniquely identify this resource, but functionality not used during grant.
 
 ####`privilege`
-Can be one of `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `TRUNCATE`, `REFERENCES`, `TRIGGER`, `USAGE`, `TEMPORARY`, `TEMP`, `CONNECT`. `ALL` is used as a synonym for `CREATE`. If you need to add multiple privileges, a space delimited string can be used.
+Can be one of `SELECT`, `TEMPORARY`, `TEMP`, `CONNECT`. `ALL` is used as a synonym for `CREATE`. If you need to add multiple privileges, a space delimited string can be used.
 
 ####`db`
 Database to grant access to.
+
+####`role`
+Role or user whom you are granting access for.
+
+####`psql_db`
+Database to execute the grant against. This should not ordinarily be changed from the default, which is `postgres`.
+
+####`psql_user`
+OS user for running `psql`. Defaults to the default user for the module, usually `postgres`.
+
+###Resource: postgresql::table\_grant
+This defined type manages grant based access privileges for users. Consult the PostgreSQL documentation for `grant` for more information.
+
+####`namevar`
+Used to uniquely identify this resource, but functionality not used during grant.
+
+####`privilege`
+Can be one of `SELECT`, `INSERT`, `UPDATE`, `REFERENCES`. `ALL` is used as a synonym for `CREATE`. If you need to add multiple privileges, a space delimited string can be used.
+
+####`table`
+Table to grant access on.
+
+####`db`
+Database of table.
 
 ####`role`
 Role or user whom you are granting access for.
