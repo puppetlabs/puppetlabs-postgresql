@@ -41,6 +41,7 @@ class postgresql::params(
   $custom_contrib_package_name = undef,
   $custom_devel_package_name   = undef,
   $custom_java_package_name    = undef,
+  $custom_plperl_package_name  = undef,
   $custom_service_name         = undef,
   $custom_user                 = undef,
   $custom_group                = undef,
@@ -115,6 +116,7 @@ class postgresql::params(
         $contrib_package_name = pick($custom_contrib_package_name,'postgresql-contrib')
         $devel_package_name   = pick($custom_devel_package_name, 'postgresql-devel')
         $java_package_name    = pick($custom_java_package_name, 'postgresql-jdbc')
+        $plperl_package_name  = pick($custom_plperl_package_name, 'postgresql-plperl')
         $service_name = pick($custom_service_name, 'postgresql')
         $bindir       = pick($custom_bindir, '/usr/bin')
         $datadir      = pick($custom_datadir, '/var/lib/pgsql/data')
@@ -127,6 +129,7 @@ class postgresql::params(
         $contrib_package_name = pick($custom_contrib_package_name,"postgresql${package_version}-contrib")
         $devel_package_name   = pick($custom_devel_package_name, "postgresql${package_version}-devel")
         $java_package_name    = pick($custom_java_package_name, "postgresql${package_version}-jdbc")
+        $plperl_package_name  = pick($custom_plperl_package_name, "postgresql${package_version}-plperl")
         $service_name = pick($custom_service_name, "postgresql-${version}")
         $bindir       = pick($custom_bindir, "/usr/pgsql-${version}/bin")
         $datadir      = pick($custom_datadir, "/var/lib/pgsql/${version}/data")
@@ -172,6 +175,7 @@ class postgresql::params(
       $confdir              = pick($custom_confdir, "/etc/postgresql/${version}/main")
       $service_status       = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
       $python_package_name  = "python-psycopg2"
+      $plperl_package_name  = "postgresql-plperl-${version}"
     }
 
     default: {
