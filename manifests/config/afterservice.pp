@@ -26,9 +26,10 @@ class postgresql::config::afterservice(
     #  to allow the postgres system user to connect via psql without specifying
     #  a password ('ident' or 'trust' security).  This is the default
     #  for pg_hba.conf.
+    $escapedpassword = postgresql_escape($postgres_password)
     exec { 'set_postgres_postgrespw':
         # This command works w/no password because we run it as postgres system user
-        command     => "psql -c \"ALTER ROLE ${postgresql::params::user} PASSWORD '${postgres_password}'\"",
+        command     => "psql -c 'ALTER ROLE \"${postgresql::params::user}\" PASSWORD ${escapedpassword}'",
         user        => $postgresql::params::user,
         group       => $postgresql::params::group,
         logoutput   => true,
@@ -38,7 +39,7 @@ class postgresql::config::afterservice(
         #  the password is correct (current), this command will exit with an exit code of 0,
         #  which will prevent the main command from running.
         unless      => "env PGPASSWORD=\"${postgres_password}\" psql -h localhost -c 'select 1' > /dev/null",
-        path        => '/usr/bin:/usr/local/bin:/bin',
+        path        => '/usr/bin:/usr/local/bin:/bin:/opt/puppet/bin',
     }
   }
 }
