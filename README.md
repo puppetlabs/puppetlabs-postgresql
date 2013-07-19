@@ -325,6 +325,9 @@ Override the locale during creation of the database. Defaults to the default def
 ####`grant`
 Grant permissions during creation. Defaults to `ALL`.
 
+####`istemplate`
+Define database as a template. Defaults to `false`.
+
 ###Resource: postgresql::database
 This defined type can be used to create a database with no users and no permissions, which is a rare use case.
 
@@ -342,6 +345,9 @@ Override the character set during creation of the database. Defaults to the defa
 
 ####`locale`
 Override the locale during creation of the database. Defaults to the default defined during installation.
+
+####`istemplate`
+Define database as a template. Defaults to `false`.
 
 ###Resource: postgresql::database\_grant
 This defined type manages grant based access privileges for users. Consult the PostgreSQL documentation for `grant` for more information.
