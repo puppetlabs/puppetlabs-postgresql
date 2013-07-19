@@ -1,3 +1,26 @@
+2013-07-19 Release 2.4.0
+========================
+
+Summary
+-------
+This updates adds the ability to change permissions on tables, create template
+databases from normal databases, manage PL-Perl's postgres package, and
+disable the management of `pg_hba.conf`.
+
+Features
+--------
+- Add `postgresql::table_grant` defined resource
+- Add `postgresql::plperl` class
+- Add `manage_pg_hba_conf` parameter to the `postgresql::config` class
+- Add `istemplate` parameter to the `postgresql::database` define
+
+Bugfixes
+--------
+- Update `postgresql::role` class to be able to update roles when modified
+instead of only on creation.
+- Update tests
+- Fix documentation of `postgresql::database_grant`
+
 2.3.0
 =====
 
