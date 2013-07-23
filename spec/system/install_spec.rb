@@ -102,13 +102,14 @@ describe 'install:' do
       pp = <<-EOS
         class { "postgresql::server":
           config_hash => {
-            'postgres_password' => 'TPSReports!',
+            'postgres_password'          => 'TPSReports!',
+            'ip_mask_deny_postgres_user' => '0.0.0.0/32',
           },
         }
       EOS
 
       puppet_apply(pp) do |r|
-        r.exit_code.should == 2
+        [0,2].should include(r.exit_code)
         r.stdout.should =~ /\[set_postgres_postgrespw\]\/returns: executed successfully/
       end
       puppet_apply(pp) do |r|
@@ -118,13 +119,18 @@ describe 'install:' do
       pp = <<-EOS
         class { "postgresql::server":
           config_hash => {
-            'postgres_password' => 'TPSR$$eports!',
+            'postgres_password'          => 'TPSR$$eports!',
+            'ip_mask_deny_postgres_user' => '0.0.0.0/32',
           },
         }
       EOS
+
       puppet_apply(pp) do |r|
-        r.exit_code.should == 2
+        [0,2].should include(r.exit_code)
         r.stdout.should =~ /\[set_postgres_postgrespw\]\/returns: executed successfully/
+      end
+      puppet_apply(pp) do |r|
+        r.exit_code.should == 0
       end
 
     end
