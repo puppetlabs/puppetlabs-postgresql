@@ -38,7 +38,7 @@ class postgresql::config::afterservice(
         #  a password.  We specify the password via the PGPASSWORD environment variable.  If
         #  the password is correct (current), this command will exit with an exit code of 0,
         #  which will prevent the main command from running.
-        unless      => "env PGPASSWORD=\"${postgres_password}\" psql -h localhost -c 'select 1' > /dev/null",
+        unless      => "env PGPASSWORD='${postgres_password}' psql -h localhost -c 'select 1' > /dev/null",
         path        => '/usr/bin:/usr/local/bin:/bin',
     }
   }
