@@ -81,7 +81,7 @@ define postgresql::role(
 
   if $password_hash {
     postgresql_psql {"ALTER ROLE \"${username}\" ${password_sql}":
-      unless => "SELECT usename FROM pg_shadow WHERE usename='${username}' and passwd='${password_hash}'",
+      unless => "SELECT usename FROM pg_shadow WHERE usename='${username}' and passwd = 'md5' || md5('${password_hash}' || '${username}')"
     }
   }
 }
