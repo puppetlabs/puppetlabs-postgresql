@@ -94,7 +94,7 @@ There are many ways to set up a postgres database using the `postgresql::db` cla
 To manage users, roles and permissions:
 
     postgresql::database_user{'marmot':
-      password_hash => 'foo',
+      password_hash => postgresql_password('marmot', 'foo'),
     }
 
     postgresql::database_grant { 'test1':
