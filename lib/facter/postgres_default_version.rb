@@ -43,6 +43,26 @@ def get_redhatfamily_postgres_version
   end
 end
 
+def get_susefamily_postgres_version
+  case Facter.value('operatingsystem')
+  when "OpenSuSE" 
+    case Facter.value('operatingsystemrelease')
+    when "12.3"
+      "9.2"
+    else
+      nil
+    end
+  when "SLES"
+    case Facter.value('operatingsystemrelease')
+    when /^11\./
+      "8.3"
+    else
+      nil
+    end
+  end
+end
+
+
 Facter.add("postgres_default_version") do
   setcode do
     result =
@@ -53,6 +73,8 @@ Facter.add("postgres_default_version") do
           get_redhatfamily_postgres_version()
         when 'Debian'
           get_debianfamily_postgres_version()
+        when 'Suse'
+          get_susefamily_postgres_version()
         else
           nil
       end
