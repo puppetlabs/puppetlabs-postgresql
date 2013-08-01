@@ -17,15 +17,15 @@
 # limitations under the License.
 
 define postgresql::role(
-    $password_hash    = false,
-    $createdb         = false,
-    $createrole       = false,
-    $db               = 'postgres',
-    $login            = false,
-    $superuser        = false,
-    $replication      = false,
-    $connection_limit = '-1',
-    $username         = $title
+  $password_hash    = false,
+  $createdb         = false,
+  $createrole       = false,
+  $db               = 'postgres',
+  $login            = false,
+  $superuser        = false,
+  $replication      = false,
+  $connection_limit = '-1',
+  $username         = $title
 ) {
   include postgresql::params
 
@@ -80,8 +80,14 @@ define postgresql::role(
   }
 
   if $password_hash {
+    if($password_hash =~ /^md5.+/) {
+      $pwd_hash_sql = $password_hash
+    } else {
+      $pwd_md5 = md5("${password_hash}${username}")
+      $pwd_hash_sql = "md5${pwd_md5}"
+    }
     postgresql_psql {"ALTER ROLE \"${username}\" ${password_sql}":
-      unless => "SELECT usename FROM pg_shadow WHERE usename='${username}' and passwd='${password_hash}'",
+      unless => "SELECT usename FROM pg_shadow WHERE usename='${username}' and passwd='${pwd_hash_sql}'",
     }
   }
 }

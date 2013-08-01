@@ -56,9 +56,9 @@ describe 'non defaults:' do
         # Currently puppetlabs/apt shows deprecated messages
         #r.stderr.should be_empty
         [2,6].should include(r.exit_code)
-      end
 
-      puppet_apply(pp) do |r|
+        r.refresh
+
         # Currently puppetlabs/apt shows deprecated messages
         #r.stderr.should be_empty
         # It also returns a 4
@@ -90,9 +90,9 @@ describe 'non defaults:' do
         #r.stderr.should be_empty
         # It also returns a 6
         [2,6].should include(r.exit_code)
-      end
 
-      puppet_apply(pp) do |r|
+        r.refresh
+
         # Currently puppetlabs/apt shows deprecated messages
         #r.stderr.should be_empty
         # It also returns a 2
