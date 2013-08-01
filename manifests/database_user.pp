@@ -22,7 +22,7 @@
 #
 # Parameters:
 #   [*user*]             - username to create.
-#   [*password_hash*]    - user's password; this may be clear text, or an md5 hash as returned by the
+#   [*password_hash*]    - user's password; this must be an md5 hash as returned by the
 #                           "postgresql_password" function in this module.
 #
 # Actions:

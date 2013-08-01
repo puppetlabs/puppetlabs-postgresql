@@ -12,8 +12,7 @@
 # Parameters:
 #   [*title*]       - postgresql database name.
 #   [*user*]        - username to create and grant access.
-#   [*password*]    - user's password.  may be md5-encoded, in the format returned by the "postgresql_password"
-#                            function in this module
+#   [*password*]    - user's password.  must be plain text
 #   [*charset*]     - database charset. defaults to 'utf8'
 #   [*grant*]       - privilege to grant user. defaults to 'all'.
 #   [*tablespace*]  - database tablespace. default to use the template database's tablespace.
@@ -59,7 +58,7 @@ define postgresql::db (
     postgresql::database_user { $user:
       # TODO: ensure is not yet supported
       #ensure         => present,
-      password_hash   => $password,
+      password_hash   => postgresql_password($user, $password),
       #provider       => 'postgresql',
       require         => Postgresql::Database[$name],
     }
