@@ -1,3 +1,18 @@
+2013-08-01 Release 2.4.1
+========================
+
+Summary
+-------
+
+This minor bugfix release solves an idempotency issue when using plain text
+passwords for the password_hash parameter for the postgresql::role defined
+type. Without this, users would continually see resource changes everytime
+your run Puppet.
+
+Bugfixes
+---------
+- Alter role call not idempotent with cleartext passwords (Ken Barber)
+
 2013-07-19 Release 2.4.0
 ========================
 
