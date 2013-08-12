@@ -4,12 +4,12 @@
 #
 # === Parameters
 #
-# [*ensure*]
-#   ensure state for package.
-#   can be specified as version.
-#
 # [*package_name*]
 #   name of package
+#
+# [*package_ensure*]
+#   ensure state for package.
+#   can be specified as version.
 #
 class postgresql::plperl(
   $package_name   = $postgresql::params::plperl_package_name,
