@@ -25,7 +25,8 @@ define postgresql::database(
   $tablespace = undef,
   $charset  = $postgresql::params::charset,
   $locale   = $postgresql::params::locale,
-  $istemplate = false
+  $istemplate = false,
+  $update_charset = false
 ) {
   include postgresql::params
 
@@ -75,6 +76,17 @@ define postgresql::database(
   postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
     db          => $postgresql::params::user,
     refreshonly => true,
+  }
+
+  if $update_charset {
+    Exec [ $createdb_command ] ->
+
+    postgresql_psql {"Set ${dbname} encoding to ${charset}":
+      command => "UPDATE pg_database SET datistemplate = FALSE WHERE datname = '${dbname}' ; UPDATE pg_database SET encoding = pg_char_to_encoding('${charset}') WHERE datname = '${dbname}'",
+      unless  => "SELECT datname FROM pg_database WHERE datname = '${dbname}' AND pg_encoding_to_char(encoding) = '${charset}'",
+      } ->
+
+      Postgresql_psql [ "UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'" ]
   }
 
   Exec [ $createdb_command ] ->

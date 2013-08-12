@@ -155,6 +155,89 @@ describe 'install:' do
         end
       end
     end
+
+    it 'should take a charset parameter' do
+      begin
+        pp = <<-EOS
+          $db = 'postgresql_test_db'
+          include postgresql::server
+
+	  postgresql::db { $db:
+            user     => $db,
+            password => postgresql_password($db, $db),
+            charset  => 'SQL_ASCII',
+          }
+        EOS
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should_not == 1
+          r.refresh
+          r.exit_code.should == 0
+        end
+
+        psql('--command="select datname from pg_database" postgresql_test_db') do |r|
+          r.stdout.should =~ /postgresql_test_db/
+          r.stderr.should be_empty
+          r.exit_code.should == 0
+        end
+      end
+    end
+
+    it 'should not update database charset if update_charset is not set to true' do
+      begin
+        pp = <<-EOS
+          $db = 'postgresql_test_db'
+          include postgresql::server
+
+	  postgresql::db { $db:
+            user     => $db,
+            password => postgresql_password($db, $db),
+            charset  => 'UTF8',
+          }
+        EOS
+
+        puppet_apply(pp) do |r|
+	  r.exit_code.should == 0
+        end
+
+        psql('--command="select datname from pg_database" postgresql_test_db') do |r|
+          r.stdout.should =~ /postgresql_test_db/
+          r.stderr.should be_empty
+          r.exit_code.should == 0
+        end
+      end
+    end
+
+    it 'should update database charset if update_charset is set to true' do
+      begin
+        pp = <<-EOS
+          $db = 'postgresql_test_db'
+          include postgresql::server
+
+	  postgresql::db { $db:
+            user           => $db,
+            password       => postgresql_password($db, $db),
+            charset        => 'UTF8',
+            update_charset => true,
+          }
+        EOS
+
+        puppet_apply(pp) do |r|
+          r.exit_code.should_not == 1
+          r.refresh
+	  r.exit_code.should == 0
+        end
+
+        psql('--command="select datname from pg_database" postgresql_test_db') do |r|
+          r.stdout.should =~ /postgresql_test_db/
+          r.stderr.should be_empty
+          r.exit_code.should == 0
+        end
+      ensure
+        psql('--command="drop database postgresql_test_db" postgres')
+      end
+    end
+
   end
 
   describe 'postgresql::psql' do
