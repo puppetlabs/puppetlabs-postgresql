@@ -21,9 +21,11 @@
 
 define postgresql::database(
   $dbname   = $title,
+  $owner = $postgresql::params::user,
   $tablespace = undef,
   $charset  = $postgresql::params::charset,
-  $locale   = $postgresql::params::locale
+  $locale   = $postgresql::params::locale,
+  $istemplate = false
 ) {
   include postgresql::params
 
@@ -47,7 +49,7 @@ define postgresql::database(
     $public_revoke_privilege = 'ALL'
   }
 
-  $createdb_command_tmp = "${postgresql::params::createdb_path} --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
+  $createdb_command_tmp = "${postgresql::params::createdb_path} --owner='${owner}' --template=template0 --encoding '${charset}' ${locale_option} '${dbname}'"
 
   if($tablespace == undef) {
     $createdb_command = $createdb_command_tmp
@@ -75,4 +77,9 @@ define postgresql::database(
     refreshonly => true,
   }
 
+  Exec [ $createdb_command ] ->
+
+  postgresql_psql {"UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
+    unless => "SELECT datname FROM pg_database WHERE datname = '${dbname}' AND datistemplate = ${istemplate}",
+  }
 }

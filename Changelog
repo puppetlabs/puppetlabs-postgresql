@@ -1,3 +1,103 @@
+2013-08-01 Release 2.4.1
+========================
+
+Summary
+-------
+
+This minor bugfix release solves an idempotency issue when using plain text
+passwords for the password_hash parameter for the postgresql::role defined
+type. Without this, users would continually see resource changes everytime
+your run Puppet.
+
+Bugfixes
+---------
+- Alter role call not idempotent with cleartext passwords (Ken Barber)
+
+2013-07-19 Release 2.4.0
+========================
+
+Summary
+-------
+This updates adds the ability to change permissions on tables, create template
+databases from normal databases, manage PL-Perl's postgres package, and
+disable the management of `pg_hba.conf`.
+
+Features
+--------
+- Add `postgresql::table_grant` defined resource
+- Add `postgresql::plperl` class
+- Add `manage_pg_hba_conf` parameter to the `postgresql::config` class
+- Add `istemplate` parameter to the `postgresql::database` define
+
+Bugfixes
+--------
+- Update `postgresql::role` class to be able to update roles when modified
+instead of only on creation.
+- Update tests
+- Fix documentation of `postgresql::database_grant`
+
+2.3.0
+=====
+
+This feature release includes the following changes:
+
+* Add a new parameter `owner` to the `database` type.  This can be used to
+  grant ownership of a new database to a specific user.  (Bruno Harbulot)
+* Add support for operating systems other than Debian/RedHat, as long as the
+  user supplies custom values for all of the required paths, package names, etc.
+  (Chris Price)
+* Improved integration testing (Ken Barber)
+
+2.2.1
+=====
+
+This release fixes a bug whereby one of our shell commands (psql) were not ran from a globally accessible directory. This was causing permission denied errors when the command attempted to change user without changing directory.
+
+Users of previous versions might have seen this error:
+
+    Error: Error executing SQL; psql returned 256: 'could not change directory to "/root"
+
+This patch should correct that.
+
+#### Detail Changes
+
+* Set /tmp as default CWD for postgresql_psql
+
+2.2.0
+=====
+
+This feature release introduces a number of new features and bug fixes.
+
+First of all it includes a new class named `postgresql::python` which provides you with a convenient way of install the python Postgresql client libraries.
+
+    class { 'postgresql::python':
+    }
+
+You are now able to use `postgresql::database_user` without having to specify a password_hash, useful for different authentication mechanisms that do not need passwords (ie. cert, local etc.).
+
+We've also provided a lot more advanced custom parameters now for greater control of your Postgresql installation. Consult the class documentation for PuppetDB in the README.
+
+This release in particular has largely been contributed by the community members below, a big thanks to one and all.
+
+#### Detailed Changes
+
+* Add support for psycopg installation (Flaper Fesp and Dan Prince)
+* Added default PostgreSQL version for Ubuntu 13.04 (Kamil Szymanski)
+* Add ability to create users without a password (Bruno Harbulot)
+* Three Puppet 2.6 fixes (Dominic Cleal)
+* Add explicit call to concat::setup when creating concat file (Dominic Cleal)
+* Fix readme typo (Jordi Boggiano)
+* Update postgres_default_version for Ubuntu (Kamil Szymanski)
+* Allow to set connection for noew role (Kamil Szymanski)
+* Fix pg_hba_rule for postgres local access (Kamil Szymanski)
+* Fix versions for travis-ci (Ken Barber)
+* Add replication support (Jordi Boggiano)
+* Cleaned up and added unit tests (Ken Barber)
+* Generalization to provide more flexability in postgresql configuration (Karel Brezina)
+* Create dependent directory for sudoers so tests work on Centos 5 (Ken Barber)
+* Allow SQL commands to be run against a specific DB (Carlos Villela)
+* Drop trailing comma to support Puppet 2.6 (Michael Arnold)
+
 2.1.1
 =====
 
@@ -60,7 +160,7 @@ A big thanks to all those listed below who made this feature release possible :-
 #### Detailed Changes
 
 2013-01-18 - Simão Fontes <simaofontes@gmail.com> & Flaper Fesp <flaper87@gmail.com>
-* Remove trailing commas from params.pp property definition for Puppet 2.6.0 compatibility 
+* Remove trailing commas from params.pp property definition for Puppet 2.6.0 compatibility
 
 2013-01-18 - Lauren Rother <lauren.rother@puppetlabs.com>
 * Updated README.md to conform with best practices template
