@@ -157,6 +157,45 @@ describe 'install:' do
     end
   end
 
+  describe 'custom postgres password' do
+    it 'should install and successfully adjust the password' do
+      pp = <<-EOS
+        class { "postgresql::server":
+          config_hash => {
+            'postgres_password'          => 'TPSReports!',
+            'ip_mask_deny_postgres_user' => '0.0.0.0/32',
+          },
+        }
+      EOS
+
+      puppet_apply(pp) do |r|
+        [0,2].should include(r.exit_code)
+        r.stdout.should =~ /\[set_postgres_postgrespw\]\/returns: executed successfully/
+      end
+      puppet_apply(pp) do |r|
+        r.exit_code.should == 0
+      end
+
+      pp = <<-EOS
+        class { "postgresql::server":
+          config_hash => {
+            'postgres_password'          => 'TPSR$$eports!',
+            'ip_mask_deny_postgres_user' => '0.0.0.0/32',
+          },
+        }
+      EOS
+
+      puppet_apply(pp) do |r|
+        [0,2].should include(r.exit_code)
+        r.stdout.should =~ /\[set_postgres_postgrespw\]\/returns: executed successfully/
+      end
+      puppet_apply(pp) do |r|
+        r.exit_code.should == 0
+      end
+
+    end
+  end
+
   describe 'postgresql::psql' do
     it 'should work but emit a deprecation warning' do
       pp = <<-EOS
