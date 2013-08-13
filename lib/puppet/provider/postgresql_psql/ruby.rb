@@ -2,7 +2,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
 
   def command()
     if ((! resource[:unless]) or (resource[:unless].empty?))
-      if (resource[:refreshonly])
+      if (resource.refreshonly?)
         # So, if there's no 'unless', and we're in "refreshonly" mode,
         # we need to return the target command here.  If we don't,
         # then Puppet will generate an event indicating that this
