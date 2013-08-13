@@ -129,6 +129,7 @@ Classes:
 * [postgresql::devel](#class-postgresqldevel)
 * [postgresql::java](#class-postgresqljava)
 * [postgresql::python](#class-postgresqlpython)
+* [postgresql::plperl](#class-postgresqlplperl)
 
 Resources:
 
@@ -293,6 +294,15 @@ The name of the postgresql python package.
 
 ####`package_ensure`
 The ensure parameter passed on to postgresql python package resource.
+
+###Class: postgresql::plperl
+This class installs the PL/Perl procedural language for postgresql.
+
+####`package_name`
+The name of the postgresql PL/Perl package.
+
+####`package_ensure`
+The ensure parameter passed on to postgresql PL/Perl package resource.
 
 ###Resource: postgresql::db
 This is a convenience resource that creates a database, user and assigns necessary permissions in one go.
