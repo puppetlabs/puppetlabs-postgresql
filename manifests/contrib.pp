@@ -24,5 +24,6 @@ class postgresql::contrib (
   package { 'postgresql-contrib':
     ensure => $package_ensure,
     name   => $package_name,
+    tag    => 'postgresql',
   }
 }
