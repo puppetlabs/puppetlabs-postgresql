@@ -1,4 +1,6 @@
-class postgresql::package_source::apt_postgresql_org {
+class postgresql::package_source::apt_postgresql_org (
+  $version
+) {
   # Here we have tried to replicate the instructions on the PostgreSQL site:
   #
   # http://www.postgresql.org/download/linux/debian/
@@ -10,7 +12,7 @@ class postgresql::package_source::apt_postgresql_org {
   apt::source { 'apt.postgresql.org':
     location          => 'http://apt.postgresql.org/pub/repos/apt/',
     release           => "${::lsbdistcodename}-pgdg",
-    repos             => 'main',
+    repos             => "main ${version}",
     required_packages => 'pgdg-keyring',
     key               => 'ACCC4CF8',
     key_source        => 'http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc',
