@@ -74,4 +74,3 @@ define postgresql::validate_db_connection(
   # appropriate relationship is created here.
   Database<|title == $database_name|> -> Exec[$exec_name]
 }
-

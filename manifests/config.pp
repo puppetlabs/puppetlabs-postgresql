@@ -71,5 +71,4 @@ class postgresql::config(
       Service['postgresqld'] ->
       Class['postgresql::config::afterservice']
 
-
 }

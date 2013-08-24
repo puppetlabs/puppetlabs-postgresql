@@ -19,14 +19,16 @@
 #   }
 #
 class postgresql::config::afterservice(
-  $postgres_password        = undef
+  $postgres_password = undef
 ) inherits postgresql::params {
+
   if ($postgres_password != undef) {
     # NOTE: this password-setting logic relies on the pg_hba.conf being configured
     #  to allow the postgres system user to connect via psql without specifying
     #  a password ('ident' or 'trust' security).  This is the default
     #  for pg_hba.conf.
     $escapedpassword = postgresql_escape($postgres_password)
+
     exec { 'set_postgres_postgrespw':
         # This command works w/no password because we run it as postgres system user
         command     => "psql -c 'ALTER ROLE \"${postgresql::params::user}\" PASSWORD ${escapedpassword}'",
