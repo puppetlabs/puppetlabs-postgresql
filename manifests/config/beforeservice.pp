@@ -2,6 +2,7 @@
 #
 # Parameters:
 #
+#   [*firewall_supported*]      - Is the firewall supported?
 #   [*ip_mask_deny_postgres_user*]   - ip mask for denying remote access for postgres user; defaults to '0.0.0.0/0',
 #                                       meaning that all TCP access for postgres user is denied.
 #   [*ip_mask_allow_all_users*]      - ip mask for allowing remote access for other users (besides postgres);
@@ -19,6 +20,7 @@
 #                                    changes include support for non-RedHat systems and finer-grained control over the
 #                                    firewall rule (currently, it simply opens up the postgres port to all TCP connections).
 #   [*manage_pg_hba_conf*]      - boolean indicating whether or not the module manages pg_hba.conf file.
+#   [*persist_firewall_command*] - Command to persist firewall connections.
 #
 # Actions:
 #
@@ -37,13 +39,15 @@
 class postgresql::config::beforeservice(
   $pg_hba_conf_path,
   $postgresql_conf_path,
+  $firewall_supported         = $postgresql::params::firewall_supported,
   $ip_mask_deny_postgres_user = $postgresql::params::ip_mask_deny_postgres_user,
   $ip_mask_allow_all_users    = $postgresql::params::ip_mask_allow_all_users,
   $listen_addresses           = $postgresql::params::listen_addresses,
   $ipv4acls                   = $postgresql::params::ipv4acls,
   $ipv6acls                   = $postgresql::params::ipv6acls,
   $manage_redhat_firewall     = $postgresql::params::manage_redhat_firewall,
-  $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf
+  $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
+  $persist_firewall_command   = $postgresql::params::persist_firewall_command,
 ) inherits postgresql::params {
 
 
@@ -64,23 +68,22 @@ class postgresql::config::beforeservice(
     }
 
     # Lets setup the base rules
+    $auth_option = $postgresql::params::version ? {
+      '8.1'   => 'sameuser',
+      default => undef,
+    }
+
     postgresql::pg_hba_rule { 'local access as postgres user':
       type        => 'local',
       user        => $postgresql::params::user,
       auth_method => 'ident',
-      auth_option => $postgresql::params::version ? {
-        '8.1'   => 'sameuser',
-        default => undef,
-      },
+      auth_option => $auth_option,
       order       => '001',
     }
     postgresql::pg_hba_rule { 'local access to database with same name':
       type        => 'local',
       auth_method => 'ident',
-      auth_option => $postgresql::params::version ? {
-        '8.1'   => 'sameuser',
-        default => undef,
-      },
+      auth_option => $auth_option,
       order       => '002',
     }
     postgresql::pg_hba_rule { 'deny access to postgresql user':
@@ -130,7 +133,7 @@ class postgresql::config::beforeservice(
   if(versioncmp($postgresql::params::version, '8.2') >= 0) {
     # Since we're adding an "include" for this extras config file, we need
     # to make sure it exists.
-    exec { "create_postgresql_conf_path":
+    exec { 'create_postgresql_conf_path':
       command => "touch `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf",
       path    => '/usr/bin:/bin',
       unless  => "[ -f `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf ]"
@@ -138,8 +141,8 @@ class postgresql::config::beforeservice(
 
     file_line { 'postgresql.conf#include':
       path        => $postgresql_conf_path,
-      line        => "include 'postgresql_puppet_extras.conf'",
-      require     => Exec["create_postgresql_conf_path"],
+      line        => 'include \'postgresql_puppet_extras.conf\'',
+      require     => Exec['create_postgresql_conf_path'],
       notify      => Service['postgresqld'],
     }
   }
@@ -149,7 +152,7 @@ class postgresql::config::beforeservice(
   # TODO: figure out a way to make this not platform-specific; debian and ubuntu have
   #        an out-of-the-box firewall configuration that seems trickier to manage
   # TODO: get rid of hard-coded port
-  if ($manage_redhat_firewall and $firewall_supported) {
+  if ( $manage_redhat_firewall and $firewall_supported ) {
       exec { 'postgresql-persist-firewall':
         command     => $persist_firewall_command,
         refreshonly => true,
