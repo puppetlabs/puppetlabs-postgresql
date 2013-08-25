@@ -18,6 +18,7 @@
 #   [*grant*]       - privilege to grant user. defaults to 'all'.
 #   [*tablespace*]  - database tablespace. default to use the template database's tablespace.
 #   [*locale*]      - locale for database. defaults to 'undef' (effectively 'C').
+#   [*istemplate*]  - determines whether or not to define database as a template. defaults to false.
 #
 # Actions:
 #
