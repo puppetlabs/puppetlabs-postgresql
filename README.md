@@ -172,10 +172,10 @@ The version of PostgreSQL to install/manage. Defaults to your operating system d
 If `true` this will setup the official PostgreSQL repositories on your host. Defaults to `false`.
 
 ####`locale`
-This will set the default database locale for all databases created with this module. Defaults to `undef` which is effectively `C`.
+This will set the default database locale for all databases created with this module. On certain operating systems when other database template is not set this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `undef` which is effectively `C`.
 
 ####`charset`
-This will set the default charset for all databases created with this module. Defaults to `UTF8`.
+This will set the default charset for all databases created with this module. On certain operating systems when other database template is not set this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `UTF8`.
 
 ####`db_template`
 This will set the default database template used during database creation. Defaults to 'template0'.
