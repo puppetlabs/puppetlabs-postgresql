@@ -130,8 +130,12 @@ class postgresql::config::beforeservice(
   if(versioncmp($postgresql::params::version, '8.2') >= 0) {
     # Since we're adding an "include" for this extras config file, we need
     # to make sure it exists.
+    # This is created by an exec rather than a file resource so that users can
+    # manage this seperately with a file resource and not have a duplicate 
+    # definition failure.
     exec { "create_postgresql_conf_path":
       command => "touch `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf",
+      user    => $postgresql::params::user,
       path    => '/usr/bin:/bin',
       unless  => "[ -f `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf ]"
     }
