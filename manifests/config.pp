@@ -66,9 +66,16 @@ class postgresql::config(
     postgres_password        => $postgres_password,
   }
 
-  Class['postgresql::config'] ->
-      Class['postgresql::config::beforeservice'] ->
-      Service['postgresqld'] ->
-      Class['postgresql::config::afterservice']
+  anchor {
+    'postgresql::config::start': ;
+    'postgresql::config::end': ;
+  }
+
+  Anchor['postgresql::config::start'] ->
+    Class['postgresql::config'] ->
+    Class['postgresql::config::beforeservice'] ->
+    Service['postgresqld'] ->
+    Class['postgresql::config::afterservice'] ->
+  Anchor['postgresql::config::end']
 
 }

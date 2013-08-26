@@ -73,13 +73,26 @@ class postgresql::server (
       status    => $service_status,
     }
 
+    anchor {
+      'postgresql::server:start': ;
+      'postgresql::server:end': ;
+    }
+
+    anchor {
+      'postgresql::server:estart': ;
+      'postgresql::server:eend': ;
+    }
+
     if ($postgresql::params::needs_initdb) {
       include postgresql::initdb
-
-      Package['postgresql-server'] -> Class['postgresql::initdb'] -> Class['postgresql::config'] -> Service['postgresqld']
+      Anchor['postgresql::server:start'] ->
+      Package['postgresql-server'] -> Class['postgresql::initdb'] -> Class['postgresql::config'] -> Service['postgresqld'] ->
+      Anchor['postgresql::server:end']
     }
     else  {
-      Package['postgresql-server'] -> Class['postgresql::config'] -> Service['postgresqld']
+      Anchor['postgresql::server:estart'] ->
+      Package['postgresql-server'] -> Class['postgresql::config'] -> Service['postgresqld'] ->
+      Anchor['postgresql::server:eend']
     }
 
     exec { 'reload_postgresql':
