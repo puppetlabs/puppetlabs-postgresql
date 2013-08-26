@@ -117,11 +117,8 @@ class postgresql::config::beforeservice(
 
   # We must set a "listen_addresses" line in the postgresql.conf if we
   #  want to allow any connections from remote hosts.
-  file_line { 'postgresql.conf#listen_addresses':
-    path        => $postgresql_conf_path,
-    match       => '^listen_addresses\s*=.*$',
-    line        => "listen_addresses = '${listen_addresses}'",
-    notify      => Service['postgresqld'],
+  postgresql::pg_conf_entry { 'listen_addresses':
+    value => "${listen_addresses}",
   }
 
   # Here we are adding an 'include' line so that users have the option of
@@ -136,11 +133,9 @@ class postgresql::config::beforeservice(
       unless  => "[ -f `dirname ${postgresql_conf_path}`/postgresql_puppet_extras.conf ]"
     }
 
-    file_line { 'postgresql.conf#include':
-      path        => $postgresql_conf_path,
-      line        => "include 'postgresql_puppet_extras.conf'",
-      require     => Exec["create_postgresql_conf_path"],
-      notify      => Service['postgresqld'],
+    postgresql::pg_conf_entry { 'include':
+      value   => 'postgresql_puppet_extras.conf',
+      require => Exec["create_postgresql_conf_path"],
     }
   }
 
