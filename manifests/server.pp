@@ -46,9 +46,9 @@ class postgresql::server (
       tag     => 'postgresql',
     }->
     file { $datadir:
-      ensure => absent,
+      ensure  => absent,
       recurse => true,
-      force => true,
+      force   => true,
     }
   } else {
     package { 'postgresql-server':
