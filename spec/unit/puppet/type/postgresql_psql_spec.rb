@@ -30,6 +30,7 @@ describe Puppet::Type.type(:postgresql_psql), :unless => Puppet.features.microso
       :psql_group  => "postgres",
       :cwd         => "/var/lib",
       :refreshonly => :true,
+      :search_path => [ "schema1", "schema2"]
     }.each do |attr, value|
       context attr do
         let(:attributes) do { attr => value } end
