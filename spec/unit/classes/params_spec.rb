@@ -3,8 +3,9 @@ require 'spec_helper'
 describe 'postgresql::params', :type => :class do
   let :facts do
     {
-      :postgres_default_version => '8.4',
       :osfamily => 'Debian',
+      :operatingsystem => 'Debian',
+      :operatingsystemrelease => '6.0',
     }
   end
   it { should include_class("postgresql::params") }

@@ -1,106 +1,62 @@
-# Class: postgresql::server
-#
-# == Class: postgresql::server
-# Manages the installation of the postgresql server.  manages the package and
-# service.
-#
-# === Parameters:
-# [*package_name*] - name of package
-# [*service_name*] - name of service
-#
-# Configuration:
-#   Advanced configuration setting parameters can be placed into 'postgresql_puppet_extras.conf' (located in the same
-#   folder as 'postgresql.conf'). You can manage that file as a normal puppet file resource, or however you see fit;
-#   which gives you complete control over the settings. Any value you specify in that file will override any existing
-#   value set in the templated version.
-#
-# Actions:
-#
-# Requires:
-#
-# Sample Usage:
-#
+# This installs a PostgreSQL server. See README.md for more details.
 class postgresql::server (
-  $ensure           = 'present',
-  $package_name     = $postgresql::params::server_package_name,
-  $package_ensure   = 'present',
-  $service_name     = $postgresql::params::service_name,
-  $service_provider = $postgresql::params::service_provider,
-  $service_status   = $postgresql::params::service_status,
-  $config_hash      = {},
-  $datadir          = $postgresql::params::datadir
+  $ensure                     = true,
+  $postgres_password          = undef,
+
+  $package_name               = $postgresql::params::server_package_name,
+  $package_ensure             = $ensure,
+
+  $service_name               = $postgresql::params::service_name,
+  $service_provider           = $postgresql::params::service_provider,
+  $service_status             = $postgresql::params::service_status,
+
+  $listen_addresses           = $postgresql::params::listen_addresses,
+  $ip_mask_deny_postgres_user = $postgresql::params::ip_mask_deny_postgres_user,
+  $ip_mask_allow_all_users    = $postgresql::params::ip_mask_allow_all_users,
+  $ipv4acls                   = $postgresql::params::ipv4acls,
+  $ipv6acls                   = $postgresql::params::ipv6acls,
+
+  $initdb_path                = $postgresql::params::initdb_path,
+  $createdb_path              = $postgresql::params::createdb_path,
+  $psql_path                  = $postgresql::params::psql_path,
+  $pg_hba_conf_path           = $postgresql::params::pg_hba_conf_path,
+  $postgresql_conf_path       = $postgresql::params::postgresql_conf_path,
+
+  $pg_hba_conf_defaults       = $postgresql::params::pg_hba_conf_defaults,
+
+  $user                       = $postgresql::params::user,
+  $group                      = $postgresql::params::group,
+
+  $needs_initdb               = $postgresql::params::needs_initdb,
+
+  $encoding                   = $postgresql::params::encoding,
+  $locale                     = $postgresql::params::locale,
+
+  $manage_firewall            = $postgresql::params::manage_firewall,
+  $firewall_supported         = $postgresql::params::firewall_supported
 ) inherits postgresql::params {
+  $pg = 'postgresql::server'
 
-  if ($ensure == 'absent') {
-    service { 'postgresqld':
-      ensure    => stopped,
-      name      => $service_name,
-      enable    => false,
-      provider  => $service_provider,
-      hasstatus => true,
-      status    => $service_status,
-    }->
-    package { 'postgresql-server':
-      ensure  => purged,
-      name    => $package_name,
-      tag     => 'postgresql',
-    }->
-    file { $datadir:
-      ensure  => absent,
-      recurse => true,
-      force   => true,
-    }
+  if ($ensure == 'present' or $ensure == true) {
+    # Reload has its own ordering, specified by other defines
+    class { "${pg}::reload": }
+
+    anchor { "${pg}::start": }->
+    class { "${pg}::install": }->
+    class { "${pg}::initdb": }->
+    class { "${pg}::config": }->
+    class { "${pg}::service": }->
+    class { "${pg}::passwd": }->
+    class { "${pg}::firewall": }->
+    anchor { "${pg}::end": }
   } else {
-    package { 'postgresql-server':
-      ensure  => $package_ensure,
-      name    => $package_name,
-      tag     => 'postgresql',
-    }
-
-    $config_class = {
-      'postgresql::config' => $config_hash,
-    }
-
-    create_resources( 'class', $config_class )
-
-    service { 'postgresqld':
-      ensure    => running,
-      name      => $service_name,
-      enable    => true,
-      require   => Package['postgresql-server'],
-      provider  => $service_provider,
-      hasstatus => true,
-      status    => $service_status,
-    }
-
-    anchor {
-      'postgresql::server:start': ;
-      'postgresql::server:end': ;
-    }
-
-    anchor {
-      'postgresql::server:estart': ;
-      'postgresql::server:eend': ;
-    }
-
-    if ($postgresql::params::needs_initdb) {
-      include postgresql::initdb
-      Anchor['postgresql::server:start'] ->
-      Package['postgresql-server'] -> Class['postgresql::initdb'] -> Class['postgresql::config'] -> Service['postgresqld'] ->
-      Anchor['postgresql::server:end']
-    }
-    else  {
-      Anchor['postgresql::server:estart'] ->
-      Package['postgresql-server'] -> Class['postgresql::config'] -> Service['postgresqld'] ->
-      Anchor['postgresql::server:eend']
-    }
-
-    exec { 'reload_postgresql':
-      path        => '/usr/bin:/usr/sbin:/bin:/sbin',
-      command     => "service ${service_name} reload",
-      onlyif      => $service_status,
-      refreshonly => true,
-    }
+    anchor { "${pg}::start": }->
+    class { "${pg}::firewall": }->
+    class { "${pg}::passwd": }->
+    class { "${pg}::service": }->
+    class { "${pg}::install": }->
+    class { "${pg}::initdb": }->
+    class { "${pg}::config": }->
+    anchor { "${pg}::end": }
   }
-
 }

@@ -3,20 +3,26 @@ require 'spec_helper'
 describe 'postgresql::validate_db_connection', :type => :define do
   let :facts do
     {
-      :postgres_default_version => '8.4',
       :osfamily => 'Debian',
+      :operatingsystem => 'Debian',
+      :operatingsystemrelease => '6.0',
     }
   end
+
   let :title do
     'test'
   end
-  let :params do
-    {
-      :database_host => 'test',
-      :database_name => 'test',
-      :database_password => 'test',
-      :database_username => 'test',
-    }
+
+  describe 'should work with all parameters' do
+    let :params do
+      {
+        :database_host => 'test',
+        :database_name => 'test',
+        :database_password => 'test',
+        :database_username => 'test',
+        :database_port => 5432,
+      }
+    end
+    it { should contain_postgresql__validate_db_connection('test') }
   end
-  it { should include_class("postgresql::params") }
 end
