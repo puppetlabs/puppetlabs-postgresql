@@ -172,10 +172,13 @@ The version of PostgreSQL to install/manage. Defaults to your operating system d
 If `true` this will setup the official PostgreSQL repositories on your host. Defaults to `false`.
 
 ####`locale`
-This will set the default database locale for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `undef` which is effectively `C`.
+This will set the default database locale for all databases created with this module. On certain operating systems when other database template is not set this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `undef` which is effectively `C`.
 
 ####`charset`
-This will set the default charset for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `UTF8`.
+This will set the default charset for all databases created with this module. On certain operating systems when other database template is not set this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `UTF8`.
+
+####`db_template`
+This will set the default database template used during database creation. Defaults to 'template0'.
 
 ####`datadir`
 This setting can be used to override the default postgresql data directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
@@ -332,6 +335,9 @@ Override the character set during creation of the database. Defaults to the defa
 ####`locale`
 Override the locale during creation of the database. Defaults to the default defined during installation.
 
+####`db_template`
+Override the database template used during database creation. Defaults to `template0`.
+
 ####`grant`
 Grant permissions during creation. Defaults to `ALL`.
 
@@ -355,6 +361,9 @@ Override the character set during creation of the database. Defaults to the defa
 
 ####`locale`
 Override the locale during creation of the database. Defaults to the default defined during installation.
+
+####`db_template`
+Override the database template used during database creation. Defaults to `template0`.
 
 ####`istemplate`
 Define database as a template. Defaults to `false`.

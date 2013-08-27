@@ -33,6 +33,9 @@
 # [*charset*]
 #    Sets the default charset to be used for initdb and createdb.
 #    Defaults to 'UTF8'.
+# [*db_template*]
+#    Sets the default database template used during database creation.
+#    Defaults to 'template0'.
 # [*datadir*]
 #    This setting can be used to override the default postgresql
 #    data directory for the target platform. If not specified, the
@@ -109,6 +112,7 @@ class postgresql (
   $package_source       = undef,
   $locale               = undef,
   $charset              = 'UTF8',
+  $db_template          = 'template0',
   $datadir              = undef,
   $confdir              = undef,
   $bindir               = undef,
@@ -129,6 +133,7 @@ class postgresql (
     package_source              => $package_source,
     locale                      => $locale,
     charset                     => $charset,
+    db_template                 => $db_template,
     custom_datadir              => $datadir,
     custom_confdir              => $confdir,
     custom_bindir               => $bindir,
