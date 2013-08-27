@@ -51,6 +51,10 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   end
 
   def run_sql_command(sql)
+    if resource[:search_path]
+      sql = "set search_path to #{Array(resource[:search_path]).join(',')}; #{sql}"
+    end
+
     command = [resource[:psql_path]]
     command.push("-d", resource[:db]) if resource[:db]
     command.push("-t", "-c", sql)
