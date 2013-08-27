@@ -37,7 +37,7 @@ define postgresql::role(
   if ($password_hash != false) {
     $password_sql = "ENCRYPTED PASSWORD '${password_hash}'"
   } else {
-    $password_sql = ""
+    $password_sql = ''
   }
 
   Postgresql_psql {

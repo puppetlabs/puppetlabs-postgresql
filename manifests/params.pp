@@ -94,7 +94,7 @@ class postgresql::params(
   # that pluginsync might not be enabled.  Ideally this would be handled directly
   # in puppet.
   if ($::postgres_default_version == undef) {
-    fail "No value for postgres_default_version facter fact; it's possible that you don't have pluginsync enabled."
+    fail('No value for postgres_default_version facter fact; it\'s possible that you don\'t have pluginsync enabled.')
   }
 
   case $::operatingsystem {
@@ -111,33 +111,33 @@ class postgresql::params(
       $persist_firewall_command = '/sbin/iptables-save > /etc/sysconfig/iptables'
 
       if $version == $::postgres_default_version {
-        $client_package_name  = pick($custom_client_package_name, 'postgresql')
-        $server_package_name  = pick($custom_server_package_name, 'postgresql-server')
-        $contrib_package_name = pick($custom_contrib_package_name,'postgresql-contrib')
-        $devel_package_name   = pick($custom_devel_package_name, 'postgresql-devel')
-        $java_package_name    = pick($custom_java_package_name, 'postgresql-jdbc')
-        $plperl_package_name  = pick($custom_plperl_package_name, 'postgresql-plperl')
-        $service_name = pick($custom_service_name, 'postgresql')
-        $bindir       = pick($custom_bindir, '/usr/bin')
-        $datadir      = pick($custom_datadir, '/var/lib/pgsql/data')
-        $confdir      = pick($custom_confdir, $datadir)
+        $client_package_name    = pick($custom_client_package_name, 'postgresql')
+        $server_package_name    = pick($custom_server_package_name, 'postgresql-server')
+        $contrib_package_name   = pick($custom_contrib_package_name,'postgresql-contrib')
+        $devel_package_name     = pick($custom_devel_package_name, 'postgresql-devel')
+        $java_package_name      = pick($custom_java_package_name, 'postgresql-jdbc')
+        $plperl_package_name    = pick($custom_plperl_package_name, 'postgresql-plperl')
+        $service_name           = pick($custom_service_name, 'postgresql')
+        $bindir                 = pick($custom_bindir, '/usr/bin')
+        $datadir                = pick($custom_datadir, '/var/lib/pgsql/data')
+        $confdir                = pick($custom_confdir, $datadir)
       } else {
-        $version_parts        = split($version, '[.]')
-        $package_version      = "${version_parts[0]}${version_parts[1]}"
-        $client_package_name  = pick($custom_client_package_name, "postgresql${package_version}")
-        $server_package_name  = pick($custom_server_package_name, "postgresql${package_version}-server")
-        $contrib_package_name = pick($custom_contrib_package_name,"postgresql${package_version}-contrib")
-        $devel_package_name   = pick($custom_devel_package_name, "postgresql${package_version}-devel")
-        $java_package_name    = pick($custom_java_package_name, "postgresql${package_version}-jdbc")
-        $plperl_package_name  = pick($custom_plperl_package_name, "postgresql${package_version}-plperl")
-        $service_name = pick($custom_service_name, "postgresql-${version}")
-        $bindir       = pick($custom_bindir, "/usr/pgsql-${version}/bin")
-        $datadir      = pick($custom_datadir, "/var/lib/pgsql/${version}/data")
-        $confdir      = pick($custom_confdir, $datadir)
+        $version_parts          = split($version, '[.]')
+        $package_version        = "${version_parts[0]}${version_parts[1]}"
+        $client_package_name    = pick($custom_client_package_name, "postgresql${package_version}")
+        $server_package_name    = pick($custom_server_package_name, "postgresql${package_version}-server")
+        $contrib_package_name   = pick($custom_contrib_package_name,"postgresql${package_version}-contrib")
+        $devel_package_name     = pick($custom_devel_package_name, "postgresql${package_version}-devel")
+        $java_package_name      = pick($custom_java_package_name, "postgresql${package_version}-jdbc")
+        $plperl_package_name    = pick($custom_plperl_package_name, "postgresql${package_version}-plperl")
+        $service_name           = pick($custom_service_name, "postgresql-${version}")
+        $bindir                 = pick($custom_bindir, "/usr/pgsql-${version}/bin")
+        $datadir                = pick($custom_datadir, "/var/lib/pgsql/${version}/data")
+        $confdir                = pick($custom_confdir, $datadir)
       }
 
-      $service_status = undef
-      $python_package_name="python-psycopg2"
+      $service_status      = undef
+      $python_package_name = 'python-psycopg2'
     }
 
     'Debian': {
@@ -146,10 +146,10 @@ class postgresql::params(
       #$persist_firewall_command = '/sbin/iptables-save > /etc/iptables/rules.v4'
 
       if $manage_package_repo == true {
-        $needs_initdb             = pick($run_initdb, true)
+        $needs_initdb = pick($run_initdb, true)
         $service_name = pick($custom_service_name, 'postgresql')
       } else {
-        $needs_initdb             = pick($run_initdb, false)
+        $needs_initdb = pick($run_initdb, false)
         case $::operatingsystem {
           'Debian': {
             $service_name = pick($custom_service_name, 'postgresql')
@@ -162,6 +162,7 @@ class postgresql::params(
               $service_name = pick($custom_service_name, 'postgresql')
             }
           }
+          default: { }
         }
       }
 
@@ -174,7 +175,7 @@ class postgresql::params(
       $datadir              = pick($custom_datadir, "/var/lib/postgresql/${version}/main")
       $confdir              = pick($custom_confdir, "/etc/postgresql/${version}/main")
       $service_status       = "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'"
-      $python_package_name  = "python-psycopg2"
+      $python_package_name  = 'python-psycopg2'
       $plperl_package_name  = "postgresql-plperl-${version}"
     }
 
@@ -210,8 +211,8 @@ class postgresql::params(
 
 
       $contrib_package_name = $custom_contrib_package_name
-      $devel_package_name = $custom_devel_package_name
-      $java_package_name = $custom_java_package_name
+      $devel_package_name   = $custom_devel_package_name
+      $java_package_name    = $custom_java_package_name
 
       if ($custom_bindir) {
         $bindir = $custom_bindir
