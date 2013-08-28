@@ -31,6 +31,7 @@ describe 'non defaults:' do
           user        => "foo1",
           password    => "foo1",
         }
+        class { "postgresql::perl": }
       EOS
 
       puppet_apply(pp) do |r|
