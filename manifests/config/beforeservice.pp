@@ -47,7 +47,7 @@ class postgresql::config::beforeservice(
   $ipv6acls                   = $postgresql::params::ipv6acls,
   $manage_redhat_firewall     = $postgresql::params::manage_redhat_firewall,
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
-  $persist_firewall_command   = $postgresql::params::persist_firewall_command,
+  $persist_firewall_command   = $postgresql::params::persist_firewall_command
 ) inherits postgresql::params {
 
 
