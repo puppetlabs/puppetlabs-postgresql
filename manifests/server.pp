@@ -22,6 +22,8 @@ class postgresql::server (
   $pg_hba_conf_path           = $postgresql::params::pg_hba_conf_path,
   $postgresql_conf_path       = $postgresql::params::postgresql_conf_path,
 
+  $datadir                    = $postgresql::params::datadir,
+
   $pg_hba_conf_defaults       = $postgresql::params::pg_hba_conf_defaults,
 
   $user                       = $postgresql::params::user,
