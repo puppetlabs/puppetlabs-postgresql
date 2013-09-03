@@ -41,7 +41,7 @@ class postgresql::globals (
 ) {
   # We are determining this here, because it is needed by the package repo
   # class.
-  $postgres_default_version = $::osfamily ? {
+  $default_version = $::osfamily ? {
     /^(RedHat|Linux)/ => $::operatingsystemrelease ? {
       /^6\./ => '8.4',
       /^5\./ => '8.1',
@@ -50,7 +50,7 @@ class postgresql::globals (
     'Debian' => $::operatingsystem ? {
       'Debian' => $::operatingsystemrelease ? {
         /^6\./ => '8.4',
-        /^(wheezy|7\.)$/ => '9.1',
+        /^(wheezy|7\.)/ => '9.1',
         default => undef,
       },
       'Ubuntu' => $::operatingsystemrelease ? {
@@ -62,7 +62,7 @@ class postgresql::globals (
     },
     default => undef,
   }
-  $globals_version = pick($version, $postgres_default_version, 'unknown')
+  $globals_version = pick($version, $default_version, 'unknown')
   if($globals_version == 'unknown') {
     fail("No preferred version defined or automatically detected.")
   }
