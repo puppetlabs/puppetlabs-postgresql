@@ -13,33 +13,33 @@ class postgresql::params inherits postgresql::globals {
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $::osfamily {
     'RedHat', 'Linux': {
-      $needs_initdb             = pick($needs_initdb, true)
-      $firewall_supported       = pick($firewall_supported, true)
+      $needs_initdb       = pick($needs_initdb, true)
+      $firewall_supported = pick($firewall_supported, true)
 
-      if $version == $postgres_default_version {
-        $client_package_name    = pick($client_package_name, 'postgresql')
-        $server_package_name    = pick($server_package_name, 'postgresql-server')
-        $contrib_package_name   = pick($contrib_package_name,'postgresql-contrib')
-        $devel_package_name     = pick($devel_package_name, 'postgresql-devel')
-        $java_package_name      = pick($java_package_name, 'postgresql-jdbc')
-        $plperl_package_name    = pick($plperl_package_name, 'postgresql-plperl')
-        $service_name           = pick($service_name, 'postgresql')
-        $bindir                 = pick($bindir, '/usr/bin')
-        $datadir                = pick($datadir, '/var/lib/pgsql/data')
-        $confdir                = pick($confdir, $datadir)
+      if $version == $default_version {
+        $client_package_name  = pick($client_package_name, 'postgresql')
+        $server_package_name  = pick($server_package_name, 'postgresql-server')
+        $contrib_package_name = pick($contrib_package_name,'postgresql-contrib')
+        $devel_package_name   = pick($devel_package_name, 'postgresql-devel')
+        $java_package_name    = pick($java_package_name, 'postgresql-jdbc')
+        $plperl_package_name  = pick($plperl_package_name, 'postgresql-plperl')
+        $service_name         = pick($service_name, 'postgresql')
+        $bindir               = pick($bindir, '/usr/bin')
+        $datadir              = pick($datadir, '/var/lib/pgsql/data')
+        $confdir              = pick($confdir, $datadir)
       } else {
-        $version_parts          = split($version, '[.]')
-        $package_version        = "${version_parts[0]}${version_parts[1]}"
-        $client_package_name    = pick($client_package_name, "postgresql${package_version}")
-        $server_package_name    = pick($server_package_name, "postgresql${package_version}-server")
-        $contrib_package_name   = pick($contrib_package_name,"postgresql${package_version}-contrib")
-        $devel_package_name     = pick($devel_package_name, "postgresql${package_version}-devel")
-        $java_package_name      = pick($java_package_name, "postgresql${package_version}-jdbc")
-        $plperl_package_name    = pick($plperl_package_name, "postgresql${package_version}-plperl")
-        $service_name           = pick($service_name, "postgresql-${version}")
-        $bindir                 = pick($bindir, "/usr/pgsql-${version}/bin")
-        $datadir                = pick($datadir, "/var/lib/pgsql/${version}/data")
-        $confdir                = pick($confdir, $datadir)
+        $version_parts        = split($version, '[.]')
+        $package_version      = "${version_parts[0]}${version_parts[1]}"
+        $client_package_name  = pick($client_package_name, "postgresql${package_version}")
+        $server_package_name  = pick($server_package_name, "postgresql${package_version}-server")
+        $contrib_package_name = pick($contrib_package_name,"postgresql${package_version}-contrib")
+        $devel_package_name   = pick($devel_package_name, "postgresql${package_version}-devel")
+        $java_package_name    = pick($java_package_name, "postgresql${package_version}-jdbc")
+        $plperl_package_name  = pick($plperl_package_name, "postgresql${package_version}-plperl")
+        $service_name         = pick($service_name, "postgresql-${version}")
+        $bindir               = pick($bindir, "/usr/pgsql-${version}/bin")
+        $datadir              = pick($datadir, "/var/lib/pgsql/${version}/data")
+        $confdir              = pick($confdir, $datadir)
       }
 
       $service_status      = $service_status

@@ -18,14 +18,14 @@ define postgresql::server::db (
 
   if ! defined(Postgresql::Server::Role[$user]) {
     postgresql::server::role { $user:
-      password_hash   => $password,
+      password_hash => $password,
     }
   }
 
   postgresql::server::database_grant { "GRANT ${user} - ${grant} - ${name}":
-    privilege       => $grant,
-    db              => $name,
-    role            => $user,
+    privilege => $grant,
+    db        => $name,
+    role      => $user,
   }
 
   if($tablespace != undef and defined(Postgresql::Server::Tablespace[$tablespace])) {
