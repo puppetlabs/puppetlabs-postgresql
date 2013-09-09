@@ -1,3 +1,24 @@
+2013-09-09 Release 2.5.0
+=======================
+
+Summary
+-------
+
+The focus of this release is primarily to capture the fixes done to the
+types and providers to make sure refreshonly works properly and to set
+the stage for the large scale refactoring work of 3.0.0.
+
+Features
+--------
+
+Bugfixes 
+--------
+- Use boolean for refreshonly.
+- Fix postgresql::plperl documentation.
+- Add two missing parameters to config::beforeservice
+- Style fixes
+
+
 2013-08-01 Release 2.4.1
 ========================
 
