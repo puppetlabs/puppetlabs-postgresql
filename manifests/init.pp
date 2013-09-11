@@ -38,6 +38,10 @@
 #    data directory for the target platform. If not specified, the
 #    module will use whatever directory is the default for your
 #    OS distro.
+# [*xlogdir*]
+#    This setting can be used to override the default postgresql
+#    xlog directory location. If not specified, the
+#    module will use the pg_xlog directory in data directory.
 # [*confdir*]
 #    This setting can be used to override the default postgresql
 #    configuration directory for the target platform. If not
@@ -110,6 +114,7 @@ class postgresql (
   $locale               = undef,
   $charset              = 'UTF8',
   $datadir              = undef,
+  $xlogdir              = undef,
   $confdir              = undef,
   $bindir               = undef,
   $client_package_name  = undef,
@@ -130,6 +135,7 @@ class postgresql (
     locale                      => $locale,
     charset                     => $charset,
     custom_datadir              => $datadir,
+    xlogdir                     => $xlogdir,
     custom_confdir              => $confdir,
     custom_bindir               => $bindir,
     custom_client_package_name  => $client_package_name,
