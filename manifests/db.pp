@@ -37,23 +37,25 @@
 define postgresql::db (
   $user,
   $password,
-  $charset    = $postgresql::params::charset,
-  $locale     = $postgresql::params::locale,
-  $grant      = 'ALL',
-  $tablespace = undef,
-  $istemplate = false
+  $charset        = $postgresql::params::charset,
+  $locale         = $postgresql::params::locale,
+  $grant          = 'ALL',
+  $tablespace     = undef,
+  $istemplate     = false,
+  $update_charset = false
 ) {
   include postgresql::params
 
   postgresql::database { $name:
     # TODO: ensure is not yet supported
-    #ensure    => present,
-    charset    => $charset,
-    tablespace => $tablespace,
-    #provider  => 'postgresql',
-    require    => Class['postgresql::server'],
-    locale     => $locale,
-    istemplate => $istemplate,
+    #ensure        => present,
+    charset        => $charset,
+    tablespace     => $tablespace,
+    #provider      => 'postgresql',
+    require        => Class['postgresql::server'],
+    locale         => $locale,
+    istemplate     => $istemplate,
+    update_charset => $update_charset,
   }
 
   if ! defined(Postgresql::Database_user[$user]) {
