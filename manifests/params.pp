@@ -45,7 +45,9 @@ class postgresql::params(
   $custom_service_name         = undef,
   $custom_user                 = undef,
   $custom_group                = undef,
-  $run_initdb                  = undef
+  $run_initdb                  = undef,
+  $manage_postgresql_conf      = true,
+  $manage_pg_hba_conf          = true
 ) {
   $user                         = pick($custom_user, 'postgres')
   $group                        = pick($custom_group, 'postgres')
@@ -54,7 +56,6 @@ class postgresql::params(
   $listen_addresses             = 'localhost'
   $ipv4acls                     = []
   $ipv6acls                     = []
-  $manage_pg_hba_conf           = true
   # TODO: figure out a way to make this not platform-specific
   $manage_redhat_firewall       = false
 

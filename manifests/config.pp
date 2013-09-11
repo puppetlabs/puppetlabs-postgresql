@@ -19,7 +19,8 @@
 #                                       redhat-based systems; this parameter is likely to change in future versions.  Possible
 #                                       changes include support for non-RedHat systems and finer-grained control over the
 #                                       firewall rule (currently, it simply opens up the postgres port to all TCP connections).
-#   [*manage_pg_hba_conf*]      - boolean indicating whether or not the module manages pg_hba.conf file.
+#   [*manage_postgresql_conf*]       - boolean indicating whether or not the module manages postgresql.conf file.
+#   [*manage_pg_hba_conf*]           - boolean indicating whether or not the module manages pg_hba.conf file.
 #
 #
 # Actions:
@@ -43,6 +44,7 @@ class postgresql::config(
   $pg_hba_conf_path           = $postgresql::params::pg_hba_conf_path,
   $postgresql_conf_path       = $postgresql::params::postgresql_conf_path,
   $manage_redhat_firewall     = $postgresql::params::manage_redhat_firewall,
+  $manage_postgresql_conf     = $postgresql::params::manage_postgresql_conf,
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf
 ) inherits postgresql::params {
 
@@ -59,6 +61,7 @@ class postgresql::config(
     pg_hba_conf_path           => $pg_hba_conf_path,
     postgresql_conf_path       => $postgresql_conf_path,
     manage_redhat_firewall     => $manage_redhat_firewall,
+    manage_postgresql_conf     => $manage_postgresql_conf,
     manage_pg_hba_conf         => $manage_pg_hba_conf,
   }
 
