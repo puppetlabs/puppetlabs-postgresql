@@ -76,6 +76,48 @@ class postgresql::server (
     if ($postgresql::params::needs_initdb) {
       include postgresql::initdb
 
+      case $::osfamily {
+        'Debian': {
+
+          # Disable the creation of "main" clusters when postgresql server packages are installed
+          # Requires postgresql-common (=> 142) to do something.
+          Apt::Source['apt.postgresql.org']->
+          package { 'postgresql-common':
+            ensure => latest,
+          }->
+          file_line { 'createcluster.conf_create_main_cluster':
+            path   => '/etc/postgresql-common/createcluster.conf',
+            match  => '^\s*create_main_cluster',
+            line   => 'create_main_cluster = false',
+          }->
+          Package<| tag == 'postgresql' |>
+
+          # Register the postgresql datadir to debian scripts
+          exec { 'postgresql_debian_register':
+            path        => '/usr/bin:/usr/sbin:/bin:/sbin',
+            command     => "pg_createcluster ${postgresql::params::version} main --datadir '${postgresql::params::datadir}'",
+            unless      => "test -f /etc/postgresql/${postgresql::params::version}/main/postgresql.conf",
+            require     => Exec['postgresql_initdb'],
+            before      => Class['postgresql::config'],
+          }
+
+        }
+
+        'RedHat', 'Linux': {
+          # Save the postgresql datadir location for init scripts
+          file { "/etc/sysconfig/pgsql/${postgresql::params::service_name}":
+            ensure  => file,
+            content => inline_template('PGDATA=<%=scope.lookupvar(\'postgresql::params::datadir\')%>'),
+            require => Package['postgresql-server'],
+            before  => Service['postgresqld'],
+          }
+        }
+
+        default: {
+          fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
+        }
+      }
+
       Package['postgresql-server'] -> Class['postgresql::initdb'] -> Class['postgresql::config'] -> Service['postgresqld']
     }
     else  {
