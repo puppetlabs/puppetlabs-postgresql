@@ -183,6 +183,7 @@ describe 'server with firewall:' do
   context 'test installing postgresql with firewall management on' do
     it 'perform installation and make sure it is idempotent' do
       pp = <<-EOS
+        class { 'firewall': }
         class { "postgresql::server":
           manage_firewall => true,
         }
