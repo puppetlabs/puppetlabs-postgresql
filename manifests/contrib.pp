@@ -1,24 +1,8 @@
-# Class: postgresql::contrib
-#
-# This class installs the postgresql contrib package.
-#
-# Parameters:
-#   [*package_name*]    - The name of the postgresql contrib package.
-#   [*package_ensure*]  - The ensure value of the package.
-#
-# Actions:
-#
-# Requires:
-#
-# Sample Usage:
-#
-#   class { 'postgresql::contrib': }
-#
+# Install the contrib postgresql packaging. See README.md for more details.
 class postgresql::contrib (
   $package_name   = $postgresql::params::contrib_package_name,
   $package_ensure = 'present'
 ) inherits postgresql::params {
-
   validate_string($package_name)
 
   package { 'postgresql-contrib':
