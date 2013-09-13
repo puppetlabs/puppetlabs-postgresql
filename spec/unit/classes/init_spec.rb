@@ -29,6 +29,7 @@ describe 'postgresql', :type => :class do
         :user => 'my-postgresql',
         :group => 'my-postgresql',
         :run_initdb => true,
+        :manage_service => true,
       }}
 
       it { should include_class("postgresql") }
@@ -62,6 +63,7 @@ describe 'postgresql', :type => :class do
         :user => 'my-postgresql',
         :group => 'my-postgresql',
         :run_initdb => true,
+        :manage_service => true,
       }}
 
       it { should include_class("postgresql") }

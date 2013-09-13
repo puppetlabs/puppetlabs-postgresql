@@ -48,6 +48,7 @@ class postgresql::config::beforeservice(
   $manage_redhat_firewall     = $postgresql::params::manage_redhat_firewall,
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $persist_firewall_command   = $postgresql::params::persist_firewall_command,
+  $manage_service             = $postgresql::params::manage_service,
 ) inherits postgresql::params {
 
 
@@ -59,7 +60,10 @@ class postgresql::config::beforeservice(
   if $manage_pg_hba_conf {
     # Create the main pg_hba resource
     postgresql::pg_hba { 'main':
-      notify => Exec['reload_postgresql'],
+      notify => $manage_service ? {
+        true => Exec['reload_postgresqld'],
+        default => undef,
+      }
     }
 
     Postgresql::Pg_hba_rule {
@@ -124,7 +128,10 @@ class postgresql::config::beforeservice(
     path        => $postgresql_conf_path,
     match       => '^listen_addresses\s*=.*$',
     line        => "listen_addresses = '${listen_addresses}'",
-    notify      => Service['postgresqld'],
+    notify      => $manage_service ? {
+      true => Service['postgresqld'],
+      default => undef,
+    }
   }
 
   # Here we are adding an 'include' line so that users have the option of
@@ -143,7 +150,10 @@ class postgresql::config::beforeservice(
       path        => $postgresql_conf_path,
       line        => 'include \'postgresql_puppet_extras.conf\'',
       require     => Exec['create_postgresql_conf_path'],
-      notify      => Service['postgresqld'],
+      notify      => $manage_service ? {
+        true => Service['postgresqld'],
+        default => undef,
+      }
     }
   }
 

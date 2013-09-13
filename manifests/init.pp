@@ -120,7 +120,8 @@ class postgresql (
   $service_name         = undef,
   $user                 = undef,
   $group                = undef,
-  $run_initdb           = undef
+  $run_initdb           = undef,
+  $manage_service       = undef,
 ) {
 
   class { 'postgresql::params':
@@ -141,5 +142,6 @@ class postgresql (
     custom_user                 => $user,
     custom_group                => $group,
     run_initdb                  => $run_initdb,
+    manage_service              => $manage_service,
   }
 }

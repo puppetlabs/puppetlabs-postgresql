@@ -43,7 +43,8 @@ class postgresql::config(
   $pg_hba_conf_path           = $postgresql::params::pg_hba_conf_path,
   $postgresql_conf_path       = $postgresql::params::postgresql_conf_path,
   $manage_redhat_firewall     = $postgresql::params::manage_redhat_firewall,
-  $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf
+  $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
+  $manage_service             = $postgresql::params::manage_service
 ) inherits postgresql::params {
 
   # Basically, all this class needs to handle is passing parameters on
@@ -60,15 +61,14 @@ class postgresql::config(
     postgresql_conf_path       => $postgresql_conf_path,
     manage_redhat_firewall     => $manage_redhat_firewall,
     manage_pg_hba_conf         => $manage_pg_hba_conf,
+    require                    => Class['postgresql::config'],
   }
 
   class { 'postgresql::config::afterservice':
     postgres_password        => $postgres_password,
+    require                  => [Class['postgresql::config::beforeservice'], $manage_service ? {
+      true => Service['postgresqld'],
+      default => undef,
+    }],
   }
-
-  Class['postgresql::config'] ->
-      Class['postgresql::config::beforeservice'] ->
-      Service['postgresqld'] ->
-      Class['postgresql::config::afterservice']
-
 }

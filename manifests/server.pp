@@ -28,7 +28,8 @@ class postgresql::server (
   $service_provider = $postgresql::params::service_provider,
   $service_status   = $postgresql::params::service_status,
   $config_hash      = {},
-  $datadir          = $postgresql::params::datadir
+  $datadir          = $postgresql::params::datadir,
+  $manage_service   = $postgresql::params::manage_service,
 ) inherits postgresql::params {
 
   if ($ensure == 'absent') {
@@ -63,30 +64,31 @@ class postgresql::server (
 
     create_resources( 'class', $config_class )
 
-    service { 'postgresqld':
-      ensure    => running,
-      name      => $service_name,
-      enable    => true,
-      require   => Package['postgresql-server'],
-      provider  => $service_provider,
-      hasstatus => true,
-      status    => $service_status,
+    if ($manage_service == true) {
+      service { 'postgresqld':
+        ensure    => 'running',
+        name      => $service_name,
+        enable    => true,
+        require   => [Package['postgresql-server'], Class['postgresql::config']],
+        provider  => $service_provider,
+        hasstatus => true,
+        status    => $service_status,
+      }
+      exec { 'reload_postgresql':
+        path        => '/usr/bin:/usr/sbin:/bin:/sbin',
+        command     => "service ${service_name} reload",
+        onlyif      => $service_status,
+        refreshonly => true,
+      }
     }
 
     if ($postgresql::params::needs_initdb) {
       include postgresql::initdb
 
-      Package['postgresql-server'] -> Class['postgresql::initdb'] -> Class['postgresql::config'] -> Service['postgresqld']
+      Package['postgresql-server'] -> Class['postgresql::initdb'] -> Class['postgresql::config']
     }
     else  {
-      Package['postgresql-server'] -> Class['postgresql::config'] -> Service['postgresqld']
-    }
-
-    exec { 'reload_postgresql':
-      path        => '/usr/bin:/usr/sbin:/bin:/sbin',
-      command     => "service ${service_name} reload",
-      onlyif      => $service_status,
-      refreshonly => true,
+      Package['postgresql-server'] -> Class['postgresql::config']
     }
   }
 
