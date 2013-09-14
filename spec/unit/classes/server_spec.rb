@@ -37,9 +37,9 @@ describe 'postgresql::server', :type => :class do
       }
     end
 
-    it 'should make package absent' do
+    it 'should make package purged' do
       should contain_package('postgresql-server').with({
-        :ensure => 'absent',
+        :ensure => 'purged',
       })
     end
 
@@ -65,7 +65,7 @@ describe 'postgresql::server', :type => :class do
 
     it 'should remove the package' do
       should contain_package('postgresql-server').with({
-        :ensure => 'absent',
+        :ensure => 'purged',
       })
     end
 
