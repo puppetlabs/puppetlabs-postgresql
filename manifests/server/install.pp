@@ -4,8 +4,9 @@ class postgresql::server::install {
   $package_name   = $postgresql::server::package_name
 
   $_package_ensure = $package_ensure ? {
-    true    => 'present',
-    false   => 'purged',
+    true     => 'present',
+    false    => 'purged',
+    'absent' => 'purged',
     default => $package_ensure,
   }
 

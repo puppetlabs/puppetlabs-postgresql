@@ -3,7 +3,7 @@ require 'spec_helper_system'
 describe 'postgresql::lib::python:' do
   after :all do
     # Cleanup after tests have ran
-    puppet_apply("class { 'postgresql::lib::python': package_ensure => absent }") do |r|
+    puppet_apply("class { 'postgresql::lib::python': package_ensure => purged }") do |r|
       r.exit_code.should_not == 1
     end
   end

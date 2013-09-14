@@ -9,19 +9,26 @@ class postgresql::server::initdb {
   $group        = $postgresql::server::group
   $user         = $postgresql::server::user
 
-  # Build up the initdb command.
-  #
-  # We optionally add the locale switch if specified. Older versions of the
-  # initdb command don't accept this switch. So if the user didn't pass the
-  # parameter, lets not pass the switch at all.
-  $ic_base = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
-  $initdb_command = $locale ? {
-    undef   => $ic_base,
-    default => "${ic_base} --locale '${locale}'"
-  }
-
   if($ensure == 'present' or $ensure == true) {
+    # Make sure the data directory exists, and has the correct permissions.
+    file { $datadir:
+      ensure => directory,
+      owner  => $user,
+      group  => $group,
+      mode   => 700,
+    }
+
     if($needs_initdb) {
+      # Build up the initdb command.
+      #
+      # We optionally add the locale switch if specified. Older versions of the
+      # initdb command don't accept this switch. So if the user didn't pass the
+      # parameter, lets not pass the switch at all.
+      $ic_base = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
+      $initdb_command = $locale ? {
+        undef   => $ic_base,
+        default => "${ic_base} --locale '${locale}'"
+      }
 
       # This runs the initdb command, we use the existance of the PG_VERSION
       # file to ensure we don't keep running this command.
@@ -31,6 +38,7 @@ class postgresql::server::initdb {
         user      => $user,
         group     => $group,
         logoutput => on_failure,
+        before    => File[$datadir],
       }
     }
   } else {

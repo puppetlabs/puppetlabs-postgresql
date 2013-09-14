@@ -5,7 +5,7 @@ describe 'server plperl:' do
     # Cleanup after tests have ran
     pp = <<-EOS
       class { 'postgresql::server': ensure => absent }
-      class { 'postgresql::server::plperl': package_ensure => absent }
+      class { 'postgresql::server::plperl': package_ensure => purged }
     EOS
     puppet_apply(pp) do |r|
       r.exit_code.should_not == 1

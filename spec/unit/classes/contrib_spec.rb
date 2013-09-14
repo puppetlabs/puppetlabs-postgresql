@@ -1,11 +1,17 @@
 require 'spec_helper'
 
 describe 'postgresql::contrib', :type => :class do
+  let :pre_condition do
+    "class { 'postgresql::server': }"
+  end
+
   let :facts do
     {
       :osfamily => 'Debian',
       :operatingsystem => 'Debian',
       :operatingsystemrelease => '6.0',
+      :kernel => 'Linux',
+      :concat_basedir => tmpfilename('contrib'),
     }
   end
 

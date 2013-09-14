@@ -10,4 +10,18 @@ class postgresql::contrib (
     name   => $package_name,
     tag    => 'postgresql',
   }
+
+  if($package_ensure == 'present' or $package_ensure == true) {
+    anchor { 'postgresql::contrib::start': }->
+    Class['postgresql::server::install']->
+    Package['postgresql-contrib']->
+    Class['postgresql::server::service']->
+    anchor { 'postgresql::contrib::end': }
+  } else {
+    anchor { 'postgresql::contrib::start': }->
+    Class['postgresql::server::service']->
+    Package['postgresql-contrib']->
+    Class['postgresql::server::install']->
+    anchor { 'postgresql::contrib::end': }
+  }
 }
