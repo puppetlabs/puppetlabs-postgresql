@@ -61,7 +61,7 @@ class postgresql::config::beforeservice(
     # Create the main pg_hba resource
     postgresql::pg_hba { 'main':
       notify => $manage_service ? {
-        true => Exec['reload_postgresqld'],
+        true => Exec['reload_postgresql'],
         default => undef,
       }
     }

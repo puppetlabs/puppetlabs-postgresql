@@ -19,7 +19,7 @@ describe 'postgresql::config::beforeservice', :type => :class do
   it { should include_class("postgresql::config::beforeservice") }
 
   describe 'pg_hba_conf notifies the service' do
-    it { should contain_Postgresql__pg_hba('main').with_notify('Exec[reload_postgresqld]') }
+    it { should contain_Postgresql__pg_hba('main').with_notify('Exec[reload_postgresql]') }
     it { should contain_File_line('postgresql.conf#listen_addresses').with_notify('Service[postgresqld]') }
     it { should contain_File_line('postgresql.conf#include').with_notify('Service[postgresqld]') }
   end
@@ -35,7 +35,7 @@ describe 'postgresql::config::beforeservice', :type => :class do
       }
     end
 
-    it { should_not contain_Postgresql__pg_hba('main').with_notify('Exec[reload_postgresqld]') }
+    it { should_not contain_Postgresql__pg_hba('main').with_notify('Exec[reload_postgresql]') }
     it { should_not contain_File_line('postgresql.conf#listen_addresses').with_notify('Service[postgresqld]') }
     it { should_not contain_File_line('postgresql.conf#include').with_notify('Service[postgresqld]') }
   end
