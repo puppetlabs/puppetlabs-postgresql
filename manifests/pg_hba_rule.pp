@@ -23,7 +23,7 @@ define postgresql::pg_hba_rule(
   }
 
   # This is required to make sure concat::setup is initialized first. This
-  # probably points to a bug inside ripienaar-concat.
+  # probably points to a bug inside puppetlabs-concat.
   include concat::setup
 
   # Create a rule fragment
