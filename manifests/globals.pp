@@ -42,10 +42,16 @@ class postgresql::globals (
   # We are determining this here, because it is needed by the package repo
   # class.
   $default_version = $::osfamily ? {
-    /^(RedHat|Linux)/ => $::operatingsystemrelease ? {
-      /^6\./ => '8.4',
-      /^5\./ => '8.1',
-      default => undef,
+    /^(RedHat|Linux)/ => $::operatingsystem ? {
+      'Fedora' => $::operatingsystemrelease ? {
+        /^(18|19|20)$/ => '9.2',
+        default => undef,
+      },
+      default => $::operatingsystemrelease ? {
+        /^6\./ => '8.4',
+        /^5\./ => '8.1',
+        default => undef,
+      },
     },
     'Debian' => $::operatingsystem ? {
       'Debian' => $::operatingsystemrelease ? {
