@@ -29,7 +29,7 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     Yumrepo['yum.postgresql.org'] -> Package<|tag == 'postgresql'|>
   } else {
     yumrepo { 'yum.postgresql.org':
-      ensure => absent,
+      enabled => absent,
     }->
     file { $gpg_key_path:
       ensure => absent,

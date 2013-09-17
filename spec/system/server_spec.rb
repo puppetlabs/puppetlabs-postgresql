@@ -82,11 +82,15 @@ describe 'server without defaults:' do
       pp = <<-EOS
         class { 'postgresql::globals':
           version             => "9.2",
-          manage_package_repo => true,
           service_status      => 'service postgresql-9.2 status',
         }
         class { 'postgresql::server':
           ensure              => absent,
+        }
+        # Repo removal doesn't work on its own, so we do it here
+        class { 'postgresql::repo':
+          ensure  => absent,
+          version => '9.2',
         }
       EOS
       puppet_apply(pp) do |r|
