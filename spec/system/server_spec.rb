@@ -82,7 +82,10 @@ describe 'server without defaults:' do
       pp = <<-EOS
         class { 'postgresql::globals':
           version      => "9.2",
-          service_name => "postgresql",
+          service_name => $::osfamily ? {
+            "RedHat" => "postgresql-9.2",
+            "Debian" => "postgresql",
+          },
         }
         class { 'postgresql::server':
           ensure => absent,
