@@ -17,6 +17,7 @@ define postgresql::pg_hba_rule(
     "The type you specified [${type}] must be one of: local, host, hostssl, hostnosssl")
 
   $allowed_auth_methods = $postgresql::params::version ? {
+    "9.3" => ["trust", "reject", "md5", "password", "gss", "sspi", "krb5", "ident", "peer", "ldap", "radius", "cert", "pam"],
     "9.2" => ["trust", "reject", "md5", "password", "gss", "sspi", "krb5", "ident", "peer", "ldap", "radius", "cert", "pam"],
     "9.1" => ["trust", "reject", "md5", "password", "gss", "sspi", "krb5", "ident", "peer", "ldap", "radius", "cert", "pam"],
     "9.0" => ["trust", "reject", "md5", "password", "gss", "sspi", "krb5", "ident", "ldap", "radius", "cert", "pam"],
