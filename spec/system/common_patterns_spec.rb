@@ -18,13 +18,16 @@ describe 'common patterns:' do
     it "should support an 'include' directive at the end of postgresql.conf" do
       pending('no support for include directive with centos 5/postgresql 8.1',
         :if => (node.facts['osfamily'] == 'RedHat' and node.facts['lsbmajdistrelease'] == '5'))
+
       pp = <<-EOS
         class { 'postgresql::server': }
 
-        $extras = "/tmp/include.conf"
+        $extras = "/etc/postgresql-include.conf"
 
         file { $extras:
           content => 'max_connections = 123',
+          seltype => 'postgresql_db_t',
+          seluser => 'system_u',
           notify  => Class['postgresql::server::service'],
         }
 
