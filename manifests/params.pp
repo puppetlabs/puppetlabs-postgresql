@@ -77,7 +77,9 @@ class postgresql::params(
       }
 
       'Debian': {
-        class { 'postgresql::package_source::apt_postgresql_org': }
+        class { 'postgresql::package_source::apt_postgresql_org':
+          version => $version
+        }
       }
 
       default: {
