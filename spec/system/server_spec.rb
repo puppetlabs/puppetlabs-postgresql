@@ -81,11 +81,11 @@ describe 'server without defaults:' do
       psql('--command="drop database postgresql_test_db" postgres')
       pp = <<-EOS
         class { 'postgresql::globals':
-          version             => "9.2",
-          service_status      => 'service postgresql-9.2 status',
+          version      => "9.2",
+          service_name => "postgresql",
         }
         class { 'postgresql::server':
-          ensure              => absent,
+          ensure => absent,
         }
         # Repo removal doesn't work on its own, so we do it here
         class { 'postgresql::repo':
@@ -130,47 +130,46 @@ describe 'server without defaults:' do
     end
   end
 
-  context 'override locale and encoding' do
-    after :all do
-      puppet_apply "class { 'postgresql::server': ensure => absent }" do |r|
-        r.exit_code.should_not == 1
-      end
-    end
+  unless ((node.facts['osfamily'] == 'RedHat' and node.facts['lsbmajdistrelease'] == '5') ||
+    node.facts['osfamily'] == 'Debian')
 
-    it 'perform installation with different locale and encoding' do
-      pending('no support for locale parameter with centos 5', :if => (node.facts['osfamily'] == 'RedHat' and node.facts['lsbmajdistrelease'] == '5'))
-      pending('no support for initdb with debian/ubuntu', :if => (node.facts['osfamily'] == 'Debian'))
-
-      pp = <<-EOS
-        class { 'postgresql::server':
-          locale   => 'en_NG',
-          encoding => 'UTF8',
-        }
-      EOS
-
-      puppet_apply(pp) do |r|
-        # Currently puppetlabs/apt shows deprecated messages
-        #r.stderr.should be_empty
-        # It also returns a 6
-        [2,6].should include(r.exit_code)
-
-        r.refresh
-
-        # Currently puppetlabs/apt shows deprecated messages
-        #r.stderr.should be_empty
-        # It also returns a 2
-        [0,4].should include(r.exit_code)
+    context 'override locale and encoding' do
+      after :each do
+        puppet_apply "class { 'postgresql::server': ensure => absent }" do |r|
+          r.exit_code.should_not == 1
+        end
       end
 
-      # Remove db first, if it exists for some reason
-      shell('su postgres -c "dropdb test1"')
-      shell('su postgres -c "createdb test1"')
-      shell('su postgres -c \'psql -c "show lc_ctype" test1\'') do |r|
-        r.stdout.should =~ /en_NG/
-      end
+      it 'perform installation with different locale and encoding' do
+        pp = <<-EOS
+          class { 'postgresql::server':
+            locale   => 'en_NG',
+            encoding => 'UTF8',
+          }
+        EOS
 
-      shell('su postgres -c \'psql -c "show lc_collate" test1\'') do |r|
-        r.stdout.should =~ /en_NG/
+        puppet_apply(pp) do |r|
+          # Currently puppetlabs/apt shows deprecated messages
+          # It also returns a 6
+          [2,6].should include(r.exit_code)
+
+          r.refresh
+
+          # Currently puppetlabs/apt shows deprecated messages
+          # It also returns a 2
+          [0,4].should include(r.exit_code)
+        end
+
+        # Remove db first, if it exists for some reason
+        shell('su postgres -c "dropdb test1"')
+        shell('su postgres -c "createdb test1"')
+        shell('su postgres -c \'psql -c "show lc_ctype" test1\'') do |r|
+          r.stdout.should =~ /en_NG/
+        end
+
+        shell('su postgres -c \'psql -c "show lc_collate" test1\'') do |r|
+          r.stdout.should =~ /en_NG/
+        end
       end
     end
   end
