@@ -12,7 +12,7 @@ describe 'postgresql::server::table_grant:' do
     begin
       pp = <<-EOS.unindent
         $db = 'table_grant'
-        $user = 'psql_table_tester'
+        $user = 'psql_grant_tester'
         $password = 'psql_table_pw'
 
         class { 'postgresql::server': }
@@ -27,6 +27,15 @@ describe 'postgresql::server::table_grant:' do
         }
 
         postgresql::server::database { $db: }
+
+        # Create a rule for the user
+        postgresql::server::pg_hba_rule { "allow ${user}":
+          type        => 'local',
+          database    => $db,
+          user        => $user,
+          auth_method => 'ident',
+          order       => 1,
+        }
 
         postgresql_psql { 'Create testing table':
           command => 'CREATE TABLE "test_table" (field integer NOT NULL)',
