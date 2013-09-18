@@ -186,6 +186,7 @@ describe 'server with firewall:' do
 
   context 'test installing postgresql with firewall management on' do
     it 'perform installation and make sure it is idempotent' do
+      pending('no support for firewall with fedora', :if => (node.facts['operatingsystem'] == 'Fedora'))
       pp = <<-EOS
         class { 'firewall': }
         class { "postgresql::server":
