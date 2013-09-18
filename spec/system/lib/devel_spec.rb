@@ -9,7 +9,7 @@ describe 'postgresql::lib::devel:' do
   end
 
   it 'test loading class with no parameters' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       class { 'postgresql::lib::devel': }
     EOS
 

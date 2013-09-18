@@ -3,7 +3,7 @@ require 'spec_helper_system'
 describe 'postgresql::validate_db_connection:' do
   before :all do
     # Setup postgresql server and a sample database for tests to use.
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       $db = 'foo'
       class { 'postgresql::server': }
 
@@ -26,7 +26,7 @@ describe 'postgresql::validate_db_connection:' do
   end
 
   it 'should run puppet with no changes declared if db ip connectivity works' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       postgresql::validate_db_connection { 'foo':
         database_host     => 'localhost',
         database_name     => 'foo',
@@ -41,7 +41,7 @@ describe 'postgresql::validate_db_connection:' do
   end
 
   it 'should fail catalogue if database connectivity fails' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       postgresql::validate_db_connection { 'foobarbaz':
         database_host     => 'localhost',
         database_name     => 'foobarbaz',

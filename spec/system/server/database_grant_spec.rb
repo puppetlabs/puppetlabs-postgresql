@@ -10,7 +10,7 @@ describe 'postgresql::server::database_grant:' do
 
   it 'should grant access so a user can create objects in a database' do
     begin
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         $db = 'postgres'
         $user = 'psql_grant_tester'
         $password = 'psql_grant_pw'

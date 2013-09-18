@@ -12,7 +12,7 @@ describe 'postgresql::lib::java:' do
     pending('libpostgresql-java-jdbc not available natively for Ubuntu 10.04 and Debian 6',
       :if => (node.facts['osfamily'] == 'Debian' and ['6', '10'].include?(node.facts['lsbmajdistrelease'])))
 
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       class { 'postgresql::lib::java': }
     EOS
 

@@ -9,7 +9,7 @@ describe 'postgresql::server::config_entry:' do
   end
 
   it 'should change setting and reflect it in show all' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       class { 'postgresql::server': }
 
       postgresql::server::config_entry { 'check_function_bodies':

@@ -11,7 +11,7 @@ describe 'postgresql::lib::python:' do
   it 'test loading class with no parameters' do
     pending('psycopg2 not available natively for centos 5', :if => (node.facts['osfamily'] == 'RedHat' and node.facts['lsbmajdistrelease'] == '5'))
 
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       class { 'postgresql::lib::python': }
     EOS
 

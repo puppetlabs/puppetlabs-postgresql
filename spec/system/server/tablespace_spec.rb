@@ -9,7 +9,7 @@ describe 'postgresql::server::tablespace:' do
   end
 
   it 'should idempotently create tablespaces and databases that are using them' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       class { 'postgresql::server': }
 
       file { '/tmp/pg_tablespaces':

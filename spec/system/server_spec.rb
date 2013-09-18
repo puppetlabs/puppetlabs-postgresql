@@ -9,24 +9,22 @@ describe 'server:' do
   end
 
   it 'test loading class with no parameters' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       class { 'postgresql::server': }
     EOS
 
     puppet_apply(pp) do |r|
-      r.exit_code.should_not == 1
-    end
-
-    puppet_apply(pp) do |r|
-      r.exit_code.should be_zero
+      r.exit_code.should == 2
+      r.refresh
+      r.exit_code.should == 0
     end
   end
 
   describe 'setting postgres password' do
     it 'should install and successfully adjust the password' do
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         class { 'postgresql::server':
-          postgres_password => 'foobarbaz',
+          postgres_password          => 'foobarbaz',
           ip_mask_deny_postgres_user => '0.0.0.0/32',
         }
       EOS
@@ -34,14 +32,13 @@ describe 'server:' do
       puppet_apply(pp) do |r|
         [0,2].should include(r.exit_code)
         r.stdout.should =~ /\[set_postgres_postgrespw\]\/returns: executed successfully/
-      end
-      puppet_apply(pp) do |r|
+        r.refresh
         r.exit_code.should == 0
       end
 
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         class { 'postgresql::server':
-          postgres_password => 'TPSR$$eports!',
+          postgres_password          => 'TPSR$$eports!',
           ip_mask_deny_postgres_user => '0.0.0.0/32',
         }
       EOS
@@ -49,8 +46,7 @@ describe 'server:' do
       puppet_apply(pp) do |r|
         [0,2].should include(r.exit_code)
         r.stdout.should =~ /\[set_postgres_postgrespw\]\/returns: executed successfully/
-      end
-      puppet_apply(pp) do |r|
+        r.refresh
         r.exit_code.should == 0
       end
 
@@ -60,7 +56,7 @@ end
 
 describe 'server without defaults:' do
   before :all do
-    puppet_apply(<<-EOS)
+    puppet_apply(<<-EOS.unindent)
       if($::operatingsystem =~ /Debian|Ubuntu/) {
         # Need to make sure the correct utf8 locale is ready for our
         # non-standard tests
@@ -79,21 +75,14 @@ describe 'server without defaults:' do
     after :each do
       # Cleanup
       psql('--command="drop database postgresql_test_db" postgres')
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         class { 'postgresql::globals':
-          version      => "9.2",
-          service_name => $::osfamily ? {
-            "RedHat" => "postgresql-9.2",
-            "Debian" => "postgresql",
-          },
+          ensure              => absent,
+          manage_package_repo => true,
+          version             => '9.3',
         }
         class { 'postgresql::server':
           ensure => absent,
-        }
-        # Repo removal doesn't work on its own, so we do it here
-        class { 'postgresql::repo':
-          ensure  => absent,
-          version => '9.2',
         }
       EOS
       puppet_apply(pp) do |r|
@@ -102,9 +91,9 @@ describe 'server without defaults:' do
     end
 
     it 'perform installation and create a db' do
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         class { "postgresql::globals":
-          version             => "9.2",
+          version             => "9.3",
           manage_package_repo => true,
           encoding            => 'UTF8',
           locale              => 'en_US.UTF-8',
@@ -117,19 +106,14 @@ describe 'server without defaults:' do
       EOS
 
       puppet_apply(pp) do |r|
-        # Currently puppetlabs/apt shows deprecated messages
-        #r.stderr.should be_empty
-        [2,6].should include(r.exit_code)
-
+        r.exit_code.should == 2
         r.refresh
-
-        # Currently puppetlabs/apt shows deprecated messages
-        #r.stderr.should be_empty
-        # It also returns a 4
-        [0,4].should include(r.exit_code)
+        r.exit_code.should == 0
       end
 
-      psql('postgresql_test_db --command="select datname from pg_database limit 1"')
+      psql('postgresql_test_db --command="select datname from pg_database limit 1"') do |r|
+        r.exit_code.should == 0
+      end
     end
   end
 
@@ -144,7 +128,7 @@ describe 'server without defaults:' do
       end
 
       it 'perform installation with different locale and encoding' do
-        pp = <<-EOS
+        pp = <<-EOS.unindent
           class { 'postgresql::server':
             locale   => 'en_NG',
             encoding => 'UTF8',
@@ -152,15 +136,9 @@ describe 'server without defaults:' do
         EOS
 
         puppet_apply(pp) do |r|
-          # Currently puppetlabs/apt shows deprecated messages
-          # It also returns a 6
-          [2,6].should include(r.exit_code)
-
+          r.exit_code.should == 2
           r.refresh
-
-          # Currently puppetlabs/apt shows deprecated messages
-          # It also returns a 2
-          [0,4].should include(r.exit_code)
+          r.exit_code.should == 0
         end
 
         # Remove db first, if it exists for some reason
@@ -189,7 +167,7 @@ describe 'server with firewall:' do
   context 'test installing postgresql with firewall management on' do
     it 'perform installation and make sure it is idempotent' do
       pending('no support for firewall with fedora', :if => (node.facts['operatingsystem'] == 'Fedora'))
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         class { 'firewall': }
         class { "postgresql::server":
           manage_firewall => true,

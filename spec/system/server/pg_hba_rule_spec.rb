@@ -9,7 +9,7 @@ describe 'postgresql::server::pg_hba_rule:' do
   end
 
   it 'should create a ruleset in pg_hba.conf' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       class { 'postgresql::server': }
       postgresql::server::pg_hba_rule { "allow application network to access app database":
         type        => "host",
@@ -34,7 +34,7 @@ describe 'postgresql::server::pg_hba_rule:' do
   end
 
   it 'should create a ruleset in pg_hba.conf that denies db access to db test1' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       class { 'postgresql::server': }
 
       postgresql::server::db { "test1":

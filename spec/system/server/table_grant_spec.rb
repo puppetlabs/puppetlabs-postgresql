@@ -10,7 +10,7 @@ describe 'postgresql::server::table_grant:' do
 
   it 'should grant access so a user can insert in a table' do
     begin
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         $db = 'table_grant'
         $user = 'psql_table_tester'
         $password = 'psql_table_pw'
@@ -51,13 +51,13 @@ describe 'postgresql::server::table_grant:' do
       end
 
       ## Check that the user can create a table in the database
-      #psql('--command="create table foo (foo int)" postgres', 'psql_grant_tester') do |r|
-      #  r.stdout.should =~ /CREATE TABLE/
-      #  r.stderr.should be_empty
-      #  r.exit_code.should == 0
-      #end
+      psql('--command="create table foo (foo int)" postgres', 'psql_grant_tester') do |r|
+        r.stdout.should =~ /CREATE TABLE/
+        r.stderr.should be_empty
+        r.exit_code.should == 0
+      end
     ensure
-      #psql('--command="drop table foo" postgres', 'psql_grant_tester')
+      psql('--command="drop table foo" postgres', 'psql_grant_tester')
     end
   end
 end

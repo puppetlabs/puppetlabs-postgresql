@@ -2,6 +2,14 @@ require 'rspec-system/spec_helper'
 require 'rspec-system-puppet/helpers'
 require 'tempfile'
 
+class String
+  # Provide ability to remove indentation from strings, for the purpose of
+  # left justifying heredoc blocks.
+  def unindent
+    gsub(/^#{scan(/^\s*/).min_by{|l|l.length}}/, "")
+  end
+end
+
 module LocalHelpers
   include RSpecSystem::Util
 

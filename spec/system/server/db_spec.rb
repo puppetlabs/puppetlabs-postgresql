@@ -10,7 +10,7 @@ describe 'postgresql::server::db' do
 
   it 'should idempotently create a db that we can connect to' do
     begin
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         $db = 'postgresql_test_db'
         class { 'postgresql::server': }
 
@@ -39,7 +39,7 @@ describe 'postgresql::server::db' do
   it 'should take a locale parameter' do
     pending('no support for locale parameter with centos 5', :if => (node.facts['osfamily'] == 'RedHat' and node.facts['lsbmajdistrelease'] == '5'))
     begin
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         class { 'postgresql::server': }
         if($::operatingsystem == 'Debian') {
           # Need to make sure the correct locale is installed first
@@ -79,7 +79,7 @@ describe 'postgresql::server::db' do
 
   it 'should take an istemplate parameter' do
     begin
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         $db = 'template2'
         class { 'postgresql::server': }
 
@@ -112,7 +112,7 @@ describe 'postgresql::server::db' do
 
   it 'should update istemplate parameter' do
     begin
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         $db = 'template2'
         class { 'postgresql::server': }
 

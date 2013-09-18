@@ -9,7 +9,7 @@ describe 'postgresql::client:' do
   end
 
   it 'test loading class with no parameters' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       class { 'postgresql::client': }
     EOS
 

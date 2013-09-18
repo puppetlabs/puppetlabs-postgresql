@@ -9,7 +9,7 @@ describe 'postgresql::server::role:' do
   end
 
   it 'should idempotently create a user who can log in' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       $user = "postgresql_test_user"
       $password = "postgresql_test_password"
 
@@ -40,7 +40,7 @@ describe 'postgresql::server::role:' do
   end
 
   it 'should idempotently alter a user who can log in' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       $user = "postgresql_test_user"
       $password = "postgresql_test_password2"
 
@@ -71,7 +71,7 @@ describe 'postgresql::server::role:' do
   end
 
   it 'should idempotently create a user with a cleartext password' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       $user = "postgresql_test_user2"
       $password = "postgresql_test_password2"
 

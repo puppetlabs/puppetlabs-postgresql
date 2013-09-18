@@ -1,6 +1,6 @@
 # This installs a PostgreSQL server. See README.md for more details.
 class postgresql::server (
-  $ensure                     = true,
+  $ensure                     = $postgresql::params::ensure,
   $postgres_password          = undef,
 
   $package_name               = $postgresql::params::server_package_name,

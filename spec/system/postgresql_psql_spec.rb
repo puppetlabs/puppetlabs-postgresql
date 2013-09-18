@@ -9,7 +9,7 @@ describe 'postgresql_psql:' do
   end
 
   it 'should run some SQL when the unless query returns no rows' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       class { 'postgresql::server': }
 
       postgresql_psql { 'foobar':
@@ -29,7 +29,7 @@ describe 'postgresql_psql:' do
   end
 
   it 'should not run SQL when the unless query returns rows' do
-    pp = <<-EOS
+    pp = <<-EOS.unindent
       class { 'postgresql::server': }
 
       postgresql_psql { 'foobar':

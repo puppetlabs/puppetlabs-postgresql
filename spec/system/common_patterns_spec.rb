@@ -3,7 +3,7 @@ require 'spec_helper_system'
 describe 'common patterns:' do
   describe 'postgresql.conf include pattern' do
     after :all do
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         class { 'postgresql::server': ensure => absent }
 
         file { '/tmp/include.conf':
@@ -19,7 +19,7 @@ describe 'common patterns:' do
       pending('no support for include directive with centos 5/postgresql 8.1',
         :if => (node.facts['osfamily'] == 'RedHat' and node.facts['lsbmajdistrelease'] == '5'))
 
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         class { 'postgresql::server': }
 
         $extras = "/etc/postgresql-include.conf"

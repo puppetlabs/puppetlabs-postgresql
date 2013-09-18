@@ -10,7 +10,7 @@ describe 'postgresql::server::database:' do
 
   it 'should idempotently create a db that we can connect to' do
     begin
-      pp = <<-EOS
+      pp = <<-EOS.unindent
         $db = 'postgresql_test_db'
         class { 'postgresql::server': }
 

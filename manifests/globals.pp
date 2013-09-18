@@ -1,6 +1,8 @@
 # Class for setting cross-class global overrides. See README.md for more
 # details.
 class postgresql::globals (
+  $ensure               = undef,
+
   $client_package_name  = undef,
   $server_package_name  = undef,
   $contrib_package_name = undef,
