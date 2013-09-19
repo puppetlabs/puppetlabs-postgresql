@@ -10,6 +10,9 @@ class postgresql::params inherits postgresql::globals {
   $user                       = pick($user, 'postgres')
   $group                      = pick($group, 'postgres')
   $encoding                   = pick($encoding, 'UTF8')
+  $locale                     = $locale
+  $service_provider           = $service_provider
+  $manage_firewall            = $manage_firewall
 
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $::osfamily {

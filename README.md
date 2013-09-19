@@ -1,5 +1,5 @@
 postgresql
-===========
+==========
 
 Table of Contents
 -----------------
@@ -49,7 +49,7 @@ Your answers to these questions will determine which of the module's parameters 
 
 ###Configuring the server
 
-The main configuration you’ll need to do will be around the `postgresql::server` class. The default parameters are reasonable, but fairly restrictive regarding permissions for who can connect and from where. To manage a PostgreSQL server with sane defaults:
+The main configuration you'll need to do will be around the `postgresql::server` class. The default parameters are reasonable, but fairly restrictive regarding permissions for who can connect and from where. To manage a PostgreSQL server with sane defaults:
 
     class { 'postgresql::server': }
 
@@ -69,7 +69,7 @@ Once you've completed your configuration of `postgresql::server`, you can test o
     $ psql -h localhost -U postgres
     $ psql -h my.postgres.server -U
 
-If you get an error message from these commands, it means that your permissions are set in a way that restricts access from where you’re trying to connect. That might be a good thing or a bad thing, depending on your goals.
+If you get an error message from these commands, it means that your permissions are set in a way that restricts access from where you're trying to connect. That might be a good thing or a bad thing, depending on your goals.
 
 For more details about server configuration parameters consult the [PostgreSQL Runtime Configuration docs](http://www.postgresql.org/docs/9.2/static/runtime-config.html).
 
@@ -345,10 +345,13 @@ This allows you to override the automated detection to see if your OS supports t
 If `true` this will setup the official PostgreSQL repositories on your host. Defaults to `false`.
 
 ###Class: postgresql::server
-Here are the options that you can set in the `config_hash` parameter of `postgresql::server`:
+The following list are options that you can set in the `config_hash` parameter of `postgresql::server`.
 
 ####`ensure`
 This value default to `present`. When set to `absent` it will remove all packages, configuration and data so use this with extreme caution.
+
+####`version`
+This will set the version of the PostgreSQL software to install. Defaults to your operating systems default.
 
 ####`postgres_password`
 This value defaults to `undef`, meaning the super user account in the postgres database is a user called `postgres` and this account does not have a password. If you provide this setting, the module will set the password for the `postgres` user to your specified value.
@@ -358,6 +361,9 @@ The name of the package to use for installing the server software. Defaults to t
 
 ####`package_ensure`
 Value to pass through to the `package` resource when creating the server instance. Defaults to `undef`.
+
+####`plperl_package_name`
+This sets the default package name for the PL/Perl extension. Defaults to utilising the operating system default.
 
 ####`service_name`
 This setting can be used to override the default postgresql service name. If not specified, the module will use whatever service name is the default for your OS distro.
@@ -369,13 +375,13 @@ This setting can be used to override the default postgresql service provider. If
 This setting can be used to override the default status check command for your PostgreSQL service. If not specified, the module will use whatever service name is the default for your OS distro.
 
 ####`listen_addresses`
-This value defaults to `localhost`, meaning the postgres server will only accept connections from localhost. If you’d like to be able to connect to postgres from remote machines, you can override this setting. A value of `*` will tell postgres to accept connections from any remote machine. Alternately, you can specify a comma-separated list of hostnames or IP addresses. (For more info, have a look at the `postgresql.conf` file from your system’s postgres package).
+This value defaults to `localhost`, meaning the postgres server will only accept connections from localhost. If you'd like to be able to connect to postgres from remote machines, you can override this setting. A value of `*` will tell postgres to accept connections from any remote machine. Alternately, you can specify a comma-separated list of hostnames or IP addresses. (For more info, have a look at the `postgresql.conf` file from your system's postgres package).
 
 ####`ip_mask_deny_postgres_user`
-This value defaults to `0.0.0.0/0`. Sometimes it can be useful to block the superuser account from remote connections if you are allowing other database users to connect remotely. Set this to an IP and mask for which you want to deny connections by the postgres superuser account. So, e.g., the default value of `0.0.0.0/0` will match any remote IP and deny access, so the postgres user won’t be able to connect remotely at all. Conversely, a value of `0.0.0.0/32` would not match any remote IP, and thus the deny rule will not be applied and the postgres user will be allowed to connect.
+This value defaults to `0.0.0.0/0`. Sometimes it can be useful to block the superuser account from remote connections if you are allowing other database users to connect remotely. Set this to an IP and mask for which you want to deny connections by the postgres superuser account. So, e.g., the default value of `0.0.0.0/0` will match any remote IP and deny access, so the postgres user won't be able to connect remotely at all. Conversely, a value of `0.0.0.0/32` would not match any remote IP, and thus the deny rule will not be applied and the postgres user will be allowed to connect.
 
 ####`ip_mask_allow_all_users`
-This value defaults to `127.0.0.1/32`. By default, Postgres does not allow any database user accounts to connect via TCP from remote machines. If you’d like to allow them to, you can override this setting. You might set it to `0.0.0.0/0` to allow database users to connect from any remote machine, or `192.168.0.0/16` to allow connections from any machine on your local 192.168 subnet.
+This value defaults to `127.0.0.1/32`. By default, Postgres does not allow any database user accounts to connect via TCP from remote machines. If you'd like to allow them to, you can override this setting. You might set it to `0.0.0.0/0` to allow database users to connect from any remote machine, or `192.168.0.0/16` to allow connections from any machine on your local 192.168 subnet.
 
 ####`ipv4acls`
 List of strings for access control for connection method, users, databases, IPv4 addresses; see [postgresql documentation](http://www.postgresql.org/docs/9.2/static/auth-pg-hba-conf.html) about `pg_hba.conf` for information (please note that the link will take you to documentation for the most recent version of Postgres, however links for earlier versions can be found on that page).
@@ -420,7 +426,7 @@ This will set the default encoding encoding for all databases created with this 
 This will set the default database locale for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `undef` which is effectively `C`.
 
 ####`manage_firewall`
-This value defaults to `false`. Many distros ship with a fairly restrictive firewall configuration which will block the port that postgres tries to listen on. If you’d like for the puppet module to open this port for you (using the [puppetlabs-firewall](http://forge.puppetlabs.com/puppetlabs/firewall) module), change this value to true. Check the documentation for `puppetlabs/firewall` to ensure the rest of the global setup is applied, to ensure things like persistence and global rules are set correctly.
+This value defaults to `false`. Many distros ship with a fairly restrictive firewall configuration which will block the port that postgres tries to listen on. If you'd like for the puppet module to open this port for you (using the [puppetlabs-firewall](http://forge.puppetlabs.com/puppetlabs/firewall) module), change this value to true. Check the documentation for `puppetlabs/firewall` to ensure the rest of the global setup is applied, to ensure things like persistence and global rules are set correctly.
 
 
 ###Class: postgresql::client

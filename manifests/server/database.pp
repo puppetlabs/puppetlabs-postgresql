@@ -9,6 +9,7 @@ define postgresql::server::database(
 ) {
   $createdb_path = $postgresql::server::createdb_path
   $user          = $postgresql::server::user
+  $group         = $postgresql::server::group
   $psql_path     = $postgresql::server::psql_path
   $version       = $postgresql::server::version
 

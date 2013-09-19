@@ -20,6 +20,10 @@ describe 'server:' do
     end
   end
 
+  describe port(5432) do
+    it { should be_listening }
+  end
+
   describe 'setting postgres password' do
     it 'should install and successfully adjust the password' do
       pp = <<-EOS.unindent

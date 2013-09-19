@@ -37,6 +37,7 @@ class postgresql::globals (
   $encoding             = undef,
   $locale               = undef,
 
+  $manage_firewall      = undef,
   $firewall_supported   = undef,
 
   $manage_package_repo  = undef

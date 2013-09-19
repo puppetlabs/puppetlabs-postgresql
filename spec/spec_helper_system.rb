@@ -1,6 +1,10 @@
 require 'rspec-system/spec_helper'
 require 'rspec-system-puppet/helpers'
+require 'rspec-system-serverspec/helpers'
 require 'tempfile'
+
+include Serverspec::Helper::RSpecSystem
+include Serverspec::Helper::DetectOS
 
 class String
   # Provide ability to remove indentation from strings, for the purpose of
