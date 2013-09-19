@@ -77,6 +77,9 @@ class postgresql::globals (
 
   # Setup of the repo only makes sense globally, so we are doing this here.
   if($manage_package_repo) {
-    class { "postgresql::repo": version => $globals_version }
+    class { "postgresql::repo":
+      ensure  => $ensure,
+      version => $globals_version
+    }
   }
 }
