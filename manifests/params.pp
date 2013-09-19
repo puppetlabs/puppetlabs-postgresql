@@ -9,7 +9,7 @@ class postgresql::params inherits postgresql::globals {
   $ipv6acls                   = []
   $user                       = pick($user, 'postgres')
   $group                      = pick($group, 'postgres')
-  $encoding                   = pick($encoding, 'UTF8')
+  $encoding                   = $encoding
   $locale                     = $locale
   $service_provider           = $service_provider
   $manage_firewall            = $manage_firewall

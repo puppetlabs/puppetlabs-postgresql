@@ -25,7 +25,7 @@ define postgresql::server::database(
   if ($version != '8.1') {
     $locale_option = $locale ? {
       undef   => '',
-      default => "--locale=${locale}",
+      default => "--locale=${locale} ",
     }
     $public_revoke_privilege = 'CONNECT'
   } else {
@@ -33,13 +33,17 @@ define postgresql::server::database(
     $public_revoke_privilege = 'ALL'
   }
 
-  $createdb_command_tmp = "${createdb_path} --owner='${owner}' --template=template0 --encoding '${encoding}' ${locale_option} '${dbname}'"
-
-  if($tablespace == undef) {
-    $createdb_command = $createdb_command_tmp
-  } else {
-    $createdb_command = "${createdb_command_tmp} --tablespace='${tablespace}'"
+  $encoding_option = $encoding ? {
+    undef   => '',
+    default => "--encoding '${encoding}' ",
   }
+
+  $tablespace_option = $tablespace ? {
+    undef   => '',
+    default => "--tablespace='${tablespace}' ",
+  }
+
+  $createdb_command = "${createdb_path} --owner='${owner}' --template=template0 ${encoding_option}${locale_option}${tablespace_option} '${dbname}'"
 
   postgresql_psql { "Check for existence of db '${dbname}'":
     command => 'SELECT 1',
