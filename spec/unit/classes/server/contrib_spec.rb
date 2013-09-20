@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'postgresql::contrib', :type => :class do
+describe 'postgresql::server::contrib', :type => :class do
   let :pre_condition do
     "class { 'postgresql::server': }"
   end

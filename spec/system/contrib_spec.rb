@@ -1,6 +1,6 @@
 require 'spec_helper_system'
 
-describe 'postgresql::contrib:' do
+describe 'postgresql::server::contrib:' do
   after :all do
     # Cleanup after tests have ran, remove both contrib and server as contrib
     # pulls in the server based packages.
@@ -8,7 +8,7 @@ describe 'postgresql::contrib:' do
       class { 'postgresql::server':
         ensure => absent,
       }
-      class { 'postgresql::contrib':
+      class { 'postgresql::server::contrib':
         package_ensure => purged,
       }
     EOS
@@ -21,7 +21,7 @@ describe 'postgresql::contrib:' do
   it 'test loading class with no parameters' do
     pp = <<-EOS.unindent
       class { 'postgresql::server': }
-      class { 'postgresql::contrib': }
+      class { 'postgresql::server::contrib': }
     EOS
 
     puppet_apply(pp) do |r|

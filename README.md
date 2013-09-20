@@ -133,6 +133,7 @@ To restructure server specific elements under the `postgresql::server::` namespa
 * `postgresql::grant` -> `postgresql::server::grant`
 * `postgresql::pg_hba_rule` -> `postgresql::server::pg_hba_rule`
 * `postgresql::plperl` -> `postgresql::server::plperl`
+* `postgresql::contrib` -> `postgresql::server::contrib`
 * `postgresql::role` -> `postgresql::server::role`
 * `postgresql::table_grant` -> `postgresql::server::table_grant`
 * `postgresql::tablespace` -> `postgresql::server::tablespace`
@@ -211,13 +212,13 @@ The postgresql module comes with many options for configuring the server. While 
 Classes:
 
 * [postgresql::client](#class-postgresqlclient)
-* [postgresql::contrib](#class-postgresqlcontrib)
 * [postgresql::globals](#class-postgresqlglobals)
 * [postgresql::lib::devel](#class-postgresqllibdevel)
 * [postgresql::lib::java](#class-postgresqllibjava)
 * [postgresql::lib::python](#class-postgresqllibpython)
 * [postgresql::server](#class-postgresqlserver)
 * [postgresql::server::plperl](#class-postgresqlserverplperl)
+* [postgresql::server::contrib](#class-postgresqlservercontrib)
 
 Resources:
 
@@ -333,7 +334,7 @@ Defaults to your operating system default.
 This setting can be used to explicitly call the initdb operation after server package is installed and before the postgresql service is started. If not specified, the module will decide whether to call initdb or not depending on your OS distro.
 
 ####`encoding`
-This will set the default encoding encoding for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `UTF8`.
+This will set the default encoding encoding for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to the operating system default.
 
 ####`locale`
 This will set the default database locale for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `undef` which is effectively `C`.
@@ -420,7 +421,7 @@ This setting can be used to override the default postgresql user group to be use
 This setting can be used to explicitly call the initdb operation after server package is installed and before the postgresql service is started. If not specified, the module will decide whether to call initdb or not depending on your OS distro.
 
 ####`encoding`
-This will set the default encoding encoding for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `UTF8`.
+This will set the default encoding encoding for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to the operating system default.
 
 ####`locale`
 This will set the default database locale for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `undef` which is effectively `C`.
@@ -440,7 +441,7 @@ The name of the postgresql client package.
 The ensure parameter passed on to postgresql client package resource.
 
 
-###Class: postgresql::contrib
+###Class: postgresql::server::contrib
 Installs the postgresql contrib package.
 
 ####`package_name`
