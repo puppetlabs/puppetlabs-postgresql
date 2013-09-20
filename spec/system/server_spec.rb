@@ -76,8 +76,7 @@ describe 'server without defaults:' do
   end
 
   context 'test installing non-default version of postgresql' do
-    after :each do
-      # Cleanup
+    after :all do
       psql('--command="drop database postgresql_test_db" postgres')
       pp = <<-EOS.unindent
         class { 'postgresql::globals':
@@ -107,6 +106,9 @@ describe 'server without defaults:' do
           user     => "foo1",
           password => postgresql_password('foo1', 'foo1'),
         }
+        postgresql::server::config_entry { 'port':
+          value => '5432',
+        }
       EOS
 
       puppet_apply(pp) do |r|
@@ -118,6 +120,10 @@ describe 'server without defaults:' do
       psql('postgresql_test_db --command="select datname from pg_database limit 1"') do |r|
         r.exit_code.should == 0
       end
+    end
+
+    describe port(5432) do
+      it { should be_listening }
     end
   end
 
@@ -162,7 +168,6 @@ end
 
 describe 'server with firewall:' do
   after :all do
-    # Cleanup after tests have ran
     puppet_apply("class { 'postgresql::server': ensure => absent }") do |r|
       r.exit_code.should_not == 1
     end
