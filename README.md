@@ -414,16 +414,16 @@ The role name to create.
 The hash to use during password creation. Use the `postgresql_password` function to provide an MD5 hash here.
 
 ####`createdb`
-Weither to grant the ability to create new databases with this role. Defaults to `false`.
+Whether to grant the ability to create new databases with this role. Defaults to `false`.
 
 ####`createrole`
-Weither to grant the ability to create new roles with this role. Defaults to `false`.
+Whether to grant the ability to create new roles with this role. Defaults to `false`.
 
 ####`login`
-Weither to grant login capability for the new role. Defaults to `false`.
+Whether to grant login capability for the new role. Defaults to `false`.
 
 ####`superuser`
-Weither to grant super user capability for the new role. Defaults to `false`.
+Whether to grant super user capability for the new role. Defaults to `false`.
 
 ####`replication`
 If `true` provides replication capabilities for this role. Defaults to `false`.
