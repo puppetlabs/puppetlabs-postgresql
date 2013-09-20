@@ -50,6 +50,24 @@ class postgresql::params inherits postgresql::globals {
       $python_package_name = pick($python_package_name, 'python-psycopg2')
     }
 
+    'Archlinux'       : {
+      $firewall_supported = false
+      # TODO: Archlinux supports firewall module but it isn't active developed.
+
+      $needs_initdb = pick($run_initdb, true)
+      # Archlinux doesn't have a client-package but has a libs package
+      $client_package_name = pick($custom_client_package_name, 'postgresql-libs')
+      $server_package_name = pick($custom_server_package_name, 'postgresql'
+      )
+      $service_name = pick($custom_service_name, 'postgresql')
+      $bindir = pick($custom_bindir, '/usr/bin')
+      $datadir = pick($custom_datadir, '/var/lib/postgres/data')
+      $confdir = pick($custom_confdir, $datadir)
+
+      $service_status = undef
+      $python_package_name = "python-psycopg2"
+    }
+
     'Debian': {
 
       if $manage_package_repo == true {
