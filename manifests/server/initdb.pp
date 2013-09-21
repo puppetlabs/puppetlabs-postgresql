@@ -15,7 +15,7 @@ class postgresql::server::initdb {
       ensure => directory,
       owner  => $user,
       group  => $group,
-      mode   => 700,
+      mode   => '0700',
     }
 
     if($needs_initdb) {
