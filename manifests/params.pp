@@ -50,6 +50,33 @@ class postgresql::params inherits postgresql::globals {
       $python_package_name = pick($python_package_name, 'python-psycopg2')
     }
 
+    'Archlinux': {
+      # Based on the existing version of the firewall module, this is normally
+      # true for Archlinux, but archlinux users want more control.
+      # so they can set it themself
+      $firewall_supported = pick($firewall_supported, true)
+      $needs_initdb       = pick($needs_initdb, true)
+
+      # Archlinux doesn't have a client-package but has a libs package which
+      # pulls in postgresql server
+      $client_package_name  = pick($client_package_name, 'postgresql')
+      $server_package_name  = pick($server_package_name, 'postgresql-libs')
+      $java_package_name    = pick($java_package_name, 'postgresql-jdbc')
+      # Archlinux doesn't have develop packages
+      $devel_package_name   = pick($devel_package_name, 'postgresql-devel')
+      # Archlinux does have postgresql-contrib but it isn't maintained
+      $contrib_package_name = pick($contrib_package_name,'undef')
+      # Archlinux postgresql package provides plperl
+      $plperl_package_name  = pick($plperl_package_name, 'undef')
+      $service_name         = pick($service_name, 'postgresql')
+      $bindir               = pick($bindir, '/usr/bin')
+      $datadir              = pick($datadir, '/var/lib/postgres/data')
+      $confdir              = pick($confdir, $datadir)
+
+      $service_status      = $service_status
+      $python_package_name = pick($python_package_name, 'python-psycopg2')
+    }
+
     'Debian': {
 
       if $manage_package_repo == true {
