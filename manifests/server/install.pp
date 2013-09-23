@@ -8,13 +8,13 @@ class postgresql::server::install {
   # installed automatically by the server package is removed and all
   # of its dependencies are removed also. Without this later installation
   # of the native Ubuntu packages will fail.
-  if($::operatingsystem == "Ubuntu" and $package_ensure == 'absent') {
+  if($::operatingsystem == 'Ubuntu' and $package_ensure == 'absent') {
     # This is an exec, because we want to invoke autoremove.
     #
     # An alternative would be to have a full list of packages, but that seemed
     # more problematic to maintain, not to mention the conflict with the
     # client class will create duplicate resources.
-    exec { "apt-get-autoremove-postgresql-client":
+    exec { 'apt-get-autoremove-postgresql-client':
       command   => "apt-get autoremove --purge --yes ${client_package_name}",
       onlyif    => "dpkg -l ${client_package_name} | grep -e '^ii'",
       logoutput => on_failure,
