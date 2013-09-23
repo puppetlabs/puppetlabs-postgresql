@@ -69,6 +69,10 @@ class postgresql::globals (
       },
       default => undef,
     },
+    'Archlinux' => $::operatingsystem ? {
+      /Archlinux/ => '9.2',
+      default => '9.2',
+    },
     default => undef,
   }
   $globals_version = pick($version, $default_version, 'unknown')
