@@ -4,6 +4,7 @@ class postgresql::server::initdb {
   $needs_initdb = $postgresql::server::needs_initdb
   $initdb_path  = $postgresql::server::initdb_path
   $datadir      = $postgresql::server::datadir
+  $xlogdir      = $postgresql::server::xlogdir
   $encoding     = $postgresql::server::encoding
   $locale       = $postgresql::server::locale
   $group        = $postgresql::server::group
@@ -18,6 +19,16 @@ class postgresql::server::initdb {
       mode   => '0700',
     }
 
+    if($xlogdir) {
+      # Make sure the xlog directory exists, and has the correct permissions.
+      file { $xlogdir:
+        ensure => directory,
+        owner  => $user,
+        group  => $group,
+        mode   => '0700',
+      }
+    }
+
     if($needs_initdb) {
       # Build up the initdb command.
       #
@@ -25,9 +36,13 @@ class postgresql::server::initdb {
       # initdb command don't accept this switch. So if the user didn't pass the
       # parameter, lets not pass the switch at all.
       $ic_base = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
-      $initdb_command = $locale ? {
+      $ic_xlog = $xlogdir ? {
         undef   => $ic_base,
-        default => "${ic_base} --locale '${locale}'"
+        default => "${ic_base} --xlogdir '${xlogdir}'"
+      }
+      $initdb_command = $locale ? {
+        undef   => $ic_xlog,
+        default => "${ic_xlog} --locale '${locale}'"
       }
 
       # This runs the initdb command, we use the existance of the PG_VERSION
@@ -47,6 +62,15 @@ class postgresql::server::initdb {
       ensure  => absent,
       recurse => true,
       force   => true,
+    }
+
+    if($xlogdir) {
+      # Make sure the xlog directory exists, and has the correct permissions.
+      file { $xlogdir:
+        ensure  => absent,
+        recurse => true,
+        force   => true,
+      }
     }
   }
 }
