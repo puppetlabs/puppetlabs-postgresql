@@ -12,7 +12,7 @@ class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
     apt::source { 'apt.postgresql.org':
       location          => 'http://apt.postgresql.org/pub/repos/apt/',
       release           => "${::lsbdistcodename}-pgdg",
-      repos             => 'main',
+      repos             => "main ${version}",
       key               => 'ACCC4CF8',
       key_source        => 'http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc',
       include_src       => false,
