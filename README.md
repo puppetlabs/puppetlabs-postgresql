@@ -127,16 +127,16 @@ Version 3 was a major rewrite to fix some internal dependency issues, and to mak
 
 To restructure server specific elements under the `postgresql::server::` namespaces the following objects were renamed as such:
 
-* `postgresql::database` -> `postgresql::server::database`
+* `postgresql::database`       -> `postgresql::server::database`
 * `postgresql::database_grant` -> `postgresql::server::database_grant`
-* `postgresql::db` -> `postgresql::server::db`
-* `postgresql::grant` -> `postgresql::server::grant`
-* `postgresql::pg_hba_rule` -> `postgresql::server::pg_hba_rule`
-* `postgresql::plperl` -> `postgresql::server::plperl`
-* `postgresql::contrib` -> `postgresql::server::contrib`
-* `postgresql::role` -> `postgresql::server::role`
-* `postgresql::table_grant` -> `postgresql::server::table_grant`
-* `postgresql::tablespace` -> `postgresql::server::tablespace`
+* `postgresql::db`             -> `postgresql::server::db`
+* `postgresql::grant`          -> `postgresql::server::grant`
+* `postgresql::pg_hba_rule`    -> `postgresql::server::pg_hba_rule`
+* `postgresql::plperl`         -> `postgresql::server::plperl`
+* `postgresql::contrib`        -> `postgresql::server::contrib`
+* `postgresql::role`           -> `postgresql::server::role`
+* `postgresql::table_grant`    -> `postgresql::server::table_grant`
+* `postgresql::tablespace`     -> `postgresql::server::tablespace`
 
 ####New `postgresql::server::config_entry` resource for managing configuration
 
@@ -148,9 +148,9 @@ Previously we used the `file_line` resource to modify `postgresql.conf`. This ne
 
 If you were using `file_line` for this purpose, you should change to this new methodology.
 
-####`postgresql_extras.conf` has been removed
+####`postgresql_puppet_extras.conf` has been removed
 
-Now that we have a methodology for managing `postgresql.conf`, and due to concerns over the file management methodology using an `exec { 'touch ...': }` as a way to create an empty file the existing postgresql\_extras.conf file is no longer managed by this module.
+Now that we have a methodology for managing `postgresql.conf`, and due to concerns over the file management methodology using an `exec { 'touch ...': }` as a way to create an empty file the existing postgresql\_puppet\_extras.conf file is no longer managed by this module.
 
 If you wish to recreate this methodology yourself, use this pattern:
 
@@ -200,7 +200,7 @@ Use `postgresql_psql` instead. In the future we may recreate this as a wrapper t
 
 It didn't make sense to have this logic in a fact any more, the logic has been moved into `postgresql::params`.
 
-####`ripieenar/concat` is no longer used, instead we use `puppetlabs/concat`
+####`ripienaar/concat` is no longer used, instead we use `puppetlabs/concat`
 
 The older concat module is now deprecated and moved into the `puppetlabs/concat` namespace. Functionality is more or less identical, but you may need to intervene during the installing of this package - as both use the same `concat` namespace.
 
