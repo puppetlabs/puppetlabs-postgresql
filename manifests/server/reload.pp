@@ -5,9 +5,18 @@ class postgresql::server::reload {
   $service_status = $postgresql::server::service_status
 
   if($ensure == 'present' or $ensure == true) {
+    case $::osfamily {
+      'Gentoo': {
+        $command = "/etc/init.d/${service_name} reload"
+      }
+      default: {
+        $command = "service ${service_name} reload"
+      }
+    }
+
     exec { 'postgresql_reload':
       path        => '/usr/bin:/usr/sbin:/bin:/sbin',
-      command     => "service ${service_name} reload",
+      command     => $command,
       onlyif      => $service_status,
       refreshonly => true,
     }
