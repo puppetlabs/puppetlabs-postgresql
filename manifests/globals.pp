@@ -48,6 +48,7 @@ class postgresql::globals (
     /^(RedHat|Linux)/ => $::operatingsystem ? {
       'Fedora' => $::operatingsystemrelease ? {
         /^(18|19|20)$/ => '9.2',
+        /^(17)$/ => '9.1',
         default => undef,
       },
       default => $::operatingsystemrelease ? {
