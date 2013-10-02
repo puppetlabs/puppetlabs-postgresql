@@ -840,6 +840,7 @@ Contributors
  * Adrien Thebo
  * Albert Koch
  * Andreas Ntaflos
+ * Bret Comnes
  * Brett Porter
  * Chris Price
  * dharwood

@@ -29,7 +29,10 @@ class postgresql::params inherits postgresql::globals {
         $plperl_package_name  = pick($plperl_package_name, 'postgresql-plperl')
         $service_name         = pick($service_name, 'postgresql')
         $bindir               = pick($bindir, '/usr/bin')
-        $datadir              = pick($datadir, '/var/lib/pgsql/data')
+        $datadir              = $::operatingsystem ? {
+          'Amazon' => pick($datadir, '/var/lib/pgsql9/data'),
+          default  => pick($datadir, '/var/lib/pgsql/data'),
+        }
         $confdir              = pick($confdir, $datadir)
       } else {
         $version_parts        = split($version, '[.]')
@@ -42,7 +45,10 @@ class postgresql::params inherits postgresql::globals {
         $plperl_package_name  = pick($plperl_package_name, "postgresql${package_version}-plperl")
         $service_name         = pick($service_name, "postgresql-${version}")
         $bindir               = pick($bindir, "/usr/pgsql-${version}/bin")
-        $datadir              = pick($datadir, "/var/lib/pgsql/${version}/data")
+        $datadir              = $::operatingsystem ? {
+          'Amazon' => pick($datadir, "/var/lib/pgsql9/${version}/data"),
+          default  => pick($datadir, "/var/lib/pgsql/${version}/data"),
+        }
         $confdir              = pick($confdir, $datadir)
       }
 
