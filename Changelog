@@ -1,4 +1,14 @@
-2013-10-01 - Version 3.0.0
+2013-10-09 - Version 3.0.0-rc2
+
+Summary:
+
+A few bugfixes have been found since -rc1.
+
+Fixes:
+- Special case for $datadir on Amazon
+- Fix documentation about username/password for the postgresql_hash function
+
+2013-10-01 - Version 3.0.0-rc1
 
 Summary:
 
