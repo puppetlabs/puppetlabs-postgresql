@@ -84,7 +84,7 @@ There are many ways to set up a postgres database using the `postgresql::server:
 
     postgresql::server::db { 'mydatabasename':
       user     => 'mydatabaseuser',
-      password => postgresql_password('mypassword', 'mydatabasename'),
+      password => postgresql_password('mydatabaseuser', 'mypassword'),
     }
 
 ###Managing users, roles and permissions
@@ -94,7 +94,7 @@ To manage users, roles and permissions:
     class { 'postgresql::server': }
 
     postgresql::server::role { 'marmot':
-      password_hash => postgresql_password('foo', 'mydb'),
+      password_hash => postgresql_password('marmot', 'mypasswd'),
     }
 
     postgresql::server::database_grant { 'test1':
@@ -654,7 +654,7 @@ The role name to create.
 The hash to use during password creation. If the password is not already pre-encrypted in a format that PostgreSQL supports, use the `postgresql_password` function to provide an MD5 hash here, for example:
 
     postgresql::role { "myusername":
-      password_hash => postgresql_password('mypassword'),
+      password_hash => postgresql_password('myusername', 'mypassword'),
     }
 
 ####`createdb`
