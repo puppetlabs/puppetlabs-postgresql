@@ -7,13 +7,15 @@ define postgresql::server::db (
   $locale     = $postgresql::server::locale,
   $grant      = 'ALL',
   $tablespace = undef,
-  $istemplate = false
+  $istemplate = false,
+  $owner      = undef
 ) {
   postgresql::server::database { $name:
     encoding   => $encoding,
     tablespace => $tablespace,
     locale     => $locale,
     istemplate => $istemplate,
+    owner      => $owner,
   }
 
   if ! defined(Postgresql::Server::Role[$user]) {
