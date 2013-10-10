@@ -17,11 +17,12 @@ describe 'postgresql::server::db', :type => :define do
     {
       :user => 'test',
       :password => 'test',
+      :owner => 'tester',
     }
   end
 
   it { should contain_postgresql__server__db('test') }
-  it { should contain_postgresql__server__database('test') }
+  it { should contain_postgresql__server__database('test').with_owner('tester') }
   it { should contain_postgresql__server__role('test') }
   it { should contain_postgresql__server__database_grant('GRANT test - ALL - test') }
 end
