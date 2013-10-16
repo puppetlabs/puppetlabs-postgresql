@@ -219,6 +219,7 @@ Classes:
 * [postgresql::server](#class-postgresqlserver)
 * [postgresql::server::plperl](#class-postgresqlserverplperl)
 * [postgresql::server::contrib](#class-postgresqlservercontrib)
+* [postgresql::server::postgis](#class-postgresqlserverpostgis)
 
 Resources:
 
@@ -335,6 +336,9 @@ This setting can be used to override the default postgresql user group to be use
 The version of PostgreSQL to install/manage. This is a simple way of providing a specific version such as '9.2' or '8.4' for example.
 
 Defaults to your operating system default.
+
+####`postgis_version`
+The version of PostGIS to install if you install PostGIS. Defaults to the lowest available with the version of PostgreSQL to be installed.
 
 ####`needs_initdb`
 This setting can be used to explicitly call the initdb operation after server package is installed and before the postgresql service is started. If not specified, the module will decide whether to call initdb or not depending on your OS distro.
@@ -470,6 +474,8 @@ The name of the postgresql contrib package.
 ####`package_ensure`
 The ensure parameter passed on to postgresql contrib package resource.
 
+###Class: postgresql::server::postgis
+Installs the postgresql postgis packages.
 
 ###Class: postgresql::lib::devel
 Installs the packages containing the development libraries for PostgreSQL.
