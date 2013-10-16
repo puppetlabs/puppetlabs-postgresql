@@ -7,7 +7,9 @@ define postgresql::server::db (
   $locale     = $postgresql::server::locale,
   $grant      = 'ALL',
   $tablespace = undef,
-  $istemplate = false
+  $istemplate = false,
+  $enforce_sql = false,
+  $sql        = '',
 ) {
   postgresql::server::database { $name:
     encoding   => $encoding,
@@ -31,4 +33,19 @@ define postgresql::server::db (
   if($tablespace != undef and defined(Postgresql::Server::Tablespace[$tablespace])) {
     Postgresql::Server::Tablespace[$tablespace]->Postgresql::Server::Database[$name]
   }
+
+  $refresh = ! $enforce_sql
+
+  if $sql {
+    exec{ "${name}-import":
+      command     => "su -l ${postgresql::params::user} -c '${postgresql::params::psql_path} -Upostgres -d ${name} -f ${sql}'",
+      logoutput   => true,
+      environment => "HOME=${::root_home}",
+      refreshonly => $refresh,
+      require     => Postgresql::Server::Database_grant ["GRANT ${user} - ${grant} - ${name}" ],
+      subscribe   => Postgresql::Server::Database [ $name ],
+      path        => "/bin",
+    }
+  }
+
 }
