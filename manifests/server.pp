@@ -40,6 +40,7 @@ class postgresql::server (
   $locale                     = $postgresql::params::locale,
 
   $manage_firewall            = $postgresql::params::manage_firewall,
+  $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $firewall_supported         = $postgresql::params::firewall_supported
 ) inherits postgresql::params {
   $pg = 'postgresql::server'

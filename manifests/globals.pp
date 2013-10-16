@@ -38,6 +38,7 @@ class postgresql::globals (
   $locale               = undef,
 
   $manage_firewall      = undef,
+  $manage_pg_hba_conf   = undef,
   $firewall_supported   = undef,
 
   $manage_package_repo  = undef

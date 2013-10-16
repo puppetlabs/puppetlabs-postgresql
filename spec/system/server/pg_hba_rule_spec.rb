@@ -64,4 +64,22 @@ describe 'postgresql::server::pg_hba_rule:' do
       r.exit_code.should == 2
     end
   end
+
+  it 'should fail catalogue if postgresql::server::manage_pga_conf is disabled' do
+    pp = <<-EOS.unindent
+      class { 'postgresql::server':
+        manage_pg_hba_conf => false,
+      }
+      postgresql::server::pg_hba_rule { 'foo':
+        type        => "local",
+        database    => "test1",
+        user        => "test1",
+        auth_method => reject,
+        order       => '001',
+      }
+    EOS
+    puppet_apply(pp) do |r|
+      r.exit_code.should == 1
+    end
+  end
 end
