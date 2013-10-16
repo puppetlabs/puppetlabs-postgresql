@@ -191,3 +191,27 @@ describe 'server with firewall:' do
     end
   end
 end
+
+describe 'server without pg_hba.conf:' do
+  after :all do
+    puppet_apply("class { 'postgresql::server': ensure => absent }") do |r|
+      r.exit_code.should_not == 1
+    end
+  end
+
+  context 'test installing postgresql without pg_hba.conf management on' do
+    it 'perform installation and make sure it is idempotent' do
+      pp = <<-EOS.unindent
+        class { "postgresql::server":
+          manage_pg_hba_conf => false,
+        }
+      EOS
+
+      puppet_apply(pp) do |r|
+        r.exit_code.should == 2
+        r.refresh
+        r.exit_code.should == 0
+      end
+    end
+  end
+end
