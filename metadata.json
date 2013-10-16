@@ -1,6 +1,6 @@
 {
     "name": "puppetlabs/postgresql",
-    "version": "3.0.0-rc1",
+    "version": "3.0.0-rc3",
     "summary": "PostgreSQL",
     "source": "git@github.com/puppetlabs/puppetlabs-postgresql.git",
     "project_page": "http://github.com/puppetlabs/puppetlabs-postgresql",

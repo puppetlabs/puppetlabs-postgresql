@@ -1,3 +1,14 @@
+2013-10-14 - Version 3.0.0-rc3
+
+Summary:
+
+Add a parameter to unmanage pg_hba.conf to fix a regression from 2.5, as well
+as allowing owner to be passed into x.
+
+Features:
+- `manage_pg_hba_conf` parameter added to control pg_hba.conf management.
+- `owner` parameter added to server::db.
+
 2013-10-09 - Version 3.0.0-rc2
 
 Summary:
