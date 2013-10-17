@@ -56,12 +56,19 @@ class postgresql::server::config {
           auth_option => $local_auth_option,
           order       => '002',
         }
+        postgresql::server::pg_hba_rule { 'allow localhost TCP access to postgresql user':
+          type        => 'host',
+          user        => $user,
+          address     => '127.0.0.1/32',
+          auth_method => 'md5',
+          order       => '003',
+        }
         postgresql::server::pg_hba_rule { 'deny access to postgresql user':
           type        => 'host',
           user        => $user,
           address     => $ip_mask_deny_postgres_user,
           auth_method => 'reject',
-          order       => '003',
+          order       => '004',
         }
 
         # ipv4acls are passed as an array of rule strings, here we transform
