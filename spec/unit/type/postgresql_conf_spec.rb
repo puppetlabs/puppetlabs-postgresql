@@ -15,6 +15,9 @@ describe Puppet::Type.type(:postgresql_conf) do
     it "should not invalid names" do
       expect { described_class.new(:name => 'foo bar') }.to raise_error(Puppet::Error, /Invalid value/)
     end
+    it "should allow dots in names" do
+      expect { described_class.new(:name => 'foo.bar') }.to_not raise_error
+    end
   end
 
   describe "when validating attributes" do
