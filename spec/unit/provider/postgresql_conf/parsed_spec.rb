@@ -60,6 +60,11 @@ describe provider_class do
       provider.parse_line("").should ==
         { :line=>"", :record_type=>:blank }
     end
+
+    it "should parse keys with dots " do
+      provider.parse_line("auto_explain.log_min_duration = 1ms").should ==
+        { :name => "auto_explain.log_min_duration", :value => "1ms", :comment => nil, :record_type => :parsed }
+    end
   end
 
   describe "configuration that should be set" do
@@ -76,6 +81,11 @@ describe provider_class do
     it "should set simple configuration" do
       provider.to_line({:name=>"listen_addresses", :value=>"*", :comment=>nil, :record_type=>:parsed }).should ==
         "listen_addresses = '*'"
+    end
+
+    it "should set simple configuration with period in name" do
+      provider.to_line({:name => "auto_explain.log_min_duration", :value => '100ms', :comment => nil, :record_type => :parsed }).should ==
+        "auto_explain.log_min_duration = 100ms"
     end
 
     it "should set simple configuration even with comments" do

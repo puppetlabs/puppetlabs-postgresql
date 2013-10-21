@@ -9,7 +9,7 @@ module Puppet
       desc "The postgresql parameter name to manage."
       isnamevar
 
-      newvalues(/^\w+$/)
+      newvalues(/^[\w\.]+$/)
     end
 
     newproperty(:value) do
