@@ -40,6 +40,35 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
         provider.run_sql_command("SELECT something")
       end
     end
+    describe "with search_path string" do
+      let(:attributes) do {
+        :search_path => "schema1"
+      } end
+
+      it "executes with the given search_path" do
+        expect(Puppet::Util::SUIDManager).to receive(:run_and_capture).with(
+          ['psql', '-t', '-c', 'set search_path to schema1; SELECT something'],
+          'postgres',
+          'postgres'
+        )
+        provider.run_sql_command("SELECT something")
+      end
+    end
+    describe "with search_path array" do
+      let(:attributes) do {
+        :search_path => ['schema1','schema2'],
+      } end
+
+      it "executes with the given search_path" do
+        expect(Puppet::Util::SUIDManager).to receive(:run_and_capture).with(
+          ['psql', '-t', '-c', 'set search_path to schema1,schema2; SELECT something'],
+          'postgres',
+          'postgres'
+        )
+        provider.run_sql_command("SELECT something")
+      end
+    end
+
   end
 
   context("#command") do
