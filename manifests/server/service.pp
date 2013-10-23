@@ -30,7 +30,7 @@ class postgresql::server::service {
     postgresql::validate_db_connection { 'validate_service_is_running':
       run_as          => $user,
       sleep           => 1,
-      tries           => 30,
+      tries           => 60,
       create_db_first => false,
       require         => Service['postgresqld'],
     }
