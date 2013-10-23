@@ -47,7 +47,7 @@ class postgresql::server (
 
   if ($ensure == 'present' or $ensure == true) {
     # Reload has its own ordering, specified by other defines
-    class { "${pg}::reload": require => Class["${pg}::install }
+    class { "${pg}::reload": require => Class["${pg}::install"] }
 
     anchor { "${pg}::start": }->
     class { "${pg}::install": }->
