@@ -37,9 +37,9 @@ define postgresql::server::pg_hba_rule(
       default => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam', 'crypt']
     }
 
-    $auth_method_regex = join(['^(', join($allowed_auth_methods, '|'), ')$'])
+    $auth_method_regex = join(['^(', join($allowed_auth_methods, '|'), ')$'],'')
     validate_re($auth_method, $auth_method_regex,
-    join(["The auth_method you specified [${auth_method}] must be one of: ", join($allowed_auth_methods, ', ')]))
+    join(["The auth_method you specified [${auth_method}] must be one of: ", join($allowed_auth_methods, ', ')],''))
 
     # Create a rule fragment
     $fragname = "pg_hba_rule_${name}"
