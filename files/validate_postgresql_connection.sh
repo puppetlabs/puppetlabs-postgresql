@@ -26,6 +26,6 @@ do
   fi
 done
 
-echo 'Unable to connect to puppetdb'
+echo 'Unable to connect to postgresql'
 
 exit 1
