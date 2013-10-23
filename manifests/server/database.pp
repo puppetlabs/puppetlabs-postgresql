@@ -48,7 +48,7 @@ define postgresql::server::database(
   postgresql_psql { "Check for existence of db '${dbname}'":
     command => 'SELECT 1',
     unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
-    require => Class['postgresql::server']
+    require => Class['postgresql::server::service']
   }~>
   exec { $createdb_command :
     refreshonly => true,

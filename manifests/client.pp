@@ -11,4 +11,19 @@ class postgresql::client (
     tag     => 'postgresql',
   }
 
+  $file_ensure = $package_ensure ? {
+    'present' => 'file',
+    true      => 'file',
+    'absent'  => 'absent',
+    false     => 'absent',
+    default   => 'file',
+  }
+  file { "/usr/local/bin/validate_postgresql_connection.sh":
+    ensure => $file_ensure,
+    source => "puppet:///modules/postgresql/validate_postgresql_connection.sh",
+    owner  => 0,
+    group  => 0,
+    mode   => 0755,
+  }
+
 }
