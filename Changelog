@@ -1,3 +1,29 @@
+2013-10-25 - Version 3.1.0
+
+Summary:
+
+This is a minor feature and bug fix release.
+
+Firstly, the postgresql_psql type now includes a new parameter `search_path` which is equivalent to using `set search_path` which allows you to change the default schema search path.
+
+The default version of Fedora 17 has now been added, so that Fedora 17 users can enjoy the module.
+
+And finally we've extended the capabilities of the defined type postgresql::validate_db_connection so that now it can handle retrying and sleeping between retries. This feature has been monopolized to fix a bug we were seeing with startup race conditions, but it can also be used by remote systems to 'wait' for PostgreSQL to start before their Puppet run continues.
+
+Features:
+- Defined $default_version for Fedora 17 (Bret Comnes)
+- add search_path attribute to postgresql_psql resource (Jeremy Kitchen)
+- (GH-198) Add wait and retry capability to validate_db_connection (Ken Barber)
+
+Bugs:
+- enabling defined postgres user password without resetting on every puppet run (jonoterc)
+- periods are valid in configuration variables also (Jeremy Kitchen)
+- Add zero length string to join() function (Jarl Stefansson)
+- add require of install to reload class (cdenneen)
+- (GH-198) Fix race condition on postgresql startup (Ken Barber)
+- Remove concat::setup for include in preparation for the next concat release (Ken Barber)
+
+
 2013-10-14 - Version 3.0.0
 
 Final release of 3.0, enjoy!
