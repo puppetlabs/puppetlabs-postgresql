@@ -52,6 +52,7 @@ class postgresql::params inherits postgresql::globals {
         }
         $confdir              = pick($confdir, $datadir)
       }
+      $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $service_status      = $service_status
       $python_package_name = pick($python_package_name, 'python-psycopg2')
@@ -79,6 +80,7 @@ class postgresql::params inherits postgresql::globals {
       $bindir               = pick($bindir, '/usr/bin')
       $datadir              = pick($datadir, '/var/lib/postgres/data')
       $confdir              = pick($confdir, $datadir)
+      $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $service_status      = $service_status
       $python_package_name = pick($python_package_name, 'python-psycopg2')
@@ -113,6 +115,7 @@ class postgresql::params inherits postgresql::globals {
       $datadir              = pick($datadir, "/var/lib/postgresql/${version}/main")
       $confdir              = pick($confdir, "/etc/postgresql/${version}/main")
       $service_status       = pick($service_status, "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'")
+      $psql_path            = pick($psql_path, "/usr/bin/psql")
 
       $firewall_supported   = pick($firewall_supported, true)
     }
@@ -121,6 +124,8 @@ class postgresql::params inherits postgresql::globals {
       # Based on the existing version of the firewall module, this is normally
       # false for other OS, but this allows an escape hatch to override it.
       $firewall_supported = pick($firewall_supported, false)
+
+      $psql_path            = pick($psql_path, "${bindir}/psql")
 
       # Since we can't determine defaults on our own, we rely on users setting
       # parameters with the postgresql::globals class. Here we are checking
@@ -138,7 +143,6 @@ class postgresql::params inherits postgresql::globals {
 
   $initdb_path          = pick($initdb_path, "${bindir}/initdb")
   $createdb_path        = pick($createdb_path, "${bindir}/createdb")
-  $psql_path            = pick($psql_path, "${bindir}/psql")
   $pg_hba_conf_path     = pick($pg_hba_conf_path, "${confdir}/pg_hba.conf")
   $pg_hba_conf_defaults = pick($pg_hba_conf_defaults, true)
   $postgresql_conf_path = pick($postgresql_conf_path, "${confdir}/postgresql.conf")
