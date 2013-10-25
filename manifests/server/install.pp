@@ -14,9 +14,17 @@ class postgresql::server::install {
     # An alternative would be to have a full list of packages, but that seemed
     # more problematic to maintain, not to mention the conflict with the
     # client class will create duplicate resources.
-    exec { 'apt-get-autoremove-postgresql-client':
+    exec { 'apt-get-autoremove-postgresql-client-XX':
       command   => "apt-get autoremove --purge --yes ${client_package_name}",
       onlyif    => "dpkg -l ${client_package_name} | grep -e '^ii'",
+      logoutput => on_failure,
+      path      => '/usr/bin:/bin:/usr/sbin/:/sbin',
+    }
+
+    # This will clean up anything we miss
+    exec { 'apt-get-autoremove-postgresql-client-brute':
+      command   => "dpkg -P postgresql*",
+      onlyif    => "dpkg -l postgresql* | grep -e '^ii'",
       logoutput => on_failure,
       path      => '/usr/bin:/bin:/usr/sbin/:/sbin',
     }

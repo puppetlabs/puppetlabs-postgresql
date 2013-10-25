@@ -4,6 +4,7 @@ class postgresql::server::service {
   $service_name     = $postgresql::server::service_name
   $service_provider = $postgresql::server::service_provider
   $service_status   = $postgresql::server::service_status
+  $user             = $postgresql::server::user
 
   $service_ensure = $ensure ? {
     present => true,
@@ -18,5 +19,20 @@ class postgresql::server::service {
     provider  => $service_provider,
     hasstatus => true,
     status    => $service_status,
+  }
+
+  if($service_ensure) {
+    # This blocks the class before continuing if chained correctly, making
+    # sure the service really is 'up' before continuing.
+    #
+    # Without it, we may continue doing more work before the database is
+    # prepared leading to a nasty race condition.
+    postgresql::validate_db_connection { 'validate_service_is_running':
+      run_as          => $user,
+      sleep           => 1,
+      tries           => 60,
+      create_db_first => false,
+      require         => Service['postgresqld'],
+    }
   }
 }

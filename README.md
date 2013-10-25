@@ -749,19 +749,31 @@ Example usage:
 Uniquely identify this resource, but functionally does nothing.
 
 ####`database_host`
-The hostname of the database you wish to test.
+The hostname of the database you wish to test. Defaults to 'undef' which generally uses the designated local unix socket.
 
 ####`database_port`
-Port to use when connecting.
+Port to use when connecting. Default to 'undef' which generally defaults to 5432 depending on your PostgreSQL packaging.
 
 ####`database_name`
-The name of the database you wish to test.
+The name of the database you wish to test. Defaults to 'postgres'.
 
 ####`database_username`
-Username to connect with.
+Username to connect with. Defaults to 'undef', which when using a unix socket and ident auth will be the user you are running as. If the host is remote you must provide a username.
 
 ####`database_password`
 Password to connect with. Can be left blank, but that is not recommended.
+
+####`run_as`
+The user to run the `psql` command with for authenticiation. This is important when trying to connect to a database locally using Unix sockets and `ident` authentication. It is not needed for remote testing.
+
+####`sleep`
+Upon failure, sets the number of seconds to sleep for before trying again.
+
+####`tries`
+Upon failure, sets the number of attempts before giving up and failing the resource.
+
+####`create_db_first`
+This will ensure the database is created before running the test. This only really works if your test is local. Defaults to `true`.
 
 
 ###Function: postgresql\_password

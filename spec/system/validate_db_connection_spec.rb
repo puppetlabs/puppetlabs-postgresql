@@ -25,6 +25,40 @@ describe 'postgresql::validate_db_connection:' do
     end
   end
 
+  it 'should run puppet with no changes declared if socket connectivity works' do
+    pp = <<-EOS.unindent
+      postgresql::validate_db_connection { 'foo':
+        database_name => 'foo',
+        run_as        => 'postgres',
+      }
+    EOS
+
+    puppet_apply(pp) do |r|
+      r.exit_code.should == 0
+    end
+  end
+
+  it 'should keep retrying if database is down' do
+    # So first we shut the db down, then background a startup routine with a
+    # sleep 10 in front of it. That way rspec-system should continue while
+    # the pause and db startup happens in the background.
+    shell("/etc/init.d/postgresql* stop")
+    shell('nohup bash -c "sleep 10; /etc/init.d/postgresql* start" > /dev/null 2>&1 &')
+
+    pp = <<-EOS.unindent
+      postgresql::validate_db_connection { 'foo':
+        database_name => 'foo',
+        tries         => 30,
+        sleep         => 1,
+        run_as        => 'postgres',
+      }
+    EOS
+
+    puppet_apply(pp) do |r|
+      r.exit_code.should == 0
+    end
+  end
+
   it 'should run puppet with no changes declared if db ip connectivity works' do
     pp = <<-EOS.unindent
       postgresql::validate_db_connection { 'foo':

@@ -13,6 +13,10 @@ describe 'postgresql::validate_db_connection', :type => :define do
     'test'
   end
 
+  describe 'should work with only default parameters' do
+    it { should contain_postgresql__validate_db_connection('test') }
+  end
+
   describe 'should work with all parameters' do
     let :params do
       {
@@ -21,6 +25,9 @@ describe 'postgresql::validate_db_connection', :type => :define do
         :database_password => 'test',
         :database_username => 'test',
         :database_port => 5432,
+        :run_as => 'postgresq',
+        :sleep => 4,
+        :tries => 30,
       }
     end
     it { should contain_postgresql__validate_db_connection('test') }

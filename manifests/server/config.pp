@@ -23,7 +23,6 @@ class postgresql::server::config {
 
     if ($manage_pg_hba_conf == true) {
       # Prepare the main pg_hba file
-      include concat::setup
       concat { $pg_hba_conf_path:
         owner  => 0,
         group  => $group,
