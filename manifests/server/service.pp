@@ -5,6 +5,7 @@ class postgresql::server::service {
   $service_provider = $postgresql::server::service_provider
   $service_status   = $postgresql::server::service_status
   $user             = $postgresql::server::user
+  $default_database = $postgresql::server::default_database
 
   $service_ensure = $ensure ? {
     present => true,
@@ -29,6 +30,7 @@ class postgresql::server::service {
     # prepared leading to a nasty race condition.
     postgresql::validate_db_connection { 'validate_service_is_running':
       run_as          => $user,
+      database_name   => $default_database,
       sleep           => 1,
       tries           => 60,
       create_db_first => false,
