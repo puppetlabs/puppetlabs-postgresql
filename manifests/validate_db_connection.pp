@@ -5,7 +5,7 @@
 # See README.md for more details.
 define postgresql::validate_db_connection(
   $database_host     = undef,
-  $database_name     = 'postgres',
+  $database_name     = undef,
   $database_password = undef,
   $database_username = undef,
   $database_port     = undef,
@@ -15,25 +15,26 @@ define postgresql::validate_db_connection(
   $create_db_first   = true
 ) {
   require postgresql::client
+  include postgresql::params
 
   $psql_path = $postgresql::params::psql_path
 
   $cmd_init = "${psql_path} --tuples-only --quiet "
   $cmd_host = $database_host ? {
     default => "-h ${database_host} ",
-    undef   => ""
+    undef   => "",
   }
   $cmd_user = $database_username ? {
     default => "-U ${database_username} ",
-    undef   => ""
+    undef   => "",
   }
   $cmd_port = $database_port ? {
     default => "-p ${database_port} ",
-    undef   => ""
+    undef   => "",
   }
   $cmd_dbname = $database_name ? {
     default => "--dbname ${database_name} ",
-    undef   => ""
+    undef   => "--dbname ${postgresql::params::default_database} ",
   }
   $env = $database_password ? {
     default => "PGPASSWORD=${database_password}",
