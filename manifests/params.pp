@@ -146,4 +146,5 @@ class postgresql::params inherits postgresql::globals {
   $pg_hba_conf_path     = pick($pg_hba_conf_path, "${confdir}/pg_hba.conf")
   $pg_hba_conf_defaults = pick($pg_hba_conf_defaults, true)
   $postgresql_conf_path = pick($postgresql_conf_path, "${confdir}/postgresql.conf")
+  $default_database     = pick($default_database, 'postgres')
 }

@@ -14,7 +14,7 @@ class postgresql::server (
   $service_name               = $postgresql::params::service_name,
   $service_provider           = $postgresql::params::service_provider,
   $service_status             = $postgresql::params::service_status,
-  $default_database           = undef,
+  $default_database           = $postgresql::params::default_database,
 
   $listen_addresses           = $postgresql::params::listen_addresses,
   $ip_mask_deny_postgres_user = $postgresql::params::ip_mask_deny_postgres_user,
