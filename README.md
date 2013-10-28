@@ -292,6 +292,9 @@ This setting can be used to override the default postgresql service provider. If
 ####`service_status`
 This setting can be used to override the default status check command for your PostgreSQL service. If not specified, the module will use whatever service name is the default for your OS distro.
 
+####`default_database`
+This setting is used to specify the name of the default database to connect with. On most systems this will be "postgres".
+
 ####`inidb_path`
 Path to the `initdb` command.
 
@@ -374,6 +377,9 @@ This setting can be used to override the default postgresql service provider. If
 
 ####`service_status`
 This setting can be used to override the default status check command for your PostgreSQL service. If not specified, the module will use whatever service name is the default for your OS distro.
+
+####`default_database`
+This setting is used to specify the name of the default database to connect with. On most systems this will be "postgres".
 
 ####`listen_addresses`
 This value defaults to `localhost`, meaning the postgres server will only accept connections from localhost. If you'd like to be able to connect to postgres from remote machines, you can override this setting. A value of `*` will tell postgres to accept connections from any remote machine. Alternately, you can specify a comma-separated list of hostnames or IP addresses. (For more info, have a look at the `postgresql.conf` file from your system's postgres package).
