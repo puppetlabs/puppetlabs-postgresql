@@ -284,9 +284,6 @@ This setting can be used to override the default postgresql PL/perl package name
 This setting can be used to override the default postgresql Python package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
 ####`service_name`
-This setting can be used to override the default postgresql service name. If not specified, the module will use whatever service name is the default for your OS distro.
-
-####`service_name`
 This setting can be used to override the default postgresql service provider. If not specified, the module will use whatever service name is the default for your OS distro.
 
 ####`service_status`
@@ -295,7 +292,7 @@ This setting can be used to override the default status check command for your P
 ####`default_database`
 This setting is used to specify the name of the default database to connect with. On most systems this will be "postgres".
 
-####`inidb_path`
+####`initdb_path`
 Path to the `initdb` command.
 
 ####`createdb_path`
