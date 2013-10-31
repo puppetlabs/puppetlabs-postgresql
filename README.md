@@ -172,7 +172,7 @@ Since PostgreSQL uses the terminology `encoding` not `charset` the parameter has
 
 ####The `postgresql` base class is no longer how you set globals
 
-The old global override pattern was less then optimal so it has been fixed, however we decided to demark this properly by specifying these overrides in the class `postgresql::global`. Consult the documentation for this class now to see what options are available.
+The old global override pattern was less then optimal so it has been fixed, however we decided to demark this properly by specifying these overrides in the class `postgresql::globals`. Consult the documentation for this class now to see what options are available.
 
 Also, some parameter elements have been moved between this and the `postgresql::server` class where it made sense.
 
@@ -245,7 +245,7 @@ This class allows you to configure the main settings for this module in a global
 
 For example, if you wanted to overwrite the default `locale` and `encoding` for all classes you could use the following combination:
 
-    class { 'postgresql::global':
+    class { 'postgresql::globals':
       encoding => 'UTF8',
       locale   => 'en_NG',
     }->
