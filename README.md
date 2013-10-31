@@ -259,7 +259,7 @@ If you want to use the upstream PostgreSQL packaging, and be specific about the 
     class { 'postgresql::globals':
       manage_package_repo => true,
       version             => '9.2',
-    }
+    }->
     class { 'postgresql::server': }
 
 ####`client_package_name`
