@@ -1,3 +1,20 @@
+2013-11-05 - Version 3.2.0
+
+Summary:
+
+Add's support for Ubuntu 13.10 (and 14.04) as well as x, y, z.
+
+Features:
+- Add versions for Ubuntu 13.10 and 14.04.
+- Use default_database in validate_db_connection instead of a hardcoded
+'postgres'
+- Add globals/params layering for default_database.
+- Allow specification of default database name.
+
+Bugs:
+- Fixes to the README.
+
+
 2013-10-25 - Version 3.1.0
 
 Summary:
