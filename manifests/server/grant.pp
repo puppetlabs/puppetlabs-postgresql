@@ -31,15 +31,31 @@ define postgresql::server::grant (
   )
 
   ## Validate that the object type's privilege is acceptable
+  # TODO: this is a terrible hack; if they pass "ALL" as the desired privilege,
+  #  we need a way to test for it--and has_database_privilege does not
+  #  recognize 'ALL' as a valid privilege name. So we probably need to
+  #  hard-code a mapping between 'ALL' and the list of actual privileges that
+  #  it entails, and loop over them to check them.  That sort of thing will
+  #  probably need to wait until we port this over to ruby, so, for now, we're
+  #  just going to assume that if they have "CREATE" privileges on a database,
+  #  then they have "ALL".  (I told you that it was terrible!)
   case $_object_type {
     'DATABASE': {
-      validate_string($_privilege,'CREATE','CONNECT','TEMPORARY','TEMP','ALL',
-        'ALL PRIVILEGES')
+      $unless_privilege = $_privilege ? {
+        'ALL'   => 'CREATE',
+        default => $_privilege,
+      }
+      validate_string($unless_privilege,'CREATE','CONNECT','TEMPORARY','TEMP',
+        'ALL','ALL PRIVILEGES')
       $unless_function = 'has_database_privilege'
       $on_db = $psql_db
     }
     'TABLE': {
-      validate_string($_privilege,'SELECT','INSERT','UPDATE','REFERENCES',
+      $unless_privilege = $_privilege ? {
+        'ALL'   => 'INSERT',
+        default => $_privilege,
+      }
+      validate_string($unless_privilege,'SELECT','INSERT','UPDATE','REFERENCES',
         'ALL','ALL PRIVILEGES')
       $unless_function = 'has_table_privilege'
       $on_db = $db
@@ -49,18 +65,6 @@ define postgresql::server::grant (
     }
   }
 
-  # TODO: this is a terrible hack; if they pass "ALL" as the desired privilege,
-  #  we need a way to test for it--and has_database_privilege does not
-  #  recognize 'ALL' as a valid privilege name. So we probably need to
-  #  hard-code a mapping between 'ALL' and the list of actual privileges that
-  #  it entails, and loop over them to check them.  That sort of thing will
-  #  probably need to wait until we port this over to ruby, so, for now, we're
-  #  just going to assume that if they have "CREATE" privileges on a database,
-  #  then they have "ALL".  (I told you that it was terrible!)
-  $unless_privilege = $_privilege ? {
-    'ALL'   => 'CREATE',
-    default => $_privilege,
-  }
   $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${object_name}\" TO \"${role}\""
   postgresql_psql { $grant_cmd:
     db         => $on_db,
