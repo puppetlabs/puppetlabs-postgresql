@@ -47,8 +47,6 @@ define postgresql::server::pg_hba_rule(
       target  => $target,
       content => template('postgresql/pg_hba_rule.conf'),
       order   => $order,
-      owner   => $::id,
-      mode    => '0600',
     }
   }
 }
