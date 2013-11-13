@@ -38,7 +38,7 @@ class postgresql::server::initdb {
         user      => $user,
         group     => $group,
         logoutput => on_failure,
-        after    => File[$datadir],
+        require   => File[$datadir],
       }
     }
   } else {
