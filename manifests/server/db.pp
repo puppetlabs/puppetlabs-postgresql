@@ -7,12 +7,14 @@ define postgresql::server::db (
   $locale     = $postgresql::server::locale,
   $grant      = 'ALL',
   $tablespace = undef,
+  $template   = 'template0',
   $istemplate = false,
   $owner      = undef
 ) {
   postgresql::server::database { $name:
     encoding   => $encoding,
     tablespace => $tablespace,
+    template   => $template,
     locale     => $locale,
     istemplate => $istemplate,
     owner      => $owner,
