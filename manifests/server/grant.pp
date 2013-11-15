@@ -55,8 +55,8 @@ define postgresql::server::grant (
         'ALL'   => 'INSERT',
         default => $_privilege,
       }
-      validate_string($unless_privilege,'SELECT','INSERT','UPDATE','REFERENCES',
-        'ALL','ALL PRIVILEGES')
+      validate_string($unless_privilege,'SELECT','INSERT','UPDATE','DELETE',
+        'TRUNCATE','REFERENCES','TRIGGER','ALL','ALL PRIVILEGES')
       $unless_function = 'has_table_privilege'
       $on_db = $db
     }
