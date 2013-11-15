@@ -3,6 +3,7 @@ define postgresql::server::database(
   $dbname     = $title,
   $owner      = $postgresql::server::user,
   $tablespace = undef,
+  $template   = 'template0',
   $encoding   = $postgresql::server::encoding,
   $locale     = $postgresql::server::locale,
   $istemplate = false
@@ -43,7 +44,7 @@ define postgresql::server::database(
     default => "--tablespace='${tablespace}' ",
   }
 
-  $createdb_command = "${createdb_path} --owner='${owner}' --template=template0 ${encoding_option}${locale_option}${tablespace_option} '${dbname}'"
+  $createdb_command = "${createdb_path} --owner='${owner}' --template=${template} ${encoding_option}${locale_option}${tablespace_option} '${dbname}'"
 
   postgresql_psql { "Check for existence of db '${dbname}'":
     command => 'SELECT 1',
