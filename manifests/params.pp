@@ -92,7 +92,10 @@ class postgresql::params inherits postgresql::globals {
         $needs_initdb = pick($needs_initdb, true)
         $service_name = pick($service_name, 'postgresql')
       } else {
-        $needs_initdb = pick($needs_initdb, false)
+        $needs_initdb = $datadir ? {
+          undef   => pick($needs_initdb, false),
+          default => pick($needs_initdb, true)
+        }
         $service_name = $::operatingsystem ? {
           'Debian' => pick($service_name, 'postgresql'),
           'Ubuntu' => $::lsbmajdistrelease ? {
@@ -113,7 +116,7 @@ class postgresql::params inherits postgresql::globals {
 
       $bindir               = pick($bindir, "/usr/lib/postgresql/${version}/bin")
       $datadir              = pick($datadir, "/var/lib/postgresql/${version}/main")
-      $confdir              = pick($confdir, "/etc/postgresql/${version}/main")
+      $confdir              = pick($confdir, $datadir)
       $service_status       = pick($service_status, "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'")
       $psql_path            = pick($psql_path, "/usr/bin/psql")
 
