@@ -26,3 +26,4 @@ describe 'postgresql::server::initdb', :type => :class do
     it { should contain_file('/var/lib/pgsql9/data').with_ensure('directory') }
   end
 end
+
