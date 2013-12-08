@@ -120,6 +120,27 @@ class postgresql::params inherits postgresql::globals {
       $firewall_supported   = pick($firewall_supported, true)
     }
 
+    'FreeBSD': {
+
+      $client_package_name  = pick($client_package_name, "databases/postgresql${version}-client")
+      $server_package_name  = pick($server_package_name, "databases/postgresql${version}-server")
+      $contrib_package_name = pick($contrib_package_name, "databases/postgresql${version}-contrib")
+      $devel_package_name   = pick($devel_package_name, 'databases/postgresql-libpqxx3')
+      $java_package_name    = pick($java_package_name, 'databases/postgresql-jdbc')
+      $plperl_package_name  = pick($plperl_package_name, "databases/postgresql${version}-plperl")
+      $python_package_name  = pick($python_package_name, 'databases/py-psycopg2')
+
+      $service_name         = pick($service_name, 'postgresql')
+      $bindir               = pick($bindir, '/usr/local/bin')
+      $datadir              = pick($datadir, '/usr/local/pgsql/data')
+      $confdir              = pick($confdir, '/usr/local/share/postgresql')
+      $service_status       = pick($service_status, "/usr/local/etc/rc.d/${service_name} status")
+      $psql_path            = pick($psql_path, "${bindir}/psql")
+
+      $firewall_supported   = pick($firewall_supported, false)
+      $needs_initdb         = pick($needs_initdb, true)
+    }
+
     default: {
       # Based on the existing version of the firewall module, this is normally
       # false for other OS, but this allows an escape hatch to override it.
