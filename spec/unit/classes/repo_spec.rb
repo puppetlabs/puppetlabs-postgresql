@@ -15,3 +15,26 @@ describe 'postgresql::repo', :type => :class do
     end
   end
 end
+
+describe 'postgresql::repo', :type => :class do
+  let :facts do
+    {
+      :osfamily => 'RedHat',
+      :operatingsystem => 'CentOS',
+      :operatingsystemrelease => '6.4',
+    }
+  end
+  let :params do
+    {
+      :version  => '9.2',
+    }
+  end
+
+  describe 'with no parameters' do
+    it 'should instantiate yum_postgresql_org class' do
+      should include_class('postgresql::repo::yum_postgresql_org')
+    end
+  end
+
+
+end

@@ -90,4 +90,32 @@ describe 'postgresql::server', :type => :class do
       should contain_exec('postgresql_initdb')
     end
   end
+
+  describe 'with manage_package_repo set' do
+    let :pre_condition do
+      "class { 'postgresql::globals':
+        manage_package_repo  => true,
+        package_repo_url     => 'http://some.local.mirror/pgrpms',
+        package_repo_name    => 'localmirror',
+      }"
+    end
+    let :facts do
+      {
+        :osfamily => 'RedHat',
+        :operatingsystem => 'CentOS',
+        :operatingsystemrelease => '6.4',
+        :concat_basedir => tmpfilename('server'),
+      }
+    end
+    let :params do
+      {
+        :version  => '9.2',
+      }
+    end
+
+    it 'should instantiate yum_postgresql_org with the mirror the user sets' do
+      should include_class('postgresql::repo::yum_postgresql_org')
+      should contain_yumrepo('localmirror').with_baseurl(/some.local.mirror/)
+    end
+  end
 end

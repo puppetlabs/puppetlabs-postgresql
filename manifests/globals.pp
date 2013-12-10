@@ -42,7 +42,9 @@ class postgresql::globals (
   $manage_pg_hba_conf   = undef,
   $firewall_supported   = undef,
 
-  $manage_package_repo  = undef
+  $manage_package_repo  = undef,
+  $package_repo_url     = undef,
+  $package_repo_name    = undef
 ) {
   # We are determining this here, because it is needed by the package repo
   # class.
@@ -83,6 +85,11 @@ class postgresql::globals (
   $globals_version = pick($version, $default_version, 'unknown')
   if($globals_version == 'unknown') {
     fail('No preferred version defined or automatically detected.')
+  }
+
+  if( ($package_repo_url != undef and $package_repo_name == undef) or
+      ($package_repo_name != undef and $package_repo_url == undef) ) {
+    fail('You must set both package_repo_name and package_repo_url')
   }
 
   # Setup of the repo only makes sense globally, so we are doing this here.
