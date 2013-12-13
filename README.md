@@ -319,6 +319,9 @@ This setting can be used to override the default postgresql configuration direct
 ####`bindir`
 This setting can be used to override the default postgresql binaries directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
 
+####`xlogdir`
+This setting can be used to override the default postgresql xlog directory. If not specified the module will use initdb's default path.
+
 ####`user`
 This setting can be used to override the default postgresql super user and owner of postgresql related files in the file system. If not specified, the module will use the user name 'postgres'.
 
