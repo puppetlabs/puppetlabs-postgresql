@@ -38,17 +38,18 @@ class postgresql::params inherits postgresql::globals {
       } else {
         $version_parts        = split($version, '[.]')
         $package_version      = "${version_parts[0]}${version_parts[1]}"
+        $package_dot_version  = "${version_parts[0]}.${version_parts[1]}"
         $client_package_name  = pick($client_package_name, "postgresql${package_version}")
         $server_package_name  = pick($server_package_name, "postgresql${package_version}-server")
         $contrib_package_name = pick($contrib_package_name,"postgresql${package_version}-contrib")
         $devel_package_name   = pick($devel_package_name, "postgresql${package_version}-devel")
         $java_package_name    = pick($java_package_name, "postgresql${package_version}-jdbc")
         $plperl_package_name  = pick($plperl_package_name, "postgresql${package_version}-plperl")
-        $service_name         = pick($service_name, "postgresql-${package_version}")
-        $bindir               = pick($bindir, "/usr/pgsql-${version}/bin")
+        $service_name         = pick($service_name, "postgresql-${package_dot_version}")
+        $bindir               = pick($bindir, "/usr/pgsql-${package_dot_version}/bin")
         $datadir              = $::operatingsystem ? {
           'Amazon' => pick($datadir, "/var/lib/pgsql9/${version}/data"),
-          default  => pick($datadir, "/var/lib/pgsql/${version}/data"),
+          default  => pick($datadir, "/var/lib/pgsql/${package_dot_version}/data"),
         }
         $confdir              = pick($confdir, $datadir)
       }
