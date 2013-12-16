@@ -102,12 +102,29 @@ class postgresql::server::config {
     postgresql::server::config_entry { 'listen_addresses':
       value => $listen_addresses,
     }
+
+    # Ensure the service starts with the correct datadir on RedHat and Amazon (Linux)
+    if $postgresql::sysconfig_filename {
+      file { '/etc/sysconfig/pgsql':
+        ensure => directory,
+      }
+
+      file { $postgresql::server::sysconfig_filename:
+        content => "PGDATA=${postgresql::server::datadir}\n",
+      }
+    }
   } else {
     file { $pg_hba_conf_path:
       ensure => absent,
     }
     file { $postgresql_conf_path:
       ensure => absent,
+    }
+
+    if $postgresql::server::sysconfig_filename {
+      file { $postgresql::server::sysconfig_filename:
+        ensure => absent,
+      }
     }
   }
 }

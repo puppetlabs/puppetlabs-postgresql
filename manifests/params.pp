@@ -35,6 +35,7 @@ class postgresql::params inherits postgresql::globals {
           default  => pick($datadir, '/var/lib/pgsql/data'),
         }
         $confdir              = pick($confdir, $datadir)
+        $sysconfig_filename   = '/etc/sysconfig/postgresql'
       } else {
         $version_parts        = split($version, '[.]')
         $package_version      = "${version_parts[0]}${version_parts[1]}"
@@ -51,6 +52,7 @@ class postgresql::params inherits postgresql::globals {
           default  => pick($datadir, "/var/lib/pgsql/${version}/data"),
         }
         $confdir              = pick($confdir, $datadir)
+        $sysconfig_filename   = "/etc/sysconfig/postgresql-${version}"
       }
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
@@ -81,6 +83,7 @@ class postgresql::params inherits postgresql::globals {
       $datadir              = pick($datadir, '/var/lib/postgres/data')
       $confdir              = pick($confdir, $datadir)
       $psql_path            = pick($psql_path, "${bindir}/psql")
+      $sysconfig_filename   = false
 
       $service_status      = $service_status
       $python_package_name = pick($python_package_name, 'python-psycopg2')
@@ -116,6 +119,7 @@ class postgresql::params inherits postgresql::globals {
       $confdir              = pick($confdir, "/etc/postgresql/${version}/main")
       $service_status       = pick($service_status, "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'")
       $psql_path            = pick($psql_path, "/usr/bin/psql")
+      $sysconfig_filename   = false
 
       $firewall_supported   = pick($firewall_supported, true)
     }
@@ -138,6 +142,7 @@ class postgresql::params inherits postgresql::globals {
       if ($bindir == undef) { fail("${err_prefix}bindir") }
       if ($datadir == undef) { fail("${err_prefix}datadir") }
       if ($confdir == undef) { fail("${err_prefix}confdir") }
+      $sysconfig_filename = false
     }
   }
 
