@@ -19,7 +19,7 @@ define postgresql::server::role(
   $createrole_sql  = $createrole  ? { true => 'CREATEROLE',  default => 'NOCREATEROLE' }
   $createdb_sql    = $createdb    ? { true => 'CREATEDB',    default => 'NOCREATEDB' }
   $superuser_sql   = $superuser   ? { true => 'SUPERUSER',   default => 'NOSUPERUSER' }
-  $replication_sql = $replication ? { true => 'REPLICATION', default => '' }
+  $replication_sql = $replication ? { true => 'REPLICATION', default => 'NOREPLICATION' }
   if ($password_hash != false) {
     $password_sql = "ENCRYPTED PASSWORD '${password_hash}'"
   } else {
