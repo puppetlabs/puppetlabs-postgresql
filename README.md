@@ -874,3 +874,4 @@ Contributors
  * Spenser Gilliland
  * stormcrow
  * William Van Hevelingen
+ * [Daniel Foglio](https://github.com/danielfoglio)
