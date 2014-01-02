@@ -7,8 +7,8 @@ class postgresql::server::service {
   $user             = $postgresql::server::user
   $default_database = $postgresql::server::default_database
 
-  case $::operatingsystem {
-    'Redhat', 'CentOS': {
+  case $::osfamily {
+    'Redhat', 'Linux': {
       file { '/etc/sysconfig/pgsql':
         ensure      => 'directory',
         owner       => 'root',
@@ -25,7 +25,7 @@ class postgresql::server::service {
       }
     }
     default: {
-      notice("${::operatingsystem} - Not creating postgresql sysconfig file: /etc/sysconfig/pgsql/${service_name}")
+      notice("${::osfamily} - Not creating ${service_name} sysconfig file: /etc/sysconfig/pgsql/${service_name}")
     }
   }
   
