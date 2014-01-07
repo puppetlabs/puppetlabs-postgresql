@@ -8,5 +8,5 @@ describe 'postgresql::params', :type => :class do
       :operatingsystemrelease => '6.0',
     }
   end
-  it { should include_class("postgresql::params") }
+  it { should contain_class("postgresql::params") }
 end

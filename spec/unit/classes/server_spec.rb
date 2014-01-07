@@ -12,8 +12,8 @@ describe 'postgresql::server', :type => :class do
   end
 
   describe 'with no parameters' do
-    it { should include_class("postgresql::params") }
-    it { should include_class("postgresql::server") }
+    it { should contain_class("postgresql::params") }
+    it { should contain_class("postgresql::server") }
     it 'should validate connection' do
       should contain_postgresql__validate_db_connection('validate_service_is_running')
     end

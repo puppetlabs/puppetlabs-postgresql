@@ -8,5 +8,5 @@ describe 'postgresql::lib::devel', :type => :class do
       :operatingsystemrelease => '6.0',
     }
   end
-  it { should include_class("postgresql::lib::devel") }
+  it { should contain_class("postgresql::lib::devel") }
 end
