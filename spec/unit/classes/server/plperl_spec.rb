@@ -16,7 +16,7 @@ describe 'postgresql::server::plperl', :type => :class do
   end
 
   describe 'with no parameters' do
-    it { should include_class("postgresql::server::plperl") }
+    it { should contain_class("postgresql::server::plperl") }
     it 'should create package' do
       should contain_package('postgresql-plperl').with({
         :ensure => 'present',
@@ -33,7 +33,7 @@ describe 'postgresql::server::plperl', :type => :class do
       }
     end
 
-    it { should include_class("postgresql::server::plperl") }
+    it { should contain_class("postgresql::server::plperl") }
     it 'should create package with correct params' do
       should contain_package('postgresql-plperl').with({
         :ensure => 'absent',
