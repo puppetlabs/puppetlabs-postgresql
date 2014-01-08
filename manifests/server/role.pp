@@ -56,8 +56,14 @@ define postgresql::server::role(
   }
 
   if(versioncmp($version, '9.1') >= 0) {
-    postgresql_psql {"ALTER ROLE \"${username}\" ${replication_sql}":
-      unless => "SELECT rolname FROM pg_roles WHERE rolname='${username}' and rolreplication=${replication}",
+    if $replication_sql == '' {
+      postgresql_psql {"ALTER ROLE \"${username}\" NOREPLICATION":
+        unless => "SELECT rolname FROM pg_roles WHERE rolname='${username}' and rolreplication=${replication}",
+      }
+    } else {
+      postgresql_psql {"ALTER ROLE \"${username}\" ${replication_sql}":
+        unless => "SELECT rolname FROM pg_roles WHERE rolname='${username}' and rolreplication=${replication}",
+      }
     }
   }
 
