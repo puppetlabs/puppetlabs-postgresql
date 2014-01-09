@@ -90,4 +90,21 @@ describe 'postgresql::server', :type => :class do
       should contain_exec('postgresql_initdb')
     end
   end
+
+  describe '/etc/sysconfig/pgsql on RHEL based systems' do
+    let(:params) do
+      {
+        :manage_package_repo => true,
+        :operatingsystem => 'CentOS',
+        :operatingsystemmajrelease => '6',
+        :operatingsystemrelease => '6.5',
+        :osfamily => 'RedHat',
+        :version => '9.3.2-1',
+      }
+
+      it 'should include the proper sysconfig file' do
+        should contain_file('/etc/sysconfig/pgsql/postgresql-9.3')
+      end
+    end
+  end
 end
