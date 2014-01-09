@@ -97,6 +97,16 @@ class postgresql::server::config {
     postgresql::server::config_entry { 'listen_addresses':
       value => $listen_addresses,
     }
+
+    # When installing pgrpms packages, write a /etc/sysconfig/pgsql file
+    if (($::osfamily == 'RedHat' or $::osfamily == 'Linux') and $postgresql::globals::manage_package_repo == true ) {
+      $version_parts = split($version, '[.]')
+      # File will be something like /etc/sysconfig/pgsql/postgresql-9.3
+      file { "etc-sysconfig-pgsql":
+        path    => "/etc/sysconfig/pgsql/postgresql-${version_parts[0]}.${version_parts[1]}",
+        content => template('postgrseql/etc-sysconfig-pgsql.erb'),
+      }
+    }
   } else {
     file { $pg_hba_conf_path:
       ensure => absent,
