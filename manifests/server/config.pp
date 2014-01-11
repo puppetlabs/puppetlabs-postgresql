@@ -14,11 +14,6 @@ class postgresql::server::config {
   $version                    = $postgresql::server::version
   $manage_pg_hba_conf         = $postgresql::server::manage_pg_hba_conf
 
-  File {
-    owner => $user,
-    group => $group,
-  }
-
   if ($ensure == 'present' or $ensure == true) {
 
     if ($manage_pg_hba_conf == true) {
