@@ -1,4 +1,10 @@
 language: ruby
+# work around RubyGems 2.2.0 breaking ruby 1.8.7
+# https://github.com/rubygems/rubygems/pull/763
+# fixed in RubyGems 2.2.1 which hasn't appeared on travis-ci yet
+before_install:
+  - gem update --system 2.1.11
+  - gem --version
 bundler_args: --without development
 script: bundle exec rake spec SPEC_OPTS='--format documentation'
 after_success:
