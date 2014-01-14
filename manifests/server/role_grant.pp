@@ -24,7 +24,7 @@ define postgresql::server::role_grant (
     Postgresql::Server::Role[$role]->Postgresql_psql[$grant_cmd]
   }
 
-  if($db != undef and defined(Postgresql::Server::Role[$user])) {
+  if($user != undef and defined(Postgresql::Server::Role[$user])) {
     Postgresql::Server::Role[$user]->Postgresql_psql[$grant_cmd]
   }
 }
