@@ -104,7 +104,7 @@ class postgresql::server::config {
       # File will be something like /etc/sysconfig/pgsql/postgresql-9.3
       file { "etc-sysconfig-pgsql":
         path    => "/etc/sysconfig/pgsql/postgresql-${version_parts[0]}.${version_parts[1]}",
-        content => template('postgrseql/etc-sysconfig-pgsql.erb'),
+        content => "PGDATA=${datadir}\n"
       }
     }
   } else {
