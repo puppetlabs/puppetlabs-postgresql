@@ -454,7 +454,7 @@ The ensure parameter passed on to postgresql client package resource.
 Installs the postgresql contrib package.
 
 ####`package_name`
-The name of the postgresql client package.
+The name of the postgresql contrib package.
 
 ####`package_ensure`
 The ensure parameter passed on to postgresql contrib package resource.
