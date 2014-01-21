@@ -75,16 +75,18 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   end
 
   def run_command(command, user, group)
-    if Puppet::PUPPETVERSION.to_f < 4
-      Puppet::Util::SUIDManager.run_and_capture(command, resource[:psql_user], resource[:psql_group])
+    if Puppet::PUPPETVERSION.to_f < 3.4
+      Puppet::Util::SUIDManager.run_and_capture(command, user, group)
     else
-      Puppet::Util::Execution.execute(command, {:uid => resource[:psql_user],
-        :gid => resource[:psql_group],
-        :failonfail=>false,
-        :combine=>true,
-        :override_locale=>true,
-        :custom_environment=>{}
+      output = Puppet::Util::Execution.execute(command, {
+        :uid                => user,
+        :gid                => group,
+        :failonfail         => false,
+        :combine            => true,
+        :override_locale    => true,
+        :custom_environment => {}
       })
+      [output, $CHILD_STATUS.dup]
     end
   end
 
