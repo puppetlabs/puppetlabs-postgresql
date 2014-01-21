@@ -396,7 +396,7 @@ List of strings for access control for connection method, users, databases, IPv4
 ####`ipv6acls`
 List of strings for access control for connection method, users, databases, IPv6 addresses; see [postgresql documentation](http://www.postgresql.org/docs/9.2/static/auth-pg-hba-conf.html) about `pg_hba.conf` for information (please note that the link will take you to documentation for the most recent version of Postgres, however links for earlier versions can be found on that page).
 
-####`inidb_path`
+####`initdb_path`
 Path to the `initdb` command.
 
 ####`createdb_path`
