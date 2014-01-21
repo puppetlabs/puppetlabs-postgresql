@@ -13,6 +13,8 @@ class postgresql::server::service {
     default => $ensure
   }
 
+  anchor { 'postgresql::server::service::begin': }
+
   service { 'postgresqld':
     ensure    => $service_ensure,
     name      => $service_name,
@@ -35,6 +37,9 @@ class postgresql::server::service {
       tries           => 60,
       create_db_first => false,
       require         => Service['postgresqld'],
+      before          => Anchor['postgresql::server::service::end']
     }
   }
+
+  anchor { 'postgresql::server::service::end': }
 }
