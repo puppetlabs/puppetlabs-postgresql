@@ -1,4 +1,4 @@
-require 'spec_helper_system'
+require 'spec_helper_acceptance'
 
 describe 'postgresql::validate_db_connection:' do
   before :all do
@@ -13,16 +13,12 @@ describe 'postgresql::validate_db_connection:' do
       }
     EOS
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should_not == 1
-    end
+    apply_manifest(pp, :catch_failures => true)
   end
 
   after :all do
     # Remove postgresql server after all tests have ran.
-    puppet_apply("class { 'postgresql::server': ensure => absent }") do |r|
-      r.exit_code.should_not == 1
-    end
+    apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
   end
 
   it 'should run puppet with no changes declared if socket connectivity works' do
@@ -33,14 +29,12 @@ describe 'postgresql::validate_db_connection:' do
       }
     EOS
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should == 0
-    end
+    apply_manifest(pp, :catch_failures => true)
   end
 
   it 'should keep retrying if database is down' do
     # So first we shut the db down, then background a startup routine with a
-    # sleep 10 in front of it. That way rspec-system should continue while
+    # sleep 10 in front of it. That way the tests should continue while
     # the pause and db startup happens in the background.
     shell("/etc/init.d/postgresql* stop")
     shell('nohup bash -c "sleep 10; /etc/init.d/postgresql* start" > /dev/null 2>&1 &')
@@ -54,9 +48,7 @@ describe 'postgresql::validate_db_connection:' do
       }
     EOS
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should == 0
-    end
+    apply_manifest(pp, :catch_failures => true)
   end
 
   it 'should run puppet with no changes declared if db ip connectivity works' do
@@ -69,9 +61,7 @@ describe 'postgresql::validate_db_connection:' do
       }
     EOS
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should == 0
-    end
+    apply_manifest(pp, :catch_failures => true)
   end
 
   it 'should fail catalogue if database connectivity fails' do
@@ -84,8 +74,6 @@ describe 'postgresql::validate_db_connection:' do
       }
     EOS
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should == 4
-    end
+    apply_manifest(pp, :expect_failures => true)
   end
 end

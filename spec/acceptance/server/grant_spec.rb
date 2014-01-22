@@ -1,14 +1,12 @@
-require 'spec_helper_system'
+require 'spec_helper_acceptance'
 
-describe 'postgresql::server::database_grant:' do
+describe 'postgresql::server::grant:' do
   after :all do
     # Cleanup after tests have ran
-    puppet_apply("class { 'postgresql::server': ensure => absent }") do |r|
-      r.exit_code.should_not == 1
-    end
+    apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
   end
 
-  it 'should grant access so a user can create objects in a database' do
+  it 'should grant access so a user can create in a database' do
     begin
       pp = <<-EOS.unindent
         $db = 'postgres'
@@ -28,24 +26,21 @@ describe 'postgresql::server::database_grant:' do
 
         postgresql::server::database { $db: }
 
-        postgresql::server::database_grant { 'grant create test':
-          privilege => 'CREATE',
-          db        => $db,
-          role      => $user,
+        postgresql::server::grant { 'grant create test':
+          object_type => 'database',
+          privilege   => 'CREATE',
+          db          => $db,
+          role        => $user,
         }
       EOS
 
-      puppet_apply(pp) do |r|
-        r.exit_code.should_not == 1
-        r.refresh
-        r.exit_code.should == 0
-      end
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
 
       # Check that the user can create a table in the database
       psql('--command="create table foo (foo int)" postgres', 'psql_grant_tester') do |r|
-        r.stdout.should =~ /CREATE TABLE/
-        r.stderr.should == ''
-        r.exit_code.should == 0
+        expect(r.stdout).to match(/CREATE TABLE/)
+        expect(r.stderr).to eq('')
       end
     ensure
       psql('--command="drop table foo" postgres', 'psql_grant_tester')

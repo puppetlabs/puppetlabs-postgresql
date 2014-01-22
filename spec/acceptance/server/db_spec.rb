@@ -1,11 +1,9 @@
-require 'spec_helper_system'
+require 'spec_helper_acceptance'
 
 describe 'postgresql::server::db' do
   after :all do
     # Cleanup after tests have ran
-    puppet_apply("class { 'postgresql::server': ensure => absent }") do |r|
-      r.exit_code.should_not == 1
-    end
+    apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
   end
 
   it 'should idempotently create a db that we can connect to' do
@@ -20,16 +18,12 @@ describe 'postgresql::server::db' do
         }
       EOS
 
-      puppet_apply(pp) do |r|
-        r.exit_code.should_not == 1
-        r.refresh
-        r.exit_code.should == 0
-      end
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
 
       psql('--command="select datname from pg_database" postgresql_test_db') do |r|
-        r.stdout.should =~ /postgresql_test_db/
-        r.stderr.should be_empty
-        r.exit_code.should == 0
+        expect(r.stdout).to match(/postgresql_test_db/)
+        expect(r.stderr).to eq('')
       end
     ensure
       psql('--command="drop database postgresql_test_db" postgres')
@@ -37,7 +31,7 @@ describe 'postgresql::server::db' do
   end
 
   it 'should take a locale parameter' do
-    pending('no support for locale parameter with centos 5', :if => (node.facts['osfamily'] == 'RedHat' and node.facts['lsbmajdistrelease'] == '5'))
+    pending('no support for locale parameter with centos 5', :if => (fact('osfamily') == 'RedHat' and fact('lsbmajdistrelease') == '5'))
     begin
       pp = <<-EOS.unindent
         class { 'postgresql::server': }
@@ -59,18 +53,15 @@ describe 'postgresql::server::db' do
         }
       EOS
 
-      puppet_apply(pp) do |r|
-        r.exit_code.should_not == 1
-        r.refresh
-        r.exit_code.should == 0
-      end
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
 
       psql('-c "show lc_ctype" test1') do |r|
-        r.stdout.should =~ /en_NG/
+        expect(r.stdout).to match(/en_NG/)
       end
 
       psql('-c "show lc_collate" test1') do |r|
-        r.stdout.should =~ /en_NG/
+        expect(r.stdout).to match(/en_NG/)
       end
     ensure
       psql('--command="drop database test1" postgres')
@@ -90,22 +81,17 @@ describe 'postgresql::server::db' do
         }
       EOS
 
-      puppet_apply(pp) do |r|
-        r.exit_code.should_not == 1
-        r.refresh
-        r.exit_code.should == 0
-      end
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
 
       psql('--command="select datname from pg_database" template2') do |r|
-        r.stdout.should =~ /template2/
-        r.stderr.should be_empty
-        r.exit_code.should == 0
+        expect(r.stdout).to match(/template2/)
+        expect(r.stderr).to eq('')
       end
     ensure
-      psql('--command="drop database template2" postgres') do |r|
-        r.stdout.should be_empty
-        r.stderr.should =~ /cannot drop a template database/
-        r.exit_code.should_not == 0
+      psql('--command="drop database template2" postgres', 'postgres', [1,2]) do |r|
+        expect(r.stdout).to eq('')
+        expect(r.stderr).to match(/cannot drop a template database/)
       end
     end
   end
@@ -123,21 +109,15 @@ describe 'postgresql::server::db' do
         }
       EOS
 
-      puppet_apply(pp) do |r|
-        r.exit_code.should_not == 1
-        r.refresh
-        r.exit_code.should == 0
-      end
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
 
       psql('--command="select datname from pg_database" template2') do |r|
-        r.stdout.should =~ /template2/
-        r.stderr.should be_empty
-        r.exit_code.should == 0
+        expect(r.stdout).to match(/template2/)
+        expect(r.stderr).to eq('')
       end
     ensure
-      psql('--command="drop database template2" postgres') do |r|
-        r.exit_code.should == 0
-      end
+      psql('--command="drop database template2" postgres')
     end
   end
 
@@ -154,21 +134,15 @@ describe 'postgresql::server::db' do
         }
       EOS
 
-      puppet_apply(pp) do |r|
-        r.exit_code.should_not == 1
-        r.refresh
-        r.exit_code.should == 0
-      end
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
 
       psql('--command="select datname from pg_database" postgresql_test_db') do |r|
-        r.stdout.should =~ /postgresql_test_db/
-        r.stderr.should be_empty
-        r.exit_code.should == 0
+        expect(r.stdout).to match(/postgresql_test_db/)
+        expect(r.stderr).to eq('')
       end
     ensure
-      psql('--command="drop database postgresql_test_db" postgres') do |r|
-        r.exit_code.should == 0
-      end
+      psql('--command="drop database postgresql_test_db" postgres')
     end
   end
 end

@@ -1,11 +1,9 @@
-require 'spec_helper_system'
+require 'spec_helper_acceptance'
 
 describe 'postgresql_psql:' do
   after :all do
     # Cleanup after tests have ran
-    puppet_apply("class { 'postgresql::server': ensure => absent }") do |r|
-      r.exit_code.should_not == 1
-    end
+    apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
   end
 
   it 'should run some SQL when the unless query returns no rows' do
@@ -21,11 +19,8 @@ describe 'postgresql_psql:' do
       }
     EOS
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should_not == 1
-      r.refresh
-      r.exit_code.should == 2
-    end
+    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, :catch_failures => true)
   end
 
   it 'should not run SQL when the unless query returns rows' do
@@ -41,11 +36,8 @@ describe 'postgresql_psql:' do
       }
     EOS
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should_not == 1
-      r.refresh
-      r.exit_code.should == 0
-    end
+    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, :catch_changes => true)
   end
 
 end
