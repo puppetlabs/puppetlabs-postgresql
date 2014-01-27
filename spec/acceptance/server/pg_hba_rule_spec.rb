@@ -1,11 +1,9 @@
-require 'spec_helper_system'
+require 'spec_helper_acceptance'
 
 describe 'postgresql::server::pg_hba_rule:' do
   after :all do
     # Cleanup after tests have ran
-    puppet_apply("class { 'postgresql::server': ensure => absent }") do |r|
-      r.exit_code.should_not == 1
-    end
+    apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
   end
 
   it 'should create a ruleset in pg_hba.conf' do
@@ -20,17 +18,10 @@ describe 'postgresql::server::pg_hba_rule:' do
       }
     EOS
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should_not == 1
-    end
+    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, :catch_failures => true)
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should be_zero
-    end
-
-    shell("grep '200.1.2.0/24' /etc/postgresql/*/*/pg_hba.conf || grep '200.1.2.0/24' /var/lib/pgsql/data/pg_hba.conf") do |r|
-      r.exit_code.should be_zero
-    end
+    shell("grep '200.1.2.0/24' /etc/postgresql/*/*/pg_hba.conf || grep '200.1.2.0/24' /var/lib/pgsql/data/pg_hba.conf")
   end
 
   it 'should create a ruleset in pg_hba.conf that denies db access to db test1' do
@@ -56,13 +47,10 @@ describe 'postgresql::server::pg_hba_rule:' do
         managehome => true,
       }
     EOS
-    puppet_apply(pp) do |r|
-      r.exit_code.should_not == 1
-    end
 
-    shell('su - test1 -c \'psql -U test1 -c "\q" test1\'') do |r|
-      r.exit_code.should == 2
-    end
+    apply_manifest(pp, :catch_failures => true)
+
+    shell('su - test1 -c \'psql -U test1 -c "\q" test1\'', :acceptable_exit_codes => [2])
   end
 
   it 'should fail catalogue if postgresql::server::manage_pga_conf is disabled' do
@@ -78,8 +66,7 @@ describe 'postgresql::server::pg_hba_rule:' do
         order       => '001',
       }
     EOS
-    puppet_apply(pp) do |r|
-      r.exit_code.should == 1
-    end
+
+    apply_manifest(pp, :expect_failures => true)
   end
 end

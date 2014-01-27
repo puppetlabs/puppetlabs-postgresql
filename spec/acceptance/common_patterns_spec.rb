@@ -1,4 +1,4 @@
-require 'spec_helper_system'
+require 'spec_helper_acceptance'
 
 describe 'common patterns:' do
   describe 'postgresql.conf include pattern' do
@@ -10,14 +10,12 @@ describe 'common patterns:' do
           ensure => absent
         }
       EOS
-      puppet_apply(pp) do |r|
-        r.exit_code.should_not == 1
-      end
+      apply_manifest(pp, :catch_failures => true)
     end
 
     it "should support an 'include' directive at the end of postgresql.conf" do
       pending('no support for include directive with centos 5/postgresql 8.1',
-        :if => (node.facts['osfamily'] == 'RedHat' and node.facts['lsbmajdistrelease'] == '5'))
+        :if => (fact('osfamily') == 'RedHat' and fact('lsbmajdistrelease') == '5'))
 
       pp = <<-EOS.unindent
         class { 'postgresql::server': }
@@ -37,16 +35,12 @@ describe 'common patterns:' do
         }
       EOS
 
-      puppet_apply(pp) do |r|
-        r.exit_code.should == 2
-        r.refresh
-        r.exit_code.should == 0
-      end
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
 
-      psql('--command="show max_connections" -t') do |r|
-        r.stdout.should =~ /123/
-        r.stderr.should == ''
-        r.exit_code.should == 0
+      psql('--command="show max_connections" -t', 'postgres') do |r|
+        expect(r.stdout).to match(/123/)
+        expect(r.stderr).to eq('')
       end
     end
   end

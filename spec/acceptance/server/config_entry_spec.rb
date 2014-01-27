@@ -1,11 +1,9 @@
-require 'spec_helper_system'
+require 'spec_helper_acceptance'
 
 describe 'postgresql::server::config_entry:' do
   after :all do
     # Cleanup after tests have ran
-    puppet_apply("class { 'postgresql::server': ensure => absent }") do |r|
-      r.exit_code.should_not == 1
-    end
+    apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
   end
 
   it 'should change setting and reflect it in show all' do
@@ -17,16 +15,12 @@ describe 'postgresql::server::config_entry:' do
       }
     EOS
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should_not == 1
-      r.refresh
-      r.exit_code.should == 0
-    end
+    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, :catch_changes => true)
 
     psql('--command="show all" postgres') do |r|
-      r.stdout.should =~ /check_function_bodies.+off/
-      r.stderr.should be_empty
-      r.exit_code.should == 0
+      expect(r.stdout).to match(/check_function_bodies.+off/)
+      expect(r.stderr).to eq('')
     end
   end
 end
