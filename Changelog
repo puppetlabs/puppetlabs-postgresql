@@ -1,3 +1,34 @@
+2014-01-28 - Version 3.3.0
+
+Summary:
+
+This release rolls up a bunch of bugfixes our users have found and fixed for
+us over the last few months.  This improves things for 9.1 users, and makes
+this module usable on FreeBSD.
+
+This release is dedicated to 'bma', who's suffering with Puppet 3.4.1 issues
+thanks to Puppet::Util::SUIDManager.run_and_capture.
+
+Features:
+ - Add lc_ config entry settings
+ - Can pass template at database creation.
+ - Add FreeBSD support.
+ - Add support for customer `xlogdir` parameter.
+ - Switch tests from rspec-system to beaker.  (This isn't really a feature)
+
+Bugfixes:
+ - Properly fix the deprecated Puppet::Util::SUIDManager.run_and_capture errors.
+ - Fix NOREPLICATION option for Postgres 9.1
+ - Wrong parameter name: manage_pg_conf -> manage_pg_hba_conf
+ - Add $postgresql::server::client_package_name, referred to by install.pp
+ - Add missing service_provider/service_name descriptions in ::globals.
+ - Fix several smaller typos/issues throughout.
+ - Exec['postgresql_initdb'] needs to be done after $datadir exists
+ - Prevent defined resources from floating in the catalog.
+ - Fix granting all privileges on a table.
+ - Add some missing privileges.
+ - Remove deprecated and unused concat::fragment parameters.
+
 2013-11-05 - Version 3.2.0
 
 Summary:
