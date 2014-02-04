@@ -361,7 +361,21 @@ This value default to `present`. When set to `absent` it will remove all package
 This will set the version of the PostgreSQL software to install. Defaults to your operating systems default.
 
 ####`postgres_password`
-This value defaults to `undef`, meaning the super user account in the postgres database is a user called `postgres` and this account does not have a password. If you provide this setting, the module will set the password for the `postgres` user to your specified value.
+This value defaults to `undef`, meaning the system user account in the postgres database is called `postgres` and this account does not have a password. If you provide this setting, the module will set the password for the `postgres` user to your specified value.
+
+    class { 'postgres:server':
+      postgres_password => 'TPSrep0rt!',
+    }
+
+You may also explicitly unset the password by specifying the value as false:
+
+    class { 'postgres:server':
+      postgres_password => false,
+    }
+
+Note: setting the password to an empty string will cause a blank password to be hashed (assuming MD5 authentication) and stored as a non-NULL value in the database, rendering the account inaccessible unless pg_hba.conf has been specified as 'all' or 'trust' authentication.
+
+Currently it is not possible to validate a NULL password, so the puppet code will (re)set the password to NULL on every run.
 
 ####`package_name`
 The name of the package to use for installing the server software. Defaults to the default for your OS distro.
