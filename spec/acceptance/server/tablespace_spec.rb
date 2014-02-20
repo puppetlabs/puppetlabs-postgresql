@@ -10,7 +10,7 @@ describe 'postgresql::server::tablespace:' do
     pp = <<-EOS.unindent
       class { 'postgresql::server': }
 
-      file { '/tmp/pg_tablespaces':
+      file { '/tmp/postgres/pg_tablespaces':
         ensure => 'directory',
         owner  => 'postgres',
         group  => 'postgres',
@@ -18,7 +18,7 @@ describe 'postgresql::server::tablespace:' do
       }
 
       postgresql::server::tablespace { 'tablespace1':
-        location => '/tmp/pg_tablespaces/space1',
+        location => '/tmp/postgres/pg_tablespaces/space1',
       }
       postgresql::server::database { 'tablespacedb1':
         encoding   => 'utf8',
@@ -34,7 +34,7 @@ describe 'postgresql::server::tablespace:' do
         password_hash => postgresql_password('spcuser', 'spcuser'),
       }
       postgresql::server::tablespace { 'tablespace2':
-        location => '/tmp/pg_tablespaces/space2',
+        location => '/tmp/postgres/pg_tablespaces/space2',
         owner    => 'spcuser',
       }
       postgresql::server::database { 'tablespacedb3':
@@ -43,6 +43,13 @@ describe 'postgresql::server::tablespace:' do
       }
     EOS
 
+    shell('mkdir -p /tmp/postgres')
+    # Apply appropriate selinux labels
+    if fact('osfamily') == 'RedHat'
+      if shell('getenforce').stdout == 'Enforcing'
+        shell('chcon -Rv --type=postgresql_db_t /tmp/postgres')
+      end
+    end
     apply_manifest(pp, :catch_failures => true)
     apply_manifest(pp, :catch_changes => true)
 
