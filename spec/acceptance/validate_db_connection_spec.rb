@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::validate_db_connection:' do
+describe 'postgresql::validate_db_connection:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   before :all do
     # Setup postgresql server and a sample database for tests to use.
     pp = <<-EOS.unindent
