@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::contrib:' do
+describe 'postgresql::server::contrib:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   after :all do
     # Cleanup after tests have ran, remove both contrib and server as contrib
     # pulls in the server based packages.

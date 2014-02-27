@@ -48,6 +48,8 @@ hosts.each do |host|
   end
 end
 
+UNSUPPORTED_PLATFORMS = ['AIX','windows','Solaris','Suse']
+
 RSpec.configure do |c|
   # Project root
   proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))

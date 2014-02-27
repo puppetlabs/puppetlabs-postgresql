@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'common patterns:' do
+describe 'common patterns:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   describe 'postgresql.conf include pattern' do
     after :all do
       pp = <<-EOS.unindent

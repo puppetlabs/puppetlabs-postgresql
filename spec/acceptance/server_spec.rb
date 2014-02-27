@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'server:' do
+describe 'server:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   after :all do
     # Cleanup after tests have ran
     apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
@@ -49,7 +49,7 @@ describe 'server:' do
   end
 end
 
-describe 'server without defaults:' do
+describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   before :all do
     pp = <<-EOS
       if($::operatingsystem =~ /Debian|Ubuntu/) {
@@ -153,7 +153,7 @@ describe 'server without defaults:' do
   end
 end
 
-describe 'server with firewall:' do
+describe 'server with firewall:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   after :all do
     apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
   end
@@ -174,7 +174,7 @@ describe 'server with firewall:' do
   end
 end
 
-describe 'server without pg_hba.conf:' do
+describe 'server without pg_hba.conf:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   after :all do
     apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
   end
