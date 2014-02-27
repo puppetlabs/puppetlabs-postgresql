@@ -19,6 +19,13 @@ describe 'server:' do
     it { should be_listening }
   end
 
+  describe file('/var/lib/pgsql/data/pg_hba.conf') do
+    it { should be_file }
+    it { should be_owned_by 'postgres' }
+    it { should be_grouped_into 'postgres' }
+    it { should be_mode 640 }
+  end
+
   describe 'setting postgres password' do
     it 'should install and successfully adjust the password' do
       pp = <<-EOS.unindent

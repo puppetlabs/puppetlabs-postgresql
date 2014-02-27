@@ -19,7 +19,7 @@ class postgresql::server::config {
     if ($manage_pg_hba_conf == true) {
       # Prepare the main pg_hba file
       concat { $pg_hba_conf_path:
-        owner  => 0,
+        owner  => $user,
         group  => $group,
         mode   => '0640',
         warn   => true,
