@@ -46,7 +46,7 @@ describe 'postgresql::server::tablespace:' do
     shell('mkdir -p /tmp/postgres')
     # Apply appropriate selinux labels
     if fact('osfamily') == 'RedHat'
-      if shell('getenforce').stdout == 'Enforcing'
+      if shell('getenforce').stdout =~ /Enforcing/
         shell('chcon -Rv --type=postgresql_db_t /tmp/postgres')
       end
     end
