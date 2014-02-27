@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::lib::python:' do
+describe 'postgresql::lib::python:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   after :all do
     # Cleanup after tests have ran
     apply_manifest("class { 'postgresql::lib::python': package_ensure => purged }", :catch_failures => true)

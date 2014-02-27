@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::db' do
+describe 'postgresql::server::db', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   after :all do
     # Cleanup after tests have ran
     apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)

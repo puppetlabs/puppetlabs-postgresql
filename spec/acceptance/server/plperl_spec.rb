@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'server plperl:' do
+describe 'server plperl:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   after :all do
     # Cleanup after tests have ran
     pp = <<-EOS.unindent
