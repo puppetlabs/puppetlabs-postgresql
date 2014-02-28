@@ -3,6 +3,7 @@ class postgresql::server::install {
   $package_ensure      = $postgresql::server::package_ensure
   $package_name        = $postgresql::server::package_name
   $client_package_name = $postgresql::server::client_package_name
+  $dependencies_list   = $postgresql::server::dependencies_list
 
   # This is necessary to ensure that the extra client package that was
   # installed automatically by the server package is removed and all
@@ -44,6 +45,12 @@ class postgresql::server::install {
     # This is searched for to create relationships with the package repos, be
     # careful about its removal
     tag    => 'postgresql',
+  }
+
+  if $dependencies_list != [] {
+    package { $dependencies_list:
+      ensure => $_package_ensure,
+    }
   }
 
 }

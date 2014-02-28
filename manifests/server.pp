@@ -8,6 +8,7 @@ class postgresql::server (
 
   $package_name               = $postgresql::params::server_package_name,
   $client_package_name        = $postgresql::params::client_package_name,
+  $dependencies_list          = $postgresql::params::dependencies_list,
   $package_ensure             = $ensure,
 
   $plperl_package_name        = $postgresql::params::plperl_package_name,
