@@ -47,7 +47,7 @@ class postgresql::server::install {
     tag    => 'postgresql',
   }
 
-  if $dependencies_list {
+  if $dependencies_list != [] {
     package { $dependencies_list:
       ensure => $_package_ensure,
     }

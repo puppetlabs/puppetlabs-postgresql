@@ -20,7 +20,7 @@ class postgresql::params inherits postgresql::globals {
     'RedHat', 'Linux': {
       $needs_initdb       = pick($needs_initdb, true)
       $firewall_supported = pick($firewall_supported, true)
-      $dependencies_list    = false
+      $dependencies_list    = []
 
       if $version == $default_version {
         $client_package_name  = pick($client_package_name, 'postgresql')
@@ -77,7 +77,7 @@ class postgresql::params inherits postgresql::globals {
       $contrib_package_name = pick($contrib_package_name,'undef')
       # Archlinux postgresql package provides plperl
       $plperl_package_name  = pick($plperl_package_name, 'undef')
-      $dependencies_list    = false
+      $dependencies_list    = []
       $service_name         = pick($service_name, 'postgresql')
       $bindir               = pick($bindir, '/usr/bin')
       $datadir              = pick($datadir, '/var/lib/postgres/data')
@@ -115,7 +115,7 @@ class postgresql::params inherits postgresql::globals {
       if $::operatingsystem == 'Debian' {
         $dependencies_list = ['locales-all']
       } else {
-        $dependencies_list = false
+        $dependencies_list = []
       }
 
       $bindir               = pick($bindir, "/usr/lib/postgresql/${version}/bin")
@@ -136,7 +136,7 @@ class postgresql::params inherits postgresql::globals {
       $java_package_name    = pick($java_package_name, 'databases/postgresql-jdbc')
       $plperl_package_name  = pick($plperl_package_name, "databases/postgresql${version}-plperl")
       $python_package_name  = pick($python_package_name, 'databases/py-psycopg2')
-      $dependencies_list    = false
+      $dependencies_list    = []
 
       $service_name         = pick($service_name, 'postgresql')
       $bindir               = pick($bindir, '/usr/local/bin')
@@ -153,7 +153,7 @@ class postgresql::params inherits postgresql::globals {
       # Based on the existing version of the firewall module, this is normally
       # false for other OS, but this allows an escape hatch to override it.
       $firewall_supported   = pick($firewall_supported, false)
-      $dependencies_list    = false
+      $dependencies_list    = []
 
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
