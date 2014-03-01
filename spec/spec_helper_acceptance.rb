@@ -59,12 +59,12 @@ RSpec.configure do |c|
     # Install module and dependencies
     puppet_module_install(:source => proj_root, :module_name => 'postgresql')
     hosts.each do |host|
-      shell("/bin/touch #{default['puppetpath']}/hiera.yaml")
-      on host, shell('chmod 755 /root')
+      on host, "/bin/touch #{default['puppetpath']}/hiera.yaml"
+      on host, 'chmod 755 /root'
       if fact('osfamily') == 'Debian'
-        shell("echo \"en_US ISO-8859-1\nen_NG.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\n\" > /etc/locale.gen")
-        shell('/usr/sbin/locale-gen')
-        shell('/usr/sbin/update-locale')
+        on host, "echo \"en_US ISO-8859-1\nen_NG.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\n\" > /etc/locale.gen"
+        on host, '/usr/sbin/locale-gen'
+        on host, '/usr/sbin/update-locale'
       end
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-firewall'), { :acceptable_exit_codes => [0,1] }
