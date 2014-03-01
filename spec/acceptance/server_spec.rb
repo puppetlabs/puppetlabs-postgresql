@@ -50,24 +50,6 @@ describe 'server:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
 end
 
 describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
-  before :all do
-    pp = <<-EOS
-      if($::operatingsystem =~ /Debian|Ubuntu/) {
-        # Need to make sure the correct utf8 locale is ready for our
-        # non-standard tests
-        file { '/etc/locale.gen':
-          content => "en_US ISO-8859-1\nen_NG UTF-8\nen_US UTF-8\n",
-        }~>
-        exec { '/usr/sbin/locale-gen':
-          logoutput => true,
-          refreshonly => true,
-        }
-      }
-    EOS
-
-    apply_manifest(pp, :catch_failures => true)
-  end
-
   context 'test installing non-default version of postgresql' do
     after :all do
       psql('--command="drop database postgresql_test_db" postgres', 'postgres')
