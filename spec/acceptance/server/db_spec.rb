@@ -39,7 +39,7 @@ describe 'postgresql::server::db', :unless => UNSUPPORTED_PLATFORMS.include?(fac
           user     => 'test1',
           password => postgresql_password('test1', 'test1'),
           encoding => 'UTF8',
-          locale   => 'en_NG',
+          locale   => 'en_NG.UTF-8',
         }
       EOS
 
