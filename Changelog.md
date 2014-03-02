@@ -1,10 +1,23 @@
-2014-02-12 - Version 3.3.1
-Bugfix:
+##2014-03-04 - Supported Release 3.3.x
+###Summary
+
+####Features
+
+####Bugfixes
+
+####Known Bugs
+
+* SLES is not supported.
+
+
+##2014-02-12 - Version 3.3.1
+####Bugfix:
 - Allow dynamic rubygems host
 
-2014-01-28 - Version 3.3.0
 
-Summary:
+##2014-01-28 - Version 3.3.0
+
+###Summary
 
 This release rolls up a bunch of bugfixes our users have found and fixed for
 us over the last few months.  This improves things for 9.1 users, and makes
@@ -13,14 +26,14 @@ this module usable on FreeBSD.
 This release is dedicated to 'bma', who's suffering with Puppet 3.4.1 issues
 thanks to Puppet::Util::SUIDManager.run_and_capture.
 
-Features:
+####Features
  - Add lc_ config entry settings
  - Can pass template at database creation.
  - Add FreeBSD support.
  - Add support for customer `xlogdir` parameter.
  - Switch tests from rspec-system to beaker.  (This isn't really a feature)
 
-Bugfixes:
+####Bugfixes
  - Properly fix the deprecated Puppet::Util::SUIDManager.run_and_capture errors.
  - Fix NOREPLICATION option for Postgres 9.1
  - Wrong parameter name: manage_pg_conf -> manage_pg_hba_conf
@@ -33,26 +46,27 @@ Bugfixes:
  - Add some missing privileges.
  - Remove deprecated and unused concat::fragment parameters.
 
-2013-11-05 - Version 3.2.0
 
-Summary:
+##2013-11-05 - Version 3.2.0
+
+###Summary
 
 Add's support for Ubuntu 13.10 (and 14.04) as well as x, y, z.
 
-Features:
+####Features
 - Add versions for Ubuntu 13.10 and 14.04.
 - Use default_database in validate_db_connection instead of a hardcoded
 'postgres'
 - Add globals/params layering for default_database.
 - Allow specification of default database name.
 
-Bugs:
+####Bugs
 - Fixes to the README.
 
 
-2013-10-25 - Version 3.1.0
+##2013-10-25 - Version 3.1.0
 
-Summary:
+###Summary
 
 This is a minor feature and bug fix release.
 
@@ -62,12 +76,12 @@ The default version of Fedora 17 has now been added, so that Fedora 17 users can
 
 And finally we've extended the capabilities of the defined type postgresql::validate_db_connection so that now it can handle retrying and sleeping between retries. This feature has been monopolized to fix a bug we were seeing with startup race conditions, but it can also be used by remote systems to 'wait' for PostgreSQL to start before their Puppet run continues.
 
-Features:
+####Features
 - Defined $default_version for Fedora 17 (Bret Comnes)
 - add search_path attribute to postgresql_psql resource (Jeremy Kitchen)
 - (GH-198) Add wait and retry capability to validate_db_connection (Ken Barber)
 
-Bugs:
+####Bugs
 - enabling defined postgres user password without resetting on every puppet run (jonoterc)
 - periods are valid in configuration variables also (Jeremy Kitchen)
 - Add zero length string to join() function (Jarl Stefansson)
@@ -76,34 +90,37 @@ Bugs:
 - Remove concat::setup for include in preparation for the next concat release (Ken Barber)
 
 
-2013-10-14 - Version 3.0.0
+##2013-10-14 - Version 3.0.0
 
 Final release of 3.0, enjoy!
 
-2013-10-14 - Version 3.0.0-rc3
 
-Summary:
+##2013-10-14 - Version 3.0.0-rc3
+
+###Summary
 
 Add a parameter to unmanage pg_hba.conf to fix a regression from 2.5, as well
 as allowing owner to be passed into x.
 
-Features:
+####Features
 - `manage_pg_hba_conf` parameter added to control pg_hba.conf management.
 - `owner` parameter added to server::db.
 
-2013-10-09 - Version 3.0.0-rc2
 
-Summary:
+##2013-10-09 - Version 3.0.0-rc2
+
+###Summary
 
 A few bugfixes have been found since -rc1.
 
-Fixes:
+####Fixes
 - Special case for $datadir on Amazon
 - Fix documentation about username/password for the postgresql_hash function
 
-2013-10-01 - Version 3.0.0-rc1
 
-Summary:
+##2013-10-01 - Version 3.0.0-rc1
+
+###Summary
 
 Version 3 was a major rewrite to fix some internal dependency issues, and to
 make the new Public API more clear. As a consequence a lot of things have
@@ -224,67 +241,60 @@ The older concat module is now deprecated and moved into the
 you may need to intervene during the installing of this package - as both use
 the same `concat` namespace.
 
-2013-09-09 Release 2.5.0
-=======================
+---
+##2013-09-09 Release 2.5.0
 
-Summary
--------
+###Summary
 
 The focus of this release is primarily to capture the fixes done to the
 types and providers to make sure refreshonly works properly and to set
 the stage for the large scale refactoring work of 3.0.0.
 
-Features
---------
+####Features
 
-Bugfixes 
---------
+
+####Bugfixes 
 - Use boolean for refreshonly.
 - Fix postgresql::plperl documentation.
 - Add two missing parameters to config::beforeservice
 - Style fixes
 
 
-2013-08-01 Release 2.4.1
-========================
+##2013-08-01 Release 2.4.1
 
-Summary
--------
+###Summary
 
 This minor bugfix release solves an idempotency issue when using plain text
 passwords for the password_hash parameter for the postgresql::role defined
 type. Without this, users would continually see resource changes everytime
 your run Puppet.
 
-Bugfixes
----------
+####Bugfixes
 - Alter role call not idempotent with cleartext passwords (Ken Barber)
 
-2013-07-19 Release 2.4.0
-========================
 
-Summary
--------
+##2013-07-19 Release 2.4.0
+
+###Summary
+
 This updates adds the ability to change permissions on tables, create template
 databases from normal databases, manage PL-Perl's postgres package, and
 disable the management of `pg_hba.conf`.
 
-Features
---------
+####Features
 - Add `postgresql::table_grant` defined resource
 - Add `postgresql::plperl` class
 - Add `manage_pg_hba_conf` parameter to the `postgresql::config` class
 - Add `istemplate` parameter to the `postgresql::database` define
 
-Bugfixes
---------
+####Bugfixes
 - Update `postgresql::role` class to be able to update roles when modified
 instead of only on creation.
 - Update tests
 - Fix documentation of `postgresql::database_grant`
 
-2.3.0
-=====
+
+##2.3.0
 
 This feature release includes the following changes:
 
@@ -295,8 +305,8 @@ This feature release includes the following changes:
   (Chris Price)
 * Improved integration testing (Ken Barber)
 
-2.2.1
-=====
+
+##2.2.1
 
 This release fixes a bug whereby one of our shell commands (psql) were not ran from a globally accessible directory. This was causing permission denied errors when the command attempted to change user without changing directory.
 
@@ -310,8 +320,8 @@ This patch should correct that.
 
 * Set /tmp as default CWD for postgresql_psql
 
-2.2.0
-=====
+
+##2.2.0
 
 This feature release introduces a number of new features and bug fixes.
 
@@ -345,8 +355,9 @@ This release in particular has largely been contributed by the community members
 * Allow SQL commands to be run against a specific DB (Carlos Villela)
 * Drop trailing comma to support Puppet 2.6 (Michael Arnold)
 
-2.1.1
-=====
+
+##2.1.1
+
 
 This release provides a bug fix for RHEL 5 and Centos 5 systems, or specifically systems using PostgreSQL 8.1 or older. On those systems one would have received the error:
 
@@ -364,8 +375,8 @@ This bug is due to a new feature we had added in 2.1.0, whereby the `include` di
 * Only install `include` directive and included file on PostgreSQL >= 8.2
 * Add system tests for Centos 5
 
-2.1.0
-=====
+
+##2.1.0
 
 This release is primarily a feature release, introducing some new helpful constructs to the module.
 
@@ -448,8 +459,8 @@ A big thanks to all those listed below who made this feature release possible :-
 2013-02-15 - Erik Dalén <dalen@spotify.com>
 * Fix case whereby we were modifying a hash after creation
 
-2.0.1
-=====
+
+##2.0.1
 
 Minor bugfix release.
 
@@ -459,8 +470,7 @@ Minor bugfix release.
 2013-01-15 - Jordi Boggiano <j.boggiano@seld.be>
  * Add support for ubuntu 12.10 status (3504405)
 
-2.0.0
-=====
+##2.0.0
 
 Many thanks to the following people who contributed patches to this
 release:
@@ -513,9 +523,9 @@ Notable features:
 
    * Many other bug fixes and improvements!
 
+---
+##1.0.0
 
-1.0.0
-=====
 2012-09-17 - Version 0.3.0 released
 
 2012-09-14 - Chris Price <chris@puppetlabs.com>
