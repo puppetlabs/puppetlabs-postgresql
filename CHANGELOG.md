@@ -1,12 +1,13 @@
-##2014-03-04 - Supported Release 3.3.x
+##2014-03-04 - Supported Release 3.3.2
 ###Summary
-
-####Features
+This is a supported release. It fixes a problem with updating passwords on postgresql.org distributed versions of PostgreSQL.
 
 ####Bugfixes
+- Correct psql path when setting password on custom versions.
+- Documentation updates
+- Test updates
 
 ####Known Bugs
-
 * SLES is not supported.
 
 
