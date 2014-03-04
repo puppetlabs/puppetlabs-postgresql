@@ -83,9 +83,6 @@ class postgresql::globals (
     default => undef,
   }
   $globals_version = pick($version, $default_version, 'unknown')
-  if($globals_version == 'unknown') {
-    fail('No preferred version defined or automatically detected.')
-  }
 
   # Setup of the repo only makes sense globally, so we are doing this here.
   if($manage_package_repo) {
