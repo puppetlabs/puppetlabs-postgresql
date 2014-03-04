@@ -54,7 +54,7 @@
     }
   ],
   "name": "puppetlabs-postgresql",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "source": "git://github.com/puppetlabs/puppet-postgresql.git",
   "author": "Inkling/Puppet Labs",
   "license": "ASL 2.0",
