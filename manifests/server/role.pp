@@ -3,7 +3,7 @@ define postgresql::server::role(
   $password_hash    = false,
   $createdb         = false,
   $createrole       = false,
-  $db               = $postgresql::server::user,
+  $db               = $postgresql::server::default_database,
   $login            = true,
   $superuser        = false,
   $replication      = false,
