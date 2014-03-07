@@ -7,8 +7,6 @@ class postgresql::params inherits postgresql::globals {
   $ip_mask_allow_all_users    = '127.0.0.1/32'
   $ipv4acls                   = []
   $ipv6acls                   = []
-  $user                       = pick($user, 'postgres')
-  $group                      = pick($group, 'postgres')
   $encoding                   = $encoding
   $locale                     = $locale
   $service_provider           = $service_provider
@@ -18,6 +16,8 @@ class postgresql::params inherits postgresql::globals {
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $::osfamily {
     'RedHat', 'Linux': {
+      $user               = pick($user, 'postgres')
+      $group              = pick($group, 'postgres')
       $needs_initdb       = pick($needs_initdb, true)
       $firewall_supported = pick($firewall_supported, true)
 
@@ -64,6 +64,8 @@ class postgresql::params inherits postgresql::globals {
       # so they can set it themself
       $firewall_supported = pick($firewall_supported, true)
       $needs_initdb       = pick($needs_initdb, true)
+      $user               = pick($user, 'postgres')
+      $group              = pick($group, 'postgres')
 
       # Archlinux doesn't have a client-package but has a libs package which
       # pulls in postgresql server
@@ -87,6 +89,8 @@ class postgresql::params inherits postgresql::globals {
     }
 
     'Debian': {
+      $user               = pick($user, 'postgres')
+      $group              = pick($group, 'postgres')
 
       if $manage_package_repo == true {
         $needs_initdb = pick($needs_initdb, true)
@@ -121,6 +125,8 @@ class postgresql::params inherits postgresql::globals {
     }
 
     'FreeBSD': {
+      $user                 = pick($user, 'pgsql')
+      $group                = pick($group, 'pgsql')
 
       $client_package_name  = pick($client_package_name, "databases/postgresql${version}-client")
       $server_package_name  = pick($server_package_name, "databases/postgresql${version}-server")
