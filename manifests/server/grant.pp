@@ -5,7 +5,7 @@ define postgresql::server::grant (
   $privilege   = undef,
   $object_type = 'database',
   $object_name = $db,
-  $psql_db     = $postgresql::server::user,
+  $psql_db     = $postgresql::server::default_database,
   $psql_user   = $postgresql::server::user
 ) {
   $group     = $postgresql::server::group

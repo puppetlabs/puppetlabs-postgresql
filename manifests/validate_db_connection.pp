@@ -55,7 +55,7 @@ define postgresql::validate_db_connection(
     environment => $env,
     logoutput   => 'on_failure',
     user        => $run_as,
-    path        => '/bin',
+    path        => '/bin:/usr/bin:/usr/local/bin',
     timeout     => $timeout,
     require     => Package['postgresql-client'],
   }

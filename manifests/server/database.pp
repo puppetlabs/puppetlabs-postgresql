@@ -13,6 +13,7 @@ define postgresql::server::database(
   $group         = $postgresql::server::group
   $psql_path     = $postgresql::server::psql_path
   $version       = $postgresql::server::version
+  $default_db    = $postgresql::server::default_database
 
   # Set the defaults for the postgresql_psql resource
   Postgresql_psql {
@@ -49,6 +50,7 @@ define postgresql::server::database(
   postgresql_psql { "Check for existence of db '${dbname}'":
     command => 'SELECT 1',
     unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
+    db      => $default_db,
     require => Class['postgresql::server::service']
   }~>
   exec { $createdb_command :
@@ -60,13 +62,14 @@ define postgresql::server::database(
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
   postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
-    db          => $user,
+    db          => $default_db,
     refreshonly => true,
   }
 
   Exec [ $createdb_command ]->
   postgresql_psql {"UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
     unless => "SELECT datname FROM pg_database WHERE datname = '${dbname}' AND datistemplate = ${istemplate}",
+    db     => $default_db,
   }
 
   # Build up dependencies on tablespace
