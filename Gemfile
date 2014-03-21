@@ -3,7 +3,7 @@ source ENV['GEM_SOURCE'] || "https://rubygems.org"
 group :development, :test do
   gem 'rake'
   gem 'puppetlabs_spec_helper', :require => false
-  gem 'rspec-puppet', '< 1.0'
+  gem 'rspec-puppet', '~> 1.0'
   gem 'puppet-lint', '~> 0.3.2'
   gem 'beaker',                  :require => false
   gem 'beaker-rspec',            :require => false
