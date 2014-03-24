@@ -686,6 +686,9 @@ Whether to grant the ability to create new roles with this role. Defaults to `fa
 ####`login`
 Whether to grant login capability for the new role. Defaults to `false`.
 
+####`inherit`
+Whether to grant inherit capability for the new role. Defaults to `true`.
+
 ####`superuser`
 Whether to grant super user capability for the new role. Defaults to `false`.
 
