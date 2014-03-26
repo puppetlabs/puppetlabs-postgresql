@@ -543,6 +543,9 @@ For example, to create a database called `test1` with a corresponding user of th
 ####`namevar`
 The namevar for the resource designates the name of the database.
 
+####`dbname`
+The name of the database to be created. Defaults to `namevar`.
+
 ####`user`
 User to create and assign access to the database upon creation. Mandatory.
 

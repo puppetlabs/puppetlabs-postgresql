@@ -13,16 +13,34 @@ describe 'postgresql::server::db', :type => :define do
     'test'
   end
 
-  let :params do
-    {
-      :user => 'test',
-      :password => 'test',
-      :owner => 'tester',
-    }
+  context 'without dbname param' do
+
+    let :params do
+      {
+        :user => 'test',
+        :password => 'test',
+        :owner => 'tester',
+      }
+    end
+
+    it { should contain_postgresql__server__db('test') }
+    it { should contain_postgresql__server__database('test').with_owner('tester') }
+    it { should contain_postgresql__server__role('test') }
+    it { should contain_postgresql__server__database_grant('GRANT test - ALL - test') }
+
   end
 
-  it { should contain_postgresql__server__db('test') }
-  it { should contain_postgresql__server__database('test').with_owner('tester') }
-  it { should contain_postgresql__server__role('test') }
-  it { should contain_postgresql__server__database_grant('GRANT test - ALL - test') }
+  context 'dbname' do
+
+    let :params do
+      {
+        :dbname => 'testtest',
+        :user => 'test',
+        :password => 'test',
+        :owner => 'tester',
+      }
+    end
+
+    it { should contain_postgresql__server__database('testtest') }
+  end
 end
