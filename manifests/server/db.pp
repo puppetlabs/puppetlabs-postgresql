@@ -3,6 +3,7 @@
 define postgresql::server::db (
   $user,
   $password,
+  $dbname     = $title,
   $encoding   = $postgresql::server::encoding,
   $locale     = $postgresql::server::locale,
   $grant      = 'ALL',
@@ -11,13 +12,16 @@ define postgresql::server::db (
   $istemplate = false,
   $owner      = undef
 ) {
-  postgresql::server::database { $name:
-    encoding   => $encoding,
-    tablespace => $tablespace,
-    template   => $template,
-    locale     => $locale,
-    istemplate => $istemplate,
-    owner      => $owner,
+
+  if ! defined(Postgresql::Server::Database[$dbname]) {
+    postgresql::server::database { $dbname:
+      encoding   => $encoding,
+      tablespace => $tablespace,
+      template   => $template,
+      locale     => $locale,
+      istemplate => $istemplate,
+      owner      => $owner,
+    }
   }
 
   if ! defined(Postgresql::Server::Role[$user]) {
@@ -26,10 +30,12 @@ define postgresql::server::db (
     }
   }
 
-  postgresql::server::database_grant { "GRANT ${user} - ${grant} - ${name}":
-    privilege => $grant,
-    db        => $name,
-    role      => $user,
+  if ! defined(Postgresql::Server::Database_grant["GRANT ${user} - ${grant} - ${dbname}"]) {
+    postgresql::server::database_grant { "GRANT ${user} - ${grant} - ${dbname}":
+      privilege => $grant,
+      db        => $dbname,
+      role      => $user,
+    }
   }
 
   if($tablespace != undef and defined(Postgresql::Server::Tablespace[$tablespace])) {

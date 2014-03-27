@@ -135,4 +135,30 @@ describe 'postgresql::server::db', :unless => UNSUPPORTED_PLATFORMS.include?(fac
       psql('--command="drop database postgresql_test_db" postgres')
     end
   end
+
+  it 'should take a dbname parameter' do
+    begin
+      pp = <<-EOS.unindent
+        $db = 'postgresql_test_db'
+        $dbname = 'postgresql_testtest_db'
+        class { 'postgresql::server': }
+
+        postgresql::server::db { $db:
+          dbname     => $dbname,
+          user       => $db,
+          password   => postgresql_password($db, $db),
+        }
+      EOS
+
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
+
+      psql('--command="select datname from pg_database" postgresql_testtest_db') do |r|
+        expect(r.stdout).to match(/postgresql_testtest_db/)
+        expect(r.stderr).to eq('')
+      end
+    ensure
+      psql('--command="drop database postgresql_testtest_db" postgres')
+    end
+  end
 end
