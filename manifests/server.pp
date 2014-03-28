@@ -18,6 +18,7 @@ class postgresql::server (
   $default_database           = $postgresql::params::default_database,
 
   $listen_addresses           = $postgresql::params::listen_addresses,
+  $port                       = $postgresql::params::port,
   $ip_mask_deny_postgres_user = $postgresql::params::ip_mask_deny_postgres_user,
   $ip_mask_allow_all_users    = $postgresql::params::ip_mask_allow_all_users,
   $ipv4acls                   = $postgresql::params::ipv4acls,
