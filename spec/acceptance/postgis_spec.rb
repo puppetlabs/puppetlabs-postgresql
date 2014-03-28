@@ -1,4 +1,4 @@
-require 'spec_helper_system'
+require 'spec_helper_acceptance'
 
 describe 'postgresql::server::postgis:' do
   after :all do
@@ -13,9 +13,7 @@ describe 'postgresql::server::postgis:' do
       }
     EOS
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should_not == 1
-    end
+    apply_manifest(pp, :catch_failures => true)
   end
 
   it 'test loading class with no parameters' do
@@ -24,10 +22,7 @@ describe 'postgresql::server::postgis:' do
       class { 'postgresql::server::postgis': }
     EOS
 
-    puppet_apply(pp) do |r|
-      r.exit_code.should == 2
-      r.refresh
-      r.exit_code.should == 0
-    end
+    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, :catch_changes => true)
   end
 end
