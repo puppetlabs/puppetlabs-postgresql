@@ -7,7 +7,7 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
   if ($ensure == 'present' or $ensure == true) {
     file { $gpg_key_path:
       source => 'puppet:///modules/postgresql/RPM-GPG-KEY-PGDG',
-      before => Yumrepo['yum.postgresql.org']
+      before => Yumrepo[$package_repo_name]
     }
 
     if($::operatingsystem == 'Fedora') {
@@ -18,17 +18,17 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
       $label2 = 'rhel'
     }
 
-    yumrepo { 'yum.postgresql.org':
+    yumrepo { $package_repo_name:
       descr    => "PostgreSQL ${version} \$releasever - \$basearch",
-      baseurl  => "http://yum.postgresql.org/${version}/${label1}/${label2}-\$releasever-\$basearch",
+      baseurl  => "${package_repo_url}/${version}/${label1}/${label2}-\$releasever-\$basearch",
       enabled  => 1,
       gpgcheck => 1,
       gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}",
     }
 
-    Yumrepo['yum.postgresql.org'] -> Package<|tag == 'postgresql'|>
+    Yumrepo[$package_repo_name] -> Package<|tag == 'postgresql'|>
   } else {
-    yumrepo { 'yum.postgresql.org':
+    yumrepo { $package_repo_name:
       enabled => absent,
     }->
     file { $gpg_key_path:

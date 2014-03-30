@@ -355,6 +355,12 @@ This allows you to override the automated detection to see if your OS supports t
 ####`manage_package_repo`
 If `true` this will setup the official PostgreSQL repositories on your host. Defaults to `false`.
 
+####`package_repo_url`
+Sets the yum repo baseurl for an alternate mirror of the pgrpms yum repositories.  Must be set along with `package_repo_name`
+
+####`package_repo_name`
+Sets the yum repo name for an alternate mirror of the pgrpms yum repositories.  Must be set along with `package_repo_url`
+
 ###Class: postgresql::server
 The following list are options that you can set in the `config_hash` parameter of `postgresql::server`.
 
