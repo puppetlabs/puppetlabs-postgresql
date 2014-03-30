@@ -1,0 +1,2 @@
+PGDATA=<%= scope.lookupvar('postgresql::server::datadir') %>
+PGLOG=<%= File.dirname(scope.lookupvar('postgresql::server::datadir')) %>/pgstartup.log

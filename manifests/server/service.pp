@@ -7,6 +7,28 @@ class postgresql::server::service {
   $user             = $postgresql::server::user
   $default_database = $postgresql::server::default_database
 
+  case $::osfamily {
+    'Redhat', 'Linux': {
+      file { '/etc/sysconfig/pgsql':
+        ensure      => 'directory',
+        owner       => 'root',
+        group       => 'root',
+        mode        => '0755',
+      }
+
+      file { "/etc/sysconfig/pgsql/${service_name}":
+        owner       => 'root',
+        group       => 'root',
+        content     => template('postgresql/postgresql.erb'),
+        mode        => '0644',
+        notify      => Service['postgresqld'],
+      }
+    }
+    default: {
+      notice("${::osfamily} - Not creating ${service_name} sysconfig file: /etc/sysconfig/pgsql/${service_name}")
+    }
+  }
+  
   $service_ensure = $ensure ? {
     present => true,
     absent  => false,
