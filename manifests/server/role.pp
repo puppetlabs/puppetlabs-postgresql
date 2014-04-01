@@ -14,6 +14,7 @@ define postgresql::server::role(
 ) {
   $psql_user  = $postgresql::server::user
   $psql_group = $postgresql::server::group
+  $psql_port  = $postgresql::server::port
   $psql_path  = $postgresql::server::psql_path
   $version    = $postgresql::server::version
 
