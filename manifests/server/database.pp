@@ -45,7 +45,7 @@ define postgresql::server::database(
     default => "--tablespace='${tablespace}' ",
   }
 
-  $createdb_command = "${createdb_path} --owner='${owner}' --template=${template} ${encoding_option}${locale_option}${tablespace_option} '${dbname}'"
+  $createdb_command = "${createdb_path} --owner='${owner}' --port=${port} --template=${template} ${encoding_option}${locale_option}${tablespace_option} '${dbname}'"
 
   postgresql_psql { "Check for existence of db '${dbname}'":
     command => 'SELECT 1',

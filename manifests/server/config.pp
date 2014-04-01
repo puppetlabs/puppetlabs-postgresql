@@ -4,6 +4,7 @@ class postgresql::server::config {
   $ip_mask_deny_postgres_user = $postgresql::server::ip_mask_deny_postgres_user
   $ip_mask_allow_all_users    = $postgresql::server::ip_mask_allow_all_users
   $listen_addresses           = $postgresql::server::listen_addresses
+  $port                       = $postgresql::server::port
   $ipv4acls                   = $postgresql::server::ipv4acls
   $ipv6acls                   = $postgresql::server::ipv6acls
   $pg_hba_conf_path           = $postgresql::server::pg_hba_conf_path
@@ -97,6 +98,10 @@ class postgresql::server::config {
     postgresql::server::config_entry { 'listen_addresses':
       value => $listen_addresses,
     }
+    postgresql::server::config_entry { 'port':
+      value => "${port}",
+    }
+
   } else {
     file { $pg_hba_conf_path:
       ensure => absent,
