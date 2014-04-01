@@ -12,6 +12,7 @@ define postgresql::server::database(
   $user          = $postgresql::server::user
   $group         = $postgresql::server::group
   $psql_path     = $postgresql::server::psql_path
+  $port          = $postgresql::server::port
   $version       = $postgresql::server::version
   $default_db    = $postgresql::server::default_database
 
@@ -45,7 +46,7 @@ define postgresql::server::database(
     default => "--tablespace='${tablespace}' ",
   }
 
-  $createdb_command = "${createdb_path} --owner='${owner}' --template=${template} ${encoding_option}${locale_option}${tablespace_option} '${dbname}'"
+  $createdb_command = "${createdb_path} --port='${port}' --owner='${owner}' --template=${template} ${encoding_option}${locale_option}${tablespace_option} '${dbname}'"
 
   postgresql_psql { "Check for existence of db '${dbname}'":
     command => 'SELECT 1',
