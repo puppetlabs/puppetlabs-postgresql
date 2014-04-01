@@ -7,6 +7,7 @@ define postgresql::server::grant (
   $object_name = $db,
   $psql_db     = $postgresql::server::default_database,
   $psql_user   = $postgresql::server::user
+  $psql_port   = $postgresql::server::port
 ) {
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
@@ -68,6 +69,7 @@ define postgresql::server::grant (
   $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${object_name}\" TO \"${role}\""
   postgresql_psql { $grant_cmd:
     db         => $on_db,
+    port       => $psql_port,
     psql_user  => $psql_user,
     psql_group => $group,
     psql_path  => $psql_path,
