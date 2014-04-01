@@ -12,7 +12,6 @@ define postgresql::server::tablespace(
   Postgresql_psql {
     psql_user  => $user,
     psql_group => $group,
-    psql_port  => $port,
     psql_path  => $psql_path,
     port       => $port,
   }
