@@ -99,7 +99,7 @@ class postgresql::server::config {
       value => $listen_addresses,
     }
     postgresql::server::config_entry { 'port':
-      value => $port,
+      value => "${port}",
     }
 
     # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
