@@ -20,8 +20,8 @@ define postgresql::server::database(
   Postgresql_psql {
     psql_user  => $user,
     psql_group => $group,
-    psql_port  => $port,
     psql_path  => $psql_path,
+    port       => $port,
   }
 
   # Optionally set the locale switch. Older versions of createdb may not accept
@@ -53,6 +53,7 @@ define postgresql::server::database(
     command => 'SELECT 1',
     unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
     db      => $default_db,
+    port    => $port,
     require => Class['postgresql::server::service']
   }~>
   exec { $createdb_command :
@@ -65,6 +66,7 @@ define postgresql::server::database(
   #  granted privileges.
   postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
     db          => $default_db,
+    port        => $port,
     refreshonly => true,
   }
 
