@@ -49,6 +49,10 @@ Puppet::Type.newtype(:postgresql_psql) do
     desc "The name of the database to execute the SQL command against."
   end
 
+  newparam(:port) do
+    desc "The port of the database server to execute the SQL command against."
+  end
+
   newparam(:search_path) do
     desc "The schema search path to use when executing the SQL command"
   end
