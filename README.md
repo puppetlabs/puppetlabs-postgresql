@@ -215,6 +215,7 @@ Classes:
 * [postgresql::globals](#class-postgresqlglobals)
 * [postgresql::lib::devel](#class-postgresqllibdevel)
 * [postgresql::lib::java](#class-postgresqllibjava)
+* [postgresql::lib::perl](#class-postgresqllibperl)
 * [postgresql::lib::python](#class-postgresqllibpython)
 * [postgresql::server](#class-postgresqlserver)
 * [postgresql::server::plperl](#class-postgresqlserverplperl)
@@ -277,6 +278,9 @@ This setting can be used to override the default postgresql devel package name. 
 
 ####`java_package_name`
 This setting can be used to override the default postgresql java package name. If not specified, the module will use whatever package name is the default for your OS distro.
+
+####`perl_package_name`
+This setting can be used to override the default postgresql Perl package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
 ####`plperl_package_name`
 This setting can be used to override the default postgresql PL/perl package name. If not specified, the module will use whatever package name is the default for your OS distro.
@@ -495,6 +499,16 @@ The name of the postgresql java package.
 
 ####`package_ensure`
 The ensure parameter passed on to postgresql java package resource.
+
+
+###Class: postgresql::lib::perl
+This class installs the postgresql Perl libraries. For customer requirements you can customise the following parameters:
+
+####`package_name`
+The name of the postgresql perl package.
+
+####`package_ensure`
+The ensure parameter passed on to postgresql perl package resource.
 
 
 ###Class: postgresql::lib::python
