@@ -2,6 +2,7 @@
 class postgresql::params inherits postgresql::globals {
   $ensure                     = true
   $version                    = $globals_version
+  $postgis_version            = $globals_postgis_version
   $listen_addresses           = 'localhost'
   $ip_mask_deny_postgres_user = '0.0.0.0/0'
   $ip_mask_allow_all_users    = '127.0.0.1/32'
@@ -56,6 +57,14 @@ class postgresql::params inherits postgresql::globals {
 
       $service_status      = $service_status
       $python_package_name = pick($python_package_name, 'python-psycopg2')
+
+      $postgis_package_name = pick(
+        $postgis_package_name,
+        versioncmp($postgis_version, '2') ? {
+          '-1'    => "postgis${package_version}",
+          default => "postgis2_${package_version}",
+        }
+      )
     }
 
     'Archlinux': {
@@ -110,6 +119,13 @@ class postgresql::params inherits postgresql::globals {
       $client_package_name  = pick($client_package_name, "postgresql-client-${version}")
       $server_package_name  = pick($server_package_name, "postgresql-${version}")
       $contrib_package_name = pick($contrib_package_name, "postgresql-contrib-${version}")
+      $postgis_package_name = pick(
+        $postgis_package_name,
+        versioncmp($postgis_version, '2') ? {
+          '-1'    => "postgresql-${version}-postgis",
+          default => "postgresql-${version}-postgis-${postgis_version}",
+        }
+      )
       $devel_package_name   = pick($devel_package_name, 'libpq-dev')
       $java_package_name    = pick($java_package_name, 'libpostgresql-jdbc-java')
       $plperl_package_name  = pick($plperl_package_name, "postgresql-plperl-${version}")
