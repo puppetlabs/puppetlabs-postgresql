@@ -85,4 +85,32 @@ describe 'postgresql::server::role:', :unless => UNSUPPORTED_PLATFORMS.include?(
       expect(r.stderr).to eq('')
     end
   end
+
+  it 'should idempotently create a user with noinherit' do
+    pp = <<-EOS.unindent
+      $user = "postgresql_test_noinherit"
+      $password = "postgresql_test_noinherit"
+
+      class { 'postgresql::server': }
+
+      # Since we are not testing pg_hba or any of that, make a local user for ident auth
+      user { $user:
+        ensure => present,
+      }
+
+      postgresql::server::role { $user:
+        password_hash => $password,
+        inherit       => false,
+      }
+    EOS
+
+    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, :catch_changes => true)
+
+    # Check that the user has noinherit set
+    psql('--command="select rolname from pg_roles where not rolinherit" postgres', 'postgresql_test_noinherit') do |r|
+      expect(r.stdout).to match(/postgresql_test_noinherit/)
+      expect(r.stderr).to eq('')
+    end
+  end
 end
