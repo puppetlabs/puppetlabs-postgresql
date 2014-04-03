@@ -45,6 +45,17 @@ hosts.each do |host|
     install_package host, 'rubygems'
     on host, 'gem install puppet --no-ri --no-rdoc'
     on host, "mkdir -p #{host['distmoduledir']}"
+    osfamily = fact 'osfamily'
+    # install augeas dependencies
+    if osfamily =~ /Debian/
+      install_package host, 'ruby-dev'
+      install_package host, 'libaugeas-dev'
+    end
+    if osfamily =~ /RedHat/
+      install_package host, 'ruby-devel'
+      install_package host, 'augeas-devel'
+    end
+    on host, 'gem install ruby-augeas --no-ri --no-rdoc'
   end
 end
 
