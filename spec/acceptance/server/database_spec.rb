@@ -26,7 +26,9 @@ describe 'postgresql::server::database:', :unless => UNSUPPORTED_PLATFORMS.inclu
       psql('--command="drop database postgresql_test_db" postgres')
     end
   end
+end
 
+describe 'postgresql::server::database: alternate port', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   it 'should idempotently create a db on a non-default port that we can connect to' do
     begin
       pp = <<-EOS.unindent
