@@ -1,5 +1,6 @@
 # PRIVATE CLASS: do not use directly
 class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
+include ::apt
   if($ensure == 'present' or $ensure == true) {
     # Here we have tried to replicate the instructions on the PostgreSQL site:
     #

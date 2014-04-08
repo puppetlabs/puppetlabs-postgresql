@@ -11,6 +11,9 @@ describe 'postgresql::server::initdb', :type => :class do
         :operatingsystem => 'CentOS',
         :operatingsystemrelease => '6.0',
         :concat_basedir => tmpfilename('server'),
+        :kernel => 'Linux',
+        :id => 'root',
+        :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       }
     end
     it { should contain_file('/var/lib/pgsql/data').with_ensure('directory') }
@@ -21,6 +24,9 @@ describe 'postgresql::server::initdb', :type => :class do
         :osfamily => 'RedHat',
         :operatingsystem => 'Amazon',
         :concat_basedir => tmpfilename('server'),
+        :kernel => 'Linux',
+        :id => 'root',
+        :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       }
     end
     it { should contain_file('/var/lib/pgsql9/data').with_ensure('directory') }

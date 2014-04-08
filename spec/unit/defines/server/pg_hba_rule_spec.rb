@@ -6,7 +6,10 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
       :osfamily => 'Debian',
       :operatingsystem => 'Debian',
       :operatingsystemrelease => '6.0',
+      :kernel => 'Linux',
       :concat_basedir => tmpfilename('pg_hba'),
+      :id => 'root',
+      :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
   end
   let :title do
@@ -17,6 +20,12 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
   end
 
   context 'test template 1' do
+    let :pre_condition do
+      <<-EOS
+        class { 'postgresql::server': }
+      EOS
+    end
+
     let :params do
       {
         :type => 'host',
@@ -35,6 +44,12 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
   end
 
   context 'test template 2' do
+    let :pre_condition do
+      <<-EOS
+        class { 'postgresql::server': }
+      EOS
+    end
+
     let :params do
       {
         :type => 'local',
@@ -52,6 +67,12 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
   end
 
   context 'test template 3' do
+    let :pre_condition do
+      <<-EOS
+        class { 'postgresql::server': }
+      EOS
+    end
+
     let :params do
       {
         :type => 'host',
@@ -72,6 +93,12 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
 
   context 'validation' do
     context 'validate type test 1' do
+      let :pre_condition do
+        <<-EOS
+          class { 'postgresql::server': }
+        EOS
+      end
+
       let :params do
         {
           :type => 'invalid',
@@ -89,6 +116,12 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
     end
 
     context 'validate auth_method' do
+      let :pre_condition do
+        <<-EOS
+          class { 'postgresql::server': }
+        EOS
+      end
+
       let :params do
         {
           :type => 'local',

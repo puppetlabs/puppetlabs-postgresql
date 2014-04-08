@@ -21,6 +21,8 @@ class postgresql::params inherits postgresql::globals {
       $group              = pick($group, 'postgres')
       $needs_initdb       = pick($needs_initdb, true)
       $firewall_supported = pick($firewall_supported, true)
+      $version_parts      = split($version, '[.]')
+      $package_version    = "${version_parts[0]}${version_parts[1]}"
 
       if $version == $default_version {
         $client_package_name  = pick($client_package_name, 'postgresql')
@@ -37,8 +39,6 @@ class postgresql::params inherits postgresql::globals {
         }
         $confdir              = pick($confdir, $datadir)
       } else {
-        $version_parts        = split($version, '[.]')
-        $package_version      = "${version_parts[0]}${version_parts[1]}"
         $client_package_name  = pick($client_package_name, "postgresql${package_version}")
         $server_package_name  = pick($server_package_name, "postgresql${package_version}-server")
         $contrib_package_name = pick($contrib_package_name,"postgresql${package_version}-contrib")

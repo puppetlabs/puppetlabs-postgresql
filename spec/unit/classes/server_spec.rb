@@ -8,6 +8,8 @@ describe 'postgresql::server', :type => :class do
       :operatingsystemrelease => '6.0',
       :concat_basedir => tmpfilename('server'),
       :kernel => 'Linux',
+      :id => 'root',
+      :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
   end
 
