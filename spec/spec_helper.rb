@@ -16,6 +16,10 @@ RSpec.configure do |c|
     # Store any environment variables away to be restored later
     @old_env = {}
     ENV.each_key {|k| @old_env[k] = ENV[k]}
+
+    if ENV['STRICT_VARIABLES'] == 'yes'
+      Puppet.settings[:strict_variables]=true
+    end
   end
 
   c.after :each do

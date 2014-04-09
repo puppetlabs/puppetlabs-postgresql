@@ -6,6 +6,10 @@ describe 'postgresql::server::tablespace', :type => :define do
       :osfamily => 'Debian',
       :operatingsystem => 'Debian',
       :operatingsystemrelease => '6.0',
+      :kernel => 'Linux',
+      :concat_basedir => tmpfilename('tablespace'),
+      :id => 'root',
+      :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
   end
 
@@ -17,6 +21,10 @@ describe 'postgresql::server::tablespace', :type => :define do
     {
       :location => '/srv/data/foo',
     }
+  end
+
+  let :pre_condition do
+    "class {'postgresql::server':}"
   end
 
   it { should contain_postgresql__server__tablespace('test') }
