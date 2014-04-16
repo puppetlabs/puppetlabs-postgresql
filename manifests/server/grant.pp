@@ -67,7 +67,8 @@ define postgresql::server::grant (
   }
 
   $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${object_name}\" TO \"${role}\""
-  postgresql_psql { $grant_cmd:
+  postgresql_psql { "grant:${name}":
+    command    => $grant_cmd,
     db         => $on_db,
     port       => $port,
     psql_user  => $psql_user,
@@ -78,10 +79,10 @@ define postgresql::server::grant (
   }
 
   if($role != undef and defined(Postgresql::Server::Role[$role])) {
-    Postgresql::Server::Role[$role]->Postgresql_psql[$grant_cmd]
+    Postgresql::Server::Role[$role]->Postgresql_psql["grant:${name}"]
   }
 
   if($db != undef and defined(Postgresql::Server::Database[$db])) {
-    Postgresql::Server::Database[$db]->Postgresql_psql[$grant_cmd]
+    Postgresql::Server::Database[$db]->Postgresql_psql["grant:${name}"]
   }
 }
