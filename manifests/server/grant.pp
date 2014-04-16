@@ -54,6 +54,11 @@ define postgresql::server::grant (
       $on_db = $psql_db
     }
     'SCHEMA': {
+      $unless_privilege = $_privilege ? {
+        'ALL'            => 'CREATE',
+        'ALL PRIVILEGES' => 'CREATE',
+        default          => $_privilege,
+      }
       validate_string($_privilege, 'CREATE', 'USAGE', 'ALL', 'ALL PRIVILEGES')
       $unless_function = 'has_schema_privilege'
       $on_db = $db
