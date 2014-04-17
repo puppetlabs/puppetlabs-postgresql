@@ -26,6 +26,20 @@ define postgresql::server::config_entry (
     }
   }
 
+  if ($::osfamily == 'RedHat') {
+    if ($name == 'port') {
+      augeas { 'override PGPORT in /etc/sysconfig/pgsql/postgresql':
+        lens    => 'Shellvars.lns',
+        incl    => '/etc/sysconfig/pgsql/*',
+        context => '/files/etc/sysconfig/pgsql/postgresql',
+        changes => "set PGPORT $value",
+        require => File['/etc/sysconfig/pgsql/postgresql'],
+        notify  => Class['postgresql::server::service'],
+        before  => Class['postgresql::server::reload'],
+      }
+    }
+  }
+
   case $ensure {
     /present|absent/: {
       postgresql_conf { $name:

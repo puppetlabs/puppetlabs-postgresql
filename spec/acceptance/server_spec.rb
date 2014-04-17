@@ -87,9 +87,6 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
           user     => "foo1",
           password => postgresql_password('foo1', 'foo1'),
         }
-        postgresql::server::config_entry { 'port':
-          value => '5432',
-        }
       EOS
 
       apply_manifest(pp, :catch_failures => true)
@@ -178,6 +175,29 @@ describe 'server without pg_hba.conf:', :unless => UNSUPPORTED_PLATFORMS.include
 
       apply_manifest(pp, :catch_failures => true)
       apply_manifest(pp, :catch_changes => true)
+    end
+  end
+end
+
+describe 'server on alternate port:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+  after :all do
+    apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
+  end
+
+  context 'test installing postgresql with alternate port' do
+    it 'perform installation and make sure it is idempotent' do
+      pp = <<-EOS.unindent
+        class { "postgresql::server":
+          port => 5433,
+        }
+      EOS
+
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
+    end
+
+    describe port(5433) do
+      it { should be_listening }
     end
   end
 end
