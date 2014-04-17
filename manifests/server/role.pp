@@ -4,6 +4,7 @@ define postgresql::server::role(
   $createdb         = false,
   $createrole       = false,
   $db               = $postgresql::server::default_database,
+  $port             = $postgresql::server::port,
   $login            = true,
   $inherit          = true,
   $superuser        = false,
@@ -30,6 +31,7 @@ define postgresql::server::role(
 
   Postgresql_psql {
     db         => $db,
+    port       => $port,
     psql_user  => $psql_user,
     psql_group => $psql_group,
     psql_path  => $psql_path,

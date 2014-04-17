@@ -4,6 +4,7 @@ class postgresql::server::config {
   $ip_mask_deny_postgres_user = $postgresql::server::ip_mask_deny_postgres_user
   $ip_mask_allow_all_users    = $postgresql::server::ip_mask_allow_all_users
   $listen_addresses           = $postgresql::server::listen_addresses
+  $port                       = $postgresql::server::port
   $ipv4acls                   = $postgresql::server::ipv4acls
   $ipv6acls                   = $postgresql::server::ipv6acls
   $pg_hba_conf_path           = $postgresql::server::pg_hba_conf_path
@@ -96,6 +97,18 @@ class postgresql::server::config {
     # want to allow any connections from remote hosts.
     postgresql::server::config_entry { 'listen_addresses':
       value => $listen_addresses,
+    }
+    postgresql::server::config_entry { 'port':
+      value => "${port}",
+    }
+
+    # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
+    # in /etc/sysconfig/pgsql/postgresql. Create a blank file so we can manage it with augeas later.
+    if ($::osfamily == 'RedHat') {
+      file { '/etc/sysconfig/pgsql/postgresql':
+        ensure  => present,
+        replace => false,
+      }
     }
   } else {
     file { $pg_hba_conf_path:

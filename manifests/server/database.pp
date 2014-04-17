@@ -12,6 +12,7 @@ define postgresql::server::database(
   $user          = $postgresql::server::user
   $group         = $postgresql::server::group
   $psql_path     = $postgresql::server::psql_path
+  $port          = $postgresql::server::port
   $version       = $postgresql::server::version
   $default_db    = $postgresql::server::default_database
 
@@ -20,6 +21,7 @@ define postgresql::server::database(
     psql_user  => $user,
     psql_group => $group,
     psql_path  => $psql_path,
+    port       => $port,
   }
 
   # Optionally set the locale switch. Older versions of createdb may not accept
@@ -45,12 +47,13 @@ define postgresql::server::database(
     default => "--tablespace='${tablespace}' ",
   }
 
-  $createdb_command = "${createdb_path} --owner='${owner}' --template=${template} ${encoding_option}${locale_option}${tablespace_option} '${dbname}'"
+  $createdb_command = "${createdb_path} --port='${port}' --owner='${owner}' --template=${template} ${encoding_option}${locale_option}${tablespace_option} '${dbname}'"
 
   postgresql_psql { "Check for existence of db '${dbname}'":
     command => 'SELECT 1',
     unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
     db      => $default_db,
+    port    => $port,
     require => Class['postgresql::server::service']
   }~>
   exec { $createdb_command :
@@ -63,6 +66,7 @@ define postgresql::server::database(
   #  granted privileges.
   postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
     db          => $default_db,
+    port        => $port,
     refreshonly => true,
   }
 
