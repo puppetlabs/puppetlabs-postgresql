@@ -3,17 +3,17 @@ class postgresql::server::firewall {
   $ensure             = $postgresql::server::ensure
   $manage_firewall    = $postgresql::server::manage_firewall
   $firewall_supported = $postgresql::server::firewall_supported
+  $port               = $postgresql::server::port
 
   if ($manage_firewall and $firewall_supported) {
     if ($ensure == 'present' or $ensure == true) {
-      # TODO: get rid of hard-coded port
-      firewall { '5432 accept - postgres':
-        port   => '5432',
+      firewall { "$port accept - postgres":
+        port   => $port,
         proto  => 'tcp',
         action => 'accept',
       }
     } else {
-      firewall { '5432 accept - postgres':
+      firewall { "$port accept - postgres":
         ensure => absent,
       }
     }
