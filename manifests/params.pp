@@ -56,6 +56,7 @@ class postgresql::params inherits postgresql::globals {
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $service_status      = $service_status
+      $perl_package_name   = pick($perl_package_name, 'perl-DBD-Pg')
       $python_package_name = pick($python_package_name, 'python-psycopg2')
 
       $postgis_package_name = pick(
@@ -95,6 +96,8 @@ class postgresql::params inherits postgresql::globals {
 
       $service_status      = $service_status
       $python_package_name = pick($python_package_name, 'python-psycopg2')
+      # Archlinux does not have a perl::DBD::Pg package
+      $perl_package_name = pick($perl_package_name, 'undef')
     }
 
     'Debian': {
@@ -128,6 +131,7 @@ class postgresql::params inherits postgresql::globals {
       )
       $devel_package_name   = pick($devel_package_name, 'libpq-dev')
       $java_package_name    = pick($java_package_name, 'libpostgresql-jdbc-java')
+      $perl_package_name    = pick($perl_package_name, 'libdbd-pg-perl')
       $plperl_package_name  = pick($plperl_package_name, "postgresql-plperl-${version}")
       $python_package_name  = pick($python_package_name, 'python-psycopg2')
 
@@ -149,6 +153,7 @@ class postgresql::params inherits postgresql::globals {
       $contrib_package_name = pick($contrib_package_name, "databases/postgresql${version}-contrib")
       $devel_package_name   = pick($devel_package_name, 'databases/postgresql-libpqxx3')
       $java_package_name    = pick($java_package_name, 'databases/postgresql-jdbc')
+      $perl_package_name    = pick($plperl_package_name, 'databases/p5-DBD-Pg')
       $plperl_package_name  = pick($plperl_package_name, "databases/postgresql${version}-plperl")
       $python_package_name  = pick($python_package_name, 'databases/py-psycopg2')
 
