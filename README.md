@@ -880,11 +880,11 @@ If you want to run the system tests, make sure you also have:
 
 Then run the tests using:
 
-    bundle exec rake spec:system
+    bundle exec rspec spec/acceptance
 
 To run the tests on different operating systems, see the sets available in .nodeset.yml and run the specific set with the following syntax:
 
-    RSPEC_SET=debian-607-x64 bundle exec rake spec:system
+    RSPEC_SET=debian-607-x64 bundle exec rspec spec/acceptance
 
 Transfer Notice
 ----------------
