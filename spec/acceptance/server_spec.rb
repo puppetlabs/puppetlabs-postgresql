@@ -113,6 +113,27 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
     end
   end
 
+  context 'test deprecating non-default version of postgresql to postgresql::server' do
+    after :all do
+      pp = <<-EOS.unindent
+        class { 'postgresql::server':
+          ensure  => absent,
+          version => '9.3',
+        }
+      EOS
+      apply_manifest(pp, :catch_failures => true)
+    end
+
+    it 'raises a warning' do
+      pp = <<-EOS.unindent
+      class { 'postgresql::server':
+        version => '9.3',
+      }
+      EOS
+      expect(apply_manifest(pp, :catch_failures => true).stderr).to match(/Passing "version" to postgresql::server is deprecated/i)
+    end
+  end
+
   unless ((fact('osfamily') == 'RedHat' and fact('lsbmajdistrelease') == '5') ||
     fact('osfamily') == 'Debian')
 
