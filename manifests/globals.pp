@@ -16,6 +16,8 @@ class postgresql::globals (
   $service_status       = undef,
   $default_database     = undef,
 
+  $validcon_script_path = undef,
+
   $initdb_path          = undef,
   $createdb_path        = undef,
   $psql_path            = undef,
