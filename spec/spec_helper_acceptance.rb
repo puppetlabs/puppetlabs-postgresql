@@ -34,28 +34,20 @@ def psql(psql_cmd, user = 'postgres', exit_codes = [0], &block)
   shell("su #{shellescape(user)} -c #{shellescape(psql)}", :acceptable_exit_codes => exit_codes, &block)
 end
 
-hosts.each do |host|
-  if host['platform'] =~ /debian/
-    on host, 'echo \'export PATH=/var/lib/gems/1.8/bin/:${PATH}\' >> ~/.bashrc'
-  end
-  if host.is_pe?
+unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
+  if hosts.first.is_pe?
     install_pe
   else
-    # Install Puppet
-    install_package host, 'rubygems'
-    on host, 'gem install puppet --no-ri --no-rdoc'
-    on host, "mkdir -p #{host['distmoduledir']}"
-    osfamily = fact 'osfamily'
-    # install augeas dependencies
-    if osfamily =~ /Debian/
-      install_package host, 'ruby-dev'
-      install_package host, 'libaugeas-dev'
-    end
-    if osfamily =~ /RedHat/
+    install_puppet
+  end
+  hosts.each do |host|
+    on hosts, "mkdir -p #{host['distmoduledir']}"
+    # Augeas is only used in one place, for Redhat.
+    if fact('osfamily') == 'RedHat'
       install_package host, 'ruby-devel'
       install_package host, 'augeas-devel'
+      install_package host, 'ruby-augeas'
     end
-    on host, 'gem install ruby-augeas --no-ri --no-rdoc'
   end
 end
 
