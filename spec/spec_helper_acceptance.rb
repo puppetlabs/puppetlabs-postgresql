@@ -40,13 +40,15 @@ unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
   else
     install_puppet
   end
+  on hosts, "mkdir -p #{host['distmoduledir']}"
   hosts.each do |host|
-    on hosts, "mkdir -p #{host['distmoduledir']}"
-    # Augeas is only used in one place, for Redhat.
-    if fact('osfamily') == 'RedHat'
-      install_package host, 'ruby-devel'
-      install_package host, 'augeas-devel'
-      install_package host, 'ruby-augeas'
+    if ! host.is_pe?
+      # Augeas is only used in one place, for Redhat.
+      if fact('osfamily') == 'RedHat'
+        install_package host, 'ruby-devel'
+        install_package host, 'augeas-devel'
+        install_package host, 'ruby-augeas'
+      end
     end
   end
 end
