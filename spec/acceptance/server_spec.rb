@@ -1,5 +1,13 @@
 require 'spec_helper_acceptance'
 
+# Hack around the fact that so far only Ubuntu 14.04 seems to have moved this
+# file.  Can revisit if everyone else gets clever.
+if fact('operatingsystem') == 'Ubuntu' && fact('operatingsystemrelease') == '14.04'
+  pghba_file = '/etc/postgresql/9.3/main/pg_hba.conf'
+else
+  pghba_file = '/var/lib/pgsql/data/pg_hba.conf'
+end
+
 describe 'server:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   after :all do
     # Cleanup after tests have ran
@@ -19,7 +27,7 @@ describe 'server:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
     it { should be_listening }
   end
 
-  describe file('/var/lib/pgsql/data/pg_hba.conf') do
+  describe file(pghba_file) do
     it { should be_file }
     it { should be_owned_by 'postgres' }
     it { should be_grouped_into 'postgres' }
