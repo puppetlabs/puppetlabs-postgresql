@@ -2,8 +2,6 @@
 class postgresql::server (
   $ensure                     = $postgresql::params::ensure,
 
-  $version                    = $postgresql::params::version,
-
   $postgres_password          = undef,
 
   $package_name               = $postgresql::params::server_package_name,
@@ -45,9 +43,16 @@ class postgresql::server (
 
   $manage_firewall            = $postgresql::params::manage_firewall,
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
-  $firewall_supported         = $postgresql::params::firewall_supported
+  $firewall_supported         = $postgresql::params::firewall_supported,
+
+  #Deprecated
+  $version                    = $postgresql::params::version,
 ) inherits postgresql::params {
   $pg = 'postgresql::server'
+
+  if $version != $postgresql::params::version {
+    warning('Passing "version" to postgresql::server is deprecated; please use postgresql::globals instead.')
+  }
 
   if ($ensure == 'present' or $ensure == true) {
     # Reload has its own ordering, specified by other defines

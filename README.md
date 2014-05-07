@@ -369,9 +369,6 @@ The following list are options that you can set in the `config_hash` parameter o
 ####`ensure`
 This value default to `present`. When set to `absent` it will remove all packages, configuration and data so use this with extreme caution.
 
-####`version`
-This will set the version of the PostgreSQL software to install. Defaults to your operating systems default.
-
 ####`postgres_password`
 This value defaults to `undef`, meaning the super user account in the postgres database is a user called `postgres` and this account does not have a password. If you provide this setting, the module will set the password for the `postgres` user to your specified value.
 
