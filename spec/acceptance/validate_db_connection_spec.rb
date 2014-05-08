@@ -32,13 +32,17 @@ describe 'postgresql::validate_db_connection:', :unless => UNSUPPORTED_PLATFORMS
     apply_manifest(pp, :catch_failures => true)
   end
 
-  it 'should keep retrying if database is down' do
-    # So first we shut the db down, then background a startup routine with a
-    # sleep 10 in front of it. That way the tests should continue while
-    # the pause and db startup happens in the background.
-    shell("/etc/init.d/postgresql* stop")
-    shell('nohup bash -c "sleep 10; /etc/init.d/postgresql* start" > /dev/null 2>&1 &')
+  it 'stops postgresql' do
+    # First we stop postgresql.
+    pp = <<-EOS
+      class { 'postgresql::server':
+        service_ensure => 'stopped',
+      }
+    EOS
+    apply_manifest(pp, :catch_failures => true)
+  end
 
+  it 'should keep retrying if database is down' do
     pp = <<-EOS.unindent
       postgresql::validate_db_connection { 'foo':
         database_name => 'foo',
@@ -48,6 +52,11 @@ describe 'postgresql::validate_db_connection:', :unless => UNSUPPORTED_PLATFORMS
       }
     EOS
 
+    if fact('operatingsystem') == 'RedHat' && fact('operatingsystemrelease') == '7.0'
+      shell('nohup bash -c "sleep 10; for i in /usr/lib/systemd/system/postgres*; do systemctl start `basename $i`; done" > /dev/null 2>&1 &')
+    else
+      shell('nohup bash -c "sleep 10; /etc/init.d/postgresql* start" > /dev/null 2>&1 &')
+    end
     apply_manifest(pp, :catch_failures => true)
   end
 
@@ -75,5 +84,14 @@ describe 'postgresql::validate_db_connection:', :unless => UNSUPPORTED_PLATFORMS
     EOS
 
     apply_manifest(pp, :expect_failures => true)
+  end
+
+  it 'starts postgresql' do
+    pp = <<-EOS
+      class { 'postgresql::server':
+        service_ensure => 'running',
+      }
+    EOS
+    apply_manifest(pp, :catch_failures => true)
   end
 end
