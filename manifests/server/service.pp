@@ -11,8 +11,8 @@ class postgresql::server::service {
 
   if ! $service_ensure {
     $real_service_ensure = $ensure ? {
-      present => true,
-      absent  => false,
+      present => 'running',
+      absent  => 'stopped',
       default => $ensure
     }
     $service_enable = $ensure ? {
