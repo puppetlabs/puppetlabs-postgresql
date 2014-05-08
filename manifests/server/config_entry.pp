@@ -29,9 +29,9 @@ define postgresql::server::config_entry (
   # We have to handle ports in a weird and special way.  On Redhat we either
   # have to create a systemd override for the port or update the sysconfig
   # file.
-  if ($::osfamily == 'RedHat') {
-    if ($::operatingsystemrelease == '7.0') {
-      if ($name == 'port') {
+  if $::osfamily == 'RedHat' {
+    if $::operatingsystemrelease =~ /^7/ {
+      if $name == 'port' {
         file { 'systemd-port-override':
           ensure  => present,
           path    => '/etc/systemd/system/postgresql.service',
@@ -48,7 +48,7 @@ define postgresql::server::config_entry (
         }
       }
     } else {
-      if ($name == 'port') {
+      if $name == 'port' {
         augeas { 'override PGPORT in /etc/sysconfig/pgsql/postgresql':
           lens    => 'Shellvars.lns',
           incl    => '/etc/sysconfig/pgsql/*',

@@ -52,7 +52,7 @@ describe 'postgresql::validate_db_connection:', :unless => UNSUPPORTED_PLATFORMS
       }
     EOS
 
-    if fact('operatingsystem') == 'RedHat' && fact('operatingsystemrelease') == '7.0'
+    if fact('operatingsystem') == 'RedHat' && fact('operatingsystemrelease') =~ /^7/
       shell('nohup bash -c "sleep 10; for i in /usr/lib/systemd/system/postgres*; do systemctl start `basename $i`; done" > /dev/null 2>&1 &')
     else
       shell('nohup bash -c "sleep 10; /etc/init.d/postgresql* start" > /dev/null 2>&1 &')

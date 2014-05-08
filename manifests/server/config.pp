@@ -104,7 +104,7 @@ class postgresql::server::config {
 
     # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
     # in /etc/sysconfig/pgsql/postgresql. Create a blank file so we can manage it with augeas later.
-    if ($::osfamily == 'RedHat') and ($::operatingsystemrelease != '7.0') {
+    if ($::osfamily == 'RedHat') and ($::operatingsystemrelease !~ /^7/) {
       file { '/etc/sysconfig/pgsql/postgresql':
         ensure  => present,
         replace => false,
