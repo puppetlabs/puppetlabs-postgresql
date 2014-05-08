@@ -288,6 +288,9 @@ This setting can be used to override the default postgresql PL/perl package name
 ####`python_package_name`
 This setting can be used to override the default postgresql Python package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
+####`service_ensure`
+This setting can be used to override the default postgresql service ensure status. If not specified, the module will use `ensure` instead.
+
 ####`service_name`
 This setting can be used to override the default postgresql service name. If not specified, the module will use whatever service name is the default for your OS distro.
 
@@ -837,10 +840,16 @@ Works with versions of PostgreSQL from 8.1 through 9.2.
 Current it is only actively tested with the following operating systems:
 
 * Debian 6.x and 7.x
-* Centos 5.x and 6.x
-* Ubuntu 10.04 and 12.04
+* Centos 5.x, 6.x, and 7.x.
+* Ubuntu 10.04 and 12.04, 14.04
 
 Although patches are welcome for making it work with other OS distros, it is considered best effort.
+
+### RHEL7
+
+Currently the following features are unsupported:
+
+* Postgis (There is no existing postgis package for RHEL7, and it's not in EPEL7 yet.)
 
 Development
 ------------

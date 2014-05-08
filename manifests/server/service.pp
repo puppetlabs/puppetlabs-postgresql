@@ -1,6 +1,7 @@
 # PRIVATE CLASS: do not call directly
 class postgresql::server::service {
   $ensure           = $postgresql::server::ensure
+  $service_ensure   = $postgresql::server::service_ensure
   $service_name     = $postgresql::server::service_name
   $service_provider = $postgresql::server::service_provider
   $service_status   = $postgresql::server::service_status
@@ -8,24 +9,38 @@ class postgresql::server::service {
   $port             = $postgresql::server::port
   $default_database = $postgresql::server::default_database
 
-  $service_ensure = $ensure ? {
-    present => true,
-    absent  => false,
-    default => $ensure
+  if ! $service_ensure {
+    $real_service_ensure = $ensure ? {
+      present => true,
+      absent  => false,
+      default => $ensure
+    }
+    $service_enable = $ensure ? {
+      present => true,
+      absent  => false,
+      default => $ensure
+    }
+  } else {
+    $real_service_ensure = $service_ensure
+    $service_enable = $ensure ? {
+      present => true,
+      absent  => false,
+      default => $ensure
+    }
   }
 
   anchor { 'postgresql::server::service::begin': }
 
   service { 'postgresqld':
-    ensure    => $service_ensure,
+    ensure    => $real_service_ensure,
     name      => $service_name,
-    enable    => $service_ensure,
+    enable    => $service_enable,
     provider  => $service_provider,
     hasstatus => true,
     status    => $service_status,
   }
 
-  if($service_ensure) {
+  if $real_service_ensure == 'running' {
     # This blocks the class before continuing if chained correctly, making
     # sure the service really is 'up' before continuing.
     #
