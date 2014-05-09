@@ -16,8 +16,8 @@ describe 'server:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
       class { 'postgresql::client': package_ensure => absent }
     EOS
     apply_manifest(pp, :catch_failures => true)
-    if fact('operatingsystem') == 'RedHat'
-      shell('rpm -e postgresql-libs')
+    if fact('osfamily') == 'RedHat'
+      shell('rpm -qa | grep postgres | xargs rpm -e')
     end
   end
 
@@ -88,8 +88,8 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
         }
       EOS
       apply_manifest(pp, :catch_failures => true)
-      if fact('operatingsystem') == 'RedHat'
-        shell('rpm -e postgresql93-libs')
+      if fact('osfamily') == 'RedHat'
+        shell('rpm -qa | grep postgres | xargs rpm -e')
       end
     end
 
@@ -155,7 +155,7 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
     fact('osfamily') == 'Debian')
 
     context 'override locale and encoding' do
-      after :each do
+      before :each do
         apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
       end
 
