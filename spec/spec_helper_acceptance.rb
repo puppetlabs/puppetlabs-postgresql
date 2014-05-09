@@ -29,7 +29,7 @@ def shellescape(str)
   return str
 end
 
-def psql(psql_cmd, user = 'postgres', exit_codes = [0], &block)
+def psql(psql_cmd, user = 'postgres', exit_codes = [0,1], &block)
   psql = "psql #{psql_cmd}"
   shell("su #{shellescape(user)} -c #{shellescape(psql)}", :acceptable_exit_codes => exit_codes, &block)
 end
