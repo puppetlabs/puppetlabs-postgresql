@@ -49,6 +49,15 @@ define postgresql::server::config_entry (
       }
     } else {
       if $name == 'port' {
+        # We need to force postgresql to stop before updating the port
+        # because puppet becomes confused and is unable to manage the
+        # service appropriately.
+        exec { 'postgresql_stop':
+          command => "service ${::postgresql::server::service_name} stop",
+          unless  => "grep 'PGPORT=${value}' /etc/sysconfig/pgsql/postgresql",
+          path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
+          require => File['/etc/sysconfig/pgsql/postgresql'],
+        } ->
         augeas { 'override PGPORT in /etc/sysconfig/pgsql/postgresql':
           lens    => 'Shellvars.lns',
           incl    => '/etc/sysconfig/pgsql/*',
