@@ -10,6 +10,7 @@ class postgresql::lib::java (
   package { 'postgresql-jdbc':
     ensure => $package_ensure,
     name   => $package_name,
+    tag    => 'postgresql',
   }
 
 }
