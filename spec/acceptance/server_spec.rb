@@ -12,8 +12,8 @@ describe 'server:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) 
   after :all do
     # Cleanup after tests have ran
     pp = <<-EOS.unindent
-      class { 'postgresql::server': ensure => absent }
-      class { 'postgresql::client': ensure => absent }
+      class { 'postgresql::server': ensure => absent } ->
+      class { 'postgresql::client': package_ensure => absent }
     EOS
     apply_manifest(pp, :catch_failures => true)
     if fact('operatingsystem') == 'RedHat'
@@ -82,9 +82,9 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
         }
         class { 'postgresql::server':
           ensure => absent,
-        }
+        } ->
         class { 'postgresql::client':
-          ensure => absent,
+          package_ensure => absent,
         }
       EOS
       apply_manifest(pp, :catch_failures => true)
@@ -133,9 +133,9 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
         }
         class { 'postgresql::server':
           ensure  => absent,
-        }
+        } ->
         class { 'postgresql::client':
-          ensure  => absent,
+          package_ensure  => absent,
         }
       EOS
       apply_manifest(pp, :catch_failures => true)
