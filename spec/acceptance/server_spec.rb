@@ -11,7 +11,14 @@ end
 describe 'server:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   after :all do
     # Cleanup after tests have ran
-    apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
+    pp = <<-EOS.unindent
+      class { 'postgresql::server': ensure => absent }
+      class { 'postgresql::client': ensure => absent }
+    EOS
+    apply_manifest(pp, :catch_failures => true)
+    if fact('operatingsystem') == 'RedHat'
+      shell('rpm -e postgresql-libs')
+    end
   end
 
   it 'test loading class with no parameters' do
@@ -70,15 +77,20 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
       psql('--command="drop database postgresql_test_db" postgres', 'postgres')
       pp = <<-EOS.unindent
         class { 'postgresql::globals':
-          ensure              => absent,
           manage_package_repo => true,
           version             => '9.3',
         }
         class { 'postgresql::server':
           ensure => absent,
         }
+        class { 'postgresql::client':
+          ensure => absent,
+        }
       EOS
       apply_manifest(pp, :catch_failures => true)
+      if fact('operatingsystem') == 'RedHat'
+        shell('rpm -e postgresql93-libs')
+      end
     end
 
     it 'perform installation and create a db' do
@@ -116,9 +128,14 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
   context 'test deprecating non-default version of postgresql to postgresql::server' do
     after :all do
       pp = <<-EOS.unindent
+        class { 'postgresql::globals':
+          version => '9.3',
+        }
         class { 'postgresql::server':
           ensure  => absent,
-          version => '9.3',
+        }
+        class { 'postgresql::client':
+          ensure  => absent,
         }
       EOS
       apply_manifest(pp, :catch_failures => true)
