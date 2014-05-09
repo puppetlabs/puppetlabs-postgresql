@@ -12,7 +12,7 @@ describe 'postgresql::lib::java', :type => :class do
     it { should contain_package('postgresql-jdbc').with(
       :name   => 'libpostgresql-jdbc-java',
       :ensure => 'present',
-      :tag    => 'postgresql',
+      :tag    => 'postgresql'
     )}
   end
 
@@ -26,7 +26,7 @@ describe 'postgresql::lib::java', :type => :class do
     it { should contain_package('postgresql-jdbc').with(
       :name => 'postgresql-jdbc',
       :ensure => 'present',
-      :tag    => 'postgresql',
+      :tag    => 'postgresql'
     )}
     describe 'when parameters are supplied' do
       let :params do
@@ -35,7 +35,7 @@ describe 'postgresql::lib::java', :type => :class do
       it { should contain_package('postgresql-jdbc').with(
         :name => 'somepackage',
         :ensure => 'latest',
-        :tag    => 'postgresql',
+        :tag    => 'postgresql'
       )}
     end
   end
