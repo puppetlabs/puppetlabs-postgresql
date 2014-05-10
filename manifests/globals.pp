@@ -92,6 +92,7 @@ class postgresql::globals (
   }
 
   $default_postgis_version = $globals_version ? {
+    '8.1' => '1.5',
     '8.4' => '1.5',
     '9.0' => '1.5',
     '9.1' => '1.5',
