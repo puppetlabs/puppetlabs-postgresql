@@ -54,6 +54,7 @@ define postgresql::server::config_entry (
         # service appropriately.
         exec { 'postgresql_stop':
           command => "service ${::postgresql::server::service_name} stop",
+          onlyif  => "service ${::postgresql::server::service_name} status",
           unless  => "grep 'PGPORT=${value}' /etc/sysconfig/pgsql/postgresql",
           path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
           require => File['/etc/sysconfig/pgsql/postgresql'],
