@@ -2,8 +2,15 @@ require 'spec_helper_acceptance'
 
 # Hack around the fact that so far only Ubuntu 14.04 seems to have moved this
 # file.  Can revisit if everyone else gets clever.
-if fact('operatingsystem') == 'Ubuntu' && fact('operatingsystemrelease') == '14.04'
-  pghba_file = '/etc/postgresql/9.3/main/pg_hba.conf'
+
+case fact('operatingsystem')
+when 'Ubuntu'
+  case fact('operatingsystemrelease')
+  when '14.04'
+    pghba_file = '/etc/postgresql/9.3/main/pg_hba.conf'
+  when '12.04'
+    pghba_file = '/etc/postgresql/9.1/main/pg_hba.conf'
+  end
 else
   pghba_file = '/var/lib/pgsql/data/pg_hba.conf'
 end
