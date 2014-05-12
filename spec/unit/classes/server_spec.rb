@@ -101,7 +101,7 @@ describe 'postgresql::server', :type => :class do
 
     it 'should still enable the service' do
       should contain_service('postgresqld').with({
-        :ensure => true,
+        :ensure => 'running',
       })
     end
   end

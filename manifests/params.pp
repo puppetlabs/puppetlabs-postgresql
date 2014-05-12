@@ -1,6 +1,6 @@
 # PRIVATE CLASS: do not use directly
 class postgresql::params inherits postgresql::globals {
-  $ensure                     = true
+  $ensure                     = present
   $version                    = $globals_version
   $postgis_version            = $globals_postgis_version
   $listen_addresses           = 'localhost'
