@@ -9,24 +9,20 @@ class postgresql::server::service {
   $port             = $postgresql::server::port
   $default_database = $postgresql::server::default_database
 
-  if ! $service_ensure {
+  if $service_ensure {
+    $real_service_ensure = $service_ensure
+  } else {
     $real_service_ensure = $ensure ? {
       present => 'running',
       absent  => 'stopped',
       default => $ensure
     }
-    $service_enable = $ensure ? {
-      present => true,
-      absent  => false,
-      default => $ensure
-    }
-  } else {
-    $real_service_ensure = $service_ensure
-    $service_enable = $ensure ? {
-      present => true,
-      absent  => false,
-      default => $ensure
-    }
+  }
+
+  $service_enable = $ensure ? {
+    present => true,
+    absent  => false,
+    default => $ensure
   }
 
   anchor { 'postgresql::server::service::begin': }
