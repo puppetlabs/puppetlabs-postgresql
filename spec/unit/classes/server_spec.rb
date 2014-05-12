@@ -21,6 +21,24 @@ describe 'postgresql::server', :type => :class do
     end
   end
 
+  describe 'service_ensure => running' do
+    let(:params) {{ :service_ensure => 'running' }}
+    it { should contain_class("postgresql::params") }
+    it { should contain_class("postgresql::server") }
+    it 'should validate connection' do
+      should contain_postgresql__validate_db_connection('validate_service_is_running')
+    end
+  end
+
+  describe 'service_ensure => stopped' do
+    let(:params) {{ :service_ensure => 'stopped' }}
+    it { should contain_class("postgresql::params") }
+    it { should contain_class("postgresql::server") }
+    it 'shouldnt validate connection' do
+      should_not contain_postgresql__validate_db_connection('validate_service_is_running')
+    end
+  end
+
   describe 'manage_firewall => true' do
     let(:params) do
       {
@@ -51,7 +69,7 @@ describe 'postgresql::server', :type => :class do
 
     it 'stop the service' do
       should contain_service('postgresqld').with({
-        :ensure => false,
+        :ensure => 'stopped',
       })
     end
 
