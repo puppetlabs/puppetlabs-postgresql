@@ -83,6 +83,15 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
     after :all do
       psql('--command="drop database postgresql_test_db" postgres', 'postgres')
       pp = <<-EOS.unindent
+        if $::osfamily == 'Debian' {
+          class { 'apt': }
+          # XXX Need to purge postgresql-common after uninstalling 9.3 because
+          # it leaves the init script behind. Poor packaging.
+          package { 'postgresql-common':
+            ensure  => purged,
+            require => Class['postgresql::server'],
+          }
+        }
         class { 'postgresql::globals':
           manage_package_repo => true,
           version             => '9.3',
@@ -102,6 +111,9 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
 
     it 'perform installation and create a db' do
       pp = <<-EOS.unindent
+        if $::osfamily == 'Debian' {
+          class { 'apt': }
+        }
         class { "postgresql::globals":
           version             => "9.3",
           manage_package_repo => true,
@@ -116,7 +128,7 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
         }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
+      expect(apply_manifest(pp, :catch_failures => true).stderr).to eq('')
       apply_manifest(pp, :catch_changes => true)
 
       shell('test -d /tmp/pg_xlogs') do |r|
