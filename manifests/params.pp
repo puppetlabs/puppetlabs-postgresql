@@ -63,9 +63,11 @@ class postgresql::params inherits postgresql::globals {
 
       $postgis_package_name = pick(
         $postgis_package_name,
-        versioncmp($postgis_version, '2') ? {
-          '-1'    => "postgis${package_version}",
-          default => "postgis2_${package_version}",
+        $::operatingsystemrelease ? {
+          /5/     => 'postgis',
+          default => versioncmp($postgis_version, '2') ? {
+            '-1'    => "postgis${package_version}",
+            default => "postgis2_${package_version}",}
         }
       )
     }
