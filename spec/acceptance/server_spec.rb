@@ -151,6 +151,7 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
     it 'raises a warning' do
       pp = <<-EOS.unindent
       class { 'postgresql::server':
+        ensure  => absent,
         version => '9.3',
       }
       EOS
