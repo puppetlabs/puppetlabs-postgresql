@@ -7,6 +7,8 @@ Table of Contents
 1. [Overview - What is the PostgreSQL module?](#overview)
 2. [Module Description - What does the module do?](#module-description)
 3. [Setup - The basics of getting started with PostgreSQL module](#setup)
+    * [PE 3.2 supported module](#pe-3.2-supported-module)
+    * [Configuring the server](#configuring-the-server) 
 4. [Usage - How to use the module for various tasks](#usage)
 5. [Upgrading - Guide for upgrading from older revisions of this module](#upgrading)
 6. [Reference - The classes, defines,functions and facts available in this module](#reference)
@@ -46,6 +48,15 @@ The postgresql module offers many security configuration settings. Before gettin
 * How restrictive do you want the database superuser's permissions to be?
 
 Your answers to these questions will determine which of the module's parameters you'll want to specify values for.
+
+###PE 3.2 supported module
+
+PE 3.2 introduces Puppet Labs supported modules. The version of the postgresql module that ships within PE 3.2 is supported via normal [Puppet Enterprise support](http://puppetlabs.com/services/customer-support) channels. If you would like to access the [supported module](http://forge.puppetlabs.com/supported) version, you will need to uninstall the shipped module and install the supported version from the Puppet Forge. You can do this by first running
+
+    # puppet module uninstall puppetlabs-postgresql
+and then running
+
+    # puppet module install puppetlabs/postgresql
 
 ###Configuring the server
 
