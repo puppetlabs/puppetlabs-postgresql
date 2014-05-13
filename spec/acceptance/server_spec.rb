@@ -208,6 +208,9 @@ describe 'server with firewall:', :unless => UNSUPPORTED_PLATFORMS.include?(fact
         }
       EOS
 
+      if fact('osfamily') == 'RedHat' and fact('operatingsystemmajrelease') == '5'
+        shell('iptables -F')
+      end
       apply_manifest(pp, :catch_failures => true)
       apply_manifest(pp, :catch_changes => true)
     end
