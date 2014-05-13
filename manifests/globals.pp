@@ -59,6 +59,7 @@ class postgresql::globals (
       },
       'Amazon' => '9.2',
       default => $::operatingsystemrelease ? {
+        /^7\./ => '9.2',
         /^6\./ => '8.4',
         /^5\./ => '8.1',
         default => undef,
@@ -91,6 +92,7 @@ class postgresql::globals (
   }
 
   $default_postgis_version = $globals_version ? {
+    '8.1' => '1.3.6',
     '8.4' => '1.5',
     '9.0' => '1.5',
     '9.1' => '1.5',
@@ -101,9 +103,12 @@ class postgresql::globals (
 
   # Setup of the repo only makes sense globally, so we are doing this here.
   if($manage_package_repo) {
-    class { 'postgresql::repo':
-      ensure  => $ensure,
-      version => $globals_version
+    # Workaround the lack of RHEL7 repositories for now.
+    if ! ($::operatingsystem == 'RedHat' and $::operatingsystemrelease =~ /^7/) {
+      class { 'postgresql::repo':
+        ensure  => $ensure,
+        version => $globals_version
+      }
     }
   }
 }

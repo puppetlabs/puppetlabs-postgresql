@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::postgis:' do
+describe 'postgresql::server::postgis:', :unless => fact('operatingsystem') == 'RedHat' && fact('operatingsystemrelease') == '7.0' do
   after :all do
     # Cleanup after tests have ran, remove both postgis and server as postgis
     # pulls in the server based packages.
@@ -18,6 +18,7 @@ describe 'postgresql::server::postgis:' do
 
   it 'test loading class with no parameters' do
     pp = <<-EOS.unindent
+      class { 'postgresql::globals': manage_package_repo => true }
       class { 'postgresql::server': }
       class { 'postgresql::server::postgis': }
     EOS

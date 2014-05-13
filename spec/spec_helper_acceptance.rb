@@ -29,7 +29,7 @@ def shellescape(str)
   return str
 end
 
-def psql(psql_cmd, user = 'postgres', exit_codes = [0], &block)
+def psql(psql_cmd, user = 'postgres', exit_codes = [0,1], &block)
   psql = "psql #{psql_cmd}"
   shell("su #{shellescape(user)} -c #{shellescape(psql)}", :acceptable_exit_codes => exit_codes, &block)
 end
@@ -72,6 +72,10 @@ RSpec.configure do |c|
         shell("echo \"en_US ISO-8859-1\nen_NG.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\n\" > /etc/locale.gen")
         shell('/usr/sbin/locale-gen')
         shell('/usr/sbin/update-locale')
+      end
+      if fact('osfamily') == 'RedHat'
+        shell('yum -y install policycoreutils-python')
+        shell('semanage port -a -t postgresql_port_t -p tcp 5433')
       end
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-firewall'), { :acceptable_exit_codes => [0,1] }

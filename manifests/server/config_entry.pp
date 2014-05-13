@@ -26,16 +26,48 @@ define postgresql::server::config_entry (
     }
   }
 
-  if ($::osfamily == 'RedHat') {
-    if ($name == 'port') {
-      augeas { 'override PGPORT in /etc/sysconfig/pgsql/postgresql':
-        lens    => 'Shellvars.lns',
-        incl    => '/etc/sysconfig/pgsql/*',
-        context => '/files/etc/sysconfig/pgsql/postgresql',
-        changes => "set PGPORT $value",
-        require => File['/etc/sysconfig/pgsql/postgresql'],
-        notify  => Class['postgresql::server::service'],
-        before  => Class['postgresql::server::reload'],
+  # We have to handle ports in a weird and special way.  On Redhat we either
+  # have to create a systemd override for the port or update the sysconfig
+  # file.
+  if $::osfamily == 'RedHat' {
+    if $::operatingsystemrelease =~ /^7/ {
+      if $name == 'port' {
+        file { 'systemd-port-override':
+          ensure  => present,
+          path    => '/etc/systemd/system/postgresql.service',
+          owner   => root,
+          group   => root,
+          content => template('postgresql/systemd-port-override.erb'),
+          notify  => [ Exec['restart-systemd'], Class['postgresql::server::service'] ],
+          before  => Class['postgresql::server::reload'],
+        }
+        exec { 'restart-systemd':
+          command     => 'systemctl daemon-reload',
+          refreshonly => true,
+          path        => '/bin:/usr/bin:/usr/local/bin'
+        }
+      }
+    } else {
+      if $name == 'port' {
+        # We need to force postgresql to stop before updating the port
+        # because puppet becomes confused and is unable to manage the
+        # service appropriately.
+        exec { 'postgresql_stop':
+          command => "service ${::postgresql::server::service_name} stop",
+          onlyif  => "service ${::postgresql::server::service_name} status",
+          unless  => "grep 'PGPORT=${value}' /etc/sysconfig/pgsql/postgresql",
+          path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
+          require => File['/etc/sysconfig/pgsql/postgresql'],
+        } ->
+        augeas { 'override PGPORT in /etc/sysconfig/pgsql/postgresql':
+          lens    => 'Shellvars.lns',
+          incl    => '/etc/sysconfig/pgsql/*',
+          context => '/files/etc/sysconfig/pgsql/postgresql',
+          changes => "set PGPORT ${value}",
+          require => File['/etc/sysconfig/pgsql/postgresql'],
+          notify  => Class['postgresql::server::service'],
+          before  => Class['postgresql::server::reload'],
+        }
       }
     }
   }

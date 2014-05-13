@@ -17,6 +17,11 @@ class postgresql::server::postgis (
     Package['postgresql-postgis']->
     Class['postgresql::server::service']->
     anchor { 'postgresql::server::postgis::end': }
+
+    if $postgresql::globals::manage_package_repo {
+      Class['postgresql::repo'] ->
+      Package['postgresql-postgis']
+    }
   } else {
     anchor { 'postgresql::server::postgis::start': }->
     Class['postgresql::server::service']->

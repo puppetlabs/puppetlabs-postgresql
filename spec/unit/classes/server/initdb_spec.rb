@@ -23,6 +23,7 @@ describe 'postgresql::server::initdb', :type => :class do
       {
         :osfamily => 'RedHat',
         :operatingsystem => 'Amazon',
+        :operatingsystemrelease => '1.0',
         :concat_basedir => tmpfilename('server'),
         :kernel => 'Linux',
         :id => 'root',

@@ -10,6 +10,7 @@ class postgresql::server (
 
   $plperl_package_name        = $postgresql::params::plperl_package_name,
 
+  $service_ensure             = $postgresql::params::service_ensure,
   $service_name               = $postgresql::params::service_name,
   $service_provider           = $postgresql::params::service_provider,
   $service_status             = $postgresql::params::service_status,
