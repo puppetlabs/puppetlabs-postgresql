@@ -1,3 +1,25 @@
+##2014-04-14 - Supported Release 3.4.0
+###Summary
+
+This feature rolls up several important features, the biggest being PostGIS
+handling and allowing `port` to be set on postgresql::server in order to
+change the port that Postgres listens on.  We've added support for RHEL7
+and Ubuntu 14.04, as well as allowing you to manage the service via
+`service_ensure` finally.
+
+####Features
+- Added `perl_package_name` for installing bindings.
+- Added `service_ensure` for allowing control of services.
+- Added `postgis_version` and postgis class for installing postgis.
+- Added `port` for selecting the port Postgres runs on.
+- Add support for RHEL7 and Ubuntu 14.04.
+- Add `default_db` to postgresql::server::database.
+- Widen the selection of unquoted parameters in postgresql_conf{}
+- Require the service within postgresql::server::reload for RHEL7.
+- Add `inherit` to postgresql::server::role.
+
+####Bugfixes
+
 ##2014-03-04 - Supported Release 3.3.3
 ###Summary
 
