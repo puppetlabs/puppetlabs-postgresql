@@ -40,7 +40,7 @@ define postgresql::server::role(
 
   postgresql_psql {"CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}":
     unless  => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
-    require => Class['Postgresql::Server'],
+    require => Class['postgresql::server'],
   }
 
   postgresql_psql {"ALTER ROLE \"${username}\" ${superuser_sql}":
