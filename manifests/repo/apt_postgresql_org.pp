@@ -15,7 +15,7 @@ include ::apt
       release           => "${::lsbdistcodename}-pgdg",
       repos             => "main ${version}",
       key               => 'ACCC4CF8',
-      key_source        => 'http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc',
+      key_source        => 'https://www.postgresql.org/media/keys/ACCC4CF8.asc',
       include_src       => false,
     }
 
