@@ -21,24 +21,24 @@ define postgresql::validate_db_connection(
 
   $cmd_init = "${psql_path} --tuples-only --quiet "
   $cmd_host = $database_host ? {
+    undef   => '',
     default => "-h ${database_host} ",
-    undef   => "",
   }
   $cmd_user = $database_username ? {
+    undef   => '',
     default => "-U ${database_username} ",
-    undef   => "",
   }
   $cmd_port = $database_port ? {
+    undef   => '',
     default => "-p ${database_port} ",
-    undef   => "",
   }
   $cmd_dbname = $database_name ? {
-    default => "--dbname ${database_name} ",
     undef   => "--dbname ${postgresql::params::default_database} ",
+    default => "--dbname ${database_name} ",
   }
   $env = $database_password ? {
-    default => "PGPASSWORD=${database_password}",
     undef   => undef,
+    default => "PGPASSWORD=${database_password}",
   }
   $cmd = join([$cmd_init, $cmd_host, $cmd_user, $cmd_port, $cmd_dbname])
   $validate_cmd = "/usr/local/bin/validate_postgresql_connection.sh ${sleep} ${tries} '${cmd}'"
