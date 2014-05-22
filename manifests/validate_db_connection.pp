@@ -20,26 +20,37 @@ define postgresql::validate_db_connection(
   $psql_path = $postgresql::params::psql_path
 
   $cmd_init = "${psql_path} --tuples-only --quiet "
-  $cmd_host = $database_host ? {
-    default => "-h ${database_host} ",
-    undef   => "",
+
+  if $database_host {
+    $cmd_host = "-h ${database_host} "
+  } else {
+    $cmd_host = ""
   }
-  $cmd_user = $database_username ? {
-    default => "-U ${database_username} ",
-    undef   => "",
+
+  if $database_username {
+    $cmd_user = "-U ${database_username} "
+  } else {
+    $cmd_user = ""
   }
-  $cmd_port = $database_port ? {
-    default => "-p ${database_port} ",
-    undef   => "",
+
+  if $database_port {
+    $cmd_port = "-p ${database_port} "
+  } else {
+    $cmd_port = ""
   }
-  $cmd_dbname = $database_name ? {
-    default => "--dbname ${database_name} ",
-    undef   => "--dbname ${postgresql::params::default_database} ",
+
+  if $database_name {
+    $cmd_dbname = "--dbname ${database_name} "
+  } else {
+    $cmd_dbname = "--dbname ${postgresql::params::default_database} "
   }
-  $env = $database_password ? {
-    default => "PGPASSWORD=${database_password}",
-    undef   => undef,
+
+  if $database_password {
+    $env = "PGPASSWORD=${database_password}"
+  } else {
+    $env = undef
   }
+
   $cmd = join([$cmd_init, $cmd_host, $cmd_user, $cmd_port, $cmd_dbname])
   $validate_cmd = "/usr/local/bin/validate_postgresql_connection.sh ${sleep} ${tries} '${cmd}'"
 

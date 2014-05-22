@@ -62,11 +62,11 @@ define postgresql::server::grant (
       $on_db = $db
     }
     default: {
-      fail("Missing privilege validation for object type ${_object_type}")
+      fail("Missing privilege validation for object type $_object_type")
     }
   }
 
-  $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${object_name}\" TO \"${role}\""
+  $grant_cmd = "GRANT $_privilege ON $_object_type \"${object_name}\" TO \"${role}\""
   postgresql_psql { $grant_cmd:
     db         => $on_db,
     port       => $port,
