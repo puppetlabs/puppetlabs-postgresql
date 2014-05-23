@@ -398,7 +398,7 @@ This sets the default package name for the PL/Perl extension. Defaults to utilis
 ####`service_name`
 This setting can be used to override the default postgresql service name. If not specified, the module will use whatever service name is the default for your OS distro.
 
-####`service_name`
+####`service_provider`
 This setting can be used to override the default postgresql service provider. If not specified, the module will use whatever service name is the default for your OS distro.
 
 ####`service_status`
