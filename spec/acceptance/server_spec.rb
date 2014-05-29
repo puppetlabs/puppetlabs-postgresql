@@ -128,7 +128,7 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
         }
       EOS
 
-      expect(apply_manifest(pp, :catch_failures => true).stderr).to eq('')
+      apply_manifest(pp, :catch_failures => true)
       apply_manifest(pp, :catch_changes => true)
 
       shell('test -d /tmp/pg_xlogs') do |r|
