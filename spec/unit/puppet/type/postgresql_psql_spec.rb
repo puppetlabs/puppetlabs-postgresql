@@ -44,49 +44,182 @@ describe Puppet::Type.type(:postgresql_psql), :unless => Puppet.features.microso
       its([:psql_user]) { should eq("postgres") }
       its([:psql_group]) { should eq("postgres") }
       its([:cwd]) { should eq("/tmp") }
-      its(:refreshonly?) { should be_false }
+      its(:refreshonly?) { should be_falsey }
     end
   end
 
-  describe "#refreshonly" do
-    [true, :true].each do |refreshonly|
-      context "=> #{refreshonly.inspect}" do
-        let(:attributes) do { :refreshonly => refreshonly } end
-        it "has a value of true" do
-          expect(subject.refreshonly?).to be_true
+  describe "#command" do
+    let(:attributes) do {:command => 'SELECT stuff'} end
+
+    it "will have the value :notrun if the command should execute" do
+      expect(subject).to receive(:should_run_sql).and_return(true)
+      expect(subject.property(:command).retrieve).to eq(:notrun)
+    end
+
+    it "will be the 'should' value if the command should not execute" do
+      expect(subject).to receive(:should_run_sql).and_return(false)
+      expect(subject.property(:command).retrieve).to eq('SELECT stuff')
+    end
+
+    it "will call provider#run_sql_command on sync" do
+      expect(subject.provider).to receive(:run_sql_command).with('SELECT stuff').and_return(["done", 0])
+      subject.property(:command).sync
+    end
+  end
+
+  describe "#unless" do
+    let(:attributes) do {:unless => 'SELECT something'} end
+
+    describe "#matches" do
+      it "does not fail when the status is successful" do
+        expect(subject.provider).to receive(:run_unless_sql_command).and_return ["1 row returned", 0]
+        subject.parameter(:unless).matches('SELECT something')
+      end
+
+      it "returns true when rows are returned" do
+        expect(subject.provider).to receive(:run_unless_sql_command).and_return ["1 row returned", 0]
+        expect(subject.parameter(:unless).matches('SELECT something')).to be_truthy
+      end
+
+      it "returns false when no rows are returned" do
+        expect(subject.provider).to receive(:run_unless_sql_command).and_return ["0 rows returned", 0]
+        expect(subject.parameter(:unless).matches('SELECT something')).to be_falsey
+      end
+
+      it "raises an error when the sql command fails" do
+        allow(subject.provider).to receive(:run_unless_sql_command).and_return ["Something went wrong", 1]
+        expect {
+          subject.parameter(:unless).matches('SELECT something')
+        }.to raise_error(Puppet::Error, /Something went wrong/)
+      end
+    end
+  end
+
+  describe "#should_run_sql" do
+    context "without 'unless'" do
+      [true, :true].each do |refreshonly|
+        context "refreshonly => #{refreshonly.inspect}" do
+          let(:attributes) do {
+            :refreshonly => refreshonly,
+          } end
+
+          context "not refreshing" do
+            it { expect(subject.should_run_sql).to be_falsey }
+          end
+
+          context "refreshing" do
+            it { expect(subject.should_run_sql(true)).to be_truthy }
+          end
         end
-        it "will not enforce command on sync because refresh() will be called" do
-          expect(subject.provider).to_not receive(:command=)
-          subject.property(:command).sync
+      end
+
+      [false, :false].each do |refreshonly|
+        context "refreshonly => #{refreshonly.inspect}" do
+          let(:attributes) do {
+            :refreshonly => refreshonly,
+          } end
+
+          context "not refreshing" do
+            it { expect(subject.should_run_sql).to be_truthy }
+          end
+
+          context "refreshing" do
+            it { expect(subject.should_run_sql(true)).to be_truthy }
+          end
         end
       end
     end
 
-    [false, :false].each do |refreshonly|
-      context "=> #{refreshonly.inspect}" do
-        let(:attributes) do { :refreshonly => refreshonly } end
-        it "has a value of false" do
-          expect(subject.refreshonly?).to be_false
+    context "with matching 'unless'" do
+      before { expect(subject.parameter(:unless)).to receive(:matches).with('SELECT something').and_return(true) }
+
+      [true, :true].each do |refreshonly|
+        context "refreshonly => #{refreshonly.inspect}" do
+          let(:attributes) do {
+            :refreshonly => refreshonly,
+            :unless => 'SELECT something',
+          } end
+
+          context "not refreshing" do
+            it { expect(subject.should_run_sql).to be_falsey }
+          end
+
+          context "refreshing" do
+            it { expect(subject.should_run_sql(true)).to be_falsey }
+          end
         end
-        it "will enforce command on sync because refresh() will not be called" do
-          expect(subject.provider).to receive(:command=)
-          subject.property(:command).sync
+      end
+
+      [false, :false].each do |refreshonly|
+        context "refreshonly => #{refreshonly.inspect}" do
+          let(:attributes) do {
+            :refreshonly => refreshonly,
+            :unless => 'SELECT something',
+          } end
+
+          context "not refreshing" do
+            it { expect(subject.should_run_sql).to be_falsey }
+          end
+
+          context "refreshing" do
+            it { expect(subject.should_run_sql(true)).to be_falsey }
+          end
+        end
+      end
+    end
+
+    context "when not matching 'unless'" do
+      before { expect(subject.parameter(:unless)).to receive(:matches).with('SELECT something').and_return(false) }
+
+      [true, :true].each do |refreshonly|
+        context "refreshonly => #{refreshonly.inspect}" do
+          let(:attributes) do {
+            :refreshonly => refreshonly,
+            :unless => 'SELECT something',
+          } end
+
+          context "not refreshing" do
+            it { expect(subject.should_run_sql).to be_falsey }
+          end
+
+          context "refreshing" do
+            it { expect(subject.should_run_sql(true)).to be_truthy }
+          end
+        end
+      end
+
+      [false, :false].each do |refreshonly|
+        context "refreshonly => #{refreshonly.inspect}" do
+          let(:attributes) do {
+            :refreshonly => refreshonly,
+            :unless => 'SELECT something',
+          } end
+
+          context "not refreshing" do
+            it { expect(subject.should_run_sql).to be_truthy }
+          end
+
+          context "refreshing" do
+            it { expect(subject.should_run_sql(true)).to be_truthy }
+          end
         end
       end
     end
   end
 
-  ## If we refresh the resource, the command should always be run regardless of
-  ## refreshonly
-  describe "when responding to refresh" do
-    [true, :true, false, :false].each do |refreshonly|
-      context "with refreshonly => #{refreshonly.inspect}" do
-        let(:attributes) do { :refreshonly => refreshonly } end
-        it "will enforce command on sync" do
-          expect(subject.provider).to receive(:command=)
-          subject.refresh
-        end
-      end
+  describe "#refresh" do
+    let(:attributes) do {} end
+
+    it "syncs command property when command should run" do
+      expect(subject).to receive(:should_run_sql).with(true).and_return(true)
+      expect(subject.property(:command)).to receive(:sync)
+      subject.refresh
+    end
+
+    it "does not sync command property when command should not run" do
+      expect(subject).to receive(:should_run_sql).with(true).and_return(false)
+      expect(subject.property(:command)).not_to receive(:sync)
+      subject.refresh
     end
   end
 end
