@@ -167,7 +167,7 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
         version => '9.3',
       }
       EOS
-      expect(apply_manifest(pp, :catch_failures => true).stderr).to match(/Passing "version" to postgresql::server is deprecated/i)
+      expect(apply_manifest(pp, :catch_failures => false).stderr).to match(/Passing "version" to postgresql::server is deprecated/i)
     end
   end
 
