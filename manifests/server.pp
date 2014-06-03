@@ -51,8 +51,11 @@ class postgresql::server (
 ) inherits postgresql::params {
   $pg = 'postgresql::server'
 
-  if $version != $postgresql::params::version {
+  if $version != undef {
     warning('Passing "version" to postgresql::server is deprecated; please use postgresql::globals instead.')
+    $_version = $postgresql::params::version
+  } else {
+    $_version = $version
   }
 
   if ($ensure == 'present' or $ensure == true) {

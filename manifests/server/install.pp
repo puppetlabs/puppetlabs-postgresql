@@ -23,7 +23,7 @@ class postgresql::server::install {
 
     # This will clean up anything we miss
     exec { 'apt-get-autoremove-postgresql-client-brute':
-      command   => "dpkg -P postgresql*",
+      command   => 'dpkg -P postgresql*',
       onlyif    => "dpkg -l postgresql* | grep -e '^ii'",
       logoutput => on_failure,
       path      => '/usr/bin:/bin:/usr/sbin/:/sbin',
