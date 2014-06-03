@@ -10,31 +10,19 @@ Puppet::Type.newtype(:postgresql_psql) do
 
     defaultto { @resource[:name] }
 
-    def sync(refreshing = false)
-      # We're overriding 'sync' here in order to do some magic
-      # in support of providing a 'refreshonly' parameter.  This
-      # is kind of hacky because the logic for 'refreshonly' is
-      # spread between the type and the provider, but this is
-      # the least horrible way that I could determine to accomplish
-      # it.
-      #
-      # Note that our overridden version of 'sync' takes a parameter,
-      # 'refreshing', which the parent version doesn't take.  This
-      # allows us to call the sync method directly from the 'refresh'
-      # method, and then inside of the body of 'sync' we can tell
-      # whether or not we're refreshing.
-
-      if (!@resource.refreshonly? || refreshing)
-        # If we're not in 'refreshonly' mode, or we're not currently
-        # refreshing, then we just call the parent method.
-        super()
+    # If needing to run the SQL command, return a fake value that will trigger
+    # a sync, else return the expected SQL command so no sync takes place
+    def retrieve
+      if @resource.should_run_sql
+        return :notrun
       else
-        # If we get here, it means we're in 'refreshonly' mode and
-        # we're not being called by the 'refresh' method, so we
-        # just no-op.  We'll be called again by the 'refresh'
-        # method momentarily.
-        nil
+        return self.should
       end
+    end
+
+    def sync
+      output, status = provider.run_sql_command(value)
+      self.fail("Error executing SQL; psql returned #{status}: '#{output}'") unless status == 0
     end
   end
 
@@ -43,6 +31,21 @@ Puppet::Type.newtype(:postgresql_psql) do
         "this is generally intended to be used for idempotency, to check " +
         "for the existence of an object in the database to determine whether " +
         "or not the main SQL command needs to be executed at all."
+
+    # Return true if a matching row is found
+    def matches(value)
+      if Puppet::PUPPETVERSION.to_f < 4
+        output, status = provider.run_unless_sql_command(value)
+      else
+        output = provider.run_unless_sql_command(value)
+        status = output.exitcode
+      end
+      self.fail("Error evaluating 'unless' clause, returned #{status}: '#{output}'") unless status == 0
+
+      result_count = output.strip.to_i
+      self.debug("Found #{result_count} row(s) executing 'unless' clause")
+      result_count > 0
+    end
   end
 
   newparam(:db) do
@@ -84,10 +87,15 @@ Puppet::Type.newtype(:postgresql_psql) do
     newvalues(:true, :false)
   end
 
-  def refresh()
-    # All of the magic for this type is attached to the ':command' property, so
-    # we just need to sync it to accomplish a 'refresh'.
-    self.property(:command).sync(true)
+  def should_run_sql(refreshing = false)
+    unless_param = @parameters[:unless]
+    return false if !unless_param.nil? && !unless_param.value.nil? && unless_param.matches(unless_param.value)
+    return false if !refreshing && @parameters[:refreshonly].value == :true
+    true
+  end
+
+  def refresh
+    self.property(:command).sync if self.should_run_sql(true)
   end
 
 end
