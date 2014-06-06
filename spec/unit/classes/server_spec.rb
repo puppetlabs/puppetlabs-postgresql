@@ -14,6 +14,7 @@ describe 'postgresql::server', :type => :class do
   end
 
   describe 'with no parameters' do
+    it { should compile.with_all_deps }
     it { should contain_class("postgresql::params") }
     it { should contain_class("postgresql::server") }
     it 'should validate connection' do
