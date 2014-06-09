@@ -4,8 +4,8 @@ group :development, :test do
   gem 'rake', '10.1.1'
   gem 'puppetlabs_spec_helper', :require => false
   gem 'rspec-puppet', '~> 1.0'
+  gem 'rspec', '~> 2.11',       :require => false
   gem 'puppet-lint', '~> 0.3.2'
-  gem 'beaker',                 :require => false
   gem 'beaker-rspec',           :require => false
   gem 'serverspec',             :require => false
 end
