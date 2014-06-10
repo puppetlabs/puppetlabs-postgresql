@@ -128,6 +128,8 @@ describe 'server without defaults:', :unless => UNSUPPORTED_PLATFORMS.include?(f
         }
       EOS
 
+      # Yum cache for yum.postgresql.org is outdated
+      shell('yum clean all') if fact('osfamily') == 'RedHat'
       apply_manifest(pp, :catch_failures => true)
       apply_manifest(pp, :catch_changes => true)
 
