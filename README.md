@@ -856,6 +856,14 @@ Current it is only actively tested with the following operating systems:
 
 Although patches are welcome for making it work with other OS distros, it is considered best effort.
 
+### All versions of RHEL/Centos
+
+If you have selinux enabled you must add any custom ports you use to the postgresql_port_t context.  You can do this as follows:
+
+```
+# semanage port -a -t postgresql_port_t -p tcp $customport
+```
+
 ### RHEL7
 
 Currently the following features are unsupported:

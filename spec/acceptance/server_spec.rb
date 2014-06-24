@@ -253,6 +253,27 @@ describe 'server on alternate port:', :unless => UNSUPPORTED_PLATFORMS.include?(
     apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
   end
 
+  it 'sets up selinux' do
+    pp = <<-EOS
+      if $::osfamily == 'RedHat' and $::selinux == 'true' {
+        $semanage_package = $::operatingsystemmajrelease ? {
+          '5'     => 'policycoreutils',
+          default => 'policycoreutils-python',
+        }
+
+        package { $semanage_package: ensure => installed }
+        exec { 'set_postgres':
+          command     => 'semanage port -a -t postgresql_port_t -p tcp 5433',
+          path        => '/bin:/usr/bin/:/sbin:/usr/sbin',
+          subscribe   => Package[$semanage_package],
+          refreshonly => true,
+        }
+    EOS
+
+    apply_manifest(pp, :catch_failures => true)
+  end
+
+
   context 'test installing postgresql with alternate port' do
     it 'perform installation and make sure it is idempotent' do
       pp = <<-EOS.unindent
