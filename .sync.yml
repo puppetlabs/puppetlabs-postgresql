@@ -1,0 +1,9 @@
+---
+.travis.yml:
+  env_matrix:
+    - PUPPET_GEM_VERSION="~> 2.7.0"
+    - PUPPET_GEM_VERSION="~> 3.2.0"
+    - PUPPET_GEM_VERSION="~> 3.4.0"
+    - PUPPET_GEM_VERSION="~> 3.5.0.rc3" STRICT_VARIABLES="yes"
+spec/spec_helper.rb:
+  unmanaged: true
