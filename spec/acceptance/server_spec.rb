@@ -268,6 +268,7 @@ describe 'server on alternate port:', :unless => UNSUPPORTED_PLATFORMS.include?(
           subscribe   => Package[$semanage_package],
           refreshonly => true,
         }
+      }
     EOS
 
     apply_manifest(pp, :catch_failures => true)
