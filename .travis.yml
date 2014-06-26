@@ -1,11 +1,14 @@
 ---
+branches:
+  only:
+    - master
 language: ruby
 bundler_args: --without development
-script: bundle exec rake spec SPEC_OPTS='--format documentation'
+script: "bundle exec rake spec SPEC_OPTS='--format documentation'"
 rvm:
-- 1.8.7
-- 1.9.3
-- 2.0.0
+  - 1.8.7
+  - 1.9.3
+  - 2.0.0
 env:
   matrix:
   - PUPPET_GEM_VERSION="~> 2.7.0"
