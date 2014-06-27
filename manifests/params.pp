@@ -172,6 +172,30 @@ class postgresql::params inherits postgresql::globals {
       $needs_initdb         = pick($needs_initdb, true)
     }
 
+    'Suse': {
+      $user                 = pick($user, 'postgres')
+      $group                = pick($group, 'postgres')
+
+      $client_package_name  = pick($client_package_name, "postgresql${version}")
+      $server_package_name  = pick($server_package_name, "postgresql${version}-server")
+      $contrib_package_name = pick($contrib_package_name, "postgresql${version}-contrib")
+      $devel_package_name   = pick($devel_package_name, "postgresql${version}-devel")
+      $java_package_name    = pick($java_package_name, 'undef')
+      $perl_package_name    = pick($plperl_package_name, 'undef')
+      $plperl_package_name  = pick($plperl_package_name, "undef")
+      $python_package_name  = pick($python_package_name, 'undef')
+
+      $service_name         = pick($service_name, 'postgresql')
+      $bindir               = pick($bindir, "/usr/lib/postgresql${version}/bin")
+      $datadir              = pick($datadir, '/var/lib/pgsql/data')
+      $confdir              = pick($confdir, "${datadir}")
+      $service_status       = pick($service_status, "/etc/init.d/${service_name} status")
+      $psql_path            = pick($psql_path, "${bindir}/psql")
+
+      $firewall_supported   = pick($firewall_supported, false)
+      $needs_initdb         = pick($needs_initdb, true)
+    }
+
     default: {
       # Based on the existing version of the firewall module, this is normally
       # false for other OS, but this allows an escape hatch to override it.
