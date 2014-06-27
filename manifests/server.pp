@@ -47,7 +47,7 @@ class postgresql::server (
   $firewall_supported         = $postgresql::params::firewall_supported,
 
   #Deprecated
-  $version                    = $postgresql::params::version,
+  $version                    = undef,
 ) inherits postgresql::params {
   $pg = 'postgresql::server'
 
