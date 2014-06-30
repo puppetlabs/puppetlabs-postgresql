@@ -11,6 +11,13 @@ when 'Ubuntu'
   when '12.04'
     pghba_file = '/etc/postgresql/9.1/main/pg_hba.conf'
   end
+when 'Debian'
+  case fact('operatingsystemmajrelease')
+  when '7'
+    pghba_file = '/etc/postgresql/9.1/main/pg_hba.conf'
+  when '6'
+    pghba_file = '/etc/postgresql/8.4/main/pg_hba.conf'
+  end
 else
   pghba_file = '/var/lib/pgsql/data/pg_hba.conf'
 end
