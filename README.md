@@ -380,9 +380,6 @@ If `true` this will setup the official PostgreSQL repositories on your host. Def
 ###Class: postgresql::server
 The following list are options that you can set in the `config_hash` parameter of `postgresql::server`.
 
-####`ensure`
-This value default to `present`. When set to `absent` it will remove all packages, configuration and data so use this with extreme caution.
-
 ####`postgres_password`
 This value defaults to `undef`, meaning the super user account in the postgres database is a user called `postgres` and this account does not have a password. If you provide this setting, the module will set the password for the `postgres` user to your specified value.
 

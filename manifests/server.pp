@@ -1,16 +1,15 @@
 # This installs a PostgreSQL server. See README.md for more details.
 class postgresql::server (
-  $ensure                     = $postgresql::params::ensure,
-
   $postgres_password          = undef,
 
   $package_name               = $postgresql::params::server_package_name,
   $client_package_name        = $postgresql::params::client_package_name,
-  $package_ensure             = $ensure,
+  $package_ensure             = $postgresql::params::package_ensure,
 
   $plperl_package_name        = $postgresql::params::plperl_package_name,
 
   $service_ensure             = $postgresql::params::service_ensure,
+  $service_enable             = $postgresql::params::service_enable,
   $service_name               = $postgresql::params::service_name,
   $service_provider           = $postgresql::params::service_provider,
   $service_status             = $postgresql::params::service_status,
@@ -58,26 +57,15 @@ class postgresql::server (
     $_version = $version
   }
 
-  if ($ensure == 'present' or $ensure == true) {
-    # Reload has its own ordering, specified by other defines
-    class { "${pg}::reload": require => Class["${pg}::install"] }
+  # Reload has its own ordering, specified by other defines
+  class { "${pg}::reload": require => Class["${pg}::install"] }
 
-    anchor { "${pg}::start": }->
-    class { "${pg}::install": }->
-    class { "${pg}::initdb": }->
-    class { "${pg}::config": }->
-    class { "${pg}::service": }->
-    class { "${pg}::passwd": }->
-    class { "${pg}::firewall": }->
-    anchor { "${pg}::end": }
-  } else {
-    anchor { "${pg}::start": }->
-    class { "${pg}::firewall": }->
-    class { "${pg}::passwd": }->
-    class { "${pg}::service": }->
-    class { "${pg}::install": }->
-    class { "${pg}::initdb": }->
-    class { "${pg}::config": }->
-    anchor { "${pg}::end": }
-  }
+  anchor { "${pg}::start": }->
+  class { "${pg}::install": }->
+  class { "${pg}::initdb": }->
+  class { "${pg}::config": }->
+  class { "${pg}::service": }->
+  class { "${pg}::passwd": }->
+  class { "${pg}::firewall": }->
+  anchor { "${pg}::end": }
 }

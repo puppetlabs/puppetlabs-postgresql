@@ -11,17 +11,9 @@ class postgresql::server::contrib (
     tag    => 'postgresql',
   }
 
-  if($package_ensure == 'present' or $package_ensure == true) {
-    anchor { 'postgresql::server::contrib::start': }->
-    Class['postgresql::server::install']->
-    Package['postgresql-contrib']->
-    Class['postgresql::server::service']->
-    anchor { 'postgresql::server::contrib::end': }
-  } else {
-    anchor { 'postgresql::server::contrib::start': }->
-    Class['postgresql::server::service']->
-    Package['postgresql-contrib']->
-    Class['postgresql::server::install']->
-    anchor { 'postgresql::server::contrib::end': }
-  }
+  anchor { 'postgresql::server::contrib::start': }->
+  Class['postgresql::server::install']->
+  Package['postgresql-contrib']->
+  Class['postgresql::server::service']->
+  anchor { 'postgresql::server::contrib::end': }
 }
