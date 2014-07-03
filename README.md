@@ -869,12 +869,6 @@ If you have selinux enabled you must add any custom ports you use to the postgre
 # semanage port -a -t postgresql_port_t -p tcp $customport
 ```
 
-### RHEL7
-
-Currently the following features are unsupported:
-
-* Postgis (There is no existing postgis package for RHEL7, and it's not in EPEL7 yet.)
-
 Development
 ------------
 
