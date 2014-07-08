@@ -30,7 +30,7 @@ define postgresql::server::config_entry (
   # have to create a systemd override for the port or update the sysconfig
   # file.
   if $::osfamily == 'RedHat' {
-    if $::operatingsystemrelease =~ /^7/ {
+    if $::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora' {
       if $name == 'port' {
         file { 'systemd-port-override':
           ensure  => present,
