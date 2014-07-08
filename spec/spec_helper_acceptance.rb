@@ -46,8 +46,8 @@ unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
       # Augeas is only used in one place, for Redhat.
       if fact('osfamily') == 'RedHat'
         install_package host, 'ruby-devel'
-        install_package host, 'augeas-devel'
-        install_package host, 'ruby-augeas'
+        #install_package host, 'augeas-devel'
+        #install_package host, 'ruby-augeas'
       end
     end
   end
