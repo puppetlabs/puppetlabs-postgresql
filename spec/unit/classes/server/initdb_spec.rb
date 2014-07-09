@@ -16,7 +16,7 @@ describe 'postgresql::server::initdb', :type => :class do
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       }
     end
-    it { should contain_file('/var/lib/pgsql/data').with_ensure('directory') }
+    it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory') }
   end
   describe 'on Amazon' do
     let :facts do
@@ -30,7 +30,7 @@ describe 'postgresql::server::initdb', :type => :class do
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       }
     end
-    it { should contain_file('/var/lib/pgsql9/data').with_ensure('directory') }
+    it { is_expected.to contain_file('/var/lib/pgsql9/data').with_ensure('directory') }
   end
 end
 

@@ -9,7 +9,7 @@ describe 'postgresql::lib::python', :type => :class do
       :operatingsystemrelease => '6.4',
     }
     end
-    it { should contain_package('python-psycopg2').with(
+    it { is_expected.to contain_package('python-psycopg2').with(
       :name => 'python-psycopg2',
       :ensure => 'present'
     )}
@@ -22,7 +22,7 @@ describe 'postgresql::lib::python', :type => :class do
       :operatingsystemrelease => '6.0',
     }
     end
-    it { should contain_package('python-psycopg2').with(
+    it { is_expected.to contain_package('python-psycopg2').with(
       :name => 'python-psycopg2',
       :ensure => 'present'
     )}

@@ -50,6 +50,27 @@ unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
         #install_package host, 'ruby-augeas'
       end
     end
+    # Set up selinux if appropriate.
+    if fact('osfamily') == 'RedHat' && fact('selinux') == 'true'
+      pp = <<-EOS
+        if $::osfamily == 'RedHat' and $::selinux == 'true' {
+          $semanage_package = $::operatingsystemmajrelease ? {
+            '5'     => 'policycoreutils',
+            default => 'policycoreutils-python',
+          }
+
+          package { $semanage_package: ensure => installed }
+          exec { 'set_postgres':
+            command     => 'semanage port -a -t postgresql_port_t -p tcp 5433',
+            path        => '/bin:/usr/bin/:/sbin:/usr/sbin',
+            subscribe   => Package[$semanage_package],
+            refreshonly => true,
+          }
+        }
+      EOS
+
+      apply_manifest(pp, :catch_failures => true)
+    end
   end
 end
 
@@ -74,6 +95,8 @@ RSpec.configure do |c|
         on host, '/usr/sbin/locale-gen'
         on host, '/usr/sbin/update-locale'
       end
+
+
       if fact('osfamily') == 'RedHat'
         shell('yum -y install policycoreutils-python')
         shell('semanage port -a -t postgresql_port_t -p tcp 5433')
@@ -83,5 +106,7 @@ RSpec.configure do |c|
       on host, puppet('module','install','puppetlabs-apt'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-concat'), { :acceptable_exit_codes => [0,1] }
     end
+
+
   end
 end

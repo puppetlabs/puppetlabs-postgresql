@@ -9,7 +9,7 @@ describe 'postgresql::lib::java', :type => :class do
       :operatingsystemrelease => '6.0',
     }
     end
-    it { should contain_package('postgresql-jdbc').with(
+    it { is_expected.to contain_package('postgresql-jdbc').with(
       :name   => 'libpostgresql-jdbc-java',
       :ensure => 'present',
       :tag    => 'postgresql'
@@ -23,7 +23,7 @@ describe 'postgresql::lib::java', :type => :class do
       :operatingsystemrelease => '6.4',
     }
     end
-    it { should contain_package('postgresql-jdbc').with(
+    it { is_expected.to contain_package('postgresql-jdbc').with(
       :name => 'postgresql-jdbc',
       :ensure => 'present',
       :tag    => 'postgresql'
@@ -32,7 +32,7 @@ describe 'postgresql::lib::java', :type => :class do
       let :params do
         {:package_ensure => 'latest', :package_name => 'somepackage'}
       end
-      it { should contain_package('postgresql-jdbc').with(
+      it { is_expected.to contain_package('postgresql-jdbc').with(
         :name => 'somepackage',
         :ensure => 'latest',
         :tag    => 'postgresql'

@@ -25,7 +25,7 @@ describe 'postgresql::server::config_entry', :type => :define do
     end
 
     let(:params) { { :ensure => 'present'} }
-    it { should contain_postgresql__server__config_entry('config_entry') }
+    it { is_expected.to contain_postgresql__server__config_entry('config_entry') }
   end
 end
 

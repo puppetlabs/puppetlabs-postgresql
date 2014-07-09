@@ -30,6 +30,6 @@ describe 'postgresql::server::table_grant', :type => :define do
     "class {'postgresql::server':}"
   end
 
-  it { should contain_postgresql__server__table_grant('test') }
-  it { should contain_postgresql__server__grant('table:test') }
+  it { is_expected.to contain_postgresql__server__table_grant('test') }
+  it { is_expected.to contain_postgresql__server__grant('table:test') }
 end

@@ -13,7 +13,7 @@ describe 'postgresql::globals', :type => :class do
 
   describe 'with no parameters' do
     it 'should work' do
-      should contain_class("postgresql::globals")
+      is_expected.to contain_class("postgresql::globals")
     end
   end
 
@@ -24,7 +24,7 @@ describe 'postgresql::globals', :type => :class do
       }
     end
     it 'should pull in class postgresql::repo' do
-      should contain_class("postgresql::repo")
+      is_expected.to contain_class("postgresql::repo")
     end
   end
 end

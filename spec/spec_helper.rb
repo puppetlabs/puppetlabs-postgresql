@@ -32,3 +32,5 @@ end
 def param(type, title, param)
   param_value(catalogue, type, title, param)
 end
+
+at_exit { RSpec::Puppet::Coverage.report! }

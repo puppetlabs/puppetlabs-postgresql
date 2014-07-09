@@ -14,7 +14,7 @@ describe 'postgresql::validate_db_connection', :type => :define do
   end
 
   describe 'should work with only default parameters' do
-    it { should contain_postgresql__validate_db_connection('test') }
+    it { is_expected.to contain_postgresql__validate_db_connection('test') }
   end
 
   describe 'should work with all parameters' do
@@ -30,6 +30,6 @@ describe 'postgresql::validate_db_connection', :type => :define do
         :tries => 30,
       }
     end
-    it { should contain_postgresql__validate_db_connection('test') }
+    it { is_expected.to contain_postgresql__validate_db_connection('test') }
   end
 end
