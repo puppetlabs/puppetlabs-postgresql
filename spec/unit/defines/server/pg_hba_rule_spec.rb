@@ -37,7 +37,7 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
       }
     end
     it do
-      should contain_concat__fragment('pg_hba_rule_test').with({
+      is_expected.to contain_concat__fragment('pg_hba_rule_test').with({
         :content => /host\s+all\s+all\s+1\.1\.1\.1\/24\s+md5/
       })
     end
@@ -60,7 +60,7 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
       }
     end
     it do
-      should contain_concat__fragment('pg_hba_rule_test').with({
+      is_expected.to contain_concat__fragment('pg_hba_rule_test').with({
         :content => /local\s+all\s+all\s+ident/
       })
     end
@@ -85,7 +85,7 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
       }
     end
     it do
-      should contain_concat__fragment('pg_hba_rule_test').with({
+      is_expected.to contain_concat__fragment('pg_hba_rule_test').with({
         :content => /host\s+all\s+all\s+0\.0\.0\.0\/0\s+ldap\s+foo=bar/
       })
     end
@@ -188,7 +188,7 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
       end
 
       it do
-        should contain_concat__fragment('pg_hba_rule_test').with({
+        is_expected.to contain_concat__fragment('pg_hba_rule_test').with({
           :content => /local\s+all\s+all\s+0\.0\.0\.0\/0\s+peer/
 	})
       end

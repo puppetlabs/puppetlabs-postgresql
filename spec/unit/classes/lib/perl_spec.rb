@@ -9,7 +9,7 @@ describe 'postgresql::lib::perl', :type => :class do
       :operatingsystemrelease => '6.4',
     }
     end
-    it { should contain_package('perl-DBD-Pg').with(
+    it { is_expected.to contain_package('perl-DBD-Pg').with(
       :name => 'perl-DBD-Pg',
       :ensure => 'present'
     )}
@@ -22,7 +22,7 @@ describe 'postgresql::lib::perl', :type => :class do
       :operatingsystemrelease => '6.0',
     }
     end
-    it { should contain_package('perl-DBD-Pg').with(
+    it { is_expected.to contain_package('perl-DBD-Pg').with(
       :name => 'libdbd-pg-perl',
       :ensure => 'present'
     )}

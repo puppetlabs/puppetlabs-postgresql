@@ -26,7 +26,7 @@ describe 'postgresql::server::postgis', :type => :class do
     end
 
     it 'should create package with correct params' do
-      should contain_package('postgresql-postgis').with({
+      is_expected.to contain_package('postgresql-postgis').with({
         :ensure => 'absent',
         :name => 'mypackage',
         :tag => 'postgresql',
@@ -36,7 +36,7 @@ describe 'postgresql::server::postgis', :type => :class do
 
   describe 'with no parameters' do
     it 'should create package with postgresql tag' do
-      should contain_package('postgresql-postgis').with({
+      is_expected.to contain_package('postgresql-postgis').with({
         :tag => 'postgresql',
       })
     end

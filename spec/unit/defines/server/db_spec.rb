@@ -31,10 +31,10 @@ describe 'postgresql::server::db', :type => :define do
       "class {'postgresql::server':}"
     end
 
-    it { should contain_postgresql__server__db('test') }
-    it { should contain_postgresql__server__database('test').with_owner('tester') }
-    it { should contain_postgresql__server__role('test') }
-    it { should contain_postgresql__server__database_grant('GRANT test - ALL - test') }
+    it { is_expected.to contain_postgresql__server__db('test') }
+    it { is_expected.to contain_postgresql__server__database('test').with_owner('tester') }
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it { is_expected.to contain_postgresql__server__database_grant('GRANT test - ALL - test') }
 
   end
 
@@ -53,6 +53,6 @@ describe 'postgresql::server::db', :type => :define do
       "class {'postgresql::server':}"
     end
 
-    it { should contain_postgresql__server__database('testtest') }
+    it { is_expected.to contain_postgresql__server__database('testtest') }
   end
 end

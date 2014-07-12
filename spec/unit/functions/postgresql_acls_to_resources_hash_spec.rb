@@ -14,7 +14,7 @@ describe 'postgresql_acls_to_resources_hash', :type => :puppet_function do
         },
       }
 
-      should run.with_params([input], 'test', 100).and_return(result)
+      is_expected.to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -29,7 +29,7 @@ describe 'postgresql_acls_to_resources_hash', :type => :puppet_function do
         },
       }
 
-      should run.with_params([input], 'test', 100).and_return(result)
+      is_expected.to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -46,7 +46,7 @@ describe 'postgresql_acls_to_resources_hash', :type => :puppet_function do
         },
       }
 
-      should run.with_params(input_array, 'test', 100).and_return(result)
+      is_expected.to run.with_params(input_array, 'test', 100).and_return(result)
     end
 
     it do
@@ -62,7 +62,7 @@ describe 'postgresql_acls_to_resources_hash', :type => :puppet_function do
         },
       }
 
-      should run.with_params([input], 'test', 100).and_return(result)
+      is_expected.to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -78,7 +78,7 @@ describe 'postgresql_acls_to_resources_hash', :type => :puppet_function do
         },
       }
 
-      should run.with_params([input], 'test', 100).and_return(result)
+      is_expected.to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -94,7 +94,7 @@ describe 'postgresql_acls_to_resources_hash', :type => :puppet_function do
         },
       }
 
-      should run.with_params([input], 'test', 100).and_return(result)
+      is_expected.to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -110,7 +110,7 @@ describe 'postgresql_acls_to_resources_hash', :type => :puppet_function do
         },
       }
 
-      should run.with_params([input], 'test', 100).and_return(result)
+      is_expected.to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -127,11 +127,11 @@ describe 'postgresql_acls_to_resources_hash', :type => :puppet_function do
         },
       }
 
-      should run.with_params([input], 'test', 100).and_return(result)
+      is_expected.to run.with_params([input], 'test', 100).and_return(result)
     end
   end
 
   it 'should return an empty hash when input is empty array' do
-    should run.with_params([], 'test', 100).and_return({})
+    is_expected.to run.with_params([], 'test', 100).and_return({})
   end
 end

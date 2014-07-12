@@ -34,17 +34,41 @@ describe Puppet::Type.type(:postgresql_psql), :unless => Puppet.features.microso
     }.each do |attr, value|
       context attr do
         let(:attributes) do { attr => value } end
-        its([attr]) { should == value }
+
+        describe [attr] do
+          subject { super()[attr] }
+          it { is_expected.to eq(value) }
+        end
       end
     end
 
     context "default values" do
       let(:attributes) do {} end
-      its([:psql_path]) { should eq("psql") }
-      its([:psql_user]) { should eq("postgres") }
-      its([:psql_group]) { should eq("postgres") }
-      its([:cwd]) { should eq("/tmp") }
-      its(:refreshonly?) { should be_falsey }
+
+      describe '[:psql_path]' do
+        subject { super()[:psql_path] }
+        it { is_expected.to eq("psql") }
+      end
+
+      describe '[:psql_user]' do
+        subject { super()[:psql_user] }
+        it { is_expected.to eq("postgres") }
+      end
+
+      describe '[:psql_group]' do
+        subject { super()[:psql_group] }
+        it { is_expected.to eq("postgres") }
+      end
+
+      describe '[:cwd]' do
+        subject { super()[:cwd] }
+        it { is_expected.to eq("/tmp") }
+      end
+
+      describe '#refreshonly?' do
+        subject { super().refreshonly? }
+        it { is_expected.to be_falsey }
+      end
     end
   end
 

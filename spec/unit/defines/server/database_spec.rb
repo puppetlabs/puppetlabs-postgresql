@@ -20,6 +20,6 @@ describe 'postgresql::server::database', :type => :define do
     "class {'postgresql::server':}"
   end
 
-  it { should contain_postgresql__server__database('test') }
-  it { should contain_postgresql_psql("Check for existence of db 'test'") }
+  it { is_expected.to contain_postgresql__server__database('test') }
+  it { is_expected.to contain_postgresql_psql("Check for existence of db 'test'") }
 end
