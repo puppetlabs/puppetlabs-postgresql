@@ -43,46 +43,11 @@ describe 'postgresql::server', :type => :class do
     let(:params) do
       {
         :manage_firewall => true,
-        :ensure => true,
       }
     end
 
     it 'should create firewall rule' do
       is_expected.to contain_firewall("5432 accept - postgres")
-    end
-  end
-
-  describe 'ensure => absent' do
-    let(:params) do
-      {
-        :ensure => 'absent',
-        :datadir => '/my/path',
-        :xlogdir => '/xlog/path',
-      }
-    end
-
-    it 'should make package purged' do
-      is_expected.to contain_package('postgresql-server').with({
-        :ensure => 'purged',
-      })
-    end
-
-    it 'stop the service' do
-      is_expected.to contain_service('postgresqld').with({
-        :ensure => 'stopped',
-      })
-    end
-
-    it 'should remove datadir' do
-      is_expected.to contain_file('/my/path').with({
-        :ensure => 'absent',
-      })
-    end
-
-    it 'should remove xlogdir' do
-      is_expected.to contain_file('/xlog/path').with({
-        :ensure => 'absent',
-      })
     end
   end
 

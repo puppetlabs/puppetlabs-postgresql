@@ -1,6 +1,5 @@
 # PRIVATE CLASS: do not use directly
 class postgresql::params inherits postgresql::globals {
-  $ensure                     = present
   $version                    = $globals_version
   $postgis_version            = $globals_postgis_version
   $listen_addresses           = 'localhost'
@@ -11,10 +10,12 @@ class postgresql::params inherits postgresql::globals {
   $ipv6acls                   = []
   $encoding                   = $encoding
   $locale                     = $locale
-  $service_ensure             = undef
+  $service_ensure             = 'running'
+  $service_enable             = true
   $service_provider           = $service_provider
   $manage_firewall            = $manage_firewall
   $manage_pg_hba_conf         = pick($manage_pg_hba_conf, true)
+  $package_ensure             = 'present'
 
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $::osfamily {
