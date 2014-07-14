@@ -503,7 +503,8 @@ The ensure parameter passed on to postgresql contrib package resource.
 Installs the postgresql postgis packages.
 
 ###Class: postgresql::lib::devel
-Installs the packages containing the development libraries for PostgreSQL.
+Installs the packages containing the development libraries for PostgreSQL and
+symlinks pg_config into `/usr/bin` (if not in `/usr/bin` or `/usr/local/bin`).
 
 ####`package_ensure`
 Override for the `ensure` parameter during package installation. Defaults to `present`.
@@ -511,6 +512,10 @@ Override for the `ensure` parameter during package installation. Defaults to `pr
 ####`package_name`
 Overrides the default package name for the distribution you are installing to. Defaults to `postgresql-devel` or `postgresql<version>-devel` depending on your distro.
 
+####`link_pg_config`
+By default, if the bin directory used by the PostgreSQL package is not `/usr/bin` or `/usr/local/bin`,
+this class will symlink `pg_config` from the package's bin dir into `/usr/bin`. Set `link_pg_config` to
+false to disable this behavior.
 
 ###Class: postgresql::lib::java
 This class installs postgresql bindings for Java (JDBC). Alter the following parameters if you have a custom version you would like to install (Note: don't forget to make sure to add any necessary yum or apt repositories if specifying a custom version):
