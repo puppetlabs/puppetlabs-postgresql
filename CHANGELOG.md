@@ -1,3 +1,9 @@
+##2014-07-15 - Supported Release 3.4.1
+###Summary
+
+This release merely updates metadata.json so the module can be uninstalled and
+upgraded via the puppet module command.
+
 ##2014-04-14 - Supported Release 3.4.0
 ###Summary
 
