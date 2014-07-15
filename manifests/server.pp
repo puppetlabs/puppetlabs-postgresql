@@ -26,6 +26,7 @@ class postgresql::server (
   $createdb_path              = $postgresql::params::createdb_path,
   $psql_path                  = $postgresql::params::psql_path,
   $pg_hba_conf_path           = $postgresql::params::pg_hba_conf_path,
+  $pg_ident_conf_path         = $postgresql::params::pg_ident_conf_path,
   $postgresql_conf_path       = $postgresql::params::postgresql_conf_path,
 
   $datadir                    = $postgresql::params::datadir,
@@ -43,6 +44,7 @@ class postgresql::server (
 
   $manage_firewall            = $postgresql::params::manage_firewall,
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
+  $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
   $firewall_supported         = $postgresql::params::firewall_supported,
 
   #Deprecated

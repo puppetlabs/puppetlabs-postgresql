@@ -15,6 +15,7 @@ class postgresql::params inherits postgresql::globals {
   $service_provider           = $service_provider
   $manage_firewall            = $manage_firewall
   $manage_pg_hba_conf         = pick($manage_pg_hba_conf, true)
+  $manage_pg_ident_conf       = pick($manage_pg_ident_conf, true)
   $package_ensure             = 'present'
 
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
@@ -200,4 +201,5 @@ class postgresql::params inherits postgresql::globals {
   $pg_hba_conf_defaults = pick($pg_hba_conf_defaults, true)
   $postgresql_conf_path = pick($postgresql_conf_path, "${confdir}/postgresql.conf")
   $default_database     = pick($default_database, 'postgres')
+  $pg_ident_conf_path   = pick($pg_ident_conf_path, "${confdir}/pg_ident.conf")
 }
