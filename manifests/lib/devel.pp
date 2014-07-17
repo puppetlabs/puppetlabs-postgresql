@@ -15,7 +15,7 @@ class postgresql::lib::devel(
   }
 
   if $link_pg_config {
-    if ( $postgresql::params::bindir != '/usr/bin' and $postgresql::params::bindir != '/usr/loca/bin') {
+    if ( $postgresql::params::bindir != '/usr/bin' and $postgresql::params::bindir != '/usr/local/bin') {
       file {'/usr/bin/pg_config':
         ensure => link,
         target => "${postgresql::params::bindir}/pg_config",
