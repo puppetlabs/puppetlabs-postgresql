@@ -1,3 +1,36 @@
+##2014-07-25 - Supported Release 4.0.0
+###Summary
+
+This release removes a significant piece of functionality; you can no longer
+uninstall postgresql through the module in the way you could before.  I know
+this'll be a disappointment to some users so I want to steal this summary space
+to talk about this.
+
+This is just the first part of a series of work we're planning to do to the
+module.  The uninstall code was extremely complex and failed on a number of
+popular platforms, often leaving chunks of postgresql behind.  This then caused
+us a number of problems in testing.  We decided to rip it out under the
+decision that the right way to uninstall software in a modern world is to
+reprovision the node and start over.
+
+Having said that we plan on building some `profiles` that will aid in
+fully uninstalling postgresql if required.  We hope most people never had to
+use the uninstall code and understand this decision.
+
+###Features
+- Remove uninstall code.
+- Rewrite acceptance tests completely.
+- Improve some unit tests to make up for the removed acceptance tests.
+- Support Debian Jessie
+- Fix refresh/unless parameter interactions (Thanks Dominic Cleal!)
+
+###Bugfixes
+- Fix Fedora (RHEL7 code was breaking it)
+- Ensure db user exists before validating db connection.
+- Tag postgresql-jdbc package to fix package repo dependency.
+- Set fallback postgis_version to undef so that catalog still compiles.
+- Update apt.postgresql.org key url.
+
 ##2014-07-15 - Supported Release 3.4.1
 ###Summary
 
