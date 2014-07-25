@@ -4,8 +4,8 @@ require 'spec_helper'
 describe Puppet::Type.type(:postgresql_conf) do
   before do
     @provider_class = described_class.provide(:simple) { mk_resource_methods }
-    @provider_class.stubs(:suitable?).returns true
-    described_class.stubs(:defaultprovider).returns @provider_class
+    @provider_class.stub(:suitable?).and_return true
+    described_class.stub(:defaultprovider).and_return @provider_class
   end
 
   describe "namevar validation" do
