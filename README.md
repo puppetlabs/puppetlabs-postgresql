@@ -853,6 +853,11 @@ Current it is only actively tested with the following operating systems:
 
 Although patches are welcome for making it work with other OS distros, it is considered best effort.
 
+### Postgis support
+
+Postgis is currently considered an unsupported feature as it doesn't work on
+all platforms correctly.
+
 ### All versions of RHEL/Centos
 
 If you have selinux enabled you must add any custom ports you use to the postgresql_port_t context.  You can do this as follows:
@@ -860,12 +865,6 @@ If you have selinux enabled you must add any custom ports you use to the postgre
 ```
 # semanage port -a -t postgresql_port_t -p tcp $customport
 ```
-
-### RHEL7
-
-Currently the following features are unsupported:
-
-* Postgis (There is no existing postgis package for RHEL7, and it's not in EPEL7 yet.)
 
 Development
 ------------
