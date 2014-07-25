@@ -764,7 +764,7 @@ OS user for running `psql`. Defaults to the default user for the module, usually
 ###Resource: postgresql::server::tablespace
 This defined type can be used to create a tablespace. For example:
 
-    postgresql::tablespace { 'tablespace1':
+    postgresql::server::tablespace { 'tablespace1':
       location => '/srv/space1',
     }
 
