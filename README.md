@@ -240,6 +240,7 @@ Resources:
 * [postgresql::server::database](#resource-postgresqlserverdatabase)
 * [postgresql::server::database_grant](#resource-postgresqlserverdatabasegrant)
 * [postgresql::server::pg_hba_rule](#resource-postgresqlserverpghbarule)
+* [postgresql::server::pg_ident_map](#resource-postgresqlserverpgidentmap)
 * [postgresql::server::role](#resource-postgresqlserverrole)
 * [postgresql::server::table_grant](#resource-postgresqlservertablegrant)
 * [postgresql::server::tablespace](#resource-postgresqlservertablespace)
@@ -325,6 +326,9 @@ Path to the `psql` command.
 
 ####`pg_hba_conf_path`
 Path to your `pg\_hba.conf` file.
+
+####`pg_ident_conf_path`
+Path to your `pg\_ident.conf` file.
 
 ####`postgresql_conf_path`
 Path to your `postgresql.conf` file.
@@ -434,6 +438,9 @@ Path to the `psql` command.
 ####`pg_hba_conf_path`
 Path to your `pg\_hba.conf` file.
 
+####`pg_ident_conf_path`
+Path to your `pg\_ident.conf` file.
+
 ####`postgresql_conf_path`
 Path to your `postgresql.conf` file.
 
@@ -467,6 +474,9 @@ This value defaults to `false`. Many distros ship with a fairly restrictive fire
 
 ####`manage_pg_hba_conf`
 This value defaults to `true`. Whether or not manage the pg_hba.conf. If set to `true`, puppet will overwrite this file. If set to `false`, puppet will not modify the file.
+
+####`manage_pg_ident_conf`
+This value defaults to `true`. Whether or not manage the pg_ident.conf. If set to `true`, puppet will overwrite this file. If set to `false`, puppet will not modify the file.
 
 
 ###Class: postgresql::client
@@ -693,6 +703,58 @@ For certain `auth_method` settings there are extra options that can be passed. C
 
 ####`order`
 An order for placing the rule in `pg_hba.conf`. Defaults to `150`.
+
+####`target`
+This provides the target for the rule, and is generally an internal only property. Use with caution.
+
+
+###Resource: postgresql::server::pg\_ident\_map
+This defined type allows you to create a user map for `pg_ident.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/8.4/static/auth-username-maps.html).
+
+For example:
+
+    postgresql::server::pg_ident_map {'map_robert_to_bob':
+      map_name          => 'omicron',
+      system_username   => 'robert',
+      database_username => 'bob',
+      description       => 'Map robert to bob'
+    }
+
+This would create a user map in `pg_ident.conf` similar to:
+
+    # Map Name: omicron
+    # Description: Map robert to bob
+    # Order: 150
+    omicron robert bob
+
+To refer to this example map in the `pg_hba.conf`, use `map=omicron`. An example `pg_hba_rule` would look similar to this:
+
+    postgresql::server::pg_hba_rule { 'allow bob to connect all databases with mapping':
+      description => 'allow any user to connect with user mapping enabled',
+      type        => 'local',
+      database    => 'all',
+      user        => 'bob',
+      auth_method => 'ident',
+      auth_option => 'map=omicron',
+    }
+
+####`namevar`
+A unique identifier or short description for this user map. The namevar doesn't provide any functional usage, but it is stored in the comments of the produced `pg_ident.conf` so the originating resource can be identified.
+
+####`description`
+A longer description for this user map if required. Defaults to `none`. This description is placed in the comments above the map in `pg_ident.conf`.
+
+####`map_name`
+Name of the user map, that is used to refer to this mapping in `pg_hba.conf`.
+
+####`system_username`
+Operating system user name, the user name used to connect to the database.
+
+####`database_username`
+Database user name, the user name of the the database user. The `system_username` will be mapped to this user name
+
+####`order`
+An order for placing the mapping in pg_ident.conf. Defaults to 150.
 
 ####`target`
 This provides the target for the rule, and is generally an internal only property. Use with caution.

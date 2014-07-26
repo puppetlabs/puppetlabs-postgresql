@@ -20,6 +20,7 @@ class postgresql::globals (
   $createdb_path        = undef,
   $psql_path            = undef,
   $pg_hba_conf_path     = undef,
+  $pg_ident_conf_path   = undef,
   $postgresql_conf_path = undef,
 
   $pg_hba_conf_defaults = undef,
@@ -42,6 +43,7 @@ class postgresql::globals (
 
   $manage_firewall      = undef,
   $manage_pg_hba_conf   = undef,
+  $manage_pg_ident_conf = undef,
   $firewall_supported   = undef,
 
   $manage_package_repo  = undef
