@@ -19,9 +19,12 @@ describe 'postgresql::server::pg_ident_rule', :type => :define do
     tmpfilename('pg_ident_rule')
   end
 
-  context 'test template 1' do
+  context 'managing pg_ident' do
     let :pre_condition do
       <<-EOS
+        class { 'postgresql::globals':
+          manage_pg_ident_conf => true,
+        }
         class { 'postgresql::server': }
       EOS
     end
