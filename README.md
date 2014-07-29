@@ -242,6 +242,7 @@ Resources:
 * [postgresql::server::pg_hba_rule](#resource-postgresqlserverpghbarule)
 * [postgresql::server::pg_ident_rule](#resource-postgresqlserverpgidentrule)
 * [postgresql::server::role](#resource-postgresqlserverrole)
+* [postgresql::server::schema](#resource-postgresqlserverschema)
 * [postgresql::server::table_grant](#resource-postgresqlservertablegrant)
 * [postgresql::server::tablespace](#resource-postgresqlservertablespace)
 * [postgresql::validate_db_connection](#resource-postgresqlvalidatedbconnection)
@@ -761,6 +762,29 @@ Specifies how many concurrent connections the role can make. Defaults to `-1` me
 
 ####`username`
 The username of the role to create, defaults to `namevar`.
+
+###Resource: postgresql::server::schema
+This defined type can be used to create a schema. For example:
+
+    postgresql::server::schema { 'isolated':
+      owner => 'jane',
+      db    => 'janedb',
+    }
+
+It will create the schema `jane` in the database `janedb` if neccessary,
+assigning the user `jane` ownership permissions.
+
+####`namevar`
+The schema name to create.
+
+###`db`
+Name of the database in which to create this schema. This must be passed.
+
+####`owner`
+The default owner of the schema.
+
+####`schema`
+Name of the schma. Defaults to `namevar`.
 
 
 ###Resource: postgresql::server::table\_grant
