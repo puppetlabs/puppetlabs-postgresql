@@ -15,8 +15,7 @@ class postgresql::params inherits postgresql::globals {
   $service_provider           = $service_provider
   $manage_firewall            = $manage_firewall
   $manage_pg_hba_conf         = pick($manage_pg_hba_conf, true)
-  # TODO : the behavior of manage_pg_ident_conf should default to true in the next major relase, is now to false for backward compatibility (20140728)
-  $manage_pg_ident_conf       = pick($manage_pg_ident_conf, false)
+  $manage_pg_ident_conf       = pick($manage_pg_ident_conf, true)
   $package_ensure             = 'present'
 
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
