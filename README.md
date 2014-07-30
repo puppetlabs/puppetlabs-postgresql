@@ -235,22 +235,22 @@ Classes:
 
 Resources:
 
-* [postgresql::server::config_entry](#resource-postgresqlserverconfigentry)
+* [postgresql::server::config_entry](#resource-postgresqlserverconfig_entry)
 * [postgresql::server::db](#resource-postgresqlserverdb)
 * [postgresql::server::database](#resource-postgresqlserverdatabase)
-* [postgresql::server::database_grant](#resource-postgresqlserverdatabasegrant)
-* [postgresql::server::pg_hba_rule](#resource-postgresqlserverpghbarule)
-* [postgresql::server::pg_ident_rule](#resource-postgresqlserverpgidentrule)
+* [postgresql::server::database_grant](#resource-postgresqlserverdatabase_grant)
+* [postgresql::server::pg_hba_rule](#resource-postgresqlserverpg_hba_rule)
+* [postgresql::server::pg_ident_rule](#resource-postgresqlserver_pg_identrule)
 * [postgresql::server::role](#resource-postgresqlserverrole)
 * [postgresql::server::schema](#resource-postgresqlserverschema)
-* [postgresql::server::table_grant](#resource-postgresqlservertablegrant)
+* [postgresql::server::table_grant](#resource-postgresqlservertable_grant)
 * [postgresql::server::tablespace](#resource-postgresqlservertablespace)
-* [postgresql::validate_db_connection](#resource-postgresqlvalidatedbconnection)
+* [postgresql::validate_db_connection](#resource-postgresqlvalidate_db_connection)
 
 Functions:
 
-* [postgresql\_password](#function-postgresqlpassword)
-* [postgresql\_acls\_to\_resources\_hash](#function-postgresqlaclstoresourceshashaclarray-id-orderoffset)
+* [postgresql\_password](#function-postgresql_password)
+* [postgresql\_acls\_to\_resources\_hash](#function-postgresql_acls_to_resources_hashacl_array-id-order_offset)
 
 
 ###Class: postgresql::globals
