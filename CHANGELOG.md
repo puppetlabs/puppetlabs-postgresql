@@ -1,3 +1,12 @@
+##2014-07-31 - Supported Release 3.4.2
+###Summary
+
+This release fixes recent Fedora versions.
+
+####Features
+####Bugfixes
+- Fix Fedora.
+
 ##2014-07-15 - Supported Release 3.4.1
 ###Summary
 
