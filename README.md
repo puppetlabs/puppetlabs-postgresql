@@ -477,7 +477,7 @@ This value defaults to `false`. Many distros ship with a fairly restrictive fire
 This value defaults to `true`. Whether or not manage the pg_hba.conf. If set to `true`, puppet will overwrite this file. If set to `false`, puppet will not modify the file.
 
 ####`manage_pg_ident_conf`
-This value defaults to `false`. Whether or not manage the pg_ident.conf. If set to `true`, puppet will overwrite this file. If set to `false`, puppet will not modify the file.
+This value defaults to `true`. Whether or not manage the pg_ident.conf. If set to `true`, puppet will overwrite this file. If set to `false`, puppet will not modify the file.
 
 ###Class: postgresql::client
 
