@@ -96,11 +96,6 @@ RSpec.configure do |c|
         on host, '/usr/sbin/update-locale'
       end
 
-
-      if fact('osfamily') == 'RedHat'
-        shell('yum -y install policycoreutils-python')
-        shell('semanage port -a -t postgresql_port_t -p tcp 5433')
-      end
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-firewall'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-apt'), { :acceptable_exit_codes => [0,1] }

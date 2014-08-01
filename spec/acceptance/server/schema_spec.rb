@@ -1,11 +1,6 @@
 require 'spec_helper_acceptance'
 
 describe 'postgresql::server::schema:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
-  after :all do
-    # Cleanup after tests have ran
-    apply_manifest("class { 'postgresql::server': ensure => absent }", :catch_failures => true)
-  end
-
   it 'should create a schema for a user' do
     begin
       pp = <<-EOS.unindent
