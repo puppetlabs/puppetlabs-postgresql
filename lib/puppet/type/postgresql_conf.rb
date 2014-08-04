@@ -14,6 +14,10 @@ module Puppet
 
     newproperty(:value) do
       desc "The value to set for this parameter."
+
+      munge do |value|
+        value.to_s
+      end
     end
 
     newproperty(:target) do
