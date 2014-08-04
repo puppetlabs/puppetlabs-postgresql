@@ -383,7 +383,7 @@ This allows you to override the automated detection to see if your OS supports t
 If `true` this will setup the official PostgreSQL repositories on your host. Defaults to `false`.
 
 ###Class: postgresql::server
-The following list are options that you can set in the `config_hash` parameter of `postgresql::server`.
+The following list are parameters that you can set in `postgresql::server`.
 
 ####`postgres_password`
 This value defaults to `undef`, meaning the super user account in the postgres database is a user called `postgres` and this account does not have a password. If you provide this setting, the module will set the password for the `postgres` user to your specified value.
@@ -478,6 +478,15 @@ This value defaults to `true`. Whether or not manage the pg_hba.conf. If set to 
 
 ####`manage_pg_ident_conf`
 This value defaults to `true`. Whether or not manage the pg_ident.conf. If set to `true`, puppet will overwrite this file. If set to `false`, puppet will not modify the file.
+
+####`config_entries`
+Config entries to add to postgresql.conf. A hash of key/value pairs.
+
+    class { 'postgresql::server:
+      config_entries => {
+        'shared_buffers' => '8GB',
+        'wal_buffers'    => '2MB'
+    }
 
 ###Class: postgresql::client
 

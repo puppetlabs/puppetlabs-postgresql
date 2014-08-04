@@ -46,6 +46,7 @@ class postgresql::server (
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
   $firewall_supported         = $postgresql::params::firewall_supported,
+  $config_entries             = $postgresql::params::config_entries,
 
   #Deprecated
   $version                    = $postgresql::params::version,

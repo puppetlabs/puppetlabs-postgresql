@@ -15,6 +15,7 @@ class postgresql::server::config {
   $version                    = $postgresql::server::version
   $manage_pg_hba_conf         = $postgresql::server::manage_pg_hba_conf
   $manage_pg_ident_conf       = $postgresql::server::manage_pg_hba_conf
+  $config_entries             = $postgresql::server::config_entries
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -100,6 +101,10 @@ class postgresql::server::config {
   postgresql::server::config_entry { 'port':
     value => $port,
   }
+
+  # Create config entries
+  create_resources('postgresql::server::config_entry',
+    hash_to_pgs_config_entries($config_entries))
 
   # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
   # in /etc/sysconfig/pgsql/postgresql. Create a blank file so we can manage it with augeas later.
