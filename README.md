@@ -488,6 +488,24 @@ Config entries to add to postgresql.conf. A hash of key/value pairs.
         'wal_buffers'    => '2MB'
     }
 
+####`roles`
+Database roles to create. A hash of `postgresql::server::role` resource hashes suitable for create_resources().
+
+    $roles = {
+      'user1' => {
+        'login'        => true,
+        'password_hash => 'md5a2bf32f491f5dc1c61b9ebdd6a3bba51'
+      },
+      'user2' => {
+        'login'        => true,
+        'password_hash => 'md515abb3a6ddbe9b16c1cd5f194f23fb2a'
+      }
+    }
+
+    class { 'postgresql::server:
+      roles => $roles
+    }
+
 ###Class: postgresql::client
 
 This class installs postgresql client software. Alter the following parameters if you have a custom version you would like to install (Note: don't forget to make sure to add any necessary yum or apt repositories if specifying a custom version):
