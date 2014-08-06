@@ -48,6 +48,8 @@ class postgresql::server (
   $firewall_supported         = $postgresql::params::firewall_supported,
   $config_entries             = $postgresql::params::config_entries,
   $roles                      = $postgresql::params::roles,
+  $database_grants            = $postgresql::params::database_grants,
+  $table_grants               = $postgresql::params::table_grants,
 
   #Deprecated
   $version                    = $postgresql::params::version,

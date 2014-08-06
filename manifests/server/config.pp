@@ -17,6 +17,8 @@ class postgresql::server::config {
   $manage_pg_ident_conf       = $postgresql::server::manage_pg_hba_conf
   $config_entries             = $postgresql::server::config_entries
   $roles                      = $postgresql::server::roles
+  $database_grants            = $postgresql::server::database_grants
+  $table_grants               = $postgresql::server::table_grants
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -109,6 +111,12 @@ class postgresql::server::config {
 
   # Create roles
   create_resources('postgresql::server::role', $roles)
+
+  # Create database grants
+  create_resources('postgresql::server::database_grant', $database_grants)
+
+  # Create table grants
+  create_resources('postgresql::server::table_grant', $table_grants)
 
   # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
   # in /etc/sysconfig/pgsql/postgresql. Create a blank file so we can manage it with augeas later.

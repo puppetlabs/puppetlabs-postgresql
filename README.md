@@ -506,6 +506,48 @@ Database roles to create. A hash of `postgresql::server::role` resource hashes s
       roles => $roles
     }
 
+####`database_grants`
+Database grants to create. A hash of `postgresql::server::database_grant` resource hashes suitable for create_resources().
+
+    $database_grants = {
+      'test1' => {
+        'privilege' => 'ALL',
+        'db'        => 'test1',
+        'role'      => 'user1'
+      },
+      'test2' => {
+        'privilege' => 'ALL',
+        'db'        => 'test2',
+        'role'      => 'user2'
+      }
+    }
+
+    class { 'postgresql::server:
+      database_grants => $database_grants
+    }
+
+####`table_grants`
+Table grants to create. A hash of `postgresql::server::table_grant` resource hashes suitable for create_resources().
+
+    $table_grants = {
+      'test1_table1_user1' => {
+        'privilege' => 'ALL',
+        'db'        => 'test1',
+        'table'     => 'table1',
+        'role'      => 'user1'
+      },
+      'test2_table1_user2' => {
+        'privilege' => 'ALL',
+        'db'        => 'test2',
+        'table'     => 'table1',
+        'role'      => 'user2'
+      }
+    }
+
+    class { 'postgresql::server:
+      table_grants => $table_grants
+    }
+
 ###Class: postgresql::client
 
 This class installs postgresql client software. Alter the following parameters if you have a custom version you would like to install (Note: don't forget to make sure to add any necessary yum or apt repositories if specifying a custom version):
