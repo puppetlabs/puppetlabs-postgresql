@@ -74,4 +74,7 @@ class postgresql::server (
   class { "${pg}::passwd": }->
   class { "${pg}::firewall": }->
   anchor { "${pg}::end": }
+
+  # resources can not be contained because they require this class.
+  class { "${pg}::resources": }
 }
