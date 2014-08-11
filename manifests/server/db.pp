@@ -3,6 +3,7 @@
 define postgresql::server::db (
   $user,
   $password,
+  $plaintext  = false,
   $dbname     = $title,
   $encoding   = $postgresql::server::encoding,
   $locale     = $postgresql::server::locale,
@@ -12,6 +13,8 @@ define postgresql::server::db (
   $istemplate = false,
   $owner      = undef
 ) {
+
+  validate_bool($plaintext)
 
   if ! defined(Postgresql::Server::Database[$dbname]) {
     postgresql::server::database { $dbname:
@@ -26,7 +29,10 @@ define postgresql::server::db (
 
   if ! defined(Postgresql::Server::Role[$user]) {
     postgresql::server::role { $user:
-      password_hash => $password,
+      password_hash => $plaintext ? {
+        true  => postgresql_password($user, $password),
+        false => $password,
+      },
     }
   }
 
