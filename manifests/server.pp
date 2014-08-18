@@ -48,15 +48,15 @@ class postgresql::server (
   $firewall_supported         = $postgresql::params::firewall_supported,
 
   #Deprecated
-  $version                    = $postgresql::params::version,
+  $version                    = undef,
 ) inherits postgresql::params {
   $pg = 'postgresql::server'
 
   if $version != undef {
     warning('Passing "version" to postgresql::server is deprecated; please use postgresql::globals instead.')
-    $_version = $postgresql::params::version
-  } else {
     $_version = $version
+  } else {
+    $_version = $postgresql::params::version
   }
 
   # Reload has its own ordering, specified by other defines
