@@ -8,7 +8,7 @@ define postgresql::server::schema(
   $group     = $postgresql::server::group
   $port      = $postgresql::server::port
   $psql_path = $postgresql::server::psql_path
-  $version   = $postgresql::server::version
+  $version   = $postgresql::server::_version
 
   Postgresql_psql {
     db         => $db,

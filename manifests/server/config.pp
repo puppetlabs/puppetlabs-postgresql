@@ -12,7 +12,7 @@ class postgresql::server::config {
   $pg_hba_conf_defaults       = $postgresql::server::pg_hba_conf_defaults
   $user                       = $postgresql::server::user
   $group                      = $postgresql::server::group
-  $version                    = $postgresql::server::version
+  $version                    = $postgresql::server::_version
   $manage_pg_hba_conf         = $postgresql::server::manage_pg_hba_conf
   $manage_pg_ident_conf       = $postgresql::server::manage_pg_hba_conf
 

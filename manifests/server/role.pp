@@ -15,7 +15,7 @@ define postgresql::server::role(
   $psql_user  = $postgresql::server::user
   $psql_group = $postgresql::server::group
   $psql_path  = $postgresql::server::psql_path
-  $version    = $postgresql::server::version
+  $version    = $postgresql::server::_version
 
   $login_sql       = $login       ? { true => 'LOGIN',       default => 'NOLOGIN' }
   $inherit_sql     = $inherit     ? { true => 'INHERIT',     default => 'NOINHERIT' }
