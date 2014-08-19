@@ -38,6 +38,15 @@ class postgresql::server::initdb {
       undef   => $ic_base,
       default => "${ic_base} --xlogdir '${xlogdir}'"
     }
+
+    # The xlogdir need to be present before initdb runs.
+    # If xlogdir is default it's created by package installer
+    if($xlogdir) {
+      $require_before_initdb = [$datadir, $xlogdir]
+    } else {
+      $require_before_initdb = [$datadir]
+    }
+
     $initdb_command = $locale ? {
       undef   => $ic_xlog,
       default => "${ic_xlog} --locale '${locale}'"
@@ -51,7 +60,7 @@ class postgresql::server::initdb {
       user      => $user,
       group     => $group,
       logoutput => on_failure,
-      require   => File[$datadir],
+      require   => File[$require_before_initdb],
     }
   }
 }
