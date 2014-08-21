@@ -39,18 +39,6 @@ describe 'postgresql::server', :type => :class do
     end
   end
 
-  describe 'manage_firewall => true' do
-    let(:params) do
-      {
-        :manage_firewall => true,
-      }
-    end
-
-    it 'should create firewall rule' do
-      is_expected.to contain_firewall("5432 accept - postgres")
-    end
-  end
-
   describe 'package_ensure => absent' do
     let(:params) do
       {

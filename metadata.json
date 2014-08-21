@@ -72,10 +72,6 @@
       "version_requirement": "4.x"
     },
     {
-      "name": "puppetlabs/firewall",
-      "version_requirement": ">= 0.0.4"
-    },
-    {
       "name": "puppetlabs/apt",
       "version_requirement": ">=1.1.0 <2.0.0"
     },
