@@ -25,7 +25,7 @@ define postgresql::server::pg_hba_rule(
       fail('You must specify an address property when type is host based')
     }
 
-    $allowed_auth_methods = $postgresql::server::version ? {
+    $allowed_auth_methods = $postgresql::server::_version ? {
       '9.3' => ['trust', 'reject', 'md5', 'sha1', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],
       '9.2' => ['trust', 'reject', 'md5', 'sha1', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],
       '9.1' => ['trust', 'reject', 'md5', 'sha1', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],

@@ -13,7 +13,7 @@ define postgresql::server::database(
   $group         = $postgresql::server::group
   $psql_path     = $postgresql::server::psql_path
   $port          = $postgresql::server::port
-  $version       = $postgresql::server::version
+  $version       = $postgresql::server::_version
   $default_db    = $postgresql::server::default_database
 
   # Set the defaults for the postgresql_psql resource
