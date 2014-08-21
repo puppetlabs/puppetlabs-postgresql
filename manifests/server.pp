@@ -42,10 +42,8 @@ class postgresql::server (
   $encoding                   = $postgresql::params::encoding,
   $locale                     = $postgresql::params::locale,
 
-  $manage_firewall            = $postgresql::params::manage_firewall,
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
-  $firewall_supported         = $postgresql::params::firewall_supported,
 
   #Deprecated
   $version                    = undef,
@@ -68,6 +66,5 @@ class postgresql::server (
   class { "${pg}::config": }->
   class { "${pg}::service": }->
   class { "${pg}::passwd": }->
-  class { "${pg}::firewall": }->
   anchor { "${pg}::end": }
 }
