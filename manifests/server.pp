@@ -46,6 +46,10 @@ class postgresql::server (
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
   $firewall_supported         = $postgresql::params::firewall_supported,
+  $config_entries             = $postgresql::params::config_entries,
+  $roles                      = $postgresql::params::roles,
+  $database_grants            = $postgresql::params::database_grants,
+  $table_grants               = $postgresql::params::table_grants,
 
   #Deprecated
   $version                    = undef,
@@ -70,4 +74,7 @@ class postgresql::server (
   class { "${pg}::passwd": }->
   class { "${pg}::firewall": }->
   anchor { "${pg}::end": }
+
+  # resources can not be contained because they require this class.
+  class { "${pg}::resources": }
 }
