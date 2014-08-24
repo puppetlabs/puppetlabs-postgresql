@@ -13,7 +13,7 @@ describe 'postgres::server', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osf
   end
 
   it 'can connect with psql' do
-    psql('-D /var/pgsql --command="\l" postgres', 'postgres') do |r|
+    psql('--command="\l" postgres', 'postgres') do |r|
       expect(r.stdout).to match(/List of databases/)
     end
   end
