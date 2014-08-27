@@ -112,7 +112,7 @@ class postgresql::params inherits postgresql::globals {
         $service_name = $::operatingsystem ? {
           'Debian' => pick($service_name, 'postgresql'),
           'Ubuntu' => $::lsbmajdistrelease ? {
-            '10' => pick($service_name, "postgresql-${version}"),
+            /^10/ => pick($service_name, "postgresql-${version}"),
             default => pick($service_name, 'postgresql'),
           },
           default => undef
