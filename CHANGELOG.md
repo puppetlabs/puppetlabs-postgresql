@@ -1,3 +1,12 @@
+##2014-08-27 - Supported Release 3.4.3
+###Summary
+
+This release fixes Ubuntu 10.04 with Facter 2.2.
+
+####Features
+####Bugfixes
+- Use a regular expression to match the major OS version on Ubuntu.
+
 ##2014-07-31 - Supported Release 3.4.2
 ###Summary
 
