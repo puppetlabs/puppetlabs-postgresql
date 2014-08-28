@@ -26,7 +26,7 @@ The PostgreSQL module allows you to easily manage postgres databases with Puppet
 Module Description
 -------------------
 
-PostgreSQL is a high-performance, free, open-source relational database server. The postgresql module allows you to manage PostgreSQL packages and services on several operating systems, while also supporting basic management of PostgreSQL databases and users. The module offers support for managing firewall for postgres ports on RedHat-based distros, as well as support for basic management of common security settings.
+PostgreSQL is a high-performance, free, open-source relational database server. The postgresql module allows you to manage PostgreSQL packages and services on several operating systems, while also supporting basic management of PostgreSQL databases and users. The module offers support for basic management of common security settings.
 
 Setup
 -----
@@ -35,7 +35,6 @@ Setup
 
 * package/service/configuration files for PostgreSQL
 * listened-to ports
-* system firewall (optional)
 * IP and mask (optional)
 
 **Introductory Questions**
@@ -44,7 +43,6 @@ The postgresql module offers many security configuration settings. Before gettin
 
 * Do you want/need to allow remote connections?
     * If yes, what about TCP connections?
-* Would you prefer to work around your current firewall settings or overwrite some of them?
 * How restrictive do you want the database superuser's permissions to be?
 
 Your answers to these questions will determine which of the module's parameters you'll want to specify values for.
@@ -71,7 +69,6 @@ For a more customized configuration:
       ip_mask_allow_all_users    => '0.0.0.0/0',
       listen_addresses           => '*',
       ipv4acls                   => ['hostssl all johndoe 192.168.0.0/24 cert'],
-      manage_firewall            => true,
       postgres_password          => 'TPSrep0rt!',
     }
 
@@ -376,9 +373,6 @@ This will set the default database locale for all databases created with this mo
 
 On Debian you'll need to ensure that the 'locales-all' package is installed for full functionality of Postgres.
 
-####`firewall_supported`
-This allows you to override the automated detection to see if your OS supports the `firewall` module.
-
 ####`manage_package_repo`
 If `true` this will setup the official PostgreSQL repositories on your host. Defaults to `false`.
 
@@ -469,9 +463,6 @@ This will set the default database locale for all databases created with this mo
 #####Debian
 
 On Debian you'll need to ensure that the 'locales-all' package is installed for full functionality of Postgres.
-
-####`manage_firewall`
-This value defaults to `false`. Many distros ship with a fairly restrictive firewall configuration which will block the port that postgres tries to listen on. If you'd like for the puppet module to open this port for you (using the [puppetlabs-firewall](http://forge.puppetlabs.com/puppetlabs/firewall) module), change this value to true. Check the documentation for `puppetlabs/firewall` to ensure the rest of the global setup is applied, to ensure things like persistence and global rules are set correctly.
 
 ####`manage_pg_hba_conf`
 This value defaults to `true`. Whether or not manage the pg_hba.conf. If set to `true`, puppet will overwrite this file. If set to `false`, puppet will not modify the file.
