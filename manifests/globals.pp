@@ -84,8 +84,8 @@ class postgresql::globals (
     },
     'FreeBSD' => '93',
     'Suse' => $::operatingsystem ? {
-         'SLES' => '91',
-         default => undef,
+      'SLES' => '91',
+      default => undef,
     },
     default => undef,
   }
