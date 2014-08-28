@@ -673,24 +673,6 @@ This would create a ruleset in `pg_hba.conf` similar to:
     # Order: 150
     host  app  app  200.1.2.0/24  md5
 
-###Resource: postgresql::server::pg\_ident\_rule
-This defined type allows you to create user name maps for `pg_ident.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/9.4/static/auth-username-maps.html).
-
-For example:
-
-    postgresql::server::pg_ident_rule{ 'Map the SSL certificate of the backup server as a replication user':
-      map_name          => 'sslrepli',
-      system_username   => 'repli1.example.com',
-      database_username => 'replication',
-    }
-
-This would create a user name map in `pg_ident.conf` similar to:
-
-    # Rule Name: Map the SSL certificate of the backup server as a replication user
-    # Description: none
-    # Order: 150
-    sslrepli	repli1.example.com	replication
-
 ####`namevar`
 A unique identifier or short description for this rule. The namevar doesn't provide any functional usage, but it is stored in the comments of the produced `pg_hba.conf` so the originating resource can be identified.
 
@@ -717,6 +699,46 @@ For certain `auth_method` settings there are extra options that can be passed. C
 
 ####`order`
 An order for placing the rule in `pg_hba.conf`. Defaults to `150`.
+
+####`target`
+This provides the target for the rule, and is generally an internal only property. Use with caution.
+
+
+###Resource: postgresql::server::pg\_ident\_rule
+This defined type allows you to create user name maps for `pg_ident.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/9.4/static/auth-username-maps.html).
+
+For example:
+
+    postgresql::server::pg_ident_rule{ 'Map the SSL certificate of the backup server as a replication user':
+      map_name          => 'sslrepli',
+      system_username   => 'repli1.example.com',
+      database_username => 'replication',
+    }
+
+This would create a user name map in `pg_ident.conf` similar to:
+
+    # Rule Name: Map the SSL certificate of the backup server as a replication user
+    # Description: none
+    # Order: 150
+    sslrepli	repli1.example.com	replication
+
+####`namevar`
+A unique identifier or short description for this rule. The namevar doesn't provide any functional usage, but it is stored in the comments of the produced `pg_ident.conf` so the originating resource can be identified.
+
+####`description`
+A longer description for this rule if required. Defaults to `none`. This description is placed in the comments above the rule in `pg_ident.conf`.
+
+####`map_name`
+Name of the user map, that is used to refer to this mapping in `pg_hba.conf`.
+
+####`system_username`
+Operating system user name, the user name used to connect to the database.
+
+####`database_username`
+Database user name, the user name of the the database user. The `system_username` will be mapped to this user name.
+
+####`order`
+An order for placing the mapping in pg_ident.conf. Defaults to 150.
 
 ####`target`
 This provides the target for the rule, and is generally an internal only property. Use with caution.
