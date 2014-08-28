@@ -14,7 +14,7 @@ class postgresql::server::config {
   $group                      = $postgresql::server::group
   $version                    = $postgresql::server::_version
   $manage_pg_hba_conf         = $postgresql::server::manage_pg_hba_conf
-  $manage_pg_ident_conf       = $postgresql::server::manage_pg_hba_conf
+  $manage_pg_ident_conf       = $postgresql::server::manage_pg_ident_conf
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
