@@ -73,18 +73,6 @@ define postgresql::server::config_entry (
           before  => Class['postgresql::server::reload'],
         }
       }
-
-      if $name == 'data_directory' {
-        augeas { 'override PGDATA in /etc/sysconfig/pgsql/postgresql':
-          lens    => 'Shellvars.lns',
-          incl    => '/etc/sysconfig/pgsql/*',
-          context => '/files/etc/sysconfig/pgsql/postgresql',
-          changes => "set PGDATA ${value}",
-          require => File['/etc/sysconfig/pgsql/postgresql'],
-          notify  => Class['postgresql::server::service'],
-          before  => Class['postgresql::server::reload'],
-        }
-      }
     }
   }
 
