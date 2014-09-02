@@ -51,6 +51,23 @@ unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
         #install_package host, 'ruby-augeas'
       end
     end
+  end
+end
+
+UNSUPPORTED_PLATFORMS = ['AIX','windows','Solaris','Suse']
+
+RSpec.configure do |c|
+  # Project root
+  proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+
+  # Readable test descriptions
+  c.formatter = :documentation
+
+  # Configure all nodes in nodeset
+  c.before :suite do
+    # Install module and dependencies
+    puppet_module_install(:source => proj_root, :module_name => 'postgresql')
+
     # Set up selinux if appropriate.
     if fact('osfamily') == 'RedHat' && fact('selinux') == 'true'
       pp = <<-EOS
@@ -69,24 +86,9 @@ unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
         }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest_on(agents, pp, :catch_failures => true)
     end
-  end
-end
 
-UNSUPPORTED_PLATFORMS = ['AIX','windows','Solaris','Suse']
-
-RSpec.configure do |c|
-  # Project root
-  proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-
-  # Readable test descriptions
-  c.formatter = :documentation
-
-  # Configure all nodes in nodeset
-  c.before :suite do
-    # Install module and dependencies
-    puppet_module_install(:source => proj_root, :module_name => 'postgresql')
     hosts.each do |host|
       on host, "/bin/touch #{default['puppetpath']}/hiera.yaml"
       on host, 'chmod 755 /root'
