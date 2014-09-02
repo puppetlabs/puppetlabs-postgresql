@@ -65,7 +65,6 @@ unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
             command     => 'semanage port -a -t postgresql_port_t -p tcp 5433',
             path        => '/bin:/usr/bin/:/sbin:/usr/sbin',
             subscribe   => Package[$semanage_package],
-            refreshonly => true,
           }
         }
       EOS
