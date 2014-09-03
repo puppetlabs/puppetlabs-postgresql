@@ -86,7 +86,7 @@ RSpec.configure do |c|
         }
       EOS
 
-      apply_manifest_on(agents, pp, :catch_failures => true)
+      apply_manifest_on(agents, pp, :catch_failures => false)
     end
 
     hosts.each do |host|
