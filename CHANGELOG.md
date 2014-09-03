@@ -5,6 +5,12 @@ This release removes the uninstall ability from the module, removes the firewall
 management, overhauls all of the acceptance testing, as well as adds better
 support for SuSE and Fedora.
 
+###Backwards Incompatible changes.
+
+- Uninstall code removal.
+- Firewall management for Postgres.
+- Set manage_pg_ident_conf to true.
+
 ####Uninstallation removal
 
 We rely heavily on the ability to uninstall and reinstall postgres throughout
@@ -45,7 +51,7 @@ kind of thing rather than trying to weave it into the main module logic itself.
 - Acceptance tests rewritten.
 - Add a defined type for creating database schemas.
 - Add a pg_ident_rule defined type.
-- Set manage_pg_ident_conf to false.
+- Set manage_pg_ident_conf to true.
 - Manage pg_ident.conf by default.
 - Improve selinux support for tablespace.
 - Remove deprecation warnings.
