@@ -30,9 +30,23 @@ define postgresql::server::config_entry (
     }
   }
 
-  # We have to handle ports in a weird and special way.  On Redhat we either
-  # have to create a systemd override for the port or update the sysconfig
-  # file.
+  # We have to handle ports in a weird and special way.  On early Debian and
+  # Ubuntu we have to ensure we stop the service completely. On Redhat we
+  # either have to create a systemd override for the port or update the
+  # sysconfig file.  
+  if $::operatingsystem == 'Debian' or $::operatingsystem == 'Ubuntu' {
+    if $::operatingsystemrelease =~ /^6/ or $::operatingsystemrelease =~ /^10\.04/ {
+      if $name == 'port' {
+        exec { 'postgresql_stop':
+          command => "service ${::postgresql::server::service_name} stop",
+          onlyif  => "service ${::postgresql::server::service_name} status",
+          unless  => "grep 'port = ${value}' ${::postgresql::server::postgresql_conf_path}",
+          path    => '/usr/sbin:/sbin:/bin:/usr/bin:/usr/local/bin',
+          before  => Postgresql_conf[$name],
+        }
+      }
+    }
+  }
   if $::osfamily == 'RedHat' {
     if $::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora' {
       if $name == 'port' {
