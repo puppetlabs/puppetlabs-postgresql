@@ -1,3 +1,80 @@
+##2014-09-03 - Supported Release 4.0.0
+###Summary
+
+This release removes the uninstall ability from the module, removes the firewall
+management, overhauls all of the acceptance testing, as well as adds better
+support for SuSE and Fedora.
+
+####Uninstallation removal
+
+We rely heavily on the ability to uninstall and reinstall postgres throughout
+our testing code, testing features like "can I move from the distribution
+packages to the upstream packages through the module" and over time we've
+learnt that the uninstall code simply doesn't work a lot of the time.  It
+leaves traces of postgres behind or fails to remove certain packages on Ubuntu,
+and generally causes bits to be left on your system that you didn't expect.
+
+When we then reinstall things fail because it's not a true clean slate, and
+this causes us enormous problems during test.  We've spent weeks and months
+working on these tests and they simply don't hold up well across the full range
+of PE platforms.
+
+Due to all these problems we've decided to take a stance on uninstalling in
+general.  We feel that in 2014 it's completely reasonable and normal to have a
+good provisioning pipeline combined with your configuration management and the
+"correct" way to uninstall a fully installed service like postgresql is to
+simply reprovision the server without it in the first place.  As a general rule
+this is how I personally like to work and I think is a good practice.
+
+####I'm not OK with this!
+
+We understand that there are environments and situations in which it's not easy
+to do that.  What if you accidently deployed Postgres on 100,000 nodes?  In the
+future we're going to take a look at building some example 'profiles' to be
+found under examples/ within this module that can uninstall postgres on popular
+platforms.  These can be modified and used in your specific case to uninstall
+postgresql.  They will be much more brute force and reliant on deleting entire
+directories and require you to do more work up front in specifying where things
+are installed but we think it'll prove to be a much cleaner mechanism for this
+kind of thing rather than trying to weave it into the main module logic itself.
+
+####Features
+- Removal of uninstall.
+- Removal of firewall management.
+- Tests ported to rspec3.
+- Acceptance tests rewritten.
+- Add a defined type for creating database schemas.
+- Add a pg_ident_rule defined type.
+- Set manage_pg_ident_conf to false.
+- Manage pg_ident.conf by default.
+- Improve selinux support for tablespace.
+- Remove deprecation warnings.
+- Support changing PGDATA on RedHat.
+- Add SLES 11 support.
+
+####Bugfixes
+- Link pg_config binary into /usr/bin.
+- Fix fedora support by using systemd.
+- Initdb should create xlogdir if set.
+
+##2014-08-27 - Supported Release 3.4.3
+###Summary
+
+This release fixes Ubuntu 10.04 with Facter 2.2.
+
+####Features
+####Bugfixes
+- Use a regular expression to match the major OS version on Ubuntu.
+
+##2014-07-31 - Supported Release 3.4.2
+###Summary
+
+This release fixes recent Fedora versions.
+
+####Features
+####Bugfixes
+- Fix Fedora.
+
 ##2014-07-15 - Supported Release 3.4.1
 ###Summary
 
