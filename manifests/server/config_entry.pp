@@ -33,7 +33,7 @@ define postgresql::server::config_entry (
   # We have to handle ports in a weird and special way.  On early Debian and
   # Ubuntu we have to ensure we stop the service completely. On Redhat we
   # either have to create a systemd override for the port or update the
-  # sysconfig file.  
+  # sysconfig file.
   if $::operatingsystem == 'Debian' or $::operatingsystem == 'Ubuntu' {
     if $::operatingsystemrelease =~ /^6/ or $::operatingsystemrelease =~ /^10\.04/ {
       if $name == 'port' {
