@@ -72,8 +72,29 @@ define postgresql::server::config_entry (
           notify  => Class['postgresql::server::service'],
           before  => Class['postgresql::server::reload'],
         }
-      }
+     } else {
+      if $name == 'data_directory' {
+        # We need to force postgresql to stop before data dir change
+        exec { 'postgresql_stop_datadir':
+          command => "service ${::postgresql::server::service_name} stop",
+          onlyif  => "service ${::postgresql::server::service_name} status",
+          unless  => "grep 'PGDATA=${value}' /etc/sysconfig/pgsql/postgresql",
+          path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
+          require => File['/etc/sysconfig/pgsql/postgresql'],
+        } ->
+        augeas { 'override PGDATA in /etc/sysconfig/pgsql/postgresql':
+          lens    => 'Shellvars.lns',
+          incl    => '/etc/sysconfig/pgsql/*',
+          context => '/files/etc/sysconfig/pgsql/postgresql',
+          changes => "set PGDATA ${value}",
+          require => File['/etc/sysconfig/pgsql/postgresql'],
+          notify  => Class['postgresql::server::service'],
+          before  => Class['postgresql::server::reload'],
+        }
+	} #added
+	}
     }
+    
   }
 
   case $ensure {
