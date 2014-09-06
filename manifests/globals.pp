@@ -14,6 +14,7 @@ class postgresql::globals (
   $service_name         = undef,
   $service_provider     = undef,
   $service_status       = undef,
+  $service_reload       = undef,
   $default_database     = undef,
 
   $initdb_path          = undef,
@@ -83,6 +84,7 @@ class postgresql::globals (
       default => '9.2',
     },
     'FreeBSD' => '93',
+    'OpenBSD' => '9.3',
     'Suse' => $::operatingsystem ? {
       'SLES' => '91',
       default => undef,
