@@ -5,6 +5,7 @@ class postgresql::server::config {
   $ip_mask_allow_all_users    = $postgresql::server::ip_mask_allow_all_users
   $listen_addresses           = $postgresql::server::listen_addresses
   $port                       = $postgresql::server::port
+  $data_directory             = $postgresql::server::datadir
   $ipv4acls                   = $postgresql::server::ipv4acls
   $ipv6acls                   = $postgresql::server::ipv6acls
   $pg_hba_conf_path           = $postgresql::server::pg_hba_conf_path
@@ -100,6 +101,9 @@ class postgresql::server::config {
     }
     postgresql::server::config_entry { 'port':
       value => "${port}",
+    }
+    postgresql::server::config_entry { 'data_directory':
+      value => "${data_directory}",
     }
 
     # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
