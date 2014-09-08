@@ -19,11 +19,11 @@ describe 'postgresql::server::config_entry', :type => :define do
     tmpfilename('postgresql_conf')
   end
 
-  context "syntax check" do
-    let :pre_condition do
-      "class {'postgresql::server':}"
-    end
+  let :pre_condition do
+    "class {'postgresql::server':}"
+  end
 
+  context "syntax check" do
     let(:params) { { :ensure => 'present'} }
     it { is_expected.to contain_postgresql__server__config_entry('config_entry') }
   end
@@ -41,7 +41,7 @@ describe 'postgresql::server::config_entry', :type => :define do
           :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         }
       end
-      let(:params) {{ :ensure => 'present', :name => 'port', :value => '5432' }}
+      let(:params) {{ :ensure => 'present', :name => 'port_spec', :value => '5432' }}
 
       it 'stops postgresql and changes the port' do
         is_expected.to contain_exec('postgresql_stop')
@@ -60,7 +60,7 @@ describe 'postgresql::server::config_entry', :type => :define do
           :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         }
       end
-      let(:params) {{ :ensure => 'present', :name => 'port', :value => '5432' }}
+      let(:params) {{ :ensure => 'present', :name => 'port_spec', :value => '5432' }}
 
       it 'stops postgresql and changes the port' do
         is_expected.to contain_file('systemd-port-override')
@@ -79,7 +79,7 @@ describe 'postgresql::server::config_entry', :type => :define do
           :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         }
       end
-      let(:params) {{ :ensure => 'present', :name => 'port', :value => '5432' }}
+      let(:params) {{ :ensure => 'present', :name => 'port_spec', :value => '5432' }}
 
       it 'stops postgresql and changes the port' do
         is_expected.to contain_file('systemd-port-override')
