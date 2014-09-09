@@ -1,6 +1,7 @@
 # Define for creating a database role. See README.md for more information
 define postgresql::server::role(
   $password_hash    = false,
+  $password         = false,
   $createdb         = false,
   $createrole       = false,
   $db               = $postgresql::server::default_database,
@@ -23,8 +24,13 @@ define postgresql::server::role(
   $createdb_sql    = $createdb    ? { true => 'CREATEDB',    default => 'NOCREATEDB' }
   $superuser_sql   = $superuser   ? { true => 'SUPERUSER',   default => 'NOSUPERUSER' }
   $replication_sql = $replication ? { true => 'REPLICATION', default => '' }
+
   if ($password_hash != false) {
+    $hashed_password = $password_hash
     $password_sql = "ENCRYPTED PASSWORD '${password_hash}'"
+  } elsif ($password != false) {
+    $hashed_password = postgresql_password($username, $password)
+    $password_sql = "ENCRYPTED PASSWORD '${hashed_password}'"
   } else {
     $password_sql = ''
   }
@@ -79,13 +85,14 @@ define postgresql::server::role(
     unless => "SELECT rolname FROM pg_roles WHERE rolname='${username}' and rolconnlimit=${connection_limit}",
   }
 
-  if $password_hash {
-    if($password_hash =~ /^md5.+/) {
-      $pwd_hash_sql = $password_hash
+  if $hashed_password {
+    if($hashed_password =~ /^md5.+/) {
+      $pwd_hash_sql = $hashed_password
     } else {
-      $pwd_md5 = md5("${password_hash}${username}")
+      $pwd_md5 = md5("${hashed_password}${username}")
       $pwd_hash_sql = "md5${pwd_md5}"
     }
+
     postgresql_psql {"ALTER ROLE \"${username}\" ${password_sql}":
       unless => "SELECT usename FROM pg_shadow WHERE usename='${username}' and passwd='${pwd_hash_sql}'",
     }
