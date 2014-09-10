@@ -548,6 +548,31 @@ Table grants to create. A hash of `postgresql::server::table_grant` resource has
       table_grants => $table_grants
     }
 
+####`hba_rules`
+Hba rules to create. A hash of `postgresql::server::pg_hba_rule` resource hashes suitable for create_resources().
+
+    $hba_rules = {
+      'test1_user1_local' => {
+        'type'        => 'local',
+        'database'    => 'test1',
+        'user'        => 'user1',
+        'auth_method' => 'ident',
+        'order'       => '010',
+      },
+      'all_user2_host' => {
+        'type'        => 'host',
+        'database'    => 'all',
+        'user'        => 'user2',
+        'auth_method' => 'md5',
+        'address'     => '0.0.0.0/0',
+        'order'       => '011',
+      }
+    }
+
+    class { 'postgresql::server:
+      hba_rules => $hba_rules
+    }
+
 ###Class: postgresql::client
 
 This class installs postgresql client software. Alter the following parameters if you have a custom version you would like to install (Note: don't forget to make sure to add any necessary yum or apt repositories if specifying a custom version):
