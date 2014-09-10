@@ -21,6 +21,7 @@ class postgresql::params inherits postgresql::globals {
   $roles                      = {}
   $database_grants            = {}
   $table_grants               = {}
+  $hba_rules                  = {}
 
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $::osfamily {

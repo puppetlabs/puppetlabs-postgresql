@@ -50,6 +50,7 @@ class postgresql::server (
   $roles                      = $postgresql::params::roles,
   $database_grants            = $postgresql::params::database_grants,
   $table_grants               = $postgresql::params::table_grants,
+  $hba_rules                  = $postgresql::params::hba_rules,
 
   #Deprecated
   $version                    = $postgresql::params::version,
