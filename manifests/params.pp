@@ -3,7 +3,7 @@ class postgresql::params inherits postgresql::globals {
   $version                    = $globals_version
   $postgis_version            = $globals_postgis_version
   $listen_addresses           = 'localhost'
-  $port                       = 5432
+  $port                       = '5432'
   $ip_mask_deny_postgres_user = '0.0.0.0/0'
   $ip_mask_allow_all_users    = '127.0.0.1/32'
   $ipv4acls                   = []
@@ -58,6 +58,7 @@ class postgresql::params inherits postgresql::globals {
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $service_status      = $service_status
+      $service_reload      = "service ${service_name} reload"
       $perl_package_name   = pick($perl_package_name, 'perl-DBD-Pg')
       $python_package_name = pick($python_package_name, 'python-psycopg2')
 
@@ -95,6 +96,7 @@ class postgresql::params inherits postgresql::globals {
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $service_status      = $service_status
+      $service_reload      = "service ${service_name} reload"
       $python_package_name = pick($python_package_name, 'python-psycopg2')
       # Archlinux does not have a perl::DBD::Pg package
       $perl_package_name = pick($perl_package_name, 'undef')
@@ -139,6 +141,7 @@ class postgresql::params inherits postgresql::globals {
       $datadir              = pick($datadir, "/var/lib/postgresql/${version}/main")
       $confdir              = pick($confdir, "/etc/postgresql/${version}/main")
       $service_status       = pick($service_status, "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'")
+      $service_reload       = "service ${service_name} reload"
       $psql_path            = pick($psql_path, "/usr/bin/psql")
     }
 
@@ -160,6 +163,31 @@ class postgresql::params inherits postgresql::globals {
       $datadir              = pick($datadir, '/usr/local/pgsql/data')
       $confdir              = pick($confdir, $datadir)
       $service_status       = pick($service_status, "/usr/local/etc/rc.d/${service_name} status")
+      $service_reload       = "service ${service_name} reload"
+      $psql_path            = pick($psql_path, "${bindir}/psql")
+
+      $needs_initdb         = pick($needs_initdb, true)
+    }
+
+    'OpenBSD': {
+      $user                = pick($user, '_postgresql')
+      $group               = pick($group, '_postgresql')
+
+      $client_package_name  = pick($client_package_name, "postgresql-client")
+      $server_package_name  = pick($server_package_name, "postgresql-server")
+      $contrib_package_name = pick($contrib_package_name, "postgresql-contrib")
+      $devel_package_name   = pick($devel_package_name, 'postgresql-client')
+      $java_package_name    = pick($java_package_name, 'postgresql-jdbc')
+      $perl_package_name    = pick($perl_package_name, 'databases/p5-DBD-Pg')
+      $plperl_package_name  = undef
+      $python_package_name  = pick($python_package_name, 'py-psycopg2')
+
+      $service_name         = pick($service_name, 'postgresql')
+      $bindir               = pick($bindir, '/usr/local/bin')
+      $datadir              = pick($datadir, '/var/postgresql/data')
+      $confdir              = pick($confdir, $datadir)
+      $service_status       = pick($service_status, "/etc/rc.d/${service_name} check")
+      $service_reload       = "/etc/rc.d/${service_name} reload"
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $needs_initdb         = pick($needs_initdb, true)
@@ -183,6 +211,7 @@ class postgresql::params inherits postgresql::globals {
       $datadir              = pick($datadir, '/var/lib/pgsql/data')
       $confdir              = pick($confdir, $datadir)
       $service_status       = pick($service_status, "/etc/init.d/${service_name} status")
+      $service_reload       = "/etc/init.d/${service_name} reload"
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $needs_initdb         = pick($needs_initdb, true)
