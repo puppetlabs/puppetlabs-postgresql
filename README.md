@@ -961,7 +961,7 @@ And then run the unit tests:
 
     bundle exec rake spec
 
-The unit tests are ran in Travis-CI as well, if you want to see the results of your own tests regsiter the service hook through Travis-CI via the accounts section for your Github clone of this project.
+The unit tests are ran in Travis-CI as well, if you want to see the results of your own tests register the service hook through Travis-CI via the accounts section for your Github clone of this project.
 
 If you want to run the system tests, make sure you also have:
 
