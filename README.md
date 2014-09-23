@@ -494,19 +494,19 @@ The ensure parameter passed on to postgresql contrib package resource.
 ###Class: postgresql::server::ssl_certificate
 Installs a self-signed openssl certificate on the server to permit hostssl connections in pg_hba.conf, as well as for use as a CA to sign client CSR's.  It can be used like so:
 
-  postgresql::server::config_entry { 'ssl':
-    value => 'on',
-  }
+    postgresql::server::config_entry { 'ssl':
+      value => 'on',
+    }
 
-  class { 'postgresql::server::ssl_certificate':
-            certificate_days => '3650',
-         certificate_country => 'US',
-           certificate_state => 'GA',
-        certificate_locality => 'Atlanta',
-    certificate_organization => 'AcmeWidgetsInc',
-     certificate_common_name => $::fqdn,
-           certificate_email => 'dba@example.com',
-  }
+    class { 'postgresql::server::ssl_certificate':
+              certificate_days => '3650',
+           certificate_country => 'US',
+             certificate_state => 'GA',
+          certificate_locality => 'Atlanta',
+      certificate_organization => 'AcmeWidgetsInc',
+       certificate_common_name => $::fqdn,
+             certificate_email => 'dba@example.com',
+    }
 
 If you have a certificate signed by a public CA, you might also use the postgresql::server::config_entry class to set the paths to your certificate as documented here: 
 http://www.postgresql.org/docs/9.3/static/ssl-tcp.html
