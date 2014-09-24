@@ -1028,5 +1028,5 @@ Contributors
  * Spenser Gilliland
  * stormcrow
  * William Van Hevelingen
- * Hugh Esco
+ * [Hugh Esco](https://github.com/hesco) [YMD Partners LLC](http://campaignfoundations.com/)
 
