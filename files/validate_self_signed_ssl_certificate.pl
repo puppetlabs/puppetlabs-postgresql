@@ -29,10 +29,10 @@ foreach my $cert ( 'server', 'root' ){
   my @cert_stats = stat("$DATADIR/$cert.crt");
   $subject->{'file_stat'} = gmtime( $cert_stats[9] )->strftime;
   $result += evaluate_results( $cert_params, $subject, $DAYS );
-  print Dumper $subject, $cert_params;
+  # print Dumper $subject, $cert_params;
 }
 
-print "result is: $result \n";
+print $result;
 exit $result;
 
 sub VERSION_MESSAGE {
@@ -64,8 +64,15 @@ sub evaluate_results {
   my $result = 0;
   my @keys = keys %{$expected};
   KEY: foreach my $key ( @keys ){
-    if ( $key =~ /^(before|after)$/ ){ next KEY; }
-    unless ( $got->{ $key } eq $expected->{ $key } ){ $result++; }
+    if ( $key =~ /^(before|after|file_stat)$/ ){ next KEY; }
+    unless( exists( $got->{ $key } ) && exists( $expected->{ $key } ) ){
+      print STDERR "$key not defined in both \$got and \$expected \n";
+      next KEY;
+    }
+    unless ( $got->{ $key } eq $expected->{ $key } ){
+      print STDERR "Certificate fails to match data for $key \n";
+      $result++;
+    }
   }
 
   $result += evaluate_result_dates( $got, $expected, $days );
@@ -78,13 +85,12 @@ sub evaluate_result_dates {
   my $days = shift;
   my $result = 0;
 
-  print 'file_stat: ' . $expected->{'file_stat'} . "\n";
-  print 'before: ' . $got->{'before'} . "\n";
-  print 'after: ' . $got->{'after'} . "\n";
+  # print 'file_stat: ' . $expected->{'file_stat'} . "\n";
+  # print 'before: ' . $got->{'before'} . "\n";
+  # print 'after: ' . $got->{'after'} . "\n";
 
   my $format = '%a, %d %b %Y %T';
-  # my $format = '%a, %d %b %Y %T %Z';
-  print "$format \n";
+  # print "$format \n";
  
   $expected->{'file_stat'} =~ s/ UTC$//;
   $got->{'before'} =~ s/ UTC$//;
@@ -94,9 +100,18 @@ sub evaluate_result_dates {
   my $before = Time::Piece->strptime( $got->{'before'}, $format );
   my $after = Time::Piece->strptime( $got->{'after'}, $format );
 
-  unless( $file_stat - $before < ( 5 * 60 ) ){ $result++; }
-  unless( $before + ( 60*60*24*( $days - 1 ) ) > $after  
-          || $before + ( 60*60*24*( $days +2 ) ) < $after ){ $result++; }
+  unless( $file_stat - $before < ( 5 * 60 ) ){
+    print STDERR "Certificate file created more than five minutes after cert's Not Before timestamp.\n";
+    $result++;
+  }
+  if( $before + ( 60*60*24*( $days - 1 ) ) > $after  
+          || $before + ( 60*60*24*( $days +2 ) ) < $after ){
+    print STDERR "Certificate's Not After date outside of tolerance: \n";
+    print STDERR "    Not Before: " . $got->{'before'} . "\n";
+    print STDERR "    Not After : " . $got->{'after'} . "\n";
+    print STDERR "    -days     : $days \n";
+    $result++;
+  }
 
   return $result;
 }
@@ -114,6 +129,8 @@ sub parse_subject {
   KV: foreach ( @subject_params ){
     my ($key, $value) = split '=', $_;
     unless( defined( $key ) ){ next KV; }
+    chomp( $key );
+    chomp( $value );
     $subject{$key} = $value;
   }
   return \%subject;  

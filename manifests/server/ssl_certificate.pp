@@ -47,8 +47,3 @@ class postgresql::server::ssl_certificate (
 
 }
 
-# root@samora007:~# openssl x509 -in /var/lib/postgresql/9.3/main/server.crt -noout -text | grep Issuer 
-#         Issuer: C=US, ST=GA, L=Atlanta, O=YMDPartnersLLC, CN=samora007.yourmessagedelivered.com/emailAddress=hesco@yourmessagedelivered.com
-# root@samora007:~# openssl x509 -in /var/lib/postgresql/9.3/main/server.crt -noout -text | grep 'Not Before'
-#             Not Before: Sep 23 01:14:03 2014 GMT
-

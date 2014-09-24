@@ -7,7 +7,7 @@ GROUP=$3
 SUBJECT=$4
 DAYS=$5
 FORCE=$6
-FORCE += 0
+FORCE+=0
 
 if [[ "$FORCE" -eq 1 ]]
 then
