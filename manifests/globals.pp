@@ -47,7 +47,7 @@ class postgresql::globals (
   $manage_package_repo  = undef,
 
   $certificate_common_name = $::fqdn,
-  $cerificate_days      = 3650
+  $certificate_days      = 3650
 ) {
   # We are determining this here, because it is needed by the package repo
   # class.

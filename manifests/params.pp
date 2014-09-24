@@ -18,7 +18,7 @@ class postgresql::params inherits postgresql::globals {
   $package_ensure             = 'present'
 
   # following required by postgresql::server::ssl_certificate
-  $cerificate_days          = undef
+  $cerificate_days          = postgresql::globals::certificate_days
   $cerificate_country       = undef
   $certificate_state        = undef
   $certificate_locality     = undef
