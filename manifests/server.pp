@@ -46,7 +46,7 @@ class postgresql::server (
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
 
   $certificate_days           = $postgresql::params::certificate_days,
-  $cerificate_country         = $postgresql::params::cerificate_country,
+  $certificate_country        = $postgresql::params::cerificate_country,
   $certificate_state          = $postgresql::params::certificate_state,
   $certificate_locality       = $postgresql::params::certificate_locality,
   $certificate_organization   = $postgresql::params::certificate_organization,
