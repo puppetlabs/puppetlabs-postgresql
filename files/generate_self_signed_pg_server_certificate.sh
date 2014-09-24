@@ -23,6 +23,11 @@ fi
 /bin/chmod 0400 "$DATADIR/server.key"
 /bin/cp "$DATADIR/server.crt" "$DATADIR/root.crt"
 
-[ -f "$DATADIR/root.crt" ] && exit 0
-exit 1
+EXIT_CODE=`$DATADIR/validate_self_signed_ssl_certificate.pl -p $DATADIR -s "$SUBJECT" -d $DAYS`
+exit $EXIT_CODE 
+
+# Contributed by Hugh Esco <hesco@yourmessagedelivered.com>
+# YMD Partners LLC
+# to the puppetlabs-postgresql module
+# https://github.com/hesco/puppetlabs-postgresql#class-postgresqlserverssl_certificate 
 

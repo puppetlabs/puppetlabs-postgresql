@@ -33,6 +33,10 @@ class postgresql::server::ssl_certificate (
     message => "The postgresql data path is at: $datadir",
   }
 
+  file { "${datadir}/validate_self_signed_ssl_certificate.pl":
+    source => 'puppet:///modules/postgresql/validate_self_signed_ssl_certificate.pl',
+  }
+
   file { "${datadir}/generate_self_signed_pg_server_certificate.sh":
     source => 'puppet:///modules/postgresql/generate_self_signed_pg_server_certificate.sh',
   }
