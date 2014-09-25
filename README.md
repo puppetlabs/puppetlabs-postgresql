@@ -583,6 +583,9 @@ The namevar for the resource designates the name of the database.
 ####`dbname`
 The name of the database to be created. Defaults to `namevar`.
 
+####`owner`
+Name of the database user who should be set as the owner of the database. Defaults to the $user variable set in `postgresql::server` or `postgresql::globals`.
+
 ####`user`
 User to create and assign access to the database upon creation. Mandatory.
 
@@ -600,6 +603,9 @@ Grant permissions during creation. Defaults to `ALL`.
 
 ####`tablespace`
 The name of the tablespace to allocate this database to. If not specifies, it defaults to the PostgreSQL default.
+
+####`template`
+The name of the template database from which to build this database. Defaults to `template0`.
 
 ####`istemplate`
 Define database as a template. Defaults to `false`.
@@ -619,6 +625,9 @@ Name of the database user who should be set as the owner of the database. Defaul
 
 ####`tablespace`
 Tablespace for where to create this database. Defaults to the defaults defined during PostgreSQL installation.
+
+####`template`
+The name of the template database from which to build this database. Defaults to `template0`.
 
 ####`encoding`
 Override the character set during creation of the database. Defaults to the default defined during installation.
