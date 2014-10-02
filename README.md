@@ -798,7 +798,7 @@ This defined type can be used to create a schema. For example:
       db    => 'janedb',
     }
 
-It will create the schema `jane` in the database `janedb` if neccessary,
+It will create the schema `isolated` in the database `janedb` if neccessary,
 assigning the user `jane` ownership permissions.
 
 ####`namevar`
