@@ -773,7 +773,7 @@ Whether to grant the ability to create new databases with this role. Defaults to
 Whether to grant the ability to create new roles with this role. Defaults to `false`.
 
 ####`login`
-Whether to grant login capability for the new role. Defaults to `false`.
+Whether to grant login capability for the new role. Defaults to `true`.
 
 ####`inherit`
 Whether to grant inherit capability for the new role. Defaults to `true`.
