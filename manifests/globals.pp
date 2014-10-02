@@ -44,7 +44,10 @@ class postgresql::globals (
   $manage_pg_hba_conf   = undef,
   $manage_pg_ident_conf = undef,
 
-  $manage_package_repo  = undef
+  $manage_package_repo  = undef,
+
+  $certificate_common_name = $::fqdn,
+  $certificate_days      = 3650
 ) {
   # We are determining this here, because it is needed by the package repo
   # class.

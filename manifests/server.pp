@@ -45,8 +45,17 @@ class postgresql::server (
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
 
+  $certificate_days           = $postgresql::params::certificate_days,
+  $certificate_country        = $postgresql::params::cerificate_country,
+  $certificate_state          = $postgresql::params::certificate_state,
+  $certificate_locality       = $postgresql::params::certificate_locality,
+  $certificate_organization   = $postgresql::params::certificate_organization,
+  $certificate_common_name    = $postgresql::params::certificate_common_name,
+  $certificate_email          = $postgresql::params::certificate_email,
+
   #Deprecated
   $version                    = undef,
+
 ) inherits postgresql::params {
   $pg = 'postgresql::server'
 

@@ -15,18 +15,18 @@ class postgresql::server::passwd {
     exec { 'set_postgres_postgrespw':
       # This command works w/no password because we run it as postgres system
       # user
-      command     => "${psql_path} -c 'ALTER ROLE \"${user}\" PASSWORD ${escaped}'",
-      user        => $user,
-      group       => $group,
-      logoutput   => true,
-      cwd         => '/tmp',
+      command   => "${psql_path} -c 'ALTER ROLE \"${user}\" PASSWORD ${escaped}'",
+      user      => $user,
+      group     => $group,
+      logoutput => true,
+      cwd       => '/tmp',
       # With this command we're passing -h to force TCP authentication, which
       # does require a password.  We specify the password via the PGPASSWORD
       # environment variable. If the password is correct (current), this
       # command will exit with an exit code of 0, which will prevent the main
       # command from running.
-      unless      => "${env} ${psql_path} -h localhost -c 'select 1' > /dev/null",
-      path        => '/usr/bin:/usr/local/bin:/bin',
+      unless    => "${env} ${psql_path} -h localhost -c 'select 1' > /dev/null",
+      path      => '/usr/bin:/usr/local/bin:/bin',
     }
   }
 }
