@@ -759,6 +759,9 @@ This resource creates a role or user in PostgreSQL.
 ####`namevar`
 The role name to create.
 
+####`password`
+The plaintext password to use. It will be hashed with the `postgresql_password` function to provide a MD5 hash.
+
 ####`password_hash`
 The hash to use during password creation. If the password is not already pre-encrypted in a format that PostgreSQL supports, use the `postgresql_password` function to provide an MD5 hash here, for example:
 
