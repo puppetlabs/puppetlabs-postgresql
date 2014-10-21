@@ -5,7 +5,7 @@ require 'spec_helper_acceptance'
 describe 'postgres::server', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
   it 'on an alternative pgdata location' do
     pp = <<-EOS
-      class { 'postgresql::server': data_directory => '/pgsql' }
+      class { 'postgresql::server': data_directory => '/var/pgsql' }
     EOS
 
     apply_manifest(pp, :catch_failures => true)
