@@ -105,6 +105,10 @@ class postgresql::server::config {
     value => $datadir,
   }
 
+  postgresql::server::config_entry { 'data_directory':
+    value => $datadir,
+  }
+
   # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
   # in /etc/sysconfig/pgsql/postgresql. Create a blank file so we can manage it with augeas later.
   if ($::osfamily == 'RedHat') and ($::operatingsystemrelease !~ /^7/) and ($::operatingsystem != 'Fedora') {
