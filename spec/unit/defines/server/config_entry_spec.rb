@@ -88,6 +88,15 @@ describe 'postgresql::server::config_entry', :type => :define do
     end
   end
 
+  context "data_directory" do
+    let(:params) {{ :ensure => 'present', :name => 'data_directory_spec', :value => '/var/pgsql' }}
+
+    it 'stops postgresql and changes the data directory' do
+      is_expected.to contain_exec('postgresql_data_directory')
+      is_expected.to contain_augeas('override PGDATA in /etc/sysconfig/pgsql/postgresql')
+    end
+  end
+
   context "passes values through appropriately" do
     let(:params) {{ :ensure => 'present', :name => 'check_function_bodies', :value => 'off' }}
 
