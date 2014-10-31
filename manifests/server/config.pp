@@ -112,7 +112,19 @@ class postgresql::server::config {
       ensure  => present,
       replace => false,
     }
+
+    # The init script from the packages of the postgresql.org repository
+    # sources an alternate sysconfig file.
+    # I. e. /etc/sysconfig/pgsql/postgresql-9.3 for PostgreSQL 9.3
+    # Link to the sysconfig file set by this puppet module
+    file { "/etc/sysconfig/pgsql/postgresql-${version}":
+      ensure  => link,
+      target  => '/etc/sysconfig/pgsql/postgresql',
+      require => File[ '/etc/sysconfig/pgsql/postgresql' ],
+    }
+
   }
+
 
   if ($manage_pg_ident_conf == true) {
     concat { $pg_ident_conf_path:
