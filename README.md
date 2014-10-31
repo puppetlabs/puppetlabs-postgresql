@@ -335,7 +335,9 @@ Path to your `postgresql.conf` file.
 If false, disables the defaults supplied with the module for `pg\_hba.conf`. This is useful if you disagree with the defaults and wish to override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform basic `psql` operations for example.
 
 ####`datadir`
-This setting can be used to override the default postgresql data directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
+This setting can be used to override the default postgresql data directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro. Please note that changing the datadir after installation will cause the server to come to a full stop before being able to make the change. For RedHat systems, the data directory must be labeled appropriately for SELinux. On Ubuntu, you need to explicitly set needs\_initdb to true in order to allow Puppet to initialize the database in the new datadir (needs\_initdb defaults to true on other systems).
+
+Warning: If datadir is changed from the default, puppet will not manage purging of the original data directory, which will cause it to fail if the data directory is changed back to the original.
 
 ####`confdir`
 This setting can be used to override the default postgresql configuration directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
@@ -407,7 +409,7 @@ This setting is used to specify the name of the default database to connect with
 This value defaults to `localhost`, meaning the postgres server will only accept connections from localhost. If you'd like to be able to connect to postgres from remote machines, you can override this setting. A value of `*` will tell postgres to accept connections from any remote machine. Alternately, you can specify a comma-separated list of hostnames or IP addresses. (For more info, have a look at the `postgresql.conf` file from your system's postgres package).
 
 ####`port`
-This value defaults to `5432`, meaning the postgres server will listen on TCP port 5432. Note that the same port number is used for all IP addresses the server listens on.
+This value defaults to `5432`, meaning the postgres server will listen on TCP port 5432. Note that the same port number is used for all IP addresses the server listens on. Also note that for RedHat systems and early Debian systems, changing the port will cause the server to come to a full stop before being able to make the change.
 
 ####`ip_mask_deny_postgres_user`
 This value defaults to `0.0.0.0/0`. Sometimes it can be useful to block the superuser account from remote connections if you are allowing other database users to connect remotely. Set this to an IP and mask for which you want to deny connections by the postgres superuser account. So, e.g., the default value of `0.0.0.0/0` will match any remote IP and deny access, so the postgres user won't be able to connect remotely at all. Conversely, a value of `0.0.0.0/32` would not match any remote IP, and thus the deny rule will not be applied and the postgres user will be allowed to connect.
