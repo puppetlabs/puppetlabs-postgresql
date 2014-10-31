@@ -124,4 +124,23 @@ class postgresql::server::config {
       notify => Class['postgresql::server::reload'],
     }
   }
+
+  if $::osfamily == 'RedHat' {
+    if $::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora' {
+      file { 'systemd-override':
+        ensure  => present,
+        path    => '/etc/systemd/system/postgresql.service',
+        owner   => root,
+        group   => root,
+        content => template('postgresql/systemd-override.erb'),
+        notify  => [ Exec['restart-systemd'], Class['postgresql::server::service'] ],
+        before  => Class['postgresql::server::reload'],
+      }
+      exec { "restart-systemd":
+        command     => 'systemctl daemon-reload',
+        refreshonly => true,
+        path        => '/bin:/usr/bin:/usr/local/bin'
+      }
+    }
+  }
 }
