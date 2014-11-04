@@ -1,4 +1,4 @@
-##2014-11-04
+##2014-11-04 - Supported Release 4.1.0
 ###Summary
 
 This release adds the ability to change the PGDATA directory, and also includes documentation and test updates, future parser support, and a few other new features.
