@@ -17,7 +17,7 @@ describe 'postgresql::server::postgis', :type => :class do
     }
   end
 
-  describe 'with parameters' do
+  describe 'when setting package' do
     let(:params) do
       {
         :package_name => 'mypackage',
@@ -30,6 +30,31 @@ describe 'postgresql::server::postgis', :type => :class do
         :ensure => 'absent',
         :name => 'mypackage',
         :tag => 'postgresql',
+      })
+    end
+  end
+
+  describe 'when setting up template' do
+    let(:params) do
+      {
+        :template => true,
+      }
+    end
+
+    it 'should create the template database' do
+      is_expected.to contain_postgresql__server__database('postgis template').with({
+        :dbname     => 'template_postgis',
+        :istemplate => true,
+        :template   => 'template1',
+      })
+    end
+
+    it 'should create database extensions' do
+      is_expected.to contain_postgresql__server__extension('postgis').with({
+        :database => 'template_postgis',
+      })
+      is_expected.to contain_postgresql__server__extension('postgis_topology').with({
+        :database => 'template_postgis',
       })
     end
   end
