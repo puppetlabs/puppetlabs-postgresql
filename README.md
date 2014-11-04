@@ -236,6 +236,7 @@ Resources:
 * [postgresql::server::db](#resource-postgresqlserverdb)
 * [postgresql::server::database](#resource-postgresqlserverdatabase)
 * [postgresql::server::database_grant](#resource-postgresqlserverdatabase_grant)
+* [postgresql::server::extension](#resource-postgresqlserverextension)
 * [postgresql::server::pg_hba_rule](#resource-postgresqlserverpg_hba_rule)
 * [postgresql::server::pg_ident_rule](#resource-postgresqlserver_pg_identrule)
 * [postgresql::server::role](#resource-postgresqlserverrole)
@@ -662,6 +663,21 @@ Database to execute the grant against. This should not ordinarily be changed fro
 ####`psql_user`
 OS user for running `psql`. Defaults to the default user for the module, usually `postgres`.
 
+
+###Resource: postgresql::server::extension
+Manages a postgresql extension.
+
+####`database`
+The database on which to activate the extension.
+
+####`ensure`
+Whether to activate (`present`) or deactivate (`absent`) the extension.
+
+####`package_name`
+If provided, this will install the given package prior to activating the extension.
+
+####`package_ensure`
+By default, the package specified with `package_name` will be installed when the extension is activated, and removed when the extension is deactivated. You can override this behavior by setting the `ensure` value for the package.
 
 ###Resource: postgresql::server::pg\_hba\_rule
 This defined type allows you to create an access rule for `pg_hba.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/8.2/static/auth-pg-hba-conf.html).
