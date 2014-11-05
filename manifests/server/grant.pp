@@ -2,12 +2,13 @@
 define postgresql::server::grant (
   $role,
   $db,
-  $privilege   = undef,
-  $object_type = 'database',
-  $object_name = $db,
-  $psql_db     = $postgresql::server::default_database,
-  $psql_user   = $postgresql::server::user,
-  $port        = $postgresql::server::port
+  $privilege           = undef,
+  $object_type         = 'database',
+  $object_name         = $db,
+  $psql_db             = $postgresql::server::default_database,
+  $psql_user           = $postgresql::server::user,
+  $port                = $postgresql::server::port,
+  $onlyif_table_exists = false,
 ) {
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
@@ -15,6 +16,8 @@ define postgresql::server::grant (
   ## Munge the input values
   $_object_type = upcase($object_type)
   $_privilege   = upcase($privilege)
+
+  validate_bool($onlyif_table_exists)
 
   ## Validate that the object type is known
   validate_string($_object_type,
@@ -50,6 +53,7 @@ define postgresql::server::grant (
         'ALL','ALL PRIVILEGES')
       $unless_function = 'has_database_privilege'
       $on_db = $psql_db
+      $onlyif_query = undef
     }
     'TABLE': {
       $unless_privilege = $_privilege ? {
@@ -60,6 +64,11 @@ define postgresql::server::grant (
         'TRUNCATE','REFERENCES','TRIGGER','ALL','ALL PRIVILEGES')
       $unless_function = 'has_table_privilege'
       $on_db = $db
+      if $onlyif_table_exists {
+        $onlyif_query = "SELECT true FROM pg_tables WHERE tablename = '${object_name}'"
+      } else {
+        $onlyif_query = undef
+      }
     }
     default: {
       fail("Missing privilege validation for object type ${_object_type}")
@@ -73,6 +82,7 @@ define postgresql::server::grant (
     psql_user  => $psql_user,
     psql_group => $group,
     psql_path  => $psql_path,
+    onlyif     => $onlyif_query,
     unless     => "SELECT 1 WHERE ${unless_function}('${role}', '${object_name}', '${unless_privilege}')",
     require    => Class['postgresql::server']
   }
