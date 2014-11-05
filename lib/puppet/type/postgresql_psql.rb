@@ -43,6 +43,28 @@ Puppet::Type.newtype(:postgresql_psql) do
     end
   end
 
+  newparam(:onlyif) do
+    desc "An optional SQL command to execute prior to the main :command; " +
+        "this is generally intended to be used for idempotency, to check " +
+        "for the existence of an object in the database to determine whether " +
+        "or not the main SQL command needs to be executed at all."
+
+    # Return true if a matching row is found
+    def matches(value)
+      if Puppet::PUPPETVERSION.to_f < 4
+        output, status = provider.run_unless_sql_command(value)
+      else
+        output = provider.run_unless_sql_command(value)
+        status = output.exitcode
+      end
+      self.fail("Error evaluating 'onlyif' clause, returned #{status}: '#{output}'") unless status == 0
+
+      result_count = output.strip.to_i
+      self.debug("Found #{result_count} row(s) executing 'onlyif' clause")
+      result_count > 0
+    end
+  end
+
   newparam(:db) do
     desc "The name of the database to execute the SQL command against."
   end
@@ -97,7 +119,9 @@ Puppet::Type.newtype(:postgresql_psql) do
   end
 
   def should_run_sql(refreshing = false)
+    onlyif_param = @parameters[:onlyif]
     unless_param = @parameters[:unless]
+    return false if !onlyif_param.nil? && !onlyif_param.value.nil? && !onlyif_param.matches(onlyif_param.value)
     return false if !unless_param.nil? && !unless_param.value.nil? && unless_param.matches(unless_param.value)
     return false if !refreshing && @parameters[:refreshonly].value == :true
     true
