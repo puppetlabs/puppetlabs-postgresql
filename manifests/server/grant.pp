@@ -2,13 +2,13 @@
 define postgresql::server::grant (
   $role,
   $db,
-  $privilege      = undef,
-  $object_type    = 'database',
-  $object_name    = undef,
-  $psql_db        = $postgresql::server::default_database,
-  $psql_user      = $postgresql::server::user,
-  $port           = $postgresql::server::port,
-  $onlyif_exists  = false,
+  $privilege     = undef,
+  $object_type   = 'database',
+  $object_name   = undef,
+  $psql_db       = $postgresql::server::default_database,
+  $psql_user     = $postgresql::server::user,
+  $port          = $postgresql::server::port,
+  $onlyif_exists = false,
 ) {
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
@@ -19,11 +19,11 @@ define postgresql::server::grant (
     $_object_name = $object_name
   }
 
+  validate_bool($onlyif_exists)
+
   ## Munge the input values
   $_object_type = upcase($object_type)
   $_privilege   = upcase($privilege)
-
-  validate_bool($onlyif_exists)
 
   ## Validate that the object type is known
   validate_string($_object_type,
@@ -161,8 +161,8 @@ define postgresql::server::grant (
   }
 
   $_onlyif = $onlyif_function ? {
-      'table_exists' => "SELECT true FROM pg_tables WHERE tablename = '${_togrant_object'",
-      default        => undef,
+    'table_exists' => "SELECT true FROM pg_tables WHERE tablename = '${_togrant_object}'",
+    default        => undef,
   }
 
   $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${_togrant_object}\" TO
@@ -174,8 +174,8 @@ define postgresql::server::grant (
     psql_user  => $psql_user,
     psql_group => $group,
     psql_path  => $psql_path,
-    onlyif     => $_onlyif,
     unless     => $_unless,
+    onlyif     => $_onlyif,
     require    => Class['postgresql::server']
   }
 
