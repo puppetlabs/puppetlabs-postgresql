@@ -2,13 +2,13 @@
 define postgresql::server::grant (
   $role,
   $db,
-  $privilege           = undef,
-  $object_type         = 'database',
-  $object_name         = $db,
-  $psql_db             = $postgresql::server::default_database,
-  $psql_user           = $postgresql::server::user,
-  $port                = $postgresql::server::port,
-  $onlyif_table_exists = false,
+  $privilege     = undef,
+  $object_type   = 'database',
+  $object_name   = $db,
+  $psql_db       = $postgresql::server::default_database,
+  $psql_user     = $postgresql::server::user,
+  $port          = $postgresql::server::port,
+  $onlyif_exists = false,
 ) {
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
@@ -17,7 +17,7 @@ define postgresql::server::grant (
   $_object_type = upcase($object_type)
   $_privilege   = upcase($privilege)
 
-  validate_bool($onlyif_table_exists)
+  validate_bool($onlyif_exists)
 
   ## Validate that the object type is known
   validate_string($_object_type,
@@ -64,10 +64,9 @@ define postgresql::server::grant (
         'TRUNCATE','REFERENCES','TRIGGER','ALL','ALL PRIVILEGES')
       $unless_function = 'has_table_privilege'
       $on_db = $db
-      if $onlyif_table_exists {
-        $onlyif_query = "SELECT true FROM pg_tables WHERE tablename = '${object_name}'"
-      } else {
-        $onlyif_query = undef
+      $onlyif_query = $onlyif_exists ? {
+        true    => "SELECT true FROM pg_tables WHERE tablename = '${object_name}'",
+        default => undef,
       }
     }
     default: {
