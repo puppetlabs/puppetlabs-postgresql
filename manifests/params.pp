@@ -57,7 +57,7 @@ class postgresql::params inherits postgresql::globals {
       }
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
-      $service_status      = $service_status
+      $service_status      = pick($service_status, "service ${service_name} status")
       $perl_package_name   = pick($perl_package_name, 'perl-DBD-Pg')
       $python_package_name = pick($python_package_name, 'python-psycopg2')
 
@@ -94,7 +94,7 @@ class postgresql::params inherits postgresql::globals {
       $confdir              = pick($confdir, $datadir)
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
-      $service_status      = $service_status
+      $service_status      = pick($service_status, "systemctl status ${service_name}")
       $python_package_name = pick($python_package_name, 'python-psycopg2')
       # Archlinux does not have a perl::DBD::Pg package
       $perl_package_name = pick($perl_package_name, 'undef')
