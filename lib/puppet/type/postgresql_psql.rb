@@ -80,6 +80,21 @@ Puppet::Type.newtype(:postgresql_psql) do
     defaultto("/tmp")
   end
 
+  newparam(:environment) do
+    desc "Any additional environment variables you want to set for a
+      SQL command. Multiple environment variables should be
+      specified as an array."
+
+    validate do |values|
+      values = [values] unless values.is_a? Array
+      values.each do |value|
+        unless value =~ /\w+=/
+          raise ArgumentError, "Invalid environment setting '#{value}'"
+        end
+      end
+    end
+  end
+
   newparam(:refreshonly, :boolean => true) do
     desc "If 'true', then the SQL will only be executed via a notify/subscribe event."
 
