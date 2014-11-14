@@ -72,6 +72,7 @@ class postgresql::globals (
         default => undef,
       },
       'Ubuntu' => $::operatingsystemrelease ? {
+        /^(14.10)$/ => '9.4',
         /^(14.04)$/ => '9.3',
         /^(11.10|12.04|12.10|13.04|13.10)$/ => '9.1',
         /^(10.04|10.10|11.04)$/ => '8.4',
@@ -104,6 +105,7 @@ class postgresql::globals (
     '9.2'   => '2.0',
     '9.3'   => '2.1',
     '93'    => '2.1',
+    '9.4'   => '2.1',
     default => undef,
   }
   $globals_postgis_version = pick($postgis_version, $default_postgis_version)
