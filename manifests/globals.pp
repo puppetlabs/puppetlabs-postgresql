@@ -68,7 +68,7 @@ class postgresql::globals (
       'Debian' => $::operatingsystemrelease ? {
         /^6\./ => '8.4',
         /^(wheezy|7\.)/ => '9.1',
-        /^(jessie|8\.)/ => '9.3',
+        /^(jessie|8\.)/ => '9.4',
         default => undef,
       },
       'Ubuntu' => $::operatingsystemrelease ? {
@@ -103,6 +103,7 @@ class postgresql::globals (
     '91'    => '1.5',
     '9.2'   => '2.0',
     '9.3'   => '2.1',
+    '9.4'   => '2.1',
     '93'    => '2.1',
     default => undef,
   }
