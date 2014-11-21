@@ -11,7 +11,7 @@ describe 'postgresql::lib::devel', :type => :class do
   it { is_expected.to contain_class("postgresql::lib::devel") }
 
   describe 'link pg_config to /usr/bin' do
-    it { should contain_file('/usr/bin/pg_config') \
+    it { should_not contain_file('/usr/bin/pg_config') \
       .with_ensure('link') \
       .with_target('/usr/lib/postgresql/8.4/bin/pg_config')
     }

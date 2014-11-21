@@ -506,7 +506,7 @@ Override for the `ensure` parameter during package installation. Defaults to `pr
 Overrides the default package name for the distribution you are installing to. Defaults to `postgresql-devel` or `postgresql<version>-devel` depending on your distro.
 
 ####`link_pg_config`
-By default, if the bin directory used by the PostgreSQL package is not `/usr/bin` or `/usr/local/bin`,
+By default on all but Debian systems, if the bin directory used by the PostgreSQL package is not `/usr/bin` or `/usr/local/bin`,
 this class will symlink `pg_config` from the package's bin dir into `/usr/bin`. Set `link_pg_config` to
 false to disable this behavior.
 
