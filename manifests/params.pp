@@ -20,6 +20,7 @@ class postgresql::params inherits postgresql::globals {
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $::osfamily {
     'RedHat', 'Linux': {
+      $link_pg_config     = true
       $user               = pick($user, 'postgres')
       $group              = pick($group, 'postgres')
       $needs_initdb       = pick($needs_initdb, true)
@@ -73,6 +74,7 @@ class postgresql::params inherits postgresql::globals {
     }
 
     'Archlinux': {
+      $link_pg_config     = true
       $needs_initdb       = pick($needs_initdb, true)
       $user               = pick($user, 'postgres')
       $group              = pick($group, 'postgres')
@@ -101,6 +103,7 @@ class postgresql::params inherits postgresql::globals {
     }
 
     'Debian': {
+      $link_pg_config     = false
       $user               = pick($user, 'postgres')
       $group              = pick($group, 'postgres')
 
@@ -143,6 +146,7 @@ class postgresql::params inherits postgresql::globals {
     }
 
     'FreeBSD': {
+      $link_pg_config       = true
       $user                 = pick($user, 'pgsql')
       $group                = pick($group, 'pgsql')
 
@@ -166,6 +170,7 @@ class postgresql::params inherits postgresql::globals {
     }
 
     'Suse': {
+      $link_pg_config       = true
       $user                 = pick($user, 'postgres')
       $group                = pick($group, 'postgres')
 
@@ -189,6 +194,7 @@ class postgresql::params inherits postgresql::globals {
     }
 
     default: {
+      $link_pg_config       = true
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       # Since we can't determine defaults on our own, we rely on users setting
