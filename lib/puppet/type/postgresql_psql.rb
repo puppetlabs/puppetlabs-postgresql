@@ -86,8 +86,7 @@ Puppet::Type.newtype(:postgresql_psql) do
       specified as an array."
 
     validate do |values|
-      values = [values] unless values.is_a? Array
-      values.each do |value|
+      Array(values).each do |value|
         unless value =~ /\w+=/
           raise ArgumentError, "Invalid environment setting '#{value}'"
         end
