@@ -16,6 +16,7 @@ class postgresql::server::config {
   $manage_pg_hba_conf         = $postgresql::server::manage_pg_hba_conf
   $manage_pg_ident_conf       = $postgresql::server::manage_pg_ident_conf
   $datadir                    = $postgresql::server::datadir
+  $manage_postgresql_conf     = $postgresql::server::manage_postgresql_conf
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -93,18 +94,19 @@ class postgresql::server::config {
     }
   }
 
-  # We must set a "listen_addresses" line in the postgresql.conf if we
-  # want to allow any connections from remote hosts.
-  postgresql::server::config_entry { 'listen_addresses':
-    value => $listen_addresses,
+  if ($manage_postgresql_conf == true) {
+	  # We must set a "listen_addresses" line in the postgresql.conf if we
+	  # want to allow any connections from remote hosts.
+	  postgresql::server::config_entry { 'listen_addresses':
+	    value => $listen_addresses,
+	  }
+	  postgresql::server::config_entry { 'port':
+	    value => $port,
+	  }
+	  postgresql::server::config_entry { 'data_directory':
+	    value => $datadir,
+	  }
   }
-  postgresql::server::config_entry { 'port':
-    value => $port,
-  }
-  postgresql::server::config_entry { 'data_directory':
-    value => $datadir,
-  }
-
   # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
   # in /etc/sysconfig/pgsql/postgresql. Create a blank file so we can manage it with augeas later.
   if ($::osfamily == 'RedHat') and ($::operatingsystemrelease !~ /^7/) and ($::operatingsystem != 'Fedora') {
