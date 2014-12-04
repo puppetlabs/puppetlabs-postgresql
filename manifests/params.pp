@@ -12,6 +12,7 @@ class postgresql::params inherits postgresql::globals {
   $locale                     = $locale
   $service_ensure             = 'running'
   $service_enable             = true
+  $service_manage             = true
   $service_provider           = $service_provider
   $manage_pg_hba_conf         = pick($manage_pg_hba_conf, true)
   $manage_pg_ident_conf       = pick($manage_pg_ident_conf, true)
