@@ -7,16 +7,15 @@ Table of Contents
 1. [Overview - What is the PostgreSQL module?](#overview)
 2. [Module Description - What does the module do?](#module-description)
 3. [Setup - The basics of getting started with PostgreSQL module](#setup)
-    * [PE 3.2 supported module](#pe-3.2-supported-module)
+    * [PE 3.2 supported module](#pe-32-supported-module)
     * [Configuring the server](#configuring-the-server) 
 4. [Usage - How to use the module for various tasks](#usage)
 5. [Upgrading - Guide for upgrading from older revisions of this module](#upgrading)
 6. [Reference - The classes, defines,functions and facts available in this module](#reference)
 7. [Limitations - OS compatibility, etc.](#limitations)
 8. [Development - Guide for contributing to the module](#development)
-9. [Disclaimer - Licensing information](#disclaimer)
-10. [Transfer Notice - Notice of authorship change](#transfer-notice)
-11. [Contributors - List of module contributors](#contributors)
+9. [Transfer Notice - Notice of authorship change](#transfer-notice)
+10. [Contributors - List of module contributors](#contributors)
 
 Overview
 --------
@@ -237,7 +236,7 @@ Resources:
 * [postgresql::server::database](#resource-postgresqlserverdatabase)
 * [postgresql::server::database_grant](#resource-postgresqlserverdatabase_grant)
 * [postgresql::server::pg_hba_rule](#resource-postgresqlserverpg_hba_rule)
-* [postgresql::server::pg_ident_rule](#resource-postgresqlserver_pg_identrule)
+* [postgresql::server::pg_ident_rule](#resource-postgresqlserverpg_ident_rule)
 * [postgresql::server::role](#resource-postgresqlserverrole)
 * [postgresql::server::schema](#resource-postgresqlserverschema)
 * [postgresql::server::table_grant](#resource-postgresqlservertable_grant)
