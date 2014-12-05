@@ -14,9 +14,8 @@ Table of Contents
 6. [Reference - The classes, defines,functions and facts available in this module](#reference)
 7. [Limitations - OS compatibility, etc.](#limitations)
 8. [Development - Guide for contributing to the module](#development)
-9. [Disclaimer - Licensing information](#disclaimer)
-10. [Transfer Notice - Notice of authorship change](#transfer-notice)
-11. [Contributors - List of module contributors](#contributors)
+9. [Transfer Notice - Notice of authorship change](#transfer-notice)
+10. [Contributors - List of module contributors](#contributors)
 
 Overview
 --------
