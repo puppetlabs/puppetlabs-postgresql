@@ -39,10 +39,11 @@ define postgresql::server::extension (
     }
 
     package { "Postgresql extension ${title}":
-      ensure => $_package_ensure,
-      name   => $package_name,
+      ensure  => $_package_ensure,
+      name    => $package_name,
+      tag     => 'postgresql',
       require => $package_require,
-      before => $package_before,
+      before  => $package_before,
     }
   }
 }
