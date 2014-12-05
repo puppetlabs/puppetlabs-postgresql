@@ -25,11 +25,31 @@ describe 'postgresql::server::extension', :type => :define do
     :database => 'template_postgis',
   } }
 
-  it { 
-    is_expected.to contain_postgresql_psql('Add postgis extension to template_postgis').with({
-      :db      => 'template_postgis',
-      :command => 'CREATE EXTENSION postgis',
-      :unless  => "SELECT extname FROM pg_extension WHERE extname = 'postgis'",
-    })
-  }
+  context "with mandatory arguments only" do
+    it { is_expected.to compile.with_all_deps }
+
+    it {
+      is_expected.to contain_postgresql_psql('Add postgis extension to template_postgis').with({
+        :db      => 'template_postgis',
+        :command => 'CREATE EXTENSION postgis',
+        :unless  => "SELECT extname FROM pg_extension WHERE extname = 'postgis'",
+      })
+    }
+  end
+
+  context "when setting package name" do
+    let (:params) { super().merge({
+      :package_name => 'postgis',
+    }) }
+
+    it "should take a package_name optional argument" do
+
+      is_expected.to compile.with_all_deps
+
+      is_expected.to contain_package('Postgresql extension postgis').with({
+          :ensure  => 'present',
+          :name    => 'postgis',
+        })
+    end
+  end
 end

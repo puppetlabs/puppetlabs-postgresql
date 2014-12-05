@@ -15,6 +15,7 @@ define postgresql::server::extension (
     package { "Postgresql extension ${title}":
       ensure => $package_ensure,
       name   => $package_name,
+      before => Postgresql_psql["Add ${title} extension to ${database}"],
     }
   }
 }
