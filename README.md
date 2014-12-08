@@ -393,6 +393,9 @@ Value to pass through to the `package` resource when creating the server instanc
 ####`plperl_package_name`
 This sets the default package name for the PL/Perl extension. Defaults to utilising the operating system default.
 
+####`restart`
+Whether the service should be restarted when things change. Defaults to `false`.
+
 ####`service_manage`
 This setting selects whether Puppet should manage the service. Defaults to `true`.
 
@@ -567,6 +570,12 @@ Name of the setting to change.
 
 ####`ensure`
 Set to `absent` to remove an entry.
+
+####`restart`
+Whether the service should be restarted when things change. Defaults to
+`false`.
+Note that the service will still be restarted if the setting requires one in
+order for the change to take effect.
 
 ####`value`
 Value for the setting.

@@ -1,10 +1,17 @@
 # Manage a postgresql.conf entry. See README.md for more details.
 define postgresql::server::config_entry (
-  $ensure = 'present',
-  $value  = undef,
-  $path   = false
+  $ensure  = 'present',
+  $value   = undef,
+  $path    = false,
+  $restart = $postgresql::server::restart,
 ) {
   $postgresql_conf_path = $postgresql::server::postgresql_conf_path
+
+  if $restart {
+    $refreshed_class = 'postgresql::server::service'
+  } else {
+    $refreshed_class = 'postgresql::server::reload'
+  }
 
   $target = $path ? {
     false   => $postgresql_conf_path,
@@ -25,7 +32,7 @@ define postgresql::server::config_entry (
 
     default: {
       Postgresql_conf {
-        notify => Class['postgresql::server::reload'],
+        notify => Class[$refreshed_class],
       }
     }
   }

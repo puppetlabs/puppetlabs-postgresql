@@ -16,6 +16,13 @@ class postgresql::server::config {
   $manage_pg_hba_conf         = $postgresql::server::manage_pg_hba_conf
   $manage_pg_ident_conf       = $postgresql::server::manage_pg_ident_conf
   $datadir                    = $postgresql::server::datadir
+  $restart                    = $postgresql::server::restart
+
+  if $restart {
+    $refreshed_class = 'postgresql::server::service'
+  } else {
+    $refreshed_class = 'postgresql::server::reload'
+  }
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -24,7 +31,7 @@ class postgresql::server::config {
       group  => $group,
       mode   => '0640',
       warn   => true,
-      notify => Class['postgresql::server::reload'],
+      notify => Class[$refreshed_class],
     }
 
     if $pg_hba_conf_defaults {
@@ -133,7 +140,7 @@ class postgresql::server::config {
       force  => true, # do not crash if there is no pg_ident_rules
       mode   => '0640',
       warn   => true,
-      notify => Class['postgresql::server::reload'],
+      notify => Class[$refreshed_class],
     }
   }
 

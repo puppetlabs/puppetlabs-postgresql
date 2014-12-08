@@ -8,6 +8,7 @@ class postgresql::server (
 
   $plperl_package_name        = $postgresql::params::plperl_package_name,
 
+  $restart                    = $postgresql::params::restart,
   $service_ensure             = $postgresql::params::service_ensure,
   $service_enable             = $postgresql::params::service_enable,
   $service_manage             = $postgresql::params::service_manage,
@@ -61,11 +62,23 @@ class postgresql::server (
   # Reload has its own ordering, specified by other defines
   class { "${pg}::reload": require => Class["${pg}::install"] }
 
-  anchor { "${pg}::start": }->
-  class { "${pg}::install": }->
-  class { "${pg}::initdb": }->
-  class { "${pg}::config": }->
-  class { "${pg}::service": }->
-  class { "${pg}::passwd": }->
-  anchor { "${pg}::end": }
+  if $restart {
+    anchor { "${pg}::start": }->
+    class { "${pg}::install": }->
+    class { "${pg}::initdb": }->
+    # The only difference between the blocks is that we use ~> to restart if
+    # restart is set to true.
+    class { "${pg}::config": }~>
+    class { "${pg}::service": }->
+    class { "${pg}::passwd": }->
+    anchor { "${pg}::end": }
+  } else {
+    anchor { "${pg}::start": }->
+    class { "${pg}::install": }->
+    class { "${pg}::initdb": }->
+    class { "${pg}::config": }->
+    class { "${pg}::service": }->
+    class { "${pg}::passwd": }->
+    anchor { "${pg}::end": }
+  }
 }
