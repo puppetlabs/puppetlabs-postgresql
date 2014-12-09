@@ -132,7 +132,7 @@ class postgresql::params inherits postgresql::globals {
 
       if ! $postgis_package_name {
         $postgis_package_name = $postgis_version ? {
-          undef   => 'UNDEFINED',
+          undef   => undef,
           default =>  versioncmp($postgis_version, '2') ? {
             '-1'    => "postgresql-${version}-postgis",
             default => "postgresql-${version}-postgis-${postgis_version}",
