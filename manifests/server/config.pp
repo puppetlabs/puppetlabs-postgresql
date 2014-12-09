@@ -16,6 +16,7 @@ class postgresql::server::config {
   $manage_pg_hba_conf         = $postgresql::server::manage_pg_hba_conf
   $manage_pg_ident_conf       = $postgresql::server::manage_pg_ident_conf
   $datadir                    = $postgresql::server::datadir
+  $logdir                     = $postgresql::server::logdir
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -103,6 +104,12 @@ class postgresql::server::config {
   }
   postgresql::server::config_entry { 'data_directory':
     value => $datadir,
+  }
+  if $logdir {
+    postgresql::server::config_entry { 'log_directory':
+      value => $logdir,
+    }
+
   }
 
   # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
