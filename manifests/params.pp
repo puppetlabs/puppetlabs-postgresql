@@ -63,15 +63,18 @@ class postgresql::params inherits postgresql::globals {
       $perl_package_name   = pick($perl_package_name, 'perl-DBD-Pg')
       $python_package_name = pick($python_package_name, 'python-psycopg2')
 
-      $postgis_package_name = pick(
-        $postgis_package_name,
-        $::operatingsystemrelease ? {
-          /5/     => 'postgis',
-          default => versioncmp($postgis_version, '2') ? {
-            '-1'    => "postgis${package_version}",
-            default => "postgis2_${package_version}",}
+      if ! $postgis_package_name {
+        $postgis_package_name = $postgis_version ? {
+          undef   => undef,
+          default => $::operatingsystemrelease ? {
+            /5/     => 'postgis',
+            default => versioncmp($postgis_version, '2') ? {
+              '-1'    => "postgis${package_version}",
+              default => "postgis2_${package_version}",
+            }
+          }
         }
-      )
+      }
     }
 
     'Archlinux': {
@@ -126,13 +129,16 @@ class postgresql::params inherits postgresql::globals {
       $client_package_name  = pick($client_package_name, "postgresql-client-${version}")
       $server_package_name  = pick($server_package_name, "postgresql-${version}")
       $contrib_package_name = pick($contrib_package_name, "postgresql-contrib-${version}")
-      $postgis_package_name = pick(
-        $postgis_package_name,
-        versioncmp($postgis_version, '2') ? {
-          '-1'    => "postgresql-${version}-postgis",
-          default => "postgresql-${version}-postgis-${postgis_version}",
+
+      if ! $postgis_package_name {
+        $postgis_package_name = $postgis_version ? {
+          undef   => 'UNDEFINED',
+          default =>  versioncmp($postgis_version, '2') ? {
+            '-1'    => "postgresql-${version}-postgis",
+            default => "postgresql-${version}-postgis-${postgis_version}",
+          }
         }
-      )
+      }
       $devel_package_name   = pick($devel_package_name, 'libpq-dev')
       $java_package_name    = pick($java_package_name, 'libpostgresql-jdbc-java')
       $perl_package_name    = pick($perl_package_name, 'libdbd-pg-perl')
