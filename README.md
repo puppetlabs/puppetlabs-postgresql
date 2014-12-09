@@ -8,7 +8,7 @@ Table of Contents
 2. [Module Description - What does the module do?](#module-description)
 3. [Setup - The basics of getting started with PostgreSQL module](#setup)
     * [PE 3.2 supported module](#pe-32-supported-module)
-    * [Configuring the server](#configuring-the-server) 
+    * [Configuring the server](#configuring-the-server)
 4. [Usage - How to use the module for various tasks](#usage)
 5. [Upgrading - Guide for upgrading from older revisions of this module](#upgrading)
 6. [Reference - The classes, defines,functions and facts available in this module](#reference)
@@ -346,6 +346,9 @@ This setting can be used to override the default postgresql binaries directory f
 
 ####`xlogdir`
 This setting can be used to override the default postgresql xlog directory. If not specified the module will use initdb's default path.
+
+####`logdir`
+This setting can be used to override the default postgresql log directory. If not specified the module will use initdb's default path.
 
 ####`user`
 This setting can be used to override the default postgresql super user and owner of postgresql related files in the file system. If not specified, the module will use the user name 'postgres'.

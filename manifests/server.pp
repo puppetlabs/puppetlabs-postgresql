@@ -32,6 +32,7 @@ class postgresql::server (
 
   $datadir                    = $postgresql::params::datadir,
   $xlogdir                    = $postgresql::params::xlogdir,
+  $logdir                     = $postgresql::params::logdir,
 
   $pg_hba_conf_defaults       = $postgresql::params::pg_hba_conf_defaults,
 

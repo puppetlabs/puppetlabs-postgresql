@@ -29,6 +29,7 @@ class postgresql::globals (
   $confdir              = undef,
   $bindir               = undef,
   $xlogdir              = undef,
+  $logdir               = undef,
 
   $user                 = undef,
   $group                = undef,
