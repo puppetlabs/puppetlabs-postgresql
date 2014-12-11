@@ -3,7 +3,7 @@ class postgresql::server::postgis (
   $package_name   = $postgresql::params::postgis_package_name,
   $package_ensure = 'present'
 ) inherits postgresql::params {
-  validate_string($package_name, "Valid postgis package could not be identified. Specify postgis package name') 
+  validate_string($package_name, "Valid postgis package could not be identified. Specify postgis package name')
 
   package { 'postgresql-postgis':
     ensure => $package_ensure,
