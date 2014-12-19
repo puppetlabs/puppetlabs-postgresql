@@ -2,7 +2,7 @@
   "name": "puppetlabs-postgresql",
   "version": "4.1.0",
   "author": "Inkling/Puppet Labs",
-  "summary": "PostgreSQL defined resource types",
+  "summary": "Offers support for basic management of PostgreSQL databases.",
   "license": "ASL 2.0",
   "source": "git://github.com/puppetlabs/puppet-postgresql.git",
   "project_page": "https://github.com/puppetlabs/puppet-postgresql",
