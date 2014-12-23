@@ -25,7 +25,7 @@ define postgresql::server::grant (
     #'FUNCTION',
     #'PROCEDURAL LANGUAGE',
     'SCHEMA',
-    #'SEQUENCE',
+    'SEQUENCE',
     'TABLE',
     'ALL TABLES IN SCHEMA',
     #'TABLESPACE',
@@ -72,6 +72,15 @@ define postgresql::server::grant (
       validate_string($unless_privilege,'SELECT','INSERT','UPDATE','DELETE',
         'TRUNCATE','REFERENCES','TRIGGER','ALL','ALL PRIVILEGES')
       $unless_function = 'has_table_privilege'
+      $on_db = $db
+    }
+    'SEQUENCE': {
+      $unless_privilege = $_privilege ? {
+        'ALL'   => 'UPDATE',
+        default => $_privilege,
+      }
+      validate_string($unless_privilege,'SELECT','USAGE','UPDATE')
+      $unless_function = 'has_sequence_privilege'
       $on_db = $db
     }
     'ALL TABLES IN SCHEMA': {
