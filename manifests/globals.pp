@@ -51,6 +51,7 @@ class postgresql::globals (
   $default_version = $::osfamily ? {
     /^(RedHat|Linux)/ => $::operatingsystem ? {
       'Fedora' => $::operatingsystemrelease ? {
+        /^(21)$/ => '9.3',
         /^(18|19|20)$/ => '9.2',
         /^(17)$/ => '9.1',
         default => undef,
@@ -103,17 +104,15 @@ class postgresql::globals (
     '91'    => '1.5',
     '9.2'   => '2.0',
     '9.3'   => '2.1',
+    '93'    => '2.1',
     default => undef,
   }
   $globals_postgis_version = pick($postgis_version, $default_postgis_version)
 
   # Setup of the repo only makes sense globally, so we are doing this here.
   if($manage_package_repo) {
-    # Workaround the lack of RHEL7 repositories for now.
-    if ! ($::operatingsystem == 'RedHat' and $::operatingsystemrelease =~ /^7/) {
-      class { 'postgresql::repo':
-        version => $globals_version
-      }
+    class { 'postgresql::repo':
+      version => $globals_version
     }
   }
 }
