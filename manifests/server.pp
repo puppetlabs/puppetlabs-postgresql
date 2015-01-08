@@ -22,6 +22,7 @@ class postgresql::server (
   $ip_mask_allow_all_users    = $postgresql::params::ip_mask_allow_all_users,
   $ipv4acls                   = $postgresql::params::ipv4acls,
   $ipv6acls                   = $postgresql::params::ipv6acls,
+  $local_auth_option_postgres = $postgresql::params::local_auth_option_postgres,
 
   $initdb_path                = $postgresql::params::initdb_path,
   $createdb_path              = $postgresql::params::createdb_path,
