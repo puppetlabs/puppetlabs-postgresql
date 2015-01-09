@@ -89,7 +89,7 @@ define postgresql::server::grant (
   # If you need such grant, use:
   # postgresql::grant { 'table:foo':
   #   role        => 'joe',
-  #   …
+  #   ...
   #   object_type => 'TABLE',
   #   object_name => [$schema, $table],
   # }
