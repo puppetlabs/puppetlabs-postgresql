@@ -584,6 +584,9 @@ For example, to create a database called `test1` with a corresponding user of th
 ####`namevar`
 The namevar for the resource designates the name of the database.
 
+####`comment`
+A comment to be stored about the database using the PostgreSQL COMMENT command.
+
 ####`dbname`
 The name of the database to be created. Defaults to `namevar`.
 
