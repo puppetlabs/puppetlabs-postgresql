@@ -7,9 +7,9 @@ class postgresql::client (
   validate_string($package_name)
 
   package { 'postgresql-client':
-    ensure  => $package_ensure,
-    name    => $package_name,
-    tag     => 'postgresql',
+    ensure => $package_ensure,
+    name   => $package_name,
+    tag    => 'postgresql',
   }
 
   file { '/usr/local/bin/validate_postgresql_connection.sh':

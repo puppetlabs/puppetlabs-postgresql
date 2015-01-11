@@ -67,16 +67,16 @@ class postgresql::server::initdb {
     if $::operatingsystem == 'Debian' or $::operatingsystem == 'Ubuntu' {
       if $::operatingsystemrelease =~ /^6/ or $::operatingsystemrelease =~ /^7/ or $::operatingsystemrelease =~ /^10\.04/ or $::operatingsystemrelease =~ /^12\.04/ {
         file { 'server.crt':
-          ensure => link,
-          path   => "${datadir}/server.crt",
-          target => '/etc/ssl/certs/ssl-cert-snakeoil.pem',
-          require   => Exec['postgresql_initdb'],
+          ensure  => link,
+          path    => "${datadir}/server.crt",
+          target  => '/etc/ssl/certs/ssl-cert-snakeoil.pem',
+          require => Exec['postgresql_initdb'],
         }
         file { 'server.key':
-          ensure => link,
-          path   => "${datadir}/server.key",
-          target => '/etc/ssl/private/ssl-cert-snakeoil.key',
-          require   => Exec['postgresql_initdb'],
+          ensure  => link,
+          path    => "${datadir}/server.key",
+          target  => '/etc/ssl/private/ssl-cert-snakeoil.key',
+          require => Exec['postgresql_initdb'],
         }
       }
     }
