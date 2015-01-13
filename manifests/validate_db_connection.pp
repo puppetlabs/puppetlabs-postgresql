@@ -14,7 +14,7 @@ define postgresql::validate_db_connection(
   $tries             = 10,
   $create_db_first   = true
 ) {
-  require postgresql::client
+  include postgresql::client
   include postgresql::params
 
   $psql_path = $postgresql::params::psql_path
@@ -57,7 +57,7 @@ define postgresql::validate_db_connection(
     user        => $run_as,
     path        => '/bin:/usr/bin:/usr/local/bin',
     timeout     => $timeout,
-    require     => Package['postgresql-client'],
+    require     => Class['postgresql::client'],
   }
 
   # This is a little bit of puppet magic.  What we want to do here is make
