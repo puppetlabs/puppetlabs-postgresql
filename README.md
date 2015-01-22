@@ -419,6 +419,9 @@ This value defaults to `0.0.0.0/0`. Sometimes it can be useful to block the supe
 ####`ip_mask_allow_all_users`
 This value defaults to `127.0.0.1/32`. By default, Postgres does not allow any database user accounts to connect via TCP from remote machines. If you'd like to allow them to, you can override this setting. You might set it to `0.0.0.0/0` to allow database users to connect from any remote machine, or `192.168.0.0/16` to allow connections from any machine on your local 192.168 subnet.
 
+####`local_auth_option_postgres`
+This value defaults to undef. If you specify it, it will append a pg_hba auth-option to the postgres and user/database rules so you can apply auth-options like custom maps; see [postgresql documentation](http://www.postgresql.org/docs/9.2/static/auth-pg-hba-conf.html) about `pg_hba.conf` for information (please note that the link will take you to documentation for the most recent version of Postgres, however links for earlier versions can be found on that page).
+
 ####`ipv4acls`
 List of strings for access control for connection method, users, databases, IPv4 addresses; see [postgresql documentation](http://www.postgresql.org/docs/9.2/static/auth-pg-hba-conf.html) about `pg_hba.conf` for information (please note that the link will take you to documentation for the most recent version of Postgres, however links for earlier versions can be found on that page).
 

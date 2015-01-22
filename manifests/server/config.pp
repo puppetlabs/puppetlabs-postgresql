@@ -10,6 +10,7 @@ class postgresql::server::config {
   $pg_ident_conf_path         = $postgresql::server::pg_ident_conf_path
   $postgresql_conf_path       = $postgresql::server::postgresql_conf_path
   $pg_hba_conf_defaults       = $postgresql::server::pg_hba_conf_defaults
+  $local_auth_option_postgres = $postgresql::server::local_auth_option_postgres
   $user                       = $postgresql::server::user
   $group                      = $postgresql::server::group
   $version                    = $postgresql::server::_version
@@ -35,8 +36,8 @@ class postgresql::server::config {
 
       # Lets setup the base rules
       $local_auth_option = $version ? {
-        '8.1'   => 'sameuser',
-        default => undef,
+        '8.1'   => "sameuser ${local_auth_option_postgres}",
+        default => $local_auth_option_postgres,
       }
       postgresql::server::pg_hba_rule { 'local access as postgres user':
         type        => 'local',

@@ -8,6 +8,7 @@ class postgresql::params inherits postgresql::globals {
   $ip_mask_allow_all_users    = '127.0.0.1/32'
   $ipv4acls                   = []
   $ipv6acls                   = []
+  $local_auth_option_postgres = undef
   $encoding                   = $encoding
   $locale                     = $locale
   $service_ensure             = 'running'
