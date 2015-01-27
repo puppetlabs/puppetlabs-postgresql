@@ -173,9 +173,9 @@ class postgresql::params inherits postgresql::globals {
       $user                = pick($user, '_postgresql')
       $group               = pick($group, '_postgresql')
 
-      $client_package_name  = pick($client_package_name, "postgresql-client")
-      $server_package_name  = pick($server_package_name, "postgresql-server")
-      $contrib_package_name = pick($contrib_package_name, "postgresql-contrib")
+      $client_package_name  = pick($client_package_name, 'postgresql-client')
+      $server_package_name  = pick($server_package_name, 'postgresql-server')
+      $contrib_package_name = pick($contrib_package_name, 'postgresql-contrib')
       $devel_package_name   = pick($devel_package_name, 'postgresql-client')
       $java_package_name    = pick($java_package_name, 'postgresql-jdbc')
       $perl_package_name    = pick($perl_package_name, 'databases/p5-DBD-Pg')
