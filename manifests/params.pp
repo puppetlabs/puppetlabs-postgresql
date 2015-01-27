@@ -1,15 +1,15 @@
 # PRIVATE CLASS: do not use directly
 class postgresql::params inherits postgresql::globals {
-  $version                    = $globals_version
-  $postgis_version            = $globals_postgis_version
+  $version                    = $postgresql::globals::globals_version
+  $postgis_version            = $postgresql::globals::globals_postgis_version
   $listen_addresses           = 'localhost'
   $port                       = 5432
   $ip_mask_deny_postgres_user = '0.0.0.0/0'
   $ip_mask_allow_all_users    = '127.0.0.1/32'
   $ipv4acls                   = []
   $ipv6acls                   = []
-  $encoding                   = $encoding
-  $locale                     = $locale
+  $encoding                   = $postgresql::globals::encoding
+  $locale                     = $postgresql::globals::locale
   $service_ensure             = 'running'
   $service_enable             = true
   $service_manage             = true
@@ -28,7 +28,7 @@ class postgresql::params inherits postgresql::globals {
       $version_parts      = split($version, '[.]')
       $package_version    = "${version_parts[0]}${version_parts[1]}"
 
-      if $version == $default_version {
+      if $version == $postgresql::globals::default_version {
         $client_package_name  = pick($client_package_name, 'postgresql')
         $server_package_name  = pick($server_package_name, 'postgresql-server')
         $contrib_package_name = pick($contrib_package_name,'postgresql-contrib')
@@ -108,7 +108,7 @@ class postgresql::params inherits postgresql::globals {
       $user               = pick($user, 'postgres')
       $group              = pick($group, 'postgres')
 
-      if $manage_package_repo == true {
+      if $postgresql::globals::manage_package_repo == true {
         $needs_initdb = pick($needs_initdb, true)
         $service_name = pick($service_name, 'postgresql')
       } else {
@@ -143,7 +143,7 @@ class postgresql::params inherits postgresql::globals {
       $datadir              = pick($datadir, "/var/lib/postgresql/${version}/main")
       $confdir              = pick($confdir, "/etc/postgresql/${version}/main")
       $service_status       = pick($service_status, "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'")
-      $psql_path            = pick($psql_path, "/usr/bin/psql")
+      $psql_path            = pick($psql_path, '/usr/bin/psql')
     }
 
     'FreeBSD': {
