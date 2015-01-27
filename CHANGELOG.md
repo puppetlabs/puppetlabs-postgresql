@@ -1,3 +1,16 @@
+##2014-11-04 - Supported Release 4.1.0
+###Summary
+
+This release adds the ability to change the PGDATA directory, and also includes documentation and test updates, future parser support, and a few other new features.
+
+####Features
+- Future parser support
+- Documentation updates
+- Test updates
+- Add a link from `/etc/sysconfig/pgsql/postgresql-${version}` to `/etc/sysconfig/pgsql/postgresql` to support init scripts from the postgresql.org repo
+- Add support for changing the PGDATA directory
+- Set default versions for Fedora 21 and FreeBSD
+
 ##2014-09-03 - Supported Release 4.0.0
 ###Summary
 

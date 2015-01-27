@@ -57,13 +57,13 @@ describe provider_class do
       )
     end
 
-    it "should allow numbers thorugh without quotes" do
+    it "should allow numbers through without quotes" do
       expect(provider.parse_line("wal_keep_segments = 32")).to eq(
         { :name=>"wal_keep_segments", :value=>"32", :comment=>nil, :record_type=>:parsed }
       )
     end
 
-    it "should allow blanks thorugh " do
+    it "should allow blanks through " do
       expect(provider.parse_line("")).to eq(
         { :line=>"", :record_type=>:blank }
       )

@@ -39,6 +39,19 @@ describe 'postgresql::server', :type => :class do
     end
   end
 
+  describe 'service_manage => true' do
+    let(:params) {{ :service_manage => true }}
+    it { is_expected.to contain_service('postgresqld') }
+  end
+
+  describe 'service_manage => false' do
+    let(:params) {{ :service_manage => false }}
+    it { is_expected.not_to contain_service('postgresqld') }
+    it 'shouldnt validate connection' do
+      is_expected.not_to contain_postgresql__validate_db_connection('validate_service_is_running')
+    end
+  end
+
   describe 'package_ensure => absent' do
     let(:params) do
       {

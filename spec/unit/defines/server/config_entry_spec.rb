@@ -44,7 +44,7 @@ describe 'postgresql::server::config_entry', :type => :define do
       let(:params) {{ :ensure => 'present', :name => 'port_spec', :value => '5432' }}
 
       it 'stops postgresql and changes the port' do
-        is_expected.to contain_exec('postgresql_stop')
+        is_expected.to contain_exec('postgresql_stop_port')
         is_expected.to contain_augeas('override PGPORT in /etc/sysconfig/pgsql/postgresql')
       end
     end
@@ -63,7 +63,7 @@ describe 'postgresql::server::config_entry', :type => :define do
       let(:params) {{ :ensure => 'present', :name => 'port_spec', :value => '5432' }}
 
       it 'stops postgresql and changes the port' do
-        is_expected.to contain_file('systemd-port-override')
+        is_expected.to contain_file('systemd-override')
         is_expected.to contain_exec('restart-systemd')
       end
     end
@@ -82,9 +82,18 @@ describe 'postgresql::server::config_entry', :type => :define do
       let(:params) {{ :ensure => 'present', :name => 'port_spec', :value => '5432' }}
 
       it 'stops postgresql and changes the port' do
-        is_expected.to contain_file('systemd-port-override')
+        is_expected.to contain_file('systemd-override')
         is_expected.to contain_exec('restart-systemd')
       end
+    end
+  end
+
+  context "data_directory" do
+    let(:params) {{ :ensure => 'present', :name => 'data_directory_spec', :value => '/var/pgsql' }}
+
+    it 'stops postgresql and changes the data directory' do
+      is_expected.to contain_exec('postgresql_data_directory')
+      is_expected.to contain_augeas('override PGDATA in /etc/sysconfig/pgsql/postgresql')
     end
   end
 

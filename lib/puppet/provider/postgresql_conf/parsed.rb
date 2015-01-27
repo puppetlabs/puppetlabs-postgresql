@@ -18,13 +18,18 @@ Puppet::Type.type(:postgresql_conf).provide(
     :to_line  => proc { |h|
 
       # simple string and numeric values don't need to be enclosed in quotes
-      dontneedquote = h[:value].match(/^(\w+)$/)
+      if h[:value].is_a?(Fixnum)
+        val = h[:value].to_s
+      else
+        val = h[:value]
+      end
+      dontneedquote = val.match(/^(\w+)$/)
       dontneedequal = h[:name].match(/^(include|include_if_exists)$/i)
 
       str =  h[:name].downcase # normalize case
       str += dontneedequal ? ' ' : ' = '
       str += "'" unless dontneedquote && !dontneedequal
-      str += h[:value]
+      str += val
       str += "'" unless dontneedquote && !dontneedequal
       str += " # #{h[:comment]}" unless (h[:comment].nil? or h[:comment] == :absent)
       str

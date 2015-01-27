@@ -62,5 +62,23 @@ class postgresql::server::initdb {
       logoutput => on_failure,
       require   => File[$require_before_initdb],
     }
+    # The package will take care of this for us the first time, but if we
+    # ever need to init a new db we need to make these links explicitly
+    if $::operatingsystem == 'Debian' or $::operatingsystem == 'Ubuntu' {
+      if $::operatingsystemrelease =~ /^6/ or $::operatingsystemrelease =~ /^7/ or $::operatingsystemrelease =~ /^10\.04/ or $::operatingsystemrelease =~ /^12\.04/ {
+        file { 'server.crt':
+          ensure => link,
+          path   => "${datadir}/server.crt",
+          target => '/etc/ssl/certs/ssl-cert-snakeoil.pem',
+          require   => Exec['postgresql_initdb'],
+        }
+        file { 'server.key':
+          ensure => link,
+          path   => "${datadir}/server.key",
+          target => '/etc/ssl/private/ssl-cert-snakeoil.key',
+          require   => Exec['postgresql_initdb'],
+        }
+      }
+    }
   }
 }

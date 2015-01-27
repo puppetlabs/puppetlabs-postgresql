@@ -30,47 +30,38 @@ define postgresql::server::config_entry (
     }
   }
 
-  # We have to handle ports in a weird and special way.  On early Debian and
-  # Ubuntu we have to ensure we stop the service completely. On Redhat we
-  # either have to create a systemd override for the port or update the
-  # sysconfig file.
+  # We have to handle ports and the data directory in a weird and
+  # special way.  On early Debian and Ubuntu and RHEL we have to ensure
+  # we stop the service completely. On RHEL 7 we either have to create
+  # a systemd override for the port or update the sysconfig file, but this
+  # is managed for us in postgresql::server::config.
   if $::operatingsystem == 'Debian' or $::operatingsystem == 'Ubuntu' {
-    if $::operatingsystemrelease =~ /^6/ or $::operatingsystemrelease =~ /^10\.04/ {
-      if $name == 'port' {
-        exec { 'postgresql_stop':
+    if $name == 'port' and ( $::operatingsystemrelease =~ /^6/ or $::operatingsystemrelease =~ /^10\.04/ ) {
+        exec { "postgresql_stop_${name}":
           command => "service ${::postgresql::server::service_name} stop",
           onlyif  => "service ${::postgresql::server::service_name} status",
           unless  => "grep 'port = ${value}' ${::postgresql::server::postgresql_conf_path}",
           path    => '/usr/sbin:/sbin:/bin:/usr/bin:/usr/local/bin',
           before  => Postgresql_conf[$name],
         }
+    }
+    elsif $name == 'data_directory' {
+      exec { "postgresql_stop_${name}":
+        command => "service ${::postgresql::server::service_name} stop",
+        onlyif  => "service ${::postgresql::server::service_name} status",
+        unless  => "grep \"data_directory = '${value}'\" ${::postgresql::server::postgresql_conf_path}",
+        path    => '/usr/sbin:/sbin:/bin:/usr/bin:/usr/local/bin',
+        before  => Postgresql_conf[$name],
       }
     }
   }
   if $::osfamily == 'RedHat' {
-    if $::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora' {
-      if $name == 'port' {
-        file { 'systemd-port-override':
-          ensure  => present,
-          path    => '/etc/systemd/system/postgresql.service',
-          owner   => root,
-          group   => root,
-          content => template('postgresql/systemd-port-override.erb'),
-          notify  => [ Exec['restart-systemd'], Class['postgresql::server::service'] ],
-          before  => Class['postgresql::server::reload'],
-        }
-        exec { 'restart-systemd':
-          command     => 'systemctl daemon-reload',
-          refreshonly => true,
-          path        => '/bin:/usr/bin:/usr/local/bin'
-        }
-      }
-    } else {
+    if ! ($::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora') {
       if $name == 'port' {
         # We need to force postgresql to stop before updating the port
         # because puppet becomes confused and is unable to manage the
         # service appropriately.
-        exec { 'postgresql_stop':
+        exec { "postgresql_stop_${name}":
           command => "service ${::postgresql::server::service_name} stop",
           onlyif  => "service ${::postgresql::server::service_name} status",
           unless  => "grep 'PGPORT=${value}' /etc/sysconfig/pgsql/postgresql",
@@ -82,6 +73,25 @@ define postgresql::server::config_entry (
           incl    => '/etc/sysconfig/pgsql/*',
           context => '/files/etc/sysconfig/pgsql/postgresql',
           changes => "set PGPORT ${value}",
+          require => File['/etc/sysconfig/pgsql/postgresql'],
+          notify  => Class['postgresql::server::service'],
+          before  => Class['postgresql::server::reload'],
+        }
+      } elsif $name == 'data_directory' {
+        # We need to force postgresql to stop before updating the data directory
+        # otherwise init script breaks
+        exec { "postgresql_${name}":
+          command => "service ${::postgresql::server::service_name} stop",
+          onlyif  => "service ${::postgresql::server::service_name} status",
+          unless  => "grep 'PGDATA=${value}' /etc/sysconfig/pgsql/postgresql",
+          path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
+          require => File['/etc/sysconfig/pgsql/postgresql'],
+        } ->
+        augeas { 'override PGDATA in /etc/sysconfig/pgsql/postgresql':
+          lens    => 'Shellvars.lns',
+          incl    => '/etc/sysconfig/pgsql/*',
+          context => '/files/etc/sysconfig/pgsql/postgresql',
+          changes => "set PGDATA ${value}",
           require => File['/etc/sysconfig/pgsql/postgresql'],
           notify  => Class['postgresql::server::service'],
           before  => Class['postgresql::server::reload'],

@@ -70,7 +70,7 @@ define postgresql::server::database(
     refreshonly => true,
   }
 
-  Exec [ $createdb_command ]->
+  Exec[ $createdb_command ]->
   postgresql_psql {"UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
     unless => "SELECT datname FROM pg_database WHERE datname = '${dbname}' AND datistemplate = ${istemplate}",
     db     => $default_db,

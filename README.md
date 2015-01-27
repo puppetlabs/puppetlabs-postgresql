@@ -7,16 +7,15 @@ Table of Contents
 1. [Overview - What is the PostgreSQL module?](#overview)
 2. [Module Description - What does the module do?](#module-description)
 3. [Setup - The basics of getting started with PostgreSQL module](#setup)
-    * [PE 3.2 supported module](#pe-3.2-supported-module)
+    * [PE 3.2 supported module](#pe-32-supported-module)
     * [Configuring the server](#configuring-the-server) 
 4. [Usage - How to use the module for various tasks](#usage)
 5. [Upgrading - Guide for upgrading from older revisions of this module](#upgrading)
 6. [Reference - The classes, defines,functions and facts available in this module](#reference)
 7. [Limitations - OS compatibility, etc.](#limitations)
 8. [Development - Guide for contributing to the module](#development)
-9. [Disclaimer - Licensing information](#disclaimer)
-10. [Transfer Notice - Notice of authorship change](#transfer-notice)
-11. [Contributors - List of module contributors](#contributors)
+9. [Transfer Notice - Notice of authorship change](#transfer-notice)
+10. [Contributors - List of module contributors](#contributors)
 
 Overview
 --------
@@ -237,7 +236,7 @@ Resources:
 * [postgresql::server::database](#resource-postgresqlserverdatabase)
 * [postgresql::server::database_grant](#resource-postgresqlserverdatabase_grant)
 * [postgresql::server::pg_hba_rule](#resource-postgresqlserverpg_hba_rule)
-* [postgresql::server::pg_ident_rule](#resource-postgresqlserver_pg_identrule)
+* [postgresql::server::pg_ident_rule](#resource-postgresqlserverpg_ident_rule)
 * [postgresql::server::role](#resource-postgresqlserverrole)
 * [postgresql::server::schema](#resource-postgresqlserverschema)
 * [postgresql::server::table_grant](#resource-postgresqlservertable_grant)
@@ -335,7 +334,9 @@ Path to your `postgresql.conf` file.
 If false, disables the defaults supplied with the module for `pg\_hba.conf`. This is useful if you disagree with the defaults and wish to override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform basic `psql` operations for example.
 
 ####`datadir`
-This setting can be used to override the default postgresql data directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
+This setting can be used to override the default postgresql data directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro. Please note that changing the datadir after installation will cause the server to come to a full stop before being able to make the change. For RedHat systems, the data directory must be labeled appropriately for SELinux. On Ubuntu, you need to explicitly set needs\_initdb to true in order to allow Puppet to initialize the database in the new datadir (needs\_initdb defaults to true on other systems).
+
+Warning: If datadir is changed from the default, puppet will not manage purging of the original data directory, which will cause it to fail if the data directory is changed back to the original.
 
 ####`confdir`
 This setting can be used to override the default postgresql configuration directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro.
@@ -391,6 +392,9 @@ Value to pass through to the `package` resource when creating the server instanc
 ####`plperl_package_name`
 This sets the default package name for the PL/Perl extension. Defaults to utilising the operating system default.
 
+####`service_manage`
+This setting selects whether Puppet should manage the service. Defaults to `true`.
+
 ####`service_name`
 This setting can be used to override the default postgresql service name. If not specified, the module will use whatever service name is the default for your OS distro.
 
@@ -407,7 +411,7 @@ This setting is used to specify the name of the default database to connect with
 This value defaults to `localhost`, meaning the postgres server will only accept connections from localhost. If you'd like to be able to connect to postgres from remote machines, you can override this setting. A value of `*` will tell postgres to accept connections from any remote machine. Alternately, you can specify a comma-separated list of hostnames or IP addresses. (For more info, have a look at the `postgresql.conf` file from your system's postgres package).
 
 ####`port`
-This value defaults to `5432`, meaning the postgres server will listen on TCP port 5432. Note that the same port number is used for all IP addresses the server listens on.
+This value defaults to `5432`, meaning the postgres server will listen on TCP port 5432. Note that the same port number is used for all IP addresses the server listens on. Also note that for RedHat systems and early Debian systems, changing the port will cause the server to come to a full stop before being able to make the change.
 
 ####`ip_mask_deny_postgres_user`
 This value defaults to `0.0.0.0/0`. Sometimes it can be useful to block the superuser account from remote connections if you are allowing other database users to connect remotely. Set this to an IP and mask for which you want to deny connections by the postgres superuser account. So, e.g., the default value of `0.0.0.0/0` will match any remote IP and deny access, so the postgres user won't be able to connect remotely at all. Conversely, a value of `0.0.0.0/32` would not match any remote IP, and thus the deny rule will not be applied and the postgres user will be allowed to connect.
@@ -504,7 +508,7 @@ Override for the `ensure` parameter during package installation. Defaults to `pr
 Overrides the default package name for the distribution you are installing to. Defaults to `postgresql-devel` or `postgresql<version>-devel` depending on your distro.
 
 ####`link_pg_config`
-By default, if the bin directory used by the PostgreSQL package is not `/usr/bin` or `/usr/local/bin`,
+By default on all but Debian systems, if the bin directory used by the PostgreSQL package is not `/usr/bin` or `/usr/local/bin`,
 this class will symlink `pg_config` from the package's bin dir into `/usr/bin`. Set `link_pg_config` to
 false to disable this behavior.
 
@@ -583,6 +587,9 @@ The namevar for the resource designates the name of the database.
 ####`dbname`
 The name of the database to be created. Defaults to `namevar`.
 
+####`owner`
+Name of the database user who should be set as the owner of the database. Defaults to the $user variable set in `postgresql::server` or `postgresql::globals`.
+
 ####`user`
 User to create and assign access to the database upon creation. Mandatory.
 
@@ -600,6 +607,9 @@ Grant permissions during creation. Defaults to `ALL`.
 
 ####`tablespace`
 The name of the tablespace to allocate this database to. If not specifies, it defaults to the PostgreSQL default.
+
+####`template`
+The name of the template database from which to build this database. Defaults to `template0`.
 
 ####`istemplate`
 Define database as a template. Defaults to `false`.
@@ -619,6 +629,9 @@ Name of the database user who should be set as the owner of the database. Defaul
 
 ####`tablespace`
 Tablespace for where to create this database. Defaults to the defaults defined during PostgreSQL installation.
+
+####`template`
+The name of the template database from which to build this database. Defaults to `template0`.
 
 ####`encoding`
 Override the character set during creation of the database. Defaults to the default defined during installation.
@@ -764,7 +777,7 @@ Whether to grant the ability to create new databases with this role. Defaults to
 Whether to grant the ability to create new roles with this role. Defaults to `false`.
 
 ####`login`
-Whether to grant login capability for the new role. Defaults to `false`.
+Whether to grant login capability for the new role. Defaults to `true`.
 
 ####`inherit`
 Whether to grant inherit capability for the new role. Defaults to `true`.
@@ -789,7 +802,7 @@ This defined type can be used to create a schema. For example:
       db    => 'janedb',
     }
 
-It will create the schema `jane` in the database `janedb` if neccessary,
+It will create the schema `isolated` in the database `janedb` if neccessary,
 assigning the user `jane` ownership permissions.
 
 ####`namevar`
@@ -961,7 +974,7 @@ And then run the unit tests:
 
     bundle exec rake spec
 
-The unit tests are ran in Travis-CI as well, if you want to see the results of your own tests regsiter the service hook through Travis-CI via the accounts section for your Github clone of this project.
+The unit tests are ran in Travis-CI as well, if you want to see the results of your own tests register the service hook through Travis-CI via the accounts section for your Github clone of this project.
 
 If you want to run the system tests, make sure you also have:
 
