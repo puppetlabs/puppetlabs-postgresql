@@ -766,7 +766,7 @@ The role name to create.
 ####`password_hash`
 The hash to use during password creation. If the password is not already pre-encrypted in a format that PostgreSQL supports, use the `postgresql_password` function to provide an MD5 hash here, for example:
 
-    postgresql::role { "myusername":
+    postgresql::server::role { "myusername":
       password_hash => postgresql_password('myusername', 'mypassword'),
     }
 
