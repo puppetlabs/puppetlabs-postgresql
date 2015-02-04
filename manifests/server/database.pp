@@ -1,5 +1,6 @@
 # Define for creating a database. See README.md for more details.
 define postgresql::server::database(
+  $comment    = undef,
   $dbname     = $title,
   $owner      = $postgresql::server::user,
   $tablespace = undef,
@@ -74,6 +75,13 @@ define postgresql::server::database(
   postgresql_psql {"UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
     unless => "SELECT datname FROM pg_database WHERE datname = '${dbname}' AND datistemplate = ${istemplate}",
     db     => $default_db,
+  }
+
+  if $comment {
+    Exec[ $createdb_command ]->
+    postgresql_psql {"COMMENT ON DATABASE ${dbname} IS '${comment}'":
+      unless  => "SELECT pg_catalog.shobj_description(d.oid, 'pg_database') as \"Description\" FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.shobj_description(d.oid, 'pg_database') = '${comment}'",
+    }
   }
 
   # Build up dependencies on tablespace
