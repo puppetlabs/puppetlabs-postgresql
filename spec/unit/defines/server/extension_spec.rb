@@ -26,8 +26,6 @@ describe 'postgresql::server::extension', :type => :define do
   } }
 
   context "with mandatory arguments only" do
-    it { is_expected.to compile.with_all_deps }
-
     it {
       is_expected.to contain_postgresql_psql('Add postgis extension to template_postgis').with({
         :db      => 'template_postgis',
@@ -42,8 +40,6 @@ describe 'postgresql::server::extension', :type => :define do
       :package_name => 'postgis',
     }) }
 
-    it { is_expected.to compile.with_all_deps }
-
     it {
       is_expected.to contain_package('Postgresql extension postgis').with({
         :ensure  => 'present',
@@ -57,8 +53,6 @@ describe 'postgresql::server::extension', :type => :define do
       :ensure       => 'absent',
       :package_name => 'postgis',
     }) }
-
-    it { is_expected.to compile.with_all_deps }
 
     it {
       is_expected.to contain_postgresql_psql('Add postgis extension to template_postgis').with({
@@ -79,8 +73,6 @@ describe 'postgresql::server::extension', :type => :define do
       let (:params) { super().merge({
         :package_ensure => 'present',
       }) }
-
-      it { is_expected.to compile.with_all_deps }
 
       it {
         is_expected.to contain_postgresql_psql('Add postgis extension to template_postgis').with({
