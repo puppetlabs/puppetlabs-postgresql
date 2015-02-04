@@ -257,8 +257,8 @@ This class allows you to configure the main settings for this module in a global
 For example, if you wanted to overwrite the default `locale` and `encoding` for all classes you could use the following combination:
 
     class { 'postgresql::globals':
-      encoding => 'UTF8',
-      locale   => 'en_NG',
+      encoding => 'UTF-8',
+      locale   => 'en_US.UTF-8',
     }->
     class { 'postgresql::server':
     }
