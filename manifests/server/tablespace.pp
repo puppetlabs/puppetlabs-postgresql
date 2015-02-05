@@ -32,6 +32,7 @@ define postgresql::server::tablespace(
     seluser => 'system_u',
     selrole => 'object_r',
     seltype => 'postgresql_db_t',
+    require => Class['postgresql::server'],
   }
 
   $create_ts = "Create tablespace '${spcname}'"
