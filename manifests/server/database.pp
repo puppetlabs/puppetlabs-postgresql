@@ -80,7 +80,8 @@ define postgresql::server::database(
   if $comment {
     Exec[ $createdb_command ]->
     postgresql_psql {"COMMENT ON DATABASE ${dbname} IS '${comment}'":
-      unless  => "SELECT pg_catalog.shobj_description(d.oid, 'pg_database') as \"Description\" FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.shobj_description(d.oid, 'pg_database') = '${comment}'",
+      unless  => "SELECT description FROM pg_description JOIN pg_database ON objoid = pg_database.oid WHERE datname = '${dbname}' AND description = '${comment}'",
+      db      => $dbname,
     }
   }
 
