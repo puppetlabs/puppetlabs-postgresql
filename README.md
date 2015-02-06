@@ -78,7 +78,7 @@ Once you've completed your configuration of `postgresql::server`, you can test o
 
 If you get an error message from these commands, it means that your permissions are set in a way that restricts access from where you're trying to connect. That might be a good thing or a bad thing, depending on your goals.
 
-For more details about server configuration parameters consult the [PostgreSQL Runtime Configuration docs](http://www.postgresql.org/docs/9.2/static/runtime-config.html).
+For more details about server configuration parameters consult the [PostgreSQL Runtime Configuration docs](http://www.postgresql.org/docs/current/static/runtime-config.html).
 
 Usage
 -----
@@ -421,10 +421,10 @@ This value defaults to `0.0.0.0/0`. Sometimes it can be useful to block the supe
 This value defaults to `127.0.0.1/32`. By default, Postgres does not allow any database user accounts to connect via TCP from remote machines. If you'd like to allow them to, you can override this setting. You might set it to `0.0.0.0/0` to allow database users to connect from any remote machine, or `192.168.0.0/16` to allow connections from any machine on your local 192.168 subnet.
 
 ####`ipv4acls`
-List of strings for access control for connection method, users, databases, IPv4 addresses; see [postgresql documentation](http://www.postgresql.org/docs/9.2/static/auth-pg-hba-conf.html) about `pg_hba.conf` for information (please note that the link will take you to documentation for the most recent version of Postgres, however links for earlier versions can be found on that page).
+List of strings for access control for connection method, users, databases, IPv4 addresses; see [postgresql documentation](http://www.postgresql.org/docs/current/static/auth-pg-hba-conf.html) about `pg_hba.conf` for information (please note that the link will take you to documentation for the most recent version of Postgres, however links for earlier versions can be found on that page).
 
 ####`ipv6acls`
-List of strings for access control for connection method, users, databases, IPv6 addresses; see [postgresql documentation](http://www.postgresql.org/docs/9.2/static/auth-pg-hba-conf.html) about `pg_hba.conf` for information (please note that the link will take you to documentation for the most recent version of Postgres, however links for earlier versions can be found on that page).
+List of strings for access control for connection method, users, databases, IPv6 addresses; see [postgresql documentation](http://www.postgresql.org/docs/current/static/auth-pg-hba-conf.html) about `pg_hba.conf` for information (please note that the link will take you to documentation for the most recent version of Postgres, however links for earlier versions can be found on that page).
 
 ####`initdb_path`
 Path to the `initdb` command.
@@ -737,7 +737,7 @@ This provides the target for the rule, and is generally an internal only propert
 
 
 ###Resource: postgresql::server::pg\_ident\_rule
-This defined type allows you to create user name maps for `pg_ident.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/9.4/static/auth-username-maps.html).
+This defined type allows you to create user name maps for `pg_ident.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/current/static/auth-username-maps.html).
 
 For example:
 
