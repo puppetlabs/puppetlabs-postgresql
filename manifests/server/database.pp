@@ -78,10 +78,15 @@ define postgresql::server::database(
   }
 
   if $comment {
+    # The shobj_description function was only introduced with 8.2
+    $comment_information_function =  $version ? {
+      '8.1'   => 'obj_description',
+      default => 'shobj_description',
+    }
     Exec[ $createdb_command ]->
     postgresql_psql {"COMMENT ON DATABASE ${dbname} IS '${comment}'":
-      unless  => "SELECT description FROM pg_description JOIN pg_database ON objoid = pg_database.oid WHERE datname = '${dbname}' AND description = '${comment}'",
-      db      => $dbname,
+      unless => "SELECT pg_catalog.${comment_information_function}(d.oid, 'pg_database') as \"Description\" FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'",
+      db     => $dbname,
     }
   }
 
