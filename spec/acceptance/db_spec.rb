@@ -30,7 +30,7 @@ describe 'postgresql::server::db', :unless => UNSUPPORTED_PLATFORMS.include?(fac
       end
 
       result = shell('psql --version')
-      version = result.stdout.match(%r{\s(8\.\d)})[1]
+      version = result.stdout.match(%r{\s(\d\.\d)})[1]
       if version > "8.1"
         comment_information_function = "shobj_description"
       else
