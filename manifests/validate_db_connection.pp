@@ -47,7 +47,7 @@ define postgresql::validate_db_connection(
   # time it takes to run each psql command.
   $timeout = (($sleep + 2) * $tries)
 
-  $exec_name = "validate postgres connection for ${database_host}/${database_name}"
+  $exec_name = "validate postgres connection for ${database_username}@${database_host}:${database_port}/${database_name}"
   exec { $exec_name:
     command     => "echo 'Unable to connect to defined database using: ${cmd}' && false",
     unless      => $validate_cmd,
