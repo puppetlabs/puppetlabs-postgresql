@@ -22,6 +22,7 @@ class postgresql::globals (
   $pg_hba_conf_path     = undef,
   $pg_ident_conf_path   = undef,
   $postgresql_conf_path = undef,
+  $recovery_conf_path   = undef,
 
   $pg_hba_conf_defaults = undef,
 
@@ -44,6 +45,7 @@ class postgresql::globals (
 
   $manage_pg_hba_conf   = undef,
   $manage_pg_ident_conf = undef,
+  $manage_recovery_conf = undef,
 
   $manage_package_repo  = undef
 ) {

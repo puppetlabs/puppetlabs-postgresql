@@ -30,6 +30,7 @@ class postgresql::server (
   $pg_hba_conf_path           = $postgresql::params::pg_hba_conf_path,
   $pg_ident_conf_path         = $postgresql::params::pg_ident_conf_path,
   $postgresql_conf_path       = $postgresql::params::postgresql_conf_path,
+  $recovery_conf_path         = $postgresql::params::recovery_conf_path,
 
   $datadir                    = $postgresql::params::datadir,
   $xlogdir                    = $postgresql::params::xlogdir,
@@ -47,6 +48,7 @@ class postgresql::server (
 
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
+  $manage_recovery_conf       = $postgresql::params::manage_recovery_conf,
 
   #Deprecated
   $version                    = undef,
