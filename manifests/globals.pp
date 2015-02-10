@@ -109,7 +109,11 @@ class postgresql::globals (
     '9.4'   => '2.1',
     default => undef,
   }
-  $globals_postgis_version = pick($postgis_version, $default_postgis_version)
+  if $postgis_version {
+    $globals_postgis_version = $postgis_version
+  } else {
+    $globals_postgis_version = $default_postgis_version
+  }
 
   # Setup of the repo only makes sense globally, so we are doing this here.
   if($manage_package_repo) {
