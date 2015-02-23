@@ -29,6 +29,7 @@ define postgresql::server::db (
   if ! defined(Postgresql::Server::Role[$user]) {
     postgresql::server::role { $user:
       password_hash => $password,
+      before        => Postgresql::Server::Database[$dbname],
     }
   }
 
