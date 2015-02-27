@@ -4,6 +4,7 @@ class postgresql::server::passwd {
   $user              = $postgresql::server::user
   $group             = $postgresql::server::group
   $psql_path         = $postgresql::server::psql_path
+  $port              = $postgresql::server::port
 
   if ($postgres_password != undef) {
     # NOTE: this password-setting logic relies on the pg_hba.conf being
@@ -25,7 +26,7 @@ class postgresql::server::passwd {
       # environment variable. If the password is correct (current), this
       # command will exit with an exit code of 0, which will prevent the main
       # command from running.
-      unless    => "${env} ${psql_path} -h localhost -c 'select 1' > /dev/null",
+      unless    => "${env} ${psql_path} -h localhost -p ${port} -c 'select 1' > /dev/null",
       path      => '/usr/bin:/usr/local/bin:/bin',
     }
   }
