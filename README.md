@@ -131,10 +131,12 @@ Classes:
 * [postgresql::globals](#class-postgresqlglobals)
 * [postgresql::lib::devel](#class-postgresqllibdevel)
 * [postgresql::lib::java](#class-postgresqllibjava)
+* [postgresql::lib::docs](#class-postgresqllibdocs)
 * [postgresql::lib::perl](#class-postgresqllibperl)
 * [postgresql::lib::python](#class-postgresqllibpython)
 * [postgresql::server](#class-postgresqlserver)
 * [postgresql::server::plperl](#class-postgresqlserverplperl)
+* [postgresql::server::plpython](#class-postgresqlserverplpython)
 * [postgresql::server::contrib](#class-postgresqlservercontrib)
 * [postgresql::server::postgis](#class-postgresqlserverpostgis)
 
@@ -205,11 +207,17 @@ This setting can be used to override the default postgresql devel package name. 
 ####`java_package_name`
 This setting can be used to override the default postgresql java package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
+####`docs_package_name`
+This setting can be used to override the default postgresql docs package name. If not specified, the module will use whatever package name is the default for your OS distro.
+
 ####`perl_package_name`
 This setting can be used to override the default postgresql Perl package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
 ####`plperl_package_name`
 This setting can be used to override the default postgresql PL/perl package name. If not specified, the module will use whatever package name is the default for your OS distro.
+
+####`plpython_package_name`
+This setting can be used to override the default postgresql PL/python package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
 ####`python_package_name`
 This setting can be used to override the default postgresql Python package name. If not specified, the module will use whatever package name is the default for your OS distro.
@@ -314,6 +322,9 @@ Value to pass through to the `package` resource when creating the server instanc
 
 ####`plperl_package_name`
 This sets the default package name for the PL/Perl extension. Defaults to utilising the operating system default.
+
+####`plpython_package_name`
+This sets the default package name for the PL/Python extension. Defaults to utilising the operating system default.
 
 ####`service_manage`
 This setting selects whether Puppet should manage the service. Defaults to `true`.
@@ -456,6 +467,15 @@ The name of the postgresql java package.
 ####`package_ensure`
 The ensure parameter passed on to postgresql java package resource.
 
+###Class: postgresql::lib::docs
+This class installs postgresql bindings for Postgres-Docs. Alter the following parameters if you have a custom version you would like to install (Note: don't forget to make sure to add any necessary yum or apt repositories if specifying a custom version):
+
+####`package_name`
+The name of the postgresql docs package.
+
+####`package_ensure`
+The ensure parameter passed on to postgresql docs package resource.
+
 
 ###Class: postgresql::lib::perl
 This class installs the postgresql Perl libraries. For customer requirements you can customise the following parameters:
@@ -466,6 +486,14 @@ The name of the postgresql perl package.
 ####`package_ensure`
 The ensure parameter passed on to postgresql perl package resource.
 
+###Class: postgresql::server::plpython
+This class installs the PL/Python procedural language for postgresql.
+
+####`package_name`
+The name of the postgresql PL/Python package.
+
+####`package_ensure`
+The ensure parameter passed on to postgresql PL/Python package resource.
 
 ###Class: postgresql::lib::python
 This class installs the postgresql Python libraries. For customer requirements you can customise the following parameters:
