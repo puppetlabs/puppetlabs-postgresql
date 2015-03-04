@@ -7,6 +7,7 @@ class postgresql::server (
   $package_ensure             = $postgresql::params::package_ensure,
 
   $plperl_package_name        = $postgresql::params::plperl_package_name,
+  $plpython_package_name      = $postgresql::params::plpython_package_name,
 
   $service_ensure             = $postgresql::params::service_ensure,
   $service_enable             = $postgresql::params::service_enable,

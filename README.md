@@ -226,6 +226,7 @@ Classes:
 * [postgresql::lib::python](#class-postgresqllibpython)
 * [postgresql::server](#class-postgresqlserver)
 * [postgresql::server::plperl](#class-postgresqlserverplperl)
+* [postgresql::server::plpython](#class-postgresqlserverplpython)
 * [postgresql::server::contrib](#class-postgresqlservercontrib)
 * [postgresql::server::postgis](#class-postgresqlserverpostgis)
 
@@ -294,6 +295,9 @@ This setting can be used to override the default postgresql Perl package name. I
 
 ####`plperl_package_name`
 This setting can be used to override the default postgresql PL/perl package name. If not specified, the module will use whatever package name is the default for your OS distro.
+
+####`plpython_package_name`
+This setting can be used to override the default postgresql PL/python package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
 ####`python_package_name`
 This setting can be used to override the default postgresql Python package name. If not specified, the module will use whatever package name is the default for your OS distro.
@@ -392,6 +396,9 @@ Value to pass through to the `package` resource when creating the server instanc
 
 ####`plperl_package_name`
 This sets the default package name for the PL/Perl extension. Defaults to utilising the operating system default.
+
+####`plpython_package_name`
+This sets the default package name for the PL/Python extension. Defaults to utilising the operating system default.
 
 ####`service_manage`
 This setting selects whether Puppet should manage the service. Defaults to `true`.
@@ -532,6 +539,14 @@ The name of the postgresql perl package.
 ####`package_ensure`
 The ensure parameter passed on to postgresql perl package resource.
 
+###Class: postgresql::server::plpython
+This class installs the PL/Python procedural language for postgresql.
+
+####`package_name`
+The name of the postgresql PL/Python package.
+
+####`package_ensure`
+The ensure parameter passed on to postgresql PL/Python package resource.
 
 ###Class: postgresql::lib::python
 This class installs the postgresql Python libraries. For customer requirements you can customise the following parameters:
