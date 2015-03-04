@@ -9,6 +9,7 @@ define postgresql::server::role(
   $inherit          = true,
   $superuser        = false,
   $replication      = false,
+  $host             = undef,
   $connection_limit = '-1',
   $username         = $title
 ) {
@@ -31,6 +32,7 @@ define postgresql::server::role(
 
   Postgresql_psql {
     db         => $db,
+    host       => $host,
     port       => $port,
     psql_user  => $psql_user,
     psql_group => $psql_group,

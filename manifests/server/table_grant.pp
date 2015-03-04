@@ -7,7 +7,8 @@ define postgresql::server::table_grant(
   $role,
   $port      = $postgresql::server::port,
   $psql_db   = undef,
-  $psql_user = undef
+  $psql_user = undef,
+  $host      = undef
 ) {
   postgresql::server::grant { "table:${name}":
     role        => $role,
@@ -18,5 +19,6 @@ define postgresql::server::table_grant(
     object_name => $table,
     psql_db     => $psql_db,
     psql_user   => $psql_user,
+    host        => $host,
   }
 }

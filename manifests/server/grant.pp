@@ -2,6 +2,7 @@
 define postgresql::server::grant (
   $role,
   $db,
+  $host        = undef,
   $privilege   = undef,
   $object_type = 'database',
   $object_name = $db,
@@ -113,6 +114,7 @@ define postgresql::server::grant (
   postgresql_psql { "grant:${name}":
     command    => $grant_cmd,
     db         => $on_db,
+    host       => $host,
     port       => $port,
     psql_user  => $psql_user,
     psql_group => $group,
