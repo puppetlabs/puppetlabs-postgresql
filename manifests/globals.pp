@@ -6,6 +6,7 @@ class postgresql::globals (
   $contrib_package_name = undef,
   $devel_package_name   = undef,
   $java_package_name    = undef,
+  $docs_package_name    = undef,
   $perl_package_name    = undef,
   $plperl_package_name  = undef,
   $plpython_package_name = undef,

@@ -222,6 +222,7 @@ Classes:
 * [postgresql::globals](#class-postgresqlglobals)
 * [postgresql::lib::devel](#class-postgresqllibdevel)
 * [postgresql::lib::java](#class-postgresqllibjava)
+* [postgresql::lib::docs](#class-postgresqllibdocs)
 * [postgresql::lib::perl](#class-postgresqllibperl)
 * [postgresql::lib::python](#class-postgresqllibpython)
 * [postgresql::server](#class-postgresqlserver)
@@ -289,6 +290,9 @@ This setting can be used to override the default postgresql devel package name. 
 
 ####`java_package_name`
 This setting can be used to override the default postgresql java package name. If not specified, the module will use whatever package name is the default for your OS distro.
+
+####`docs_package_name`
+This setting can be used to override the default postgresql docs package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
 ####`perl_package_name`
 This setting can be used to override the default postgresql Perl package name. If not specified, the module will use whatever package name is the default for your OS distro.
@@ -528,6 +532,15 @@ The name of the postgresql java package.
 
 ####`package_ensure`
 The ensure parameter passed on to postgresql java package resource.
+
+###Class: postgresql::lib::docs
+This class installs postgresql bindings for Postgres-Docs. Alter the following parameters if you have a custom version you would like to install (Note: don't forget to make sure to add any necessary yum or apt repositories if specifying a custom version):
+
+####`package_name`
+The name of the postgresql docs package.
+
+####`package_ensure`
+The ensure parameter passed on to postgresql docs package resource.
 
 
 ###Class: postgresql::lib::perl
