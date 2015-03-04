@@ -70,7 +70,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
    describe "with port string" do
       let(:attributes) do { :port => '5555' } end
 
-      it "executes with the given psql_path on the given DB" do
+      it "executes with the given port" do
         expect(provider).to receive(:run_command).with(["psql",
         "-p", "5555",
         "-t", "-c", "SELECT something"],
@@ -82,7 +82,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
     describe "with host string" do
       let(:attributes) do { :host => '127.0.0.1' } end
 
-      it "executes with the given psql_path on the given DB" do
+      it "executes with the given host" do
         expect(provider).to receive(:run_command).with(["psql",
           "-h", "127.0.0.1",
           "-t", "-c",
