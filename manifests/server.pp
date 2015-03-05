@@ -25,7 +25,6 @@ class postgresql::server (
   $ipv6acls                   = $postgresql::params::ipv6acls,
 
   $initdb_path                = $postgresql::params::initdb_path,
-  $createdb_path              = $postgresql::params::createdb_path,
   $psql_path                  = $postgresql::params::psql_path,
   $pg_hba_conf_path           = $postgresql::params::pg_hba_conf_path,
   $pg_ident_conf_path         = $postgresql::params::pg_ident_conf_path,
