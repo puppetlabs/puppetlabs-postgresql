@@ -5,9 +5,10 @@ define postgresql::server::table_grant(
   $table,
   $db,
   $role,
-  $port      = $postgresql::server::port,
+  $port      = undef,
   $psql_db   = undef,
-  $psql_user = undef
+  $psql_user = undef,
+  $connect_settings = undef,
 ) {
   postgresql::server::grant { "table:${name}":
     role        => $role,
@@ -18,5 +19,6 @@ define postgresql::server::table_grant(
     object_name => $table,
     psql_db     => $psql_db,
     psql_user   => $psql_user,
+    connect_settings => $connect_settings,
   }
 }
