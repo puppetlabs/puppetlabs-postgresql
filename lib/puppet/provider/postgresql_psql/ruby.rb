@@ -16,19 +16,21 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
     command.push("-p", resource[:port]) if resource[:port]
     command.push("-t", "-c", '"' + sql.gsub('"', '\"') + '"')
 
+    environment = get_environment
+
     if resource[:cwd]
       Dir.chdir resource[:cwd] do
-        run_command(command, resource[:psql_user], resource[:psql_group])
+        run_command(command, resource[:psql_user], resource[:psql_group], environment)
       end
     else
-      run_command(command, resource[:psql_user], resource[:psql_group])
+      run_command(command, resource[:psql_user], resource[:psql_group], environment)
     end
   end
 
   private
 
   def get_environment
-    environment = {}
+    environment = resource[:connect_settings] || {}
     if envlist = resource[:environment]
       envlist = [envlist] unless envlist.is_a? Array
       envlist.each do |setting|
@@ -47,7 +49,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
     return environment
   end
 
-  def run_command(command, user, group)
+  def run_command(command, user, group, environment)
     command = command.join ' '
     environment = get_environment
     if Puppet::PUPPETVERSION.to_f < 3.0
@@ -66,7 +68,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
         :failonfail         => false,
         :combine            => true,
         :override_locale    => true,
-        :custom_environment => environment
+        :custom_environment => environment,
       })
       [output, $CHILD_STATUS.dup]
     end

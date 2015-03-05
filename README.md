@@ -120,6 +120,43 @@ In this example, you would grant ALL privileges on the test1 database and on the
 
 At this point, you would just need to plunk these database name/username/password values into your PuppetDB config files, and you are good to go.
 
+###Managing remote users, roles and permissions
+
+Remote SQL objects are managed using the same Puppet resources as local SQL objects with the additional of a connect_settings hash. This provides control over how Puppet should connect to the remote Postgres instances and the version that should be used when generating SQL commands.
+
+When provided the connect_settings hash can contain environment variables to control Postgres client connections, such as: PGHOST, PGPORT, PGPASSWORD PGSSLKEY (see http://www.postgresql.org/docs/9.4/static/libpq-envars.html) Additionally the special value of DBVERSION can be provided to specify the target database's version. If the connect_settings hash is omitted or empty then Puppet will connect to the local Postgres instance.
+
+A connect_settings hash can be provided with each of the Puppet resources or a default connect_settings hash can be set in postgresql::globals. Per resource configuration of connect_settings allows for SQL object to be creating on multiple database by multiple users.
+
+    $connection_settings_super2 = {
+                                     'PGUSER'     => "super2",
+                                     'PGPASSWORD' => "foobar2",
+                                     'PGHOST'     => "127.0.0.1",
+                                     'PGPORT'     => "5432",
+                                     'PGDATABASE' => "postgres",
+                                  }
+
+    include postgresql::server
+
+    # Connect with no special settings, i.e domain sockets, user postges
+    postgresql::server::role{'super2':
+      password_hash => "foobar2",
+      superuser => true,
+
+      connect_settings => {},
+      require => [
+                   Class['postgresql::globals'],
+                   Class['postgresql::server::service'],
+                 ],
+    }
+
+    # Now using this new user connect via TCP
+    postgresql::server::database { 'db1':
+      connect_settings => $connection_settings_super2,
+
+      require => Postgresql::Server::Role['super2'],
+    }
+
 Reference
 ---------
 
@@ -241,6 +278,7 @@ This setting is used to specify the name of the default database to connect with
 Path to the `initdb` command.
 
 ####`createdb_path`
+**Deprecated**
 Path to the `createdb` command.
 
 ####`psql_path`
@@ -370,6 +408,7 @@ List of strings for access control for connection method, users, databases, IPv6
 Path to the `initdb` command.
 
 ####`createdb_path`
+**Deprecated**
 Path to the `createdb` command.
 
 ####`psql_path`
@@ -539,7 +578,7 @@ Value for the setting.
 
 
 ###Resource: postgresql::server::db
-This is a convenience resource that creates a database, user and assigns necessary permissions in one go.
+This is a convenience resource that creates a local database, user and assigns necessary permissions in one go.
 
 For example, to create a database called `test1` with a corresponding user of the same name, you can use:
 
@@ -612,6 +651,8 @@ Override the locale during creation of the database. Defaults to the default def
 ####`istemplate`
 Define database as a template. Defaults to `false`.
 
+####`connect_settings`
+Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
 
 ###Resource: postgresql::server::database\_grant
 This defined type manages grant based access privileges for users, wrapping the `postgresql::server::database_grant` for database specific permissions. Consult the PostgreSQL documentation for `grant` for more information.
@@ -634,6 +675,8 @@ Database to execute the grant against. This should not ordinarily be changed fro
 ####`psql_user`
 OS user for running `psql`. Defaults to the default user for the module, usually `postgres`.
 
+####`connect_settings`
+Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
 
 ###Resource: postgresql::server::extension
 Manages a postgresql extension.
@@ -682,6 +725,9 @@ OS user for running `psql`. Defaults to the default user for the module, usually
 
 ####`port`
 Port to use when connecting. Default to 'undef' which generally defaults to 5432 depending on your PostgreSQL packaging.
+
+####`connect_settings`
+Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
 
 ###Resource: postgresql::server::pg\_hba\_rule
 This defined type allows you to create an access rule for `pg_hba.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/8.2/static/auth-pg-hba-conf.html).
@@ -886,6 +932,9 @@ Specifies how many concurrent connections the role can make. Defaults to `-1` me
 ####`username`
 The username of the role to create, defaults to `namevar`.
 
+####`connect_settings`
+Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
+
 ###Resource: postgresql::server::schema
 This defined type can be used to create a schema. For example:
 
@@ -908,6 +957,9 @@ The default owner of the schema.
 
 ####`schema`
 Name of the schma. Defaults to `namevar`.
+
+####`connect_settings`
+Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
 
 
 ###Resource: postgresql::server::table\_grant
@@ -934,6 +986,8 @@ Database to execute the grant against. This should not ordinarily be changed fro
 ####`psql_user`
 OS user for running `psql`. Defaults to the default user for the module, usually `postgres`.
 
+####`connect_settings`
+Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
 
 ###Resource: postgresql::server::tablespace
 This defined type can be used to create a tablespace. For example:
@@ -957,8 +1011,11 @@ The default owner of the tablespace.
 ####`spcname`
 Name of the tablespace. Defaults to `namevar`.
 
+####`connect_settings`
+Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
 
 ###Resource: postgresql::validate\_db\_connection
+
 This resource can be utilised inside composite manifests to validate that a client has a valid connection with a remote PostgreSQL database. It can be ran from any node where the PostgreSQL client software is installed to validate connectivity before commencing other dependent tasks in your Puppet manifests, so it is often used when chained to other tasks such as: starting an application server, performing a database migration.
 
 Example usage:
@@ -990,6 +1047,9 @@ Username to connect with. Defaults to 'undef', which when using a unix socket an
 
 ####`database_password`
 Password to connect with. Can be left blank, but that is not recommended.
+
+####`connect_settings`
+Hash of environment variable used when connecting to a remote server, this is an alternative to providing individual parameters (database_host, etc.). If provided the individual parameters take precedence.
 
 ####`run_as`
 The user to run the `psql` command with for authenticiation. This is important when trying to connect to a database locally using Unix sockets and `ident` authentication. It is not needed for remote testing.

@@ -4,19 +4,11 @@ define postgresql::server::extension (
   $ensure = 'present',
   $package_name = undef,
   $package_ensure = undef,
+  $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   $user          = $postgresql::server::user
   $group         = $postgresql::server::group
   $psql_path     = $postgresql::server::psql_path
-  $port          = $postgresql::server::port
-
-  # Set the defaults for the postgresql_psql resource
-  Postgresql_psql {
-    psql_user  => $user,
-    psql_group => $group,
-    psql_path  => $psql_path,
-    port       => $port,
-  }
 
   case $ensure {
     'present': {
@@ -39,10 +31,16 @@ define postgresql::server::extension (
   }
 
   postgresql_psql {"Add ${title} extension to ${database}":
-    db      => $database,
-    command => $command,
-    unless  => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = '${name}') as t WHERE t.count ${unless_comp} 1",
-    require => Postgresql::Server::Database[$database],
+
+    psql_user        => $user,
+    psql_group       => $group,
+    psql_path        => $psql_path,
+    connect_settings => $connect_settings,
+
+    db               => $database,
+    command          => $command,
+    unless           => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = '${name}') as t WHERE t.count ${unless_comp} 1",
+    require          => Postgresql::Server::Database[$database],
   }
 
   if $package_name {
