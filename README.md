@@ -10,12 +10,11 @@ Table of Contents
     * [PE 3.2 supported module](#pe-32-supported-module)
     * [Configuring the server](#configuring-the-server) 
 4. [Usage - How to use the module for various tasks](#usage)
-5. [Upgrading - Guide for upgrading from older revisions of this module](#upgrading)
-6. [Reference - The classes, defines,functions and facts available in this module](#reference)
-7. [Limitations - OS compatibility, etc.](#limitations)
-8. [Development - Guide for contributing to the module](#development)
-9. [Transfer Notice - Notice of authorship change](#transfer-notice)
-10. [Contributors - List of module contributors](#contributors)
+5. [Reference - The classes, defines,functions and facts available in this module](#reference)
+6. [Limitations - OS compatibility, etc.](#limitations)
+7. [Development - Guide for contributing to the module](#development)
+8. [Transfer Notice - Notice of authorship change](#transfer-notice)
+9. [Contributors - List of module contributors](#contributors)
 
 Overview
 --------
@@ -120,96 +119,6 @@ To manage users, roles and permissions:
 In this example, you would grant ALL privileges on the test1 database and on the `my_table` table of the test2 database to the user or group specified by dan.
 
 At this point, you would just need to plunk these database name/username/password values into your PuppetDB config files, and you are good to go.
-
-Upgrading
----------
-
-###Upgrading from 2.x to version 3
-
-*Note:* if you are upgrading for 2.x, you *must* read this, as just about everything has changed.
-
-Version 3 was a major rewrite to fix some internal dependency issues, and to make the new Public API more clear. As a consequence a lot of things have changed for version 3 and older revisions that we will try to outline here.
-
-####Server specific objects now moved under `postgresql::server::` namespace
-
-To restructure server specific elements under the `postgresql::server::` namespaces the following objects were renamed as such:
-
-* `postgresql::database`       -> `postgresql::server::database`
-* `postgresql::database_grant` -> `postgresql::server::database_grant`
-* `postgresql::db`             -> `postgresql::server::db`
-* `postgresql::grant`          -> `postgresql::server::grant`
-* `postgresql::pg_hba_rule`    -> `postgresql::server::pg_hba_rule`
-* `postgresql::plperl`         -> `postgresql::server::plperl`
-* `postgresql::contrib`        -> `postgresql::server::contrib`
-* `postgresql::role`           -> `postgresql::server::role`
-* `postgresql::table_grant`    -> `postgresql::server::table_grant`
-* `postgresql::tablespace`     -> `postgresql::server::tablespace`
-
-####New `postgresql::server::config_entry` resource for managing configuration
-
-Previously we used the `file_line` resource to modify `postgresql.conf`. This new revision now adds a new resource named `postgresql::server::config_entry` for managing this file. For example:
-
-    postgresql::server::config_entry { 'check_function_bodies':
-      value => 'off',
-    }
-
-If you were using `file_line` for this purpose, you should change to this new methodology.
-
-####`postgresql_puppet_extras.conf` has been removed
-
-Now that we have a methodology for managing `postgresql.conf`, and due to concerns over the file management methodology using an `exec { 'touch ...': }` as a way to create an empty file the existing postgresql\_puppet\_extras.conf file is no longer managed by this module.
-
-If you wish to recreate this methodology yourself, use this pattern:
-
-    class { 'postgresql::server': }
-
-    $extras = "/tmp/include.conf"
-
-    file { $extras:
-      content => 'max_connections = 123',
-      notify  => Class['postgresql::server::service'],
-    }->
-    postgresql::server::config_entry { 'include':
-      value   => $extras,
-    }
-
-####All uses of the parameter `charset` changed to `encoding`
-
-Since PostgreSQL uses the terminology `encoding` not `charset` the parameter has been made consisent across all classes and resources.
-
-####The `postgresql` base class is no longer how you set globals
-
-The old global override pattern was less then optimal so it has been fixed, however we decided to demark this properly by specifying these overrides in the class `postgresql::globals`. Consult the documentation for this class now to see what options are available.
-
-Also, some parameter elements have been moved between this and the `postgresql::server` class where it made sense.
-
-####`config_hash` parameter collapsed for the `postgresql::server` class
-
-Because the `config_hash` was really passing data through to what was in effect an internal class (`postgresql::config`). And since we don't want this kind of internal exposure the parameters were collapsed up into the `postgresql::server` class directly.
-
-####Lots of changes to 'private' or 'undocumented' classes
-
-If you were using these before, these have changed names. You should only use what is documented in this README.md, and if you don't have what you need you should raise a patch to add that feature to a public API. All internal classes now have a comment at the top indicating them as private to make sure the message is clear that they are not supported as Public API.
-
-####`pg_hba_conf_defaults` parameter included to turn off default pg\_hba rules
-
-The defaults should be good enough for most cases (if not raise a bug) but if you simply need an escape hatch, this setting will turn off the defaults. If you want to do this, it may affect the rest of the module so make sure you replace the rules with something that continues operation.
-
-####`postgresql::database_user` has now been removed
-
-Use `postgresql::server::role` instead.
-
-####`postgresql::psql` resource has now been removed
-
-Use `postgresql_psql` instead. In the future we may recreate this as a wrapper to add extra capability, but it will not match the old behaviour.
-
-####`postgresql_default_version` fact has now been removed
-
-It didn't make sense to have this logic in a fact any more, the logic has been moved into `postgresql::params`.
-
-####`ripienaar/concat` is no longer used, instead we use `puppetlabs/concat`
-
-The older concat module is now deprecated and moved into the `puppetlabs/concat` namespace. Functionality is more or less identical, but you may need to intervene during the installing of this package - as both use the same `concat` namespace.
 
 Reference
 ---------
