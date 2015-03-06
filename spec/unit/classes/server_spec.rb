@@ -16,6 +16,10 @@ describe 'postgresql::server', :type => :class do
   describe 'with no parameters' do
     it { is_expected.to contain_class("postgresql::params") }
     it { is_expected.to contain_class("postgresql::server") }
+    it { is_expected.to contain_exec('postgresql_reload').with({
+      'command' => 'service postgresql reload',
+    })
+    }
     it 'should validate connection' do
       is_expected.to contain_postgresql__validate_db_connection('validate_service_is_running')
     end
@@ -36,6 +40,19 @@ describe 'postgresql::server', :type => :class do
     it { is_expected.to contain_class("postgresql::server") }
     it 'shouldnt validate connection' do
       is_expected.not_to contain_postgresql__validate_db_connection('validate_service_is_running')
+    end
+  end
+
+  describe 'service_reload => /bin/true' do
+    let(:params) {{ :service_reload => '/bin/true' }}
+    it { is_expected.to contain_class("postgresql::params") }
+    it { is_expected.to contain_class("postgresql::server") }
+    it { is_expected.to contain_exec('postgresql_reload').with({
+      'command' => '/bin/true',
+    })
+    }
+    it 'should validate connection' do
+      is_expected.to contain_postgresql__validate_db_connection('validate_service_is_running')
     end
   end
 

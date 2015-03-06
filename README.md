@@ -311,6 +311,9 @@ This setting can be used to override the default postgresql service name. If not
 ####`service_provider`
 This setting can be used to override the default postgresql service provider. If not specified, the module will use whatever service name is the default for your OS distro.
 
+####`service_reload`
+This setting can be used to override the default reload command for your PostgreSQL service. If not specified, the module will the default reload command for your OS distro.
+
 ####`service_status`
 This setting can be used to override the default status check command for your PostgreSQL service. If not specified, the module will use whatever service name is the default for your OS distro.
 
