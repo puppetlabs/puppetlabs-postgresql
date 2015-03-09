@@ -4,13 +4,19 @@ define postgresql::server::grant (
   $db,
   $privilege   = undef,
   $object_type = 'database',
-  $object_name = $db,
+  $object_name = undef,
   $psql_db     = $postgresql::server::default_database,
   $psql_user   = $postgresql::server::user,
   $port        = $postgresql::server::port
 ) {
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
+
+  if ! $object_name {
+    $_object_name = $db
+  } else {
+    $_object_name = $object_name
+  }
 
   ## Munge the input values
   $_object_type = upcase($object_type)
@@ -93,13 +99,13 @@ define postgresql::server::grant (
   #   object_type => 'TABLE',
   #   object_name => [$schema, $table],
   # }
-  if is_array($object_name) {
-    $_togrant_object = join($object_name, '"."')
+  if is_array($_object_name) {
+    $_togrant_object = join($_object_name, '"."')
     # Never put double quotes into has_*_privilege function
-    $_granted_object = join($object_name, '.')
+    $_granted_object = join($_object_name, '.')
   } else {
-    $_granted_object = $object_name
-    $_togrant_object = $object_name
+    $_granted_object = $_object_name
+    $_togrant_object = $_object_name
   }
 
   $_unless = $unless_function ? {
