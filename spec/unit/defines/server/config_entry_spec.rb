@@ -106,4 +106,20 @@ describe 'postgresql::server::config_entry', :type => :define do
         :value => 'off' })
     end
   end
+
+  context 'with restart => true' do
+    let(:params) {{ :ensure => 'present', :name => 'foo', :value => 'foovalue', :restart => true }}
+
+    it 'the service should be restarted when applying the config entry' do
+      is_expected.to contain_postgresql_conf('foo').that_notifies('Class[postgresql::server::service]')
+    end
+  end
+
+  context 'with restart => false' do
+    let(:params) {{ :ensure => 'present', :name => 'foo', :value => 'foovalue', :restart => false }}
+
+    it 'the service should be reloaded when applying the config entry' do
+      is_expected.to contain_postgresql_conf('foo').that_notifies('Class[postgresql::server::reload]')
+    end
+  end
 end
