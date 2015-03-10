@@ -1,10 +1,9 @@
 ##2015-03-10 - Supported Release 4.2.0
 ###Summary
 
-This release has several new features including the ability to run psql commands on remote hosts, improved grant support, and a number of bugfixes.
+This release has several new features including support for server extensions, improved grant support, and a number of bugfixes.
 
 ####Features
-- Add host parameter to `postgresql_psql` type (MODULES-661)
 - Changes to support OpenBSD
 - Add `service_reload` parameter to `postgresql::server`
 - Add `comment` parameter to `postgresql::server::database` (MODULES-1153)
