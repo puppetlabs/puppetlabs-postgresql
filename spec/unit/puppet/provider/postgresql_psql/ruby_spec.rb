@@ -79,19 +79,6 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
         provider.run_sql_command("SELECT something")
       end
     end
-    describe "with host string" do
-      let(:attributes) do { :host => '127.0.0.1' } end
-
-      it "executes with the given host" do
-        expect(provider).to receive(:run_command).with(["psql",
-          "-h", "127.0.0.1",
-          "-t", "-c",
-          "SELECT something"],
-          "postgres", "postgres")
-
-        provider.run_sql_command("SELECT something")
-      end
-    end
 
   context("#run_unless_sql_command") do
     let(:attributes) do { } end

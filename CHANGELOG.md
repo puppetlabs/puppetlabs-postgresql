@@ -1,3 +1,27 @@
+##2015-03-10 - Supported Release 4.2.0
+###Summary
+
+This release has several new features including support for server extensions, improved grant support, and a number of bugfixes.
+
+####Features
+- Changes to support OpenBSD
+- Add `service_reload` parameter to `postgresql::server`
+- Add `comment` parameter to `postgresql::server::database` (MODULES-1153)
+- Add `postgresql::server::extension` defined type
+- Add postgresql versions for utopic and jessie
+- Update `postgresql::server::grant` to support 'GRANT SCHEMA' and 'ALL TABLES IN SCHEMA'
+
+####Bugfixes
+- Lint cleanup
+- Remove outdated upgrade info from README
+- Use correct TCP port when checking password
+- Create role before database
+- Fix template1 encoding on Debian
+- Require server package before user permissions
+- Fix `service_status` default for FreeBSD to allow PostgreSQL to start the first run
+- Fix invalid US-ASCII byte sequence in `postgresql::server::grant` comments
+- Reverted to default behavior for Debian systems as `pg_config` should not be overwritten (MODULES-1485)
+
 ##2014-11-04 - Supported Release 4.1.0
 ###Summary
 
