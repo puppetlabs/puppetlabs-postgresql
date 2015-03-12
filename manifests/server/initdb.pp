@@ -94,7 +94,7 @@ class postgresql::server::initdb {
         SET encoding = pg_char_to_encoding('${encoding}'), datistemplate = TRUE
         WHERE datname = 'template1'",
       unless  => "SELECT datname FROM pg_database WHERE
-        datname = 'template1' AND pg_encoding_to_char(encoding) = '${encoding}'",
+        datname = 'template1' AND encoding = pg_char_to_encoding('${encoding}')",
     }
   }
 }
