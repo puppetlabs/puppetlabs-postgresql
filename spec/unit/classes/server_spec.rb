@@ -26,8 +26,8 @@ describe 'postgresql::server', :type => :class do
   end
 
   describe 'service_ensure => running' do
-    let(:params) do 
-      { 
+    let(:params) do
+      {
         :service_ensure    => 'running',
         :postgres_password => 'new-p@s$word-to-set'
       }
