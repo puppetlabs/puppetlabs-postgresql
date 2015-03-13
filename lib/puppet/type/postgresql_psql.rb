@@ -34,12 +34,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
     # Return true if a matching row is found
     def matches(value)
-      if Puppet::PUPPETVERSION.to_f < 4
-        output, status = provider.run_unless_sql_command(value)
-      else
-        output = provider.run_unless_sql_command(value)
-        status = output.exitcode
-      end
+      output, status = provider.run_unless_sql_command(value)
       self.fail("Error evaluating 'unless' clause, returned #{status}: '#{output}'") unless status == 0
 
       result_count = output.strip.to_i
