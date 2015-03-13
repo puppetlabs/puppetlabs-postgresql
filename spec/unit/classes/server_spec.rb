@@ -46,7 +46,7 @@ describe 'postgresql::server', :type => :class do
           "PGPASSWORD='new-p@s$word-to-set'",
           "NEWPASSWD_ESCAPED='$$new-p@s$word-to-set$$'"
         ],
-        'unless'      => "/usr/bin/psql -h localhost -c 'select 1' > /dev/null",
+        'unless'      => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null",
       })
     end
   end
