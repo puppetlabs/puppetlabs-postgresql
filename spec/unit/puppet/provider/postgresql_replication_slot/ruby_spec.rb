@@ -35,7 +35,7 @@ def |        | physical  |        |          | t      |      |              | 0/
       provider.class.expects(:run_command).with(
         ['psql', '-t', '-c', 'SELECT * FROM pg_replication_slots;'],
         'postgres', 'postgres').returns([sql_instances, nil])
-      instances = type.instances
+      instances = provider.class.instances
       expect(instances.size).to eq 2
       expect(instances[0].name).to eq 'abc'
       expect(instances[1].name).to eq 'def'
