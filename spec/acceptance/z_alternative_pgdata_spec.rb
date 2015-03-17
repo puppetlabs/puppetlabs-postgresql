@@ -4,7 +4,7 @@ require 'spec_helper_acceptance'
 # location properly.
 
 # Allow postgresql to use /tmp/* as a datadir
-if fact('osfamily') == 'RedHat' and fact('selinux') == true
+if fact('osfamily') == 'RedHat' and fact('selinux') == 'true'
   shell 'setenforce 0'
 end
 
