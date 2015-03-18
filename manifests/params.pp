@@ -142,7 +142,7 @@ class postgresql::params inherits postgresql::globals {
       $bindir               = pick($bindir, "/usr/lib/postgresql/${version}/bin")
       $datadir              = pick($datadir, "/var/lib/postgresql/${version}/main")
       $confdir              = pick($confdir, "/etc/postgresql/${version}/main")
-      if versioncmp($::operatingsystemrelease, '8.0') >= 0 {
+      if $::operatingsystem == 'Debian' and versioncmp($::operatingsystemrelease, '8.0') >= 0 {
         # Jessie uses systemd
         $service_status = pick($service_status, "/usr/sbin/service ${service_name}@*-main status")
       } else {
