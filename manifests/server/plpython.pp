@@ -2,7 +2,7 @@
 # README.md for more details.
 class postgresql::server::plpython(
   $package_ensure = 'present',
-  $package_name   = $postgresql::server::plpython_package_name
+  $package_name   = $postgresql::server::plpython_pkg_name
 ) {
   package { 'postgresql-plpython':
     ensure => $package_ensure,

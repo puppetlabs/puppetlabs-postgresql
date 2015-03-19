@@ -9,7 +9,7 @@ class postgresql::globals (
   $docs_package_name    = undef,
   $perl_package_name    = undef,
   $plperl_package_name  = undef,
-  $plpython_package_name= undef,
+  $plpython_pkg_name    = undef,
   $python_package_name  = undef,
   $postgis_package_name = undef,
 
