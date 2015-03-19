@@ -40,7 +40,7 @@ define postgresql::validate_db_connection(
     undef   => undef,
     default => "PGPASSWORD=${database_password}",
   }
-  $cmd = join([$cmd_init, $cmd_host, $cmd_user, $cmd_port, $cmd_dbname])
+  $cmd = join([$cmd_init, $cmd_host, $cmd_user, $cmd_port, $cmd_dbname], ' ')
   $validate_cmd = "/usr/local/bin/validate_postgresql_connection.sh ${sleep} ${tries} '${cmd}'"
 
   # This is more of a safety valve, we add a little extra to compensate for the
