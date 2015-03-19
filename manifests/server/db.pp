@@ -11,7 +11,9 @@ define postgresql::server::db (
   $tablespace = undef,
   $template   = 'template0',
   $istemplate = false,
-  $owner      = undef
+  $owner      = undef,
+  $lc_collate = undef,
+  $lc_ctype   = undef
 ) {
 
   if ! defined(Postgresql::Server::Database[$dbname]) {
@@ -23,6 +25,8 @@ define postgresql::server::db (
       locale     => $locale,
       istemplate => $istemplate,
       owner      => $owner,
+      lc_collate => $lc_collate,
+      lc_ctype   => $lc_ctype,
     }
   }
 
