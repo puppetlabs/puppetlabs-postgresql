@@ -5,6 +5,19 @@ define postgresql::server::extension (
   $package_name = undef,
   $package_ensure = undef,
 ) {
+  $user          = $postgresql::server::user
+  $group         = $postgresql::server::group
+  $psql_path     = $postgresql::server::psql_path
+  $port          = $postgresql::server::port
+  
+  # Set the defaults for the postgresql_psql resource
+  Postgresql_psql {
+    psql_user  => $user,
+    psql_group => $group,
+    psql_path  => $psql_path,
+    port       => $port,
+  }
+
   case $ensure {
     'present': {
       $command = "CREATE EXTENSION ${name}"

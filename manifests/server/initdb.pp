@@ -9,6 +9,16 @@ class postgresql::server::initdb {
   $locale       = $postgresql::server::locale
   $group        = $postgresql::server::group
   $user         = $postgresql::server::user
+  $psql_path    = $postgresql::server::psql_path
+  $port         = $postgresql::server::port
+
+  # Set the defaults for the postgresql_psql resource
+  Postgresql_psql {
+    psql_user  => $user,
+    psql_group => $group,
+    psql_path  => $psql_path,
+    port       => $port,
+  }
 
   # Make sure the data directory exists, and has the correct permissions.
   file { $datadir:
