@@ -7,7 +7,8 @@ define postgresql::server::database(
   $template   = 'template0',
   $encoding   = $postgresql::server::encoding,
   $locale     = $postgresql::server::locale,
-  $istemplate = false
+  $istemplate = false,
+  $host       = undef,
 ) {
   $createdb_path = $postgresql::server::createdb_path
   $user          = $postgresql::server::user
@@ -23,6 +24,7 @@ define postgresql::server::database(
     psql_group => $group,
     psql_path  => $psql_path,
     port       => $port,
+    host       => $host,
   }
 
   # Optionally set the locale switch. Older versions of createdb may not accept
