@@ -9,7 +9,7 @@ define postgresql::server::extension (
   $group         = $postgresql::server::group
   $psql_path     = $postgresql::server::psql_path
   $port          = $postgresql::server::port
-  
+
   # Set the defaults for the postgresql_psql resource
   Postgresql_psql {
     psql_user  => $user,
@@ -20,14 +20,14 @@ define postgresql::server::extension (
 
   case $ensure {
     'present': {
-      $command = "CREATE EXTENSION ${name}"
+      $command = "CREATE EXTENSION \"${name}\""
       $unless_comp = '='
       $package_require = undef
       $package_before = Postgresql_psql["Add ${title} extension to ${database}"]
     }
 
     'absent': {
-      $command = "DROP EXTENSION ${name}"
+      $command = "DROP EXTENSION \"${name}\""
       $unless_comp = '!='
       $package_require = Postgresql_psql["Add ${title} extension to ${database}"]
       $package_before = undef
