@@ -18,6 +18,7 @@ This release fixes compatibility with Puppet 4 and removes opportunities for loc
 - Fix default `postgresql::server::grant::object_name` value
 - Fix idempotency of granting all tables in schema with `puppet::server::grant`
 - Fix lint warnings
+- Fix apt key to use 40 character key and bump puppetlabs-apt to >= 1.8.0 < 2.0.0
 
 
 ##2015-03-10 - Supported Release 4.2.0
