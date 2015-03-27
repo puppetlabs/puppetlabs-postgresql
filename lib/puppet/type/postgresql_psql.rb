@@ -75,7 +75,7 @@ Puppet::Type.newtype(:postgresql_psql) do
     defaultto("/tmp")
   end
 
-  newparam(:environment) do
+  newparam(:pgenv) do
     desc "Any additional environment variables you want to set for a
       SQL command. Multiple environment variables should be
       specified as an array."
