@@ -34,7 +34,9 @@ class postgresql::params inherits postgresql::globals {
         $contrib_package_name = pick($contrib_package_name,'postgresql-contrib')
         $devel_package_name   = pick($devel_package_name, 'postgresql-devel')
         $java_package_name    = pick($java_package_name, 'postgresql-jdbc')
+        $docs_package_name    = pick($docs_package_name, 'postgresql-docs')
         $plperl_package_name  = pick($plperl_package_name, 'postgresql-plperl')
+        $plpython_pkg_name    = pick($plpython_pkg_name, 'postgresql-plpython')
         $service_name         = pick($service_name, 'postgresql')
         $bindir               = pick($bindir, '/usr/bin')
         $datadir              = $::operatingsystem ? {
@@ -48,7 +50,9 @@ class postgresql::params inherits postgresql::globals {
         $contrib_package_name = pick($contrib_package_name,"postgresql${package_version}-contrib")
         $devel_package_name   = pick($devel_package_name, "postgresql${package_version}-devel")
         $java_package_name    = pick($java_package_name, "postgresql${package_version}-jdbc")
+        $docs_package_name    = pick($docs_package_name, "postgresql${package_version}-docs")
         $plperl_package_name  = pick($plperl_package_name, "postgresql${package_version}-plperl")
+        $plpython_pkg_name    = pick($plpython_pkg_name, "postgresql${package_version}-plpython")
         $service_name         = pick($service_name, "postgresql-${version}")
         $bindir               = pick($bindir, "/usr/pgsql-${version}/bin")
         $datadir              = $::operatingsystem ? {
@@ -92,6 +96,7 @@ class postgresql::params inherits postgresql::globals {
       $contrib_package_name = pick($contrib_package_name,'undef')
       # Archlinux postgresql package provides plperl
       $plperl_package_name  = pick($plperl_package_name, 'undef')
+      $plpython_pkg_name    = pick($plpython_pkg_name, 'undef')
       $service_name         = pick($service_name, 'postgresql')
       $bindir               = pick($bindir, '/usr/bin')
       $datadir              = pick($datadir, '/var/lib/postgres/data')
@@ -137,6 +142,7 @@ class postgresql::params inherits postgresql::globals {
       $java_package_name    = pick($java_package_name, 'libpostgresql-jdbc-java')
       $perl_package_name    = pick($perl_package_name, 'libdbd-pg-perl')
       $plperl_package_name  = pick($plperl_package_name, "postgresql-plperl-${version}")
+      $plpython_pkg_name    = pick($plpython_pkg_name, "postgresql-plpython-${version}")
       $python_package_name  = pick($python_package_name, 'python-psycopg2')
 
       $bindir               = pick($bindir, "/usr/lib/postgresql/${version}/bin")
