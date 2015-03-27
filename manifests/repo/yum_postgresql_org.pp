@@ -1,6 +1,6 @@
 # PRIVATE CLASS: do not use directly
-class postgresql::repo::yum_postgresql_org ( 
-      $repo_priority = 10 
+class postgresql::repo::yum_postgresql_org (
+      $repo_priority = 10
     ) inherits postgresql::repo {
   $version_parts   = split($postgresql::repo::version, '[.]')
   $package_version = "${version_parts[0]}${version_parts[1]}"
