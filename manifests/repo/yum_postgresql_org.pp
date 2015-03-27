@@ -1,5 +1,7 @@
 # PRIVATE CLASS: do not use directly
-class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
+class postgresql::repo::yum_postgresql_org ( 
+      $repo_priority = 10 
+    ) inherits postgresql::repo {
   $version_parts   = split($postgresql::repo::version, '[.]')
   $package_version = "${version_parts[0]}${version_parts[1]}"
   $gpg_key_path    = "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}"
@@ -22,6 +24,7 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     baseurl  => "http://yum.postgresql.org/${postgresql::repo::version}/${label1}/${label2}-\$releasever-\$basearch",
     enabled  => 1,
     gpgcheck => 1,
+    priority => $repo_priority,
     gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}",
   }
 
