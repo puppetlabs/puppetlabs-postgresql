@@ -29,7 +29,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
 
   def get_environment
     environment = {}
-    if envlist = resource[:pgenv]
+    if envlist = resource[:environment]
       envlist = [envlist] unless envlist.is_a? Array
       envlist.each do |setting|
         if setting =~ /^(\w+)=((.|\n)+)$/

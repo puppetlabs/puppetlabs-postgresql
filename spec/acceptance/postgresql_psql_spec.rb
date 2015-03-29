@@ -123,7 +123,7 @@ describe 'postgresql_psql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
           db          => 'postgres',
           psql_user   => 'postgres',
           command     => '#{select}',
-          pgenv       => [
+          environment => [
             'PASS_TO_EMBED=pa$swD',
           ],
         }
@@ -140,7 +140,7 @@ describe 'postgresql_psql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
           psql_user   => 'postgres',
           command     => 'invalid sql query',
           unless      => '#{select}',
-          pgenv       => [
+          environment => [
             'PASS_TO_EMBED=passwD',
           ],
         }
