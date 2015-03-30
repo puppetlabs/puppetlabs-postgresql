@@ -2,7 +2,7 @@
 # details.
 class postgresql::lib::docs (
   $package_name   = $postgresql::params::docs_package_name,
-  $package_ensure = 'present'
+  $package_ensure = 'present',
 ) inherits postgresql::params {
 
   validate_string($package_name)

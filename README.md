@@ -300,7 +300,7 @@ This setting can be used to override the default postgresql Perl package name. I
 ####`plperl_package_name`
 This setting can be used to override the default postgresql PL/perl package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
-####`plpython_pkg_name`
+####`plpython_package_name`
 This setting can be used to override the default postgresql PL/python package name. If not specified, the module will use whatever package name is the default for your OS distro.
 
 ####`python_package_name`
@@ -401,7 +401,7 @@ Value to pass through to the `package` resource when creating the server instanc
 ####`plperl_package_name`
 This sets the default package name for the PL/Perl extension. Defaults to utilising the operating system default.
 
-####`plpython_pkg_name`
+####`plpython_package_name`
 This sets the default package name for the PL/Python extension. Defaults to utilising the operating system default.
 
 ####`service_manage`
