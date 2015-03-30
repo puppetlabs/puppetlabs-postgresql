@@ -1,3 +1,26 @@
+## 2015-03-24 - Supported Release 4.3.0
+### Summary
+This release fixes compatibility with Puppet 4 and removes opportunities for local users to view the postgresql password. It also adds a new custom resource to aid in managing replication.
+
+#### Features
+- Add `postgresql::server::logdir` parameter to manage the logdir
+- Add `environment` parameter to `postgresql_psql`
+- Add `postgresql_replication_slot` custom resource
+
+#### Bugfixes
+- Fix for Puppet 4
+- Don't print postgresql\_psql password in command
+- Allow `postgresql::validate_db_connection` for more than one host+port+database combo
+- Fix service command on Debian 8 and up
+- Fix `postgresql::server::extension` to work with custom user/group/port
+- Fix `postgresql::server::initdb` to work with custom user/group/port
+- Fix changing template1 encoding
+- Fix default `postgresql::server::grant::object_name` value
+- Fix idempotency of granting all tables in schema with `puppet::server::grant`
+- Fix lint warnings
+- Fix apt key to use 40 character key and bump puppetlabs-apt to >= 1.8.0 < 2.0.0
+
+
 ##2015-03-10 - Supported Release 4.2.0
 ###Summary
 

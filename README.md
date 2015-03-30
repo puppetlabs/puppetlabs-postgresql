@@ -153,6 +153,12 @@ Resources:
 * [postgresql::server::tablespace](#resource-postgresqlservertablespace)
 * [postgresql::validate_db_connection](#resource-postgresqlvalidate_db_connection)
 
+Custom Resources:
+
+* [postgresql\_psql](#custom-resource-postgresql_psql)
+* [postgresql\_replication\_slot](#custom-resource-postgresql_replication_slot)
+* [postgresql\_conf](#custom-resource-postgresql_conf)
+
 Functions:
 
 * [postgresql\_password](#function-postgresql_password)
@@ -845,6 +851,74 @@ Upon failure, sets the number of attempts before giving up and failing the resou
 ####`create_db_first`
 This will ensure the database is created before running the test. This only really works if your test is local. Defaults to `true`.
 
+
+### Custom Resource: postgresql\_psql
+This type allows puppet to run psql statements.
+
+#### `name`
+An arbitrary tag for your own reference; the name of the message. This is the
+namevar.
+
+#### `command`
+The SQL command to execute via psql. Required.
+
+#### `cwd`
+The working directory under which the psql command should be executed. Defaults
+to '/tmp'
+
+#### `db`
+The name of the database to execute the SQL command against.
+
+#### `environment`
+Any additional environment variables you want to set for a SQL command.
+Multiple environment variables should be specified as an array.
+
+#### `port`
+The port of the database server to execute the SQL command against.
+
+#### `psql\_group`
+The system user group account under which the psql command should be executed.
+Defaults to 'postgres'
+
+#### `psql\_path`
+The path to psql executable. Defaults to 'psql'
+
+#### `psql\_user`
+The system user account under which the psql command should be executed.
+Defaults to "postgres"
+
+#### `refreshonly`
+If 'true', then the SQL will only be executed via a notify/subscribe event.
+Valid values are true or false. Defaults to false.
+
+#### `search\_path`
+The schema search path to use when executing the SQL command
+
+#### `unless`
+An optional SQL command to execute prior to the main :command; this is
+generally intended to be used for idempotency, to check for the existence of an
+object in the database to determine whether or not the main SQL command needs
+to be executed at all.
+
+### Custom Resource: postgresql\_conf
+This type allows puppet to manage postgresql.conf parameters.
+
+#### `name`
+The postgresql parameter name to manage. This is the namevar.
+
+#### `target`
+The path to postgresql.conf. Defaults to '/etc/postgresql.conf'
+
+#### `value`
+The value to set for this parameter.
+
+### Custom Resource: postgresql\_replication\_slot
+This type allows to create and destroy replication slots
+to register warm standby replication on a Postgresql
+master server.
+
+#### `name`
+The name of the slot to create. Must be a validt replication slot name. This is the namevar.
 
 ###Function: postgresql\_password
 If you need to generate a postgres encrypted password, use `postgresql_password`. You can call it from your production manifests if you don't mind them containing the clear text versions of your passwords, or you can call it from the command line and then copy and paste the encrypted password into your manifest:
