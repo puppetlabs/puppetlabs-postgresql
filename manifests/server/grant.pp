@@ -2,12 +2,13 @@
 define postgresql::server::grant (
   $role,
   $db,
-  $privilege   = undef,
-  $object_type = 'database',
-  $object_name = undef,
-  $psql_db     = $postgresql::server::default_database,
-  $psql_user   = $postgresql::server::user,
-  $port        = $postgresql::server::port
+  $privilege           = undef,
+  $object_type         = 'database',
+  $object_name         = undef,
+  $psql_db             = $postgresql::server::default_database,
+  $psql_user           = $postgresql::server::user,
+  $port                = $postgresql::server::port,
+  $onlyif_exists       = false,
 ) {
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
@@ -21,6 +22,8 @@ define postgresql::server::grant (
   ## Munge the input values
   $_object_type = upcase($object_type)
   $_privilege   = upcase($privilege)
+
+  validate_bool($onlyif_exists)
 
   ## Validate that the object type is known
   validate_string($_object_type,
@@ -59,6 +62,7 @@ define postgresql::server::grant (
         'ALL','ALL PRIVILEGES')
       $unless_function = 'has_database_privilege'
       $on_db = $psql_db
+      $onlyif_query = undef
     }
     'SCHEMA': {
       $unless_privilege = $_privilege ? {
@@ -79,6 +83,10 @@ define postgresql::server::grant (
         'TRUNCATE','REFERENCES','TRIGGER','ALL','ALL PRIVILEGES')
       $unless_function = 'has_table_privilege'
       $on_db = $db
+      $onlyif_query = $onlyif_exists ? {
+        true    => "SELECT true FROM pg_tables WHERE tablename = '${object_name}'",
+        default => undef,
+      }
     }
     'ALL TABLES IN SCHEMA': {
       validate_string($_privilege,'SELECT','INSERT','UPDATE','DELETE',
@@ -160,6 +168,7 @@ define postgresql::server::grant (
     psql_group => $group,
     psql_path  => $psql_path,
     unless     => $_unless,
+    onlyif     => $onlyif_query,
     require    => Class['postgresql::server']
   }
 

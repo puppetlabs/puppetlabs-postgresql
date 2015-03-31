@@ -972,6 +972,11 @@ generally intended to be used for idempotency, to check for the existence of an
 object in the database to determine whether or not the main SQL command needs
 to be executed at all.
 
+#### `onlyif`
+An optional SQL command to execute prior to the main :command; this is generally intended 
+to be used for idempotency, to check for the existence of an object in the database to 
+determine whether or not the main SQL command needs to be executed at all.
+
 ### Custom Resource: postgresql\_conf
 This type allows puppet to manage postgresql.conf parameters.
 
