@@ -431,6 +431,16 @@ The ensure parameter passed on to postgresql contrib package resource.
 
 ###Class: postgresql::server::postgis
 Installs the postgresql postgis packages.
+Requires EPEL repository on RedHat based distributions.
+
+Example:
+
+      class { 'postgresql::globals':
+        manage_package_repo => true,
+        version             => '9.4',
+      } -> 
+      class { 'postgresql::server': } 
+      class { 'postgresql::server::postgis': }
 
 ###Class: postgresql::lib::devel
 Installs the packages containing the development libraries for PostgreSQL and
