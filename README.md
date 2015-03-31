@@ -410,6 +410,9 @@ This value defaults to `false`. Whether or not manage the recovery.conf. If set 
 
 This class installs postgresql client software. Alter the following parameters if you have a custom version you would like to install (Note: don't forget to make sure to add any necessary yum or apt repositories if specifying a custom version):
 
+####`validcon_script_path`
+Path to validate connection script. Defaults to `/usr/local/bin/validate_postgresql_connection.sh`.
+
 ####`package_name`
 The name of the postgresql client package.
 
