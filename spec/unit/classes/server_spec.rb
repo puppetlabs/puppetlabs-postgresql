@@ -43,8 +43,8 @@ describe 'postgresql::server', :type => :class do
         'command'     => '/usr/bin/psql -c "ALTER ROLE \"postgres\" PASSWORD ${NEWPASSWD_ESCAPED}"',
         'user'        => 'postgres',
         'environment' => [
-          "PGPASSWORD='new-p@s$word-to-set'",
-          "NEWPASSWD_ESCAPED='$$new-p@s$word-to-set$$'"
+          "PGPASSWORD=new-p@s$word-to-set",
+          "NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$"
         ],
         'unless'      => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null",
       })
