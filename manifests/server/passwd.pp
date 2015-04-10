@@ -21,8 +21,8 @@ class postgresql::server::passwd {
       logoutput   => true,
       cwd         => '/tmp',
       environment => [
-        "PGPASSWORD='${postgres_password}'",
-        "NEWPASSWD_ESCAPED='${escaped}'",
+        "PGPASSWORD=${postgres_password}",
+        "NEWPASSWD_ESCAPED=${escaped}",
       ],
       # With this command we're passing -h to force TCP authentication, which
       # does require a password.  We specify the password via the PGPASSWORD
