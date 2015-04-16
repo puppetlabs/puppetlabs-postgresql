@@ -19,6 +19,7 @@ class postgresql::server::config {
   $manage_recovery_conf       = $postgresql::server::manage_recovery_conf
   $datadir                    = $postgresql::server::datadir
   $logdir                     = $postgresql::server::logdir
+  $manage_package_repo        = $postgresql::globals::manage_package_repo
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file

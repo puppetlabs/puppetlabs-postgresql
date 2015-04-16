@@ -1,4 +1,8 @@
+<% if @managed_package_repo -%>
+  .include /lib/systemd/system/postgresql-<%= @version %>.service
+<% else -%>
 .include /lib/systemd/system/postgresql.service
+<% end -%>
 [Service]
 Environment=PGPORT=<%= @port %>
 Environment=PGDATA=<%= @datadir %>
