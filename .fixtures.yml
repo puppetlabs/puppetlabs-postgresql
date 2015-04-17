@@ -4,5 +4,6 @@ fixtures:
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
     firewall: "https://github.com/puppetlabs/puppetlabs-firewall.git"
     concat: "https://github.com/puppetlabs/puppetlabs-concat.git"
+    file_concat: "https://github.com/electrical/puppet-lib-file_concat.git"
   symlinks:
     postgresql: "#{source_dir}"
