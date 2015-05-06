@@ -6,4 +6,5 @@ spec/fixtures/
 .bundle/
 coverage/
 .idea/
+log/
 *.iml
