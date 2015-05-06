@@ -31,7 +31,6 @@ define postgresql::server::role(
     $environment  = []
   }
 
-  # Set the defaults for the postgresql_psql resource
   Postgresql_psql {
     db         => $db,
     port       => $port,
@@ -44,13 +43,11 @@ define postgresql::server::role(
     ],
   }
 
-  postgresql_psql { "Check for existence of role '${username}'":
+  postgresql_psql { "CREATE ROLE ${username} ENCRYPTED PASSWORD ****":
     command     => "CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}",
     unless      => "SELECT rolname FROM pg_roles WHERE rolname='${username}'",
-    require     => Class['Postgresql::Server'],
     environment => $environment,
-    db          => $db,
-    port        => $port,
+    require     => Class['Postgresql::Server'],
   }
 
   postgresql_psql {"ALTER ROLE \"${username}\" ${superuser_sql}":

@@ -28,8 +28,8 @@ describe 'postgresql::server::role', :type => :define do
   end
 
   it { is_expected.to contain_postgresql__server__role('test') }
-  it 'should Check for existence of role "test"' do
-    is_expected.to contain_postgresql_psql("Check for existence of role 'test'").with({
+  it 'should have create role for "test" user with password as ****' do
+    is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****').with({
       'command'     => "CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1",
       'environment' => "NEWPGPASSWD=new-pa$s",
       'unless'      => "SELECT rolname FROM pg_roles WHERE rolname='test'",

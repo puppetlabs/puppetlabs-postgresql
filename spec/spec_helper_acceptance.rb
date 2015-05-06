@@ -99,7 +99,7 @@ RSpec.configure do |c|
       end
 
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
-      on host, puppet('module','install','puppetlabs-apt'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module','install','puppetlabs-apt', '--version', '1.8.0', '--force'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','--force','puppetlabs-concat'), { :acceptable_exit_codes => [0,1] }
     end
 
