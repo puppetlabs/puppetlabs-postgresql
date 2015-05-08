@@ -31,13 +31,15 @@ define postgresql::server::grant (
     #'FUNCTION',
     #'PROCEDURAL LANGUAGE',
     'SCHEMA',
-    #'SEQUENCE',
+    'SEQUENCE',
+    'ALL SEQUENCES IN SCHEMA',
     'TABLE',
     'ALL TABLES IN SCHEMA',
     #'TABLESPACE',
     #'VIEW',
   )
   # You can use ALL TABLES IN SCHEMA by passing schema_name to object_name
+  # You can use ALL SEQUENCES IN SCHEMA by passing schema_name to object_name
 
   ## Validate that the object type's privilege is acceptable
   # TODO: this is a terrible hack; if they pass "ALL" as the desired privilege,
@@ -69,6 +71,53 @@ define postgresql::server::grant (
       validate_string($_privilege, 'CREATE', 'USAGE', 'ALL', 'ALL PRIVILEGES')
       $unless_function = 'has_schema_privilege'
       $on_db = $db
+    }
+    'SEQUENCE': {
+      $unless_privilege = $_privilege ? {
+        'ALL'   => 'USAGE',
+        default => $_privilege,
+      }
+      validate_string($unless_privilege,'USAGE','ALL','ALL PRIVILEGES')
+      $unless_function = 'has_sequence_privilege'
+      $on_db = $db
+    }
+    'ALL SEQUENCES IN SCHEMA': {
+      validate_string($_privilege,'USAGE','ALL','ALL PRIVILEGES')
+      $unless_function = 'custom'
+      $on_db = $db
+
+      $schema = $object_name
+
+      $custom_privilege = $_privilege ? {
+        'ALL'            => 'USAGE',
+        'ALL PRIVILEGES' => 'USAGE',
+        default          => $_privilege,
+      }
+      
+      # This checks if there is a difference between the sequences in the
+      # specified schema and the sequences for which the role has the specified
+      # privilege. It uses the EXCEPT clause which computes the set of rows
+      # that are in the result of the first SELECT statement but not in the
+      # result of the second one. It then counts the number of rows from this
+      # operation. If this number is zero then the role has the specified
+      # privilege for all sequences in the schema and the whole query returns a
+      # single row, which satisfies the `unless` parameter of Postgresql_psql.
+      # If this number is not zero then there is at least one sequence for which
+      # the role does not have the specified privilege, making it necessary to
+      # execute the GRANT statement.
+      $custom_unless = "SELECT 1 FROM (
+        SELECT sequence_name
+        FROM information_schema.sequences
+        WHERE sequence_schema='${schema}'
+          EXCEPT DISTINCT
+        SELECT object_name as sequence_name
+        FROM information_schema.role_usage_grants
+        WHERE object_type='SEQUENCE'
+        AND grantee='${role}'
+        AND object_schema='${schema}'
+        AND privilege_type='${custom_privilege}'
+        ) P
+        HAVING count(P.sequence_name) = 0"
     }
     'TABLE': {
       $unless_privilege = $_privilege ? {
