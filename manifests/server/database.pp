@@ -90,7 +90,11 @@ define postgresql::server::database(
     }
   }
 
-  # Build up dependencies on tablespace
+  # Build up dependencies
+  if($owner != undef) {
+    Postgresql::Server::Role <| username == $owner |> -> Exec[$createdb_command]
+  }
+
   if($tablespace != undef and defined(Postgresql::Server::Tablespace[$tablespace])) {
     Postgresql::Server::Tablespace[$tablespace]->Exec[$createdb_command]
   }
