@@ -95,7 +95,7 @@ define postgresql::server::database(
     Postgresql::Server::Role <| username == $owner |> -> Exec[$createdb_command]
   }
 
-  if($tablespace != undef and defined(Postgresql::Server::Tablespace[$tablespace])) {
-    Postgresql::Server::Tablespace[$tablespace]->Exec[$createdb_command]
+  if ($tablespace != undef) {
+    Postgresql::Server::Tablespace <| spcname == $tablespace |> -> Exec[$createdb_command]
   }
 }
