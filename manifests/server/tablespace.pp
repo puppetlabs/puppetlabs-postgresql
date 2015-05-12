@@ -42,7 +42,7 @@ define postgresql::server::tablespace(
     require => [Class['postgresql::server'], File[$location]],
   }
 
-  if($owner != undef and defined(Postgresql::Server::Role[$owner])) {
-    Postgresql::Server::Role[$owner]->Postgresql_psql[$create_ts]
+  if($owner != undef) {
+    Postgresql::Server::Role <| username == $owner |> -> Postgresql_psql[$create_ts]
   }
 }
