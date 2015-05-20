@@ -26,12 +26,13 @@ define postgresql::server::pg_hba_rule(
     }
 
     $allowed_auth_methods = $postgresql::server::_version ? {
-      '9.3' => ['trust', 'reject', 'md5', 'sha1', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],
-      '9.2' => ['trust', 'reject', 'md5', 'sha1', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],
-      '9.1' => ['trust', 'reject', 'md5', 'sha1', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],
-      '9.0' => ['trust', 'reject', 'md5', 'sha1', 'password', 'gss', 'sspi', 'krb5', 'ident', 'ldap', 'radius', 'cert', 'pam'],
-      '8.4' => ['trust', 'reject', 'md5', 'sha1', 'password', 'gss', 'sspi', 'krb5', 'ident', 'ldap', 'cert', 'pam'],
-      '8.3' => ['trust', 'reject', 'md5', 'sha1', 'crypt', 'password', 'gss', 'sspi', 'krb5', 'ident', 'ldap', 'pam'],
+      '9.4' => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],
+      '9.3' => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],
+      '9.2' => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],
+      '9.1' => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],
+      '9.0' => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'krb5', 'ident', 'ldap', 'radius', 'cert', 'pam'],
+      '8.4' => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'krb5', 'ident', 'ldap', 'cert', 'pam'],
+      '8.3' => ['trust', 'reject', 'md5', 'crypt', 'password', 'gss', 'sspi', 'krb5', 'ident', 'ldap', 'pam'],
       '8.2' => ['trust', 'reject', 'md5', 'crypt', 'password', 'krb5', 'ident', 'ldap', 'pam'],
       '8.1' => ['trust', 'reject', 'md5', 'crypt', 'password', 'krb5', 'ident', 'pam'],
       default => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam', 'crypt']
