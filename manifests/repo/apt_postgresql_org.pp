@@ -18,8 +18,8 @@ include ::apt
       'source' => 'https://www.postgresql.org/media/keys/ACCC4CF8.asc',
     },
     include  => {
-      'src'    => false,
-      'deb'    => true,
+      'src' => false,
+      'deb' => true,
     },
   }
 
