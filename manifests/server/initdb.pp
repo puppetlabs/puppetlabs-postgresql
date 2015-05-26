@@ -83,19 +83,25 @@ class postgresql::server::initdb {
       require   => File[$require_before_initdb],
     }
     # The package will take care of this for us the first time, but if we
-    # ever need to init a new db we need to make these links explicitly
+    # ever need to init a new db we need to copy these files explicitly
     if $::operatingsystem == 'Debian' or $::operatingsystem == 'Ubuntu' {
       if $::operatingsystemrelease =~ /^6/ or $::operatingsystemrelease =~ /^7/ or $::operatingsystemrelease =~ /^10\.04/ or $::operatingsystemrelease =~ /^12\.04/ {
         file { 'server.crt':
-          ensure  => link,
+          ensure  => file,
           path    => "${datadir}/server.crt",
-          target  => '/etc/ssl/certs/ssl-cert-snakeoil.pem',
+          source  => 'file:///etc/ssl/certs/ssl-cert-snakeoil.pem',
+          owner   => $::postgresql::server::user,
+          group   => $::postgresql::server::group,
+          mode    => '0644',
           require => Exec['postgresql_initdb'],
         }
         file { 'server.key':
-          ensure  => link,
+          ensure  => file,
           path    => "${datadir}/server.key",
-          target  => '/etc/ssl/private/ssl-cert-snakeoil.key',
+          source  => 'file:///etc/ssl/private/ssl-cert-snakeoil.key',
+          owner   => $::postgresql::server::user,
+          group   => $::postgresql::server::group,
+          mode    => '0600',
           require => Exec['postgresql_initdb'],
         }
       }
