@@ -7,7 +7,9 @@ define postgresql::server::database(
   $template   = 'template0',
   $encoding   = $postgresql::server::encoding,
   $locale     = $postgresql::server::locale,
-  $istemplate = false
+  $istemplate = false,
+  $lc_collate = undef,
+  $lc_ctype   = undef
 ) {
   $createdb_path = $postgresql::server::createdb_path
   $user          = $postgresql::server::user
@@ -48,7 +50,17 @@ define postgresql::server::database(
     default => "--tablespace='${tablespace}' ",
   }
 
-  $createdb_command = "${createdb_path} --port='${port}' --owner='${owner}' --template=${template} ${encoding_option}${locale_option}${tablespace_option} '${dbname}'"
+  $lc_collate_option = $lc_collate ? {
+    undef   => '',
+    default => "--lc-collate='${lc_collate}' ",
+  }
+
+  $lc_ctype_option = $lc_ctype ? {
+    undef   => '',
+    default => "--$lc-ctype='${lc_ctype}' ",
+  }
+
+  $createdb_command = "${createdb_path} --port='${port}' --owner='${owner}' --template=${template} ${encoding_option}${locale_option}${tablespace_option}${lc_collate_option}${lc_ctype_option} '${dbname}'"
 
   postgresql_psql { "Check for existence of db '${dbname}'":
     command => 'SELECT 1',
