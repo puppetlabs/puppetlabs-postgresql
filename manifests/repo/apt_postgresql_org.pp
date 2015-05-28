@@ -10,12 +10,12 @@ include ::apt
     priority   => 500,
   }->
   apt::source { 'apt.postgresql.org':
-    location    => 'http://apt.postgresql.org/pub/repos/apt/',
-    release     => "${::lsbdistcodename}-pgdg",
-    repos       => "main ${postgresql::repo::version}",
-    key         => {
+    location => 'http://apt.postgresql.org/pub/repos/apt/',
+    release  => "${::lsbdistcodename}-pgdg",
+    repos    => "main ${postgresql::repo::version}",
+    key      => {
       id         => 'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
-      key_source  => 'https://www.postgresql.org/media/keys/ACCC4CF8.asc',
+      key_source => 'https://www.postgresql.org/media/keys/ACCC4CF8.asc',
     },
     include  => {
       'src' => false,
