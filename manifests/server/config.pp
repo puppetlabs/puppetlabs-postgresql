@@ -69,12 +69,6 @@ class postgresql::server::config {
         order       => '004',
       }
 
-      # ipv4acls are passed as an array of rule strings, here we transform
-      # them into a resources hash, and pass the result to create_resources
-      $ipv4acl_resources = postgresql_acls_to_resources_hash($ipv4acls,
-      'ipv4acls', 10)
-      create_resources('postgresql::server::pg_hba_rule', $ipv4acl_resources)
-
       postgresql::server::pg_hba_rule { 'allow access to all users':
         type        => 'host',
         address     => $ip_mask_allow_all_users,
@@ -87,13 +81,20 @@ class postgresql::server::config {
         auth_method => 'md5',
         order       => '101',
       }
-
-      # ipv6acls are passed as an array of rule strings, here we transform
-      # them into a resources hash, and pass the result to create_resources
-      $ipv6acl_resources = postgresql_acls_to_resources_hash($ipv6acls,
-      'ipv6acls', 102)
-      create_resources('postgresql::server::pg_hba_rule', $ipv6acl_resources)
     }
+
+    # ipv4acls are passed as an array of rule strings, here we transform
+    # them into a resources hash, and pass the result to create_resources
+    $ipv4acl_resources = postgresql_acls_to_resources_hash($ipv4acls,
+    'ipv4acls', 10)
+    create_resources('postgresql::server::pg_hba_rule', $ipv4acl_resources)
+
+
+    # ipv6acls are passed as an array of rule strings, here we transform
+    # them into a resources hash, and pass the result to create_resources
+    $ipv6acl_resources = postgresql_acls_to_resources_hash($ipv6acls,
+    'ipv6acls', 102)
+    create_resources('postgresql::server::pg_hba_rule', $ipv6acl_resources)
   }
 
   # We must set a "listen_addresses" line in the postgresql.conf if we
