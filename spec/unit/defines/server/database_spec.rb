@@ -27,8 +27,7 @@ describe 'postgresql::server::database', :type => :define do
     let (:params) {{ :comment => 'test comment',
                      :connect_settings => {} }}
 
-    it { is_expected.to contain_postgresql_psql("COMMENT ON DATABASE test IS 'test comment'")
-	    .with_connect_settings( {} ) }
+    it { is_expected.to contain_postgresql_psql("COMMENT ON DATABASE test IS 'test comment'").with_connect_settings( {} ) }
   end
 
   context "with specific db connection settings - default port" do
@@ -39,10 +38,7 @@ describe 'postgresql::server::database', :type => :define do
     let (:params) {{ :connect_settings => { 'PGHOST'    => 'postgres-db-server',
                                             'DBVERSION' => '9.1', }}}
 
-    it { is_expected.to contain_postgresql_psql("Create db 'test'")
-	    .with_connect_settings( { 'PGHOST'    => 'postgres-db-server',
-			                          'DBVERSION' => '9.1' } )
-      .with_port( 5432 ) }
+    it { is_expected.to contain_postgresql_psql("Create db 'test'").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1' } ).with_port( 5432 ) }
 
   end
 
@@ -57,11 +53,7 @@ describe 'postgresql::server::database', :type => :define do
                                             'DBVERSION' => '9.1',
                                             'PGPORT'    => '1234' }}}
 
-    it { is_expected.to contain_postgresql_psql("Create db 'test'")
-	    .with_connect_settings( { 'PGHOST'    => 'postgres-db-server',
-			                          'DBVERSION' => '9.1',
-	                              'PGPORT'    => '1234' } )
-            .with_port( nil ) }
+    it { is_expected.to contain_postgresql_psql("Create db 'test'").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ).with_port( nil ) }
 
   end
 
@@ -76,11 +68,7 @@ describe 'postgresql::server::database', :type => :define do
        class {'postgresql::server':}"
     end
 
-    it { is_expected.to contain_postgresql_psql("Create db 'test'")
-	    .with_connect_settings( { 'PGHOST'    => 'postgres-db-server',
-			                          'DBVERSION' => '9.2',
-	                              'PGPORT'    => '1234' } )
-            .with_port( nil ) }
+    it { is_expected.to contain_postgresql_psql("Create db 'test'").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.2','PGPORT'    => '1234' } ).with_port( nil ) }
 
   end
 end
