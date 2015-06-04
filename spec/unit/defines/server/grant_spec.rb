@@ -50,8 +50,8 @@ describe 'postgresql::server::grant', :type => :define do
 
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql("grant:test")
-             .with_connect_settings( { :PGHOST    => 'postgres-db-server',
-                                       :DBVERSION => '9.1' } )
+             .with_connect_settings( { 'PGHOST'    => 'postgres-db-server',
+                                       'DBVERSION' => '9.1' } )
              .with_port( 5432 ) }
   end
 
@@ -72,9 +72,9 @@ describe 'postgresql::server::grant', :type => :define do
 
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql("grant:test")
-             .with_connect_settings( { :PGHOST    => 'postgres-db-server',
-                                       :DBVERSION => '9.1',
-	                               :PGPORT    => '1234' } )
+             .with_connect_settings( { 'PGHOST'    => 'postgres-db-server',
+                                       'DBVERSION' => '9.1',
+	                               'PGPORT'    => '1234' } )
              .with_port( nil ) }
   end
 
@@ -96,9 +96,9 @@ describe 'postgresql::server::grant', :type => :define do
 
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql("grant:test")
-             .with_connect_settings( { :PGHOST    => 'postgres-db-server',
-                                       :DBVERSION => '9.1',
-	                               :PGPORT    => '1234' } )
+             .with_connect_settings( { 'PGHOST'    => 'postgres-db-server',
+                                       'DBVERSION' => '9.1',
+	                               'PGPORT'    => '1234' } )
              .with_port( '5678' ) }
   end
 end

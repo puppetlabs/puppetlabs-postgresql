@@ -40,9 +40,9 @@ describe 'postgresql::server::database', :type => :define do
                                             'DBVERSION' => '9.1', }}}
 
     it { is_expected.to contain_postgresql_psql("Create db 'test'")
-	    .with_connect_settings( { :PGHOST    => 'postgres-db-server',
-			              :DBVERSION => '9.1' } )
-            .with_port( 5432 ) }
+	    .with_connect_settings( { 'PGHOST'    => 'postgres-db-server',
+			                          'DBVERSION' => '9.1' } )
+      .with_port( 5432 ) }
 
   end
 
@@ -58,9 +58,9 @@ describe 'postgresql::server::database', :type => :define do
                                             'PGPORT'    => '1234' }}}
 
     it { is_expected.to contain_postgresql_psql("Create db 'test'")
-	    .with_connect_settings( { :PGHOST    => 'postgres-db-server',
-			              :DBVERSION => '9.1',
-	                              :PGPORT    => '1234' } )
+	    .with_connect_settings( { 'PGHOST'    => 'postgres-db-server',
+			                          'DBVERSION' => '9.1',
+	                              'PGPORT'    => '1234' } )
             .with_port( nil ) }
 
   end
@@ -77,9 +77,9 @@ describe 'postgresql::server::database', :type => :define do
     end
 
     it { is_expected.to contain_postgresql_psql("Create db 'test'")
-	    .with_connect_settings( { :PGHOST    => 'postgres-db-server',
-			              :DBVERSION => '9.2',
-	                              :PGPORT    => '1234' } )
+	    .with_connect_settings( { 'PGHOST'    => 'postgres-db-server',
+			                          'DBVERSION' => '9.2',
+	                              'PGPORT'    => '1234' } )
             .with_port( nil ) }
 
   end

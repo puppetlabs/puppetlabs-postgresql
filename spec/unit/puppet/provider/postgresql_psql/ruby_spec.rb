@@ -81,13 +81,13 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
       end
     end
     describe "with connect_settings" do
-      let(:attributes) do { :connect_settings => { :PGHOST => '127.0.0.1' } } end
+      let(:attributes) do { :connect_settings => { 'PGHOST' => '127.0.0.1' } } end
 
       it "executes with the given host" do
         expect(provider).to receive(:run_command).with(["psql",
           "-t", "-c",
           "\"SELECT something\""],
-          "postgres", "postgres", { :PGHOST => '127.0.0.1' } )
+          "postgres", "postgres", { 'PGHOST' => '127.0.0.1' } )
 
         provider.run_sql_command("SELECT something")
       end
