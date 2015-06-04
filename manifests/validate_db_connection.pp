@@ -54,9 +54,9 @@ define postgresql::validate_db_connection(
   # from the $connect_settings hash
   if $connect_settings != undef {
     if $pass_env != undef {
-      $env = concat(join_keys_to_values( $connect_settings, "="), $pass_env)
+      $env = concat(join_keys_to_values( $connect_settings, '='), $pass_env)
     } else {
-      $env = join_keys_to_values( $connect_settings, "=")
+      $env = join_keys_to_values( $connect_settings, '=')
     }
   } else {
     $env = $pass_env

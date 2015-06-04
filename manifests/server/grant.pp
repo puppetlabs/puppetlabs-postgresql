@@ -165,15 +165,15 @@ define postgresql::server::grant (
   $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${_togrant_object}\" TO
       \"${role}\""
   postgresql_psql { "grant:${name}":
-    command    => $grant_cmd,
-    db         => $on_db,
-    port       => $port_override,
+    command          => $grant_cmd,
+    db               => $on_db,
+    port             => $port_override,
     connect_settings => $connect_settings,
-    psql_user  => $psql_user,
-    psql_group => $group,
-    psql_path  => $psql_path,
-    unless     => $_unless,
-    require    => Class['postgresql::server']
+    psql_user        => $psql_user,
+    psql_group       => $group,
+    psql_path        => $psql_path,
+    unless           => $_unless,
+    require          => Class['postgresql::server']
   }
 
   if($role != undef and defined(Postgresql::Server::Role[$role])) {

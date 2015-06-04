@@ -11,14 +11,14 @@ define postgresql::server::table_grant(
   $connect_settings = undef,
 ) {
   postgresql::server::grant { "table:${name}":
-    role        => $role,
-    db          => $db,
-    port        => $port,
-    privilege   => $privilege,
-    object_type => 'TABLE',
-    object_name => $table,
-    psql_db     => $psql_db,
-    psql_user   => $psql_user,
+    role             => $role,
+    db               => $db,
+    port             => $port,
+    privilege        => $privilege,
+    object_type      => 'TABLE',
+    object_name      => $table,
+    psql_db          => $psql_db,
+    psql_user        => $psql_user,
     connect_settings => $connect_settings,
   }
 }
