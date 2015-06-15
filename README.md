@@ -1043,6 +1043,10 @@ Current it is only actively tested with the following operating systems:
 
 Although patches are welcome for making it work with other OS distros, it is considered best effort.
 
+### Apt module support
+
+While this module supports both 1.x and 2.x versions of the puppetlabs-apt module, it does not support puppetlabs-apt 2.0.0 or 2.0.1.
+
 ### Postgis support
 
 Postgis is currently considered an unsupported feature as it doesn't work on
