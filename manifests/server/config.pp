@@ -161,7 +161,7 @@ class postgresql::server::config {
     if $::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora' {
       file { 'systemd-override':
         ensure  => present,
-        path    => '/etc/systemd/system/postgresql.service',
+        path    => "/etc/systemd/system/${postgresql::params::service_name}.service",
         owner   => root,
         group   => root,
         content => template('postgresql/systemd-override.erb'),
