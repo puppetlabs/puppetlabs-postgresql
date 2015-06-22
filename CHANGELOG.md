@@ -16,10 +16,12 @@ This release has several new features, bugfixes, and test improvements.
 - Fix execution command with puppet <3.4 (MODULES-1923)
 - Fix Puppet.newtype deprecation warning (MODULES-2007)
 - Fix systemd override for manage_repo package versions
+- Fix Copy snakeoil certificate and key instead of symlinking
 
 #### Test Improvements
 - Allows setting BEAKER and BEAKER_RSPEC versions via environment variables.
 - Enables Unit testing on Travis CI with Puppet 4.
+- Cleans up spec_helper_acceptance.rb to use new puppet_install_helper gem.
 
 ## 2015-03-24 - Supported Release 4.3.0
 ### Summary
