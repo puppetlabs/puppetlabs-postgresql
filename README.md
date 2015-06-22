@@ -618,6 +618,39 @@ If provided, this will install the given package prior to activating the extensi
 ####`package_ensure`
 By default, the package specified with `package_name` will be installed when the extension is activated, and removed when the extension is deactivated. You can override this behavior by setting the `ensure` value for the package.
 
+###Resource: postgresql::server::grant
+This defined type manages grant based access privileges for roles. Consult the PostgreSQL documentation for `grant` for more information.
+
+####`namevar`
+Used to uniquely identify this resource, but functionality not used during grant.
+
+####`db`
+Database of object which you are granting access on.
+
+####`role`
+Role or user whom you are granting access for.
+
+####`privilege`
+The privilege you are granting. Can be `ALL`, `ALL PRIVILEGES` or
+`object_type` dependent string.
+
+####`object_type`
+The type of object you are granting privileges on. Can be `DATABASE`,
+`SCHEMA`, `SEQUENCE`, `ALL SEQUENCES IN SCHEMA`, `TABLE` or `ALL
+TABLES IN SCHEMA`.
+
+####`object_name`
+Object of type `object_type` on which to grant access.
+
+####`psql_db`
+Database to execute the grant against. This should not ordinarily be changed from the default, which is `postgres`.
+
+####`psql_user`
+OS user for running `psql`. Defaults to the default user for the module, usually `postgres`.
+
+####`port`
+Port to use when connecting. Default to 'undef' which generally defaults to 5432 depending on your PostgreSQL packaging.
+
 ###Resource: postgresql::server::pg\_hba\_rule
 This defined type allows you to create an access rule for `pg_hba.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/8.2/static/auth-pg-hba-conf.html).
 
