@@ -79,6 +79,7 @@ class postgresql::globals (
         default => undef,
       },
       'Ubuntu' => $::operatingsystemrelease ? {
+        /^(15.04)$/ => '9.4',
         /^(14.10)$/ => '9.4',
         /^(14.04)$/ => '9.3',
         /^(11.10|12.04|12.10|13.04|13.10)$/ => '9.1',
