@@ -1,4 +1,3 @@
-require 'spec_helper'
 
 describe 'postgresql::server::grant', :type => :define do
   let :facts do
@@ -21,6 +20,7 @@ describe 'postgresql::server::grant', :type => :define do
     {
       :db => 'test',
       :role => 'test',
+      :connect_settings => {},
     }
   end
 
@@ -29,4 +29,62 @@ describe 'postgresql::server::grant', :type => :define do
   end
 
   it { is_expected.to contain_postgresql__server__grant('test') }
+  it { is_expected.to contain_postgresql_psql("grant:test").with_connect_settings( {} ).with_port( 5432 ) }
+
+  context "with specific db connection settings - default port" do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'test',
+        :connect_settings => { 'PGHOST'    => 'postgres-db-server',
+                               'DBVERSION' => '9.1', },
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql("grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1' } ).with_port( 5432 ) }
+  end
+
+  context "with specific db connection settings - including port" do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'test',
+        :connect_settings => { 'PGHOST'    => 'postgres-db-server',
+                               'DBVERSION' => '9.1',
+			       'PGPORT'    => '1234', },
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql("grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ).with_port( nil ) }
+  end
+
+  context "with specific db connection settings - port overriden by explicit parameter" do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'test',
+        :connect_settings => { 'PGHOST'    => 'postgres-db-server',
+                               'DBVERSION' => '9.1',
+			       'PGPORT'    => '1234', },
+        :port => '5678',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql("grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ).with_port( '5678' ) }
+  end
 end
