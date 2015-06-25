@@ -67,7 +67,7 @@
     }
   ],
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":"4.x"},
+    {"name":"puppetlabs/stdlib","version_requirement":">= 4.0.0 < 6.0.0"},
     {"name":"puppetlabs/apt","version_requirement":">=1.8.0 <2.0.0"},
     {"name":"puppetlabs/concat","version_requirement":">= 1.1.0 <2.0.0"}
   ]
