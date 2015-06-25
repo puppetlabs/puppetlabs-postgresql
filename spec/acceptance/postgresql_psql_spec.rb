@@ -126,7 +126,7 @@ describe 'postgresql_psql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
     EOS
 
     apply_manifest(pp, :catch_failures => true)
-    apply_manifest(pp, :expect_changes  => true)
+    apply_manifest(pp, :catch_changes  => true)
   end
 
   it 'should run SQL when the onlyif query returns rows' do
@@ -136,12 +136,12 @@ describe 'postgresql_psql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
         db        => 'postgres',
         psql_user => 'postgres',
         command   => 'select * from pg_database limit 1',
-        onlfy    => 'select 1 where 1=1',
+        onlyif    => 'select 1 where 1=1',
       }
     EOS
 
     apply_manifest(pp, :catch_failures => true)
-    apply_manifest(pp, :catch_changes => true)
+    apply_manifest(pp, :expect_changes => true)
   end
 
   context 'with secure password passing by environment' do
