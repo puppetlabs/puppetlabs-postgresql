@@ -73,6 +73,15 @@ RSpec.configure do |c|
       apply_manifest_on(agents, pp, :catch_failures => false)
     end
 
+    # net-tools required for netstat utility being used by be_listening
+    if fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '7'
+      pp = <<-EOS
+        package { 'net-tools': ensure => installed }
+      EOS
+
+      apply_manifest_on(agents, pp, :catch_failures => false)
+    end
+
     hosts.each do |host|
       on host, "/bin/touch #{default['puppetpath']}/hiera.yaml"
       on host, 'chmod 755 /root'
