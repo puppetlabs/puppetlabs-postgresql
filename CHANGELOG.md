@@ -1,4 +1,4 @@
-## 2015-06-23 - Supported Release 4.4.0
+## 2015-06-30 - Supported Release 4.4.0
 ### Summary
 This release has several new features, bugfixes, and test improvements.
 
