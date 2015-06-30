@@ -1,17 +1,17 @@
 require 'spec_helper_acceptance'
 
 describe 'postgresql::server::recovery', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
-  after(:all) do
-    pp = <<-EOS.unindent
-      file { '/tmp/recovery.conf':
-        ensure => absent,
-      }
-    EOS
-
-    apply_manifest(pp, :catch_failures => true)
-  end
-
   describe 'should manage recovery' do
+    after(:all) do
+      pp = <<-EOS.unindent
+        file { '/tmp/recovery.conf':
+          ensure => absent,
+        }
+      EOS
+
+      apply_manifest(pp, :catch_failures => true)
+    end
+
     it 'adds conf file' do
       pp = <<-EOS.unindent
         class { 'postgresql::globals':
