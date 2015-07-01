@@ -14,6 +14,7 @@ class postgresql::server::config {
   $user                       = $postgresql::server::user
   $group                      = $postgresql::server::group
   $version                    = $postgresql::server::_version
+  $manage_package_repo        = $postgresql::server::manage_package_repo
   $manage_pg_hba_conf         = $postgresql::server::manage_pg_hba_conf
   $manage_pg_ident_conf       = $postgresql::server::manage_pg_ident_conf
   $manage_recovery_conf       = $postgresql::server::manage_recovery_conf

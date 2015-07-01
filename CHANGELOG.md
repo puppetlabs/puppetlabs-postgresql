@@ -1,3 +1,10 @@
+## 2015-07-01 - Supported Release 4.4.1
+### Summary
+This release fixes RHEL 7 & Fedora with manage_package_repo switched on.
+
+#### Bugfixes
+- Ensure manage_package_repo variable is in scope for systemd-override file for RHEL7
+
 ## 2015-06-30 - Supported Release 4.4.0
 ### Summary
 This release has several new features, bugfixes, and test improvements.
