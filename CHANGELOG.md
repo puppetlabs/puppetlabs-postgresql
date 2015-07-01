@@ -1,3 +1,35 @@
+## 2015-07-01 - Supported Release 4.4.1
+### Summary
+This release fixes RHEL 7 & Fedora with manage_package_repo switched on.
+
+#### Bugfixes
+- Ensure manage_package_repo variable is in scope for systemd-override file for RHEL7
+
+## 2015-06-30 - Supported Release 4.4.0
+### Summary
+This release has several new features, bugfixes, and test improvements.
+
+#### Features
+- Adds a resource to manage recovery.conf.
+- Adds a parameter that allows the specification of a validate connection script in `postgresql::client`.
+- Adds support for plpython package management.
+- Adds support for postgresql-docs management.
+- Adds ability to make `postgresql::server::schema` titles unique. (MODULES-2049)
+- Updates puppetlabs-apt module dependency to support version 2.1.0.
+
+#### Bugfixes
+- Fix `postgresql_psql` parameter ordering to work on OpenBSD with Future Parser
+- Fix setting postgres role password (MODULES-1869)
+- Fix execution command with puppet <3.4 (MODULES-1923)
+- Fix Puppet.newtype deprecation warning (MODULES-2007)
+- Fix systemd override for manage_repo package versions
+- Fix Copy snakeoil certificate and key instead of symlinking
+
+#### Test Improvements
+- Allows setting BEAKER and BEAKER_RSPEC versions via environment variables.
+- Enables Unit testing on Travis CI with Puppet 4.
+- Cleans up spec_helper_acceptance.rb to use new puppet_install_helper gem.
+
 ## 2015-03-24 - Supported Release 4.3.0
 ### Summary
 This release fixes compatibility with Puppet 4 and removes opportunities for local users to view the postgresql password. It also adds a new custom resource to aid in managing replication.
