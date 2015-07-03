@@ -775,7 +775,7 @@ This defined type allows you to create the content for `recovery.conf`. For more
 
 For example:
 
-    postgresql::server::recovery( 'Create a recovery.conf file with the following defined parameters':
+    postgresql::server::recovery{ 'Create a recovery.conf file with the following defined parameters':
       restore_command                => 'cp /mnt/server/archivedir/%f %p',
       archive_cleanup_command        => undef,
       recovery_end_command           => undef,
