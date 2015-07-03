@@ -95,7 +95,13 @@ class postgresql::globals (
     'FreeBSD' => '93',
     'OpenBSD' => '9.3',
     'Suse' => $::operatingsystem ? {
-      'SLES' => '91',
+      'SLES' => $::operatingsystemrelease ? {
+        /11\.[0-4]/ => '91',
+        default => '93',
+      },
+      'OpenSuSE' => $::operatingsystemrelease ? {
+        '13.2' => '93',
+      },
       default => undef,
     },
     default => undef,
