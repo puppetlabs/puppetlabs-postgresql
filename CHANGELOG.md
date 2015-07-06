@@ -1,3 +1,10 @@
+## 2015-07-07 - Supported Release 4.4.2
+### Summary
+This release fixes a bug introduced in 4.4.0.
+
+#### Bugfixes
+- Fixes `withenv` execution under Puppet 2.7. (MODULES-2185)
+
 ## 2015-07-01 - Supported Release 4.4.1
 ### Summary
 This release fixes RHEL 7 & Fedora with manage_package_repo switched on.
