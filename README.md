@@ -301,6 +301,10 @@ This will set the default encoding encoding for all databases created with this 
 ####`locale`
 This will set the default database locale for all databases created with this module. On certain operating systems this will be used during the `template1` initialization as well so it becomes a default outside of the module as well. Defaults to `undef` which is effectively `C`.
 
+####`repo_proxy`
+This will set the proxy option for the official PostgreSQL yum-repositories only, Debian is currently not supported. This is useful if your server is behind a corporate firewall and needs to use proxyservers for outside connectivity.
+
+
 #####Debian
 
 On Debian you'll need to ensure that the 'locales-all' package is installed for full functionality of Postgres.
