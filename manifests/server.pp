@@ -28,12 +28,14 @@ class postgresql::server (
   $initdb_path                = $postgresql::params::initdb_path,
   $createdb_path              = $postgresql::params::createdb_path,
   $psql_path                  = $postgresql::params::psql_path,
+  $pg_ctl_path                = $postgresql::params::pg_ctl_path,
   $pg_hba_conf_path           = $postgresql::params::pg_hba_conf_path,
   $pg_ident_conf_path         = $postgresql::params::pg_ident_conf_path,
   $postgresql_conf_path       = $postgresql::params::postgresql_conf_path,
   $recovery_conf_path         = $postgresql::params::recovery_conf_path,
 
   $datadir                    = $postgresql::params::datadir,
+  $bindir                     = $postgresql::params::bindir,
   $xlogdir                    = $postgresql::params::xlogdir,
   $logdir                     = $postgresql::params::logdir,
 
@@ -50,6 +52,8 @@ class postgresql::server (
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
   $manage_recovery_conf       = $postgresql::params::manage_recovery_conf,
+
+  $migrate_data               = $postgresql::params::migrate_data,
 
   #Deprecated
   $version                    = undef,
@@ -70,6 +74,7 @@ class postgresql::server (
   class { "${pg}::install": }->
   class { "${pg}::initdb": }->
   class { "${pg}::config": }->
+  class { "${pg}::migrate": }->
   class { "${pg}::service": }->
   class { "${pg}::passwd": }->
   anchor { "${pg}::end": }

@@ -23,6 +23,7 @@ class postgresql::globals (
   $initdb_path            = undef,
   $createdb_path          = undef,
   $psql_path              = undef,
+  $pg_upgrade_path        = undef,
   $pg_hba_conf_path       = undef,
   $pg_ident_conf_path     = undef,
   $postgresql_conf_path   = undef,
@@ -45,6 +46,7 @@ class postgresql::globals (
 
   $needs_initdb           = undef,
 
+  $migrate_data           = undef,
   $encoding               = undef,
   $locale                 = undef,
 
