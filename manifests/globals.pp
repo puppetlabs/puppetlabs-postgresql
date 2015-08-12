@@ -41,6 +41,7 @@ class postgresql::globals (
 
   $version                = undef,
   $postgis_version        = undef,
+  $repo_proxy             = undef,
 
   $needs_initdb           = undef,
 
@@ -64,6 +65,12 @@ class postgresql::globals (
         default => undef,
       },
       'Amazon' => '9.2',
+      default => $::operatingsystemrelease ? {
+        /^7\./ => '9.2',
+        /^6\./ => '8.4',
+        /^5\./ => '8.1',
+        default => undef,
+      },
       default => $::operatingsystemrelease ? {
         /^7\./ => '9.2',
         /^6\./ => '8.4',
@@ -131,7 +138,8 @@ class postgresql::globals (
   # Setup of the repo only makes sense globally, so we are doing this here.
   if($manage_package_repo) {
     class { 'postgresql::repo':
-      version => $globals_version
+      version => $globals_version,
+      proxy   => $repo_proxy,
     }
   }
 }

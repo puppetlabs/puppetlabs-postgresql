@@ -1,3 +1,7 @@
+## Unreleased
+### Summary
+- support setting a proxy for yum operations
+
 ## 2015-07-07 - Supported Release 4.4.2
 ### Summary
 This release fixes a bug introduced in 4.4.0.
