@@ -700,6 +700,19 @@ This would create a ruleset in `pg_hba.conf` similar to:
     # Order: 150
     host  app  app  200.1.2.0/24  md5
 
+By default, `pg_hba_rule` requires that you include `postgresql::server`, however, you can override that behavior by setting target and postgresql_version when declaring your rule.  That might look like the following.
+
+    postgresql::server::pg_hba_rule { 'allow application network to access app database':
+      description        => "Open up postgresql for access from 200.1.2.0/24",
+      type               => 'host',
+      database           => 'app',
+      user               => 'app',
+      address            => '200.1.2.0/24',
+      auth_method        => 'md5',
+      target             => '/path/to/pg_hba.conf',
+      postgresql_version => '9.4',
+    }
+
 ####`namevar`
 A unique identifier or short description for this rule. The namevar doesn't provide any functional usage, but it is stored in the comments of the produced `pg_hba.conf` so the originating resource can be identified.
 
@@ -730,6 +743,8 @@ An order for placing the rule in `pg_hba.conf`. Defaults to `150`.
 ####`target`
 This provides the target for the rule, and is generally an internal only property. Use with caution.
 
+####`postgresql_version`
+Defaults to the version set in `postgresql::server`.  Use this if you want to manage `pg_hba.conf` without managing the entire PostgreSQL instance.
 
 ###Resource: postgresql::server::pg\_ident\_rule
 This defined type allows you to create user name maps for `pg_ident.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/current/static/auth-username-maps.html).
