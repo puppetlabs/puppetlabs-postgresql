@@ -41,7 +41,7 @@ describe 'postgresql::server::extension', :type => :define do
     }) }
 
     it {
-      is_expected.to contain_package('Postgresql extension postgis').with({
+      is_expected.to contain_package('postgis').with({
         :ensure  => 'present',
         :name    => 'postgis',
       }).that_comes_before('Postgresql_psql[Add postgis extension to template_postgis]')
@@ -63,7 +63,7 @@ describe 'postgresql::server::extension', :type => :define do
     }
 
     it {
-      is_expected.to contain_package('Postgresql extension postgis').with({
+      is_expected.to contain_package('postgis').with({
         :ensure  => 'absent',
         :name    => 'postgis',
       })
@@ -83,7 +83,7 @@ describe 'postgresql::server::extension', :type => :define do
       }
 
       it {
-        is_expected.to contain_package('Postgresql extension postgis').with({
+        is_expected.to contain_package('postgis').with({
           :ensure  => 'present',
           :name    => 'postgis',
         }).that_requires('Postgresql_psql[Add postgis extension to template_postgis]')
