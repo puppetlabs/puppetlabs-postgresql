@@ -1,6 +1,23 @@
 ## Unreleased
 ### Summary
 - support setting a proxy for yum operations
+## 2015-07-27 - Supported Release 4.5.0
+### Summary
+This release adds sequence grants, some postgresql 9.4 fixes, and `onlyif` to
+the psql resource.
+
+### Features
+- Add `onlyif` parameter to `postgresql_psql`
+- Add unsupported compatibility with Ubuntu 15.04
+- Add unsupported compatibility with SLES 11/12 and OpenSuSE 13.2
+- Add `postgresql::server::grant::onlyif_exists` attribute
+- Add `postgresql::server::table_grant::onlyif_exists` attribute
+- Add granting permissions on sequences
+
+### Bugfixes
+- Added docs for `postgresql::server::grant`
+- Fix `pg_hba_conf_defaults => false` to not disable ipv4/ipv6 acls
+- Fix 9.4 for `postgresql::server::pg_hba_rule`
 
 ## 2015-07-07 - Supported Release 4.4.2
 ### Summary
