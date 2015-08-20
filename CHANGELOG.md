@@ -1,6 +1,15 @@
 ## Unreleased
+## 2015-09-01 - Supported Release 4.5.0
 ### Summary
-- support setting a proxy for yum operations
+This release adds a proxy feature for yum, Postgis improvements, and decoupling pg_hba_rule from postgresql::server.
+
+#### Features
+- Support setting a proxy for yum operations
+- Allow for undefined PostGIS version
+- Decouple pg_hba_rule from postgresql::server
+
+#### Bugfixes
+- Fix postgis default package name on RedHat
 
 ## 2015-07-07 - Supported Release 4.4.2
 ### Summary
