@@ -10,6 +10,7 @@ define postgresql::server::grant (
   $port             = $postgresql::server::port,
   $onlyif_exists    = false,
   $connect_settings = $postgresql::server::default_connect_settings,
+  $ensure        = 'present',
 ) {
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
@@ -38,19 +39,19 @@ define postgresql::server::grant (
 
   ## Validate that the object type is known
   validate_string($_object_type,
-    #'COLUMN',
-    'DATABASE',
-    #'FOREIGN SERVER',
-    #'FOREIGN DATA WRAPPER',
-    #'FUNCTION',
-    #'PROCEDURAL LANGUAGE',
-    'SCHEMA',
-    'SEQUENCE',
-    'ALL SEQUENCES IN SCHEMA',
-    'TABLE',
-    'ALL TABLES IN SCHEMA',
-    #'TABLESPACE',
-    #'VIEW',
+  #'COLUMN',
+  'DATABASE',
+  #'FOREIGN SERVER',
+  #'FOREIGN DATA WRAPPER',
+  #'FUNCTION',
+  #'PROCEDURAL LANGUAGE',
+  'SCHEMA',
+  'SEQUENCE',
+  'ALL SEQUENCES IN SCHEMA',
+  'TABLE',
+  'ALL TABLES IN SCHEMA',
+  #'TABLESPACE',
+  #'VIEW',
   )
   # You can use ALL TABLES IN SCHEMA by passing schema_name to object_name
   # You can use ALL SEQUENCES IN SCHEMA by passing schema_name to object_name
@@ -72,7 +73,7 @@ define postgresql::server::grant (
         default          => $_privilege,
       }
       validate_string($unless_privilege,'CREATE','CONNECT','TEMPORARY','TEMP',
-        'ALL','ALL PRIVILEGES')
+      'ALL','ALL PRIVILEGES')
       $unless_function = 'has_database_privilege'
       $on_db = $psql_db
       $onlyif_function = undef
@@ -109,7 +110,7 @@ define postgresql::server::grant (
         'ALL PRIVILEGES' => 'USAGE',
         default          => $_privilege,
       }
-      
+
       # This checks if there is a difference between the sequences in the
       # specified schema and the sequences for which the role has the specified
       # privilege. It uses the EXCEPT clause which computes the set of rows
@@ -125,15 +126,15 @@ define postgresql::server::grant (
         SELECT sequence_name
         FROM information_schema.sequences
         WHERE sequence_schema='${schema}'
-          EXCEPT DISTINCT
+        EXCEPT DISTINCT
         SELECT object_name as sequence_name
         FROM information_schema.role_usage_grants
         WHERE object_type='SEQUENCE'
         AND grantee='${role}'
         AND object_schema='${schema}'
         AND privilege_type='${custom_privilege}'
-        ) P
-        HAVING count(P.sequence_name) = 0"
+      ) P
+      HAVING count(P.sequence_name) = 0"
     }
     'TABLE': {
       $unless_privilege = $_privilege ? {
@@ -141,7 +142,7 @@ define postgresql::server::grant (
         default => $_privilege,
       }
       validate_string($unless_privilege,'SELECT','INSERT','UPDATE','DELETE',
-        'TRUNCATE','REFERENCES','TRIGGER','ALL','ALL PRIVILEGES')
+      'TRUNCATE','REFERENCES','TRIGGER','ALL','ALL PRIVILEGES')
       $unless_function = 'has_table_privilege'
       $on_db = $db
       $onlyif_function = $onlyif_exists ? {
@@ -151,7 +152,7 @@ define postgresql::server::grant (
     }
     'ALL TABLES IN SCHEMA': {
       validate_string($_privilege,'SELECT','INSERT','UPDATE','DELETE',
-        'TRUNCATE','REFERENCES','TRIGGER','ALL','ALL PRIVILEGES')
+      'TRUNCATE','REFERENCES','TRIGGER','ALL','ALL PRIVILEGES')
       $unless_function = 'custom'
       $on_db = $db
       $onlyif_function = undef
@@ -182,14 +183,14 @@ define postgresql::server::grant (
         SELECT table_name
         FROM information_schema.tables
         WHERE table_schema='${schema}'
-          EXCEPT DISTINCT
+        EXCEPT DISTINCT
         SELECT table_name
         FROM information_schema.role_table_grants
         WHERE grantee='${role}'
         AND table_schema='${schema}'
         AND privilege_type='${custom_privilege}'
-        ) P
-        HAVING count(P.table_name) = 0"
+      ) P
+      HAVING count(P.table_name) = 0"
     }
     default: {
       fail("Missing privilege validation for object type ${_object_type}")
@@ -214,10 +215,10 @@ define postgresql::server::grant (
   }
 
   $_unless = $unless_function ? {
-      false    => undef,
-      'custom' => $custom_unless,
-      default  => "SELECT 1 WHERE ${unless_function}('${role}',
-                  '${_granted_object}', '${unless_privilege}')",
+    false    => undef,
+    'custom' => $custom_unless,
+    default  => "SELECT 1 WHERE ${unless_function}('${role}',
+    '${_granted_object}', '${unless_privilege}')",
   }
 
   $_onlyif = $onlyif_function ? {
@@ -225,26 +226,52 @@ define postgresql::server::grant (
     default        => undef,
   }
 
-  $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${_togrant_object}\" TO
-      \"${role}\""
-  postgresql_psql { "grant:${name}":
-    command          => $grant_cmd,
-    db               => $on_db,
-    port             => $port_override,
-    connect_settings => $connect_settings,
-    psql_user        => $psql_user,
-    psql_group       => $group,
-    psql_path        => $psql_path,
-    unless           => $_unless,
-    onlyif           => $_onlyif,
-    require          => Class['postgresql::server']
-  }
+  if $ensure == 'present' {
+    $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${_togrant_object}\" TO
+    \"${role}\""
+    postgresql_psql { "grant:${name}":
+      command          => $grant_cmd,
+      db               => $on_db,
+      port             => $port,
+      connect_settings => $connect_settings,
+      psql_user        => $psql_user,
+      psql_group       => $group,
+      psql_path        => $psql_path,
+      unless           => $_unless,
+      onlyif           => $_onlyif,
+      require          => Class['postgresql::server']
+    }
 
-  if($role != undef and defined(Postgresql::Server::Role[$role])) {
-    Postgresql::Server::Role[$role]->Postgresql_psql["grant:${name}"]
-  }
+    if($role != undef and defined(Postgresql::Server::Role[$role])) {
+      Postgresql::Server::Role[$role]->Postgresql_psql["grant:${name}"]
+    }
 
-  if($db != undef and defined(Postgresql::Server::Database[$db])) {
-    Postgresql::Server::Database[$db]->Postgresql_psql["grant:${name}"]
+    if($db != undef and defined(Postgresql::Server::Database[$db])) {
+      Postgresql::Server::Database[$db]->Postgresql_psql["grant:${name}"]
+    }
+  } elsif $ensure == 'absent' {
+
+    $revoke_cmd = "REVOKE ${_privilege} ON ${_object_type} \"${_togrant_object}\"
+    FROM \"${role}\""
+    postgresql_psql { "revoke:${name}":
+      command    => $revoke_cmd,
+      db         => $on_db,
+      port       => $port,
+      psql_user  => $psql_user,
+      psql_group => $group,
+      psql_path  => $psql_path,
+      unless     => $_onlyif,
+      onlyif     => $_unless,
+      require    => Class['postgresql::server']
+    }
+    if($role != undef and defined(Postgresql::Server::Role[$role])) {
+      Postgresql_psql["revoke:${name}"]->Postgresql::Server::Role[$role]
+    }
+
+    if($db != undef and defined(Postgresql::Server::Database[$db])) {
+      Postgresql_psql["revoke:${name}"]->Postgresql::Server::Database[$db]
+    }
+  } else {
+    fail('Invalid value for $ensure. Postgresql::server::grant $ensure must be either present or absent')
   }
 }

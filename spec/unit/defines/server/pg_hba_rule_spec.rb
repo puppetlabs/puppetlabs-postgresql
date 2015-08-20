@@ -195,4 +195,30 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
     end
 
   end
+
+  context 'removal' do
+    let :pre_condition do
+      <<-EOS
+        class { 'postgresql::server': }
+      EOS
+    end
+
+    let :params do
+      {
+        :type => 'host',
+        :database => 'all',
+        :user => 'all',
+        :address => '1.1.1.1/24',
+        :auth_method => 'md5',
+        :target => target,
+        :ensure => 'absent'
+      }
+    end
+    it do
+      is_expected.to contain_concat__fragment('pg_hba_rule_test').with({
+        :content => /host\s+all\s+all\s+1\.1\.1\.1\/24\s+md5/,
+        :ensure => 'absent',
+      })
+    end
+  end
 end

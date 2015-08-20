@@ -6,8 +6,10 @@ define postgresql::server::database_grant(
   $psql_db          = undef,
   $psql_user        = undef,
   $connect_settings = undef,
+  $ensure           = 'present',
 ) {
   postgresql::server::grant { "database:${name}":
+    ensure           => $ensure,
     role             => $role,
     db               => $db,
     privilege        => $privilege,

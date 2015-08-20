@@ -10,8 +10,10 @@ define postgresql::server::table_grant(
   $psql_user        = undef,
   $connect_settings = undef,
   $onlyif_exists    = false,
+  $ensure           = 'present',
 ) {
   postgresql::server::grant { "table:${name}":
+    ensure           => $ensure,
     role             => $role,
     db               => $db,
     port             => $port,

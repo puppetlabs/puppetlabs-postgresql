@@ -11,11 +11,23 @@ define postgresql::server::db (
   $tablespace = undef,
   $template   = 'template0',
   $istemplate = false,
-  $owner      = undef
+  $owner      = undef,
+  $ensure     = 'present',
 ) {
+
+  if $ensure == 'present' {
+    Postgresql::Server::Role[$user] ->
+    Postgresql::Server::Database[$dbname] ->
+    Postgresql::Server::Database_grant["GRANT ${user} - ${grant} - ${dbname}"]
+  } elsif $ensure == 'absent' {
+    Postgresql::Server::Database[$dbname] ->
+    Postgresql::Server::Role[$user]
+  }
+
 
   if ! defined(Postgresql::Server::Database[$dbname]) {
     postgresql::server::database { $dbname:
+      ensure     => $ensure,
       comment    => $comment,
       encoding   => $encoding,
       tablespace => $tablespace,
@@ -28,13 +40,14 @@ define postgresql::server::db (
 
   if ! defined(Postgresql::Server::Role[$user]) {
     postgresql::server::role { $user:
+      ensure        => $ensure,
       password_hash => $password,
-      before        => Postgresql::Server::Database[$dbname],
     }
   }
 
-  if ! defined(Postgresql::Server::Database_grant["GRANT ${user} - ${grant} - ${dbname}"]) {
+  if ! defined(Postgresql::Server::Database_grant["GRANT ${user} - ${grant} - ${dbname}"]) and $ensure == 'present' {
     postgresql::server::database_grant { "GRANT ${user} - ${grant} - ${dbname}":
+      ensure    => $ensure,
       privilege => $grant,
       db        => $dbname,
       role      => $user,

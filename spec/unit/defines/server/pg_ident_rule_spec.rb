@@ -41,6 +41,24 @@ describe 'postgresql::server::pg_ident_rule', :type => :define do
         :content => /thatsmymap\s+systemuser\s+dbuser/
       })
     end
+
+    context 'removal' do
+      let :params do
+        {
+          :map_name => 'thatsmymap',
+          :system_username => 'systemuser',
+          :database_username => 'dbuser',
+          :ensure => 'absent',
+        }
+      end
+      it do
+        is_expected.to contain_concat__fragment('pg_ident_rule_test').with({
+          :content => /thatsmymap\s+systemuser\s+dbuser/,
+          :ensure => 'absent'
+        })
+      end
+
+    end
   end
   context 'not managing pg_ident' do
     let :pre_condition do
@@ -53,14 +71,14 @@ describe 'postgresql::server::pg_ident_rule', :type => :define do
     end
     let :params do
       {
-          :map_name => 'thatsmymap',
-          :system_username => 'systemuser',
-          :database_username => 'dbuser',
+        :map_name => 'thatsmymap',
+        :system_username => 'systemuser',
+        :database_username => 'dbuser',
       }
     end
     it 'should fail because $manage_pg_ident_conf is false' do
       expect { catalogue }.to raise_error(Puppet::Error,
-                                      /postgresql::server::manage_pg_ident_conf has been disabled/)
+                                          /postgresql::server::manage_pg_ident_conf has been disabled/)
     end
   end
 end
