@@ -6,6 +6,7 @@ define postgresql::server::pg_ident_rule(
   $database_username,
   $description = 'none',
   $order       = '150',
+  $ensure      = 'present',
 
   # Needed for testing primarily, support for multiple files is not really
   # working.
@@ -22,6 +23,7 @@ define postgresql::server::pg_ident_rule(
       target  => $target,
       content => template('postgresql/pg_ident_rule.conf'),
       order   => $order,
+      ensure  => $ensure,
     }
   }
 }

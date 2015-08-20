@@ -11,7 +11,8 @@ define postgresql::server::db (
   $tablespace = undef,
   $template   = 'template0',
   $istemplate = false,
-  $owner      = undef
+  $owner      = undef,
+  $ensure     = 'present',
 ) {
 
   if ! defined(Postgresql::Server::Database[$dbname]) {
@@ -23,6 +24,7 @@ define postgresql::server::db (
       locale     => $locale,
       istemplate => $istemplate,
       owner      => $owner,
+      ensure     => $ensure,
     }
   }
 
@@ -30,6 +32,7 @@ define postgresql::server::db (
     postgresql::server::role { $user:
       password_hash => $password,
       before        => Postgresql::Server::Database[$dbname],
+      ensure        => $ensure,
     }
   }
 
@@ -38,6 +41,7 @@ define postgresql::server::db (
       privilege => $grant,
       db        => $dbname,
       role      => $user,
+      ensure    => $ensure,
     } -> Postgresql::Validate_db_connection<| database_name == $dbname |>
   }
 

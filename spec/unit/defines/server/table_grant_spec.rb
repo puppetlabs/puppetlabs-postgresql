@@ -32,4 +32,19 @@ describe 'postgresql::server::table_grant', :type => :define do
 
   it { is_expected.to contain_postgresql__server__table_grant('test') }
   it { is_expected.to contain_postgresql__server__grant('table:test') }
+
+  context "removal" do
+    let :params do
+      {
+        :privilege => 'ALL',
+        :db => 'test',
+        :role => 'test',
+        :table => 'foo',
+        :ensure => 'absent',
+      }
+    end
+
+    it { is_expected.to contain_postgresql__server__table_grant('test').with_ensure('absent') }
+    it { is_expected.to contain_postgresql__server__grant('table:test').with_ensure('absent') }
+  end
 end

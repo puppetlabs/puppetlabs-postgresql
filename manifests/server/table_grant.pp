@@ -9,6 +9,7 @@ define postgresql::server::table_grant(
   $psql_db       = undef,
   $psql_user     = undef,
   $onlyif_exists = false,
+  $ensure        = 'present',
 ) {
   postgresql::server::grant { "table:${name}":
     role          => $role,
@@ -20,5 +21,6 @@ define postgresql::server::table_grant(
     psql_db       => $psql_db,
     psql_user     => $psql_user,
     onlyif_exists => $onlyif_exists,
+    ensure        => $ensure,
   }
 }
