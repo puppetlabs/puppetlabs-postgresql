@@ -8,8 +8,14 @@ class postgresql::params inherits postgresql::globals {
   $ip_mask_allow_all_users    = '127.0.0.1/32'
   $ipv4acls                   = []
   $ipv6acls                   = []
-  $encoding                   = $postgresql::globals::encoding
-  $locale                     = $postgresql::globals::locale
+  $migrate_data               = $postgresql::globals::migrate_data
+  if $migrate_data {
+    $encoding                   = pick($postgres_server_encoding, $postgresql::globals::encoding)
+    $locale                     = pick($postgres_cluster_locale_ctype, $postgresql::globals::locale)
+  } else {
+    $encoding                   = $postgresql::globals::encoding
+    $locale                     = $postgresql::globals::locale
+  }
   $service_ensure             = 'running'
   $service_enable             = true
   $service_manage             = true
@@ -63,6 +69,7 @@ class postgresql::params inherits postgresql::globals {
         $confdir                = pick($confdir, $datadir)
       }
       $psql_path           = pick($psql_path, "${bindir}/psql")
+
 
       $service_status      = $service_status
       $service_reload      = "service ${service_name} reload"
@@ -157,6 +164,7 @@ class postgresql::params inherits postgresql::globals {
       }
       $service_reload         = "service ${service_name} reload"
       $psql_path              = pick($psql_path, '/usr/bin/psql')
+
     }
 
     'FreeBSD': {
@@ -250,14 +258,16 @@ class postgresql::params inherits postgresql::globals {
       if ($confdir == undef) { fail("${err_prefix}confdir") }
     }
   }
-
-  $validcon_script_path = pick($validcon_script_path, '/usr/local/bin/validate_postgresql_connection.sh')
-  $initdb_path          = pick($initdb_path, "${bindir}/initdb")
-  $createdb_path        = pick($createdb_path, "${bindir}/createdb")
-  $pg_hba_conf_path     = pick($pg_hba_conf_path, "${confdir}/pg_hba.conf")
-  $pg_hba_conf_defaults = pick($pg_hba_conf_defaults, true)
-  $pg_ident_conf_path   = pick($pg_ident_conf_path, "${confdir}/pg_ident.conf")
-  $postgresql_conf_path = pick($postgresql_conf_path, "${confdir}/postgresql.conf")
-  $recovery_conf_path   = pick($recovery_conf_path, "${datadir}/recovery.conf")
-  $default_database     = pick($default_database, 'postgres')
+  $validcon_script_path  = pick($validcon_script_path, '/usr/local/bin/validate_postgresql_connection.sh')
+  $initdb_path           = pick($initdb_path, "${bindir}/initdb")
+  $createdb_path         = pick($createdb_path, "${bindir}/createdb")
+  $pg_upgrade_path       = pick($pg_upgrade_path, "${bindir}/pg_upgrade")
+  $pg_ctl_path           = pick($pg_ctl_path, "${bindir}/pg_ctl")
+  $pg_hba_conf_path      = pick($pg_hba_conf_path, "${confdir}/pg_hba.conf")
+  $pg_hba_conf_defaults  = pick($pg_hba_conf_defaults, true)
+  $pg_ident_conf_path    = pick($pg_ident_conf_path, "${confdir}/pg_ident.conf")
+  $postgresql_conf_path  = pick($postgresql_conf_path, "${confdir}/postgresql.conf")
+  $start_conf_path       = pick($start_conf_path, "${confdir}/start.conf")
+  $recovery_conf_path    = pick($recovery_conf_path, "${datadir}/recovery.conf")
+  $default_database      = pick($default_database, 'postgres')
 }

@@ -182,6 +182,8 @@ For example, if you wanted to overwrite the default `locale` and `encoding` for 
     class { 'postgresql::server':
     }
 
+Note that locale and encoding will be overwritten if migrate_data is selected and an older database with a different locale/encoding is found
+
 That would make the `encoding` and `locale` the default for all classes and defined resources in this module.
 
 If you want to use the upstream PostgreSQL packaging, and be specific about the version you wish to download, you could use something like this:
@@ -314,6 +316,9 @@ If `true` this will setup the official PostgreSQL repositories on your host. Def
 
 ###Class: postgresql::server
 The following list are options that you can set in the `config_hash` parameter of `postgresql::server`.
+
+####`migrate_data`
+Ensures that if an older version of PostgreSQL is already installed we migrate existing data from the old DB to the new one and shut down/disable the old DB. Note that if the old DB locale/encoding does not match the new this will overwrite those settings to match the old
 
 ####`postgres_password`
 This value defaults to `undef`, meaning the super user account in the postgres database is a user called `postgres` and this account does not have a password. If you provide this setting, the module will set the password for the `postgres` user to your specified value.
