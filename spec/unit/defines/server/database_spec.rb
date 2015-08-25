@@ -28,4 +28,10 @@ describe 'postgresql::server::database', :type => :define do
 
     it { is_expected.to contain_postgresql_psql("COMMENT ON DATABASE test IS 'test comment'") }
   end
+
+  context "removal" do
+    let (:params) {{ :ensure => 'absent' }}
+
+    it { is_expected.to contain_postgresql_psql("DROP DATABASE 'test'").with_onlyif("SELECT datname FROM pg_database WHERE datname='test'") }
+  end
 end

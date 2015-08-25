@@ -50,7 +50,7 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql_psql('grant:test').with(
                           {
                             'command' => "GRANT USAGE ON SEQUENCE \"test\" TO\n      \"test\"",
-                            'unless' => "SELECT 1 WHERE has_sequence_privilege('test',\n                  'test', 'USAGE')",
+                            'unless' => "SELECT 1 WHERE has_sequence_privilege('test',\n                'test', 'USAGE')",
                           }) }
   end
 
@@ -74,6 +74,28 @@ describe 'postgresql::server::grant', :type => :define do
                           {
                             'command' => "GRANT USAGE ON ALL SEQUENCES IN SCHEMA \"public\" TO\n      \"test\"",
                             'unless' => "SELECT 1 FROM (\n        SELECT sequence_name\n        FROM information_schema.sequences\n        WHERE sequence_schema='public'\n          EXCEPT DISTINCT\n        SELECT object_name as sequence_name\n        FROM information_schema.role_usage_grants\n        WHERE object_type='SEQUENCE'\n        AND grantee='test'\n        AND object_schema='public'\n        AND privilege_type='USAGE'\n        ) P\n        HAVING count(P.sequence_name) = 0",
+                          }) }
+  end
+  context "removal" do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'test',
+        :privilege => 'usage',
+        :object_type => 'all sequences in schema',
+        :object_name => 'public',
+        :ensure => 'absent',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to contain_postgresql_psql('revoke:test').with(
+                          {
+                            'command' => "REVOKE USAGE ON ALL SEQUENCES IN SCHEMA \"public\"\n      FROM \"test\"",
+                            'onlyif'  => "SELECT 1 FROM (\n        SELECT sequence_name\n        FROM information_schema.sequences\n        WHERE sequence_schema='public'\n          EXCEPT DISTINCT\n        SELECT object_name as sequence_name\n        FROM information_schema.role_usage_grants\n        WHERE object_type='SEQUENCE'\n        AND grantee='test'\n        AND object_schema='public'\n        AND privilege_type='USAGE'\n        ) P\n        HAVING count(P.sequence_name) = 0",
                           }) }
   end
 end

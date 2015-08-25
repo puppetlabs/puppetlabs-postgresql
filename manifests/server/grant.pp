@@ -9,6 +9,7 @@ define postgresql::server::grant (
   $psql_user     = $postgresql::server::user,
   $port          = $postgresql::server::port,
   $onlyif_exists = false,
+  $ensure        = 'present',
 ) {
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
@@ -206,7 +207,7 @@ define postgresql::server::grant (
       false    => undef,
       'custom' => $custom_unless,
       default  => "SELECT 1 WHERE ${unless_function}('${role}',
-                  '${_granted_object}', '${unless_privilege}')",
+                '${_granted_object}', '${unless_privilege}')",
   }
 
   $_onlyif = $onlyif_function ? {
@@ -214,25 +215,52 @@ define postgresql::server::grant (
     default        => undef,
   }
 
-  $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${_togrant_object}\" TO
+  if $ensure == 'present' {
+    $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${_togrant_object}\" TO
       \"${role}\""
-  postgresql_psql { "grant:${name}":
-    command    => $grant_cmd,
-    db         => $on_db,
-    port       => $port,
-    psql_user  => $psql_user,
-    psql_group => $group,
-    psql_path  => $psql_path,
-    unless     => $_unless,
-    onlyif     => $_onlyif,
-    require    => Class['postgresql::server']
-  }
+    postgresql_psql { "grant:${name}":
+      command    => $grant_cmd,
+      db         => $on_db,
+      port       => $port,
+      psql_user  => $psql_user,
+      psql_group => $group,
+      psql_path  => $psql_path,
+      unless     => $_unless,
+      onlyif     => $_onlyif,
+      require    => Class['postgresql::server']
+    }
 
-  if($role != undef and defined(Postgresql::Server::Role[$role])) {
-    Postgresql::Server::Role[$role]->Postgresql_psql["grant:${name}"]
-  }
+    if($role != undef and defined(Postgresql::Server::Role[$role])) {
+      Postgresql::Server::Role[$role]->Postgresql_psql["grant:${name}"]
+    }
 
-  if($db != undef and defined(Postgresql::Server::Database[$db])) {
-    Postgresql::Server::Database[$db]->Postgresql_psql["grant:${name}"]
+    if($db != undef and defined(Postgresql::Server::Database[$db])) {
+      Postgresql::Server::Database[$db]->Postgresql_psql["grant:${name}"]
+    }
+  } elsif $ensure == 'absent' {
+
+    $revoke_cmd = "REVOKE ${_privilege} ON ${_object_type} \"${_togrant_object}\"
+      FROM \"${role}\""
+    postgresql_psql { "revoke:${name}":
+      command    => $revoke_cmd,
+      db         => $on_db,
+      port       => $port,
+      psql_user  => $psql_user,
+      psql_group => $group,
+      psql_path  => $psql_path,
+      unless     => $_onlyif,
+      onlyif     => $_unless,
+      require    => Class['postgresql::server']
+    }
+
+    if($role != undef and defined(Postgresql::Server::Role[$role])) {
+      Postgresql::Server::Role[$role]<-Postgresql_psql["revoke:${name}"]
+    }
+
+    if($db != undef and defined(Postgresql::Server::Database[$db])) {
+      Postgresql::Server::Database[$db]<-Postgresql_psql["revoke:${name}"]
+    }
+  } else {
+    fail('Invalid value for $ensure. Postgresql::server::grant $ensure must be either present or absent')
   }
 }
