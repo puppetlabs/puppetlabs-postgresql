@@ -32,8 +32,7 @@ describe 'postgresql::server::config', :type => :class do
       let (:pre_condition) do
         <<-EOS
           class { 'postgresql::globals':
-            manage_package_repo => true,
-            version => '9.4',
+            version => '9.0',
           }->
           class { 'postgresql::server': }
         EOS
