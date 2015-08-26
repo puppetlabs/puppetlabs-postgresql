@@ -28,11 +28,11 @@ describe 'postgresql::server::config', :type => :class do
         .with_content(/postgresql.service/)
     end
 
-    describe 'with manage_package_repo => true and a version' do
+    describe 'with a version >= 9.1' do
       let (:pre_condition) do
         <<-EOS
           class { 'postgresql::globals':
-            version => '9.0',
+            version => '9.1',
           }->
           class { 'postgresql::server': }
         EOS
