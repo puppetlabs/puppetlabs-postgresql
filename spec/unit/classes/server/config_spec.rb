@@ -17,22 +17,12 @@ describe 'postgresql::server::config', :type => :class do
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       }
     end
-    it 'should have the correct systemd-override file' do
-      is_expected.to contain_file('systemd-override').with ({
-        :ensure => 'present',
-        :path => '/etc/systemd/system/postgresql.service',
-        :owner => 'root',
-        :group => 'root',
-      })
-      is_expected.to contain_file('systemd-override') \
-        .with_content(/postgresql.service/)
-    end
 
-    describe 'with manage_package_repo => true and a version' do
+    describe 'with a version >= 9.1' do
       let (:pre_condition) do
         <<-EOS
           class { 'postgresql::globals':
-            manage_package_repo => true,
+            manage_package_repo => false,
             version => '9.4',
           }->
           class { 'postgresql::server': }
@@ -52,4 +42,3 @@ describe 'postgresql::server::config', :type => :class do
     end
   end
 end
-
