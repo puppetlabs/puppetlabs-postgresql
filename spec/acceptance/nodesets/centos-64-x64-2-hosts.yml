@@ -1,0 +1,18 @@
+HOSTS:
+  database:
+    roles:
+      - default
+      - database
+    platform: el-6-x86_64
+    box : centos-64-x64-vbox4210-nocm
+    box_url : http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box
+    hypervisor : vagrant
+  client:
+    roles:
+      - client
+    platform: el-6-x86_64
+    box : centos-64-x64-vbox4210-nocm
+    box_url : http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box
+    hypervisor : vagrant
+CONFIG:
+ type: foss
