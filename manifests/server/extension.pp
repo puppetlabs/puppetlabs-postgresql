@@ -1,6 +1,7 @@
 # Activate an extension on a postgresql database
 define postgresql::server::extension (
   $database,
+  $extension_name,
   $ensure = 'present',
   $package_name = undef,
   $package_ensure = undef,
@@ -12,14 +13,14 @@ define postgresql::server::extension (
 
   case $ensure {
     'present': {
-      $command = "CREATE EXTENSION \"${name}\""
+      $command = "CREATE EXTENSION \"${extension_name}\""
       $unless_comp = '='
       $package_require = undef
       $package_before = Postgresql_psql["Add ${title} extension to ${database}"]
     }
 
     'absent': {
-      $command = "DROP EXTENSION \"${name}\""
+      $command = "DROP EXTENSION \"${extension_name}\""
       $unless_comp = '!='
       $package_require = Postgresql_psql["Add ${title} extension to ${database}"]
       $package_before = undef
@@ -39,7 +40,7 @@ define postgresql::server::extension (
 
     db               => $database,
     command          => $command,
-    unless           => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = '${name}') as t WHERE t.count ${unless_comp} 1",
+    unless           => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = '${extension_name}') as t WHERE t.count ${unless_comp} 1",
     require          => Postgresql::Server::Database[$database],
   }
 
