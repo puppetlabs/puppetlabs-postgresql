@@ -20,6 +20,7 @@ class postgresql::server::config {
   $manage_recovery_conf       = $postgresql::server::manage_recovery_conf
   $datadir                    = $postgresql::server::datadir
   $logdir                     = $postgresql::server::logdir
+  $service_name               = $postgresql::server::service_name
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -163,7 +164,7 @@ class postgresql::server::config {
     if $::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora' {
       file { 'systemd-override':
         ensure  => present,
-        path    => "/etc/systemd/system/${postgresql::params::service_name}.service",
+        path    => "/etc/systemd/system/${service_name}.service",
         owner   => root,
         group   => root,
         content => template('postgresql/systemd-override.erb'),
