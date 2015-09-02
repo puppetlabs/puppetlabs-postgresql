@@ -679,7 +679,10 @@ OS user for running `psql`. Defaults to the default user for the module, usually
 Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
 
 ###Resource: postgresql::server::extension
-Manages a postgresql extension.
+This defined type manages a postgresql extension for a given database.
+
+####`extension`
+The extension to activate. If left blank, will use the name of the resource.
 
 ####`database`
 The database on which to activate the extension.
