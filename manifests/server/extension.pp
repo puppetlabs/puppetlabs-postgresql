@@ -1,6 +1,7 @@
 # Activate an extension on a postgresql database
 define postgresql::server::extension (
   $database,
+  $extension = $name,
   $ensure = 'present',
   $package_name = undef,
   $package_ensure = undef,
@@ -12,16 +13,16 @@ define postgresql::server::extension (
 
   case $ensure {
     'present': {
-      $command = "CREATE EXTENSION \"${name}\""
+      $command = "CREATE EXTENSION \"${extension}\""
       $unless_comp = '='
       $package_require = undef
-      $package_before = Postgresql_psql["Add ${title} extension to ${database}"]
+      $package_before = Postgresql_psql["Add ${extension} extension to ${database}"]
     }
 
     'absent': {
-      $command = "DROP EXTENSION \"${name}\""
+      $command = "DROP EXTENSION \"${extension}\""
       $unless_comp = '!='
-      $package_require = Postgresql_psql["Add ${title} extension to ${database}"]
+      $package_require = Postgresql_psql["Add ${extension} extension to ${database}"]
       $package_before = undef
     }
 
@@ -30,7 +31,8 @@ define postgresql::server::extension (
     }
   }
 
-  postgresql_psql {"Add ${title} extension to ${database}":
+
+  postgresql_psql {"Add ${extension} extension to ${database}":
 
     psql_user        => $user,
     psql_group       => $group,
@@ -39,7 +41,7 @@ define postgresql::server::extension (
 
     db               => $database,
     command          => $command,
-    unless           => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = '${name}') as t WHERE t.count ${unless_comp} 1",
+    unless           => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = '${extension}') as t WHERE t.count ${unless_comp} 1",
     require          => Postgresql::Server::Database[$database],
   }
 
@@ -49,12 +51,11 @@ define postgresql::server::extension (
       default => $package_ensure,
     }
 
-    package { "Postgresql extension ${title}":
+    ensure_packages($package_name, {
       ensure  => $_package_ensure,
-      name    => $package_name,
       tag     => 'postgresql',
       require => $package_require,
       before  => $package_before,
-    }
+    })
   }
 }
