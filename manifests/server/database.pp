@@ -60,7 +60,7 @@ define postgresql::server::database(
 
   $encoding_option = $encoding ? {
     undef   => '',
-    default => "ENCODING=${encoding}",
+    default => "ENCODING='${encoding}'",
   }
 
   $tablespace_option = $tablespace ? {
