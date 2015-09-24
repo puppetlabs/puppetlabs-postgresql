@@ -52,7 +52,7 @@ class postgresql::server::config {
       }
       postgresql::server::pg_hba_rule { 'local access to database with same name':
         type        => 'local',
-        auth_method => 'ident',
+        auth_method => 'md5',
         auth_option => $local_auth_option,
         order       => '002',
       }
