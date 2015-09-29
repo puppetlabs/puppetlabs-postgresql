@@ -22,6 +22,8 @@ define postgresql::server::config_entry (
           notify => Class['postgresql::server::service'],
           before => Class['postgresql::server::reload'],
         }
+      } else {
+        Postgresql_conf {}
       }
     }
 
