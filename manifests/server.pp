@@ -13,6 +13,7 @@ class postgresql::server (
   $service_enable             = $postgresql::params::service_enable,
   $service_manage             = $postgresql::params::service_manage,
   $service_name               = $postgresql::params::service_name,
+  $service_restart_on_change  = $postgresql::params::service_restart_on_change,
   $service_provider           = $postgresql::params::service_provider,
   $service_reload             = $postgresql::params::service_reload,
   $service_status             = $postgresql::params::service_status,
