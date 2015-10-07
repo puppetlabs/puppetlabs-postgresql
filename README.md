@@ -195,14 +195,14 @@ Resources:
 
 Custom Resources:
 
-* [postgresql\_psql](#custom-resource-postgresql_psql)
-* [postgresql\_replication\_slot](#custom-resource-postgresql_replication_slot)
-* [postgresql\_conf](#custom-resource-postgresql_conf)
+* [postgresql_psql](#custom-resource-postgresql_psql)
+* [postgresql_replication_slot](#custom-resource-postgresql_replication_slot)
+* [postgresql_conf](#custom-resource-postgresql_conf)
 
 Functions:
 
-* [postgresql\_password](#function-postgresql_password)
-* [postgresql\_acls\_to\_resources\_hash](#function-postgresql_acls_to_resources_hashacl_array-id-order_offset)
+* [postgresql_password](#function-postgresql_password)
+* [postgresql_acls_to_resources_hash](#function-postgresql_acls_to_resources_hashacl_array-id-order_offset)
 
 
 ###Class: postgresql::globals
@@ -285,10 +285,10 @@ Path to the `createdb` command.
 Path to the `psql` command.
 
 ####`pg_hba_conf_path`
-Path to your `pg\_hba.conf` file.
+Path to your `pg_hba.conf` file.
 
 ####`pg_ident_conf_path`
-Path to your `pg\_ident.conf` file.
+Path to your `pg_ident.conf` file.
 
 ####`postgresql_conf_path`
 Path to your `postgresql.conf` file.
@@ -297,10 +297,10 @@ Path to your `postgresql.conf` file.
 Path to your `recovery.conf` file.
 
 ####`pg_hba_conf_defaults`
-If false, disables the defaults supplied with the module for `pg\_hba.conf`. This is useful if you disagree with the defaults and wish to override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform basic `psql` operations for example.
+If false, disables the defaults supplied with the module for `pg_hba.conf`. This is useful if you disagree with the defaults and wish to override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform basic `psql` operations for example.
 
 ####`datadir`
-This setting can be used to override the default postgresql data directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro. Please note that changing the datadir after installation will cause the server to come to a full stop before being able to make the change. For RedHat systems, the data directory must be labeled appropriately for SELinux. On Ubuntu, you need to explicitly set needs\_initdb to true in order to allow Puppet to initialize the database in the new datadir (needs\_initdb defaults to true on other systems).
+This setting can be used to override the default postgresql data directory for the target platform. If not specified, the module will use whatever directory is the default for your OS distro. Please note that changing the datadir after installation will cause the server to come to a full stop before being able to make the change. For RedHat systems, the data directory must be labeled appropriately for SELinux. On Ubuntu, you need to explicitly set needs_initdb to true in order to allow Puppet to initialize the database in the new datadir (needs_initdb defaults to true on other systems).
 
 Warning: If datadir is changed from the default, puppet will not manage purging of the original data directory, which will cause it to fail if the data directory is changed back to the original.
 
@@ -415,10 +415,10 @@ Path to the `createdb` command.
 Path to the `psql` command.
 
 ####`pg_hba_conf_path`
-Path to your `pg\_hba.conf` file.
+Path to your `pg_hba.conf` file.
 
 ####`pg_ident_conf_path`
-Path to your `pg\_ident.conf` file.
+Path to your `pg_ident.conf` file.
 
 ####`postgresql_conf_path`
 Path to your `postgresql.conf` file.
@@ -427,10 +427,7 @@ Path to your `postgresql.conf` file.
 Path to your `recovery.conf` file.
 
 ####`pg_hba_conf_defaults`
-If false, disables the defaults supplied with the module for `pg\_hba.conf`. This is useful if you di
-sagree with the defaults and wish to override them yourself. Be sure that your changes of course alig
-n with the rest of the module, as some access is required to perform basic `psql` operations for exam
-ple.
+If false, disables the defaults supplied with the module for `pg_hba.conf`. This is useful if you disagree with the defaults and wish to override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform basic `psql` operations for example.
 
 ####`user`
 This setting can be used to override the default postgresql super user and owner of postgresql related files in the file system. If not specified, the module will use the user name 'postgres'.
@@ -558,7 +555,7 @@ The name of the postgresql PL/Perl package.
 The ensure parameter passed on to postgresql PL/Perl package resource.
 
 
-###Resource: postgresql::server::config\_entry
+###Resource: postgresql::server::config_entry
 This resource can be used to modify your `postgresql.conf` configuration file.
 
 Each resource maps to a line inside your `postgresql.conf` file, for example:
@@ -654,7 +651,7 @@ Define database as a template. Defaults to `false`.
 ####`connect_settings`
 Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
 
-###Resource: postgresql::server::database\_grant
+###Resource: postgresql::server::database_grant
 This defined type manages grant based access privileges for users, wrapping the `postgresql::server::database_grant` for database specific permissions. Consult the PostgreSQL documentation for `grant` for more information.
 
 ####`namevar`
@@ -732,7 +729,7 @@ Port to use when connecting. Default to 'undef' which generally defaults to 5432
 ####`connect_settings`
 Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
 
-###Resource: postgresql::server::pg\_hba\_rule
+###Resource: postgresql::server::pg_hba_rule
 This defined type allows you to create an access rule for `pg_hba.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/8.2/static/auth-pg-hba-conf.html).
 
 For example:
@@ -799,7 +796,7 @@ This provides the target for the rule, and is generally an internal only propert
 ####`postgresql_version`
 Defaults to the version set in `postgresql::server`.  Use this if you want to manage `pg_hba.conf` without managing the entire PostgreSQL instance.
 
-###Resource: postgresql::server::pg\_ident\_rule
+###Resource: postgresql::server::pg_ident_rule
 This defined type allows you to create user name maps for `pg_ident.conf`. For more details see the [PostgreSQL documentation](http://www.postgresql.org/docs/current/static/auth-username-maps.html).
 
 For example:
@@ -965,7 +962,7 @@ Name of the schma. Defaults to `namevar`.
 Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
 
 
-###Resource: postgresql::server::table\_grant
+###Resource: postgresql::server::table_grant
 This defined type manages grant based access privileges for users. Consult the PostgreSQL documentation for `grant` for more information.
 
 ####`namevar`
@@ -1017,7 +1014,7 @@ Name of the tablespace. Defaults to `namevar`.
 ####`connect_settings`
 Hash of environment variable used when connecting to a remote server. Defaults to connecting to the local Postgres instance.
 
-###Resource: postgresql::validate\_db\_connection
+###Resource: postgresql::validate_db_connection
 
 This resource can be utilised inside composite manifests to validate that a client has a valid connection with a remote PostgreSQL database. It can be ran from any node where the PostgreSQL client software is installed to validate connectivity before commencing other dependent tasks in your Puppet manifests, so it is often used when chained to other tasks such as: starting an application server, performing a database migration.
 
@@ -1067,7 +1064,7 @@ Upon failure, sets the number of attempts before giving up and failing the resou
 This will ensure the database is created before running the test. This only really works if your test is local. Defaults to `true`.
 
 
-### Custom Resource: postgresql\_psql
+### Custom Resource: postgresql_psql
 This type allows puppet to run psql statements.
 
 #### `name`
@@ -1091,14 +1088,14 @@ Multiple environment variables should be specified as an array.
 #### `port`
 The port of the database server to execute the SQL command against.
 
-#### `psql\_group`
+#### `psql_group`
 The system user group account under which the psql command should be executed.
 Defaults to 'postgres'
 
-#### `psql\_path`
+#### `psql_path`
 The path to psql executable. Defaults to 'psql'
 
-#### `psql\_user`
+#### `psql_user`
 The system user account under which the psql command should be executed.
 Defaults to "postgres"
 
@@ -1106,7 +1103,7 @@ Defaults to "postgres"
 If 'true', then the SQL will only be executed via a notify/subscribe event.
 Valid values are true or false. Defaults to false.
 
-#### `search\_path`
+#### `search_path`
 The schema search path to use when executing the SQL command
 
 #### `unless`
@@ -1115,7 +1112,7 @@ generally intended to be used for idempotency, to check for the existence of an
 object in the database to determine whether or not the main SQL command needs
 to be executed at all.
 
-### Custom Resource: postgresql\_conf
+### Custom Resource: postgresql_conf
 This type allows puppet to manage postgresql.conf parameters.
 
 #### `name`
@@ -1127,7 +1124,7 @@ The path to postgresql.conf. Defaults to '/etc/postgresql.conf'
 #### `value`
 The value to set for this parameter.
 
-### Custom Resource: postgresql\_replication\_slot
+### Custom Resource: postgresql_replication_slot
 This type allows to create and destroy replication slots
 to register warm standby replication on a Postgresql
 master server.
@@ -1135,12 +1132,12 @@ master server.
 #### `name`
 The name of the slot to create. Must be a validt replication slot name. This is the namevar.
 
-###Function: postgresql\_password
+###Function: postgresql_password
 If you need to generate a postgres encrypted password, use `postgresql_password`. You can call it from your production manifests if you don't mind them containing the clear text versions of your passwords, or you can call it from the command line and then copy and paste the encrypted password into your manifest:
 
     $ puppet apply --execute 'notify { "test": message => postgresql_password("username", "password") }'
 
-###Function: postgresql\_acls\_to\_resources\_hash(acl\_array, id, order\_offset)
+###Function: postgresql_acls_to_resources_hash(acl_array, id, order_offset)
 This internal function converts a list of `pg_hba.conf` based acls (passed in as an array of strings) to a format compatible with the `postgresql::pg_hba_rule` resource.
 
 **This function should only be used internally by the module**.
