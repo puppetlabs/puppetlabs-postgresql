@@ -60,6 +60,28 @@ describe 'postgresql::server', :type => :class do
     end
   end
 
+  describe 'service_restart_on_change => false' do
+    let(:params) {{ :service_restart_on_change => false }}
+    it { is_expected.to contain_class("postgresql::params") }
+    it { is_expected.to contain_class("postgresql::server") }
+    it { is_expected.to_not contain_Postgresql_conf('data_directory').that_notifies('Class[postgresql::server::service]')
+    }
+    it 'should validate connection' do
+      is_expected.to contain_postgresql__validate_db_connection('validate_service_is_running')
+    end
+  end
+
+  describe 'service_restart_on_change => true' do
+    let(:params) {{ :service_restart_on_change => true }}
+    it { is_expected.to contain_class("postgresql::params") }
+    it { is_expected.to contain_class("postgresql::server") }
+    it { is_expected.to contain_Postgresql_conf('data_directory').that_notifies('Class[postgresql::server::service]')
+    }
+    it 'should validate connection' do
+      is_expected.to contain_postgresql__validate_db_connection('validate_service_is_running')
+    end
+  end
+
   describe 'service_reload => /bin/true' do
     let(:params) {{ :service_reload => '/bin/true' }}
     it { is_expected.to contain_class("postgresql::params") }

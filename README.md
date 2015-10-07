@@ -380,6 +380,9 @@ This setting can be used to override the default postgresql service provider. If
 ####`service_reload`
 This setting can be used to override the default reload command for your PostgreSQL service. If not specified, the module will the default reload command for your OS distro.
 
+####`service_restart_on_change`
+This setting can be used to override the default behaviour to restart your Postgresql service when a config entry has been changed that requires a service restart to become active. Defaults to `true`.
+
 ####`service_status`
 This setting can be used to override the default status check command for your PostgreSQL service. If not specified, the module will use whatever service name is the default for your OS distro.
 
