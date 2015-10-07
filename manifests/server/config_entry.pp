@@ -23,7 +23,12 @@ define postgresql::server::config_entry (
           before => Class['postgresql::server::reload'],
         }
       } else {
-        Postgresql_conf {}
+        Postgresql_conf {
+            before => [
+                Class['postgresql::server::service'],
+                Class['postgresql::server::reload'],
+            ],
+        }
       }
     }
 
