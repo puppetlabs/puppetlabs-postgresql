@@ -31,4 +31,18 @@ describe 'postgresql::server::database_grant', :type => :define do
 
   it { is_expected.to contain_postgresql__server__database_grant('test') }
   it { is_expected.to contain_postgresql__server__grant('database:test') }
+
+  context "removal" do
+    let :params do
+      {
+        :privilege => 'ALL',
+        :db => 'test',
+        :role => 'test',
+        :ensure => 'absent',
+      }
+    end
+
+    it { is_expected.to contain_postgresql__server__database_grant('test').with_ensure('absent') }
+    it { is_expected.to contain_postgresql__server__grant('database:test').with_ensure('absent') }
+  end
 end

@@ -70,4 +70,10 @@ describe 'postgresql::server::database', :type => :define do
     it { is_expected.to contain_postgresql_psql("Create db 'test'").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.2','PGPORT'    => '1234' } ).with_port( nil ) }
 
   end
+
+  context "removal" do
+    let (:params) {{ :ensure => 'absent' }}
+
+    it { is_expected.to contain_postgresql_psql("DROP DATABASE test").with_onlyif("SELECT datname FROM pg_database WHERE datname='test'") }
+  end
 end

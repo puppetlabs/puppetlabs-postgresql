@@ -25,7 +25,7 @@ describe 'postgresql::server::role', :type => :define do
   end
 
   let :pre_condition do
-   "class {'postgresql::server':}"
+    "class {'postgresql::server':}"
   end
 
   it { is_expected.to contain_postgresql__server__role('test') }
@@ -135,4 +135,18 @@ describe 'postgresql::server::role', :type => :define do
     end
   end
 
+  context 'removal' do
+    let :params do
+      {
+        :password_hash => 'new-pa$s',
+        :ensure => 'absent',
+      }
+    end
+
+    it 'should have drop role for "test" user' do
+      is_expected.to contain_postgresql_psql("DROP ROLE test").with({
+        'onlyif'      => "SELECT rolname FROM pg_roles WHERE rolname='test'",
+      })
+    end
+  end
 end
