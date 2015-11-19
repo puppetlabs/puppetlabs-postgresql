@@ -2,7 +2,7 @@
 class postgresql::repo (
   $version = undef,
   $proxy = undef,
-) inherits postgresql::params {
+) {
   case $::osfamily {
     'RedHat', 'Linux': {
       if $version == undef {
