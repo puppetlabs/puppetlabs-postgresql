@@ -45,7 +45,7 @@ define postgresql::server::database(
   if ($version != '8.1') {
     $locale_option = $locale ? {
       undef   => '',
-      default => "LC_COLLATE=${locale} LC_CTYPE=${locale}",
+      default => "LC_COLLATE='${locale}' LC_CTYPE='${locale}'",
     }
     $public_revoke_privilege = 'CONNECT'
   } else {
