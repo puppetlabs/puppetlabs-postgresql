@@ -1,3 +1,8 @@
+## Supported Release 4.6.1
+###Summary
+
+Small release for support of newer PE versions. This increments the version of PE in the metadata.json file.
+
 ## 2015-09-01 - Supported Release 4.6.0
 ### Summary
 This release adds a proxy feature for yum, Postgis improvements, and decoupling pg_hba_rule from postgresql::server.
