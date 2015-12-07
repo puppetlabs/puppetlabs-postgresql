@@ -84,7 +84,7 @@ Usage
 
 ###Creating a database
 
-There are many ways to set up a postgres database using the `postgresql::server::db` class. For instance, to set up a database for PuppetDB:
+There are many ways to set up a postgres database using the `postgresql::server::db` defined type. For instance, to set up a database for PuppetDB:
 
     class { 'postgresql::server': }
 
