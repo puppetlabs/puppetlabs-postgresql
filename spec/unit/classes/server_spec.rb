@@ -5,6 +5,7 @@ describe 'postgresql::server', :type => :class do
     {
       :osfamily => 'Debian',
       :operatingsystem => 'Debian',
+      :lsbdistid => 'Debian',
       :operatingsystemrelease => '6.0',
       :concat_basedir => tmpfilename('server'),
       :kernel => 'Linux',
@@ -137,6 +138,21 @@ describe 'postgresql::server', :type => :class do
 
     it 'should contain proper initdb exec' do
       is_expected.to contain_exec('postgresql_initdb')
+    end
+  end
+
+  describe 'postgresql_version' do
+    let(:pre_condition) do
+      <<-EOS
+      class { 'postgresql::globals':
+        manage_package_repo => true,
+        version             => '99.5',
+        before              => Class['postgresql::server'],
+      }
+      EOS
+    end
+    it 'contains the correct package version' do
+      is_expected.to contain_class('postgresql::repo').with_version('99.5')
     end
   end
 end

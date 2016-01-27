@@ -76,15 +76,15 @@ class postgresql::params inherits postgresql::globals {
       $perl_package_name   = pick($perl_package_name, 'perl-DBD-Pg')
       $python_package_name = pick($python_package_name, 'python-psycopg2')
 
-      $postgis_package_name = pick(
-        $postgis_package_name,
-        $::operatingsystemrelease ? {
-          /^5\./     => 'postgis',
-          default => versioncmp($postgis_version, '2') ? {
-            '-1'    => "postgis${package_version}",
-            default => "postgis2_${package_version}",}
-        }
-      )
+      if $postgresql::globals::postgis_package_name {
+        $postgis_package_name = $postgresql::globals::postgis_package_name
+      } elsif $::operatingsystemrelease =~ /^5\./ {
+        $postgis_package_name = 'postgis'
+      } elsif $postgis_version and versioncmp($postgis_version, '2') < 0 {
+        $postgis_package_name = "postgis${package_version}"
+      } else {
+        $postgis_package_name = "postgis2_${package_version}"
+      }
     }
 
     'Archlinux': {
@@ -141,7 +141,7 @@ class postgresql::params inherits postgresql::globals {
       $client_package_name    = pick($client_package_name, "postgresql-client-${version}")
       $server_package_name    = pick($server_package_name, "postgresql-${version}")
       $contrib_package_name   = pick($contrib_package_name, "postgresql-contrib-${version}")
-      if versioncmp($postgis_version, '2') < 0 {
+      if $postgis_version and versioncmp($postgis_version, '2') < 0 {
         $postgis_package_name = pick($postgis_package_name, "postgresql-${version}-postgis")
       } else {
         $postgis_package_name = pick($postgis_package_name, "postgresql-${version}-postgis-${postgis_version}")
