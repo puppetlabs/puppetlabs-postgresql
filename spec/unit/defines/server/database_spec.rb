@@ -27,7 +27,7 @@ describe 'postgresql::server::database', :type => :define do
     let (:params) {{ :comment => 'test comment',
                      :connect_settings => {} }}
 
-    it { is_expected.to contain_postgresql_psql("COMMENT ON DATABASE test IS 'test comment'").with_connect_settings( {} ) }
+    it { is_expected.to contain_postgresql_psql("COMMENT ON DATABASE \"test\" IS 'test comment'").with_connect_settings( {} ) }
   end
 
   context "with specific db connection settings - default port" do
