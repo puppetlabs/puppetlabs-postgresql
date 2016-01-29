@@ -124,6 +124,19 @@ describe provider_class do
         "wal_segments = 32"
       )
     end
+
+    it "should allow numbers" do
+      expect(provider.to_line( {:name=>"integer", :value=>42, :comment=>nil, :record_type=>:parsed })).to eq(
+        "integer = 42"
+      )
+    end
+
+    it "should allow floats" do
+      expect(provider.to_line( {:name=>"float", :value=>2.71828182845, :comment=>nil, :record_type=>:parsed })).to eq(
+        "float = 2.71828182845"
+      )
+    end
+
   end
 end
 
