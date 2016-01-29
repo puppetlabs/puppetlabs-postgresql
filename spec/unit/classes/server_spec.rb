@@ -45,6 +45,7 @@ describe 'postgresql::server', :type => :class do
         'user'        => 'postgres',
         'environment' => [
           "PGPASSWORD=new-p@s$word-to-set",
+          "PGPORT=5432",
           "NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$"
         ],
         'unless'      => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null",
