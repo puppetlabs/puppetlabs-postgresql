@@ -19,4 +19,5 @@ include ::apt
   }
 
   Apt::Source['apt.postgresql.org']->Package<|tag == 'postgresql'|>
+  Class['Apt::Update'] -> Package<|tag == 'postgresql'|>
 }
