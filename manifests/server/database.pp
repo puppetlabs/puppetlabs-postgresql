@@ -55,7 +55,7 @@ define postgresql::server::database(
 
   $template_option = $template ? {
     undef   => '',
-    default => "TEMPLATE=${template}",
+    default => "TEMPLATE=\"${template}\"",
   }
 
   $encoding_option = $encoding ? {
@@ -65,7 +65,7 @@ define postgresql::server::database(
 
   $tablespace_option = $tablespace ? {
     undef   => '',
-    default => "TABLESPACE=${tablespace}",
+    default => "TABLESPACE=\"${tablespace}\"",
   }
 
   if $createdb_path != undef{
@@ -73,7 +73,7 @@ define postgresql::server::database(
   }
 
   postgresql_psql { "Create db '${dbname}'":
-    command => "CREATE DATABASE \"${dbname}\" WITH OWNER=${owner} ${template_option} ${encoding_option} ${locale_option} ${tablespace_option}",
+    command => "CREATE DATABASE \"${dbname}\" WITH OWNER=\"${owner}\" ${template_option} ${encoding_option} ${locale_option} ${tablespace_option}",
     unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
     db      => $default_db,
     require => Class['postgresql::server::service']
@@ -99,7 +99,7 @@ define postgresql::server::database(
       default => 'shobj_description',
     }
     Postgresql_psql[ "Create db '${dbname}'" ]->
-    postgresql_psql {"COMMENT ON DATABASE ${dbname} IS '${comment}'":
+    postgresql_psql {"COMMENT ON DATABASE \"${dbname}\" IS '${comment}'":
       unless => "SELECT pg_catalog.${comment_information_function}(d.oid, 'pg_database') as \"Description\" FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'",
       db     => $dbname,
     }
