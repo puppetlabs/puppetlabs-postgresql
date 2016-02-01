@@ -4,9 +4,9 @@ describe 'postgresql::server::schema:', :unless => UNSUPPORTED_PLATFORMS.include
   it 'should create a schema for a user' do
     begin
       pp = <<-EOS.unindent
-        $db = 'schema_test'
-        $user = 'psql_schema_tester'
-        $password = 'psql_schema_pw'
+        $db = 'schema-test'
+        $user = 'psql-schema-tester'
+        $password = 'psql-schema-pw'
 
         class { 'postgresql::server': }
 
