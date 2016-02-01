@@ -1,3 +1,36 @@
+## Supported Release 4.7.0
+### Summary
+A release with a considerable amount of new features, including remote db support and several platform support updates. Various bugfixes including several to address warnings and a sizable README update.
+
+#### Features
+- Remote DB support - Connection-settings allows a hash of options that can be used when connecting to a remote DB.
+- Debian 8 support.
+- Updated systemd-override to support fedora and CentOS paths.
+- Adds the ability to define the extension name separately from the title of the resource, which allows you to add the extension to more than one database.
+- Added parameter to disable automatic service restarts on config changes.
+- Ubuntu 15.10 compatibility.
+- OpenBSD version is now 9.4.
+- Added .gitattributes to maintain line endings for .sh and .rb files.
+- Adds default postgis version for 9.5.
+- Allows float postgresql_conf values.
+- Schedule apt update after install of repo.
+
+#### Bugfixes
+- Fixed systemd-override for RedHat systems with unmanaged Yum repos.
+- Removed inherits postgresql::params.
+- Multi-node tests are now not ran by default.
+- Change apt::pin to apt_postgresql_org to prevent error message.
+- Removed syntax error near UTF8.
+- Removal of extra blanks and backslashes in README.
+- Double quotes now used around database name to prevent syntax error.
+- Removes ruby 1.8.7 and puppet 2.7 from travis-ci jobs.
+- Removed inherits postgresql::params.
+- Fixed paths to work on Amazon Linux.
+- Fixed quotes around locale options.
+- Huge README update.
+- Update to use current msync configs.
+- Fixes postgresql::server acceptance test descriptions.
+
 ## Supported Release 4.6.1
 ###Summary
 
