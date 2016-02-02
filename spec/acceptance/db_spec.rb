@@ -47,7 +47,7 @@ describe 'postgresql::server::db', :unless => UNSUPPORTED_PLATFORMS.include?(fac
         expect(r.stdout).to match(/\(1 row\)/)
       end
     ensure
-      psql('--command="drop database "postgresql-test-db" postgres')
+      psql('--command=\'drop database "postgresql-test-db" postgres\'')
       psql('--command="DROP USER test"')
     end
   end
