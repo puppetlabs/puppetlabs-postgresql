@@ -1094,6 +1094,7 @@ Sets the hash to use during password creation. If the password is not already pr
 postgresql::server::role { "myusername":
 password_hash => postgresql_password('myusername', 'mypassword'),
 }
+```
 
 ##### `replication`
 
