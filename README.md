@@ -229,13 +229,14 @@ postgresql::server::pg_ident_rule{ 'Map the SSL certificate of the backup server
   system_username   => 'repli1.example.com',
   database_username => 'replication',
 }
+```
 
 This would create a user name map in `pg_ident.conf` similar to:
 
 ```
-# Rule Name: Map the SSL certificate of the backup server as a replication user
-# Description: none
-# Order: 150
+#Rule Name: Map the SSL certificate of the backup server as a replication user
+#Description: none
+#Order: 150
 sslrepli  repli1.example.com  replication
 ```
 
@@ -280,10 +281,9 @@ recovery_min_apply_delay = 0
 
 Only the specified parameters are recognized in the template. The `recovery.conf` is only be created if at least one parameter is set **and** [manage_recovery_conf](#manage_recovery_conf) is set to true.
 
-
 ### Validate connectivity
 
-To validate client connections to a remote PostgreSQL database before starting dependent tasks, use the `postgresql::validate_db_connection` resource.  You can use this on any node where the PostgreSQL client software is installed. It is often chained to other tasks such as starting an application server or performing a database migration.
+To validate client connections to a remote PostgreSQL database before starting dependent tasks, use the `postgresql::validate_db_connection` resource. You can use this on any node where the PostgreSQL client software is installed. It is often chained to other tasks such as starting an application server or performing a database migration.
 
 Example usage:
 
@@ -299,11 +299,11 @@ exec { 'rake db:migrate':
 }
 ```
 
- ## Reference
+## Reference
 
 The posgresql module comes with many options for configuring the server. While you are unlikely to use all of the settings below, they provide a decent amount of control over your security settings.
 
-Classes:
+**Classes:**
 
 * [postgresql::client](#postgresqlclient)
 * [postgresql::globals](#postgresqlglobals)
@@ -316,7 +316,7 @@ Classes:
 * [postgresql::server::contrib](#postgresqlservercontrib)
 * [postgresql::server::postgis](#postgresqlserverpostgis)
 
-Defined Types:
+**Defined Types:**
 
 * [postgresql::server::config_entry](#postgresqlserverconfig_entry)
 * [postgresql::server::database](#postgresqlserverdatabase)
@@ -332,13 +332,13 @@ Defined Types:
 * [postgresql::server::tablespace](#postgresqlservertablespace)
 * [postgresql::validate_db_connection](#postgresqlvalidate_db_connection)
 
-Types:
+**Types:**
 
 * [postgresql_psql](#custom-resource-postgresql_psql)
 * [postgresql_replication_slot](#custom-resource-postgresql_replication_slot)
 * [postgresql_conf](#custom-resource-postgresql_conf)
 
-Functions:
+**Functions:**
 
 * [postgresql_password](#function-postgresql_password)
 * [postgresql_acls_to_resources_hash](#function-postgresql_acls_to_resources_hashacl_array-id-order_offset)
@@ -367,7 +367,7 @@ Specifies the path to validate the connection script. Default: '/usr/local/bin/v
 
 Installs PostgreSQL bindings for Postgres-Docs. Set the following parameters if you have a custom version you would like to install.
 
->**Note:** Make sure to add any necessary yum or apt repositories if specifying a custom version.
+**Note:** Make sure to add any necessary yum or apt repositories if specifying a custom version.
 
 ##### `package_name`
 
@@ -379,7 +379,7 @@ Whether the PostgreSQL docs package resource should be present. Valid values: 'p
 
 #### postgresql::globals
 
->**Note:** Most server-specific defaults should be overriden in the `postgresql::server` class. This class should be used only if you are using a non-standard OS, or if you are changing elements that can only be changed here, such as `version` or `manage_package_repo`.
+**Note:** Most server-specific defaults should be overriden in the `postgresql::server` class. This class should be used only if you are using a non-standard OS, or if you are changing elements that can only be changed here, such as `version` or `manage_package_repo`.
 
 ##### `bindir`
 
@@ -405,7 +405,7 @@ Overrides the default PostgreSQL contrib package name. Default: OS dependent.
 
 Overrides the default PostgreSQL data directory for the target platform. Default: OS dependent.
 
->**Note:** Changing the datadir after installation causes the server to come to a full stop before making the change. For RedHat systems, the data directory must be labeled appropriately for SELinux. On Ubuntu, you must explicitly set `needs_initdb = true` to allow Puppet to initialize the database in the new datadir (`needs_initdb` defaults to true on other systems).
+**Note:** Changing the datadir after installation causes the server to come to a full stop before making the change. For RedHat systems, the data directory must be labeled appropriately for SELinux. On Ubuntu, you must explicitly set `needs_initdb = true` to allow Puppet to initialize the database in the new datadir (`needs_initdb` defaults to true on other systems).
 
 **Warning:** If datadir is changed from the default, Puppet does not manage purging of the original data directory, which causes it to fail if the data directory is changed back to the original.
 
@@ -545,11 +545,11 @@ Overrides the `ensure` parameter during package installation. Defaults to `prese
 
 Overrides the default package name for the distribution you are installing to. Defaults to `postgresql-devel` or `postgresql<version>-devel` depending on your distro.
 
-####postgresql::lib::java
+#### postgresql::lib::java
 
 Installs PostgreSQL bindings for Java (JDBC). Set the following parameters if you have a custom version you would like to install.
 
->**Note:** Make sure to add any necessary yum or apt repositories if specifying a custom version.
+**Note:** Make sure to add any necessary yum or apt repositories if specifying a custom version.
 
 ##### `package_ensure`
 
@@ -583,7 +583,7 @@ Specifies the name of the postgresql PL/Python package.
 
 Specifies whether the package is present. Valid values: 'present', 'absent'. Default: 'present'.
 
-####postgresql::lib::python
+#### postgresql::lib::python
 
 Installs PostgreSQL Python libraries. 
 
@@ -595,7 +595,7 @@ Specifies whether the package is present. Valid values: 'present', 'absent'. Def
 
 The name of the PostgreSQL Python package.
 
-####postgresql::server
+#### postgresql::server
 
 ##### `createdb_path`
 
@@ -1107,7 +1107,6 @@ Specifies whether to grant super user capability for the new role. Default: fals
 ##### `username`
 
 Defines the username of the role to create. Defaults to the namevar.
-
 
 #### postgresql::server::schema
 
