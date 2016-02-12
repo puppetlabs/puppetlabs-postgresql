@@ -56,7 +56,7 @@ class postgresql::params inherits postgresql::globals {
         $plperl_package_name    = pick($plperl_package_name, "postgresql${package_version}-plperl")
         $plpython_package_name  = pick($plpython_package_name, "postgresql${package_version}-plpython")
         $service_name           = $::operatingsystem ? {
-          'Amazon' => pick($service_name, "postgresql${version}"),
+          'Amazon' => pick($service_name, "postgresql${version_parts[0]}${version_parts[1]}"),
           default  => pick($service_name, "postgresql-${version}"),
         }
         $bindir                 = $::operatingsystem ? {
