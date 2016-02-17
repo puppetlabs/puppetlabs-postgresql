@@ -96,11 +96,13 @@ define postgresql::server::grant (
       validate_string($unless_privilege,'USAGE','ALL','ALL PRIVILEGES')
       $unless_function = 'has_sequence_privilege'
       $on_db = $db
+      $onlyif_function = undef
     }
     'ALL SEQUENCES IN SCHEMA': {
       validate_string($_privilege,'USAGE','ALL','ALL PRIVILEGES')
       $unless_function = 'custom'
       $on_db = $db
+      $onlyif_function = undef
 
       $schema = $object_name
 
