@@ -137,6 +137,11 @@ describe provider_class do
       )
     end
 
+    it "quotes addresses" do
+      expect(provider.to_line( {:name=>"listen_addresses", :value=>"0.0.0.0", :comment=>nil, :record_type=>:parsed })).to eq(
+        "listen_addresses = '0.0.0.0'"
+      )
+    end
   end
 end
 
