@@ -1,3 +1,19 @@
+## Supported Release 4.7.1
+### Summary
+This release contains some bugfixes and documentation updates.
+
+#### Bugfixes
+- (MODULES-3024) Quote database objects when creating databases.
+- Properly escape case where password ends with '$'.
+- Fixes password change when postgres is configure to non-standard port.
+- Unpins concat dependency to be able to use concat 2.x.
+- Workaround to fix installing on Amazon Linux.
+- Fixes proper defaulting of `$service_provider` parameter.
+- Fixes postgres server init script naming on Amazon Linux.
+- Fixes service reload parameter on Arch Linux.
+- Adds missing onlyif_function to sequence grant code.
+- Fixes to the markdown of the README.
+
 ## Supported Release 4.7.0
 ### Summary
 A release with a considerable amount of new features, including remote db support and several platform support updates. Various bugfixes including several to address warnings and a sizable README update.
