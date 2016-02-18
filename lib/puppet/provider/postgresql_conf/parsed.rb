@@ -23,7 +23,7 @@ Puppet::Type.type(:postgresql_conf).provide(
       else
         val = h[:value]
       end
-      dontneedquote = val.match(/^([\d\.]+|\w+)$/)
+      dontneedquote = val.match(/^(\d+.?\d+|\w+)$/)
       dontneedequal = h[:name].match(/^(include|include_if_exists)$/i)
 
       str =  h[:name].downcase # normalize case
