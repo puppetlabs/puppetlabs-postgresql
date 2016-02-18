@@ -14,7 +14,7 @@ class postgresql::params inherits postgresql::globals {
   $service_enable             = true
   $service_manage             = true
   $service_restart_on_change  = true
-  $service_provider           = $service_provider
+  $service_provider           = $postgresql::globals::service_provider
   $manage_pg_hba_conf         = pick($manage_pg_hba_conf, true)
   $manage_pg_ident_conf       = pick($manage_pg_ident_conf, true)
   $manage_recovery_conf       = pick($manage_recovery_conf, false)
@@ -30,7 +30,7 @@ class postgresql::params inherits postgresql::globals {
       $version_parts      = split($version, '[.]')
       $package_version    = "${version_parts[0]}${version_parts[1]}"
 
-      if $version == $postgresql::globals::default_version {
+      if $version == $postgresql::globals::default_version and $::operatingsystem != 'Amazon' {
         $client_package_name    = pick($client_package_name, 'postgresql')
         $server_package_name    = pick($server_package_name, 'postgresql-server')
         $contrib_package_name   = pick($contrib_package_name,'postgresql-contrib')
@@ -56,7 +56,7 @@ class postgresql::params inherits postgresql::globals {
         $plperl_package_name    = pick($plperl_package_name, "postgresql${package_version}-plperl")
         $plpython_package_name  = pick($plpython_package_name, "postgresql${package_version}-plpython")
         $service_name           = $::operatingsystem ? {
-          'Amazon' => pick($service_name, "postgresql${version}"),
+          'Amazon' => pick($service_name, "postgresql${version_parts[0]}${version_parts[1]}"),
           default  => pick($service_name, "postgresql-${version}"),
         }
         $bindir                 = $::operatingsystem ? {
@@ -112,7 +112,7 @@ class postgresql::params inherits postgresql::globals {
       $psql_path              = pick($psql_path, "${bindir}/psql")
 
       $service_status         = $service_status
-      $service_reload         = "service ${service_name} reload"
+      $service_reload         = "systemctl reload ${service_name}"
       $python_package_name    = pick($python_package_name, 'python-psycopg2')
       # Archlinux does not have a perl::DBD::Pg package
       $perl_package_name      = pick($perl_package_name, 'undef')
