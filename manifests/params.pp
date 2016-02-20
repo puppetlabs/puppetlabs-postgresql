@@ -159,6 +159,9 @@ class postgresql::params inherits postgresql::globals {
       if $::operatingsystem == 'Debian' and versioncmp($::operatingsystemrelease, '8.0') >= 0 {
         # Jessie uses systemd
         $service_status = pick($service_status, "/usr/sbin/service ${service_name}@*-main status")
+      } elsif $::operatingsystem == 'Ubuntu' and versioncmp($::operatingsystemrelease, '15.04') >= 0 {
+        # Ubuntu releases since vivid use systemd
+        $service_status = pick($service_status, "/usr/sbin/service ${service_name} status")
       } else {
         $service_status = pick($service_status, "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'")
       }
