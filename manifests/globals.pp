@@ -27,7 +27,7 @@ class postgresql::globals (
   $pg_ident_conf_path       = undef,
   $postgresql_conf_path     = undef,
   $recovery_conf_path       = undef,
-  $default_connect_settings = undef,
+  $default_connect_settings = {},
 
   $pg_hba_conf_defaults     = undef,
 

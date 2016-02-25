@@ -18,7 +18,7 @@ class postgresql::server (
   $service_reload             = $postgresql::params::service_reload,
   $service_status             = $postgresql::params::service_status,
   $default_database           = $postgresql::params::default_database,
-
+  $default_connect_settings   = $postgresql::globals::default_connect_settings,
   $listen_addresses           = $postgresql::params::listen_addresses,
   $port                       = $postgresql::params::port,
   $ip_mask_deny_postgres_user = $postgresql::params::ip_mask_deny_postgres_user,
