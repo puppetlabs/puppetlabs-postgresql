@@ -41,7 +41,7 @@ PostgreSQL is a high-performance, free, open-source relational database server. 
 
 ### Getting started with postgresql
 
-To configure a basic default PostgreSQL server, declare the `postgresql::server` class. 
+To configure a basic default PostgreSQL server, declare the `postgresql::server` class.
 
 ```puppet
 class { 'postgresql::server': }
@@ -182,7 +182,7 @@ require => Postgresql::Server::Role['super2'],
 
 ### Create an access rule for pg_hba.conf
 
-To create an access rule for `pg_hba.conf`: 
+To create an access rule for `pg_hba.conf`:
 
 ```puppet
 postgresql::server::pg_hba_rule { 'allow application network to access app database':
@@ -242,7 +242,7 @@ sslrepli  repli1.example.com  replication
 
 ### Create recovery configuration
 
-To create the recovery configuration file (`recovery.conf`): 
+To create the recovery configuration file (`recovery.conf`):
 
 ```puppet
 postgresql::server::recovery{ 'Create a recovery.conf file with the following defined parameters':
@@ -535,7 +535,7 @@ Installs the packages containing the development libraries for PostgreSQL and sy
 
 ##### `link_pg_config`
 
-If the bin directory used by the PostgreSQL page is not  `/usr/bin` or `/usr/local/bin`, symlinks `pg_config` from the package's bin dir into `usr/bin` (not applicable to Debian systems). Set to false to disable this behavior. Valid values: true, false. Default: true. 
+If the bin directory used by the PostgreSQL page is not  `/usr/bin` or `/usr/local/bin`, symlinks `pg_config` from the package's bin dir into `usr/bin` (not applicable to Debian systems). Set to false to disable this behavior. Valid values: true, false. Default: true.
 
 ##### `package_ensure`
 
@@ -585,7 +585,7 @@ Specifies whether the package is present. Valid values: 'present', 'absent'. Def
 
 #### postgresql::lib::python
 
-Installs PostgreSQL Python libraries. 
+Installs PostgreSQL Python libraries.
 
 ##### `package_ensure`
 
@@ -604,6 +604,10 @@ The name of the PostgreSQL Python package.
 ##### `default_database`
 
 Specifies the name of the default database to connect with. On most systems this is "postgres".
+
+##### `default_connect_settings`
+
+Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined-types. i.e. `postgresql::server::role`
 
 ##### `encoding`
 
@@ -627,7 +631,7 @@ Lists strings for access control for connection method, users, databases, IPv6 a
 
 ##### `ip_mask_allow_all_users`
 
-Overrides PostgreSQL defaults for remote connections. By default, PostgreSQL does not allow database user accounts to connect via TCP from remote machines. If you'd like to allow this, you can override this setting. 
+Overrides PostgreSQL defaults for remote connections. By default, PostgreSQL does not allow database user accounts to connect via TCP from remote machines. If you'd like to allow this, you can override this setting.
 
 Set to `0.0.0.0/0` to allow database users to connect from any remote machine, or `192.168.0.0/16` to allow connections from any machine on your local 192.168 subnet. Default: `127.0.0.1/32`.
 
@@ -1035,7 +1039,7 @@ Provides the target for the rule and is generally an internal only property. **U
 
 Allows you to create the content for `recovery.conf`. For more details see the [usage example](#create-recovery-configuration) and the [PostgreSQL documentation](http://www.postgresql.org/docs/current/static/recovery-config.html).
 
-Every parameter value is a string set in the template except `recovery_target_inclusive`, `pause_at_recovery_target`, `standby_mode` and `recovery_min_apply_delay`. 
+Every parameter value is a string set in the template except `recovery_target_inclusive`, `pause_at_recovery_target`, `standby_mode` and `recovery_min_apply_delay`.
 
 A detailed description of all listed parameters can be found in the [PostgreSQL documentation](http://www.postgresql.org/docs/current/static/recovery-config.html).
 
