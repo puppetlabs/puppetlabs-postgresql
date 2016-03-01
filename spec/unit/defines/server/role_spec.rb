@@ -20,7 +20,6 @@ describe 'postgresql::server::role', :type => :define do
   let :params do
     {
       :password_hash => 'new-pa$s',
-      :connect_settings => {},
     }
   end
 
@@ -35,7 +34,6 @@ describe 'postgresql::server::role', :type => :define do
       'environment' => "NEWPGPASSWD=new-pa$s",
       'unless'      => "SELECT rolname FROM pg_roles WHERE rolname='test'",
       'port'        => "5432",
-      'connect_settings' => {},
     })
   end
   it 'should have alter role for "test" user with password as ****' do
@@ -44,7 +42,6 @@ describe 'postgresql::server::role', :type => :define do
       'environment' => "NEWPGPASSWD=new-pa$s",
       'unless'      => "SELECT usename FROM pg_shadow WHERE usename='test' and passwd='md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
       'port'        => "5432",
-      'connect_settings' => {},
     })
   end
 
