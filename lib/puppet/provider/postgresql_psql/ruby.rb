@@ -38,7 +38,11 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
           env_name = $1
           value = $2
           if environment.include?(env_name) || environment.include?(env_name.to_sym)
-            warning "Overriding environment setting '#{env_name}' with '#{value}'"
+            if env_name == 'NEWPGPASSWD'
+              warning "Overriding environment setting '#{env_name}' with '****'"
+            else
+              warning "Overriding environment setting '#{env_name}' with '#{value}'"
+            end
           end
           environment[env_name] = value
         else
