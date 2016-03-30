@@ -20,6 +20,7 @@ class postgresql::server::config {
   $datadir                    = $postgresql::server::datadir
   $logdir                     = $postgresql::server::logdir
   $service_name               = $postgresql::server::service_name
+  $log_line_prefix            = $postgresql::server::log_line_prefix
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -114,6 +115,12 @@ class postgresql::server::config {
       value => $logdir,
     }
 
+  }
+  # Allow timestamps in log by default
+  if $log_line_prefix {
+    postgresql::server::config_entry {'log_line_prefix':
+      value => $log_line_prefix,
+    }
   }
 
   # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
