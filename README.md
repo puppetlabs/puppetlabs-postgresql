@@ -1256,6 +1256,10 @@ Specifies any additional environment variables you want to set for a SQL command
 Sets an arbitrary tag for your own reference; the name of the message. This is the
 namevar.
 
+##### `onlyif`
+
+Sets an optional SQL command to execute prior to the main command. This is generally intended to be used for idempotency, to check for the existence of an object in the database to determine whether or not the main SQL command needs to be executed at all.
+
 ##### `port`
 
 Specifies the port of the database server to execute the SQL command against.
@@ -1282,7 +1286,7 @@ Defines the schema search path to use when executing the SQL command.
 
 ##### `unless`
 
-Sets an optional SQL command to execute prior to the main command. This is generally intended to be used for idempotency, to check for the existence of an object in the database to determine whether or not the main SQL command needs to be executed at all.
+The inverse of `onlyif`.
 
 #### postgresql_conf
 
