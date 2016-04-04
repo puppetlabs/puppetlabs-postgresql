@@ -3,7 +3,7 @@
 #### Table of Contents
 
 1. [Module Description - What does the module do?](#module-description)
-2. [Setup - The basics of getting started with posgresql module](#setup)
+2. [Setup - The basics of getting started with postgresql module](#setup)
     * [What postgresql affects](#what-postgresql-affects)
     * [Getting started with postgresql](#getting-started-with-postgresql)
 3. [Usage - Configuration options and additional functionality](#usage)
@@ -27,9 +27,9 @@
 
 ## Module description
 
-The posgresql module allows you to manage PostgreSQL databases with Puppet.
+The postgresql module allows you to manage PostgreSQL databases with Puppet.
 
-PostgreSQL is a high-performance, free, open-source relational database server. The posgresql module allows you to manage packages, services, databases, users, and common security settings in PostgreSQL.
+PostgreSQL is a high-performance, free, open-source relational database server. The postgresql module allows you to manage packages, services, databases, users, and common security settings in PostgreSQL.
 
 ## Setup
 
@@ -160,7 +160,7 @@ $connection_settings_super2 = {
 
 include postgresql::server
 
-# Connect with no special settings, i.e domain sockets, user postges
+# Connect with no special settings, i.e domain sockets, user postgres
 postgresql::server::role{'super2':
   password_hash => "foobar2",
   superuser     => true,
@@ -301,7 +301,7 @@ exec { 'rake db:migrate':
 
 ## Reference
 
-The posgresql module comes with many options for configuring the server. While you are unlikely to use all of the settings below, they provide a decent amount of control over your security settings.
+The postgresql module comes with many options for configuring the server. While you are unlikely to use all of the settings below, they provide a decent amount of control over your security settings.
 
 **Classes:**
 
@@ -379,7 +379,7 @@ Whether the PostgreSQL docs package resource should be present. Valid values: 'p
 
 #### postgresql::globals
 
-**Note:** Most server-specific defaults should be overriden in the `postgresql::server` class. This class should be used only if you are using a non-standard OS, or if you are changing elements that can only be changed here, such as `version` or `manage_package_repo`.
+**Note:** Most server-specific defaults should be overridden in the `postgresql::server` class. This class should be used only if you are using a non-standard OS, or if you are changing elements that can only be changed here, such as `version` or `manage_package_repo`.
 
 ##### `bindir`
 
@@ -405,7 +405,7 @@ Overrides the default PostgreSQL contrib package name. Default: OS dependent.
 
 Overrides the default PostgreSQL data directory for the target platform. Default: OS dependent.
 
-**Note:** Changing the datadir after installation causes the server to come to a full stop before making the change. For RedHat systems, the data directory must be labeled appropriately for SELinux. On Ubuntu, you must explicitly set `needs_initdb = true` to allow Puppet to initialize the database in the new datadir (`needs_initdb` defaults to true on other systems).
+**Note:** Changing the datadir after installation causes the server to come to a full stop before making the change. For Red Hat systems, the data directory must be labeled appropriately for SELinux. On Ubuntu, you must explicitly set `needs_initdb = true` to allow Puppet to initialize the database in the new datadir (`needs_initdb` defaults to true on other systems).
 
 **Warning:** If datadir is changed from the default, Puppet does not manage purging of the original data directory, which causes it to fail if the data directory is changed back to the original.
 
@@ -499,7 +499,7 @@ Path to your `recovery.conf` file.
 
 ##### `repo_proxy`
 
-Sets the proxy option for the official PostgreSQL yum-repositories only. Debian is currently not supported. This is useful if your server is behind a corporate firewall and needs to use proxyservers for outside connectivity.
+Sets the proxy option for the official PostgreSQL yum-repositories only. Debian is currently not supported. This is useful if your server is behind a corporate firewall and needs to use proxy servers for outside connectivity.
 
 ##### `server_package_name`
 
@@ -696,7 +696,7 @@ Sets the default package name for the PL/Python extension. Default: OS dependent
 
 ##### `port`
 
-Specifies the port for the PostgreSQL server to listen on. **Note:** The same port number is used for all IP addresses the server listens on. Also, for RedHat systems and early Debian systems, changing the port causes the server to come to a full stop before being able to make the change. Default: `5432`, meaning the Postgres server listens on TCP port 5432.
+Specifies the port for the PostgreSQL server to listen on. **Note:** The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems, changing the port causes the server to come to a full stop before being able to make the change. Default: `5432`, meaning the Postgres server listens on TCP port 5432.
 
 ##### `postgres_password`
 
@@ -860,7 +860,7 @@ Defines the database as a template if set to true. Default: false.
 
 ##### `locale`
 
-Overrides the locale during creation of the database. DefaultThe default defined during installation.
+Overrides the locale during creation of the database. The default defined during installation.
 
 ##### `owner`
 
@@ -1013,7 +1013,7 @@ Allows you to create user name maps for `pg_ident.conf`. For more details see th
 
 ##### `database_username`
 
-Specifies the user name of the the database user. The `system_username` is mapped to this user name.
+Specifies the user name of the database user. The `system_username` is mapped to this user name.
 
 ##### `description`
 
@@ -1256,6 +1256,10 @@ Specifies any additional environment variables you want to set for a SQL command
 Sets an arbitrary tag for your own reference; the name of the message. This is the
 namevar.
 
+##### `onlyif`
+
+Sets an optional SQL command to execute prior to the main command. This is generally intended to be used for idempotency, to check for the existence of an object in the database to determine whether or not the main SQL command needs to be executed at all.
+
 ##### `port`
 
 Specifies the port of the database server to execute the SQL command against.
@@ -1282,7 +1286,7 @@ Defines the schema search path to use when executing the SQL command.
 
 ##### `unless`
 
-Sets an optional SQL command to execute prior to the main command. This is generally intended to be used for idempotency, to check for the existence of an object in the database to determine whether or not the main SQL command needs to be executed at all.
+The inverse of `onlyif`.
 
 #### postgresql_conf
 
@@ -1333,7 +1337,7 @@ Works with versions of PostgreSQL from 8.1 through 9.5.
 Currently, the postgresql module is tested on the following operating systems:
 
 * Debian 6.x, 7.x, 8.x.
-* Centos 5.x, 6.x, and 7.x.
+* CentOS 5.x, 6.x, and 7.x.
 * Ubuntu 10.04 and 12.04, 14.04.
 
 Other systems might be compatible, but are not being actively tested.
@@ -1342,11 +1346,11 @@ Other systems might be compatible, but are not being actively tested.
 
 While this module supports both 1.x and 2.x versions of the puppetlabs-apt module, it does not support puppetlabs-apt 2.0.0 or 2.0.1.
 
-### Postgis support
+### PostGIS support
 
-Postgis is currently considered an unsupported feature, as it doesn't work on all platforms correctly.
+PostGIS is currently considered an unsupported feature, as it doesn't work on all platforms correctly.
 
-### All versions of RHEL/Centos
+### All versions of RHEL/CentOS
 
 If you have SELinux enabled you must add any custom ports you use to the `postgresql_port_t` context.  You can do this as follows:
 
@@ -1379,12 +1383,12 @@ And then run the unit tests:
 bundle exec rake spec
 ```
 
-The unit tests are run in Travis-CI as well. If you want to see the results of your own tests, register the service hook through Travis-CI via the accounts section for your Github clone of this project.
+The unit tests are run in Travis-CI as well. If you want to see the results of your own tests, register the service hook through Travis-CI via the accounts section for your GitHub clone of this project.
 
 To run the system tests, make sure you also have:
 
-* vagrant > 1.2.x
-* Virtualbox > 4.2.10
+* Vagrant > 1.2.x
+* VirtualBox > 4.2.10
 
 Then run the tests using:
 
