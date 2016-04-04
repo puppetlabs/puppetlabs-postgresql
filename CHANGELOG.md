@@ -40,7 +40,6 @@ A release with a considerable amount of new features, including remote db suppor
 - Removal of extra blanks and backslashes in README.
 - Double quotes now used around database name to prevent syntax error.
 - Removes ruby 1.8.7 and puppet 2.7 from travis-ci jobs.
-- Removed inherits postgresql::params.
 - Fixed paths to work on Amazon Linux.
 - Fixed quotes around locale options.
 - Huge README update.
