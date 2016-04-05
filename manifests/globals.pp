@@ -36,6 +36,7 @@ class postgresql::globals (
   $bindir                   = undef,
   $xlogdir                  = undef,
   $logdir                   = undef,
+  $log_line_prefix          = undef,
 
   $user                     = undef,
   $group                    = undef,

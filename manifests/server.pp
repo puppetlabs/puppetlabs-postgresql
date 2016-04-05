@@ -38,6 +38,8 @@ class postgresql::server (
   $xlogdir                    = $postgresql::params::xlogdir,
   $logdir                     = $postgresql::params::logdir,
 
+  $log_line_prefix            = $postgresql::params::log_line_prefix,
+
   $pg_hba_conf_defaults       = $postgresql::params::pg_hba_conf_defaults,
 
   $user                       = $postgresql::params::user,
