@@ -30,7 +30,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   private
 
   def get_environment
-    environment = resource[:connect_settings] || {}
+    environment = (resource[:connect_settings] || {}).dup
     if envlist = resource[:environment]
       envlist = [envlist] unless envlist.is_a? Array
       envlist.each do |setting|
@@ -55,7 +55,6 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
 
   def run_command(command, user, group, environment)
     command = command.join ' '
-    environment = get_environment
     if Puppet::PUPPETVERSION.to_f < 3.0
       require 'puppet/util/execution'
       Puppet::Util::Execution.withenv environment do
