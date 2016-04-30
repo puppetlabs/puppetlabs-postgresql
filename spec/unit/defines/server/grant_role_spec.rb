@@ -46,4 +46,32 @@ describe 'postgresql::server::grant_role', :type => :define do
       }).that_requires('Class[postgresql::server]')
     }
   end
+
+  context "with user defined" do
+    let :pre_condition do
+      "class { 'postgresql::server': }
+postgresql::server::role { '#{params[:role]}': }"
+    end
+
+    it {
+      is_expected.to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").that_requires("Postgresql::Server::Role[#{params[:role]}]")
+    }
+    it {
+      is_expected.not_to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").that_requires("Postgresql::Server::Role[#{params[:group]}]")
+    }
+  end
+
+  context "with group defined" do
+    let :pre_condition do
+      "class { 'postgresql::server': }
+postgresql::server::role { '#{params[:group]}': }"
+    end
+
+    it {
+      is_expected.to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").that_requires("Postgresql::Server::Role[#{params[:group]}]")
+    }
+    it {
+      is_expected.not_to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").that_requires("Postgresql::Server::Role[#{params[:role]}]")
+    }
+  end
 end
