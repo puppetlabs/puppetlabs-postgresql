@@ -74,4 +74,17 @@ postgresql::server::role { '#{params[:group]}': }"
       is_expected.not_to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").that_requires("Postgresql::Server::Role[#{params[:role]}]")
     }
   end
+
+  context "with connect_settings" do
+    let (:params) { super().merge({
+      :connect_settings => { 'PGHOST' => 'postgres-db-server' },
+    }) }
+
+    it {
+      is_expected.to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").with_connect_settings( { 'PGHOST' => 'postgres-db-server' } )
+    }
+    it {
+      is_expected.not_to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").that_requires('Class[postgresql::server]')
+    }
+  end
 end
