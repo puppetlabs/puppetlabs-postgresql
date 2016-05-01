@@ -987,6 +987,10 @@ Specifies the database to execute the grant against. _This should not ordinarily
 
 Sets the OS user to run `psql`. Default: the default user for the module, usually `postgres`.
 
+##### `connect_settings`
+
+Specifies a hash of environment variables used when connecting to a remote server. Default: Connects to the local Postgres instance.
+
 #### postgresql::server::pg_hba_rule
 
 Allows you to create an access rule for `pg_hba.conf`. For more details see the [usage example](#create-an-access-rule-for-pghba.conf) and the [PostgreSQL documentation](http://www.postgresql.org/docs/current/static/auth-pg-hba-conf.html).

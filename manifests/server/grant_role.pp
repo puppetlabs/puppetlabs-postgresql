@@ -1,3 +1,4 @@
+# Define for granting membership to a role. See README.md for more information
 define postgresql::server::grant_role (
   $group,
   $role,
