@@ -19,13 +19,14 @@ describe 'postgresql::server::grant_role', :type => :define do
 
   let (:params) { {
     :group => 'my_group',
-    :role => 'my_role'
+    :role  => 'my_role',
   } }
 
   context "with mandatory arguments only" do
     it {
-      is_expected.to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").with({
-        :unless  => "select pg_roles.rolname,usename from pg_user join pg_auth_members on (pg_user.usesysid = pg_auth_members.member) join pg_roles on (pg_roles.oid = pg_auth_members.roleid) where pg_roles.rolname ='#{params[:group]}' and pg_user.usename = '#{params[:role]}'",
+      is_expected.to contain_postgresql_psql("grant_role:#{title}").with({
+        :command => "GRANT '#{params[:group]}' TO '#{params[:role]}'",
+        :unless  => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:user]}') AS t WHERE t.count = 1",
       }).that_requires('Class[postgresql::server]')
     }
   end
@@ -38,12 +39,36 @@ describe 'postgresql::server::grant_role', :type => :define do
     }) }
 
     it {
-      is_expected.to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").with({
-        :unless    => "select pg_roles.rolname,usename from pg_user join pg_auth_members on (pg_user.usesysid = pg_auth_members.member) join pg_roles on (pg_roles.oid = pg_auth_members.roleid) where pg_roles.rolname ='#{params[:group]}' and pg_user.usename = '#{params[:role]}'",
+      is_expected.to contain_postgresql_psql("grant_role:#{title}").with({
+        :command => "GRANT '#{params[:group]}' TO '#{params[:role]}'",
+        :unless    => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:user]}') AS t WHERE t.count = 1",
         :db        => params[:psql_db],
         :psql_user => params[:psql_user],
         :port      => params[:port],
       }).that_requires('Class[postgresql::server]')
+    }
+  end
+
+  context "with ensure => absent" do
+    let (:params) { super().merge({
+      :ensure   => 'absent',
+    }) }
+
+    it {
+      is_expected.to contain_postgresql_psql("grant_role:#{title}").with({
+        :command => "REVOKE '#{params[:group]}' FROM '#{params[:role]}'",
+        :unless  => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:user]}') AS t WHERE t.count != 1",
+      }).that_requires('Class[postgresql::server]')
+    }
+  end
+
+  context "with ensure => invalid" do
+    let (:params) { super().merge({
+      :ensure   => 'invalid',
+    }) }
+
+    it {
+      expect { catalogue }.to raise_error(Puppet::Error, /Unknown value for ensure/)
     }
   end
 
@@ -54,10 +79,10 @@ postgresql::server::role { '#{params[:role]}': }"
     end
 
     it {
-      is_expected.to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").that_requires("Postgresql::Server::Role[#{params[:role]}]")
+      is_expected.to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:role]}]")
     }
     it {
-      is_expected.not_to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").that_requires("Postgresql::Server::Role[#{params[:group]}]")
+      is_expected.not_to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:group]}]")
     }
   end
 
@@ -68,10 +93,10 @@ postgresql::server::role { '#{params[:group]}': }"
     end
 
     it {
-      is_expected.to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").that_requires("Postgresql::Server::Role[#{params[:group]}]")
+      is_expected.to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:group]}]")
     }
     it {
-      is_expected.not_to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").that_requires("Postgresql::Server::Role[#{params[:role]}]")
+      is_expected.not_to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:role]}]")
     }
   end
 
@@ -81,10 +106,10 @@ postgresql::server::role { '#{params[:group]}': }"
     }) }
 
     it {
-      is_expected.to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").with_connect_settings( { 'PGHOST' => 'postgres-db-server' } )
+      is_expected.to contain_postgresql_psql("grant_role:#{title}").with_connect_settings( { 'PGHOST' => 'postgres-db-server' } )
     }
     it {
-      is_expected.not_to contain_postgresql_psql("GRANT '#{params[:group]}' TO '#{params[:role]}'").that_requires('Class[postgresql::server]')
+      is_expected.not_to contain_postgresql_psql("grant_role:#{title}").that_requires('Class[postgresql::server]')
     }
   end
 end

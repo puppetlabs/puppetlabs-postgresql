@@ -975,6 +975,10 @@ Specifies the group role to which you are assigning a role.
 
 Specifies the role you want to assign to a group.
 
+##### `ensure`
+
+Specifies whether to grant ('present') or revoke ('absent') the membership. Default: 'present'.
+
 ##### `port`
 
 Port to use when connecting. Default: undef, which generally defaults to port 5432 depending on your PostgreSQL packaging.
