@@ -26,7 +26,7 @@ describe 'postgresql::server::grant_role', :type => :define do
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}").with({
         :command => "GRANT '#{params[:group]}' TO '#{params[:role]}'",
-        :unless  => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:user]}') AS t WHERE t.count = 1",
+        :unless  => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:role]}') AS t WHERE t.count = 1",
       }).that_requires('Class[postgresql::server]')
     }
   end
@@ -41,7 +41,7 @@ describe 'postgresql::server::grant_role', :type => :define do
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}").with({
         :command => "GRANT '#{params[:group]}' TO '#{params[:role]}'",
-        :unless    => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:user]}') AS t WHERE t.count = 1",
+        :unless    => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:role]}') AS t WHERE t.count = 1",
         :db        => params[:psql_db],
         :psql_user => params[:psql_user],
         :port      => params[:port],
@@ -57,7 +57,7 @@ describe 'postgresql::server::grant_role', :type => :define do
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}").with({
         :command => "REVOKE '#{params[:group]}' FROM '#{params[:role]}'",
-        :unless  => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:user]}') AS t WHERE t.count != 1",
+        :unless  => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:role]}') AS t WHERE t.count != 1",
       }).that_requires('Class[postgresql::server]')
     }
   end
