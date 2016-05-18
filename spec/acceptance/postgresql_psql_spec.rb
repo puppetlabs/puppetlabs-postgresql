@@ -114,6 +114,36 @@ describe 'postgresql_psql', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfa
     end
   end
 
+  it 'should not run some SQL when the onlyif query returns no rows' do
+    pp = <<-EOS
+      class { 'postgresql::server': } ->
+      postgresql_psql { 'foobar':
+        db        => 'postgres',
+        psql_user => 'postgres',
+        command   => 'select 1',
+        onlyif    => 'select 1 where 1=2',
+      }
+    EOS
+
+    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, :catch_changes  => true)
+  end
+
+  it 'should run SQL when the onlyif query returns rows' do
+    pp = <<-EOS
+      class { 'postgresql::server': } ->
+      postgresql_psql { 'foobar':
+        db        => 'postgres',
+        psql_user => 'postgres',
+        command   => 'select * from pg_database limit 1',
+        onlyif    => 'select 1 where 1=1',
+      }
+    EOS
+
+    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, :expect_changes => true)
+  end
+
   context 'with secure password passing by environment' do
     it 'should run SQL that contanins password passed by environment' do
       select = "select \\'$PASS_TO_EMBED\\'"

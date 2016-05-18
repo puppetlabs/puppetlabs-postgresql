@@ -43,12 +43,35 @@ Puppet::Type.newtype(:postgresql_psql) do
     end
   end
 
+  newparam(:onlyif) do
+    desc "An optional SQL command to execute prior to the main :command; " +
+        "this is generally intended to be used for idempotency, to check " +
+        "for the existence of an object in the database to determine whether " +
+        "or not the main SQL command needs to be executed at all."
+
+    # Return true if a matching row is found
+    def matches(value)
+      output, status = provider.run_unless_sql_command(value)
+      status = output.exitcode if status.nil?
+
+      self.fail("Error evaluating 'onlyif' clause, returned #{status}: '#{output}'") unless status == 0
+
+      result_count = output.strip.to_i
+      self.debug("Found #{result_count} row(s) executing 'onlyif' clause")
+      result_count > 0
+    end
+  end
+
+  newparam(:connect_settings) do
+    desc "Connection settings that will be used when connecting to postgres"
+  end
+
   newparam(:db) do
-    desc "The name of the database to execute the SQL command against."
+    desc "The name of the database to execute the SQL command against, this overrides any PGDATABASE value in connect_settings"
   end
 
   newparam(:port) do
-    desc "The port of the database server to execute the SQL command against."
+    desc "The port of the database server to execute the SQL command against, this overrides any PGPORT value in connect_settings."
   end
 
   newparam(:search_path) do
@@ -97,7 +120,9 @@ Puppet::Type.newtype(:postgresql_psql) do
   end
 
   def should_run_sql(refreshing = false)
+    onlyif_param = @parameters[:onlyif]
     unless_param = @parameters[:unless]
+    return false if !onlyif_param.nil? && !onlyif_param.value.nil? && !onlyif_param.matches(onlyif_param.value)
     return false if !unless_param.nil? && !unless_param.value.nil? && unless_param.matches(unless_param.value)
     return false if !refreshing && @parameters[:refreshonly].value == :true
     true

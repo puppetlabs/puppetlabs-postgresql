@@ -19,6 +19,8 @@ class postgresql::server::config {
   $manage_recovery_conf       = $postgresql::server::manage_recovery_conf
   $datadir                    = $postgresql::server::datadir
   $logdir                     = $postgresql::server::logdir
+  $service_name               = $postgresql::server::service_name
+  $log_line_prefix            = $postgresql::server::log_line_prefix
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -69,12 +71,6 @@ class postgresql::server::config {
         order       => '004',
       }
 
-      # ipv4acls are passed as an array of rule strings, here we transform
-      # them into a resources hash, and pass the result to create_resources
-      $ipv4acl_resources = postgresql_acls_to_resources_hash($ipv4acls,
-      'ipv4acls', 10)
-      create_resources('postgresql::server::pg_hba_rule', $ipv4acl_resources)
-
       postgresql::server::pg_hba_rule { 'allow access to all users':
         type        => 'host',
         address     => $ip_mask_allow_all_users,
@@ -87,13 +83,20 @@ class postgresql::server::config {
         auth_method => 'md5',
         order       => '101',
       }
-
-      # ipv6acls are passed as an array of rule strings, here we transform
-      # them into a resources hash, and pass the result to create_resources
-      $ipv6acl_resources = postgresql_acls_to_resources_hash($ipv6acls,
-      'ipv6acls', 102)
-      create_resources('postgresql::server::pg_hba_rule', $ipv6acl_resources)
     }
+
+    # ipv4acls are passed as an array of rule strings, here we transform
+    # them into a resources hash, and pass the result to create_resources
+    $ipv4acl_resources = postgresql_acls_to_resources_hash($ipv4acls,
+    'ipv4acls', 10)
+    create_resources('postgresql::server::pg_hba_rule', $ipv4acl_resources)
+
+
+    # ipv6acls are passed as an array of rule strings, here we transform
+    # them into a resources hash, and pass the result to create_resources
+    $ipv6acl_resources = postgresql_acls_to_resources_hash($ipv6acls,
+    'ipv6acls', 102)
+    create_resources('postgresql::server::pg_hba_rule', $ipv6acl_resources)
   }
 
   # We must set a "listen_addresses" line in the postgresql.conf if we
@@ -112,6 +115,12 @@ class postgresql::server::config {
       value => $logdir,
     }
 
+  }
+  # Allow timestamps in log by default
+  if $log_line_prefix {
+    postgresql::server::config_entry {'log_line_prefix':
+      value => $log_line_prefix,
+    }
   }
 
   # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
@@ -159,9 +168,14 @@ class postgresql::server::config {
 
   if $::osfamily == 'RedHat' {
     if $::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora' {
+      # Template uses:
+      # - $::operatingsystem
+      # - $service_name
+      # - $port
+      # - $datadir
       file { 'systemd-override':
         ensure  => present,
-        path    => '/etc/systemd/system/postgresql.service',
+        path    => "/etc/systemd/system/${service_name}.service",
         owner   => root,
         group   => root,
         content => template('postgresql/systemd-override.erb'),

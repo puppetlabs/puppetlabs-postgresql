@@ -162,7 +162,7 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
 
       it 'should fail parsing when auth_method is not valid' do
         expect { catalogue }.to raise_error(Puppet::Error,
-          /The auth_method you specified \[peer\] must be one of: trust, reject, md5, sha1, password, gss, sspi, krb5, ident, ldap, radius, cert, pam/)
+          /The auth_method you specified \[peer\] must be one of: trust, reject, md5, password, gss, sspi, krb5, ident, ldap, radius, cert, pam/)
       end
     end
 
