@@ -59,7 +59,8 @@ define postgresql::server::role(
     connect_settings => $connect_settings,
     require    => [
       Postgresql_psql["CREATE ROLE ${username} ENCRYPTED PASSWORD ****"],
-      Class['postgresql::server'],
+      Class['postgresql::service'],
+      Class['postgresql::passwd'],
     ],
   }
 
