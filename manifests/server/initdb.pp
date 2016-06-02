@@ -11,6 +11,7 @@ class postgresql::server::initdb {
   $user         = $postgresql::server::user
   $psql_path    = $postgresql::server::psql_path
   $port         = $postgresql::server::port
+  $ismount      = $postgresql::server::ismount
 
   # Set the defaults for the postgresql_psql resource
   Postgresql_psql {
@@ -21,11 +22,13 @@ class postgresql::server::initdb {
   }
 
   # Make sure the data directory exists, and has the correct permissions.
-  file { $datadir:
-    ensure => directory,
-    owner  => $user,
-    group  => $group,
-    mode   => '0700',
+  if(!$ismount) {
+    file { $datadir:
+      ensure => directory,
+      owner  => $user,
+      group  => $group,
+      mode   => '0700',
+    }
   }
 
   if($xlogdir) {
