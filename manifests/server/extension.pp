@@ -15,7 +15,7 @@ define postgresql::server::extension (
     'present': {
       $command = "CREATE EXTENSION \"${extension}\""
       $unless_comp = '='
-      $package_require = undef
+      $package_require = []
       $package_before = Postgresql_psql["Add ${extension} extension to ${database}"]
     }
 
@@ -23,7 +23,7 @@ define postgresql::server::extension (
       $command = "DROP EXTENSION \"${extension}\""
       $unless_comp = '!='
       $package_require = Postgresql_psql["Add ${extension} extension to ${database}"]
-      $package_before = undef
+      $package_before = []
     }
 
     default: {
