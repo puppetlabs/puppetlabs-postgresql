@@ -409,6 +409,13 @@ Overrides the default PostgreSQL data directory for the target platform. Default
 
 **Warning:** If datadir is changed from the default, Puppet does not manage purging of the original data directory, which causes it to fail if the data directory is changed back to the original.
 
+##### `manage_datadir`
+
+Manage datadir as file resource by this module, default true.
+If false, it will not create the folder, and expect 'datadir' exists and own by the 'user'.
+
+**Warning** If manage_datadir is false, Puppet will still initialize database.
+
 ##### `default_database`
 
 Specifies the name of the default database to connect with. On most systems, this is 'postgres'.

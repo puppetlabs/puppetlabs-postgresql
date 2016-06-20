@@ -55,7 +55,7 @@ class postgresql::globals (
   $manage_recovery_conf     = undef,
 
   $manage_package_repo      = undef,
-  $ismount                  = false,
+  $manage_datadir           = true,
 ) {
   # We are determining this here, because it is needed by the package repo
   # class.
