@@ -12,10 +12,20 @@ describe 'postgresql::client', :type => :class do
   describe 'with parameters' do
     let :params do
       {
-        :validcon_script_path  => '/opt/bin/my-validate-con.sh',
-        :package_ensure => 'absent',
-        :package_name   => 'mypackage',
-        :file_ensure    => 'file'
+        :validcon_script_path => '/opt/bin/my-validate-con.sh',
+        :package_ensure       => 'absent',
+        :package_name         => 'mypackage',
+        :file_ensure          => 'file',
+        :validate_connections => { 'test' => {
+                                              'database_host' => 'test',
+                                              'database_name' => 'test',
+                                              'database_password' => 'test',
+                                              'database_username' => 'test',
+                                              'database_port' => 5432,
+                                              'run_as' => 'postgresq',
+                                              'sleep' => 4,
+                                              'tries' => 30,
+                                            } }
       }
     end
 
@@ -35,6 +45,9 @@ describe 'postgresql::client', :type => :class do
         :mode   => '0755'
       })
     end
+
+    it { is_expected.to contain_postgresql__validate_db_connection('test') }
+
   end
 
   describe 'with no parameters' do
