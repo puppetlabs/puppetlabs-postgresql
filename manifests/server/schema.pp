@@ -51,7 +51,7 @@ define postgresql::server::schema(
   postgresql_psql { $schema_title:
     command => $schema_command,
     unless  => $unless,
-    require => Class['postgresql::server'],
+    require => Class['postgresql::service'],
   }
 
   if($owner != undef and defined(Postgresql::Server::Role[$owner])) {

@@ -54,6 +54,19 @@ class postgresql::server (
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
   $manage_recovery_conf       = $postgresql::params::manage_recovery_conf,
 
+  $config_entries  = {},
+  $databases       = {},
+  $database_grants = {},
+  $dbs             = {},
+  $extensions      = {},
+  $pg_hba_rules    = {},
+  $pg_ident_rules  = {},
+  $recovery        = {},
+  $roles           = {},
+  $schemas         = {},
+  $table_grants    = {},
+  $tablespaces     = {},
+
   #Deprecated
   $version                    = undef,
 ) inherits postgresql::params {
@@ -80,4 +93,41 @@ class postgresql::server (
   class { "${pg}::service": }->
   class { "${pg}::passwd": }->
   anchor { "${pg}::end": }
+
+  if $config_entries {
+    create_resources('postgresql::server::config_entry', $config_entries)
+  }
+  if $databases {
+    create_resources('postgresql::server::database', $databases)
+  }
+  if $database_grants {
+    create_resources('postgresql::server::database_grant', $database_grants)
+  }
+  if $dbs {
+    create_resources('postgresql::server::db', $dbs)
+  }
+  if $extensions {
+    create_resources('postgresql::server::extension', $extensions)
+  }
+  if $pg_hba_rules {
+    create_resources('postgresql::server::pg_hba_rule', $pg_hba_rules)
+  }
+  if $pg_ident_rules {
+    create_resources('postgresql::server::pg_ident_rule', $pg_ident_rules)
+  }
+  if $recovery {
+    create_resources('postgresql::server::recovery', $recovery)
+  }
+  if $roles {
+    create_resources('postgresql::server::role', $roles)
+  }
+  if $schemas {
+    create_resources('postgresql::server::schema', $schemas)
+  }
+  if $table_grants {
+    create_resources('postgresql::server::table_grant', $table_grants)
+  }
+  if $tablespaces {
+    create_resources('postgresql::server::tablespace', $tablespaces)
+  }
 }

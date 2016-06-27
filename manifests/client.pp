@@ -1,9 +1,10 @@
 # Install client cli tool. See README.md for more details.
 class postgresql::client (
-  $file_ensure    = 'file',
+  $file_ensure           = 'file',
   $validcon_script_path  = $postgresql::params::validcon_script_path,
-  $package_name   = $postgresql::params::client_package_name,
-  $package_ensure = 'present'
+  $package_name          = $postgresql::params::client_package_name,
+  $package_ensure        = 'present'
+  $validate_connections  = {},
 ) inherits postgresql::params {
   validate_absolute_path($validcon_script_path)
   validate_string($package_name)
@@ -20,6 +21,10 @@ class postgresql::client (
     owner  => 0,
     group  => 0,
     mode   => '0755',
+  }
+
+  if $validate_connections {
+    create_resources('postgresql::validate_db_connection', $validate_connections)
   }
 
 }

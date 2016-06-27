@@ -363,6 +363,10 @@ Sets the name of the PostgreSQL client package. Default: 'file'.
 
 Specifies the path to validate the connection script. Default: '/usr/local/bin/validate_postgresql_connection.sh'.
 
+##### `validate_connections`
+
+Optional parameter passed to postgresql::validate_db_connection
+
 #### postgresql::lib::docs
 
 Installs PostgreSQL bindings for Postgres-Docs. Set the following parameters if you have a custom version you would like to install.
@@ -738,6 +742,41 @@ Overrides the default status check command for your PostgreSQL service. Default:
 
 Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system. Default: 'postgres'.
 
+##### `config_entries`
+Optional hash of config_entry to create, which are passed to `postgresql::server::config_entry`
+
+##### `databases`
+Optional hash of databases to create, which are passed to `postgresql::server::database`
+
+##### `database_grants`
+Optional hash of database grants to create, which are passed to `postgresql::server::database_grant`
+
+##### `dbs`
+Optional hash of db to create, which are passed to `postgresql::server::db`
+
+##### `extensions`
+Optional hash of extensions to manage, which are passed to `postgresql::server::extension`
+
+##### `pg_hba_rules`
+Optional hash of pg_hba_rule to create, which are passed to `postgresql::server::pg_hba_rule`
+
+##### `pg_ident_rule`
+Optional hash of pg_ident_rule to create, which are passed to `postgresql::server::pg_ident_rule`
+
+##### `recovery`
+Optional hash of recovery to create, which are passed to `postgresql::server::recovery`
+
+##### `roles`
+Optional hash of roles to create, which are passed to `postgresql::server::role`
+
+##### `schemas`
+Optional hash of database schemas to create, which are passed to `postgresql::server::schema`
+
+##### `table_grants`
+Optional hash of table_grant to create, which are passed to `postgresql::server::table_grant`
+
+##### `tablespaces`
+Optional hash of tablespace to create, which are passed to `postgresql::server::tablespace`
 
 #### postgresql::server::contrib
 
