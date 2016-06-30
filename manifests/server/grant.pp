@@ -111,7 +111,7 @@ define postgresql::server::grant (
         'ALL PRIVILEGES' => 'USAGE',
         default          => $_privilege,
       }
-      
+
       # This checks if there is a difference between the sequences in the
       # specified schema and the sequences for which the role has the specified
       # privilege. It uses the EXCEPT clause which computes the set of rows
