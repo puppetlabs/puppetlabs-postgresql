@@ -445,6 +445,10 @@ Sets the default database locale for all databases created with this module. On 
 
 Overrides the default PostgreSQL log directory. Default: initdb's default path.
 
+##### `log_line_prefix`
+
+Set a prefix for the server logs. Default: `'%t '`
+
 ##### `manage_package_repo`
 
 Sets up official PostgreSQL repositories on your host if set to true. Default: false.
@@ -649,6 +653,10 @@ Specifies the addresses the server accepts connections to. Valid values:
 ##### `locale`
 
 Sets the default database locale for all databases created with this module. On certain operating systems this is used during the `template1` initialization as well, so it becomes a default outside of the module. Default: undef, which is effectively `C`. **On Debian, you must ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.**
+
+##### `log_line_prefix`
+
+Set a prefix for the server logs. Default: `'%t '`
 
 ##### `manage_pg_hba_conf`
 

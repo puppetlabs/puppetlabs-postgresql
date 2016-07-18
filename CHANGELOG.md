@@ -1,3 +1,24 @@
+## Supported Release 4.8.0
+### Summary
+This release primarily fixes an issue with `postgresql_conf` values of ipaddresses being considered floats and not getting quoted.
+
+#### Features
+- Add `default_connect_settings` parameter to `postgresql::server`
+- Running under strict variables is now supported
+- Add timestamps into logs by default
+
+#### Bugfixes
+- Obscure password in postgresql\_psql type
+- Fix ip address quoting in postgresql\_conf type
+- Fix handling of systemd service on Ubuntu
+- Mark log_min_duration_statement setting as requiring a service restart
+- Add fixes for Fedora 23, Fedora 24, FreeBSD, OpenBSD
+- Fix environment handling to avoid "Overriding environment setting" message
+- Work around PUP-6385, using empty arrays instead of undef when specifying resource relationships
+- README editorial pass
+- Reduce whitespace in templates
+- Update build/test infrastructure
+
 ## Supported Release 4.7.1
 ### Summary
 This release contains some bugfixes and documentation updates.
@@ -559,7 +580,7 @@ the stage for the large scale refactoring work of 3.0.0.
 ####Features
 
 
-####Bugfixes 
+####Bugfixes
 - Use boolean for refreshonly.
 - Fix postgresql::plperl documentation.
 - Add two missing parameters to config::beforeservice
