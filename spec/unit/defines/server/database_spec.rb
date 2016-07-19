@@ -69,4 +69,11 @@ describe 'postgresql::server::database', :type => :define do
     it { is_expected.to contain_postgresql_psql("Create db 'test'").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.2','PGPORT'    => '1234' } ).with_port( nil ) }
 
   end
+
+  context "with change_ownership set to true" do
+    let (:params) {{ :change_ownership => true,
+                     :owner            => 'test_owner' }}
+
+    it { is_expected.to contain_postgresql_psql("Change owner of db 'test' to test_owner") }
+  end
 end
