@@ -2,6 +2,8 @@ source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :development, :test do
   gem 'rake', '10.1.1'
+  gem 'mocha'
+  gem 'rspec', '~> 2.11',       :require => false
   gem 'puppetlabs_spec_helper', :require => false
   gem 'rspec-puppet', '~> 1.0'
   gem 'rspec', '~> 2.11',       :require => false
