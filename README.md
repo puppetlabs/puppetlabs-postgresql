@@ -453,6 +453,10 @@ Set a prefix for the server logs. Default: `'%t '`
 
 Sets up official PostgreSQL repositories on your host if set to true. Default: false.
 
+##### `module_workdir`
+
+Specifies working directory under which the psql command should be executed. May need to specify if /tmp is on volume mounted with noexec option. Default: /tmp 
+
 ##### `needs_initdb`
 
 Explicitly calls the initdb operation after the server package is installed and before the PostgreSQL service is started. Default: OS dependent.

@@ -6,6 +6,7 @@ class postgresql::server::passwd {
   $psql_path         = $postgresql::server::psql_path
   $port              = $postgresql::server::port
   $database          = $postgresql::server::default_database
+  $module_workdir    = $postgresql::server::module_workdir
 
   # psql will default to connecting as $user if you don't specify name
   $_datbase_user_same = $database == $user
@@ -27,7 +28,7 @@ class postgresql::server::passwd {
       user        => $user,
       group       => $group,
       logoutput   => true,
-      cwd         => '/tmp',
+      cwd         => $module_workdir,
       environment => [
         "PGPASSWORD=${postgres_password}",
         "PGPORT=${port}",
