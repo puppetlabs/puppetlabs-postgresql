@@ -13,6 +13,6 @@ module Puppet::Parser::Functions
     username = args[0]
     password = args[1]
 
-    'md5' + Digest::MD5.hexdigest(password + username)
+    'md5' + Digest::MD5.hexdigest(password.to_s + username.to_s)
   end
 end
