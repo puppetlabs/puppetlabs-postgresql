@@ -31,7 +31,10 @@ end
 
 # json_pure 2.0.2 added a requirement on ruby >= 2. We pin to json_pure 2.0.1
 # if using ruby 1.x
-gem 'json_pure', '<=2.0.1', :require => false if RUBY_VERSION =~ /^1\./
+gem 'json_pure',  '<=2.0.1',  :require => false if RUBY_VERSION =~ /^1\./
+# mime-types 3.0 \dded a requirement  on mime-types-data which requires ruby >= 2.0
+# Pin mime-types to 2.99.2 if using ruby 1.x
+gem 'mime-types', '<=2.99.2', :require => false if RUBY_VERSION =~ /^1\./
 
 gem 'facter', *location_for(ENV['FACTER_GEM_VERSION'])
 gem 'puppet', *location_for(ENV['PUPPET_GEM_VERSION'])
