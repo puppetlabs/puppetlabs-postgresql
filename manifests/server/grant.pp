@@ -239,7 +239,7 @@ define postgresql::server::grant (
     psql_path        => $psql_path,
     unless           => $_unless,
     onlyif           => $_onlyif,
-    require          => Class['postgresql::server']
+    require          => Class['postgresql::server::service']
   }
 
   if($role != undef and defined(Postgresql::Server::Role[$role])) {

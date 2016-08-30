@@ -40,14 +40,14 @@ define postgresql::server::tablespace(
     seluser => 'system_u',
     selrole => 'object_r',
     seltype => 'postgresql_db_t',
-    require => Class['postgresql::server'],
+    require => Class['postgresql::server::service'],
   }
 
   $create_ts = "Create tablespace '${spcname}'"
   postgresql_psql { "Create tablespace '${spcname}'":
     command => $create_tablespace_command,
     unless  => "SELECT spcname FROM pg_tablespace WHERE spcname='${spcname}'",
-    require => [Class['postgresql::server'], File[$location]],
+    require => [Class['postgresql::server::service'], File[$location]],
   }
 
   if($owner != undef and defined(Postgresql::Server::Role[$owner])) {

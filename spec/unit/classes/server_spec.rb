@@ -157,4 +157,83 @@ describe 'postgresql::server', :type => :class do
       is_expected.to contain_class('postgresql::repo').with_version('99.5')
     end
   end
+
+  describe 'create config entries' do
+    let(:params) {{ 'config_entries' => {'example_config' => {'ensure' => 'present', 'value' => 'is_set'}}}}
+    it 'changes the config file' do
+      is_expected.to contain_postgresql_conf('example_config')
+    end
+  end
+
+  describe 'create database entries' do
+    let(:params) {{ 'databases' => {'test' => {'comment' => 'test comment'}} }}
+
+    it { is_expected.to contain_postgresql_psql("COMMENT ON DATABASE \"test\" IS 'test comment'").with_connect_settings( {} ) }
+  end
+
+  describe 'create database_grant entries' do
+    let(:params) {{ 'database_grants' => {'test' => {'privilege' => 'ALL', 'db' => 'test', 'role' => 'test'}} }}
+
+    it { is_expected.to contain_postgresql__server__database_grant('test') }
+    it { is_expected.to contain_postgresql__server__grant('database:test') }
+  end
+
+  describe 'create db entries' do
+    let(:params) {{ 'dbs' => {'test' => {'user' => 'test', 'password' => 'test', 'owner' => 'tester'}} }}
+
+    it { is_expected.to contain_postgresql__server__db('test') }
+    it { is_expected.to contain_postgresql__server__database('test').with_owner('tester') }
+    it { is_expected.to contain_postgresql__server__role('test').that_comes_before('Postgresql::Server::Database[test]') }
+    it { is_expected.to contain_postgresql__server__database_grant('GRANT test - ALL - test') }
+  end
+
+  describe 'manage extension entries' do
+    let(:params) {{ 'extensions' => {'postgis' => {'database' => 'template_postgis'}} }}
+
+    it { is_expected.to contain_postgresql_psql('Add postgis extension to template_postgis') }
+  end
+
+  describe 'create pg_hba_rule entries' do
+    let(:params) {{ 'pg_hba_rules' => {'test' => {'type' => 'host', 'database' => 'all', 'user' => 'all', 'address' => '1.1.1.1/24', 'auth_method' => 'md5', 'target' => tmpfilename('pg_hba_rule')}} }}
+
+    it { is_expected.to contain_concat__fragment('pg_hba_rule_test') }
+  end
+
+  describe 'create pg_ident_rule entries' do
+    let(:params) {{ 'pg_ident_rules' => {'test' => {'map_name' => 'thatsmymap', 'system_username' => 'systemuser', 'database_username' => 'dbuser', }} }}
+
+    it { is_expected.to contain_concat__fragment('pg_ident_rule_test') }
+  end
+
+  describe 'create recovery entries' do
+    let(:params) {{ 'recovery' => {'test' => {'restore_command' => 'restore_command', 'recovery_target_timeline' => 'recovery_target_timeline' }}, 'manage_recovery_conf' => true }}
+
+    it { is_expected.to contain_concat__fragment('recovery.conf') }
+  end
+
+  describe 'create role entries' do
+    let(:params) {{ 'roles' => {'test' => {'password_hash' => 'new-pa$s'}} }}
+
+    it { is_expected.to contain_postgresql__server__role('test') }
+  end
+
+  describe 'create schema entries' do
+    let(:params) {{ 'schemas' => {'test' => {'owner' => 'jane', 'db' => 'janedb' }} }}
+
+    it { should contain_postgresql__server__schema('test') }
+  end
+
+  describe 'create table_grant entries' do
+    let(:params) {{ 'table_grants' => {'test' => {'privilege' => 'ALL', 'db' => 'test', 'role' => 'test', 'table' => 'foo',}} }}
+
+    it { is_expected.to contain_postgresql__server__table_grant('test') }
+    it { is_expected.to contain_postgresql__server__grant('table:test') }
+  end
+
+  describe 'create tablespace entries' do
+    let(:params) {{ 'tablespaces' => {'test' => {'location' => '/srv/data/foo'}} }}
+
+    it { is_expected.to contain_postgresql__server__tablespace('test') }
+  end
+
 end
