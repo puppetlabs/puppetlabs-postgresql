@@ -1,16 +1,17 @@
 # PRIVATE CLASS: do not call directly
 class postgresql::server::initdb {
-  $needs_initdb = $postgresql::server::needs_initdb
-  $initdb_path  = $postgresql::server::initdb_path
-  $datadir      = $postgresql::server::datadir
-  $xlogdir      = $postgresql::server::xlogdir
-  $logdir       = $postgresql::server::logdir
-  $encoding     = $postgresql::server::encoding
-  $locale       = $postgresql::server::locale
-  $group        = $postgresql::server::group
-  $user         = $postgresql::server::user
-  $psql_path    = $postgresql::server::psql_path
-  $port         = $postgresql::server::port
+  $needs_initdb     = $postgresql::server::needs_initdb
+  $initdb_path      = $postgresql::server::initdb_path
+  $datadir          = $postgresql::server::datadir
+  $xlogdir          = $postgresql::server::xlogdir
+  $logdir           = $postgresql::server::logdir
+  $encoding         = $postgresql::server::encoding
+  $locale           = $postgresql::server::locale
+  $group            = $postgresql::server::group
+  $user             = $postgresql::server::user
+  $psql_path        = $postgresql::server::psql_path
+  $port             = $postgresql::server::port
+  $manage_datadir   = $postgresql::server::manage_datadir
 
   # Set the defaults for the postgresql_psql resource
   Postgresql_psql {
@@ -21,11 +22,13 @@ class postgresql::server::initdb {
   }
 
   # Make sure the data directory exists, and has the correct permissions.
-  file { $datadir:
-    ensure => directory,
-    owner  => $user,
-    group  => $group,
-    mode   => '0700',
+  if($manage_datadir) {
+    file { $datadir:
+      ensure => directory,
+      owner  => $user,
+      group  => $group,
+      mode   => '0700',
+    }
   }
 
   if($xlogdir) {
