@@ -10,11 +10,11 @@ define postgresql::server::grant_role (
 ) {
   case $ensure {
     'present': {
-      $command = "GRANT '${group}' TO '${role}'"
+      $command = "GRANT \"${group}\" TO \"${role}\""
       $unless_comp = '='
     }
     'absent': {
-      $command = "REVOKE '${group}' FROM '${role}'"
+      $command = "REVOKE \"${group}\" FROM \"${role}\""
       $unless_comp = '!='
     }
     default: {

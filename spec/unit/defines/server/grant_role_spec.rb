@@ -25,7 +25,7 @@ describe 'postgresql::server::grant_role', :type => :define do
   context "with mandatory arguments only" do
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}").with({
-        :command => "GRANT '#{params[:group]}' TO '#{params[:role]}'",
+        :command => "GRANT \"#{params[:group]}\" TO \"#{params[:role]}\"",
         :unless  => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:role]}') AS t WHERE t.count = 1",
       }).that_requires('Class[postgresql::server]')
     }
@@ -40,7 +40,7 @@ describe 'postgresql::server::grant_role', :type => :define do
 
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}").with({
-        :command => "GRANT '#{params[:group]}' TO '#{params[:role]}'",
+        :command => "GRANT \"#{params[:group]}\" TO \"#{params[:role]}\"",
         :unless    => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:role]}') AS t WHERE t.count = 1",
         :db        => params[:psql_db],
         :psql_user => params[:psql_user],
@@ -56,7 +56,7 @@ describe 'postgresql::server::grant_role', :type => :define do
 
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}").with({
-        :command => "REVOKE '#{params[:group]}' FROM '#{params[:role]}'",
+        :command => "REVOKE \"#{params[:group]}\" FROM \"#{params[:role]}\"",
         :unless  => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '#{params[:group]}' AND u.usename = '#{params[:role]}') AS t WHERE t.count != 1",
       }).that_requires('Class[postgresql::server]')
     }
