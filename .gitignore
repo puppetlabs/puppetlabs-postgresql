@@ -9,4 +9,5 @@ spec/fixtures/modules/
 coverage/
 log/
 .idea/
+log/
 *.iml
