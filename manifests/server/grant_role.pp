@@ -8,6 +8,14 @@ define postgresql::server::grant_role (
   $port             = $postgresql::server::port,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
+  validate_string($group)
+  validate_string($role)
+  if empty($group) {
+    fail('$group must be set')
+  }
+  if empty($role) {
+    fail('$role must be set')
+  }
   case $ensure {
     'present': {
       $command = "GRANT \"${group}\" TO \"${role}\""

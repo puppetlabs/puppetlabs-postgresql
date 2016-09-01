@@ -31,6 +31,52 @@ describe 'postgresql::server::grant_role', :type => :define do
     }
   end
 
+  context "validation" do
+    context "group invalid type" do
+      let (:params) { {
+        :group => ['a', 'b'],
+        :role  => 'r',
+      } }
+
+      it {
+        expect { catalogue }.to raise_error(Puppet::Error, /is not a string/)
+      }
+    end
+
+    context "role invalid type" do
+      let (:params) { {
+          :group => 'g',
+          :role  => 1,
+      } }
+
+      it {
+        expect { catalogue }.to raise_error(Puppet::Error, /is not a string/)
+      }
+    end
+
+    context "group empty" do
+      let (:params) { {
+          :group => '',
+          :role  => 'r',
+      } }
+
+      it {
+        expect { catalogue }.to raise_error(/\$group must be set/)
+      }
+    end
+
+    context "role empty" do
+      let (:params) { {
+          :group => 'g',
+          :role  => :undef,
+      } }
+
+      it {
+        expect { catalogue }.to raise_error(/\$role must be set/)
+      }
+    end
+  end
+
   context "with db arguments" do
     let (:params) { super().merge({
       :psql_db   => 'postgres',
