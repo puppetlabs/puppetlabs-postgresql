@@ -46,7 +46,7 @@ describe 'postgresql::server::grant_role', :type => :define do
     context "role invalid type" do
       let (:params) { {
           :group => 'g',
-          :role  => 1,
+          :role  => true,
       } }
 
       it {
