@@ -19,10 +19,11 @@ define postgresql::server::schema(
   $connect_settings = $postgresql::server::default_connect_settings,
   $change_ownership = false,
 ) {
-  $user      = $postgresql::server::user
-  $group     = $postgresql::server::group
-  $psql_path = $postgresql::server::psql_path
-  $version   = $postgresql::server::_version
+  $user           = $postgresql::server::user
+  $group          = $postgresql::server::group
+  $psql_path      = $postgresql::server::psql_path
+  $version        = $postgresql::server::_version
+  $module_workdir = $postgresql::server::module_workdir
 
   # If the connection settings do not contain a port, then use the local server port
   if $connect_settings != undef and has_key( $connect_settings, 'PGPORT') {
@@ -37,6 +38,7 @@ define postgresql::server::schema(
     psql_group => $group,
     psql_path  => $psql_path,
     port       => $port,
+    cwd        => $module_workdir,
     connect_settings => $connect_settings,
   }
 

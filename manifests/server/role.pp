@@ -13,9 +13,10 @@ define postgresql::server::role(
   $username         = $title,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
-  $psql_user  = $postgresql::server::user
-  $psql_group = $postgresql::server::group
-  $psql_path  = $postgresql::server::psql_path
+  $psql_user      = $postgresql::server::user
+  $psql_group     = $postgresql::server::group
+  $psql_path      = $postgresql::server::psql_path
+  $module_workdir = $postgresql::server::module_workdir
 
   #
   # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
@@ -57,6 +58,7 @@ define postgresql::server::role(
     psql_group => $psql_group,
     psql_path  => $psql_path,
     connect_settings => $connect_settings,
+    cwd        => $module_workdir,
     require    => [
       Postgresql_psql["CREATE ROLE ${username} ENCRYPTED PASSWORD ****"],
       Class['postgresql::server'],
