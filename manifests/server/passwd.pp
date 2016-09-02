@@ -5,6 +5,15 @@ class postgresql::server::passwd {
   $group             = $postgresql::server::group
   $psql_path         = $postgresql::server::psql_path
   $port              = $postgresql::server::port
+  $database          = $postgresql::server::default_database
+  $module_workdir    = $postgresql::server::module_workdir
+
+  # psql will default to connecting as $user if you don't specify name
+  $_datbase_user_same = $database == $user
+  $_dboption = $_datbase_user_same ? {
+    false => " --dbname ${database}",
+    default => ''
+  }
 
   if ($postgres_password != undef) {
     # NOTE: this password-setting logic relies on the pg_hba.conf being
@@ -15,11 +24,11 @@ class postgresql::server::passwd {
     exec { 'set_postgres_postgrespw':
       # This command works w/no password because we run it as postgres system
       # user
-      command     => "${psql_path} -c \"ALTER ROLE \\\"${user}\\\" PASSWORD \${NEWPASSWD_ESCAPED}\"",
+      command     => "${psql_path}${_dboption} -c \"ALTER ROLE \\\"${user}\\\" PASSWORD \${NEWPASSWD_ESCAPED}\"",
       user        => $user,
       group       => $group,
       logoutput   => true,
-      cwd         => '/tmp',
+      cwd         => $module_workdir,
       environment => [
         "PGPASSWORD=${postgres_password}",
         "PGPORT=${port}",

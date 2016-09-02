@@ -5,9 +5,10 @@ define postgresql::server::tablespace(
   $spcname = $title,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
-  $user      = $postgresql::server::user
-  $group     = $postgresql::server::group
-  $psql_path = $postgresql::server::psql_path
+  $user           = $postgresql::server::user
+  $group          = $postgresql::server::group
+  $psql_path      = $postgresql::server::psql_path
+  $module_workdir = $postgresql::server::module_workdir
 
   # If the connection settings do not contain a port, then use the local server port
   if $connect_settings != undef and has_key( $connect_settings, 'PGPORT') {
@@ -22,6 +23,7 @@ define postgresql::server::tablespace(
     psql_path        => $psql_path,
     port             => $port,
     connect_settings => $connect_settings,
+    cwd              => $module_workdir,
   }
 
   if ($owner == undef) {

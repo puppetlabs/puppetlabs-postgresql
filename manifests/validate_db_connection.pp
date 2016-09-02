@@ -19,6 +19,7 @@ define postgresql::validate_db_connection(
   include postgresql::params
 
   $psql_path = $postgresql::params::psql_path
+  $module_workdir = $postgresql::params::module_workdir
   $validcon_script_path = $postgresql::client::validcon_script_path
 
   $cmd_init = "${psql_path} --tuples-only --quiet "
@@ -67,7 +68,7 @@ define postgresql::validate_db_connection(
   exec { $exec_name:
     command     => "echo 'Unable to connect to defined database using: ${cmd}' && false",
     unless      => $validate_cmd,
-    cwd         => '/tmp',
+    cwd         => $module_workdir,
     environment => $env,
     logoutput   => 'on_failure',
     user        => $run_as,
