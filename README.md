@@ -323,6 +323,7 @@ The postgresql module comes with many options for configuring the server. While 
 * [postgresql::server::database_grant](#postgresqlserverdatabase_grant)
 * [postgresql::server::db](#postgresqlserverdb)
 * [postgresql::server::extension](#postgresqlserverextension)
+* [postgresql::server::grant_role](#postgresqlservergrant_role)
 * [postgresql::server::pg_hba_rule](#postgresqlserverpg_hba_rule)
 * [postgresql::server::pg_ident_rule](#postgresqlserverpg_ident_rule)
 * [postgresql::server::recovery](#postgresqlserverrecovery)
@@ -981,6 +982,38 @@ Sets the OS user to run `psql`. Default: the default user for the module, usuall
 ##### `role`
 
 Specifies the role or user whom you are granting access to.
+
+#### postgresql::server::grant_role
+
+Allows you to assign a role to a (group) role. See [PostgreSQL documentation for `Role Membership`](http://www.postgresql.org/docs/current/static/role-membership.html) for more information.
+
+##### `group`
+
+Specifies the group role to which you are assigning a role.
+
+##### `role`
+
+Specifies the role you want to assign to a group.
+
+##### `ensure`
+
+Specifies whether to grant ('present') or revoke ('absent') the membership. Default: 'present'.
+
+##### `port`
+
+Port to use when connecting. Default: undef, which generally defaults to port 5432 depending on your PostgreSQL packaging.
+
+##### `psql_db`
+
+Specifies the database to execute the grant against. _This should not ordinarily be changed from the default_, which is `postgres`.
+
+##### `psql_user`
+
+Sets the OS user to run `psql`. Default: the default user for the module, usually `postgres`.
+
+##### `connect_settings`
+
+Specifies a hash of environment variables used when connecting to a remote server. Default: Connects to the local Postgres instance.
 
 #### postgresql::server::pg_hba_rule
 
