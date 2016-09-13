@@ -21,7 +21,7 @@ Puppet::Type.newtype(:postgresql_psql) do
     end
 
     def sync
-      output, status = provider.run_sql_command(value)
+      output, status = provider.run_sql_command(value.gsub(/[\\$]/, '$' => '\$', '\\' => '\\\\'))
       self.fail("Error executing SQL; psql returned #{status}: '#{output}'") unless status == 0
     end
   end
