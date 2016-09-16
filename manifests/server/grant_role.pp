@@ -32,7 +32,7 @@ define postgresql::server::grant_role (
 
   postgresql_psql { "grant_role:${name}":
     command          => $command,
-    unless           => "SELECT t.count FROM (SELECT count(*) FROM pg_user AS u JOIN pg_auth_members AS am ON (u.usesysid = am.member) JOIN pg_roles AS r ON (r.oid = am.roleid) WHERE r.rolname = '${group}' AND u.usename = '${role}') AS t WHERE t.count ${unless_comp} 1",
+    unless           => "SELECT 1 WHERE pg_has_role('${role}', '${group}', 'MEMBER') ${unless_comp} true",
     db               => $psql_db,
     psql_user        => $psql_user,
     port             => $port,
