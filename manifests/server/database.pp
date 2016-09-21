@@ -114,8 +114,15 @@ define postgresql::server::database(
     }
   }
 
-  # Build up dependencies on tablespace
-  if $tablespace != undef and defined(Postgresql::Server::Tablespace[$tablespace]) {
-    Postgresql::Server::Tablespace[$tablespace]->Postgresql_psql["CREATE DATABASE \"${dbname}\""]
+  if $tablespace {
+    postgresql_psql { "ALTER DATABASE \"${dbname}\" SET ${tablespace_option}":
+      unless  => "SELECT 1 FROM pg_database JOIN pg_tablespace spc ON dattablespace = spc.oid WHERE datname = '${dbname}' AND spcname = '${tablespace}'",
+      require => Postgresql_psql["CREATE DATABASE \"${dbname}\""],
+    }
+
+    if defined(Postgresql::Server::Tablespace[$tablespace]) {
+      # The tablespace must be there, before we create the database.
+      Postgresql::Server::Tablespace[$tablespace]->Postgresql_psql["CREATE DATABASE \"${dbname}\""]
+    }
   }
 }
