@@ -1,7 +1,7 @@
 # Define for granting membership to a role. See README.md for more information
 define postgresql::server::grant_role (
   $group,
-  $role,
+  $role             = $name,
   $ensure           = 'present',
   $psql_db          = $postgresql::server::default_database,
   $psql_user        = $postgresql::server::user,
