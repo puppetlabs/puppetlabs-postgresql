@@ -8,7 +8,7 @@ class postgresql::repo (
       if $version == undef {
         fail("The parameter 'version' for 'postgresql::repo' is undefined. You must always define it when osfamily == Redhat or Linux")
       }
-      class { 'postgresql::repo::yum_postgresql_org': }
+      class { 'postgresql::repo::download_postgresql_org': }
     }
 
     'Debian': {
