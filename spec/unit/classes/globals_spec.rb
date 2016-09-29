@@ -57,7 +57,7 @@ describe 'postgresql::globals', :type => :class do
       end
 
       it do
-        should contain_yumrepo('yum.postgresql.org').with(
+        should contain_repo('download.postgresql.org').with(
           'enabled' => '1',
           'proxy'   => 'http://proxy-server:8080'
           )
