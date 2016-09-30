@@ -5,12 +5,16 @@ include ::apt
   #
   # http://www.postgresql.org/download/linux/debian/
   #
+  $default_baseurl = 'http://apt.postgresql.org/pub/repos/apt/'
+
+  $baseurl_real = pick($postgresql::repo::baseurl,$default_baseurl)
+
   apt::pin { 'apt_postgresql_org':
     originator => 'apt.postgresql.org',
     priority   => 500,
   }->
   apt::source { 'apt.postgresql.org':
-    location    => 'http://apt.postgresql.org/pub/repos/apt/',
+    location    => $baseurl_real,
     release     => "${::lsbdistcodename}-pgdg",
     repos       => "main ${postgresql::repo::version}",
     key         => 'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
