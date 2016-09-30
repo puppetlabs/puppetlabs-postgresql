@@ -19,7 +19,7 @@ class postgresql::repo::download_postgresql_org inherits postgresql::repo {
 
   yumrepo { 'download.postgresql.org':
     descr    => "PostgreSQL ${postgresql::repo::version} \$releasever - \$basearch",
-    baseurl  => "http://download.postgresql.org/pub/repos/yum/${postgresql::repo::version}/${label1}/${label2}-\$releasever-\$basearch",
+    baseurl  => "https://download.postgresql.org/pub/repos/yum/${postgresql::repo::version}/${label1}/${label2}-\$releasever-\$basearch",
     enabled  => 1,
     gpgcheck => 1,
     gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}",
