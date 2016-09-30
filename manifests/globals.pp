@@ -44,6 +44,7 @@ class postgresql::globals (
   $version                  = undef,
   $postgis_version          = undef,
   $repo_proxy               = undef,
+  $repo_baseurl             = undef,
 
   $needs_initdb             = undef,
 
@@ -150,6 +151,7 @@ class postgresql::globals (
     class { 'postgresql::repo':
       version => $globals_version,
       proxy   => $repo_proxy,
+      baseurl => $repo_baseurl,
     }
   }
 }
