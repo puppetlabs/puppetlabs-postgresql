@@ -6,10 +6,8 @@ include ::apt
   # http://www.postgresql.org/download/linux/debian/
   #
   $default_baseurl = 'http://apt.postgresql.org/pub/repos/apt/'
-  $baseurl_real = pick($postgresql::repo::baseurl,$default_baseurl,'undefined')
-  if ( $baseurl_real == 'undefined' ){
-    fail('No repo baseurl defined or automatically detected.')
-  }
+
+  $baseurl_real = pick($postgresql::repo::baseurl,$default_baseurl)
 
   apt::pin { 'apt_postgresql_org':
     originator => 'apt.postgresql.org',

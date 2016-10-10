@@ -512,7 +512,7 @@ Sets the proxy option for the official PostgreSQL yum-repositories only. Debian 
 
 ##### `repo_baseurl`
 
-Sets the baseurl for the PostgreSQL repository. Useful if you host your own mirror of the repository.
+Sets the baseurl for the PostgreSQL repository. Useful if you host your own mirror of the repository. Defaults to the official PostgreSQL repository.
 
 ##### `server_package_name`
 

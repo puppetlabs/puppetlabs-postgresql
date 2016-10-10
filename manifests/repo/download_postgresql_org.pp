@@ -18,10 +18,7 @@ class postgresql::repo::download_postgresql_org inherits postgresql::repo {
   }
   $default_baseurl = "https://download.postgresql.org/pub/repos/yum/${postgresql::repo::version}/${label1}/${label2}-\$releasever-\$basearch"
 
-  $baseurl_real = pick($postgresql::repo::baseurl,$default_baseurl,'undefined')
-  if ( $baseurl_real == 'undefined' ){
-    fail('No repo baseurl defined or automatically detected.')
-  }
+  $baseurl_real = pick($postgresql::repo::baseurl,$default_baseurl)
 
   yumrepo { 'download.postgresql.org':
     descr    => "PostgreSQL ${postgresql::repo::version} \$releasever - \$basearch",
