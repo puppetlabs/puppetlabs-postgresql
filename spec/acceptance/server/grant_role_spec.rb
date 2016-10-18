@@ -128,4 +128,45 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
     end
   end
 
+  it 'should not grant permission to a nonexistent user' do
+     begin
+       pp = <<-EOS
+
+         $db = "#{db}"
+         $user = "#{user}"
+         $group = "#{group}"
+         $password = #{password}
+
+         class { 'postgresql::server': }
+
+         # Since we are not testing pg_hba or any of that, make a local user for ident auth
+           user { $user:
+           ensure => absent,
+         }
+
+         postgresql::server::database { $db:
+         }
+
+         # Create a role to grant to the nonexistent user
+         postgresql::server::role { $group:
+           db      => $db,
+           login   => false,
+           require => Postgresql::Server::Database[$db],
+         }
+
+         # Grant the role to the nonexistent user
+         postgresql::server::grant_role { "grant_role ${group} to ${user}":
+           role  => $user
+           group => $group,
+         }
+       EOS
+       apply_manifest(pp, :expect_failures => true)
+
+       psql('--command="SELECT 1 WHERE pg_has_role(\'psql_grant_role_tester\', \'test_group\', \'MEMBER\') = true" grant_role_test', 'psql_grant_role_tester') do |r|
+         expect(r.stdout).to match(/\(0 rows\)/)
+         expect(r.stderr).to eq('')
+       end
+     end
+   end
+
 end
