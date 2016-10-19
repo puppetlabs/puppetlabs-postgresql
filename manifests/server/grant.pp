@@ -37,20 +37,21 @@ define postgresql::server::grant (
   $_privilege   = upcase($privilege)
 
   ## Validate that the object type is known
-  validate_string($_object_type,
-    #'COLUMN',
-    'DATABASE',
-    #'FOREIGN SERVER',
-    #'FOREIGN DATA WRAPPER',
-    #'FUNCTION',
-    #'PROCEDURAL LANGUAGE',
-    'SCHEMA',
-    'SEQUENCE',
-    'ALL SEQUENCES IN SCHEMA',
-    'TABLE',
-    'ALL TABLES IN SCHEMA',
-    #'TABLESPACE',
-    #'VIEW',
+  validate_re($_object_type,[
+    #'^COLUMN$',
+    '^DATABASE$',
+    #'^FOREIGN SERVER$',
+    #'^FOREIGN DATA WRAPPER$',
+    #'^FUNCTION$',
+    #'^PROCEDURAL LANGUAGE$',
+    '^SCHEMA$',
+    '^SEQUENCE$',
+    '^ALL SEQUENCES IN SCHEMA$',
+    '^TABLE$',
+    '^ALL TABLES IN SCHEMA$',
+    #'^TABLESPACE$',
+    #'^VIEW$',
+    ]
   )
   # You can use ALL TABLES IN SCHEMA by passing schema_name to object_name
   # You can use ALL SEQUENCES IN SCHEMA by passing schema_name to object_name
@@ -71,8 +72,8 @@ define postgresql::server::grant (
         'ALL PRIVILEGES' => 'CREATE',
         default          => $_privilege,
       }
-      validate_string($unless_privilege,'CREATE','CONNECT','TEMPORARY','TEMP',
-        'ALL','ALL PRIVILEGES')
+      validate_re($unless_privilege, [ '^$', '^CREATE$','^CONNECT$','^TEMPORARY$','^TEMP$',
+        '^ALL$','^ALL PRIVILEGES$' ])
       $unless_function = 'has_database_privilege'
       $on_db = $psql_db
       $onlyif_function = undef
@@ -83,7 +84,7 @@ define postgresql::server::grant (
         'ALL PRIVILEGES' => 'CREATE',
         default          => $_privilege,
       }
-      validate_string($_privilege, 'CREATE', 'USAGE', 'ALL', 'ALL PRIVILEGES')
+      validate_re($_privilege, [ '^$', '^CREATE$', '^USAGE$', '^ALL$', '^ALL PRIVILEGES$' ])
       $unless_function = 'has_schema_privilege'
       $on_db = $db
       $onlyif_function = undef
@@ -93,13 +94,13 @@ define postgresql::server::grant (
         'ALL'   => 'USAGE',
         default => $_privilege,
       }
-      validate_string($unless_privilege,'USAGE','ALL','ALL PRIVILEGES')
+      validate_re($unless_privilege, [ '^$', '^USAGE$','^ALL$','^ALL PRIVILEGES$' ])
       $unless_function = 'has_sequence_privilege'
       $on_db = $db
       $onlyif_function = undef
     }
     'ALL SEQUENCES IN SCHEMA': {
-      validate_string($_privilege,'USAGE','ALL','ALL PRIVILEGES')
+      validate_re($_privilege, [ '^$', '^USAGE$','^ALL$','^ALL PRIVILEGES$' ])
       $unless_function = 'custom'
       $on_db = $db
       $onlyif_function = undef
@@ -142,8 +143,8 @@ define postgresql::server::grant (
         'ALL'   => 'INSERT',
         default => $_privilege,
       }
-      validate_string($unless_privilege,'SELECT','INSERT','UPDATE','DELETE',
-        'TRUNCATE','REFERENCES','TRIGGER','ALL','ALL PRIVILEGES')
+      validate_re($unless_privilege,[ '^$', '^SELECT$','^INSERT$','^UPDATE$','^DELETE$',
+        '^TRUNCATE$','^REFERENCES$','^TRIGGER$','^ALL$','^ALL PRIVILEGES$' ])
       $unless_function = 'has_table_privilege'
       $on_db = $db
       $onlyif_function = $onlyif_exists ? {
@@ -152,8 +153,8 @@ define postgresql::server::grant (
       }
     }
     'ALL TABLES IN SCHEMA': {
-      validate_string($_privilege,'SELECT','INSERT','UPDATE','DELETE',
-        'TRUNCATE','REFERENCES','TRIGGER','ALL','ALL PRIVILEGES')
+      validate_re($_privilege, [ '^$', '^SELECT$','^INSERT$','^UPDATE$','^DELETE$',
+        '^TRUNCATE$','^REFERENCES$','^TRIGGER$','^ALL$','^ALL PRIVILEGES$' ])
       $unless_function = 'custom'
       $on_db = $db
       $onlyif_function = undef
