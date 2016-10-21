@@ -76,7 +76,7 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
 
         postgresql::server::role { $user:
           password_hash => postgresql_password($user, $password),
-	  superuser     => true,
+          superuser     => true,
         }
 
         postgresql::server::database { $db:
@@ -111,7 +111,7 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
       apply_manifest(pp, :catch_changes => true)
 
       ## Check that the role was granted to the user
-      psql('--command="SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON (r_role.oid = am.member) JOIN pg_roles AS r_group ON (r_group.oid = am.roleid) WHERE r_group.rolname = \'test_group\' AND r_role.rolname = \'psql_grant_role_super_tester\'" grant_role_test', 'psql_grant_role_super_tester') do |r|
+      psql('--command="SELECT 1 FROM pg_role AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = \'test_group\' AND r_role.rolname = \'psql_grant_role_super_tester\'', 'psql_grant_role_super_tester') do |r|
         expect(r.stdout).to match(/\(1 row\)/)
         expect(r.stderr).to eq('')
       end
