@@ -171,6 +171,30 @@ class postgresql::params inherits postgresql::globals {
       $psql_path              = pick($psql_path, '/usr/bin/psql')
     }
 
+    'Gentoo': {
+      $user                = pick($user, 'postgres')
+      $group               = pick($group, 'postgres')
+
+      $client_package_name  = pick($client_package_name, 'UNSET')
+      $server_package_name  = pick($server_package_name, 'postgresql')
+      $contrib_package_name = pick_default($contrib_package_name, undef)
+      $devel_package_name   = pick_default($devel_package_name, undef)
+      $java_package_name    = pick($java_package_name, 'jdbc-postgresql')
+      $perl_package_name    = pick($perl_package_name, 'DBD-Pg')
+      $plperl_package_name  = undef
+      $python_package_name  = pick($python_package_name, 'psycopg')
+
+      $service_name         = pick($service_name, "postgresql-${version}")
+      $bindir               = pick($bindir, "/usr/lib/postgresql-${version}/bin")
+      $datadir              = pick($datadir, "/var/lib/postgresql/${version}_data")
+      $confdir              = pick($confdir, "/etc/postgresql-${version}")
+      $service_status       = pick($service_status, "systemctl status ${service_name}")
+      $service_reload       = "systemctl reload ${service_name}"
+      $psql_path            = pick($psql_path, "${bindir}/psql")
+
+      $needs_initdb         = pick($needs_initdb, true)
+    }
+
     'FreeBSD': {
       $link_pg_config       = true
       $user                 = pick($user, 'pgsql')

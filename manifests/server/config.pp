@@ -166,27 +166,28 @@ class postgresql::server::config {
     }
   }
 
-  if $::osfamily == 'RedHat' {
-    if $::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora' {
-      # Template uses:
-      # - $::operatingsystem
-      # - $service_name
-      # - $port
-      # - $datadir
-      file { 'systemd-override':
-        ensure  => present,
-        path    => "/etc/systemd/system/${service_name}.service",
-        owner   => root,
-        group   => root,
-        content => template('postgresql/systemd-override.erb'),
-        notify  => [ Exec['restart-systemd'], Class['postgresql::server::service'] ],
-        before  => Class['postgresql::server::reload'],
-      }
-      exec { 'restart-systemd':
-        command     => 'systemctl daemon-reload',
-        refreshonly => true,
-        path        => '/bin:/usr/bin:/usr/local/bin'
-      }
+  if $::osfamily == 'Gentoo' or
+    ($::osfamily == 'RedHat' and
+      ($::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora')) {
+
+    # Template uses:
+    # - $::operatingsystem
+    # - $service_name
+    # - $port
+    # - $datadir
+    file { 'systemd-override':
+      ensure  => present,
+      path    => "/etc/systemd/system/${service_name}.service",
+      owner   => root,
+      group   => root,
+      content => template('postgresql/systemd-override.erb'),
+      notify  => [ Exec['restart-systemd'], Class['postgresql::server::service'] ],
+      before  => Class['postgresql::server::reload'],
+    }
+    exec { 'restart-systemd':
+      command     => 'systemctl daemon-reload',
+      refreshonly => true,
+      path        => '/bin:/usr/bin:/usr/local/bin'
     }
   }
 }
