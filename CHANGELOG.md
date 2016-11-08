@@ -265,14 +265,6 @@ kind of thing rather than trying to weave it into the main module logic itself.
 - Link pg_config binary into /usr/bin.
 - Fix fedora support by using systemd.
 - Initdb should create xlogdir if set.
-
-##2014-08-27 - Supported Release 3.4.3
-###Summary
-
-This release fixes Ubuntu 10.04 with Facter 2.2.
-
-####Features
-####Bugfixes
 - Use a regular expression to match the major OS version on Ubuntu.
 
 ##2014-07-31 - Supported Release 3.4.2
