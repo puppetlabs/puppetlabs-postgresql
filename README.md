@@ -323,6 +323,7 @@ The postgresql module comes with many options for configuring the server. While 
 * [postgresql::server::database_grant](#postgresqlserverdatabase_grant)
 * [postgresql::server::db](#postgresqlserverdb)
 * [postgresql::server::extension](#postgresqlserverextension)
+* [postgresql::server::grant](#postgresqlservergrant)
 * [postgresql::server::grant_role](#postgresqlservergrant_role)
 * [postgresql::server::pg_hba_rule](#postgresqlserverpg_hba_rule)
 * [postgresql::server::pg_ident_rule](#postgresqlserverpg_ident_rule)
