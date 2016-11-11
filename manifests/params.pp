@@ -36,6 +36,7 @@ class postgresql::params inherits postgresql::globals {
         $client_package_name    = pick($client_package_name, 'postgresql')
         $server_package_name    = pick($server_package_name, 'postgresql-server')
         $contrib_package_name   = pick($contrib_package_name,'postgresql-contrib')
+        $debuginfo_package_name = pick($debuginfo_package_name,'postgresql-contrib')
         $devel_package_name     = pick($devel_package_name, 'postgresql-devel')
         $java_package_name      = pick($java_package_name, 'postgresql-jdbc')
         $docs_package_name      = pick($docs_package_name, 'postgresql-docs')
@@ -52,6 +53,7 @@ class postgresql::params inherits postgresql::globals {
         $client_package_name    = pick($client_package_name, "postgresql${package_version}")
         $server_package_name    = pick($server_package_name, "postgresql${package_version}-server")
         $contrib_package_name   = pick($contrib_package_name,"postgresql${package_version}-contrib")
+        $debuginfo_package_name = pick($contrib_package_name,"postgresql${package_version}-debuginfo")
         $devel_package_name     = pick($devel_package_name, "postgresql${package_version}-devel")
         $java_package_name      = pick($java_package_name, "postgresql${package_version}-jdbc")
         $docs_package_name      = pick($docs_package_name, "postgresql${package_version}-docs")
@@ -104,6 +106,8 @@ class postgresql::params inherits postgresql::globals {
       $devel_package_name     = pick($devel_package_name, 'postgresql-devel')
       # Archlinux does have postgresql-contrib but it isn't maintained
       $contrib_package_name   = pick($contrib_package_name,'undef')
+      # Archlinux does have postgresql-debuginfo but it isn't maintained
+      $debuginfo_package_name   = pick($debuginfo_package_name,'undef')
       # Archlinux postgresql package provides plperl
       $plperl_package_name    = pick($plperl_package_name, 'undef')
       $plpython_package_name  = pick($plpython_package_name, 'undef')
@@ -143,6 +147,8 @@ class postgresql::params inherits postgresql::globals {
       $client_package_name    = pick($client_package_name, "postgresql-client-${version}")
       $server_package_name    = pick($server_package_name, "postgresql-${version}")
       $contrib_package_name   = pick($contrib_package_name, "postgresql-contrib-${version}")
+      # Debian does not have a debuginfo package
+      $debuginfo_package_name   = pick($debuginfo_package_name, 'undef')
       if $postgis_version and versioncmp($postgis_version, '2') < 0 {
         $postgis_package_name = pick($postgis_package_name, "postgresql-${version}-postgis")
       } else {
@@ -172,77 +178,80 @@ class postgresql::params inherits postgresql::globals {
     }
 
     'FreeBSD': {
-      $link_pg_config       = true
-      $user                 = pick($user, 'pgsql')
-      $group                = pick($group, 'pgsql')
+      $link_pg_config         = true
+      $user                   = pick($user, 'pgsql')
+      $group                  = pick($group, 'pgsql')
 
-      $client_package_name  = pick($client_package_name, "databases/postgresql${version}-client")
-      $server_package_name  = pick($server_package_name, "databases/postgresql${version}-server")
-      $contrib_package_name = pick($contrib_package_name, "databases/postgresql${version}-contrib")
-      $devel_package_name   = pick($devel_package_name, 'databases/postgresql-libpqxx3')
-      $java_package_name    = pick($java_package_name, 'databases/postgresql-jdbc')
-      $perl_package_name    = pick($plperl_package_name, 'databases/p5-DBD-Pg')
-      $plperl_package_name  = pick($plperl_package_name, "databases/postgresql${version}-plperl")
-      $python_package_name  = pick($python_package_name, 'databases/py-psycopg2')
+      $client_package_name    = pick($client_package_name, "databases/postgresql${version}-client")
+      $server_package_name    = pick($server_package_name, "databases/postgresql${version}-server")
+      $contrib_package_name   = pick($contrib_package_name, "databases/postgresql${version}-contrib")
+      $debuginfo_package_name = pick($debuginfo_package_name, "databases/postgresql${version}-debuginfo")
+      $devel_package_name     = pick($devel_package_name, 'databases/postgresql-libpqxx3')
+      $java_package_name      = pick($java_package_name, 'databases/postgresql-jdbc')
+      $perl_package_name      = pick($plperl_package_name, 'databases/p5-DBD-Pg')
+      $plperl_package_name    = pick($plperl_package_name, "databases/postgresql${version}-plperl")
+      $python_package_name    = pick($python_package_name, 'databases/py-psycopg2')
 
-      $service_name         = pick($service_name, 'postgresql')
-      $bindir               = pick($bindir, '/usr/local/bin')
-      $datadir              = pick($datadir, '/usr/local/pgsql/data')
-      $confdir              = pick($confdir, $datadir)
-      $service_status       = pick($service_status, "/usr/local/etc/rc.d/${service_name} onestatus")
-      $service_reload       = "service ${service_name} reload"
-      $psql_path            = pick($psql_path, "${bindir}/psql")
+      $service_name           = pick($service_name, 'postgresql')
+      $bindir                 = pick($bindir, '/usr/local/bin')
+      $datadir                = pick($datadir, '/usr/local/pgsql/data')
+      $confdir                = pick($confdir, $datadir)
+      $service_status         = pick($service_status, "/usr/local/etc/rc.d/${service_name} onestatus")
+      $service_reload         = "service ${service_name} reload"
+      $psql_path              = pick($psql_path, "${bindir}/psql")
 
-      $needs_initdb         = pick($needs_initdb, true)
+      $needs_initdb           = pick($needs_initdb, true)
     }
 
     'OpenBSD': {
       $user                = pick($user, '_postgresql')
       $group               = pick($group, '_postgresql')
 
-      $client_package_name  = pick($client_package_name, 'postgresql-client')
-      $server_package_name  = pick($server_package_name, 'postgresql-server')
-      $contrib_package_name = pick($contrib_package_name, 'postgresql-contrib')
-      $devel_package_name   = pick($devel_package_name, 'postgresql-client')
-      $java_package_name    = pick($java_package_name, 'postgresql-jdbc')
-      $perl_package_name    = pick($perl_package_name, 'databases/p5-DBD-Pg')
-      $plperl_package_name  = undef
-      $python_package_name  = pick($python_package_name, 'py-psycopg2')
+      $client_package_name    = pick($client_package_name, 'postgresql-client')
+      $server_package_name    = pick($server_package_name, 'postgresql-server')
+      $contrib_package_name   = pick($contrib_package_name, 'postgresql-contrib')
+      $debuginfo_package_name = pick($debuginfo_package_name, 'postgresql-debuginfo')
+      $devel_package_name     = pick($devel_package_name, 'postgresql-client')
+      $java_package_name      = pick($java_package_name, 'postgresql-jdbc')
+      $perl_package_name      = pick($perl_package_name, 'databases/p5-DBD-Pg')
+      $plperl_package_name    = undef
+      $python_package_name    = pick($python_package_name, 'py-psycopg2')
 
-      $service_name         = pick($service_name, 'postgresql')
-      $bindir               = pick($bindir, '/usr/local/bin')
-      $datadir              = pick($datadir, '/var/postgresql/data')
-      $confdir              = pick($confdir, $datadir)
-      $service_status       = pick($service_status, "/etc/rc.d/${service_name} check")
-      $service_reload       = "/etc/rc.d/${service_name} reload"
-      $psql_path            = pick($psql_path, "${bindir}/psql")
+      $service_name           = pick($service_name, 'postgresql')
+      $bindir                 = pick($bindir, '/usr/local/bin')
+      $datadir                = pick($datadir, '/var/postgresql/data')
+      $confdir                = pick($confdir, $datadir)
+      $service_status         = pick($service_status, "/etc/rc.d/${service_name} check")
+      $service_reload         = "/etc/rc.d/${service_name} reload"
+      $psql_path              = pick($psql_path, "${bindir}/psql")
 
-      $needs_initdb         = pick($needs_initdb, true)
+      $needs_initdb           = pick($needs_initdb, true)
     }
 
     'Suse': {
-      $link_pg_config       = true
-      $user                 = pick($user, 'postgres')
-      $group                = pick($group, 'postgres')
+      $link_pg_config         = true
+      $user                   = pick($user, 'postgres')
+      $group                  = pick($group, 'postgres')
 
-      $client_package_name  = pick($client_package_name, "postgresql${version}")
-      $server_package_name  = pick($server_package_name, "postgresql${version}-server")
-      $contrib_package_name = pick($contrib_package_name, "postgresql${version}-contrib")
-      $devel_package_name   = pick($devel_package_name, "postgresql${version}-devel")
-      $java_package_name    = pick($java_package_name, "postgresql${version}-jdbc")
-      $perl_package_name    = pick($plperl_package_name, 'perl-DBD-Pg')
-      $plperl_package_name  = pick($plperl_package_name, "postgresql${version}-plperl")
-      $python_package_name  = pick($python_package_name, 'python-psycopg2')
+      $client_package_name    = pick($client_package_name, "postgresql${version}")
+      $server_package_name    = pick($server_package_name, "postgresql${version}-server")
+      $contrib_package_name   = pick($contrib_package_name, "postgresql${version}-contrib")
+      $debuginfo_package_name = pick($debuginfo_package_name, "postgresql${version}-debuginfo")
+      $devel_package_name     = pick($devel_package_name, "postgresql${version}-devel")
+      $java_package_name      = pick($java_package_name, "postgresql${version}-jdbc")
+      $perl_package_name      = pick($plperl_package_name, 'perl-DBD-Pg')
+      $plperl_package_name    = pick($plperl_package_name, "postgresql${version}-plperl")
+      $python_package_name    = pick($python_package_name, 'python-psycopg2')
 
-      $service_name         = pick($service_name, 'postgresql')
-      $bindir               = pick($bindir, "/usr/lib/postgresql${version}/bin")
-      $datadir              = pick($datadir, '/var/lib/pgsql/data')
-      $confdir              = pick($confdir, $datadir)
-      $service_status       = pick($service_status, "/etc/init.d/${service_name} status")
-      $service_reload       = "/etc/init.d/${service_name} reload"
-      $psql_path            = pick($psql_path, "${bindir}/psql")
+      $service_name           = pick($service_name, 'postgresql')
+      $bindir                 = pick($bindir, "/usr/lib/postgresql${version}/bin")
+      $datadir                = pick($datadir, '/var/lib/pgsql/data')
+      $confdir                = pick($confdir, $datadir)
+      $service_status         = pick($service_status, "/etc/init.d/${service_name} status")
+      $service_reload         = "/etc/init.d/${service_name} reload"
+      $psql_path              = pick($psql_path, "${bindir}/psql")
 
-      $needs_initdb         = pick($needs_initdb, true)
+      $needs_initdb           = pick($needs_initdb, true)
     }
 
     default: {
