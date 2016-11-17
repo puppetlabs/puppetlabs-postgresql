@@ -111,8 +111,10 @@ class postgresql::server::config {
   postgresql::server::config_entry { 'data_directory':
     value => $datadir,
   }
-  postgresql::server::config_entry { 'timezone':
-    value => $timezone,
+  if $timezone {
+    postgresql::server::config_entry { 'timezone':
+      value => $timezone,
+    }
   }
   if $logdir {
     postgresql::server::config_entry { 'log_directory':
