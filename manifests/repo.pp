@@ -2,13 +2,14 @@
 class postgresql::repo (
   $version = undef,
   $proxy = undef,
+  $baseurl = undef,
 ) {
   case $::osfamily {
     'RedHat', 'Linux': {
       if $version == undef {
         fail("The parameter 'version' for 'postgresql::repo' is undefined. You must always define it when osfamily == Redhat or Linux")
       }
-      class { 'postgresql::repo::yum_postgresql_org': }
+      class { 'postgresql::repo::download_postgresql_org': }
     }
 
     'Debian': {
