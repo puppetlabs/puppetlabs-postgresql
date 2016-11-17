@@ -323,6 +323,7 @@ The postgresql module comes with many options for configuring the server. While 
 * [postgresql::server::database_grant](#postgresqlserverdatabase_grant)
 * [postgresql::server::db](#postgresqlserverdb)
 * [postgresql::server::extension](#postgresqlserverextension)
+* [postgresql::server::grant](#postgresqlservergrant)
 * [postgresql::server::grant_role](#postgresqlservergrant_role)
 * [postgresql::server::pg_hba_rule](#postgresqlserverpg_hba_rule)
 * [postgresql::server::pg_ident_rule](#postgresqlserverpg_ident_rule)
@@ -909,7 +910,7 @@ Specifies the database to which you are granting access.
 
 ##### `privilege`
 
-Specifies which privileges to grant. Valid options: `SELECT`, `TEMPORARY`, `TEMP`, `CONNECT`. `ALL` is used as a synonym for `CREATE`, so if you need to add multiple privileges, you can use a space delimited string.
+Specifies comma-separated list of privileges to grant. Valid options: `ALL`, `CREATE`, `CONNECT`, `TEMPORARY`, `TEMP`.
 
 ##### `psql_db`
 
@@ -1033,7 +1034,7 @@ For certain `auth_method` settings there are extra options that can be passed. C
 
 ##### `database`
 
-Sets a comma separated list of databases that this rule matches.
+Sets a comma-separated list of databases that this rule matches.
 
 ##### `description`
 
@@ -1203,7 +1204,7 @@ Specifies which database the table is in.
 
 ##### `privilege`
 
-Valid options: `SELECT`, `INSERT`, `UPDATE`, `REFERENCES`. `ALL` is used as a synonym for `CREATE`, so if you need to add multiple privileges, use a space-delimited string.
+Specifies comma-separated list of privileges to grant. Valid options: `ALL`, `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `TRUNCATE`, `REFERENCES`, `TRIGGER`.
 
 ##### `psql_db`
 
