@@ -2,7 +2,7 @@
 .include /usr/lib64/systemd/system/<%= @service_name %>.service
 <%- elsif scope.lookupvar('::operatingsystem') == 'Fedora' -%>
 .include /lib/systemd/system/<%= @service_name %>.service
-<% else %>
+<% else -%>
 .include /usr/lib/systemd/system/<%= @service_name %>.service
 <% end -%>
 [Service]
