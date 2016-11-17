@@ -172,10 +172,20 @@ class postgresql::params inherits postgresql::globals {
     }
 
     'FreeBSD': {
-      $link_pg_config       = true
-      $user                 = pick($user, 'pgsql')
-      $group                = pick($group, 'pgsql')
+      case $version {
+        '96': {
+          $user                 = pick($user, 'postgres')
+          $group                = pick($group, 'postgres')
+          $datadir              = pick($datadir, "/var/db/postgres/data${version}")
+        }
+        default: {
+          $user                 = pick($user, 'pgsql')
+          $group                = pick($group, 'pgsql')
+          $datadir              = pick($datadir, '/usr/local/pgsql/data')
+        }
+      }
 
+      $link_pg_config       = true
       $client_package_name  = pick($client_package_name, "databases/postgresql${version}-client")
       $server_package_name  = pick($server_package_name, "databases/postgresql${version}-server")
       $contrib_package_name = pick($contrib_package_name, "databases/postgresql${version}-contrib")
@@ -187,7 +197,6 @@ class postgresql::params inherits postgresql::globals {
 
       $service_name         = pick($service_name, 'postgresql')
       $bindir               = pick($bindir, '/usr/local/bin')
-      $datadir              = pick($datadir, '/usr/local/pgsql/data')
       $confdir              = pick($confdir, $datadir)
       $service_status       = pick($service_status, "/usr/local/etc/rc.d/${service_name} onestatus")
       $service_reload       = "service ${service_name} reload"
