@@ -43,7 +43,7 @@ describe 'postgresql::globals', :type => :class do
         is_expected.to contain_class("postgresql::globals")
       end
     end
-    
+
     describe 'manage_package_repo on RHEL => true' do
       let(:params) do
         {
@@ -51,7 +51,7 @@ describe 'postgresql::globals', :type => :class do
           :repo_proxy          => 'http://proxy-server:8080',
         }
       end
-      
+
       it 'should pull in class postgresql::repo' do
         is_expected.to contain_class("postgresql::repo")
       end
