@@ -8,7 +8,7 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     source => 'puppet:///modules/postgresql/RPM-GPG-KEY-PGDG',
     owner  => 'root',
     group  => 'root',
-    mode   => '0755',
+    mode   => '0644',
     before => Yumrepo['yum.postgresql.org']
   }
 
