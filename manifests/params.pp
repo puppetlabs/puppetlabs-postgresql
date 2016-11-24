@@ -11,6 +11,7 @@ class postgresql::params inherits postgresql::globals {
   $ipv6acls                   = []
   $encoding                   = $postgresql::globals::encoding
   $locale                     = $postgresql::globals::locale
+  $timezone                   = $postgresql::globals::timezone
   $service_ensure             = 'running'
   $service_enable             = true
   $service_manage             = true

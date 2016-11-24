@@ -443,6 +443,10 @@ Overrides the default PostgreSQL java package name. Default: OS dependent.
 
 Sets the default database locale for all databases created with this module. On certain operating systems, this is also used during the `template1` initialization, so it becomes a default outside of the module as well. Default: undef, which is effectively `C`. **On Debian, you'll need to ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.**
 
+##### `timezone`
+
+Sets the default timezone of the postgresql server. The postgresql built-in default is taking the systems timezone information.
+
 ##### `logdir`
 
 Overrides the default PostgreSQL log directory. Default: initdb's default path.
