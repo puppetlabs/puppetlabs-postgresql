@@ -77,7 +77,7 @@ describe 'postgresql::globals', type: :class do
       end
 
       it do
-        should contain_yumrepo('download.postgresql.org').with(
+        should contain_yumrepo('yum.postgresql.org').with(
           'enabled' => '1',
           'baseurl' => 'http://mirror.localrepo.com'
         )
