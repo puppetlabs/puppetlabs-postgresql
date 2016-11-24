@@ -21,6 +21,7 @@ class postgresql::server::config {
   $logdir                     = $postgresql::server::logdir
   $service_name               = $postgresql::server::service_name
   $log_line_prefix            = $postgresql::server::log_line_prefix
+  $timezone                   = $postgresql::server::timezone
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -109,6 +110,9 @@ class postgresql::server::config {
   }
   postgresql::server::config_entry { 'data_directory':
     value => $datadir,
+  }
+  postgresql::server::config_entry { 'timezone':
+    value => $timezone,
   }
   if $logdir {
     postgresql::server::config_entry { 'log_directory':

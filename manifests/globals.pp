@@ -49,6 +49,7 @@ class postgresql::globals (
 
   $encoding                 = undef,
   $locale                   = undef,
+  $timezone                 = undef,
 
   $manage_pg_hba_conf       = undef,
   $manage_pg_ident_conf     = undef,

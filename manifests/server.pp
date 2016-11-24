@@ -49,6 +49,7 @@ class postgresql::server (
 
   $encoding                   = $postgresql::params::encoding,
   $locale                     = $postgresql::params::locale,
+  $timezone                   = $postgresql::params::timezone,
 
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
