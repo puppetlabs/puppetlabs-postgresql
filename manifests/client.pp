@@ -8,10 +8,12 @@ class postgresql::client (
   validate_absolute_path($validcon_script_path)
   validate_string($package_name)
 
-  package { 'postgresql-client':
-    ensure => $package_ensure,
-    name   => $package_name,
-    tag    => 'postgresql',
+  if $package_name != 'UNSET' {
+    package { 'postgresql-client':
+      ensure => $package_ensure,
+      name   => $package_name,
+      tag    => 'postgresql',
+    }
   }
 
   file { $validcon_script_path:
