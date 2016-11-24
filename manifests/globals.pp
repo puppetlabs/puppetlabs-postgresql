@@ -98,6 +98,7 @@ class postgresql::globals (
       /Archlinux/ => '9.2',
       default => '9.2',
     },
+    'Gentoo' => '9.5',
     'FreeBSD' => '93',
     'OpenBSD' => $::operatingsystemrelease ? {
       /5\.6/ => '9.3',

@@ -8,6 +8,10 @@ class postgresql::lib::devel(
 
   validate_string($package_name)
 
+  if $::osfamily == 'Gentoo' {
+    fail('osfamily Gentoo does not have a separate "devel" package, postgresql::lib::devel is not supported')
+  }
+
   package { 'postgresql-devel':
     ensure => $package_ensure,
     name   => $package_name,
