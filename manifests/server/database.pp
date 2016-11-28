@@ -2,7 +2,7 @@
 define postgresql::server::database(
   $comment          = undef,
   $dbname           = $title,
-  $owner            = $postgresql::server::user,
+  $owner            = undef,
   $tablespace       = undef,
   $template         = 'template0',
   $encoding         = $postgresql::server::encoding,
@@ -74,7 +74,7 @@ define postgresql::server::database(
   }
 
   postgresql_psql { "CREATE DATABASE \"${dbname}\"":
-    command => "CREATE DATABASE \"${dbname}\" WITH OWNER = \"${owner}\" ${template_option} ${encoding_option} ${locale_option} ${tablespace_option}",
+    command => "CREATE DATABASE \"${dbname}\" WITH ${template_option} ${encoding_option} ${locale_option} ${tablespace_option}",
     unless  => "SELECT 1 FROM pg_database WHERE datname = '${dbname}'",
     require => Class['postgresql::server::service']
   }~>
@@ -100,6 +100,17 @@ define postgresql::server::database(
     postgresql_psql { "COMMENT ON DATABASE \"${dbname}\" IS '${comment}'":
       unless => "SELECT 1 FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'",
       db     => $dbname,
+    }
+  }
+
+  if $owner {
+    postgresql_psql { "ALTER DATABASE \"${dbname}\" OWNER TO \"${owner}\"":
+      unless  => "SELECT 1 FROM pg_database JOIN pg_roles rol ON datdba = rol.oid WHERE datname = '${dbname}' AND rolname = '${owner}'",
+      require => Postgresql_psql["CREATE DATABASE \"${dbname}\""],
+    }
+
+    if defined(Postgresql::Server::Role[$owner]) {
+      Postgresql::Server::Role[$owner]->Postgresql_psql["ALTER DATABASE \"${dbname}\" OWNER TO \"${owner}\""]
     }
   }
 
