@@ -46,7 +46,7 @@ define postgresql::server::database(
   if ($version != '8.1') {
     $locale_option = $locale ? {
       undef   => '',
-      default => "LC_COLLATE='${locale}' LC_CTYPE='${locale}'",
+      default => "LC_COLLATE = '${locale}' LC_CTYPE = '${locale}'",
     }
     $public_revoke_privilege = 'CONNECT'
   } else {
@@ -56,17 +56,17 @@ define postgresql::server::database(
 
   $template_option = $template ? {
     undef   => '',
-    default => "TEMPLATE=\"${template}\"",
+    default => "TEMPLATE = \"${template}\"",
   }
 
   $encoding_option = $encoding ? {
     undef   => '',
-    default => "ENCODING='${encoding}'",
+    default => "ENCODING = '${encoding}'",
   }
 
   $tablespace_option = $tablespace ? {
     undef   => '',
-    default => "TABLESPACE=\"${tablespace}\"",
+    default => "TABLESPACE = \"${tablespace}\"",
   }
 
   if $createdb_path != undef {
@@ -74,8 +74,8 @@ define postgresql::server::database(
   }
 
   postgresql_psql { "CREATE DATABASE \"${dbname}\"":
-    command => "CREATE DATABASE \"${dbname}\" WITH OWNER=\"${owner}\" ${template_option} ${encoding_option} ${locale_option} ${tablespace_option}",
-    unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
+    command => "CREATE DATABASE \"${dbname}\" WITH OWNER = \"${owner}\" ${template_option} ${encoding_option} ${locale_option} ${tablespace_option}",
+    unless  => "SELECT 1 FROM pg_database WHERE datname = '${dbname}'",
     require => Class['postgresql::server::service']
   }~>
 
@@ -86,8 +86,8 @@ define postgresql::server::database(
   }
 
   Postgresql_psql["CREATE DATABASE \"${dbname}\""]->
-  postgresql_psql {"UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
-    unless => "SELECT datname FROM pg_database WHERE datname = '${dbname}' AND datistemplate = ${istemplate}",
+  postgresql_psql { "UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
+    unless => "SELECT 1 FROM pg_database WHERE datname = '${dbname}' AND datistemplate = ${istemplate}",
   }
 
   if $comment {
@@ -97,8 +97,8 @@ define postgresql::server::database(
       default => 'shobj_description',
     }
     Postgresql_psql["CREATE DATABASE \"${dbname}\""]->
-    postgresql_psql {"COMMENT ON DATABASE \"${dbname}\" IS '${comment}'":
-      unless => "SELECT pg_catalog.${comment_information_function}(d.oid, 'pg_database') as \"Description\" FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'",
+    postgresql_psql { "COMMENT ON DATABASE \"${dbname}\" IS '${comment}'":
+      unless => "SELECT 1 FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'",
       db     => $dbname,
     }
   }
