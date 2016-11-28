@@ -29,4 +29,15 @@ describe 'postgresql::server::schema', :type => :define do
   end
 
   it { should contain_postgresql__server__schema('test') }
+
+  context "with different owner" do
+    let :params do
+      {
+        :owner => 'nate',
+        :db    => 'natedb',
+      }
+    end
+
+    it { is_expected.to contain_postgresql_psql('natedb: ALTER SCHEMA "test" OWNER TO "nate"') }
+  end
 end
