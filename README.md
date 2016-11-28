@@ -814,7 +814,7 @@ Defines the value for the setting.
 
 #### postgresql::server::db
 
-Creates or modifies a local database, user, and assigns necessary permissions.
+Creates a local database, user, and assigns necessary permissions.
 
 ##### `comment`
 
@@ -864,13 +864,9 @@ Specifies the name of the template database from which to build this database. D
 
 User to create and assign access to the database upon creation. Mandatory.
 
-##### `change_ownership`
-
-Specifies whether to create a new database or change the owner of an existing one. Default: false.
-
 #### postgresql::server::database
 
-Creates or modifies a database with no users and no permissions.
+Creates a database with no users and no permissions.
 
 ##### `dbname`
 
@@ -899,10 +895,6 @@ Sets tablespace for where to create this database. Default: The defaults defined
 ##### `template`
 
 Specifies the name of the template database from which to build this database. Default: `template0`.
-
-##### `change_ownership`
-
-Specifies whether to create a new database or change the owner of an existing one. Default: false.
 
 #### postgresql::server::database_grant
 
@@ -1176,7 +1168,7 @@ Defines the username of the role to create. Defaults to the namevar.
 
 #### postgresql::server::schema
 
-Creates or modifies a schema.
+Creates a schema.
 
 ##### `connect_settings`
 
@@ -1193,10 +1185,6 @@ Sets the default owner of the schema.
 ##### `schema`
 
 Sets the name of the schema. Defaults to the namevar.
-
-##### `change_ownership`
-
-Specifies whether to create a new schema or change the owner of an existing one. Default: false.
 
 #### postgresql::server::table_grant
 
