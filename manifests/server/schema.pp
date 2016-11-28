@@ -41,22 +41,18 @@ define postgresql::server::schema(
     connect_settings => $connect_settings,
   }
 
-  $schema_title   = "Create Schema '${title}'"
-  $authorization = $owner? {
+  $authorization = $owner ? {
     undef   => '',
     default => "AUTHORIZATION \"${owner}\"",
   }
 
-  $schema_command = "CREATE SCHEMA \"${schema}\" ${authorization}"
-  $unless         = "SELECT nspname FROM pg_namespace WHERE nspname='${schema}'"
-
-  postgresql_psql { $schema_title:
-    command => $schema_command,
-    unless  => $unless,
+  postgresql_psql { "${db}: CREATE SCHEMA \"${schema}\"":
+    command => "CREATE SCHEMA \"${schema}\" ${authorization}",
+    unless  => "SELECT 1 FROM pg_namespace WHERE nspname = '${schema}'",
     require => Class['postgresql::server'],
   }
 
-  if($owner != undef and defined(Postgresql::Server::Role[$owner])) {
-    Postgresql::Server::Role[$owner]->Postgresql_psql[$schema_title]
+  if $owner != undef and defined(Postgresql::Server::Role[$owner]) {
+    Postgresql::Server::Role[$owner]->Postgresql_psql["${db}: CREATE SCHEMA \"${schema}\""]
   }
 }
