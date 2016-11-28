@@ -26,13 +26,11 @@ define postgresql::server::tablespace(
     cwd              => $module_workdir,
   }
 
-  if ($owner == undef) {
+  if $owner == undef {
     $owner_section = ''
   } else {
     $owner_section = "OWNER \"${owner}\""
   }
-
-  $create_tablespace_command = "CREATE TABLESPACE \"${spcname}\" ${owner_section} LOCATION '${location}'"
 
   file { $location:
     ensure  => directory,
@@ -45,14 +43,13 @@ define postgresql::server::tablespace(
     require => Class['postgresql::server'],
   }
 
-  $create_ts = "Create tablespace '${spcname}'"
-  postgresql_psql { "Create tablespace '${spcname}'":
-    command => $create_tablespace_command,
-    unless  => "SELECT spcname FROM pg_tablespace WHERE spcname='${spcname}'",
+  postgresql_psql { "CREATE TABLESPACE \"${spcname}\"":
+    command => "CREATE TABLESPACE \"${spcname}\" ${owner_section} LOCATION '${location}'",
+    unless  => "SELECT 1 FROM pg_tablespace WHERE spcname = '${spcname}'",
     require => [Class['postgresql::server'], File[$location]],
   }
 
-  if($owner != undef and defined(Postgresql::Server::Role[$owner])) {
-    Postgresql::Server::Role[$owner]->Postgresql_psql[$create_ts]
+  if $owner != undef and defined(Postgresql::Server::Role[$owner]) {
+    Postgresql::Server::Role[$owner]->Postgresql_psql["CREATE TABLESPACE \"${spcname}\""]
   }
 }
