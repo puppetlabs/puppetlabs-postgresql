@@ -68,11 +68,11 @@ define postgresql::server::database(
     default => "TABLESPACE=\"${tablespace}\"",
   }
 
-  if $createdb_path != undef{
+  if $createdb_path != undef {
     warning('Passing "createdb_path" to postgresql::database is deprecated, it can be removed safely for the same behaviour')
   }
 
-  postgresql_psql { "Create db '${dbname}'":
+  postgresql_psql { "CREATE DATABASE \"${dbname}\"":
     command => "CREATE DATABASE \"${dbname}\" WITH OWNER=\"${owner}\" ${template_option} ${encoding_option} ${locale_option} ${tablespace_option}",
     unless  => "SELECT datname FROM pg_database WHERE datname='${dbname}'",
     db      => $default_db,
@@ -81,12 +81,12 @@ define postgresql::server::database(
 
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
-  postgresql_psql {"REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
+  postgresql_psql { "REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
     db          => $default_db,
     refreshonly => true,
   }
 
-  Postgresql_psql[ "Create db '${dbname}'" ]->
+  Postgresql_psql["CREATE DATABASE \"${dbname}\""]->
   postgresql_psql {"UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
     unless => "SELECT datname FROM pg_database WHERE datname = '${dbname}' AND datistemplate = ${istemplate}",
     db     => $default_db,
@@ -98,7 +98,7 @@ define postgresql::server::database(
       '8.1'   => 'obj_description',
       default => 'shobj_description',
     }
-    Postgresql_psql[ "Create db '${dbname}'" ]->
+    Postgresql_psql["CREATE DATABASE \"${dbname}\""]->
     postgresql_psql {"COMMENT ON DATABASE \"${dbname}\" IS '${comment}'":
       unless => "SELECT pg_catalog.${comment_information_function}(d.oid, 'pg_database') as \"Description\" FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'",
       db     => $dbname,
@@ -106,7 +106,7 @@ define postgresql::server::database(
   }
 
   # Build up dependencies on tablespace
-  if($tablespace != undef and defined(Postgresql::Server::Tablespace[$tablespace])) {
-    Postgresql::Server::Tablespace[$tablespace]->Postgresql_psql[ "Create db '${dbname}'" ]
+  if $tablespace != undef and defined(Postgresql::Server::Tablespace[$tablespace]) {
+    Postgresql::Server::Tablespace[$tablespace]->Postgresql_psql["CREATE DATABASE \"${dbname}\""]
   }
 }
