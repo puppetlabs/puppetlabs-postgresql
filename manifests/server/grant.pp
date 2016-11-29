@@ -94,13 +94,13 @@ define postgresql::server::grant (
         'ALL'   => 'USAGE',
         default => $_privilege,
       }
-      validate_re($unless_privilege, [ '^$', '^USAGE$','^ALL$','^ALL PRIVILEGES$' ])
+      validate_re($unless_privilege, [ '^$', '^USAGE$', '^SELECT$', '^UPDATE$', '^ALL$', '^ALL PRIVILEGES$' ])
       $unless_function = 'has_sequence_privilege'
       $on_db = $db
       $onlyif_function = undef
     }
     'ALL SEQUENCES IN SCHEMA': {
-      validate_re($_privilege, [ '^$', '^USAGE$','^ALL$','^ALL PRIVILEGES$' ])
+      validate_re($_privilege, [ '^$', '^USAGE$', '^SELECT$', '^UPDATE$', '^ALL$', '^ALL PRIVILEGES$' ])
       $unless_function = 'custom'
       $on_db = $db
       $onlyif_function = undef
@@ -130,9 +130,33 @@ define postgresql::server::grant (
         WHERE sequence_schema='${schema}'
           EXCEPT DISTINCT
         SELECT object_name as sequence_name
-        FROM information_schema.role_usage_grants
-        WHERE object_type='SEQUENCE'
-        AND grantee='${role}'
+        FROM (
+          SELECT object_schema,
+                 object_name,
+                 grantee,
+                 CASE privs_split
+                   WHEN 'r' THEN 'SELECT'
+                   WHEN 'w' THEN 'UPDATE'
+                   WHEN 'U' THEN 'USAGE'
+                 END AS privilege_type
+            FROM (
+              SELECT DISTINCT
+                     object_schema,
+                     object_name,
+                     (regexp_split_to_array(regexp_replace(privs,E'\/.*',''),'='))[1] AS grantee,
+                     regexp_split_to_table((regexp_split_to_array(regexp_replace(privs,E'\/.*',''),'='))[2],E'\\s*') AS privs_split
+                FROM (
+                 SELECT n.nspname as object_schema,
+                         c.relname as object_name,
+                         regexp_split_to_table(array_to_string(c.relacl,','),',') AS privs
+                    FROM pg_catalog.pg_class c
+                         LEFT JOIN pg_catalog.pg_namespace n ON c.relnamespace = n.oid
+                   WHERE c.relkind = 'S'
+                         AND n.nspname NOT IN ( 'pg_catalog', 'information_schema' )
+                ) P1
+            ) P2
+        ) P3
+        WHERE grantee='${role}'
         AND object_schema='${schema}'
         AND privilege_type='${custom_privilege}'
         ) P
