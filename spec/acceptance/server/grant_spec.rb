@@ -82,6 +82,40 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
         end
       end
     end
+
+    it 'should grant update on a sequence to a user' do
+      begin
+        pp = pp_setup + <<-EOS.unindent
+
+          postgresql_psql { 'create test sequence':
+            command   => 'CREATE SEQUENCE test_seq',
+            db        => $db,
+            psql_user => $owner,
+            unless    => "SELECT 1 FROM information_schema.sequences WHERE sequence_name = 'test_seq'",
+            require   => Postgresql::Server::Database[$db],
+          }
+
+          postgresql::server::grant { 'grant update on test_seq':
+            privilege   => 'UPDATE',
+            object_type => 'SEQUENCE',
+            object_name => 'test_seq',
+            db          => $db,
+            role        => $user,
+            require     => [ Postgresql_psql['create test sequence'],
+                             Postgresql::Server::Role[$user], ]
+          }
+        EOS
+
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes => true)
+
+        ## Check that the privilege was granted to the user
+        psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq', 'UPDATE')\"", user) do |r|
+          expect(r.stdout).to match(/\(1 row\)/)
+          expect(r.stderr).to eq('')
+        end
+      end
+    end
   end
 
   context 'all sequences' do
@@ -113,6 +147,40 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
 
         ## Check that the privileges were granted to the user
         psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq2', 'USAGE') AND has_sequence_privilege('#{user}', 'test_seq3', 'USAGE')\"", user) do |r|
+          expect(r.stdout).to match(/\(1 row\)/)
+          expect(r.stderr).to eq('')
+        end
+      end
+    end
+
+    it 'should grant update on all sequences to a user' do
+      begin
+        pp = pp_setup + <<-EOS.unindent
+
+          postgresql_psql { 'create test sequences':
+            command   => 'CREATE SEQUENCE test_seq2; CREATE SEQUENCE test_seq3;',
+            db        => $db,
+            psql_user => $owner,
+            unless    => "SELECT 1 FROM information_schema.sequences WHERE sequence_name = 'test_seq2'",
+            require   => Postgresql::Server::Database[$db],
+          }
+
+          postgresql::server::grant { 'grant usage on all sequences':
+            privilege   => 'UPDATE',
+            object_type => 'ALL SEQUENCES IN SCHEMA',
+            object_name => 'public',
+            db          => $db,
+            role        => $user,
+            require     => [ Postgresql_psql['create test sequences'],
+                             Postgresql::Server::Role[$user], ]
+          }
+        EOS
+
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes => true)
+
+        ## Check that the privileges were granted to the user
+        psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq2', 'UPDATE') AND has_sequence_privilege('#{user}', 'test_seq3', 'UPDATE')\"", user) do |r|
           expect(r.stdout).to match(/\(1 row\)/)
           expect(r.stderr).to eq('')
         end
