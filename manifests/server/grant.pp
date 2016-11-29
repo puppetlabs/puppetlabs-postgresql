@@ -143,8 +143,8 @@ define postgresql::server::grant (
               SELECT DISTINCT
                      object_schema,
                      object_name,
-                     (regexp_split_to_array(regexp_replace(privs,E'\/.*',''),'='))[1] AS grantee,
-                     regexp_split_to_table((regexp_split_to_array(regexp_replace(privs,E'\/.*',''),'='))[2],E'\\s*') AS privs_split
+                     (regexp_split_to_array(regexp_replace(privs,E'/.*',''),'='))[1] AS grantee,
+                     regexp_split_to_table((regexp_split_to_array(regexp_replace(privs,E'/.*',''),'='))[2],E'\\s*') AS privs_split
                 FROM (
                  SELECT n.nspname as object_schema,
                          c.relname as object_name,
