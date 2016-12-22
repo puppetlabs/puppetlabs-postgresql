@@ -22,30 +22,43 @@ class postgresql::server::initdb {
     cwd        => $module_workdir,
   }
 
+  if $::osfamily == 'RedHat' and $::selinux == true {
+    $seltype = 'postgresql_db_t'
+    $logdir_type = 'postgresql_log_t'
+  }
+
+  else {
+    $seltype = undef
+    $logdir_type = undef
+  }
+
   # Make sure the data directory exists, and has the correct permissions.
   file { $datadir:
-    ensure => directory,
-    owner  => $user,
-    group  => $group,
-    mode   => '0700',
+    ensure  => directory,
+    owner   => $user,
+    group   => $group,
+    mode    => '0700',
+    seltype => $seltype,
   }
 
   if($xlogdir) {
     # Make sure the xlog directory exists, and has the correct permissions.
     file { $xlogdir:
-      ensure => directory,
-      owner  => $user,
-      group  => $group,
-      mode   => '0700',
+      ensure  => directory,
+      owner   => $user,
+      group   => $group,
+      mode    => '0700',
+      seltype => $seltype,
     }
   }
 
   if($logdir) {
     # Make sure the log directory exists, and has the correct permissions.
     file { $logdir:
-      ensure => directory,
-      owner  => $user,
-      group  => $group,
+      ensure  => directory,
+      owner   => $user,
+      group   => $group,
+      seltype => $logdir_type,
     }
   }
 

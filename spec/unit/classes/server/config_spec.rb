@@ -15,6 +15,7 @@ describe 'postgresql::server::config', :type => :class do
         :kernel => 'Linux',
         :id => 'root',
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        :selinux => true,
       }
     end
     it 'should have the correct systemd-override file' do
@@ -62,6 +63,7 @@ describe 'postgresql::server::config', :type => :class do
         :kernel => 'Linux',
         :id => 'root',
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        :selinux => true,
       }
     end
     it 'should have the correct systemd-override file' do
@@ -117,6 +119,7 @@ describe 'postgresql::server::config', :type => :class do
         :kernel => 'Linux',
         :id => 'root',
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        :selinux => false,
       }
     end
     it 'should have the correct systemd-override file' do
