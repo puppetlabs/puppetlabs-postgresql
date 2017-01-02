@@ -3,7 +3,6 @@ class postgresql::server (
   $postgres_password          = undef,
 
   $package_name               = $postgresql::params::server_package_name,
-  $client_package_name        = $postgresql::params::client_package_name,
   $package_ensure             = $postgresql::params::package_ensure,
 
   $plperl_package_name        = $postgresql::params::plperl_package_name,
