@@ -2,7 +2,6 @@
 class postgresql::server::install {
   $package_ensure      = $postgresql::server::package_ensure
   $package_name        = $postgresql::server::package_name
-  $client_package_name = $postgresql::server::client_package_name
 
   $_package_ensure = $package_ensure ? {
     true     => 'present',
