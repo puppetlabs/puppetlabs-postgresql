@@ -26,7 +26,7 @@ do
   then
     exit 0
   fi
-$c++
+  c=$((c+1))
 done
 
 echo 'Unable to connect to postgresql'
