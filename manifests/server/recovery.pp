@@ -29,6 +29,15 @@ define postgresql::server::recovery(
       fail('postgresql::server::recovery use this resource but do not pass a parameter will avoid creating the recovery.conf, because it makes no sense.')
     }
 
+    concat { $target:
+      owner  => $::postgresql::server::config::user,
+      group  => $::postgresql::server::config::group,
+      force  => true, # do not crash if there is no recovery conf file
+      mode   => '0640',
+      warn   => true,
+      notify => Class['postgresql::server::reload'],
+    }
+
     # Create the recovery.conf content
     concat::fragment { 'recovery.conf':
       target  => $target,
