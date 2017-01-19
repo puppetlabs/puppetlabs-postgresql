@@ -1,8 +1,12 @@
 require 'beaker-rspec/spec_helper'
 require 'beaker-rspec/helpers/serverspec'
 require 'beaker/puppet_install_helper'
+require 'beaker/module_install_helper'
 
 run_puppet_install_helper
+install_ca_certs unless ENV['PUPPET_INSTALL_TYPE'] =~ /pe/i
+install_module_on(hosts)
+install_module_dependencies_on(hosts)
 
 UNSUPPORTED_PLATFORMS = ['AIX','windows','Solaris','Suse']
 
@@ -39,19 +43,12 @@ def psql(psql_cmd, user = 'postgres', exit_codes = [0,1], &block)
   shell("su #{shellescape(user)} -c #{shellescape(psql)}", :acceptable_exit_codes => exit_codes, &block)
 end
 
-
 RSpec.configure do |c|
-  # Project root
-  proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-
   # Readable test descriptions
   c.formatter = :documentation
 
   # Configure all nodes in nodeset
   c.before :suite do
-    # Install module and dependencies
-    puppet_module_install(:source => proj_root, :module_name => 'postgresql')
-
     # Set up selinux if appropriate.
     if fact('osfamily') == 'RedHat' && fact('selinux') == 'true'
       pp = <<-EOS
@@ -83,19 +80,13 @@ RSpec.configure do |c|
     end
 
     hosts.each do |host|
-      on host, "/bin/touch #{default['puppetpath']}/hiera.yaml"
+      on host, "/bin/touch #{host['puppetpath']}/hiera.yaml"
       on host, 'chmod 755 /root'
       if fact_on(host, 'osfamily') == 'Debian'
         on host, "echo \"en_US ISO-8859-1\nen_NG.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\n\" > /etc/locale.gen"
         on host, '/usr/sbin/locale-gen'
         on host, '/usr/sbin/update-locale'
       end
-
-      on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
-      on host, puppet('module','install','puppetlabs-apt'), { :acceptable_exit_codes => [0,1] }
-      on host, puppet('module','install','--force','puppetlabs-concat'), { :acceptable_exit_codes => [0,1] }
     end
-
-
   end
 end
