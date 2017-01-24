@@ -154,7 +154,6 @@ class postgresql::server::config {
     concat { $pg_ident_conf_path:
       owner  => $user,
       group  => $group,
-      force  => true, # do not crash if there is no pg_ident_rules
       mode   => '0640',
       warn   => true,
       notify => Class['postgresql::server::reload'],
@@ -165,7 +164,6 @@ class postgresql::server::config {
     concat { $recovery_conf_path:
       owner  => $user,
       group  => $group,
-      force  => true, # do not crash if there is no recovery conf file
       mode   => '0640',
       warn   => true,
       notify => Class['postgresql::server::reload'],
