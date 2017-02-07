@@ -20,7 +20,10 @@ class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
     repos       => "main ${postgresql::repo::version}",
     key         => 'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
     key_source  => 'https://www.postgresql.org/media/keys/ACCC4CF8.asc',
-    include_src => false,
+    include     => {
+      'src'     => false,
+      'deb'     => true,
+    },
   }
 
   Apt::Source['apt.postgresql.org']->Package<|tag == 'postgresql'|>
