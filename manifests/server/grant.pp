@@ -49,6 +49,7 @@ define postgresql::server::grant (
     '^ALL SEQUENCES IN SCHEMA$',
     '^TABLE$',
     '^ALL TABLES IN SCHEMA$',
+    '^LANGUAGE$',
     #'^TABLESPACE$',
     #'^VIEW$',
     ]
