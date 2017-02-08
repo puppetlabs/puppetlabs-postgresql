@@ -219,6 +219,18 @@ define postgresql::server::grant (
         ) P
         HAVING count(P.table_name) = 0"
     }
+    'LANGUAGE': {
+      $unless_privilege = $_privilege ? {
+        'ALL'            => 'USAGE',
+        'ALL PRIVILEGES' => 'USAGE',
+        default          => $_privilege,
+      }
+      validate_re($unless_privilege, [ '^$','^CREATE$','^USAGE$','^ALL$','^ALL PRIVILEGES$' ])
+      $unless_function = 'has_language_privilege'
+      $on_db = $psql_db
+      $onlyif_function = undef
+    }
+
     default: {
       fail("Missing privilege validation for object type ${_object_type}")
     }
@@ -249,8 +261,9 @@ define postgresql::server::grant (
   }
 
   $_onlyif = $onlyif_function ? {
-    'table_exists' => "SELECT true FROM pg_tables WHERE tablename = '${_togrant_object}'",
-    default        => undef,
+    'table_exists'    => "SELECT true FROM pg_tables WHERE tablename = '${_togrant_object}'",
+    'language_exists' => "SELECT true from pg_language WHERE lanname = '${_togrant_object}'",
+    default           => undef,
   }
 
   $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${_togrant_object}\" TO
