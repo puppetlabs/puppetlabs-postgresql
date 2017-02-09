@@ -5,6 +5,8 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
   let(:db) { 'grant_priv_test' }
   let(:owner) { 'psql_grant_priv_owner' }
   let(:user) { 'psql_grant_priv_tester' }
+  #testing grants on language requires a superuser
+  let(:superuser) { 'postgres' }
   let(:password) { 'psql_grant_role_pw' }
   let(:pp_install) { "class {'postgresql::server': }"}
 
@@ -49,6 +51,65 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
     }
     EOS
   }
+
+  context 'LANGUAGE' do
+    describe 'GRANT * ON LANGUAGE' do
+      let(:pp_lang) { pp_setup + <<-EOS.unindent
+
+          postgresql_psql { 'make sure plpgsql exists':
+            command   => 'CREATE OR REPLACE LANGUAGE plpgsql',
+            db        => $db,
+            psql_user => $superuser,
+            unless    => "SELECT 1 from pg_language where lanname = 'plpgsql'",
+            require   => Postgresql::Server::Database[$db],
+          }
+
+          postgresql::server::grant { 'grant usage on plpgsql':
+            psql_user     => '#{superuser}',
+            privilege     => 'USAGE',
+            object_type   => 'LANGUAGE',
+            object_name   => 'plpgsql',
+            role          => $user,
+            db            => $db,
+            require       => [ Postgresql_psql['make sure plpgsql exists'],
+                               Postgresql::Server::Role[$user], ]
+        }
+        EOS
+      }
+
+      it 'is expected to run idempotently' do
+        apply_manifest(pp_lang, :catch_failures => true)
+        apply_manifest(pp_lang, :catch_changes => true)
+      end
+
+      it 'is expected to GRANT USAGE ON LANGUAGE plpgsql to ROLE' do
+        ## Check that the privilege was granted to the user
+        psql("-d #{db} --command=\"SELECT 1 WHERE has_language_privilege('#{user}', 'plpgsql', 'USAGE')\"", superuser) do |r|
+          expect(r.stdout).to match(/\(1 row\)/)
+          expect(r.stderr).to eq('')
+        end
+      end
+
+      let(:pp_onlyif) { pp_setup + <<-EOS.unindent
+          postgresql::server::grant { 'grant usage on BSql':
+            psql_user     => '#{superuser}',
+            privilege     => 'USAGE',
+            object_type   => 'LANGUAGE',
+            object_name   => 'bsql',
+            role          => $user,
+            db            => $db,
+            onlyif_exists => true,
+        }
+        EOS
+      }
+
+      #test onlyif_exists function
+      it 'is expected to not GRANT USAGE ON (dummy)LANGUAGE BSql to ROLE' do
+        apply_manifest(pp_onlyif, :catch_failures => true)
+        apply_manifest(pp_onlyif, :catch_changes => true)
+      end
+    end
+  end
 
   context 'sequence' do
     it 'should grant usage on a sequence to a user' do
