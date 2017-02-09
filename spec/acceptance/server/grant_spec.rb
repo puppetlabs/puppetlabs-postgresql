@@ -57,7 +57,7 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
       let(:pp_lang) { pp_setup + <<-EOS.unindent
 
           postgresql_psql { 'make sure plpgsql exists':
-            command   => 'CREATE OR REPLACE LANGUAGE plpgsql',
+            command   => 'CREATE LANGUAGE plpgsql',
             db        => $db,
             psql_user => $superuser,
             unless    => "SELECT 1 from pg_language where lanname = 'plpgsql'",
