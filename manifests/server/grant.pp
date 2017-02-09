@@ -227,7 +227,7 @@ define postgresql::server::grant (
       }
       validate_re($unless_privilege, [ '^$','^CREATE$','^USAGE$','^ALL$','^ALL PRIVILEGES$' ])
       $unless_function = 'has_language_privilege'
-      $on_db = $psql_db
+      $on_db = $db
       $onlyif_function = $onlyif_exists ? {
         true    => 'language_exists',
         default => undef,
