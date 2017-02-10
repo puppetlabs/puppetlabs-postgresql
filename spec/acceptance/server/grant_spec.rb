@@ -5,8 +5,6 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
   let(:db) { 'grant_priv_test' }
   let(:owner) { 'psql_grant_priv_owner' }
   let(:user) { 'psql_grant_priv_tester' }
-  #testing grants on language requires a superuser
-  let(:superuser) { 'postgres' }
   let(:password) { 'psql_grant_role_pw' }
   let(:pp_install) { "class {'postgresql::server': }"}
 
@@ -54,12 +52,14 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
 
   context 'LANGUAGE' do
     describe 'GRANT * ON LANGUAGE' do
+      #testing grants on language requires a superuser
+      let(:superuser) { 'postgres' }
       let(:pp_lang) { pp_setup + <<-EOS.unindent
 
           postgresql_psql { 'make sure plpgsql exists':
-            command   => 'CREATE OR REPLACE LANGUAGE plpgsql',
+            command   => 'CREATE LANGUAGE plpgsql',
             db        => $db,
-            psql_user => $superuser,
+            psql_user => '#{superuser}',
             unless    => "SELECT 1 from pg_language where lanname = 'plpgsql'",
             require   => Postgresql::Server::Database[$db],
           }
