@@ -24,6 +24,8 @@ define postgresql::server::schema(
   $version        = $postgresql::server::_version
   $module_workdir = $postgresql::server::module_workdir
 
+  Postgresql::Server::Db <| dbname == $db |> -> Postgresql::Server::Schema[$name]
+
   # If the connection settings do not contain a port, then use the local server port
   if $connect_settings != undef and has_key( $connect_settings, 'PGPORT') {
     $port = undef
