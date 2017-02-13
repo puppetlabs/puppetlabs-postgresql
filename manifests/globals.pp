@@ -81,9 +81,10 @@ class postgresql::globals (
     },
     'Debian' => $::operatingsystem ? {
       'Debian' => $::operatingsystemrelease ? {
-        /^6\./ => '8.4',
-        /^(wheezy|7\.)/ => '9.1',
-        /^(jessie|8\.)/ => '9.4',
+        /^(squeeze|6\.)/ => '8.4',
+        /^(wheezy|7\.)/  => '9.1',
+        /^(jessie|8\.)/  => '9.4',
+        /^(stretch|9\.)/ => '9.6',
         default => undef,
       },
       'Ubuntu' => $::operatingsystemrelease ? {
@@ -91,7 +92,7 @@ class postgresql::globals (
         /^(11.10|12.04|12.10|13.04|13.10)$/ => '9.1',
         /^(14.04)$/ => '9.3',
         /^(14.10|15.04|15.10)$/ => '9.4',
-        /^(16.04)$/ => '9.5',
+        /^(16.04|16.10)$/ => '9.5',
         default => undef,
       },
       default => undef,
