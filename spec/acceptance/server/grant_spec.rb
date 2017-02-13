@@ -77,18 +77,31 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
         EOS
       }
 
-      it 'is expected to run idempotently' do
-        apply_manifest(pp_lang, :catch_failures => true)
-        apply_manifest(pp_lang, :catch_changes => true)
-      end
+        it 'is expected to run idempotently' do
+          apply_manifest(pp_install)
 
-      it 'is expected to GRANT USAGE ON LANGUAGE plpgsql to ROLE' do
-        ## Check that the privilege was granted to the user
-        psql("-d #{db} --command=\"SELECT 1 WHERE has_language_privilege('#{user}', 'plpgsql', 'USAGE')\"", superuser) do |r|
-          expect(r.stdout).to match(/\(1 row\)/)
-          expect(r.stderr).to eq('')
+          #postgres version
+          result = shell('psql --version')
+          version = result.stdout.match(%r{\s(\d\.\d)})[1]
+
+          if version >= '8.4.0'
+            apply_manifest(pp_lang, :catch_failures => true)
+            apply_manifest(pp_lang, :catch_changes => true)
+          end
         end
-      end
+
+        it 'is expected to GRANT USAGE ON LANGUAGE plpgsql to ROLE' do
+          result = shell('psql --version')
+          version = result.stdout.match(%r{\s(\d\.\d)})[1]
+
+          if version >= '8.4.0'
+            ## Check that the privilege was granted to the user
+            psql("-d #{db} --command=\"SELECT 1 WHERE has_language_privilege('#{user}', 'plpgsql', 'USAGE')\"", superuser) do |r|
+              expect(r.stdout).to match(/\(1 row\)/)
+              expect(r.stderr).to eq('')
+            end
+          end
+        end
 
       let(:pp_onlyif) { pp_setup + <<-EOS.unindent
           postgresql::server::grant { 'grant usage on BSql':
@@ -105,8 +118,16 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
 
       #test onlyif_exists function
       it 'is expected to not GRANT USAGE ON (dummy)LANGUAGE BSql to ROLE' do
-        apply_manifest(pp_onlyif, :catch_failures => true)
-        apply_manifest(pp_onlyif, :catch_changes => true)
+        apply_manifest(pp_install)
+
+        #postgres version
+        result = shell('psql --version')
+        version = result.stdout.match(%r{\s(\d\.\d)})[1]
+
+        if version >= '8.4.0'
+          apply_manifest(pp_onlyif, :catch_failures => true)
+          apply_manifest(pp_onlyif, :catch_changes => true)
+        end
       end
     end
   end
