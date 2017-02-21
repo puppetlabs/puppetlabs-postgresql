@@ -1445,6 +1445,9 @@ Default value: `true`.
 ##### `password_hash`
 Sets the hash to use during password creation. If the password is not already pre-encrypted in a format that PostgreSQL supports, use the `postgresql_password` function to provide an MD5 hash here, for example:
 
+##### `refresh_password`
+If set to true, refreshes the password on changes. Set this to false if your user is not allowed to view current passwords of user.
+
 ```puppet
 postgresql::server::role { "myusername":
 password_hash => postgresql_password('myusername', 'mypassword'),
@@ -1811,4 +1814,4 @@ RSPEC_SET=debian-607-x64 bundle exec rspec spec/acceptance
 
 ### Contributors
 
-View the full list of contributors on [https://github.com/puppetlabs/puppetlabs-postgresql/graphs/contributors](GitHub).
+View the full list of contributors on [Github](https://github.com/puppetlabs/puppetlabs-postgresql/graphs/contributors).
