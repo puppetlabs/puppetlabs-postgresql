@@ -10,7 +10,7 @@ describe 'postgresql::lib::java', :type => :class do
     }
     end
     it { is_expected.to contain_package('postgresql-jdbc').with(
-      :name   => 'libpostgresql-jdbc-java',
+      :name   => 'libpg-java',
       :ensure => 'present',
       :tag    => 'postgresql'
     )}

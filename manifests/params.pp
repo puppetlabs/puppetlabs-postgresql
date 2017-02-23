@@ -150,9 +150,9 @@ class postgresql::params inherits postgresql::globals {
         $postgis_package_name = pick($postgis_package_name, "postgresql-${version}-postgis-${postgis_version}")
       }
       $devel_package_name     = pick($devel_package_name, 'libpq-dev')
-      $java_package_name      = $::operatingsystem ? {
-        'Debian' => $::lsbmajdistrelease ? {
-          /^6/    => pick($java_package_name, 'libjava'),
+      $java_package_name = $::operatingsystem ? {
+        'Debian' => $::operatingsystemrelease ? {
+          /^6/    => pick($java_package_name, 'libpg-java'),
           default => pick($java_package_name, 'libpostgresql-jdbc-java'),
         },
       default  => pick($java_package_name, 'libpostgresql-jdbc-java'),
