@@ -283,16 +283,16 @@ Only the specified parameters are recognized in the template. The `recovery.conf
 
 ### Validate connectivity
 
-To validate client connections to a remote PostgreSQL database before starting dependent tasks, use the `postgresql::validate_db_connection` resource. You can use this on any node where the PostgreSQL client software is installed. It is often chained to other tasks such as starting an application server or performing a database migration.
+To validate client connections to a remote PostgreSQL database before starting dependent tasks, use the `postgresql_conn_validator` resource. You can use this on any node where the PostgreSQL client software is installed. It is often chained to other tasks such as starting an application server or performing a database migration.
 
 Example usage:
 
 ```puppet
-postgresql::validate_db_connection { 'validate my postgres connection':
-  database_host     => 'my.postgres.host',
-  database_username => 'mydbuser',
-  database_password => 'mydbpassword',
-  database_name     => 'mydbname',
+postgresql_conn_validator { 'validate my postgres connection':
+  host              => 'my.postgres.host',
+  db_username       => 'mydbuser',
+  db_password       => 'mydbpassword',
+  db_name           => 'mydbname',
 }->
 exec { 'rake db:migrate':
   cwd => '/opt/myrubyapp',
@@ -332,13 +332,13 @@ The postgresql module comes with many options for configuring the server. While 
 * [postgresql::server::schema](#postgresqlserverschema)
 * [postgresql::server::table_grant](#postgresqlservertable_grant)
 * [postgresql::server::tablespace](#postgresqlservertablespace)
-* [postgresql::validate_db_connection](#postgresqlvalidate_db_connection)
 
 **Types:**
 
 * [postgresql_psql](#custom-resource-postgresql_psql)
 * [postgresql_replication_slot](#custom-resource-postgresql_replication_slot)
 * [postgresql_conf](#custom-resource-postgresql_conf)
+* [postgresql_conn_validator](#custom-resource-postgresql_conn_validator)
 
 **Functions:**
 
@@ -366,13 +366,6 @@ Default value: 'present'.
 Sets the name of the PostgreSQL client package.
 
 Default value: 'file'.
-
-##### `validcon_script_path`
-
-Specifies the path to validate the connection script.
-
-
-Default value: '/usr/local/bin/validate_postgresql_connection.sh'.
 
 #### postgresql::lib::docs
 
@@ -1543,64 +1536,6 @@ Specifies the name of the tablespace.
 
 Default value: the namevar.
 
-#### postgresql::validate_db_connection
-
-Validates client connection with a remote PostgreSQL database.
-
-##### `connect_settings`
-
-Specifies a hash of environment variables used when connecting to a remote server. This is an alternative to providing individual parameters (`database_host`, etc). If provided, the individual parameters take precedence.
-
-##### `create_db_first`
-
-Ensures that the database is created before running the test. This only works if your test is local.
-
-Default value: `true`.
-
-##### `database_host`
-
-Sets the hostname of the database you wish to test.
-
-Default value: `undef`, which generally uses the designated local Unix socket.
-
-##### `database_name`
-
-Specifies the name of the database you wish to test.
-
-Default value: 'postgres'.
-
-##### `database_port`
-
-Defines the port to use when connecting.
-
-Default value: `undef`, which generally defaults to port 5432 depending on your PostgreSQL packaging.
-
-##### `database_password`
-
-Specifies the password to connect with. Can be left blank, not recommended.
-
-##### `database_username`
-
-Specifies the username to connect with.
-
-Default value: `undef`.
-
-When using a Unix socket and ident auth, this is the user you are running as.
-
-**If the host is remote you must provide a username.**
-
-##### `run_as`
-
-Specifies the user to run the `psql` command as. This is important when trying to connect to a database locally using Unix sockets and `ident` authentication. Not needed for remote testing.
-
-##### `sleep`
-
-Sets the number of seconds to sleep for before trying again after a failure.
-
-##### `tries`
-
-Sets the number of attempts after failure before giving up and failing the resource.
-
 ### Types
 
 #### postgresql_psql
@@ -1702,6 +1637,62 @@ Allows you to create and destroy replication slots to register warm standby repl
 Specifies the name of the slot to create. Must be a valid replication slot name.
 
 This is the namevar.
+
+#### postgresql_conn_validator
+
+Validate the connection to a local or remote PostgreSQL database using this type.
+
+##### `connect_settings`
+
+Specifies a hash of environment variables used when connecting to a remote server. This is an alternative to providing individual parameters (`host`, etc). If provided, the individual parameters take precedence.
+
+Default value: {}
+
+##### `db_name`
+
+Specifies the name of the database you wish to test.
+
+Default value: ''
+
+##### `db_password`
+
+Specifies the password to connect with. Can be left blank if `.pgpass` is being used, otherwise not recommended.
+
+Default value: ''
+
+##### `db_username`
+
+Specifies the username to connect with.
+
+Default value: ''
+
+When using a Unix socket and ident auth, this is the user you are running as.
+
+##### `host`
+
+Sets the hostname of the database you wish to test.
+
+Default value: '', which generally uses the designated local Unix socket.
+
+**If the host is remote you must provide a username.**
+
+##### `port`
+
+Defines the port to use when connecting.
+
+Default value: '' 
+
+##### `run_as`
+
+Specifies the user to run the `psql` command as. This is important when trying to connect to a database locally using Unix sockets and `ident` authentication. Not needed for remote testing.
+
+##### `sleep`
+
+Sets the number of seconds to sleep for before trying again after a failure.
+
+##### `tries`
+
+Sets the number of attempts after failure before giving up and failing the resource.
 
 ### Functions
 
