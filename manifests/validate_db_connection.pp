@@ -18,6 +18,8 @@ define postgresql::validate_db_connection(
   include postgresql::client
   include postgresql::params
 
+  warning("postgresql::validate_db_connection is deprecated, please use postgresql_conn_validator.")
+
   $psql_path = $postgresql::params::psql_path
   $module_workdir = $postgresql::params::module_workdir
   $validcon_script_path = $postgresql::client::validcon_script_path
@@ -62,6 +64,9 @@ define postgresql::validate_db_connection(
   } else {
     $env = $pass_env
   }
+
+  warning($validate_cmd)
+  warning($env)
 
   $exec_name = "validate postgres connection for ${database_username}@${database_host}:${database_port}/${database_name}"
 

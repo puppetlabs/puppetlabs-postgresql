@@ -22,8 +22,9 @@ describe 'postgresql::server::db', :unless => UNSUPPORTED_PLATFORMS.include?(fac
       apply_manifest(pp, :catch_failures => true)
       apply_manifest(pp, :catch_changes => true)
 
+
       # Verify that the postgres password works
-      shell("echo 'localhost:*:*:postgres:space password' > /root/.pgpass")
+      shell("echo 'localhost:*:*:postgres:\'space password\'' > /root/.pgpass")
       shell("chmod 600 /root/.pgpass")
       shell("psql -U postgres -h localhost --command='\\l'")
 
