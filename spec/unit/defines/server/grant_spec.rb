@@ -48,10 +48,11 @@ describe 'postgresql::server::grant', :type => :define do
 
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('grant:test').with(
-                          {
-                            'command' => "GRANT USAGE ON SEQUENCE \"test\" TO\n      \"test\"",
-                            'unless' => "SELECT 1 WHERE has_sequence_privilege('test',\n                  'test', 'USAGE')",
-                          }) }
+      {
+        'command' => /GRANT USAGE ON SEQUENCE "test" TO\s* "test"/m,
+        'unless'  => /SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)/m,
+      }
+    ) }
   end
 
   context 'all sequences' do
@@ -71,10 +72,11 @@ describe 'postgresql::server::grant', :type => :define do
 
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('grant:test').with(
-                          {
-                            'command' => "GRANT USAGE ON ALL SEQUENCES IN SCHEMA \"public\" TO\n      \"test\"",
-                            'unless' => "SELECT 1 FROM (\n        SELECT sequence_name\n        FROM information_schema.sequences\n        WHERE sequence_schema='public'\n          EXCEPT DISTINCT\n        SELECT object_name as sequence_name\n        FROM information_schema.role_usage_grants\n        WHERE object_type='SEQUENCE'\n        AND grantee='test'\n        AND object_schema='public'\n        AND privilege_type='USAGE'\n        ) P\n        HAVING count(P.sequence_name) = 0",
-                          }) }
+      {
+        'command' => /GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* "test"/m,
+        'unless'  => /SELECT 1 FROM \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\) P\s* HAVING count\(P\.sequence_name\) = 0/m,
+      }
+    ) }
   end
 
   context "with specific db connection settings - default port" do
@@ -132,5 +134,22 @@ describe 'postgresql::server::grant', :type => :define do
 
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql("grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ).with_port( '5678' ) }
+  end
+
+  context 'invalid objectype' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'test',
+        :privilege => 'usage',
+        :object_type => 'invalid',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to compile.and_raise_error(/"INVALID" does not match/) }
   end
 end

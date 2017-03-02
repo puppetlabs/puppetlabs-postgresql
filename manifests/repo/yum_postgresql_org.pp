@@ -6,6 +6,9 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
 
   file { $gpg_key_path:
     source => 'puppet:///modules/postgresql/RPM-GPG-KEY-PGDG',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
     before => Yumrepo['yum.postgresql.org']
   }
 
@@ -16,10 +19,13 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     $label1 = 'redhat'
     $label2 = 'rhel'
   }
+  $default_baseurl = "https://download.postgresql.org/pub/repos/yum/${postgresql::repo::version}/${label1}/${label2}-\$releasever-\$basearch"
+
+  $_baseurl = pick($postgresql::repo::baseurl, $default_baseurl)
 
   yumrepo { 'yum.postgresql.org':
     descr    => "PostgreSQL ${postgresql::repo::version} \$releasever - \$basearch",
-    baseurl  => "http://yum.postgresql.org/${postgresql::repo::version}/${label1}/${label2}-\$releasever-\$basearch",
+    baseurl  => $_baseurl,
     enabled  => 1,
     gpgcheck => 1,
     gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}",

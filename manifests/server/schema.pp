@@ -13,17 +13,18 @@
 # }
 #
 define postgresql::server::schema(
-  $db = $postgresql::server::default_database,
-  $owner  = undef,
-  $schema = $title,
+  $db               = $postgresql::server::default_database,
+  $owner            = undef,
+  $schema           = $title,
   $connect_settings = $postgresql::server::default_connect_settings,
-  $change_ownership = false,
 ) {
   $user           = $postgresql::server::user
   $group          = $postgresql::server::group
   $psql_path      = $postgresql::server::psql_path
   $version        = $postgresql::server::_version
   $module_workdir = $postgresql::server::module_workdir
+
+  Postgresql::Server::Db <| dbname == $db |> -> Postgresql::Server::Schema[$name]
 
   # If the connection settings do not contain a port, then use the local server port
   if $connect_settings != undef and has_key( $connect_settings, 'PGPORT') {
@@ -42,36 +43,21 @@ define postgresql::server::schema(
     connect_settings => $connect_settings,
   }
 
-  $schema_exists = "SELECT nspname FROM pg_namespace WHERE nspname='${schema}'"
-  $authorization = $owner? {
-    undef   => '',
-    default => "AUTHORIZATION \"${owner}\"",
+  postgresql_psql { "${db}: CREATE SCHEMA \"${schema}\"":
+    command => "CREATE SCHEMA \"${schema}\"",
+    unless  => "SELECT 1 FROM pg_namespace WHERE nspname = '${schema}'",
+    require => Class['postgresql::server'],
   }
 
-  if $change_ownership {
-    # Change owner for existing schema
-    if !$owner {
-      fail('Must specify an owner to change schema ownership.')
+  if $owner {
+    postgresql_psql { "${db}: ALTER SCHEMA \"${schema}\" OWNER TO \"${owner}\"":
+      command => "ALTER SCHEMA \"${schema}\" OWNER TO ${owner}",
+      unless  => "SELECT 1 FROM pg_namespace JOIN pg_roles rol ON nspowner = rol.oid WHERE nspname = '${schema}' AND rolname = '${owner}'",
+      require => Postgresql_psql["${db}: CREATE SCHEMA \"${schema}\""],
     }
-    $schema_title   = "Change owner of schema '${schema}' to ${owner}"
-    $schema_command = "ALTER SCHEMA \"${schema}\" OWNER TO ${owner}"
-    postgresql_psql { $schema_title:
-      command => $schema_command,
-      onlyif  => $schema_exists,
-      require => Class['postgresql::server'],
-    }
-  } else {
-    # Create a new schema
-    $schema_title   = "Create Schema '${title}'"
-    $schema_command = "CREATE SCHEMA \"${schema}\" ${authorization}"
-    postgresql_psql { $schema_title:
-      command => $schema_command,
-      unless  => $schema_exists,
-      require => Class['postgresql::server'],
-    }
-  }
 
-  if($owner != undef and defined(Postgresql::Server::Role[$owner])) {
-    Postgresql::Server::Role[$owner]->Postgresql_psql[$schema_title]
+    if defined(Postgresql::Server::Role[$owner]) {
+      Postgresql::Server::Role[$owner]->Postgresql_psql["${db}: ALTER SCHEMA \"${schema}\" OWNER TO \"${owner}\""]
+    }
   }
 }

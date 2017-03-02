@@ -10,6 +10,7 @@ describe 'postgresql::server::plpython', :type => :class do
       :kernel => 'Linux',
       :id => 'root',
       :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      :selinux => true,
     }
   end
 

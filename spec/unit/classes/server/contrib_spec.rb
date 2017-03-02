@@ -41,4 +41,19 @@ describe 'postgresql::server::contrib', :type => :class do
       })
     end
   end
+
+  describe 'on Gentoo' do
+    let :facts do
+      {
+        :osfamily => 'Gentoo',
+        :operatingsystem => 'Gentoo',
+      }
+    end
+
+    it 'should fail to compile' do
+      expect {
+        is_expected.to compile
+      }.to raise_error(/is not supported/)
+    end
+  end
 end

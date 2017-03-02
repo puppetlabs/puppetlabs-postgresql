@@ -5,6 +5,10 @@ class postgresql::server::contrib (
 ) inherits postgresql::params {
   validate_string($package_name)
 
+  if $::osfamily == 'Gentoo' {
+    fail('osfamily Gentoo does not have a separate "contrib" package, postgresql::server::contrib is not supported.')
+  }
+
   package { 'postgresql-contrib':
     ensure => $package_ensure,
     name   => $package_name,

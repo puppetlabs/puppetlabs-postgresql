@@ -3,28 +3,26 @@
 define postgresql::server::db (
   $user,
   $password,
-  $comment          = undef,
-  $dbname           = $title,
-  $encoding         = $postgresql::server::encoding,
-  $locale           = $postgresql::server::locale,
-  $grant            = 'ALL',
-  $tablespace       = undef,
-  $template         = 'template0',
-  $istemplate       = false,
-  $owner            = undef,
-  $change_ownership = false,
+  $comment    = undef,
+  $dbname     = $title,
+  $encoding   = $postgresql::server::encoding,
+  $locale     = $postgresql::server::locale,
+  $grant      = 'ALL',
+  $tablespace = undef,
+  $template   = 'template0',
+  $istemplate = false,
+  $owner      = undef
 ) {
 
   if ! defined(Postgresql::Server::Database[$dbname]) {
     postgresql::server::database { $dbname:
-      comment          => $comment,
-      encoding         => $encoding,
-      tablespace       => $tablespace,
-      template         => $template,
-      locale           => $locale,
-      istemplate       => $istemplate,
-      owner            => $owner,
-      change_ownership => $change_ownership,
+      comment    => $comment,
+      encoding   => $encoding,
+      tablespace => $tablespace,
+      template   => $template,
+      locale     => $locale,
+      istemplate => $istemplate,
+      owner      => $owner,
     }
   }
 
