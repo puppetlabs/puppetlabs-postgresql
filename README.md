@@ -994,7 +994,7 @@ Specifies the group role to which you are assigning a role.
 
 ##### `role`
 
-Specifies the role you want to assign to a group.
+Specifies the role you want to assign to a group.  If left blank, uses the name of the resource.
 
 ##### `ensure`
 
