@@ -21,6 +21,7 @@ class postgresql::server::config {
   $logdir                     = $postgresql::server::logdir
   $service_name               = $postgresql::server::service_name
   $log_line_prefix            = $postgresql::server::log_line_prefix
+  $timezone                   = $postgresql::server::timezone
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -110,6 +111,11 @@ class postgresql::server::config {
   postgresql::server::config_entry { 'data_directory':
     value => $datadir,
   }
+  if $timezone {
+    postgresql::server::config_entry { 'timezone':
+      value => $timezone,
+    }
+  }
   if $logdir {
     postgresql::server::config_entry { 'log_directory':
       value => $logdir,
@@ -187,6 +193,27 @@ class postgresql::server::config {
         refreshonly => true,
         path        => '/bin:/usr/bin:/usr/local/bin'
       }
+    }
+  }
+  elsif $::osfamily == 'Gentoo' {
+    # Template uses:
+    # - $::operatingsystem
+    # - $service_name
+    # - $port
+    # - $datadir
+    file { 'systemd-override':
+      ensure  => present,
+      path    => "/etc/systemd/system/${service_name}.service",
+      owner   => root,
+      group   => root,
+      content => template('postgresql/systemd-override.erb'),
+      notify  => [ Exec['restart-systemd'], Class['postgresql::server::service'] ],
+      before  => Class['postgresql::server::reload'],
+    }
+    exec { 'restart-systemd':
+      command     => 'systemctl daemon-reload',
+      refreshonly => true,
+      path        => '/bin:/usr/bin:/usr/local/bin'
     }
   }
 }

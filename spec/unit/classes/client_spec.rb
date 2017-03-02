@@ -44,4 +44,15 @@ describe 'postgresql::client', :type => :class do
       })
     end
   end
+
+  describe 'with client package name explicitly set undef' do
+    let :params do
+      {
+        :package_name => 'UNSET'
+      }
+    end
+    it 'should not manage postgresql-client package' do
+      is_expected.not_to contain_package('postgresql-client')
+    end
+  end
 end

@@ -323,6 +323,7 @@ The postgresql module comes with many options for configuring the server. While 
 * [postgresql::server::database_grant](#postgresqlserverdatabase_grant)
 * [postgresql::server::db](#postgresqlserverdb)
 * [postgresql::server::extension](#postgresqlserverextension)
+* [postgresql::server::grant](#postgresqlservergrant)
 * [postgresql::server::grant_role](#postgresqlservergrant_role)
 * [postgresql::server::pg_hba_rule](#postgresqlserverpg_hba_rule)
 * [postgresql::server::pg_ident_rule](#postgresqlserverpg_ident_rule)
@@ -442,6 +443,10 @@ Overrides the default PostgreSQL java package name. Default: OS dependent.
 
 Sets the default database locale for all databases created with this module. On certain operating systems, this is also used during the `template1` initialization, so it becomes a default outside of the module as well. Default: undef, which is effectively `C`. **On Debian, you'll need to ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.**
 
+##### `timezone`
+
+Sets the default timezone of the postgresql server. The postgresql built-in default is taking the systems timezone information.
+
 ##### `logdir`
 
 Overrides the default PostgreSQL log directory. Default: initdb's default path.
@@ -456,7 +461,7 @@ Sets up official PostgreSQL repositories on your host if set to true. Default: f
 
 ##### `module_workdir`
 
-Specifies working directory under which the psql command should be executed. May need to specify if /tmp is on volume mounted with noexec option. Default: /tmp 
+Specifies working directory under which the psql command should be executed. May need to specify if /tmp is on volume mounted with noexec option. Default: /tmp
 
 ##### `needs_initdb`
 
@@ -509,6 +514,10 @@ Path to your `recovery.conf` file.
 ##### `repo_proxy`
 
 Sets the proxy option for the official PostgreSQL yum-repositories only. Debian is currently not supported. This is useful if your server is behind a corporate firewall and needs to use proxy servers for outside connectivity.
+
+##### `repo_baseurl`
+
+Sets the baseurl for the PostgreSQL repository. Useful if you host your own mirror of the repository. Defaults to the official PostgreSQL repository.
 
 ##### `server_package_name`
 
@@ -805,7 +814,7 @@ Defines the value for the setting.
 
 #### postgresql::server::db
 
-Creates or modifies a local database, user, and assigns necessary permissions.
+Creates a local database, user, and assigns necessary permissions.
 
 ##### `comment`
 
@@ -855,13 +864,9 @@ Specifies the name of the template database from which to build this database. D
 
 User to create and assign access to the database upon creation. Mandatory.
 
-##### `change_ownership`
-
-Specifies whether to create a new database or change the owner of an existing one. Default: false.
-
 #### postgresql::server::database
 
-Creates or modifies a database with no users and no permissions.
+Creates a database with no users and no permissions.
 
 ##### `dbname`
 
@@ -891,10 +896,6 @@ Sets tablespace for where to create this database. Default: The defaults defined
 
 Specifies the name of the template database from which to build this database. Default: `template0`.
 
-##### `change_ownership`
-
-Specifies whether to create a new database or change the owner of an existing one. Default: false.
-
 #### postgresql::server::database_grant
 
 Manages grant-based access privileges for users, wrapping the `postgresql::server::database_grant` for database specific permissions. Consult the [PostgreSQL documentation for `grant`](http://www.postgresql.org/docs/current/static/sql-grant.html) for more information.
@@ -909,7 +910,7 @@ Specifies the database to which you are granting access.
 
 ##### `privilege`
 
-Specifies which privileges to grant. Valid options: `SELECT`, `TEMPORARY`, `TEMP`, `CONNECT`. `ALL` is used as a synonym for `CREATE`, so if you need to add multiple privileges, you can use a space delimited string.
+Specifies comma-separated list of privileges to grant. Valid options: `ALL`, `CREATE`, `CONNECT`, `TEMPORARY`, `TEMP`.
 
 ##### `psql_db`
 
@@ -1033,7 +1034,7 @@ For certain `auth_method` settings there are extra options that can be passed. C
 
 ##### `database`
 
-Sets a comma separated list of databases that this rule matches.
+Sets a comma-separated list of databases that this rule matches.
 
 ##### `description`
 
@@ -1167,7 +1168,7 @@ Defines the username of the role to create. Defaults to the namevar.
 
 #### postgresql::server::schema
 
-Creates or modifies a schema.
+Creates a schema.
 
 ##### `connect_settings`
 
@@ -1185,10 +1186,6 @@ Sets the default owner of the schema.
 
 Sets the name of the schema. Defaults to the namevar.
 
-##### `change_ownership`
-
-Specifies whether to create a new schema or change the owner of an existing one. Default: false.
-
 #### postgresql::server::table_grant
 
 Manages grant-based access privileges for users. Consult the PostgreSQL documentation for `grant` for more information.
@@ -1203,7 +1200,7 @@ Specifies which database the table is in.
 
 ##### `privilege`
 
-Valid options: `SELECT`, `INSERT`, `UPDATE`, `REFERENCES`. `ALL` is used as a synonym for `CREATE`, so if you need to add multiple privileges, use a space-delimited string.
+Specifies comma-separated list of privileges to grant. Valid options: `ALL`, `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `TRUNCATE`, `REFERENCES`, `TRIGGER`.
 
 ##### `psql_db`
 

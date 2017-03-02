@@ -65,6 +65,65 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
     end
   end
 
+  it 'should grant a role to a superuser' do
+    begin
+      pp = <<-EOS.unindent
+        $db = "#{db}"
+        $user = "#{user}"
+        $group = "#{group}"
+        $password = #{password}
+
+        class { 'postgresql::server': }
+
+        # Since we are not testing pg_hba or any of that, make a local user for ident auth
+        user { $user:
+          ensure => present,
+        }
+
+        postgresql::server::role { $user:
+          password_hash => postgresql_password($user, $password),
+          superuser     => true,
+        }
+
+        postgresql::server::database { $db:
+          owner   => $user,
+          require => Postgresql::Server::Role[$user],
+        }
+
+        # Create a rule for the user
+        postgresql::server::pg_hba_rule { "allow ${user}":
+          type        => 'local',
+          database    => $db,
+          user        => $user,
+          auth_method => 'ident',
+          order       => 1,
+        }
+
+        # Create a role to grant to the user
+        postgresql::server::role { $group:
+          db      => $db,
+          login   => false,
+          require => Postgresql::Server::Database[$db],
+        }
+
+        # Grant the role to the user
+        postgresql::server::grant_role { "grant_role ${group} to ${user}":
+          role  => $user,
+          group => $group,
+        }
+      EOS
+
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
+
+      ## Check that the role was granted to the user
+      psql('--command="SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = \'test_group\' AND r_role.rolname = \'psql_grant_role_tester\'" grant_role_test', 'psql_grant_role_tester') do |r|
+        expect(r.stdout).to match(/\(1 row\)/)
+        expect(r.stderr).to eq('')
+      end
+    end
+  end
+
   it 'should revoke a role from a user' do
     begin
       pp = <<-EOS
@@ -168,5 +227,4 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
        end
      end
    end
-
 end

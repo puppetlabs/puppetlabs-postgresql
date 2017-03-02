@@ -15,6 +15,7 @@ describe 'postgresql::server::config', :type => :class do
         :kernel => 'Linux',
         :id => 'root',
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        :selinux => true,
       }
     end
     it 'should have the correct systemd-override file' do
@@ -62,6 +63,7 @@ describe 'postgresql::server::config', :type => :class do
         :kernel => 'Linux',
         :id => 'root',
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        :selinux => true,
       }
     end
     it 'should have the correct systemd-override file' do
@@ -96,6 +98,39 @@ describe 'postgresql::server::config', :type => :class do
         is_expected.to contain_file('systemd-override') \
           .with_content(/.include \/lib\/systemd\/system\/postgresql-9.4.service/)
       end
+    end
+  end
+
+  describe 'on Gentoo' do
+    let (:pre_condition) do
+      <<-EOS
+        class { 'postgresql::globals':
+          version => '9.5',
+        }->
+        class { 'postgresql::server': }
+      EOS
+    end
+    let :facts do
+      {
+        :osfamily => 'Gentoo',
+        :operatingsystem => 'Gentoo',
+        :operatingsystemrelease => 'unused',
+        :concat_basedir => tmpfilename('server'),
+        :kernel => 'Linux',
+        :id => 'root',
+        :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        :selinux => false,
+      }
+    end
+    it 'should have the correct systemd-override file' do
+      is_expected.to contain_file('systemd-override').with ({
+        :ensure => 'present',
+        :path => '/etc/systemd/system/postgresql-9.5.service',
+        :owner => 'root',
+        :group => 'root',
+      })
+      is_expected.to contain_file('systemd-override') \
+        .with_content(/.include \/usr\/lib64\/systemd\/system\/postgresql-9.5.service/)
     end
   end
 end

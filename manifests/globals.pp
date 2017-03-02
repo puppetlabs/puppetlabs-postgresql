@@ -44,11 +44,13 @@ class postgresql::globals (
   $version                  = undef,
   $postgis_version          = undef,
   $repo_proxy               = undef,
+  $repo_baseurl             = undef,
 
   $needs_initdb             = undef,
 
   $encoding                 = undef,
   $locale                   = undef,
+  $timezone                 = undef,
 
   $manage_pg_hba_conf       = undef,
   $manage_pg_ident_conf     = undef,
@@ -62,7 +64,7 @@ class postgresql::globals (
   $default_version = $::osfamily ? {
     /^(RedHat|Linux)/ => $::operatingsystem ? {
       'Fedora' => $::operatingsystemrelease ? {
-        /^(24)$/       => '9.5',
+        /^(24|25)$/    => '9.5',
         /^(22|23)$/    => '9.4',
         /^(21)$/       => '9.3',
         /^(18|19|20)$/ => '9.2',
@@ -76,18 +78,13 @@ class postgresql::globals (
         /^5\./ => '8.1',
         default => undef,
       },
-      default => $::operatingsystemrelease ? {
-        /^7\./ => '9.2',
-        /^6\./ => '8.4',
-        /^5\./ => '8.1',
-        default => undef,
-      },
     },
     'Debian' => $::operatingsystem ? {
       'Debian' => $::operatingsystemrelease ? {
-        /^6\./ => '8.4',
-        /^(wheezy|7\.)/ => '9.1',
-        /^(jessie|8\.)/ => '9.4',
+        /^(squeeze|6\.)/ => '8.4',
+        /^(wheezy|7\.)/  => '9.1',
+        /^(jessie|8\.)/  => '9.4',
+        /^(stretch|9\.)/ => '9.6',
         default => undef,
       },
       'Ubuntu' => $::operatingsystemrelease ? {
@@ -95,7 +92,7 @@ class postgresql::globals (
         /^(11.10|12.04|12.10|13.04|13.10)$/ => '9.1',
         /^(14.04)$/ => '9.3',
         /^(14.10|15.04|15.10)$/ => '9.4',
-        /^(16.04)$/ => '9.5',
+        /^(16.04|16.10)$/ => '9.5',
         default => undef,
       },
       default => undef,
@@ -104,6 +101,7 @@ class postgresql::globals (
       /Archlinux/ => '9.2',
       default => '9.2',
     },
+    'Gentoo' => '9.5',
     'FreeBSD' => '93',
     'OpenBSD' => $::operatingsystemrelease ? {
       /5\.6/ => '9.3',
@@ -138,6 +136,7 @@ class postgresql::globals (
     '93'    => '2.1',
     '9.4'   => '2.1',
     '9.5'   => '2.2',
+    '9.6'   => '2.3',
     default => undef,
   }
   $globals_postgis_version = $postgis_version ? {
@@ -150,6 +149,7 @@ class postgresql::globals (
     class { 'postgresql::repo':
       version => $globals_version,
       proxy   => $repo_proxy,
+      baseurl => $repo_baseurl,
     }
   }
 }
