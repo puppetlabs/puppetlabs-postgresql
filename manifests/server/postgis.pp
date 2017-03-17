@@ -1,7 +1,7 @@
 # Install the postgis postgresql packaging. See README.md for more details.
 class postgresql::server::postgis (
-  String $package_name   = $postgresql::params::postgis_package_name,
-  $package_ensure = 'present'
+  String $package_name                                             = $postgresql::params::postgis_package_name,
+  Enum['present', 'absent', 'latest', 'installed'] $package_ensure = 'present'
 ) inherits postgresql::params {
 
   package { 'postgresql-postgis':
