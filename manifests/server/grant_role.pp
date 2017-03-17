@@ -2,7 +2,7 @@
 define postgresql::server::grant_role (
   String $group,
   String $role      = $name,
-  $ensure           = 'present',
+  Enum['present', 'absent'] $ensure           = 'present',
   $psql_db          = $postgresql::server::default_database,
   $psql_user        = $postgresql::server::user,
   $port             = $postgresql::server::port,
