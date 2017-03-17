@@ -1,7 +1,8 @@
 # This resource manages an individual rule that applies to the file defined in
 # $target. See README.md for more details.
 define postgresql::server::pg_hba_rule(
-  $type,
+
+  Enum['local', 'host', 'hostssl', 'hostnossl'] $type,
   $database,
   $user,
   $auth_method,
@@ -27,8 +28,6 @@ define postgresql::server::pg_hba_rule(
   if $manage_pg_hba_conf == false {
       fail('postgresql::server::manage_pg_hba_conf has been disabled, so this resource is now unused and redundant, either enable that option or remove this resource from your manifests')
   } else {
-    validate_re($type, '^(local|host|hostssl|hostnossl)$',
-    "The type you specified [${type}] must be one of: local, host, hostssl, hostnossl")
 
     if($type =~ /^host/ and $address == undef) {
       fail('You must specify an address property when type is host based')
