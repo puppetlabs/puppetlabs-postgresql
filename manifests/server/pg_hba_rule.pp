@@ -1,20 +1,19 @@
 # This resource manages an individual rule that applies to the file defined in
 # $target. See README.md for more details.
 define postgresql::server::pg_hba_rule(
-
   Enum['local', 'host', 'hostssl', 'hostnossl'] $type,
-  $database,
-  $user,
-  $auth_method,
-  $address       = undef,
-  $description   = 'none',
-  $auth_option   = undef,
-  Integer $order = 150,
+  String $database,
+  String $user,
+  String $auth_method,
+  Optional[String] $address     = undef,
+  String $description           = 'none',
+  Optional[String] $auth_option = undef,
+  Integer $order                = 150,
 
   # Needed for testing primarily, support for multiple files is not really
   # working.
-  $target             = $postgresql::server::pg_hba_conf_path,
-  $postgresql_version = $postgresql::server::_version
+  Stdlib::Absolutepath $target  = $postgresql::server::pg_hba_conf_path,
+  String $postgresql_version    = $postgresql::server::_version
 ) {
 
   #Allow users to manage pg_hba.conf even if they are not managing the whole PostgreSQL instance
