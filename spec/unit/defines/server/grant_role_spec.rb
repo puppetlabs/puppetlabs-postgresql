@@ -31,52 +31,6 @@ describe 'postgresql::server::grant_role', :type => :define do
     }
   end
 
-  context "validation" do
-    context "group invalid type" do
-      let (:params) { {
-        :group => ['a', 'b'],
-        :role  => 'r',
-      } }
-
-      it {
-        expect { catalogue }.to raise_error(Puppet::Error, /is not a string/)
-      }
-    end
-
-    context "role invalid type" do
-      let (:params) { {
-          :group => 'g',
-          :role  => true,
-      } }
-
-      it {
-        expect { catalogue }.to raise_error(Puppet::Error, /is not a string/)
-      }
-    end
-
-    context "group empty" do
-      let (:params) { {
-          :group => '',
-          :role  => 'r',
-      } }
-
-      it {
-        expect { catalogue }.to raise_error(/\$group must be set/)
-      }
-    end
-
-    context "role empty" do
-      let (:params) { {
-          :group => 'g',
-          :role  => '',
-      } }
-
-      it {
-        expect { catalogue }.to raise_error(/\$role must be set/)
-      }
-    end
-  end
-
   context "with db arguments" do
     let (:params) { super().merge({
       :psql_db   => 'postgres',
@@ -105,16 +59,6 @@ describe 'postgresql::server::grant_role', :type => :define do
         :command => "REVOKE \"#{params[:group]}\" FROM \"#{params[:role]}\"",
         :unless  => "SELECT 1 WHERE EXISTS (SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = '#{params[:group]}' AND r_role.rolname = '#{params[:role]}') != true",
       }).that_requires('Class[postgresql::server]')
-    }
-  end
-
-  context "with ensure => invalid" do
-    let (:params) { super().merge({
-      :ensure   => 'invalid',
-    }) }
-
-    it {
-      expect { catalogue }.to raise_error(Puppet::Error, /Unknown value for ensure/)
     }
   end
 
