@@ -6,10 +6,10 @@ define postgresql::server::pg_hba_rule(
   $database,
   $user,
   $auth_method,
-  $address     = undef,
-  $description = 'none',
-  $auth_option = undef,
-  $order       = '150',
+  $address       = undef,
+  $description   = 'none',
+  $auth_option   = undef,
+  Integer $order = 150,
 
   # Needed for testing primarily, support for multiple files is not really
   # working.
