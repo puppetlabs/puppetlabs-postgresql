@@ -190,7 +190,7 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
       it do
         is_expected.to contain_concat__fragment('pg_hba_rule_test').with({
           :content => /local\s+all\s+all\s+0\.0\.0\.0\/0\s+peer/
-	})
+  })
       end
     end
 
