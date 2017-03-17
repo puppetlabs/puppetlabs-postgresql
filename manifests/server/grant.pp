@@ -1,18 +1,19 @@
 # Define for granting permissions to roles. See README.md for more details.
 define postgresql::server::grant (
-  $role,
-  $db,
-  $privilege             = undef,
-  $object_type           = 'database',
-  $object_name           = undef,
-  $psql_db               = $postgresql::server::default_database,
-  $psql_user             = $postgresql::server::user,
-  $port                  = $postgresql::server::port,
-  Boolean $onlyif_exists = false,
-  $connect_settings      = $postgresql::server::default_connect_settings,
+  String $role,
+  String $db,
+  Optional[String] $privilege      = undef,
+  String $object_type              = 'database',
+  Optional[String[1]] $object_name = undef,
+  String $psql_db                  = $postgresql::server::default_database,
+  String $psql_user                = $postgresql::server::user,
+  Integer $port                    = $postgresql::server::port,
+  Boolean $onlyif_exists           = false,
+  Hash $connect_settings           = $postgresql::server::default_connect_settings,
 ) {
-  $group                 = $postgresql::server::group
-  $psql_path             = $postgresql::server::psql_path
+
+  $group     = $postgresql::server::group
+  $psql_path = $postgresql::server::psql_path
 
   if ! $object_name {
     $_object_name = $db
