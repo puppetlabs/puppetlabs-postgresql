@@ -161,17 +161,6 @@ class postgresql::server::config {
     }
   }
 
-  if ($manage_recovery_conf == true) {
-    concat { $recovery_conf_path:
-      owner  => $user,
-      group  => $group,
-      force  => true, # do not crash if there is no recovery conf file
-      mode   => '0640',
-      warn   => true,
-      notify => Class['postgresql::server::reload'],
-    }
-  }
-
   if $::osfamily == 'RedHat' {
     if $::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora' {
       # Template uses:
