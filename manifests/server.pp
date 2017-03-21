@@ -45,6 +45,7 @@ class postgresql::server (
   $group                      = $postgresql::params::group,
 
   $needs_initdb               = $postgresql::params::needs_initdb,
+  $data_checksums             = $postgresql::params::data_checksums,
 
   $encoding                   = $postgresql::params::encoding,
   $locale                     = $postgresql::params::locale,

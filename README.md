@@ -411,6 +411,12 @@ Overrides the default PostgreSQL data directory for the target platform. Default
 
 **Warning:** If datadir is changed from the default, Puppet does not manage purging of the original data directory, which causes it to fail if the data directory is changed back to the original.
 
+##### `data_checksums`
+
+Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent. Valid values: 'true' or 'false'. Default: initdb's default ('false').
+
+**Warning:** This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
+
 ##### `default_database`
 
 Specifies the name of the default database to connect with. On most systems, this is 'postgres'.
@@ -618,6 +624,12 @@ The name of the PostgreSQL Python package.
 ##### `createdb_path`
 
 **Deprecated.** Specifies the path to the `createdb` command. Default: "${bindir}/createdb".
+
+##### `data_checksums`
+
+Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent. Valid values: 'true' or 'false'. Default: initdb's default ('false').
+
+**Warning:** This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 
 ##### `default_database`
 
