@@ -278,13 +278,8 @@ class postgresql::params inherits postgresql::globals {
       $bindir               = pick($bindir, "/usr/lib/postgresql${version}/bin")
       $datadir              = pick($datadir, '/var/lib/pgsql/data')
       $confdir              = pick($confdir, $datadir)
-      if $::operatingsystem == 'SLES' and versioncmp($::operatingsystemrelease, '11.4') <= 0 {
-        $service_status     = pick($service_status, "/etc/init.d/${service_name} status")
-        $service_reload     = "/etc/init.d/${service_name} reload"
-      } else {
-        $service_status     = pick($service_status, "systemctl status ${service_name}")
-        $service_reload     = "systemctl reload ${service_name}"
-      }
+      $service_status       = pick($service_status, "/etc/init.d/${service_name} status")
+      $service_reload       = "/etc/init.d/${service_name} reload"
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $needs_initdb         = pick($needs_initdb, true)
