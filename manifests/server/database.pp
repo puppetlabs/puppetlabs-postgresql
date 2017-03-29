@@ -77,16 +77,16 @@ define postgresql::server::database(
     command => "CREATE DATABASE \"${dbname}\" WITH ${template_option} ${encoding_option} ${locale_option} ${tablespace_option}",
     unless  => "SELECT 1 FROM pg_database WHERE datname = '${dbname}'",
     require => Class['postgresql::server::service']
-  }~>
+  }
 
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
-  postgresql_psql { "REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
+  ~> postgresql_psql { "REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
     refreshonly => true,
   }
 
-  Postgresql_psql["CREATE DATABASE \"${dbname}\""]->
-  postgresql_psql { "UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
+  Postgresql_psql["CREATE DATABASE \"${dbname}\""]
+  -> postgresql_psql { "UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
     unless => "SELECT 1 FROM pg_database WHERE datname = '${dbname}' AND datistemplate = ${istemplate}",
   }
 
@@ -96,8 +96,8 @@ define postgresql::server::database(
       '8.1'   => 'obj_description',
       default => 'shobj_description',
     }
-    Postgresql_psql["CREATE DATABASE \"${dbname}\""]->
-    postgresql_psql { "COMMENT ON DATABASE \"${dbname}\" IS '${comment}'":
+    Postgresql_psql["CREATE DATABASE \"${dbname}\""]
+    -> postgresql_psql { "COMMENT ON DATABASE \"${dbname}\" IS '${comment}'":
       unless => "SELECT 1 FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'",
       db     => $dbname,
     }
