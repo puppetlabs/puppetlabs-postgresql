@@ -11,14 +11,14 @@ class postgresql::server::postgis (
     tag    => 'postgresql',
   }
 
-  anchor { 'postgresql::server::postgis::start': }->
-  Class['postgresql::server::install']->
-  Package['postgresql-postgis']->
-  Class['postgresql::server::service']->
-  anchor { 'postgresql::server::postgis::end': }
+  anchor { 'postgresql::server::postgis::start': }
+  -> Class['postgresql::server::install']
+  -> Package['postgresql-postgis']
+  -> Class['postgresql::server::service']
+  -> anchor { 'postgresql::server::postgis::end': }
 
   if $postgresql::globals::manage_package_repo {
-    Class['postgresql::repo'] ->
-    Package['postgresql-postgis']
+    Class['postgresql::repo']
+    -> Package['postgresql-postgis']
   }
 }
