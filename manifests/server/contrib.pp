@@ -15,9 +15,9 @@ class postgresql::server::contrib (
     tag    => 'postgresql',
   }
 
-  anchor { 'postgresql::server::contrib::start': }->
-  Class['postgresql::server::install']->
-  Package['postgresql-contrib']->
-  Class['postgresql::server::service']->
-  anchor { 'postgresql::server::contrib::end': }
+  anchor { 'postgresql::server::contrib::start': }
+  -> Class['postgresql::server::install']
+  -> Package['postgresql-contrib']
+  -> Class['postgresql::server::service']
+  -> anchor { 'postgresql::server::contrib::end': }
 }
