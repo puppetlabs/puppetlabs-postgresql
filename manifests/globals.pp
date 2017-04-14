@@ -111,10 +111,11 @@ class postgresql::globals (
     'Suse' => $::operatingsystem ? {
       'SLES' => $::operatingsystemrelease ? {
         /11\.[0-4]/ => '91',
-        default => '93',
+        /12\.0/     => '93',
+        default     => '94',
       },
       'OpenSuSE' => $::operatingsystemrelease ? {
-        '13.2' => '93',
+        default => '94',
       },
       default => undef,
     },
