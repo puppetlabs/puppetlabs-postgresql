@@ -49,7 +49,7 @@ define postgresql::server::role(
 
   $login_sql       = $login       ? { true => 'LOGIN',       default => 'NOLOGIN' }
   $inherit_sql     = $inherit     ? { true => 'INHERIT',     default => 'NOINHERIT' }
-  $createrole_sql  = $createrole  ? { true => 'CREATE${role_keyword}',  default => 'NOCREATE${role_keyword}' }
+  $createrole_sql  = $createrole  ? { true => "CREATE${role_keyword}",  default => "NOCREATE${role_keyword}" }
   $createdb_sql    = $createdb    ? { true => 'CREATEDB',    default => 'NOCREATEDB' }
   $superuser_sql   = $superuser   ? { true => 'SUPERUSER',   default => 'NOSUPERUSER' }
   $replication_sql = $replication ? { true => 'REPLICATION', default => '' }
