@@ -24,7 +24,7 @@ describe 'postgresql::server::role', :type => :define do
   end
 
   let :pre_condition do
-   "class {'postgresql::server':}"
+   "class {'postgresql::server': dialect => 'postgres'}"
   end
 
   it { is_expected.to contain_postgresql__server__role('test') }
@@ -57,7 +57,7 @@ describe 'postgresql::server::role', :type => :define do
     end
 
     let :pre_condition do
-     "class {'postgresql::server':}"
+     "class {'postgresql::server': dialect => 'postgres'}"
     end
 
     it { is_expected.to contain_postgresql__server__role('test') }
@@ -102,7 +102,7 @@ describe 'postgresql::server::role', :type => :define do
     end
 
     let :pre_condition do
-     "class {'postgresql::server':}"
+     "class {'postgresql::server': dialect => 'postgres'}"
     end
 
     it { is_expected.to contain_postgresql__server__role('test') }

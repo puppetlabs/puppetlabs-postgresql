@@ -1,6 +1,7 @@
 # This installs a PostgreSQL server. See README.md for more details.
 class postgresql::server (
   $postgres_password          = undef,
+  $skip_install               = false,
 
   $package_name               = $postgresql::params::server_package_name,
   $package_ensure             = $postgresql::params::package_ensure,
@@ -46,6 +47,7 @@ class postgresql::server (
 
   $needs_initdb               = $postgresql::params::needs_initdb,
 
+  $dialect                    = $postgresql::params::dialect,
   $encoding                   = $postgresql::params::encoding,
   $locale                     = $postgresql::params::locale,
   $timezone                   = $postgresql::params::timezone,
@@ -71,13 +73,14 @@ class postgresql::server (
   }
 
   # Reload has its own ordering, specified by other defines
-  class { "${pg}::reload": require => Class["${pg}::install"] }
-
-  anchor { "${pg}::start": }
-  -> class { "${pg}::install": }
-  -> class { "${pg}::initdb": }
-  -> class { "${pg}::config": }
-  -> class { "${pg}::service": }
-  -> class { "${pg}::passwd": }
-  -> anchor { "${pg}::end": }
+  if !$skip_install {
+    class { "${pg}::reload": require => Class["${pg}::install"] }
+    anchor { "${pg}::start": }
+    -> class { "${pg}::install": }
+    -> class { "${pg}::initdb": }
+    -> class { "${pg}::config": }
+    -> class { "${pg}::service": }
+    -> class { "${pg}::passwd": }
+    -> anchor { "${pg}::end": }
+  }
 }

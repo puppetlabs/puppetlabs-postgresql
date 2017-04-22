@@ -27,6 +27,7 @@ class postgresql::params inherits postgresql::globals {
   case $::osfamily {
     'RedHat', 'Linux': {
       $link_pg_config     = true
+      $dialect            = pick($dialect, 'postgres')
       $user               = pick($user, 'postgres')
       $group              = pick($group, 'postgres')
       $needs_initdb       = pick($needs_initdb, true)
