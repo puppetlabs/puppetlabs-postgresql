@@ -27,6 +27,18 @@ describe 'postgresql::server', :type => :class do
     end
   end
 
+  describe 'skip installation parameter' do
+
+    let(:params) {{ :skip_install => true }}
+    it { is_expected.not_to contain_class("postgresql::server::install") }
+  end
+
+  describe 'redshift skips installation' do
+
+      let(:params) {{ :dialect => 'redshift' }}
+    it { is_expected.not_to contain_class("postgresql::server::install") }
+  end
+
   describe 'service_ensure => running' do
     let(:params) do
       {
