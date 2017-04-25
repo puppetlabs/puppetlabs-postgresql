@@ -55,4 +55,5 @@ describe 'postgresql::server::db', :type => :define do
 
     it { is_expected.to contain_postgresql__server__database('testtest') }
   end
+
 end

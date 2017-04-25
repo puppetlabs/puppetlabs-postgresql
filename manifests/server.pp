@@ -73,7 +73,7 @@ class postgresql::server (
   }
 
   # Reload has its own ordering, specified by other defines
-  if !$skip_install {
+  if !$skip_install and ($dialect != 'redshift') {
     class { "${pg}::reload": require => Class["${pg}::install"] }
     anchor { "${pg}::start": }
     -> class { "${pg}::install": }
