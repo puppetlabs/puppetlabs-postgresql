@@ -28,7 +28,7 @@ describe 'postgresql::server::db', :type => :define do
     end
 
     let :pre_condition do
-      "class {'postgresql::server':}"
+      "class {'postgresql::server': dialect => 'postgres'}"
     end
 
     it { is_expected.to contain_postgresql__server__db('test') }
@@ -50,9 +50,10 @@ describe 'postgresql::server::db', :type => :define do
     end
 
     let :pre_condition do
-      "class {'postgresql::server':}"
+      "class {'postgresql::server': dialect => 'postgres'}"
     end
 
     it { is_expected.to contain_postgresql__server__database('testtest') }
   end
+
 end

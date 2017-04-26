@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'postgresql::server::grant_role', :type => :define do
   let :pre_condition do
-    "class { 'postgresql::server': }"
+    "class { 'postgresql::server': dialect => 'postgres'}"
   end
 
   let :facts do
@@ -120,7 +120,7 @@ describe 'postgresql::server::grant_role', :type => :define do
 
   context "with user defined" do
     let :pre_condition do
-      "class { 'postgresql::server': }
+      "class { 'postgresql::server': dialect => 'postgres'}
 postgresql::server::role { '#{params[:role]}': }"
     end
 
@@ -134,7 +134,7 @@ postgresql::server::role { '#{params[:role]}': }"
 
   context "with group defined" do
     let :pre_condition do
-      "class { 'postgresql::server': }
+      "class { 'postgresql::server': dialect => 'postgres'}
 postgresql::server::role { '#{params[:group]}': }"
     end
 

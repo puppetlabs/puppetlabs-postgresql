@@ -11,6 +11,7 @@ define postgresql::server::role(
   $replication      = false,
   $connection_limit = '-1',
   $username         = $title,
+  $dialect          = $postgresql::server::dialect,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   $psql_user      = $postgresql::server::user
@@ -29,6 +30,15 @@ define postgresql::server::role(
     $port_override = $postgresql::server::port
   }
 
+  # Dialect determines keyword for role definition
+  if $dialect == 'postgres' {
+    $role_keyword = "ROLE"
+  } elsif $dialect == 'redshift' {
+    $role_keyword = "USER"
+  } else {
+    fail("dialect must be set to a valid value")
+  }
+
   # If possible use the version of the remote database, otherwise
   # fallback to our local DB version
   if $connect_settings != undef and has_key( $connect_settings, 'DBVERSION') {
@@ -39,7 +49,7 @@ define postgresql::server::role(
 
   $login_sql       = $login       ? { true => 'LOGIN',       default => 'NOLOGIN' }
   $inherit_sql     = $inherit     ? { true => 'INHERIT',     default => 'NOINHERIT' }
-  $createrole_sql  = $createrole  ? { true => 'CREATEROLE',  default => 'NOCREATEROLE' }
+  $createrole_sql  = $createrole  ? { true => "CREATE${role_keyword}",  default => "NOCREATE${role_keyword}" }
   $createdb_sql    = $createdb    ? { true => 'CREATEDB',    default => 'NOCREATEDB' }
   $superuser_sql   = $superuser   ? { true => 'SUPERUSER',   default => 'NOSUPERUSER' }
   $replication_sql = $replication ? { true => 'REPLICATION', default => '' }
@@ -60,51 +70,51 @@ define postgresql::server::role(
     connect_settings => $connect_settings,
     cwd        => $module_workdir,
     require    => [
-      Postgresql_psql["CREATE ROLE ${username} ENCRYPTED PASSWORD ****"],
+      Postgresql_psql["CREATE ${role_keyword} ${username} ENCRYPTED PASSWORD ****"],
       Class['postgresql::server'],
     ],
   }
 
-  postgresql_psql { "CREATE ROLE ${username} ENCRYPTED PASSWORD ****":
-    command     => "CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}",
+  postgresql_psql { "CREATE ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
+    command     => "CREATE ${role_keyword} \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}",
     unless      => "SELECT 1 FROM pg_roles WHERE rolname = '${username}'",
     environment => $environment,
     require     => Class['Postgresql::Server'],
   }
 
-  postgresql_psql {"ALTER ROLE \"${username}\" ${superuser_sql}":
+  postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${superuser_sql}":
     unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolsuper = ${superuser}",
   }
 
-  postgresql_psql {"ALTER ROLE \"${username}\" ${createdb_sql}":
+  postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${createdb_sql}":
     unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolcreatedb = ${createdb}",
   }
 
-  postgresql_psql {"ALTER ROLE \"${username}\" ${createrole_sql}":
+  postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${createrole_sql}":
     unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolcreaterole = ${createrole}",
   }
 
-  postgresql_psql {"ALTER ROLE \"${username}\" ${login_sql}":
+  postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${login_sql}":
     unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolcanlogin = ${login}",
   }
 
-  postgresql_psql {"ALTER ROLE \"${username}\" ${inherit_sql}":
+  postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${inherit_sql}":
     unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolinherit = ${inherit}",
   }
 
   if(versioncmp($version, '9.1') >= 0) {
     if $replication_sql == '' {
-      postgresql_psql {"ALTER ROLE \"${username}\" NOREPLICATION":
+      postgresql_psql {"ALTER ${role_keyword} \"${username}\" NOREPLICATION":
         unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolreplication = ${replication}",
       }
     } else {
-      postgresql_psql {"ALTER ROLE \"${username}\" ${replication_sql}":
+      postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${replication_sql}":
         unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolreplication = ${replication}",
       }
     }
   }
 
-  postgresql_psql {"ALTER ROLE \"${username}\" CONNECTION LIMIT ${connection_limit}":
+  postgresql_psql {"ALTER ${role_keyword} \"${username}\" CONNECTION LIMIT ${connection_limit}":
     unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolconnlimit = ${connection_limit}",
   }
 
@@ -115,8 +125,8 @@ define postgresql::server::role(
       $pwd_md5 = md5("${password_hash}${username}")
       $pwd_hash_sql = "md5${pwd_md5}"
     }
-    postgresql_psql { "ALTER ROLE ${username} ENCRYPTED PASSWORD ****":
-      command     => "ALTER ROLE \"${username}\" ${password_sql}",
+    postgresql_psql { "ALTER ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
+      command     => "ALTER ${role_keyword} \"${username}\" ${password_sql}",
       unless      => "SELECT 1 FROM pg_shadow WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'",
       environment => $environment,
     }
