@@ -1,2 +1,2 @@
 test:
-	docker build -t puppetlabs-test . && docker run -t puppetlabs-test
+	docker build -t puppetlabs-postgresql-test . && docker run -t puppetlabs-postgresql-test
