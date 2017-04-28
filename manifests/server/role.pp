@@ -76,7 +76,11 @@ define postgresql::server::role(
       $password_sql = "PASSWORD '\$NEWPGPASSWD'"
     }
   } else {
-    $password_sql = ''
+    if ($dialect == 'postgres') {
+      $password_sql = ''
+    } elsif ($dialect == 'redshift') {
+      $password_sql = "PASSWORD DISABLE"
+    }
     $environment  = []
   }
 
