@@ -49,6 +49,27 @@ describe 'postgresql::server::role', :type => :define do
     end
   end
 
+  context 'passwordless' do
+
+    let :params do
+      {}
+    end
+  
+    let :pre_condition do
+     "class {'postgresql::server': dialect => 'postgres'}"
+    end
+  
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it 'should have create role for "test" user with password as ****' do
+      is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****').with({
+        'command'     => "CREATE ROLE \"test\"  NOCREATEROLE NOCREATEDB LOGIN NOSUPERUSER  CONNECTION LIMIT -1",
+        'environment' => [],
+        'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
+        'port'        => "5432",
+      })
+    end
+  end
+
   context "with specific db connection settings - default port" do
     let :params do
       {
@@ -162,6 +183,27 @@ describe 'postgresql::server::role', :type => :define do
         'command'     => "ALTER USER \"test\" PASSWORD '$NEWPGPASSWD'",
         'environment' => "NEWPGPASSWD=new-pa$s",
         'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
+        'port'        => "5432",
+      })
+    end
+  end
+
+  context 'passwordless (redshift)' do
+
+    let :params do
+      {}
+    end
+  
+    let :pre_condition do
+     "class {'postgresql::server': dialect => 'redshift'}"
+    end
+  
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it 'should have create role for "test" user with password as ****' do
+      is_expected.to contain_postgresql_psql('CREATE USER test ENCRYPTED PASSWORD ****').with({
+        'command'     => "CREATE USER \"test\" PASSWORD DISABLE NOCREATEUSER NOCREATEDB CONNECTION LIMIT UNLIMITED",
+        'environment' => [],
+        'unless'      => "SELECT 1 FROM pg_user_info WHERE usename = 'test'",
         'port'        => "5432",
       })
     end
