@@ -33,7 +33,7 @@ describe 'postgresql::server::role', :type => :define do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'should have create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****').with({
-        'command'     => "CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1",
+        'command'     => "CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' NOCREATEROLE NOCREATEDB LOGIN NOSUPERUSER  CONNECTION LIMIT -1",
         'environment' => "NEWPGPASSWD=new-pa$s",
         'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
         'port'        => "5432",
@@ -67,7 +67,7 @@ describe 'postgresql::server::role', :type => :define do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'should have create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****').with({
-        'command'     => "CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1",
+        'command'     => "CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' NOCREATEROLE NOCREATEDB LOGIN NOSUPERUSER  CONNECTION LIMIT -1",
         'environment' => "NEWPGPASSWD=new-pa$s",
         'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
         'port'        => "5432",
@@ -112,7 +112,7 @@ describe 'postgresql::server::role', :type => :define do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'should have create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****').with({
-        'command'     => "CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1",
+        'command'     => "CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' NOCREATEROLE NOCREATEDB LOGIN NOSUPERUSER  CONNECTION LIMIT -1",
         'environment' => "NEWPGPASSWD=new-pa$s",
         'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
         'connect_settings' => { 'PGHOST'     => 'postgres-db-server',
@@ -151,17 +151,17 @@ describe 'postgresql::server::role', :type => :define do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'should have create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE USER test ENCRYPTED PASSWORD ****').with({
-        'command'     => "CREATE USER \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEUSER NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1",
+        'command'     => "CREATE USER \"test\" PASSWORD '$NEWPGPASSWD' NOCREATEUSER NOCREATEDB CONNECTION LIMIT UNLIMITED",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
+        'unless'      => "SELECT 1 FROM pg_user_info WHERE usename = 'test'",
         'port'        => "5432",
       })
     end
     it 'should have alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER USER test ENCRYPTED PASSWORD ****').with({
-        'command'     => "ALTER USER \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD'",
+        'command'     => "ALTER USER \"test\" PASSWORD '$NEWPGPASSWD'",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
+        'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
         'port'        => "5432",
       })
     end
@@ -185,9 +185,9 @@ describe 'postgresql::server::role', :type => :define do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'should have create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE USER test ENCRYPTED PASSWORD ****').with({
-        'command'     => "CREATE USER \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEUSER NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1",
+        'command'     => "CREATE USER \"test\" PASSWORD '$NEWPGPASSWD' NOCREATEUSER NOCREATEDB CONNECTION LIMIT UNLIMITED",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
+        'unless'      => "SELECT 1 FROM pg_user_info WHERE usename = 'test'",
         'port'        => "5432",
 
         'connect_settings' => { 'PGHOST'     => 'redshift-db-server',
@@ -198,9 +198,9 @@ describe 'postgresql::server::role', :type => :define do
     end
     it 'should have alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER USER test ENCRYPTED PASSWORD ****').with({
-        'command'     => "ALTER USER \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD'",
+        'command'     => "ALTER USER \"test\" PASSWORD '$NEWPGPASSWD'",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
+        'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
         'port'        => "5432",
 
         'connect_settings' => { 'PGHOST'     => 'redshift-db-server',
@@ -230,9 +230,9 @@ describe 'postgresql::server::role', :type => :define do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'should have create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE USER test ENCRYPTED PASSWORD ****').with({
-        'command'     => "CREATE USER \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEUSER NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1",
+        'command'     => "CREATE USER \"test\" PASSWORD '$NEWPGPASSWD' NOCREATEUSER NOCREATEDB CONNECTION LIMIT UNLIMITED",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
+        'unless'      => "SELECT 1 FROM pg_user_info WHERE usename = 'test'",
         'connect_settings' => { 'PGHOST'     => 'redshift-db-server',
                                 'DBVERSION'  => '9.1',
                                 'PGPORT'     => '1234',
@@ -242,9 +242,9 @@ describe 'postgresql::server::role', :type => :define do
     end
     it 'should have alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER USER test ENCRYPTED PASSWORD ****').with({
-        'command'     => "ALTER USER \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD'",
+        'command'     => "ALTER USER \"test\" PASSWORD '$NEWPGPASSWD'",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
+        'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
         'connect_settings' => { 'PGHOST'     => 'redshift-db-server',
                                 'DBVERSION'  => '9.1',
                                 'PGPORT'     => '1234',
