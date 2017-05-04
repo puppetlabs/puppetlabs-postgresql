@@ -12,6 +12,10 @@ define postgresql::server::group(
   $psql_path      = $postgresql::server::psql_path
   $module_workdir = $postgresql::server::module_workdir
 
+  # TODO: complete this functionality
+  $groupmembers_list = []
+  $groupmembers_sql = ''
+
   postgresql_psql { "${title}: CREATE GROUP ${groupname}":
     command     => "CREATE GROUP ${groupname}",
     unless      => "SELECT 1 FROM pg_group WHERE groname = '${groupname}'",
@@ -22,5 +26,4 @@ define postgresql::server::group(
   postgresql_psql {"${title}: ALTER GROUP \"${group}\" ${groupmembers_sql}":
     unless => "SELECT 1 FROM pg_group WHERE groname = '${groupname}' AND grolist = ${groupmembers_list}",
   }
-
 }
