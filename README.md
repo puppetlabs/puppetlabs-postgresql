@@ -325,6 +325,7 @@ The postgresql module comes with many options for configuring the server. While 
 * [postgresql::server::extension](#postgresqlserverextension)
 * [postgresql::server::grant](#postgresqlservergrant)
 * [postgresql::server::grant_role](#postgresqlservergrant_role)
+* [postgresql::server::group](#postgresqlservergroup)
 * [postgresql::server::pg_hba_rule](#postgresqlserverpg_hba_rule)
 * [postgresql::server::pg_ident_rule](#postgresqlserverpg_ident_rule)
 * [postgresql::server::recovery](#postgresqlserverrecovery)
@@ -447,6 +448,12 @@ Default value: 'postgres' (for most systems).
 Overrides the default PostgreSQL devel package name.
 
 Default value: OS dependent.
+
+##### `dialect`
+
+Sets the dialect for all databases managed with this module. Select 'postgres' for managing vanilla postgres databases, or 'redshift' for Amazon Redshift databases. Note: local database software is only installable using the 'postgres' dialect.
+
+Default value: 'postgres'
 
 ##### `docs_package_name`
 
@@ -742,6 +749,12 @@ Specifies the name of the default database to connect with. On most systems this
 
 Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined-types. i.e. `postgresql::server::role`
 
+##### `dialect`
+
+Sets the dialect for all databases managed with this module. Select 'postgres' for managing vanilla postgres databases, or 'redshift' for Amazon Redshift databases. Note: local database software is only installable using the 'postgres' dialect.
+
+Default value: value set in `postgresql::params` or `postgresql::globals`
+
 ##### `encoding`
 
 Sets the default encoding for all databases created with this module. On certain operating systems this is also used during the `template1` initialization, so it becomes a default outside of the module as well.
@@ -944,6 +957,12 @@ Default value: `true`.
 Overrides the default status check command for your PostgreSQL service. 
 
 Default value: OS dependent.
+
+##### `skip_install`
+
+Overrides the installation of a local PostgreSQL instance, such as when performing tests or when an instance is managed remotely.
+
+Default value: `false`.
 
 ##### `user`
 
@@ -1281,6 +1300,40 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: Connects to the local Postgres instance.
 
+#### postgresql::server::group
+
+Creates a Redshift group. This class is only relevant to the `redshift` dialect, as vanilla postgres uses roles for this purpose instead.
+
+##### `connect_settings`
+Specifies a hash of environment variables used when connecting to a remote server.
+
+Default value: Connects to the local Postgres instance.
+
+##### `db`
+Required.
+
+Specifies which database psql will use to perform certain checks, such as what settings exist for the current group prior to applying changes.
+
+##### `dialect`
+Determines whether to use postgres or redshift's definition of a user. Also determines the tables to query for user metadata.
+
+Default value: inherit from server settings.
+
+##### `groupname`
+Defines the name of the group to create.
+
+Default value: the namevar.
+
+##### `groupmembers`
+Defines the users that are part of the current group, if any.
+
+Default value: `undef`, which specifies an empty members list.
+
+##### `port`
+Optional port override for connecting to postgres when applying this group.
+
+Default value: inherit from `$connect_settings` or `postgresql::server::port`
+
 #### postgresql::server::pg_hba_rule
 
 Allows you to create an access rule for `pg_hba.conf`. For more details see the [usage example](#create-an-access-rule-for-pghba.conf) and the [PostgreSQL documentation](http://www.postgresql.org/docs/current/static/auth-pg-hba-conf.html).
@@ -1410,7 +1463,7 @@ Provides the target for the rule, and is generally an internal only property.
 **Use with caution.**
 
 #### postgresql::server::role
-Creates a role or user in PostgreSQL.
+Creates a role or user in PostgreSQL. In the Redshift dialect, this creates a new redshift user (see `postgresql::server::group` for groups).
 
 ##### `connection_limit`
 Specifies how many concurrent connections the role can make.
@@ -1432,6 +1485,16 @@ Specifies whether to grant the ability to create new roles with this role.
 
 Default value: `false`.
 
+##### `db`
+Required.
+
+Specifies which database psql will use to perform certain checks, such as what settings exist for the current role prior to applying changes.
+
+##### `dialect`
+Determines whether to use postgres or redshift's definition of a user. Also determines the tables to query for user metadata.
+
+Default value: inherit from server settings.
+
 ##### `inherit`
 Specifies whether to grant inherit capability for the new role.
 
@@ -1450,6 +1513,11 @@ postgresql::server::role { "myusername":
 password_hash => postgresql_password('myusername', 'mypassword'),
 }
 ```
+
+##### `port`
+Optional port override for connecting to postgres when applying this role.
+
+Default value: inherit from `$connect_settings` or `postgresql::server::port`
 
 ##### `replication`
 
