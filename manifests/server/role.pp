@@ -93,7 +93,7 @@ define postgresql::server::role(
     connect_settings => $connect_settings,
     cwd        => $module_workdir,
     require    => [
-      Postgresql_psql["CREATE ${role_keyword} ${username} ENCRYPTED PASSWORD ****"],
+      Postgresql_psql["${title}: CREATE ${role_keyword} ${username} ENCRYPTED PASSWORD ****"],
       Class['postgresql::server'],
     ],
   }
@@ -104,41 +104,41 @@ define postgresql::server::role(
     $options_sql = "${createrole_sql} ${createdb_sql}"
   }
   
-  postgresql_psql { "CREATE ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
+  postgresql_psql { "${title}: CREATE ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
     command     => "CREATE ${role_keyword} \"${username}\" ${password_sql} ${options_sql} CONNECTION LIMIT ${role_connection_limit}",
     unless      => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}'",
     environment => $environment,
     require     => Class['Postgresql::Server'],
   }
 
-  postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${createdb_sql}":
+  postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${createdb_sql}":
     unless => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}' AND ${role_column_prefix}createdb = ${createdb}",
   }
 
   if ($dialect == 'postgres') {
-    postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${createrole_sql}":
+    postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${createrole_sql}":
       unless => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}' AND rolcreaterole = ${createrole}",
     }
 
-    postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${superuser_sql}":
+    postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${superuser_sql}":
       unless => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolsuper = ${superuser}",
     }
   
-    postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${login_sql}":
+    postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${login_sql}":
       unless => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolcanlogin = ${login}",
     }
   
-    postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${inherit_sql}":
+    postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${inherit_sql}":
       unless => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolinherit = ${inherit}",
     }
   
     if(versioncmp($version, '9.1') >= 0) {
       if $replication_sql == '' {
-        postgresql_psql {"ALTER ${role_keyword} \"${username}\" NOREPLICATION":
+        postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" NOREPLICATION":
           unless => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolreplication = ${replication}",
         }
       } else {
-        postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${replication_sql}":
+        postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${replication_sql}":
           unless => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolreplication = ${replication}",
         }
       }
@@ -146,12 +146,12 @@ define postgresql::server::role(
   } elsif ($dialect == 'redshift') {
 
     # CREATEUSER actually defines superuser privileges in Redshift: http://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html
-    postgresql_psql {"ALTER ${role_keyword} \"${username}\" ${createrole_sql}":
+    postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${createrole_sql}":
       unless => "SELECT 1 FROM ${role_table} WHERE usename = '${username}' AND usesuper = ${createrole}",
     }
   }
 
-  postgresql_psql {"ALTER ${role_keyword} \"${username}\" CONNECTION LIMIT ${role_connection_limit}":
+  postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" CONNECTION LIMIT ${role_connection_limit}":
     unless => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}' AND ${role_column_prefix}connlimit = '${role_connection_limit}'",
   }
 
@@ -162,7 +162,7 @@ define postgresql::server::role(
       $pwd_md5 = md5("${password_hash}${username}")
       $pwd_hash_sql = "md5${pwd_md5}"
     }
-    postgresql_psql { "ALTER ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
+    postgresql_psql { "${title}: ALTER ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
       command     => "ALTER ${role_keyword} \"${username}\" ${password_sql}",
       unless      => "SELECT 1 FROM ${password_table} WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'",
       environment => $environment,
