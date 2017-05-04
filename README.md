@@ -1302,12 +1302,14 @@ Default value: Connects to the local Postgres instance.
 
 #### postgresql::server::group
 
-Creates a Redshift group. This class is only relevant to the `redshift` dialect, as vanilla postgres uses roles for this purpose instead.
+Creates a Postgres group.
 
 ##### `connect_settings`
+Required.
+
 Specifies a hash of environment variables used when connecting to a remote server.
 
-Default value: Connects to the local Postgres instance.
+Default value: `undef`, because groups only currently make sense in remotely-managed Redshift clusters.
 
 ##### `db`
 Required.
@@ -1315,7 +1317,7 @@ Required.
 Specifies which database psql will use to perform certain checks, such as what settings exist for the current group prior to applying changes.
 
 ##### `dialect`
-Determines whether to use postgres or redshift's definition of a user. Also determines the tables to query for user metadata.
+Reserved for future use. Currently both the 'postgres' and 'redshift' dialects are identical in operation.
 
 Default value: inherit from server settings.
 
