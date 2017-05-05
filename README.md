@@ -322,10 +322,10 @@ The postgresql module comes with many options for configuring the server. While 
 * [postgresql::server::database](#postgresqlserverdatabase)
 * [postgresql::server::database_grant](#postgresqlserverdatabase_grant)
 * [postgresql::server::db](#postgresqlserverdb)
+* [postgresql::server::dbgroup](#postgresqlserverdbgroup)
 * [postgresql::server::extension](#postgresqlserverextension)
 * [postgresql::server::grant](#postgresqlservergrant)
 * [postgresql::server::grant_role](#postgresqlservergrant_role)
-* [postgresql::server::group](#postgresqlservergroup)
 * [postgresql::server::pg_hba_rule](#postgresqlserverpg_hba_rule)
 * [postgresql::server::pg_ident_rule](#postgresqlserverpg_ident_rule)
 * [postgresql::server::recovery](#postgresqlserverrecovery)
@@ -1094,6 +1094,42 @@ Defaults value: `template0`.
 
 User to create and assign access to the database upon creation. Mandatory.
 
+#### postgresql::server::dbgroup
+
+Creates a Postgres group.
+
+##### `connect_settings`
+Required.
+
+Specifies a hash of environment variables used when connecting to a remote server.
+
+Default value: `undef`, because groups only currently make sense in remotely-managed Redshift clusters.
+
+##### `db`
+Required.
+
+Specifies which database psql will use to perform certain checks, such as what settings exist for the current group prior to applying changes.
+
+##### `dialect`
+Reserved for future use. Currently both the 'postgres' and 'redshift' dialects are identical in operation.
+
+Default value: inherit from server settings.
+
+##### `groupname`
+Defines the name of the group to create.
+
+Default value: the namevar.
+
+##### `groupmembers`
+Defines the users that are part of the current group, if any.
+
+Default value: `undef`, which specifies an empty members list.
+
+##### `port`
+Optional port override for connecting to postgres when applying this group.
+
+Default value: inherit from `$connect_settings` or `postgresql::server::port`
+
 #### postgresql::server::database
 
 Creates a database with no users and no permissions.
@@ -1299,42 +1335,6 @@ Default value: the default user for the module, usually `postgres`.
 Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: Connects to the local Postgres instance.
-
-#### postgresql::server::group
-
-Creates a Postgres group.
-
-##### `connect_settings`
-Required.
-
-Specifies a hash of environment variables used when connecting to a remote server.
-
-Default value: `undef`, because groups only currently make sense in remotely-managed Redshift clusters.
-
-##### `db`
-Required.
-
-Specifies which database psql will use to perform certain checks, such as what settings exist for the current group prior to applying changes.
-
-##### `dialect`
-Reserved for future use. Currently both the 'postgres' and 'redshift' dialects are identical in operation.
-
-Default value: inherit from server settings.
-
-##### `groupname`
-Defines the name of the group to create.
-
-Default value: the namevar.
-
-##### `groupmembers`
-Defines the users that are part of the current group, if any.
-
-Default value: `undef`, which specifies an empty members list.
-
-##### `port`
-Optional port override for connecting to postgres when applying this group.
-
-Default value: inherit from `$connect_settings` or `postgresql::server::port`
 
 #### postgresql::server::pg_hba_rule
 
