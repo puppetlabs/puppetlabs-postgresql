@@ -132,11 +132,11 @@ describe 'postgresql::server::role', :type => :define do
     end
   end
 
-  context 'with refresh_password set to false' do
+  context 'with update_password set to false' do
     let :params do
       {
           :password_hash => 'new-pa$s',
-          :refresh_password => false,
+          :update_password => false,
       }
     end
 
@@ -144,7 +144,7 @@ describe 'postgresql::server::role', :type => :define do
       "class {'postgresql::server':}"
     end
 
-    it 'should not have alter role for "test" user with password as **** if refresh_password is false' do
+    it 'should not have alter role for "test" user with password as **** if update_password is false' do
       is_expected.not_to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
     end
   end
