@@ -38,13 +38,14 @@ define postgresql::server::dbgroup(
   }
 
   postgresql_psql { "${title}: CREATE GROUP ${groupname}":
-    command     => "CREATE GROUP ${groupname}",
+    command     => "CREATE GROUP \"${groupname}\"",
     unless      => "SELECT 1 FROM pg_group WHERE groname = '${groupname}'",
     environment => [],
     require     => Class['Postgresql::Server'],
   }
 
   postgresql_psql {"${title}: UPDATE pg_group SET grolist = '${groupmembers}' WHERE groname = '${groupname}'":
+    command => "UPDATE pg_group SET grolist = '${groupmembers}' WHERE groname = '${groupname}'",
     unless => "SELECT 1 FROM pg_group WHERE groname = '${groupname}' AND grolist = '${groupmembers}'",
   }
 }
