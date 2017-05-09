@@ -34,10 +34,10 @@ describe 'postgresql::server::dbgroup', :type => :define do
       })
     end
     it 'should have update pg_group for test group with groupmembers as []' do
-      is_expected.to contain_postgresql_psql("test: UPDATE pg_group SET grolist = [] WHERE groname = 'test'").with({
-        'command'     => "UPDATE pg_group SET grolist = [] WHERE groname = 'test'",
+      is_expected.to contain_postgresql_psql("test: UPDATE pg_group SET grolist = ARRAY[] WHERE groname = 'test'").with({
+        'command'     => "UPDATE pg_group SET grolist = ARRAY[] WHERE groname = 'test'",
         'environment' => [],
-        'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test' AND grolist = []",
+        'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test' AND grolist = ARRAY[]",
         'port'        => "5432",
       })
     end
