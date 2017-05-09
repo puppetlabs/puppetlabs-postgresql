@@ -1,5 +1,6 @@
 # Define for creating a database role. See README.md for more information
 define postgresql::server::role(
+  $update_password = true,
   $password_hash    = false,
   $createdb         = false,
   $createrole       = false,
@@ -108,7 +109,7 @@ define postgresql::server::role(
     unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolconnlimit = ${connection_limit}",
   }
 
-  if $password_hash {
+  if $password_hash and $update_password {
     if($password_hash =~ /^md5.+/) {
       $pwd_hash_sql = $password_hash
     } else {
