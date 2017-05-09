@@ -75,9 +75,9 @@ describe 'postgresql::server::role', :type => :define do
       {
         :password_hash => 'new-pa$s',
         :connect_settings => { 'PGHOST'     => 'postgres-db-server',
-	                       'DBVERSION'  => '9.1',
-	                       'PGUSER'     => 'login-user',
-			       'PGPASSWORD' => 'login-pass' },
+                           'DBVERSION'  => '9.1',
+                           'PGUSER'     => 'login-user',
+                           'PGPASSWORD' => 'login-pass' },
       }
     end
 
@@ -119,10 +119,10 @@ describe 'postgresql::server::role', :type => :define do
       {
         :password_hash => 'new-pa$s',
         :connect_settings => { 'PGHOST'     => 'postgres-db-server',
-	                       'DBVERSION'  => '9.1',
-	                       'PGPORT'     => '1234',
-	                       'PGUSER'     => 'login-user',
-			       'PGPASSWORD' => 'login-pass' },
+                           'DBVERSION'  => '9.1',
+                           'PGPORT'     => '1234',
+                           'PGUSER'     => 'login-user',
+                           'PGPASSWORD' => 'login-pass' },
       }
     end
 
@@ -214,9 +214,9 @@ describe 'postgresql::server::role', :type => :define do
       {
         :password_hash => 'new-pa$s',
         :connect_settings => { 'PGHOST'     => 'redshift-db-server',
-	                       'DBVERSION'  => '9.1',
-	                       'PGUSER'     => 'login-user',
-			       'PGPASSWORD' => 'login-pass' },
+                           'DBVERSION'  => '9.1',
+                           'PGUSER'     => 'login-user',
+                           'PGPASSWORD' => 'login-pass' },
       }
     end
 
@@ -258,10 +258,10 @@ describe 'postgresql::server::role', :type => :define do
       {
         :password_hash => 'new-pa$s',
         :connect_settings => { 'PGHOST'     => 'redshift-db-server',
-	                       'DBVERSION'  => '9.1',
-	                       'PGPORT'     => '1234',
-	                       'PGUSER'     => 'login-user',
-			       'PGPASSWORD' => 'login-pass' },
+                           'DBVERSION'  => '9.1',
+                           'PGPORT'     => '1234',
+                           'PGUSER'     => 'login-user',
+                           'PGPASSWORD' => 'login-pass' },
       }
     end
 
