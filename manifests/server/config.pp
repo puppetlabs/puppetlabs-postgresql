@@ -100,11 +100,12 @@ class postgresql::server::config {
     create_resources('postgresql::server::pg_hba_rule', $ipv6acl_resources)
   }
 
-  # We must set a "listen_addresses" line in the postgresql.conf if we
-  # want to allow any connections from remote hosts.
-  postgresql::server::config_entry { 'listen_addresses':
-    value => $listen_addresses,
+  if $listen_addresses {
+    postgresql::server::config_entry { 'listen_addresses':
+      value => $listen_addresses,
+    }
   }
+
   postgresql::server::config_entry { 'port':
     value => $port,
   }
