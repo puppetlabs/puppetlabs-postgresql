@@ -9,10 +9,15 @@ define postgresql::server::grant (
   $psql_user        = $postgresql::server::user,
   $port             = $postgresql::server::port,
   $onlyif_exists    = false,
+  $dialect          = $postgresql::server::dialect,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
+
+  if ($dialect != 'postgres') and ($dialect != 'redshift') {
+    fail("dialect must be set to a valid value")
+  }
 
   if ! $object_name {
     $_object_name = $db
