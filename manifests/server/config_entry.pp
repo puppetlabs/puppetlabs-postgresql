@@ -11,12 +11,15 @@ define postgresql::server::config_entry (
     default => $path,
   }
 
+  # Those are the variables that are marked as "(change requires restart)"
+  # on postgresql.conf.  Items are ordered as on postgresql.conf.
+  #
+  # XXX: This resource supports setting other variables without knowing
+  # their names.  Do not add them here.
   $requires_restart = [
     'data_directory',
-    'timezone',
     'hba_file',
     'ident_file',
-    'include',
     'listen_addresses',
     'port',
     'max_connections',
@@ -45,11 +48,6 @@ define postgresql::server::config_entry (
     'autovacuum_freeze_max_age',
     'max_locks_per_transaction',
     'max_pred_locks_per_transaction',
-    'restart_after_crash',
-    'lc_messages',
-    'lc_monetary',
-    'lc_numeric',
-    'lc_time',
   ]
 
   Exec {
