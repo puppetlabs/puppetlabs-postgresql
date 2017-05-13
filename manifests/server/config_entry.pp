@@ -63,14 +63,10 @@ define postgresql::server::config_entry (
   } elsif $postgresql::server::service_restart_on_change {
     Postgresql_conf {
       notify => Class['postgresql::server::service'],
-      before => Class['postgresql::server::reload'],
     }
   } else {
     Postgresql_conf {
-      before => [
-        Class['postgresql::server::service'],
-        Class['postgresql::server::reload'],
-      ],
+      before => Class['postgresql::server::service'],
     }
   }
 
