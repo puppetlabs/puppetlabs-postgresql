@@ -25,7 +25,7 @@ define postgresql::server::config_entry (
     'port'                                => undef,
     'max_connections'                     => undef,
     'superuser_reserved_connections'      => undef,
-    'unix_socket_directory'               => undef,
+    'unix_socket_directory'               => '9.3',   # Turned into "unix_socket_directories"
     'unix_socket_directories'             => undef,
     'unix_socket_group'                   => undef,
     'unix_socket_permissions'             => undef,
@@ -56,7 +56,7 @@ define postgresql::server::config_entry (
     'hot_standby'                         => undef,
     'logging_collector'                   => undef,
     'cluster_name'                        => undef,   # New on 9.5
-    'silent_mode'                         => undef,
+    'silent_mode'                         => '9.2',   # Removed
     'track_activity_query_size'           => undef,
     'autovacuum_max_workers'              => undef,
     'autovacuum_freeze_max_age'           => undef,
