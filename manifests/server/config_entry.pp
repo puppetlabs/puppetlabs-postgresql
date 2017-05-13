@@ -24,10 +24,10 @@ define postgresql::server::config_entry (
         }
       } else {
         Postgresql_conf {
-            before => [
-                Class['postgresql::server::service'],
-                Class['postgresql::server::reload'],
-            ],
+          before => [
+            Class['postgresql::server::service'],
+            Class['postgresql::server::reload'],
+          ],
         }
       }
     }
