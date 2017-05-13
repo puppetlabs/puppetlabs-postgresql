@@ -16,60 +16,63 @@ define postgresql::server::config_entry (
   #
   # XXX: This resource supports setting other variables without knowing
   # their names.  Do not add them here.
-  $requires_restart = [
-    'data_directory',
-    'hba_file',
-    'ident_file',
-    'external_pid_file',
-    'listen_addresses',
-    'port',
-    'max_connections',
-    'superuser_reserved_connections',
-    'unix_socket_directory',
-    'unix_socket_directories',
-    'unix_socket_group',
-    'unix_socket_permissions',
-    'bonjour',
-    'bonjour_name',
-    'ssl',
-    'ssl_ciphers',
-    'ssl_prefer_server_ciphers',            # New on 9.4
-    'ssl_ecdh_curve',                       # New on 9.4
-    'ssl_cert_file',                        # New on 9.2
-    'ssl_key_file',                         # New on 9.2
-    'ssl_ca_file',                          # New on 9.2
-    'ssl_crl_file',                         # New on 9.2
-    'shared_buffers',
-    'huge_pages',                           # New on 9.4
-    'max_prepared_transactions',
-    'max_files_per_process',
-    'shared_preload_libraries',
-    'max_worker_processes',                 # New on 9.4
-    'old_snapshot_threshold',               # New on 9.6
-    'wal_level',
-    'wal_log_hints',                        # New on 9.4
-    'wal_buffers',
-    'archive_mode',
-    'max_wal_senders',
-    'max_replication_slots',                # New on 9.4
-    'track_commit_timestamp',               # New on 9.5
-    'hot_standby',
-    'logging_collector',
-    'cluster_name',                         # New on 9.5
-    'silent_mode',
-    'track_activity_query_size',
-    'autovacuum_max_workers',
-    'autovacuum_freeze_max_age',
-    'autovacuum_multixact_freeze_max_age',  # New on 9.5
-    'max_locks_per_transaction',
-    'max_pred_locks_per_transaction',
-  ]
+  $requires_restart_until = {
+    'data_directory'                      => undef,
+    'hba_file'                            => undef,
+    'ident_file'                          => undef,
+    'external_pid_file'                   => undef,
+    'listen_addresses'                    => undef,
+    'port'                                => undef,
+    'max_connections'                     => undef,
+    'superuser_reserved_connections'      => undef,
+    'unix_socket_directory'               => undef,
+    'unix_socket_directories'             => undef,
+    'unix_socket_group'                   => undef,
+    'unix_socket_permissions'             => undef,
+    'bonjour'                             => undef,
+    'bonjour_name'                        => undef,
+    'ssl'                                 => '10',
+    'ssl_ciphers'                         => '10',
+    'ssl_prefer_server_ciphers'           => '10',    # New on 9.4
+    'ssl_ecdh_curve'                      => '10',    # New on 9.4
+    'ssl_cert_file'                       => '10',    # New on 9.2
+    'ssl_key_file'                        => '10',    # New on 9.2
+    'ssl_ca_file'                         => '10',    # New on 9.2
+    'ssl_crl_file'                        => '10',    # New on 9.2
+    'shared_buffers'                      => undef,
+    'huge_pages'                          => undef,   # New on 9.4
+    'max_prepared_transactions'           => undef,
+    'max_files_per_process'               => undef,
+    'shared_preload_libraries'            => undef,
+    'max_worker_processes'                => undef,   # New on 9.4
+    'old_snapshot_threshold'              => undef,   # New on 9.6
+    'wal_level'                           => undef,
+    'wal_log_hints'                       => undef,   # New on 9.4
+    'wal_buffers'                         => undef,
+    'archive_mode'                        => undef,
+    'max_wal_senders'                     => undef,
+    'max_replication_slots'               => undef,   # New on 9.4
+    'track_commit_timestamp'              => undef,   # New on 9.5
+    'hot_standby'                         => undef,
+    'logging_collector'                   => undef,
+    'cluster_name'                        => undef,   # New on 9.5
+    'silent_mode'                         => undef,
+    'track_activity_query_size'           => undef,
+    'autovacuum_max_workers'              => undef,
+    'autovacuum_freeze_max_age'           => undef,
+    'autovacuum_multixact_freeze_max_age' => undef,   # New on 9.5
+    'max_locks_per_transaction'           => undef,
+    'max_pred_locks_per_transaction'      => undef,
+  }
 
   Exec {
     logoutput => 'on_failure',
   }
 
-  if ! ($name in $requires_restart) {
+  if ! ($name in $requires_restart_until and (
+    ! $requires_restart_until[$name] or
+    versioncmp($postgresql::server::_version, $requires_restart_until[$name]) < 0
+  )) {
     Postgresql_conf {
       notify => Class['postgresql::server::reload'],
     }
