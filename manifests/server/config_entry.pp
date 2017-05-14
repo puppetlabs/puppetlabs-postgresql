@@ -20,6 +20,7 @@ define postgresql::server::config_entry (
     'data_directory',
     'hba_file',
     'ident_file',
+    'external_pid_file',
     'listen_addresses',
     'port',
     'max_connections',
@@ -32,20 +33,34 @@ define postgresql::server::config_entry (
     'bonjour_name',
     'ssl',
     'ssl_ciphers',
+    'ssl_prefer_server_ciphers',            # New on 9.4
+    'ssl_ecdh_curve',                       # New on 9.4
+    'ssl_cert_file',                        # New on 9.2
+    'ssl_key_file',                         # New on 9.2
+    'ssl_ca_file',                          # New on 9.2
+    'ssl_crl_file',                         # New on 9.2
     'shared_buffers',
+    'huge_pages',                           # New on 9.4
     'max_prepared_transactions',
     'max_files_per_process',
     'shared_preload_libraries',
+    'max_worker_processes',                 # New on 9.4
+    'old_snapshot_threshold',               # New on 9.6
     'wal_level',
+    'wal_log_hints',                        # New on 9.4
     'wal_buffers',
     'archive_mode',
     'max_wal_senders',
+    'max_replication_slots',                # New on 9.4
+    'track_commit_timestamp',               # New on 9.5
     'hot_standby',
     'logging_collector',
+    'cluster_name',                         # New on 9.5
     'silent_mode',
     'track_activity_query_size',
     'autovacuum_max_workers',
     'autovacuum_freeze_max_age',
+    'autovacuum_multixact_freeze_max_age',  # New on 9.5
     'max_locks_per_transaction',
     'max_pred_locks_per_transaction',
   ]
