@@ -9,15 +9,10 @@ define postgresql::server::grant (
   $psql_user        = $postgresql::server::user,
   $port             = $postgresql::server::port,
   $onlyif_exists    = false,
-  $dialect          = $postgresql::server::dialect,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
-
-  if ($dialect != 'postgres') and ($dialect != 'redshift') {
-    fail("dialect must be set to a valid value")
-  }
 
   if ! $object_name {
     $_object_name = $db
@@ -276,7 +271,7 @@ define postgresql::server::grant (
 
   $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${_togrant_object}\" TO
       \"${role}\""
-  postgresql_psql { "grant:${name}":
+  postgresql_psql { "${title}: grant:${name}":
     command          => $grant_cmd,
     db               => $on_db,
     port             => $port_override,
@@ -290,10 +285,10 @@ define postgresql::server::grant (
   }
 
   if($role != undef and defined(Postgresql::Server::Role[$role])) {
-    Postgresql::Server::Role[$role]->Postgresql_psql["grant:${name}"]
+    Postgresql::Server::Role[$role]->Postgresql_psql["${title}: grant:${name}"]
   }
 
   if($db != undef and defined(Postgresql::Server::Database[$db])) {
-    Postgresql::Server::Database[$db]->Postgresql_psql["grant:${name}"]
+    Postgresql::Server::Database[$db]->Postgresql_psql["${title}: grant:${name}"]
   }
 }
