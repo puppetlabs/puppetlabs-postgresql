@@ -500,7 +500,7 @@ Default value: initdb's default path.
 
 Set a prefix for the server logs.
 
-Default value: '%t '.
+Default value: `undef`.
 
 ##### `manage_package_repo`
 
@@ -805,7 +805,7 @@ Default value: `undef`, which is effectively 'C'.
 
 Set a prefix for the server logs.
 
-Default value: '%t'
+Default value: '$log_line_prefix' variable set in `postgresql::server` or `postgresql::globals`.
 
 ##### `manage_pg_hba_conf`
 
