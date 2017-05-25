@@ -1,15 +1,15 @@
 # Activate an extension on a postgresql database
 define postgresql::server::extension (
   $database,
-  $extension = $name,
-  $ensure = 'present',
-  $package_name = undef,
-  $package_ensure = undef,
+  $extension        = $name,
+  String[1] $ensure = 'present',
+  $package_name     = undef,
+  $package_ensure   = undef,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
-  $user          = $postgresql::server::user
-  $group         = $postgresql::server::group
-  $psql_path     = $postgresql::server::psql_path
+  $user             = $postgresql::server::user
+  $group            = $postgresql::server::group
+  $psql_path        = $postgresql::server::psql_path
 
   case $ensure {
     'present': {
