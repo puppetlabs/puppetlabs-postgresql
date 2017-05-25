@@ -1,7 +1,7 @@
 # Install the contrib postgresql packaging. See README.md for more details.
 class postgresql::server::contrib (
-  String $package_name                                = $postgresql::params::contrib_package_name,
-  Enum['present', 'absent', 'latest', 'installed'] $package_ensure = 'present'
+  String $package_name      = $postgresql::params::contrib_package_name,
+  String[1] $package_ensure = 'present'
 ) inherits postgresql::params {
 
   if $::osfamily == 'Gentoo' {
