@@ -30,6 +30,7 @@ class postgresql::server::config {
       group  => $group,
       mode   => '0640',
       warn   => true,
+      order  => 'numeric',
       notify => Class['postgresql::server::reload'],
     }
 
@@ -157,6 +158,7 @@ class postgresql::server::config {
       group  => $group,
       mode   => '0640',
       warn   => true,
+      order  => 'numeric',
       notify => Class['postgresql::server::reload'],
     }
   }
@@ -167,6 +169,7 @@ class postgresql::server::config {
       group  => $group,
       mode   => '0640',
       warn   => true,
+      order  => 'numeric',
       notify => Class['postgresql::server::reload'],
     }
   }
