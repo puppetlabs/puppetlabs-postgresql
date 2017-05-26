@@ -6,6 +6,7 @@ define postgresql::server::grant_role (
   $psql_db          = $postgresql::server::default_database,
   $psql_user        = $postgresql::server::user,
   $port             = $postgresql::server::port,
+  $dialect          = $postgresql::server::dialect,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   validate_string($group)
@@ -16,6 +17,11 @@ define postgresql::server::grant_role (
   if empty($role) {
     fail('$role must be set')
   }
+
+  if $dialect != 'postgres' {
+    fail("dialect must be postgres to use this feature (for redshift, use dbgroup instead)")
+  }
+
   case $ensure {
     'present': {
       $command = "GRANT \"${group}\" TO \"${role}\""

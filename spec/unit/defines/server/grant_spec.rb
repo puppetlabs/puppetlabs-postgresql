@@ -47,7 +47,7 @@ describe 'postgresql::server::grant', :type => :define do
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql('grant:test').with(
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT USAGE ON SEQUENCE "test" TO\s* "test"/m,
         'unless'  => /SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)/m,
@@ -71,7 +71,7 @@ describe 'postgresql::server::grant', :type => :define do
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql('grant:test').with(
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* "test"/m,
         'unless'  => /SELECT 1 FROM \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\) P\s* HAVING count\(P\.sequence_name\) = 0/m,
@@ -94,7 +94,7 @@ describe 'postgresql::server::grant', :type => :define do
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql("grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1' } ).with_port( 5432 ) }
+    it { is_expected.to contain_postgresql_psql("test: grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1' } ).with_port( 5432 ) }
   end
 
   context "with specific db connection settings - including port" do
@@ -113,7 +113,7 @@ describe 'postgresql::server::grant', :type => :define do
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql("grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ) }
+    it { is_expected.to contain_postgresql_psql("test: grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ) }
   end
 
   context "with specific db connection settings - port overriden by explicit parameter" do
@@ -133,7 +133,7 @@ describe 'postgresql::server::grant', :type => :define do
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql("grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ).with_port( '5678' ) }
+    it { is_expected.to contain_postgresql_psql("test: grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ).with_port( '5678' ) }
   end
 
   context 'invalid objectype' do
