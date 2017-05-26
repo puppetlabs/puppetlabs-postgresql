@@ -495,12 +495,6 @@ Overrides the default PostgreSQL log directory.
 
 Default value: initdb's default path.
 
-##### `log_line_prefix`
-
-Set a prefix for the server logs.
-
-Default value: `undef`.
-
 ##### `manage_package_repo`
 
 Sets up official PostgreSQL repositories on your host if set to `true`.
@@ -792,12 +786,6 @@ Sets the default database locale for all databases created with this module. On 
 Default value: `undef`, which is effectively 'C'.
 
 **On Debian, you must ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.**
-
-##### `log_line_prefix`
-
-Set a prefix for the server logs.
-
-Default value: '$log_line_prefix' variable set in `postgresql::server` or `postgresql::globals`.
 
 ##### `manage_pg_hba_conf`
 
