@@ -3,6 +3,13 @@ require 'spec_helper'
 describe 'postgresql::repo', :type => :class do
   let :facts do
     {
+      :os => {
+        :name                 => 'Debian',
+        :family               => 'Debian',
+        :release => {
+          :full               => '6.0'
+        }
+      },
       :osfamily               => 'Debian',
       :operatingsystem        => 'Debian',
       :operatingsystemrelease => '6.0',
