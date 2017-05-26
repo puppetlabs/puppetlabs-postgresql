@@ -56,14 +56,14 @@ define postgresql::server::role(
 
   if $ensure == 'absent' {
     Postgresql_psql {
-      db         => $db,
-      port       => $port_override,
-      psql_user  => $psql_user,
-      psql_group => $psql_group,
-      psql_path  => $psql_path,
+      db               => $db,
+      port             => $port_override,
+      psql_user        => $psql_user,
+      psql_group       => $psql_group,
+      psql_path        => $psql_path,
       connect_settings => $connect_settings,
-      cwd        => $module_workdir,
-      require    => [
+      cwd              => $module_workdir,
+      require          => [
         Postgresql_psql["${title}: DROP ${role_keyword} ${username}"],
         Class['postgresql::server'],
       ],
@@ -116,14 +116,14 @@ define postgresql::server::role(
     }
   
     Postgresql_psql {
-      db         => $db,
-      port       => $port_override,
-      psql_user  => $psql_user,
-      psql_group => $psql_group,
-      psql_path  => $psql_path,
+      db               => $db,
+      port             => $port_override,
+      psql_user        => $psql_user,
+      psql_group       => $psql_group,
+      psql_path        => $psql_path,
       connect_settings => $connect_settings,
-      cwd        => $module_workdir,
-      require    => [
+      cwd              => $module_workdir,
+      require          => [
         Postgresql_psql["${title}: CREATE ${role_keyword} ${username} ENCRYPTED PASSWORD ****"],
         Class['postgresql::server'],
       ],
