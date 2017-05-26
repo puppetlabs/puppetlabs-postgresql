@@ -123,7 +123,8 @@ For example, to overwrite the default `locale` and `encoding` for all classes, u
 class { 'postgresql::globals':
   encoding => 'UTF-8',
   locale   => 'en_US.UTF-8',
-}->
+}
+
 class { 'postgresql::server':
 }
 ```
@@ -134,7 +135,8 @@ To use a specific version of the PostgreSQL package:
 class { 'postgresql::globals':
   manage_package_repo => true,
   version             => '9.2',
-}->
+}
+
 class { 'postgresql::server': }
 ```
 
