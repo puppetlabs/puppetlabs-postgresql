@@ -57,7 +57,6 @@ For default settings, declare the `postgresql::server` class as above. To custom
 class { 'postgresql::server':
   ip_mask_deny_postgres_user => '0.0.0.0/32',
   ip_mask_allow_all_users    => '0.0.0.0/0',
-  listen_addresses           => '*',
   ipv4acls                   => ['hostssl all johndoe 192.168.0.0/24 cert'],
   postgres_password          => 'TPSrep0rt!',
 }
@@ -785,13 +784,6 @@ Default value: '127.0.0.1/32'.
 Specifies the IP mask from which remote connections should be denied for the postgres superuser.
 
 Default value: '0.0.0.0/0', which denies any remote connection.
-
-##### `listen_addresses`
-
-Specifies the addresses the server accepts connections to. Valid values:
-  * 'localhost': Accept connections from local host only.
-  * '*': Accept connections from any remote machine.
-  * Specified comma-separated list of hostnames or IP addresses.
 
 ##### `locale`
 
