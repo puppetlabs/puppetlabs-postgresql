@@ -6,6 +6,7 @@ define postgresql::server::index (
   Array[String] $columns,
   Boolean       $unique            = false,
   Boolean       $concurrently      = false,
+  String        $method            = 'btree',
   String        $psql_user         = $postgresql::server::user,
   String        $psql_group        = $postgresql::server::group,
   Integer       $port              = $postgresql::server::port,
@@ -37,7 +38,7 @@ define postgresql::server::index (
 
   if $ensure == 'present' {
     postgresql_psql { "${db}: CREATE INDEX ${index_name}" :
-      command => "CREATE ${_unique} INDEX ${_concurrently} ${index_name} ON ${table}(${columns_string})",
+      command => "CREATE ${_unique} INDEX ${_concurrently} ${index_name} ON ${table} USING ${method} (${columns_string})",
       unless  => $index_existence_query,
     }
   } else {
