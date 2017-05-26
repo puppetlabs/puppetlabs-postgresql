@@ -3,6 +3,13 @@ require 'spec_helper'
 describe 'postgresql::server', :type => :class do
   let :facts do
     {
+      :os => {
+        :family  => 'Debian',
+        :name => 'Debian',
+        :release => {
+          :full => '6.0'
+        }
+      },
       :osfamily => 'Debian',
       :operatingsystem => 'Debian',
       :lsbdistid => 'Debian',
