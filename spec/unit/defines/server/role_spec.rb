@@ -213,7 +213,6 @@ describe 'postgresql::server::role', :type => :define do
       is_expected.to contain_postgresql_psql('test: ALTER USER test ENCRYPTED PASSWORD ****').with({
         'command'     => "ALTER USER \"test\" PASSWORD '$NEWPGPASSWD'",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
         'port'        => "5432",
       })
     end
@@ -257,7 +256,6 @@ describe 'postgresql::server::role', :type => :define do
       is_expected.to contain_postgresql_psql('test: ALTER USER "test" PASSWORD DISABLE').with({
         'command'     => "ALTER USER \"test\" PASSWORD DISABLE",
         'environment' => [],
-        'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = ''",
         'port'        => "5432",
       })
     end
@@ -296,7 +294,6 @@ describe 'postgresql::server::role', :type => :define do
       is_expected.to contain_postgresql_psql('test: ALTER USER test ENCRYPTED PASSWORD ****').with({
         'command'     => "ALTER USER \"test\" PASSWORD '$NEWPGPASSWD'",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
         'port'        => "5432",
 
         'connect_settings' => { 'PGHOST'     => 'redshift-db-server',
@@ -340,7 +337,6 @@ describe 'postgresql::server::role', :type => :define do
       is_expected.to contain_postgresql_psql('test: ALTER USER test ENCRYPTED PASSWORD ****').with({
         'command'     => "ALTER USER \"test\" PASSWORD '$NEWPGPASSWD'",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
         'connect_settings' => { 'PGHOST'     => 'redshift-db-server',
                                 'DBVERSION'  => '9.1',
                                 'PGPORT'     => '1234',

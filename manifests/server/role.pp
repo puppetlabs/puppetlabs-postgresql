@@ -48,7 +48,7 @@ define postgresql::server::role(
     } else {
       $role_connection_limit = $connection_limit
     }
-    $password_table = "pg_user"
+    $password_table = "pg_shadow"
 
   } else {
     fail("dialect must be set to a valid value")
@@ -192,7 +192,8 @@ define postgresql::server::role(
       # $login can act as a string in Redshift, which is useful for passing PASSWORD DISABLE
       postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${login_sql}":
         command => "ALTER ${role_keyword} \"${username}\" ${login_sql}",
-        unless => "SELECT 1 FROM ${password_table} WHERE usename = '${username}' AND passwd = ''",
+        # pg_shadow cannot be selected from in Redshift, even by superusers. As such, this command will always be run when invoked.
+        #unless => "SELECT 1 FROM ${password_table} WHERE usename = '${username}' AND passwd = ''",
       }
     }
   
@@ -208,10 +209,19 @@ define postgresql::server::role(
         $pwd_md5 = md5("${password_hash}${username}")
         $pwd_hash_sql = "md5${pwd_md5}"
       }
-      postgresql_psql { "${title}: ALTER ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
-        command     => "ALTER ${role_keyword} \"${username}\" ${password_sql}",
-        unless      => "SELECT 1 FROM ${password_table} WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'",
-        environment => $environment,
+      if ($dialect == 'postgres') {
+        postgresql_psql { "${title}: ALTER ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
+          command     => "ALTER ${role_keyword} \"${username}\" ${password_sql}",
+          unless      => "SELECT 1 FROM ${password_table} WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'",
+          environment => $environment,
+        }
+      } elsif ($dialect == 'redshift') {
+        postgresql_psql { "${title}: ALTER ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
+          command     => "ALTER ${role_keyword} \"${username}\" ${password_sql}",
+          # pg_shadow cannot be selected from in Redshift, even by superusers. As such, this command will always be run when invoked.
+          #unless      => "SELECT 1 FROM ${password_table} WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'",
+          environment => $environment,
+        }
       }
     }
   }
