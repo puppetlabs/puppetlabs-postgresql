@@ -4,11 +4,17 @@ describe 'postgresql::globals', type: :class do
   context 'on a debian 6' do
     let (:facts) do
       {
-        :osfamily               => 'Debian',
-        :operatingsystem        => 'Debian',
-        :operatingsystemrelease => '6.0',
-        :lsbdistid              => 'Debian',
-        :lsbdistcodename        => 'squeeze'
+        lsbdistid: 'Debian',
+        lsbdistcodename: 'squeeze',
+        operatingsystem: 'Debian',
+        operatingsystemrelease: '6.0',
+        os: {
+          family: 'Debian',
+          lsb: { distid: 'Debian', distcodename: 'squeeze' },
+          name: 'Debian',
+          release: { full: '6.0' },
+        },
+        osfamily: 'Debian',
       }
     end
 
