@@ -167,10 +167,6 @@ postgresql::server::role{'super2':
   superuser     => true,
 
   connect_settings => {},
-  require          => [
-                       Class['postgresql::globals'],
-                       Class['postgresql::server::service'],
-                      ],
 }
 
 # Now using this new user connect via TCP
