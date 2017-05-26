@@ -240,6 +240,29 @@ describe 'postgresql::server::role', :type => :define do
     end
   end
 
+  context 'login set to PASSWORD DISABLE (redshift)' do
+
+    let :params do
+      {
+        :login => "PASSWORD DISABLE",
+      }
+    end
+  
+    let :pre_condition do
+     "class {'postgresql::server': dialect => 'redshift'}"
+    end
+  
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it 'should have an alter statement to set PASSWORD DISABLE' do
+      is_expected.to contain_postgresql_psql('test: ALTER USER "test" PASSWORD DISABLE').with({
+        'command'     => "ALTER USER \"test\" PASSWORD DISABLE",
+        'environment' => [],
+        'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = ''",
+        'port'        => "5432",
+      })
+    end
+  end
+
   context "with specific db connection settings - default port (redshift)" do
     let :params do
       {
