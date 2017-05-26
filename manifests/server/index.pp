@@ -4,6 +4,8 @@ define postgresql::server::index (
   String        $db,
   String        $table,
   Array[String] $columns,
+  Boolean       $unique            = false,
+  Boolean       $concurrently      = false,
   String        $psql_user         = $postgresql::server::user,
   String        $psql_group        = $postgresql::server::group,
   Integer       $port              = $postgresql::server::port,
@@ -23,9 +25,19 @@ define postgresql::server::index (
 
   $index_existence_query = "SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = '${index_name}'"
 
+  $_unique = $unique ? {
+    true    => 'UNIQUE',
+    default => '',
+  }
+
+  $_concurrently = $concurrently ? {
+    true    => 'CONCURRENTLY',
+    default => '',
+  }
+
   if $ensure == 'present' {
     postgresql_psql { "${db}: CREATE INDEX ${index_name}" :
-      command => "CREATE INDEX ${index_name} ON ${table}(${columns_string})",
+      command => "CREATE ${_unique} INDEX ${_concurrently} ${index_name} ON ${table}(${columns_string})",
       unless  => $index_existence_query,
     }
   } else {
