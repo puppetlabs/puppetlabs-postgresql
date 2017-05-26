@@ -8,6 +8,12 @@ describe 'postgresql::server', :type => :class do
       :lsbdistid => 'Debian',
       :lsbdistcodename => 'jessie',
       :operatingsystemrelease => '8.0',
+      :os => {
+        family: 'Debian',
+        lsb: { distid: 'Debian', distcodename: 'squeeze' },
+        name: 'Debian',
+        release: { full: '6.0' },
+      },
       :concat_basedir => tmpfilename('server'),
       :kernel => 'Linux',
       :id => 'root',
