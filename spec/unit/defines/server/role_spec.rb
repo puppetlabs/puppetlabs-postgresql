@@ -157,6 +157,37 @@ describe 'postgresql::server::role', :type => :define do
     end
   end
 
+  context "drop user" do
+    let :params do
+      {
+        :connect_settings => { 'PGHOST'     => 'postgres-db-server',
+                           'DBVERSION'  => '9.1',
+                           'PGPORT'     => '1234',
+                           'PGUSER'     => 'login-user',
+                           'PGPASSWORD' => 'login-pass' },
+        :ensure => 'absent',
+      }
+    end
+
+    let :pre_condition do
+     "class {'postgresql::server': dialect => 'postgres'}"
+    end
+
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it 'should have drop role for "test" user' do
+      is_expected.to contain_postgresql_psql('test: DROP ROLE test').with({
+        'command'     => "DROP ROLE \"test\"",
+        'environment' => ["rp_env"],
+        'unless'      => "SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'test')",
+        'connect_settings' => { 'PGHOST'     => 'postgres-db-server',
+                                'DBVERSION'  => '9.1',
+                                'PGPORT'     => '1234',
+                                'PGUSER'     => 'login-user',
+                                'PGPASSWORD' => 'login-pass' },
+      })
+    end
+  end
+
   context 'standalone (redshift)' do
 
     let :params do
@@ -182,7 +213,6 @@ describe 'postgresql::server::role', :type => :define do
       is_expected.to contain_postgresql_psql('test: ALTER USER test ENCRYPTED PASSWORD ****').with({
         'command'     => "ALTER USER \"test\" PASSWORD '$NEWPGPASSWD'",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
         'port'        => "5432",
       })
     end
@@ -204,6 +234,28 @@ describe 'postgresql::server::role', :type => :define do
         'command'     => "CREATE USER \"test\" PASSWORD DISABLE NOCREATEUSER NOCREATEDB CONNECTION LIMIT UNLIMITED",
         'environment' => [],
         'unless'      => "SELECT 1 FROM pg_user_info WHERE usename = 'test'",
+        'port'        => "5432",
+      })
+    end
+  end
+
+  context 'login set to PASSWORD DISABLE (redshift)' do
+
+    let :params do
+      {
+        :login => "PASSWORD DISABLE",
+      }
+    end
+  
+    let :pre_condition do
+     "class {'postgresql::server': dialect => 'redshift'}"
+    end
+  
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it 'should have an alter statement to set PASSWORD DISABLE' do
+      is_expected.to contain_postgresql_psql('test: ALTER USER "test" PASSWORD DISABLE').with({
+        'command'     => "ALTER USER \"test\" PASSWORD DISABLE",
+        'environment' => [],
         'port'        => "5432",
       })
     end
@@ -242,7 +294,6 @@ describe 'postgresql::server::role', :type => :define do
       is_expected.to contain_postgresql_psql('test: ALTER USER test ENCRYPTED PASSWORD ****').with({
         'command'     => "ALTER USER \"test\" PASSWORD '$NEWPGPASSWD'",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
         'port'        => "5432",
 
         'connect_settings' => { 'PGHOST'     => 'redshift-db-server',
@@ -286,7 +337,37 @@ describe 'postgresql::server::role', :type => :define do
       is_expected.to contain_postgresql_psql('test: ALTER USER test ENCRYPTED PASSWORD ****').with({
         'command'     => "ALTER USER \"test\" PASSWORD '$NEWPGPASSWD'",
         'environment' => "NEWPGPASSWD=new-pa$s",
-        'unless'      => "SELECT 1 FROM pg_user WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
+        'connect_settings' => { 'PGHOST'     => 'redshift-db-server',
+                                'DBVERSION'  => '9.1',
+                                'PGPORT'     => '1234',
+                                'PGUSER'     => 'login-user',
+                                'PGPASSWORD' => 'login-pass' },
+      })
+    end
+  end
+
+  context "drop user (redshift)" do
+    let :params do
+      {
+        :connect_settings => { 'PGHOST'     => 'redshift-db-server',
+                           'DBVERSION'  => '9.1',
+                           'PGPORT'     => '1234',
+                           'PGUSER'     => 'login-user',
+                           'PGPASSWORD' => 'login-pass' },
+        :ensure => 'absent',
+      }
+    end
+
+    let :pre_condition do
+     "class {'postgresql::server': dialect => 'redshift'}"
+    end
+
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it 'should have drop role for "test" user' do
+      is_expected.to contain_postgresql_psql('test: DROP USER test').with({
+        'command'     => "DROP USER \"test\"",
+        'environment' => ["rp_env"],
+        'unless'      => "SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM pg_user_info WHERE usename = 'test')",
         'connect_settings' => { 'PGHOST'     => 'redshift-db-server',
                                 'DBVERSION'  => '9.1',
                                 'PGPORT'     => '1234',
