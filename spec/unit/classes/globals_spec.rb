@@ -4,6 +4,13 @@ describe 'postgresql::globals', type: :class do
   context 'on a debian 6' do
     let (:facts) do
       {
+        :os => {
+          :family               => 'Debian',
+          :name                 => 'Debian',
+          :release => {
+            :full => '6.0'
+          }
+        },
         :osfamily               => 'Debian',
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '6.0',
