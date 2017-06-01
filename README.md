@@ -486,6 +486,12 @@ Default value: `undef`, which is effectively 'C'.
 
 **On Debian, you'll need to ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.**
 
+##### `data_checksums`
+
+Optional boolean to turn on data checksums during `initdb`.
+
+Default value: `undef`, which is the same as `false`.
+
 ##### `timezone`
 
 Sets the default timezone of the postgresql server. The postgresql built-in default is taking the systems timezone information.
