@@ -1,11 +1,9 @@
 # This class installs the postgresql-docs See README.md for more
 # details.
 class postgresql::lib::docs (
-  $package_name   = $postgresql::params::docs_package_name,
-  $package_ensure = 'present',
+  String $package_name      = $postgresql::params::docs_package_name,
+  String[1] $package_ensure = 'present',
 ) inherits postgresql::params {
-
-  validate_string($package_name)
 
   package { 'postgresql-docs':
     ensure => $package_ensure,
