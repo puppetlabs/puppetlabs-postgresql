@@ -9,9 +9,9 @@ describe Puppet::Type.type(:postgresql_conn_validator).provider(:ruby) do
 
   let(:attributes) do
     {
-      :psql_path => '/usr/bin/psql',
-      :host => 'db.test.com',
-      :port => '4444',
+      :psql_path   => '/usr/bin/psql',
+      :host        => 'db.test.com',
+      :port        => '4444',
       :db_username => 'testuser',
       :db_password => 'testpass'
     }
@@ -37,8 +37,8 @@ describe Puppet::Type.type(:postgresql_conn_validator).provider(:ruby) do
       {
         :connect_settings => {
           :PGPASSWORD => 'testpass',
-          :PGHOST => 'db.test.com',
-          :PGPORT => '1234'
+          :PGHOST     => 'db.test.com',
+          :PGPORT     => '1234'
         }
       }
     end
