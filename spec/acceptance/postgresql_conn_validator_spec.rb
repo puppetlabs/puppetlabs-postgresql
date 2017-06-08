@@ -10,13 +10,13 @@ describe 'postgresql_conn_validator', :unless => UNSUPPORTED_PLATFORMS.include?(
       password_hash => postgresql_password('testuser','test1'),
     }->
     postgresql::server::database { 'testdb':
-      owner => 'testuser',
+      owner   => 'testuser',
       require => Postgresql::Server::Role['testuser']
     }->
     postgresql::server::database_grant { 'allow connect for testuser':
       privilege => 'CONNECT',
-      db => 'testdb',
-      role => 'testuser',
+      db        => 'testdb',
+      role      => 'testuser',
     }
 
   EOS
@@ -28,11 +28,11 @@ describe 'postgresql_conn_validator', :unless => UNSUPPORTED_PLATFORMS.include?(
       pp = <<-EOS
         #{install_pp}->
         postgresql_conn_validator { 'validate this':
-          db_name => 'testdb',
+          db_name     => 'testdb',
           db_username => 'testuser',
           db_password => 'test1',
-          host => 'localhost',
-          psql_path => '/usr/bin/psql',
+          host        => 'localhost',
+          psql_path   => '/usr/bin/psql',
         }
     EOS
 
@@ -65,7 +65,7 @@ describe 'postgresql_conn_validator', :unless => UNSUPPORTED_PLATFORMS.include?(
         #{install_pp}->
         postgresql_conn_validator { 'validate this':
           psql_path => '/usr/bin/psql',
-          tries => 3
+          tries     => 3
         }
      EOS
 

@@ -18,7 +18,7 @@ define postgresql::validate_db_connection(
   include postgresql::client
   include postgresql::params
 
-  warning("postgresql::validate_db_connection is deprecated, please use postgresql_conn_validator.")
+  warning('postgresql::validate_db_connection is deprecated, please use postgresql_conn_validator.')
 
   $psql_path = $postgresql::params::psql_path
   $module_workdir = $postgresql::params::module_workdir
