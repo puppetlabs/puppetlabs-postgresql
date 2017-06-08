@@ -44,7 +44,8 @@ PostgreSQL is a high-performance, free, open-source relational database server. 
 To configure a basic default PostgreSQL server, declare the `postgresql::server` class.
 
 ```puppet
-class { 'postgresql::server': }
+class { 'postgresql::server':
+}
 ```
 
 ## Usage
@@ -57,7 +58,6 @@ For default settings, declare the `postgresql::server` class as above. To custom
 class { 'postgresql::server':
   ip_mask_deny_postgres_user => '0.0.0.0/32',
   ip_mask_allow_all_users    => '0.0.0.0/0',
-  listen_addresses           => '*',
   ipv4acls                   => ['hostssl all johndoe 192.168.0.0/24 cert'],
   postgres_password          => 'TPSrep0rt!',
 }
@@ -79,7 +79,8 @@ For more details about server configuration parameters, consult the [PostgreSQL 
 You can set up a variety of PostgreSQL databases with the `postgresql::server::db` defined type. For instance, to set up a database for PuppetDB:
 
 ```puppet
-class { 'postgresql::server': }
+class { 'postgresql::server':
+}
 
 postgresql::server::db { 'mydatabasename':
   user     => 'mydatabaseuser',
@@ -92,10 +93,11 @@ postgresql::server::db { 'mydatabasename':
 To manage users, roles, and permissions:
 
 ```puppet
-class { 'postgresql::server': }
+class { 'postgresql::server':
+}
 
 postgresql::server::role { 'marmot':
-password_hash => postgresql_password('marmot', 'mypasswd'),
+  password_hash => postgresql_password('marmot', 'mypasswd'),
 }
 
 postgresql::server::database_grant { 'test1':
@@ -124,7 +126,8 @@ For example, to overwrite the default `locale` and `encoding` for all classes, u
 class { 'postgresql::globals':
   encoding => 'UTF-8',
   locale   => 'en_US.UTF-8',
-}->
+}
+
 class { 'postgresql::server':
 }
 ```
@@ -135,8 +138,10 @@ To use a specific version of the PostgreSQL package:
 class { 'postgresql::globals':
   manage_package_repo => true,
   version             => '9.2',
-}->
-class { 'postgresql::server': }
+}
+
+class { 'postgresql::server':
+}
 ```
 
 ### Manage remote users, roles, and permissions
@@ -151,32 +156,27 @@ You can provide a `connect_settings` hash for each of the Puppet resources, or y
 
 ```puppet
 $connection_settings_super2 = {
-                                 'PGUSER'     => "super2",
-                                 'PGPASSWORD' => "foobar2",
-                                 'PGHOST'     => "127.0.0.1",
-                                 'PGPORT'     => "5432",
-                                 'PGDATABASE' => "postgres",
-                                }
+  'PGUSER'     => 'super2',
+  'PGPASSWORD' => 'foobar2',
+  'PGHOST'     => '127.0.0.1',
+  'PGPORT'     => '5432',
+  'PGDATABASE' => 'postgres',
+}
 
 include postgresql::server
 
 # Connect with no special settings, i.e domain sockets, user postgres
-postgresql::server::role{'super2':
-  password_hash => "foobar2",
-  superuser     => true,
+postgresql::server::role { 'super2':
+  password_hash    => 'foobar2',
+  superuser        => true,
 
   connect_settings => {},
-  require          => [
-                       Class['postgresql::globals'],
-                       Class['postgresql::server::service'],
-                      ],
 }
 
 # Now using this new user connect via TCP
 postgresql::server::database { 'db1':
   connect_settings => $connection_settings_super2,
-
-require => Postgresql::Server::Role['super2'],
+  require          => Postgresql::Server::Role['super2'],
 }
 ```
 
@@ -186,7 +186,7 @@ To create an access rule for `pg_hba.conf`:
 
 ```puppet
 postgresql::server::pg_hba_rule { 'allow application network to access app database':
-  description => "Open up PostgreSQL for access from 200.1.2.0/24",
+  description => 'Open up PostgreSQL for access from 200.1.2.0/24',
   type        => 'host',
   database    => 'app',
   user        => 'app',
@@ -208,7 +208,7 @@ By default, `pg_hba_rule` requires that you include `postgresql::server`. Howeve
 
 ```puppet
 postgresql::server::pg_hba_rule { 'allow application network to access app database':
-  description        => "Open up postgresql for access from 200.1.2.0/24",
+  description        => 'Open up postgresql for access from 200.1.2.0/24',
   type               => 'host',
   database           => 'app',
   user               => 'app',
@@ -224,7 +224,7 @@ postgresql::server::pg_hba_rule { 'allow application network to access app datab
 To create a user name map for the pg_ident.conf:
 
 ```puppet
-postgresql::server::pg_ident_rule{ 'Map the SSL certificate of the backup server as a replication user':
+postgresql::server::pg_ident_rule { 'Map the SSL certificate of the backup server as a replication user':
   map_name          => 'sslrepli',
   system_username   => 'repli1.example.com',
   database_username => 'replication',
@@ -245,22 +245,22 @@ sslrepli  repli1.example.com  replication
 To create the recovery configuration file (`recovery.conf`):
 
 ```puppet
-postgresql::server::recovery{ 'Create a recovery.conf file with the following defined parameters':
-  restore_command                => 'cp /mnt/server/archivedir/%f %p',
-  archive_cleanup_command        => undef,
-  recovery_end_command           => undef,
-  recovery_target_name           => 'daily backup 2015-01-26',
-  recovery_target_time           => '2015-02-08 22:39:00 EST',
-  recovery_target_xid            => undef,
-  recovery_target_inclusive      => true,
-  recovery_target                => 'immediate',
-  recovery_target_timeline       => 'latest',
-  pause_at_recovery_target       => true,
-  standby_mode                   => 'on',
-  primary_conninfo               => 'host=localhost port=5432',
-  primary_slot_name              => undef,
-  trigger_file                   => undef,
- recovery_min_apply_delay        => 0,
+postgresql::server::recovery { 'Create a recovery.conf file with the following defined parameters':
+  restore_command           => 'cp /mnt/server/archivedir/%f %p',
+  archive_cleanup_command   => undef,
+  recovery_end_command      => undef,
+  recovery_target_name      => 'daily backup 2015-01-26',
+  recovery_target_time      => '2015-02-08 22:39:00 EST',
+  recovery_target_xid       => undef,
+  recovery_target_inclusive => true,
+  recovery_target           => 'immediate',
+  recovery_target_timeline  => 'latest',
+  pause_at_recovery_target  => true,
+  standby_mode              => 'on',
+  primary_conninfo          => 'host=localhost port=5432',
+  primary_slot_name         => undef,
+  trigger_file              => undef,
+  recovery_min_apply_delay  => 0,
 }
 ```
 
@@ -289,10 +289,10 @@ Example usage:
 
 ```puppet
 postgresql::validate_db_connection { 'validate my postgres connection':
-  database_host           => 'my.postgres.host',
-  database_username       => 'mydbuser',
-  database_password       => 'mydbpassword',
-  database_name           => 'mydbname',
+  database_host     => 'my.postgres.host',
+  database_username => 'mydbuser',
+  database_password => 'mydbpassword',
+  database_name     => 'mydbname',
 }->
 exec { 'rake db:migrate':
   cwd => '/opt/myrubyapp',
@@ -495,12 +495,6 @@ Sets the default timezone of the postgresql server. The postgresql built-in defa
 Overrides the default PostgreSQL log directory.
 
 Default value: initdb's default path.
-
-##### `log_line_prefix`
-
-Set a prefix for the server logs.
-
-Default value: `undef`.
 
 ##### `manage_package_repo`
 
@@ -786,13 +780,6 @@ Specifies the IP mask from which remote connections should be denied for the pos
 
 Default value: '0.0.0.0/0', which denies any remote connection.
 
-##### `listen_addresses`
-
-Specifies the addresses the server accepts connections to. Valid values:
-  * 'localhost': Accept connections from local host only.
-  * '*': Accept connections from any remote machine.
-  * Specified comma-separated list of hostnames or IP addresses.
-
 ##### `locale`
 
 Sets the default database locale for all databases created with this module. On certain operating systems this is used during the `template1` initialization as well, so it becomes a default outside of the module.
@@ -800,12 +787,6 @@ Sets the default database locale for all databases created with this module. On 
 Default value: `undef`, which is effectively 'C'.
 
 **On Debian, you must ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.**
-
-##### `log_line_prefix`
-
-Set a prefix for the server logs.
-
-Default value: '$log_line_prefix' variable set in `postgresql::server` or `postgresql::globals`.
 
 ##### `manage_pg_hba_conf`
 
@@ -1449,8 +1430,8 @@ Sets the hash to use during password creation. If the password is not already pr
 If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.
 
 ```puppet
-postgresql::server::role { "myusername":
-password_hash => postgresql_password('myusername', 'mypassword'),
+postgresql::server::role { 'myusername':
+  password_hash => postgresql_password('myusername', 'mypassword'),
 }
 ```
 
@@ -1728,8 +1709,8 @@ This is the namevar.
 
 Generates a PostgreSQL encrypted password, use `postgresql_password`. Call it from the command line and then copy and paste the encrypted password into your manifest:
 
-```puppet
-puppet apply --execute 'notify { "test": message => postgresql_password("username", "password") }'
+```shell
+puppet apply --execute 'notify { 'test': message => postgresql_password('username', 'password') }'
 ```
 
 Alternatively, you can call this from your production manifests, but the manifests will then contain a clear text version of your passwords.
