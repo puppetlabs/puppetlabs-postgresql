@@ -35,15 +35,15 @@ Puppet::Type.newtype(:postgresql_conn_validator) do
     desc 'The port that the PostgreSQL server should be listening on.'
 
     validate do |value|
-      if value
-        value =~ /[0-9]+/
-      end
+      Integer(value)
+    end
+    munge do |value|
+      Integer(value)
     end
   end
 
   newparam(:connect_settings) do
     desc 'Hash of environment variables for connection to a db.'
-
   end
 
   newparam(:sleep) do
@@ -78,5 +78,11 @@ Puppet::Type.newtype(:postgresql_conn_validator) do
 
   newparam(:run_as) do
     desc "System user that will run the psql command."
+  end
+
+  newparam(:command) do
+    desc "Command to run against target database."
+
+    defaultto "SELECT 1"
   end
 end

@@ -65,9 +65,6 @@ define postgresql::validate_db_connection(
     $env = $pass_env
   }
 
-  warning($validate_cmd)
-  warning($env)
-
   $exec_name = "validate postgres connection for ${database_username}@${database_host}:${database_port}/${database_name}"
 
   exec { $exec_name:

@@ -10,18 +10,19 @@ module Puppet
       def build_psql_cmd
         final_cmd = []
 
-        cmd_init = "#{@resource[:psql_path]} --tuples-only --quiet "
+        cmd_init = "#{@resource[:psql_path]} --tuples-only --quiet --no-psqlrc"
 
         final_cmd.push cmd_init
 
         cmd_parts = {
-          :host => "-h #{@resource[:host]}",
-          :port => "-p #{@resource[:port]}",
-          :db_username => "-U #{@resource[:db_username]}",
-          :db_name => "--dbname #{@resource[:db_name]}"
+          :host => "--host=#{@resource[:host]}",
+          :port => "--port=#{@resource[:port]}",
+          :db_username => "--username=#{@resource[:db_username]}",
+          :db_name => "--dbname=#{@resource[:db_name]}",
+          :command => "--command='#{@resource[:command]}'"
         }
 
-        cmd_parts[:db_password] = "-w " if @resource[:db_password]
+        cmd_parts[:db_password] = "--no-password " if @resource[:db_password]
 
         cmd_parts.each do |k,v|
           final_cmd.push v if @resource[k]
@@ -57,7 +58,7 @@ module Puppet
       end
 
       def build_validate_cmd
-        "/bin/echo 'SELECT 1' | #{parse_connect_settings.join(' ')} #{build_psql_cmd} "
+        "#{parse_connect_settings.join(' ')} #{build_psql_cmd} "
       end
     end
   end
