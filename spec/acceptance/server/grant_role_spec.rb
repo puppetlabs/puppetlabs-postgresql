@@ -2,10 +2,15 @@ require 'spec_helper_acceptance'
 
 describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
 
-  db = 'grant_role_test'
-  user = 'psql_grant_role_tester'
-  group = 'test_group'
-  password = 'psql_grant_role_pw'
+  let(:db) { 'grant_role_test' }
+  let(:user) { 'psql_grant_role_tester' }
+  let(:group) { 'test_group' }
+  let(:password) { 'psql_grant_role_pw' }
+  let(:version) do
+    if fact('osfamily') == 'RedHat' and fact('operatingsystemrelease') =~ /5/
+      '8.1'
+    end
+  end
 
   it 'should grant a role to a user' do
     begin
@@ -14,6 +19,7 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
         $user = #{user}
         $group = #{group}
         $password = #{password}
+        $version = '#{version}'
 
         class { 'postgresql::server': }
 
@@ -31,12 +37,19 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
           require => Postgresql::Server::Role[$user],
         }
 
+        # Lets setup the base rules
+        $local_auth_option = $version ? {
+          '8.1'   => 'sameuser',
+          default => undef,
+        }
+
         # Create a rule for the user
         postgresql::server::pg_hba_rule { "allow ${user}":
           type        => 'local',
           database    => $db,
           user        => $user,
           auth_method => 'ident',
+          auth_option => $local_auth_option,
           order       => 1,
         }
 
@@ -72,6 +85,7 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
         $user = "#{user}"
         $group = "#{group}"
         $password = #{password}
+        $version = '#{version}'
 
         class { 'postgresql::server': }
 
@@ -90,12 +104,19 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
           require => Postgresql::Server::Role[$user],
         }
 
+        # Lets setup the base rules
+        $local_auth_option = $version ? {
+          '8.1'   => 'sameuser',
+          default => undef,
+        }
+
         # Create a rule for the user
         postgresql::server::pg_hba_rule { "allow ${user}":
           type        => 'local',
           database    => $db,
           user        => $user,
           auth_method => 'ident',
+          auth_option => $local_auth_option,
           order       => 1,
         }
 
@@ -132,6 +153,7 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
         $user = "#{user}"
         $group = "#{group}"
         $password = #{password}
+        $version = '#{version}'
 
         class { 'postgresql::server': }
 
@@ -149,12 +171,19 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
           require => Postgresql::Server::Role[$user],
         }
 
+        # Lets setup the base rules
+        $local_auth_option = $version ? {
+          '8.1'   => 'sameuser',
+          default => undef,
+        }
+
         # Create a rule for the user
         postgresql::server::pg_hba_rule { "allow ${user}":
           type        => 'local',
           database    => $db,
           user        => $user,
           auth_method => 'ident',
+          auth_option => $local_auth_option,
           order       => 1,
         }
 
