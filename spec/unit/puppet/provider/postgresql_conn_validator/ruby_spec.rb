@@ -11,7 +11,7 @@ describe Puppet::Type.type(:postgresql_conn_validator).provider(:ruby) do
     {
       :psql_path   => '/usr/bin/psql',
       :host        => 'db.test.com',
-      :port        => '4444',
+      :port        => 4444,
       :db_username => 'testuser',
       :db_password => 'testpass'
     }
@@ -19,7 +19,7 @@ describe Puppet::Type.type(:postgresql_conn_validator).provider(:ruby) do
 
   describe '#build_psql_cmd' do
     it 'contains expected commandline options' do
-      expect(provider.validator.build_psql_cmd).to match /\/usr\/bin\/psql.*-h.*-p.*-U.*/
+      expect(provider.validator.build_psql_cmd).to match /\/usr\/bin\/psql.*--host=.*--port=.*--username=.*/
     end
   end
 

@@ -1668,6 +1668,12 @@ Default value: ''
 
 When using a Unix socket and ident auth, this is the user you are running as.
 
+##### `command`
+
+This is the command run against the target database to verify connectivity.
+
+Default value: 'SELECT 1'
+
 ##### `host`
 
 Sets the hostname of the database you wish to test.
