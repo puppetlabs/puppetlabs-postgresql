@@ -14,7 +14,7 @@ describe 'postgresql_conn_validator', :unless => UNSUPPORTED_PLATFORMS.include?(
       require => Postgresql::Server::Role['testuser']
     }->
     postgresql::server::database_grant { 'allow connect for testuser':
-      privilege => 'CONNECT',
+      privilege => 'ALL',
       db        => 'testdb',
       role      => 'testuser',
     }
