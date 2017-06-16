@@ -1,24 +1,26 @@
 ## Supported Release 5.0.0
 ### Summary
-This **major** release drops support for Puppet 3 and PostgreSQL 8.x, adds Puppet 4 data types, and deprecates the validate_db_connection type.
+This **major** release dropped support for Puppet 3 and PostgreSQL 8.x, added Puppet 4 data types, and deprecated the validate_db_connection type.
 
 #### Added
-- `locales/` directory, .pot file, and i18n `config.yaml`
-- `update_password` parameter to toggle password management per role
-- **Puppet 4** type validation
-- `postgresql_conn_validator` type
+- `locales/` directory, .pot file, and i18n `config.yaml`. ([FM-6116](https://tickets.puppet.com/browse/FM-6116))
+- `update_password` parameter to toggle password management per role.
+- **Puppet 4** type validation.
+- new `postgresql_conn_validator` custom type and deprecated `validate_db_connection`. ([MODULES-1394](https://tickets.puppet.com/browse/MODULES-1394))
 
 #### Changed
-- Updated default postgis versions in postgresql::globals
-- Updated puppetlabs-concat and puppetlabs-apt dependencies
-- default `log_line_prefix` has been removed
-- `listen_addresses` now defaults to 'localhost' and can be set independently of a class declaration
+- default postgis versions in postgresql::globals to use newer versions.
+- puppetlabs-concat and puppetlabs-apt dependencies to use latest versions. ([MODULES-4906](https://tickets.puppet.com/browse/MODULES-4906), [MODULES-4947](https://tickets.puppet.com/browse/MODULES-4947))
+- default value for `log_line_prefix` to `undef`.
+- `listen_addresses` default value to 'localhost'. Allows for it to be set independently of a class declaration. 
+- use of stdlib validate_* functions. They have been removed in favor of Puppet 4 type validation.
+- lower Puppet dependency in metadata to 4.7.0. ([MODULES-4826](https://tickets.puppet.com/browse/MODULES-4826))
 
 #### Fixed
-- Fixed deprecated apt::source parameters
-- Fix for default SUSE parameters
-- Remove deprecated force parameter on concat resources
-- Replace Puppet.version.to_f version comparison from spec_helper.rb ([MODULES-4528](https://tickets.puppetlabs.com/browse/MODULES-4528))
+- deprecated apt::source parameters.
+- default SUSE parameters. ([MODULES-4598](https://tickets.puppet.com/browse/MODULES-4598))
+- use of force parameter on concat resources.
+- Puppet.version.to_f version comparison from spec_helper.rb. ([MODULES-4528](https://tickets.puppetlabs.com/browse/MODULES-4528))
 
 ## Supported Release 4.9.0
 ### Summary
