@@ -1642,9 +1642,9 @@ This is the namevar.
 
 Specifies the action to create or destroy named slot. Must be present
 
-Valid values: `present`, `absent`.
+Valid values: 'present', 'absent'.
 
-Default value: `present`.
+Default value: 'present'.
 
 #### postgresql_conn_validator
 
