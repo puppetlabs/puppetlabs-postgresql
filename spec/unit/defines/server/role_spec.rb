@@ -50,9 +50,9 @@ describe 'postgresql::server::role', :type => :define do
       {
         :password_hash => 'new-pa$s',
         :connect_settings => { 'PGHOST'     => 'postgres-db-server',
-	                       'DBVERSION'  => '9.1',
-	                       'PGUSER'     => 'login-user',
-			       'PGPASSWORD' => 'login-pass' },
+                               'DBVERSION'  => '9.1',
+                               'PGUSER'     => 'login-user',
+                               'PGPASSWORD' => 'login-pass' },
       }
     end
 
@@ -94,10 +94,10 @@ describe 'postgresql::server::role', :type => :define do
       {
         :password_hash => 'new-pa$s',
         :connect_settings => { 'PGHOST'     => 'postgres-db-server',
-	                       'DBVERSION'  => '9.1',
-	                       'PGPORT'     => '1234',
-	                       'PGUSER'     => 'login-user',
-			       'PGPASSWORD' => 'login-pass' },
+                               'DBVERSION'  => '9.1',
+                               'PGPORT'     => '1234',
+                               'PGUSER'     => 'login-user',
+                               'PGPASSWORD' => 'login-pass' },
       }
     end
 
@@ -129,6 +129,23 @@ describe 'postgresql::server::role', :type => :define do
                                 'PGUSER'     => 'login-user',
                                 'PGPASSWORD' => 'login-pass' },
       })
+    end
+  end
+
+  context 'with update_password set to false' do
+    let :params do
+      {
+          :password_hash => 'new-pa$s',
+          :update_password => false,
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it 'should not have alter role for "test" user with password as **** if update_password is false' do
+      is_expected.not_to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
     end
   end
 

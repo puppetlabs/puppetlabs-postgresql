@@ -10,10 +10,10 @@ class postgresql::server::plpython(
     tag    => 'postgresql',
   }
 
-  anchor { 'postgresql::server::plpython::start': }->
-  Class['postgresql::server::install']->
-  Package['postgresql-plpython']->
-  Class['postgresql::server::service']->
-  anchor { 'postgresql::server::plpython::end': }
+  anchor { 'postgresql::server::plpython::start': }
+  -> Class['postgresql::server::install']
+  -> Package['postgresql-plpython']
+  -> Class['postgresql::server::service']
+  -> anchor { 'postgresql::server::plpython::end': }
 
 }

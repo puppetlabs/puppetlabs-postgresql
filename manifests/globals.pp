@@ -111,10 +111,11 @@ class postgresql::globals (
     'Suse' => $::operatingsystem ? {
       'SLES' => $::operatingsystemrelease ? {
         /11\.[0-4]/ => '91',
-        default => '93',
+        /12\.0/     => '93',
+        default     => '94',
       },
       'OpenSuSE' => $::operatingsystemrelease ? {
-        '13.2' => '93',
+        default => '94',
       },
       default => undef,
     },
@@ -127,15 +128,15 @@ class postgresql::globals (
 
   $default_postgis_version = $globals_version ? {
     '8.1'   => '1.3.6',
-    '8.4'   => '1.5',
-    '9.0'   => '1.5',
-    '9.1'   => '1.5',
-    '91'    => '1.5',
-    '9.2'   => '2.0',
-    '9.3'   => '2.1',
-    '93'    => '2.1',
-    '9.4'   => '2.1',
-    '9.5'   => '2.2',
+    '8.4'   => '2.0',
+    '9.0'   => '2.1',
+    '9.1'   => '2.1',
+    '91'    => '2.1',
+    '9.2'   => '2.3',
+    '9.3'   => '2.3',
+    '93'    => '2.3',
+    '9.4'   => '2.3',
+    '9.5'   => '2.3',
     '9.6'   => '2.3',
     default => undef,
   }

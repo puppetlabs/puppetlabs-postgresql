@@ -1,3 +1,25 @@
+## Supported Release 5.0.0
+### Summary
+This **major** release drops support for Puppet 3 and PostgreSQL 8.x, adds Puppet 4 data types, and deprecates the validate_db_connection type.
+
+#### Added
+- `locales/` directory, .pot file, and i18n `config.yaml`
+- `update_password` parameter to toggle password management per role
+- **Puppet 4** type validation
+- `postgresql_conn_validator` type
+
+#### Changed
+- Updated default postgis versions in postgresql::globals
+- Updated puppetlabs-concat and puppetlabs-apt dependencies
+- default `log_line_prefix` has been removed
+- `listen_addresses` now defaults to 'localhost' and can be set independently of a class declaration
+
+#### Fixed
+- Fixed deprecated apt::source parameters
+- Fix for default SUSE parameters
+- Remove deprecated force parameter on concat resources
+- Replace Puppet.version.to_f version comparison from spec_helper.rb ([MODULES-4528](https://tickets.puppetlabs.com/browse/MODULES-4528))
+
 ## Supported Release 4.9.0
 ### Summary
 This release adds several types and, among other bugs, fixes an issue with the yum URL.
