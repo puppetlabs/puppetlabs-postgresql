@@ -1640,7 +1640,7 @@ This is the namevar.
 
 ##### `ensure`
 
-Specifies the action to create or destroy named slot. Must be present
+Specifies the action to create or destroy named slot. Required.
 
 Valid values: 'present', 'absent'.
 
