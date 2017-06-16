@@ -38,7 +38,7 @@ define postgresql::server::db (
       privilege => $grant,
       db        => $dbname,
       role      => $user,
-    } -> Postgresql::Validate_db_connection<| database_name == $dbname |>
+    } -> Postgresql_conn_validator<| db_name == $dbname |>
   }
 
   if($tablespace != undef and defined(Postgresql::Server::Tablespace[$tablespace])) {

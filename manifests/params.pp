@@ -2,9 +2,9 @@
 class postgresql::params inherits postgresql::globals {
   $version                    = $postgresql::globals::globals_version
   $postgis_version            = $postgresql::globals::globals_postgis_version
-  $listen_addresses           = 'localhost'
+  $listen_addresses           = undef
   $port                       = 5432
-  $log_line_prefix            = '%t '
+  $log_line_prefix            = undef
   $ip_mask_deny_postgres_user = '0.0.0.0/0'
   $ip_mask_allow_all_users    = '127.0.0.1/32'
   $ipv4acls                   = []
@@ -278,8 +278,13 @@ class postgresql::params inherits postgresql::globals {
       $bindir               = pick($bindir, "/usr/lib/postgresql${version}/bin")
       $datadir              = pick($datadir, '/var/lib/pgsql/data')
       $confdir              = pick($confdir, $datadir)
-      $service_status       = pick($service_status, "/etc/init.d/${service_name} status")
-      $service_reload       = "/etc/init.d/${service_name} reload"
+      if $::operatingsystem == 'SLES' and versioncmp($::operatingsystemrelease, '11.4') <= 0 {
+        $service_status     = pick($service_status, "/etc/init.d/${service_name} status")
+        $service_reload     = "/etc/init.d/${service_name} reload"
+      } else {
+        $service_status     = pick($service_status, "systemctl status ${service_name}")
+        $service_reload     = "systemctl reload ${service_name}"
+      }
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $needs_initdb         = pick($needs_initdb, true)
