@@ -17,10 +17,9 @@ This **major** release dropped support for Puppet 3 and PostgreSQL 8.x, added Pu
 - lower Puppet dependency in metadata to 4.7.0. ([MODULES-4826](https://tickets.puppet.com/browse/MODULES-4826))
 
 #### Fixed
-- deprecated apt::source parameters.
+- deprecated apt::source parameters(`key`,`key_source`, & `include_src`).
 - default SUSE parameters. ([MODULES-4598](https://tickets.puppet.com/browse/MODULES-4598))
 - use of force parameter on concat resources.
-- Puppet.version.to_f version comparison from spec_helper.rb. ([MODULES-4528](https://tickets.puppetlabs.com/browse/MODULES-4528))
 
 ## Supported Release 4.9.0
 ### Summary
