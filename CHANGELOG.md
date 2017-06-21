@@ -1,3 +1,26 @@
+## Supported Release 5.0.0
+### Summary
+This **major** release dropped support for Puppet 3 and PostgreSQL 8.x, added Puppet 4 data types, and deprecated the validate_db_connection type.
+
+#### Added
+- `locales/` directory, .pot file, and i18n `config.yaml`. ([FM-6116](https://tickets.puppet.com/browse/FM-6116))
+- `update_password` parameter to toggle password management per role.
+- **Puppet 4** type validation.
+- new `postgresql_conn_validator` custom type and deprecated `validate_db_connection`. ([MODULES-1394](https://tickets.puppet.com/browse/MODULES-1394))
+
+#### Changed
+- default postgis versions in postgresql::globals to use newer versions.
+- puppetlabs-concat and puppetlabs-apt dependencies to use latest versions. ([MODULES-4906](https://tickets.puppet.com/browse/MODULES-4906), [MODULES-4947](https://tickets.puppet.com/browse/MODULES-4947))
+- default value for `log_line_prefix` to `undef`.
+- `listen_addresses` default value to 'localhost'. Allows for it to be set independently of a class declaration. 
+- use of stdlib validate_* functions. They have been removed in favor of Puppet 4 type validation.
+- lower Puppet dependency in metadata to 4.7.0. ([MODULES-4826](https://tickets.puppet.com/browse/MODULES-4826))
+
+#### Fixed
+- deprecated apt::source parameters(`key`,`key_source`, & `include_src`).
+- default SUSE parameters. ([MODULES-4598](https://tickets.puppet.com/browse/MODULES-4598))
+- use of force parameter on concat resources.
+
 ## Supported Release 4.9.0
 ### Summary
 This release adds several types and, among other bugs, fixes an issue with the yum URL.
