@@ -7,6 +7,7 @@ class postgresql::server::initdb {
   $logdir         = $postgresql::server::logdir
   $encoding       = $postgresql::server::encoding
   $locale         = $postgresql::server::locale
+  $data_checksums = $postgresql::server::data_checksums
   $group          = $postgresql::server::group
   $user           = $postgresql::server::user
   $psql_path      = $postgresql::server::psql_path
@@ -82,9 +83,15 @@ class postgresql::server::initdb {
       $require_before_initdb = [$datadir]
     }
 
-    $initdb_command = $locale ? {
+    $ic_locale = $locale ? {
       undef   => $ic_xlog,
       default => "${ic_xlog} --locale '${locale}'"
+    }
+
+    $initdb_command = $data_checksums ? {
+      undef   => $ic_locale,
+      false   => $ic_locale,
+      default => "${ic_locale} --data-checksums"
     }
 
     # This runs the initdb command, we use the existance of the PG_VERSION
