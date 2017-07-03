@@ -1638,6 +1638,16 @@ Specifies the name of the slot to create. Must be a valid replication slot name.
 
 This is the namevar.
 
+##### `ensure`
+
+Required.
+
+Specifies the action to create or destroy named slot. 
+
+Valid values: 'present', 'absent'.
+
+Default value: 'present'.
+
 #### postgresql_conn_validator
 
 Validate the connection to a local or remote PostgreSQL database using this type.
