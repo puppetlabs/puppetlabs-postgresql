@@ -1,6 +1,7 @@
 # PRIVATE CLASS: do not call directly
 class postgresql::server::initdb {
   $needs_initdb   = $postgresql::server::needs_initdb
+  $data_checksums = $postgresql::server::data_checksums
   $initdb_path    = $postgresql::server::initdb_path
   $datadir        = $postgresql::server::datadir
   $xlogdir        = $postgresql::server::xlogdir
@@ -74,6 +75,11 @@ class postgresql::server::initdb {
       default => "${ic_base} --xlogdir '${xlogdir}'"
     }
 
+    $ic_checksums = $data_checksums ? {
+      true    => "${ic_xlog} --data-checksums",
+      default => $ic_xlog,
+    }
+
     # The xlogdir need to be present before initdb runs.
     # If xlogdir is default it's created by package installer
     if($xlogdir) {
@@ -83,8 +89,8 @@ class postgresql::server::initdb {
     }
 
     $initdb_command = $locale ? {
-      undef   => $ic_xlog,
-      default => "${ic_xlog} --locale '${locale}'"
+      undef   => $ic_checksums,
+      default => "${ic_checksums} --locale '${locale}'"
     }
 
     # This runs the initdb command, we use the existance of the PG_VERSION

@@ -47,6 +47,7 @@ class postgresql::globals (
   $repo_baseurl             = undef,
 
   $needs_initdb             = undef,
+  $data_checksums           = undef,
 
   $encoding                 = undef,
   $locale                   = undef,

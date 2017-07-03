@@ -12,6 +12,7 @@ class postgresql::params inherits postgresql::globals {
   $encoding                   = $postgresql::globals::encoding
   $locale                     = $postgresql::globals::locale
   $timezone                   = $postgresql::globals::timezone
+  $data_checksums             = $postgresql::globals::data_checksums
   $service_ensure             = 'running'
   $service_enable             = true
   $service_manage             = true
@@ -306,6 +307,10 @@ class postgresql::params inherits postgresql::globals {
       if ($datadir == undef) { fail("${err_prefix}datadir") }
       if ($confdir == undef) { fail("${err_prefix}confdir") }
     }
+  }
+
+  if($data_checksums and versioncmp($version, '9.3') < 0) {
+    fail('data_checksums require version 9.3 or greater')
   }
 
   $validcon_script_path = pick($validcon_script_path, '/usr/local/bin/validate_postgresql_connection.sh')
