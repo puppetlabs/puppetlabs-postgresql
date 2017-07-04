@@ -10,6 +10,7 @@
     * [Configure a server](#configure-a-server)
     * [Create a database](#create-a-database)
     * [Manage users, roles, and permissions](#manage-users-roles-and-permissions)
+    * [Manage ownership of DB objects](#manage-ownership-of-db-objects)
     * [Override defaults](#override-defaults)
     * [Create an access rule for pg_hba.conf](#create-an-access-rule-for-pg_hbaconf)
     * [Create user name maps for pg_ident.conf](#create-user-name-maps-for-pg_identconf)
@@ -115,6 +116,24 @@ postgresql::server::table_grant { 'my_table of test2':
 ```
 
 This example grants **all** privileges on the test1 database and on the `my_table` table of the test2 database to the specified user or group. After the values are added into the PuppetDB config file, this database would be ready for use.
+
+### Manage ownership of DB objects
+
+To change the ownership of all objects within a database using REASSIGN OWNED:
+
+```puppet
+postgresql::server::reassign_owned_by { 'new owner is meerkat':
+  db        => 'test_db',
+  old_owner => 'marmot',
+  new_owner => 'meerkat',
+}
+```
+
+This would run the PostgreSQL statement 'REASSIGN OWNED' to update to ownership of all tables, sequences, functions and views currently owned by the role 'marmot' to be owned by the role 'meerkat' instead.
+
+This applies to objects within the nominated database, 'test_db' only.
+
+For Postgresql >= 9.3, the ownership of the database is also updated.
 
 ### Override defaults
 
@@ -327,6 +346,7 @@ The postgresql module comes with many options for configuring the server. While 
 * [postgresql::server::grant_role](#postgresqlservergrant_role)
 * [postgresql::server::pg_hba_rule](#postgresqlserverpg_hba_rule)
 * [postgresql::server::pg_ident_rule](#postgresqlserverpg_ident_rule)
+* [postgresql::server::reassign_owned_by](#postgresqlserverreassign_owned_by)
 * [postgresql::server::recovery](#postgresqlserverrecovery)
 * [postgresql::server::role](#postgresqlserverrole)
 * [postgresql::server::schema](#postgresqlserverschema)
@@ -1345,6 +1365,40 @@ Specifies the operating system user name (the user name used to connect to the d
 Provides the target for the rule and is generally an internal only property.
 
 **Use with caution.**
+
+#### postgresql::server::reassign_owned_by
+
+Runs the PostgreSQL command 'REASSIGN OWNED' on a database, to transfer the ownership of existing objects between database roles
+
+##### `db`
+
+Specifies the database to which the 'REASSIGN OWNED' will be applied
+
+##### `old_role`
+
+Specifies the role or user who is the current owner of the objects in the specified db
+
+##### `new_role`
+
+Specifies the role or user who will be the new owner of these objects
+
+##### `psql_user`
+
+Specifies the OS user for running `psql`.
+
+Default value: The default user for the module, usually 'postgres'.
+
+##### `port`
+
+Port to use when connecting.
+
+Default value: `undef`, which generally defaults to port 5432 depending on your PostgreSQL packaging.
+
+##### `connect_settings`
+
+Specifies a hash of environment variables used when connecting to a remote server.
+
+Default value: Connects to the local Postgres instance.
 
 #### postgresql::server::recovery
 
