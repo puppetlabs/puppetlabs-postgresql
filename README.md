@@ -1444,7 +1444,16 @@ Provides the target for the rule, and is generally an internal only property.
 **Use with caution.**
 
 #### postgresql::server::role
-Creates a role or user in PostgreSQL.
+Creates or drops a role or user in PostgreSQL.
+
+##### `ensure`
+
+Specify whether to create or drop the role.
+
+Specifying `present` will create the role.
+Specifying `absent` will drop the role.
+
+Default value: `present`.
 
 ##### `connection_limit`
 Specifies how many concurrent connections the role can make.
