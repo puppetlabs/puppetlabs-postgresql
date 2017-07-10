@@ -100,13 +100,12 @@ describe 'postgresql::server::reassign_owned_by:', :unless => UNSUPPORTED_PLATFO
 
       it 'should reassign all objects to new_owner' do
         begin
-          apply_manifest(pp_setup + pp_db_old_owner + pp_setup_objects,   :catch_failures => true)
-
           #postgres version
           result = shell('psql --version')
           version = result.stdout.match(%r{\s(\d\.\d)})[1]
-
           if version >= '9.0'
+
+            apply_manifest(pp_setup + pp_db_old_owner + pp_setup_objects,   :catch_failures => true)
 
             apply_manifest(pp_setup + pp_db_no_owner + pp_reassign_owned_by, :catch_failures => true)
             apply_manifest(pp_setup + pp_db_no_owner + pp_reassign_owned_by, :catch_changes => true)
