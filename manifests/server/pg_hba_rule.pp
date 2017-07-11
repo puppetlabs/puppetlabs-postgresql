@@ -5,10 +5,10 @@ define postgresql::server::pg_hba_rule(
   String $database,
   String $user,
   String $auth_method,
-  Optional[String] $address     = undef,
-  String $description           = 'none',
-  Optional[String] $auth_option = undef,
-  Integer $order                = 150,
+  Optional[String] $address       = undef,
+  String $description             = 'none',
+  Optional[String] $auth_option   = undef,
+  Variant[String, Integer] $order = 150,
 
   # Needed for testing primarily, support for multiple files is not really
   # working.
