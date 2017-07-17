@@ -1,3 +1,22 @@
+## Supported Release 5.1.0
+### Summary
+This release includes Japanese translations for internationalization, Puppet 5 support, implementation of defined type postgresql::server::reassign_owned_by.
+
+#### Features
+- Updating translations for readmes/README_ja_JP.md
+- add defined type postgresql::server::reassign_owned_by
+- Allow order parameter to be string value
+- prep for puppet 5 ([MODULES-5144](https://tickets.puppetlabs.com/browse/MODULES-5144))
+- add data_checksums option to initdb
+- parameter ensure of custom resource postgresql_replication_slot is not documented ([MODULES-2989](https://tickets.puppetlabs.com/browse/MODULES-2989))
+
+#### Bug Fixes
+- Adding a space for header formatting
+- use https for apt.postgresql.org repo
+- msync puppet 5 and ruby 2.4 ([MODULES-5197](https://tickets.puppetlabs.com/browse/MODULES-5187))
+- Only run test on postgresql >= 9.0 ([FM-6240](https://tickets.puppetlabs.com/browse/FM-6240))
+- Fix Ruby 2.4 deprecation in postgresql_acls_to_resources_hash
+
 ## Supported Release 5.0.0
 ### Summary
 This **major** release dropped support for Puppet 3 and PostgreSQL 8.x, added Puppet 4 data types, and deprecated the validate_db_connection type.
@@ -12,7 +31,7 @@ This **major** release dropped support for Puppet 3 and PostgreSQL 8.x, added Pu
 - default postgis versions in postgresql::globals to use newer versions.
 - puppetlabs-concat and puppetlabs-apt dependencies to use latest versions. ([MODULES-4906](https://tickets.puppet.com/browse/MODULES-4906), [MODULES-4947](https://tickets.puppet.com/browse/MODULES-4947))
 - default value for `log_line_prefix` to `undef`.
-- `listen_addresses` default value to 'localhost'. Allows for it to be set independently of a class declaration. 
+- `listen_addresses` default value to 'localhost'. Allows for it to be set independently of a class declaration.
 - use of stdlib validate_* functions. They have been removed in favor of Puppet 4 type validation.
 - lower Puppet dependency in metadata to 4.7.0. ([MODULES-4826](https://tickets.puppet.com/browse/MODULES-4826))
 
