@@ -649,7 +649,7 @@ Overrides the default PostgreSQL xlog directory.
 
 Default value: initdb's default path.
 
-####postgresql::lib::devel
+#### postgresql::lib::devel
 
 Installs the packages containing the development libraries for PostgreSQL and symlinks `pg_config` into `/usr/bin` (if not in `/usr/bin` or `/usr/local/bin`).
 

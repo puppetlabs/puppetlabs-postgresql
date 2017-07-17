@@ -623,7 +623,7 @@ PostgreSQLサービスのデフォルトのステータスチェックコマン�
 
 デフォルト値: initdbのデフォルトパス。
 
-####postgresql::lib::devel
+#### postgresql::lib::devel
 
 PostgreSQLの開発ライブラリとシンボリックリンク`pg_config`を含むパッケージを`/usr/bin`にインストールします(`/usr/bin`または`/usr/local/bin`に存在しない場合)。
 
