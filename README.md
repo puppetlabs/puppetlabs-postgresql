@@ -501,7 +501,11 @@ Default value: `undef`, which is effectively 'C'.
 
 ##### `data_checksums`
 
-Optional boolean to turn on data checksums during `initdb`.
+Optional.
+
+Data type: Boolean.
+
+Turns on data checksums during `initdb`.
 
 Default value: `undef`, which is the same as `false`.
 
