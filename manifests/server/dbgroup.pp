@@ -44,8 +44,8 @@ define postgresql::server::dbgroup(
     require     => Class['Postgresql::Server'],
   }
 
-  postgresql_psql {"${title}: UPDATE pg_group SET grolist = ARRAY${groupmembers} WHERE groname = '${groupname}'":
-    command => "UPDATE pg_group SET grolist = ARRAY${groupmembers} WHERE groname = '${groupname}'",
-    unless => "SELECT 1 FROM pg_group WHERE groname = '${groupname}' AND grolist = ARRAY${groupmembers}",
+  postgresql_psql {"${title}: UPDATE pg_group SET grolist = '${groupmembers}' WHERE groname = '${groupname}'":
+    command => "UPDATE pg_group SET grolist = '${groupmembers}' WHERE groname = '${groupname}'",
+    unless => "SELECT 1 FROM pg_group WHERE groname = '${groupname}' AND grolist = '${groupmembers}'",
   }
 }
