@@ -50,7 +50,7 @@ describe 'postgresql::server::dbgroup', :type => :define do
   
     let :params do
       {
-        :groupmembers => "{\"testuser1\", \"testuser2\"}",
+        :groupmembers => ['testuser1', 'testuser2'],
       }
     end
 
