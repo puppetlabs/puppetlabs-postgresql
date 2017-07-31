@@ -2,7 +2,7 @@
 define postgresql::server::dbgroup(
   $db               = $postgresql::server::default_database,
   $port             = undef, 
-  $groupmembers     = [],
+  $groupmembers     = '{}',
   $groupname        = $title,
   $dialect          = $postgresql::server::dialect,
   $connect_settings = undef,
