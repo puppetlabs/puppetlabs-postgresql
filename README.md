@@ -1207,7 +1207,10 @@ Valid options: 'DATABASE', 'SCHEMA', 'SEQUENCE', 'ALL SEQUENCES IN SCHEMA', 'TAB
 
 ##### `object_name`
 
-Specifies name of `object_type` to which to grant access.
+Specifies name of `object_type` to which to grant access, can be either a string or a two element array.
+
+String: 'object_name'
+Array:  ['schema_name', 'object_name']
 
 ##### `port`
 
