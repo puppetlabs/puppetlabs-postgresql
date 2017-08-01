@@ -23,6 +23,14 @@ define postgresql::server::dbgroup(
     $port_override = $postgresql::server::port
   }
 
+  #
+  # Group members, converted to a string acceptable by psql
+  # [user1, user2] to {"user1", "user2"}
+  #
+  $groupmembers_braces = regsubst("${groupmembers}", '^\[(.*)\]$', '{"\1"}')
+  $groupmembers_strip_empty_array = regsubst("${groupmembers_braces}", '^{""}$', '{}')
+  $groupmembers_psql = regsubst("${groupmembers_strip_empty_array}", ', ', '", "', 'G')
+
   Postgresql_psql {
     db         => $db,
     port       => $port_override,
@@ -44,8 +52,8 @@ define postgresql::server::dbgroup(
     require     => Class['Postgresql::Server'],
   }
 
-  postgresql_psql {"${title}: UPDATE pg_group SET grolist = ARRAY${groupmembers} WHERE groname = '${groupname}'":
-    command => "UPDATE pg_group SET grolist = ARRAY${groupmembers} WHERE groname = '${groupname}'",
-    unless => "SELECT 1 FROM pg_group WHERE groname = '${groupname}' AND grolist = ARRAY${groupmembers}",
+  postgresql_psql {"${title}: UPDATE pg_group SET grolist = '${groupmembers_psql}' WHERE groname = '${groupname}'":
+    command => "UPDATE pg_group SET grolist = '${groupmembers_psql}' WHERE groname = '${groupname}'",
+    unless => "SELECT 1 FROM pg_group WHERE groname = '${groupname}' AND grolist = '${groupmembers_psql}'",
   }
 }

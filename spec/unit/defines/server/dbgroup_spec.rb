@@ -33,11 +33,10 @@ describe 'postgresql::server::dbgroup', :type => :define do
         'port'        => "5432",
       })
     end
-    it 'should have update pg_group for test group with groupmembers as []' do
-      is_expected.to contain_postgresql_psql("test: UPDATE pg_group SET grolist = ARRAY[] WHERE groname = 'test'").with({
-        'command'     => "UPDATE pg_group SET grolist = ARRAY[] WHERE groname = 'test'",
-        'environment' => [],
-        'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test' AND grolist = ARRAY[]",
+    it 'should have update pg_group for test group with groupmembers as {}' do
+      is_expected.to contain_postgresql_psql("test: UPDATE pg_group SET grolist = '{}' WHERE groname = 'test'").with({
+        'command'     => "UPDATE pg_group SET grolist = '{}' WHERE groname = 'test'",
+        'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test' AND grolist = '{}'",
         'port'        => "5432",
       })
     end
@@ -65,10 +64,9 @@ describe 'postgresql::server::dbgroup', :type => :define do
       })
     end
     it 'should have update pg_group for test group with provided groupmembers' do
-      is_expected.to contain_postgresql_psql("test: UPDATE pg_group SET grolist = ARRAY[testuser1, testuser2] WHERE groname = 'test'").with({
-        'command'     => "UPDATE pg_group SET grolist = ARRAY[testuser1, testuser2] WHERE groname = 'test'",
-        'environment' => [],
-        'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test' AND grolist = ARRAY[testuser1, testuser2]",
+      is_expected.to contain_postgresql_psql("test: UPDATE pg_group SET grolist = '{\"testuser1\", \"testuser2\"}' WHERE groname = 'test'").with({
+        'command'     => "UPDATE pg_group SET grolist = '{\"testuser1\", \"testuser2\"}' WHERE groname = 'test'",
+        'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test' AND grolist = '{\"testuser1\", \"testuser2\"}'",
         'port'        => "5432",
       })
     end

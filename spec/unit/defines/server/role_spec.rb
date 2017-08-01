@@ -255,7 +255,6 @@ describe 'postgresql::server::role', :type => :define do
     it 'should have an alter statement to set PASSWORD DISABLE' do
       is_expected.to contain_postgresql_psql('test: ALTER USER "test" PASSWORD DISABLE').with({
         'command'     => "ALTER USER \"test\" PASSWORD DISABLE",
-        'environment' => [],
         'port'        => "5432",
       })
     end
