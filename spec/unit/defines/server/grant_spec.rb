@@ -215,7 +215,7 @@ describe 'postgresql::server::grant', :type => :define do
       "class {'postgresql::server':}"
     end
 
-    it { is_expected.to compile.and_raise_error(/parameter 'object_name' expects a value of type (Undef, )?Array, or String, got Integer/) }
+    it { is_expected.to compile.and_raise_error(/parameter 'object_name' expects a value of type (Array|Undef, Array,) or String, got Integer/) }
   end
 
   context 'invalid object_name - insufficent array elements' do
