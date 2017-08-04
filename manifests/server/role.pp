@@ -84,15 +84,7 @@ define postgresql::server::role(
       $version = $postgresql::server::_version
     }
   
-    if ($dialect == 'postgres') {
-      $login_sql       = $login       ? { true => 'LOGIN',       default => 'NOLOGIN' }
-    } elsif ($dialect == 'redshift') {
-      if ($login != false) {
-        $login_sql = $login
-      } else {
-        $login_sql = ''
-      }
-    }
+    $login_sql       = $login       ? { true => 'LOGIN',       default => 'NOLOGIN' }
     $inherit_sql     = $inherit     ? { true => 'INHERIT',     default => 'NOINHERIT' }
     $createrole_sql  = $createrole  ? { true => "CREATE${role_keyword}",  default => "NOCREATE${role_keyword}" }
     $createdb_sql    = $createdb    ? { true => 'CREATEDB',    default => 'NOCREATEDB' }
@@ -187,13 +179,6 @@ define postgresql::server::role(
       postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${createrole_sql}":
         command => "ALTER ${role_keyword} \"${username}\" ${createrole_sql}",
         unless => "SELECT 1 FROM ${role_table} WHERE usename = '${username}' AND usesuper = ${createrole}",
-      }
-
-      # $login can act as a string in Redshift, which is useful for passing PASSWORD DISABLE
-      postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${login_sql}":
-        command => "ALTER ${role_keyword} \"${username}\" ${login_sql}",
-        # pg_shadow cannot be selected from in Redshift, even by superusers. As such, this command will always be run when invoked.
-        #unless => "SELECT 1 FROM ${password_table} WHERE usename = '${username}' AND passwd = ''",
       }
     }
   
