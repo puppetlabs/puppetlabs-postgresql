@@ -87,7 +87,7 @@ define postgresql::server::role(
     if ($dialect == 'postgres') {
       $login_sql       = $login       ? { true => 'LOGIN',       default => 'NOLOGIN' }
     } elsif ($dialect == 'redshift') {
-      if ($login != false) {
+      if ($login != true) {
         $login_sql = $login
       } else {
         $login_sql = ''
