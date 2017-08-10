@@ -12,6 +12,7 @@ define postgresql::server::role(
   $connection_limit = '-1',
   $username         = $title,
   $connect_settings = $postgresql::server::default_connect_settings,
+  $rds              = false,
 ) {
   $psql_user  = $postgresql::server::user
   $psql_group = $postgresql::server::group
@@ -113,10 +114,19 @@ define postgresql::server::role(
       $pwd_md5 = md5("${password_hash}${username}")
       $pwd_hash_sql = "md5${pwd_md5}"
     }
-    postgresql_psql { "ALTER ROLE ${username} ENCRYPTED PASSWORD ****":
-      command     => "ALTER ROLE \"${username}\" ${password_sql}",
-      unless      => "SELECT usename FROM pg_shadow WHERE usename='${username}' and passwd='${pwd_hash_sql}'",
-      environment => $environment,
+
+    if $rds {
+      postgresql_psql { "ALTER ROLE ${username} ENCRYPTED PASSWORD ****":
+        command     => "ALTER ROLE \"${username}\" ${password_sql}",
+        unless      => "SELECT usename FROM pg_user WHERE usename='${username}' and passwd='${pwd_hash_sql}'",
+        environment => $environment,
+      }
+    } else {
+      postgresql_psql { "ALTER ROLE ${username} ENCRYPTED PASSWORD ****":
+        command     => "ALTER ROLE \"${username}\" ${password_sql}",
+        unless      => "SELECT usename FROM pg_shadow WHERE usename='${username}' and passwd='${pwd_hash_sql}'",
+        environment => $environment,
+      }
     }
   }
 }

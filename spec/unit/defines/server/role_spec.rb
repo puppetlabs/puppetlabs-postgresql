@@ -132,4 +132,34 @@ describe 'postgresql::server::role', :type => :define do
     end
   end
 
+  context "with specific db connection settings in Amazon RDS" do
+    let :params do
+      {
+        :password_hash => 'new-pa$s',
+        :connect_settings => { 'PGHOST'     => 'postgres-db-server',
+	                       'DBVERSION'  => '9.1',
+	                       'PGPORT'     => '1234',
+	                       'PGUSER'     => 'login-user',
+			       'PGPASSWORD' => 'login-pass' },
+        :rds => true,
+      }
+    end
+
+    let :pre_condition do
+     "class {'postgresql::server':}"
+    end
+
+    it 'should have alter role for "test" user with password as ****' do
+      is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****').with({
+        'command'     => "ALTER ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD'",
+        'environment' => "NEWPGPASSWD=new-pa$s",
+        'unless'      => "SELECT usename FROM pg_user WHERE usename='test' and passwd='md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
+        'connect_settings' => { 'PGHOST'     => 'postgres-db-server',
+                                'DBVERSION'  => '9.1',
+                                'PGPORT'     => '1234',
+                                'PGUSER'     => 'login-user',
+                                'PGPASSWORD' => 'login-pass' },
+      })
+    end
+  end
 end
