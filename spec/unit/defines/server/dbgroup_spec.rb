@@ -27,7 +27,7 @@ describe 'postgresql::server::dbgroup', :type => :define do
     it { is_expected.to contain_postgresql__server__dbgroup('test') }
     it 'should have create group for test' do
       is_expected.to contain_postgresql_psql('test: CREATE GROUP test').with({
-        'command'     => "CREATE GROUP 'test'",
+        'command'     => "CREATE GROUP test",
         'environment' => [],
         'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test'",
         'port'        => "5432",
@@ -57,7 +57,7 @@ describe 'postgresql::server::dbgroup', :type => :define do
     it { is_expected.to contain_postgresql__server__dbgroup('test') }
     it 'should have create group for test' do
       is_expected.to contain_postgresql_psql('test: CREATE GROUP test').with({
-        'command'     => "CREATE GROUP 'test'",
+        'command'     => "CREATE GROUP test",
         'environment' => [],
         'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test'",
         'port'        => "5432",

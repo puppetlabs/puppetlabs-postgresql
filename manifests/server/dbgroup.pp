@@ -46,7 +46,7 @@ define postgresql::server::dbgroup(
   }
 
   postgresql_psql { "${title}: CREATE GROUP ${groupname}":
-    command     => "CREATE GROUP '${groupname}'",
+    command     => "CREATE GROUP ${groupname}",
     unless      => "SELECT 1 FROM pg_group WHERE groname = '${groupname}'",
     environment => [],
     require     => Class['Postgresql::Server'],
