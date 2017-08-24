@@ -1,9 +1,10 @@
-# Define for creating a redshift group. See README.md for more information
-define postgresql::server::dbgroup(
+# Define for creating a redshift group member. See README.md for more information
+define postgresql::server::dbgroupmember(
   $db               = $postgresql::server::default_database,
   $port             = undef, 
   $ensure           = 'present',
-  $groupname        = $title,
+  $groupname        = undef,
+  $username         = $title,
   $dialect          = $postgresql::server::dialect,
   $connect_settings = undef,
 ) {
@@ -33,14 +34,13 @@ define postgresql::server::dbgroup(
       connect_settings => $connect_settings,
       cwd              => $module_workdir,
       require          => [
-        Postgresql_psql["${title}: DROP GROUP ${groupname}"],
+        Postgresql_psql["${title}: ALTER GROUP ${groupname} DROP USER ${username}"],
         Class['postgresql::server'],
       ],
     }
-
-    postgresql_psql { "${title}: DROP GROUP ${groupname}":
-      command     => "DROP GROUP ${groupname}",
-      unless      => "SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM pg_group WHERE groname = '${groupname}')",
+    postgresql_psql { "${title}: ALTER GROUP ${groupname} DROP USER ${username}":
+      command     => "ALTER GROUP ${groupname} DROP USER ${username}",
+      unless      => "SELECT NOT (SELECT usesysid from pg_user where usename = '${username}') = ANY((SELECT grolist from pg_group where groname = '${groupname}')::int[])",
       environment => $environment,
       require     => Class['Postgresql::Server'],
     }
@@ -54,13 +54,13 @@ define postgresql::server::dbgroup(
       connect_settings => $connect_settings,
       cwd        => $module_workdir,
       require    => [
-        Postgresql_psql["${title}: CREATE GROUP ${groupname}"],
+        Postgresql_psql["${title}: ALTER GROUP ${groupname} ADD USER ${username}"],
         Class['postgresql::server'],
       ],
     }
-    postgresql_psql { "${title}: CREATE GROUP ${groupname}":
-      command     => "CREATE GROUP ${groupname}",
-      unless      => "SELECT 1 FROM pg_group WHERE groname = '${groupname}'",
+    postgresql_psql { "${title}: ALTER GROUP ${groupname} ADD USER ${username}":
+      command     => "ALTER GROUP ${groupname} ADD USER ${username}",
+      unless      => "SELECT (SELECT usesysid from pg_user where usename = '${username}') = ANY((SELECT grolist from pg_group where groname = '${groupname}')::int[])",
       environment => $environment,
       require     => Class['Postgresql::Server'],
     }
