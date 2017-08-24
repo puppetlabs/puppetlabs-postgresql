@@ -41,7 +41,7 @@ define postgresql::server::dbgroup(
     postgresql_psql { "${title}: DROP GROUP ${groupname}":
       command     => "DROP GROUP ${groupname}",
       unless      => "SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM pg_group WHERE groname = '${groupname}')",
-      environment => $environment,
+      environment => [],
       require     => Class['Postgresql::Server'],
     }
   } else {
@@ -61,7 +61,7 @@ define postgresql::server::dbgroup(
     postgresql_psql { "${title}: CREATE GROUP ${groupname}":
       command     => "CREATE GROUP ${groupname}",
       unless      => "SELECT 1 FROM pg_group WHERE groname = '${groupname}'",
-      environment => $environment,
+      environment => [],
       require     => Class['Postgresql::Server'],
     }
   }

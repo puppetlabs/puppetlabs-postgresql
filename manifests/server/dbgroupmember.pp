@@ -40,8 +40,8 @@ define postgresql::server::dbgroupmember(
     }
     postgresql_psql { "${title}: ALTER GROUP ${groupname} DROP USER ${username}":
       command     => "ALTER GROUP ${groupname} DROP USER ${username}",
-      unless      => "SELECT NOT (SELECT usesysid from pg_user where usename = '${username}') = ANY((SELECT grolist from pg_group where groname = '${groupname}')::int[])",
-      environment => $environment,
+      unless      => "SELECT 1 WHERE NOT (SELECT usesysid from pg_user where usename = '${username}') = ANY((SELECT grolist from pg_group where groname = '${groupname}')::int[])",
+      environment => [],
       require     => Class['Postgresql::Server'],
     }
   } else {
@@ -60,8 +60,8 @@ define postgresql::server::dbgroupmember(
     }
     postgresql_psql { "${title}: ALTER GROUP ${groupname} ADD USER ${username}":
       command     => "ALTER GROUP ${groupname} ADD USER ${username}",
-      unless      => "SELECT (SELECT usesysid from pg_user where usename = '${username}') = ANY((SELECT grolist from pg_group where groname = '${groupname}')::int[])",
-      environment => $environment,
+      unless      => "SELECT 1 WHERE (SELECT usesysid from pg_user where usename = '${username}') = ANY((SELECT grolist from pg_group where groname = '${groupname}')::int[])",
+      environment => [],
       require     => Class['Postgresql::Server'],
     }
   }
