@@ -18,7 +18,7 @@ describe 'postgresql::server::dbgroup', :type => :define do
     'test'
   end
 
-  context 'no members' do
+  context 'group present' do
 
     let :pre_condition do
      "class {'postgresql::server': dialect => 'postgres'}"
@@ -28,21 +28,14 @@ describe 'postgresql::server::dbgroup', :type => :define do
     it 'should have create group for test' do
       is_expected.to contain_postgresql_psql('test: CREATE GROUP test').with({
         'command'     => "CREATE GROUP test",
-        'environment' => [],
+        'environment' => ["rp_env"],
         'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test'",
-        'port'        => "5432",
-      })
-    end
-    it 'should have update pg_group for test group with groupmembers as {}' do
-      is_expected.to contain_postgresql_psql("test: UPDATE pg_group SET grolist = '{}' WHERE groname = 'test'").with({
-        'command'     => "UPDATE pg_group SET grolist = '{}' WHERE groname = 'test'",
-        'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test' AND grolist = '{}'",
         'port'        => "5432",
       })
     end
   end
 
-  context 'group containing test members' do
+  context 'group absent' do
 
     let :pre_condition do
      "class {'postgresql::server': dialect => 'postgres'}"
@@ -50,23 +43,16 @@ describe 'postgresql::server::dbgroup', :type => :define do
   
     let :params do
       {
-        :groupmembers => ['testuser1', 'testuser2'],
+        :ensure => 'absent',
       }
     end
 
     it { is_expected.to contain_postgresql__server__dbgroup('test') }
     it 'should have create group for test' do
-      is_expected.to contain_postgresql_psql('test: CREATE GROUP test').with({
-        'command'     => "CREATE GROUP test",
-        'environment' => [],
-        'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test'",
-        'port'        => "5432",
-      })
-    end
-    it 'should have update pg_group for test group with provided groupmembers' do
-      is_expected.to contain_postgresql_psql("test: UPDATE pg_group SET grolist = '{\"testuser1\", \"testuser2\"}' WHERE groname = 'test'").with({
-        'command'     => "UPDATE pg_group SET grolist = '{\"testuser1\", \"testuser2\"}' WHERE groname = 'test'",
-        'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test' AND grolist = '{\"testuser1\", \"testuser2\"}'",
+      is_expected.to contain_postgresql_psql('test: DROP GROUP test').with({
+        'command'     => "DROP GROUP test",
+        'environment' => ["rp_env"],
+        'unless'      => "SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM pg_group WHERE groname = 'test')",
         'port'        => "5432",
       })
     end
