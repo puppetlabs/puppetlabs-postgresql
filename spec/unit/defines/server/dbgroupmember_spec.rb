@@ -34,8 +34,8 @@ describe 'postgresql::server::dbgroupmember', :type => :define do
     it 'should have create group for test' do
       is_expected.to contain_postgresql_psql('test_user: ALTER GROUP test ADD USER test_user').with({
         'command'     => "ALTER GROUP test ADD USER test_user",
-        'environment' => ["rp_env"],
-        'unless'      => "SELECT (SELECT usesysid from pg_user where usename = 'test_user') = ANY((SELECT grolist from pg_group where groname = 'test')::int[])",
+        'environment' => [],
+        'unless'      => "SELECT 1 WHERE (SELECT usesysid from pg_user where usename = 'test_user') = ANY((SELECT grolist from pg_group where groname = 'test')::int[])",
         'port'        => "5432",
       })
     end
@@ -58,8 +58,8 @@ describe 'postgresql::server::dbgroupmember', :type => :define do
     it 'should have create group for test' do
       is_expected.to contain_postgresql_psql('test_user: ALTER GROUP test DROP USER test_user').with({
         'command'     => "ALTER GROUP test DROP USER test_user",
-        'environment' => ["rp_env"],
-        'unless'      => "SELECT NOT (SELECT usesysid from pg_user where usename = 'test_user') = ANY((SELECT grolist from pg_group where groname = 'test')::int[])",
+        'environment' => [],
+        'unless'      => "SELECT 1 WHERE NOT (SELECT usesysid from pg_user where usename = 'test_user') = ANY((SELECT grolist from pg_group where groname = 'test')::int[])",
         'port'        => "5432",
       })
     end

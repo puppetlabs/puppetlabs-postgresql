@@ -28,7 +28,7 @@ describe 'postgresql::server::dbgroup', :type => :define do
     it 'should have create group for test' do
       is_expected.to contain_postgresql_psql('test: CREATE GROUP test').with({
         'command'     => "CREATE GROUP test",
-        'environment' => ["rp_env"],
+        'environment' => [],
         'unless'      => "SELECT 1 FROM pg_group WHERE groname = 'test'",
         'port'        => "5432",
       })
@@ -51,7 +51,7 @@ describe 'postgresql::server::dbgroup', :type => :define do
     it 'should have create group for test' do
       is_expected.to contain_postgresql_psql('test: DROP GROUP test').with({
         'command'     => "DROP GROUP test",
-        'environment' => ["rp_env"],
+        'environment' => [],
         'unless'      => "SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM pg_group WHERE groname = 'test')",
         'port'        => "5432",
       })
