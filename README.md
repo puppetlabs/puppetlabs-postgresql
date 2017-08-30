@@ -748,7 +748,7 @@ Specifies the name of the default database to connect with. On most systems this
 
 ##### `default_connect_settings`
 
-Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined-types. i.e. `postgresql::server::role`
+Specifies a puppet hash of environment variables used when connecting to a remote server. This should contain environment variables to be consumed by psql. Becomes the default for other defined-types. i.e. `postgresql::server::role`
 
 ##### `dialect`
 
