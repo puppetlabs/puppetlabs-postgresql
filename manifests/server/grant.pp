@@ -1,16 +1,34 @@
 # Define for granting permissions to roles. See README.md for more details.
 define postgresql::server::grant (
-  $role,
-  $db,
-  $privilege        = undef,
-  $object_type      = 'database',
-  $object_name      = undef,
-  $psql_db          = $postgresql::server::default_database,
-  $psql_user        = $postgresql::server::user,
-  $port             = $postgresql::server::port,
-  $onlyif_exists    = false,
-  $connect_settings = $postgresql::server::default_connect_settings,
+  String $role,
+  String $db,
+  Optional[String] $privilege      = undef,
+  Pattern[#/(?i:^COLUMN$)/,
+    /(?i:^ALL SEQUENCES IN SCHEMA$)/,
+    /(?i:^ALL TABLES IN SCHEMA$)/,
+    /(?i:^DATABASE$)/,
+    #/(?i:^FOREIGN DATA WRAPPER$)/,
+    #/(?i:^FOREIGN SERVER$)/,
+    #/(?i:^FUNCTION$)/,
+    /(?i:^LANGUAGE$)/,
+    #/(?i:^PROCEDURAL LANGUAGE$)/,
+    /(?i:^TABLE$)/,
+    #/(?i:^TABLESPACE$)/,
+    /(?i:^SCHEMA$)/,
+    /(?i:^SEQUENCE$)/
+    #/(?i:^VIEW$)/
+  ] $object_type                   = 'database',
+  Optional[Variant[
+            Array[String,2,2],
+            String[1]]
+  ] $object_name                   = undef,
+  String $psql_db                  = $postgresql::server::default_database,
+  String $psql_user                = $postgresql::server::user,
+  Integer $port                    = $postgresql::server::port,
+  Boolean $onlyif_exists           = false,
+  Hash $connect_settings           = $postgresql::server::default_connect_settings,
 ) {
+
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
 
@@ -20,7 +38,6 @@ define postgresql::server::grant (
     $_object_name = $object_name
   }
 
-  validate_bool($onlyif_exists)
   #
   # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
   #
@@ -36,24 +53,6 @@ define postgresql::server::grant (
   $_object_type = upcase($object_type)
   $_privilege   = upcase($privilege)
 
-  ## Validate that the object type is known
-  validate_re($_object_type,[
-    #'^COLUMN$',
-    '^DATABASE$',
-    #'^FOREIGN SERVER$',
-    #'^FOREIGN DATA WRAPPER$',
-    #'^FUNCTION$',
-    #'^PROCEDURAL LANGUAGE$',
-    '^SCHEMA$',
-    '^SEQUENCE$',
-    '^ALL SEQUENCES IN SCHEMA$',
-    '^TABLE$',
-    '^ALL TABLES IN SCHEMA$',
-    '^LANGUAGE$',
-    #'^TABLESPACE$',
-    #'^VIEW$',
-    ]
-  )
   # You can use ALL TABLES IN SCHEMA by passing schema_name to object_name
   # You can use ALL SEQUENCES IN SCHEMA by passing schema_name to object_name
 
@@ -71,10 +70,15 @@ define postgresql::server::grant (
       $unless_privilege = $_privilege ? {
         'ALL'            => 'CREATE',
         'ALL PRIVILEGES' => 'CREATE',
-        default          => $_privilege,
+        Pattern[
+          '^$',
+          '^CONNECT$',
+          '^CREATE$',
+          '^TEMP$',
+          '^TEMPORARY$'
+        ]                => $_privilege,
+        default          => fail('Illegal value for $privilege parameter'),
       }
-      validate_re($unless_privilege, [ '^$', '^CREATE$','^CONNECT$','^TEMPORARY$','^TEMP$',
-        '^ALL$','^ALL PRIVILEGES$' ])
       $unless_function = 'has_database_privilege'
       $on_db = $psql_db
       $onlyif_function = undef
@@ -83,9 +87,13 @@ define postgresql::server::grant (
       $unless_privilege = $_privilege ? {
         'ALL'            => 'CREATE',
         'ALL PRIVILEGES' => 'CREATE',
-        default          => $_privilege,
+        Pattern[
+          '^$',
+          '^CREATE$',
+          '^USAGE$'
+        ]                => $_privilege,
+        default          => fail('Illegal value for $privilege parameter'),
       }
-      validate_re($_privilege, [ '^$', '^CREATE$', '^USAGE$', '^ALL$', '^ALL PRIVILEGES$' ])
       $unless_function = 'has_schema_privilege'
       $on_db = $db
       $onlyif_function = undef
@@ -93,15 +101,31 @@ define postgresql::server::grant (
     'SEQUENCE': {
       $unless_privilege = $_privilege ? {
         'ALL'   => 'USAGE',
-        default => $_privilege,
+        Pattern[
+          '^$',
+          '^ALL PRIVILEGES$',
+          '^SELECT$',
+          '^UPDATE$',
+          '^USAGE$'
+        ]       => $_privilege,
+        default => fail('Illegal value for $privilege parameter'),
       }
-      validate_re($unless_privilege, [ '^$', '^USAGE$', '^SELECT$', '^UPDATE$', '^ALL$', '^ALL PRIVILEGES$' ])
       $unless_function = 'has_sequence_privilege'
       $on_db = $db
       $onlyif_function = undef
     }
     'ALL SEQUENCES IN SCHEMA': {
-      validate_re($_privilege, [ '^$', '^USAGE$', '^SELECT$', '^UPDATE$', '^ALL$', '^ALL PRIVILEGES$' ])
+      case $_privilege {
+        Pattern[
+          '^$',
+          '^ALL$',
+          '^ALL PRIVILEGES$',
+          '^SELECT$',
+          '^UPDATE$',
+          '^USAGE$'
+        ]:       { }
+        default: { fail('Illegal value for $privilege parameter') }
+      }
       $unless_function = 'custom'
       $on_db = $db
       $onlyif_function = undef
@@ -166,10 +190,19 @@ define postgresql::server::grant (
     'TABLE': {
       $unless_privilege = $_privilege ? {
         'ALL'   => 'INSERT',
-        default => $_privilege,
+        Pattern[
+          '^$',
+          '^ALL$',
+          '^ALL PRIVILEGES$',
+          '^DELETE$',
+          '^REFERENCES$',
+          '^SELECT$',
+          '^TRIGGER$',
+          '^TRUNCATE$',
+          '^UPDATE$'
+        ]       => $_privilege,
+        default => fail('Illegal value for $privilege parameter'),
       }
-      validate_re($unless_privilege,[ '^$', '^SELECT$','^INSERT$','^UPDATE$','^DELETE$',
-        '^TRUNCATE$','^REFERENCES$','^TRIGGER$','^ALL$','^ALL PRIVILEGES$' ])
       $unless_function = 'has_table_privilege'
       $on_db = $db
       $onlyif_function = $onlyif_exists ? {
@@ -178,8 +211,21 @@ define postgresql::server::grant (
       }
     }
     'ALL TABLES IN SCHEMA': {
-      validate_re($_privilege, [ '^$', '^SELECT$','^INSERT$','^UPDATE$','^DELETE$',
-        '^TRUNCATE$','^REFERENCES$','^TRIGGER$','^ALL$','^ALL PRIVILEGES$' ])
+      case $_privilege {
+        Pattern[
+          '^$',
+          '^ALL$',
+          '^ALL PRIVILEGES$',
+          '^DELETE$',
+          '^INSERT$',
+          '^REFERENCES$',
+          '^SELECT$',
+          '^TRIGGER$',
+          '^TRUNCATE$',
+          '^UPDATE$'
+        ]:       { }
+        default: { fail('Illegal value for $privilege parameter') }
+      }
       $unless_function = 'custom'
       $on_db = $db
       $onlyif_function = undef
@@ -223,9 +269,13 @@ define postgresql::server::grant (
       $unless_privilege = $_privilege ? {
         'ALL'            => 'USAGE',
         'ALL PRIVILEGES' => 'USAGE',
-        default          => $_privilege,
+        Pattern[
+          '^$',
+          '^CREATE$',
+          '^USAGE$'
+        ]                => $_privilege,
+        default          => fail('Illegal value for $privilege parameter'),
       }
-      validate_re($unless_privilege, [ '^$','^CREATE$','^USAGE$','^ALL$','^ALL PRIVILEGES$' ])
       $unless_function = 'has_language_privilege'
       $on_db = $db
       $onlyif_function = $onlyif_exists ? {
@@ -247,13 +297,16 @@ define postgresql::server::grant (
   #   object_type => 'TABLE',
   #   object_name => [$schema, $table],
   # }
-  if is_array($_object_name) {
-    $_togrant_object = join($_object_name, '"."')
-    # Never put double quotes into has_*_privilege function
-    $_granted_object = join($_object_name, '.')
-  } else {
-    $_granted_object = $_object_name
-    $_togrant_object = $_object_name
+  case $_object_name {
+    Array:   {
+      $_togrant_object = join($_object_name, '"."')
+      # Never put double quotes into has_*_privilege function
+      $_granted_object = join($_object_name, '.')
+    }
+    default: {
+      $_granted_object = $_object_name
+      $_togrant_object = $_object_name
+    }
   }
 
   $_unless = $unless_function ? {

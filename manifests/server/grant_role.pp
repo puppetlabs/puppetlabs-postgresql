@@ -1,27 +1,13 @@
 # Define for granting membership to a role. See README.md for more information
 define postgresql::server::grant_role (
-  $group,
-  $role             = $name,
-  $ensure           = 'present',
-  $psql_db          = $postgresql::server::default_database,
-  $psql_user        = $postgresql::server::user,
-  $port             = $postgresql::server::port,
-  $dialect          = $postgresql::server::dialect,
-  $connect_settings = $postgresql::server::default_connect_settings,
+  String[1] $group,
+  String[1] $role                   = $name,
+  Enum['present', 'absent'] $ensure = 'present',
+  $psql_db                          = $postgresql::server::default_database,
+  $psql_user                        = $postgresql::server::user,
+  $port                             = $postgresql::server::port,
+  $connect_settings                 = $postgresql::server::default_connect_settings,
 ) {
-  validate_string($group)
-  validate_string($role)
-  if empty($group) {
-    fail('$group must be set')
-  }
-  if empty($role) {
-    fail('$role must be set')
-  }
-
-  if $dialect != 'postgres' {
-    fail("dialect must be postgres to use this feature (for redshift, use dbgroup instead)")
-  }
-
   case $ensure {
     'present': {
       $command = "GRANT \"${group}\" TO \"${role}\""

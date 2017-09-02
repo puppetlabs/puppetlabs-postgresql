@@ -1,3 +1,65 @@
+## Supported Release 5.1.0
+### Summary
+This release includes Japanese translations for internationalization, Puppet 5 support, implementation of defined type postgresql::server::reassign_owned_by.
+
+#### Features
+- Updating translations for readmes/README_ja_JP.md
+- add defined type postgresql::server::reassign_owned_by
+- Allow order parameter to be string value
+- prep for puppet 5 ([MODULES-5144](https://tickets.puppetlabs.com/browse/MODULES-5144))
+- add data_checksums option to initdb
+- parameter ensure of custom resource postgresql_replication_slot is not documented ([MODULES-2989](https://tickets.puppetlabs.com/browse/MODULES-2989))
+
+#### Bug Fixes
+- Adding a space for header formatting
+- use https for apt.postgresql.org repo
+- msync puppet 5 and ruby 2.4 ([MODULES-5197](https://tickets.puppetlabs.com/browse/MODULES-5187))
+- Only run test on postgresql >= 9.0 ([FM-6240](https://tickets.puppetlabs.com/browse/FM-6240))
+- Fix Ruby 2.4 deprecation in postgresql_acls_to_resources_hash
+
+## Supported Release 5.0.0
+### Summary
+This **major** release dropped support for Puppet 3 and PostgreSQL 8.x, added Puppet 4 data types, and deprecated the validate_db_connection type.
+
+#### Added
+- `locales/` directory, .pot file, and i18n `config.yaml`. ([FM-6116](https://tickets.puppet.com/browse/FM-6116))
+- `update_password` parameter to toggle password management per role.
+- **Puppet 4** type validation.
+- new `postgresql_conn_validator` custom type and deprecated `validate_db_connection`. ([MODULES-1394](https://tickets.puppet.com/browse/MODULES-1394))
+
+#### Changed
+- default postgis versions in postgresql::globals to use newer versions.
+- puppetlabs-concat and puppetlabs-apt dependencies to use latest versions. ([MODULES-4906](https://tickets.puppet.com/browse/MODULES-4906), [MODULES-4947](https://tickets.puppet.com/browse/MODULES-4947))
+- default value for `log_line_prefix` to `undef`.
+- `listen_addresses` default value to 'localhost'. Allows for it to be set independently of a class declaration.
+- use of stdlib validate_* functions. They have been removed in favor of Puppet 4 type validation.
+- lower Puppet dependency in metadata to 4.7.0. ([MODULES-4826](https://tickets.puppet.com/browse/MODULES-4826))
+
+#### Fixed
+- deprecated apt::source parameters(`key`,`key_source`, & `include_src`).
+- default SUSE parameters. ([MODULES-4598](https://tickets.puppet.com/browse/MODULES-4598))
+- use of force parameter on concat resources.
+
+## Supported Release 4.9.0
+### Summary
+This release adds several types and, among other bugs, fixes an issue with the yum URL.
+
+#### Features
+- Modifying ownership of databases and schemas now available (MODULES-3247)
+- Use `module_workdir` to specify a custom directory in which to execute psql commands
+- `grant_role` and `grant` types added!
+- Support for parallel unit testing (parallel_tests)
+- Override download/installation repo URL with `repo_baseurl`
+- Set your timezone with `timezone`
+- Grant privileges on LANGUAGEs
+- Added support for Debian Stretch and Ubuntu Yakkety Yak
+
+#### Bugfixes
+- Usernames and passwords are now converted to strings before password hash is created
+- Specify default database name if it is not the username
+- Update to yum repo
+- Schema name conflicts fix
+
 ## Supported Release 4.8.0
 ### Summary
 This release primarily fixes an issue with `postgresql_conf` values of ipaddresses being considered floats and not getting quoted.

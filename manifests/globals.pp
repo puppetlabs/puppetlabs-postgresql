@@ -51,6 +51,7 @@ class postgresql::globals (
   $dialect                  = undef,
   $encoding                 = undef,
   $locale                   = undef,
+  $data_checksums           = undef,
   $timezone                 = undef,
 
   $manage_pg_hba_conf       = undef,
@@ -94,6 +95,7 @@ class postgresql::globals (
         /^(14.04)$/ => '9.3',
         /^(14.10|15.04|15.10)$/ => '9.4',
         /^(16.04|16.10)$/ => '9.5',
+        /^(17.04)$/ => '9.6',
         default => undef,
       },
       default => undef,

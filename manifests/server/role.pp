@@ -1,10 +1,11 @@
 # Define for creating a database role. See README.md for more information
 define postgresql::server::role(
+  $update_password  = true,
   $password_hash    = false,
   $createdb         = false,
   $createrole       = false,
   $db               = $postgresql::server::default_database,
-  $ensure           = 'present',
+  Enum['present', 'absent'] $ensure = 'present',
   $port             = undef,
   $login            = true,
   $inherit          = true,
@@ -126,7 +127,11 @@ define postgresql::server::role(
     } elsif ($dialect == 'redshift') {
       $options_sql = "${createrole_sql} ${createdb_sql}"
     }
-    
+
+    postgresql_psql {"ALTER ROLE \"${username}\" CONNECTION LIMIT ${connection_limit}":
+      unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolconnlimit = ${connection_limit}",
+    }
+
     postgresql_psql { "${title}: CREATE ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
       command     => "CREATE ${role_keyword} \"${username}\" ${password_sql} ${options_sql} CONNECTION LIMIT ${role_connection_limit}",
       unless      => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}'",
@@ -187,7 +192,7 @@ define postgresql::server::role(
       unless => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}' AND ${role_column_prefix}connlimit = '${role_connection_limit}'",
     }
   
-    if $password_hash {
+    if $password_hash and $update_password {
       if($password_hash =~ /^md5.+/) {
         $pwd_hash_sql = $password_hash
       } else {

@@ -55,6 +55,29 @@ describe 'postgresql::server::grant', :type => :define do
     ) }
   end
 
+  context 'SeQuEnCe case insensitive object_type match' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'test',
+        :privilege => 'usage',
+        :object_type => 'SeQuEnCe',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT USAGE ON SEQUENCE "test" TO\s* "test"/m,
+        'unless'  => /SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)/m,
+      }
+    ) }
+  end
+
   context 'all sequences' do
     let :params do
       {
@@ -124,7 +147,7 @@ describe 'postgresql::server::grant', :type => :define do
         :connect_settings => { 'PGHOST'    => 'postgres-db-server',
                                'DBVERSION' => '9.1',
              'PGPORT'    => '1234', },
-        :port => '5678',
+        :port => 5678,
       }
     end
 
@@ -136,7 +159,31 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql_psql("test: grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ).with_port( '5678' ) }
   end
 
-  context 'invalid objectype' do
+  context 'with specific schema name' do
+    let :params do
+      {
+        :db          => 'test',
+        :role        => 'test',
+        :privilege   => 'all',
+        :object_name => ['myschema', 'mytable'],
+        :object_type => 'table',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT ALL ON TABLE "myschema"."mytable" TO\s* "test"/m,
+        'unless'  => /SELECT 1 WHERE has_table_privilege\('test',\s*'myschema.mytable', 'INSERT'\)/m,
+      }
+    ) }
+  end
+
+  context 'invalid object_type' do
     let :params do
       {
         :db => 'test',
@@ -150,6 +197,61 @@ describe 'postgresql::server::grant', :type => :define do
       "class {'postgresql::server':}"
     end
 
-    it { is_expected.to compile.and_raise_error(/"INVALID" does not match/) }
+    it { is_expected.to compile.and_raise_error(/parameter 'object_type' expects a match for Pattern/) }
   end
+
+  context 'invalid object_name - wrong type' do
+    let :params do
+      {
+        :db          => 'test',
+        :role        => 'test',
+        :privilege   => 'all',
+        :object_name => 1,
+        :object_type => 'table',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to compile.and_raise_error(/parameter 'object_name' expects a value of type (Array|Undef, Array,) or String, got Integer/) }
+  end
+
+  context 'invalid object_name - insufficent array elements' do
+    let :params do
+      {
+        :db          => 'test',
+        :role        => 'test',
+        :privilege   => 'all',
+        :object_name => ['oops'],
+        :object_type => 'table',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to compile.and_raise_error(/parameter 'object_name' variant 0 expects size to be 2, got 1/) }
+  end
+
+  context 'invalid object_name - too many array elements' do
+    let :params do
+      {
+        :db          => 'test',
+        :role        => 'test',
+        :privilege   => 'all',
+        :object_name => ['myschema', 'mytable', 'oops'],
+        :object_type => 'table',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to compile.and_raise_error(/parameter 'object_name' variant 0 expects size to be 2, got 3/) }
+  end
+
 end
