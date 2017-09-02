@@ -6,7 +6,7 @@ class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
   #
   # http://www.postgresql.org/download/linux/debian/
   #
-  $default_baseurl = 'http://apt.postgresql.org/pub/repos/apt/'
+  $default_baseurl = 'https://apt.postgresql.org/pub/repos/apt/'
 
   $_baseurl = pick($postgresql::repo::baseurl, $default_baseurl)
 

@@ -10,6 +10,7 @@
     * [Configure a server](#configure-a-server)
     * [Create a database](#create-a-database)
     * [Manage users, roles, and permissions](#manage-users-roles-and-permissions)
+    * [Manage ownership of DB objects](#manage-ownership-of-db-objects)
     * [Override defaults](#override-defaults)
     * [Create an access rule for pg_hba.conf](#create-an-access-rule-for-pg_hbaconf)
     * [Create user name maps for pg_ident.conf](#create-user-name-maps-for-pg_identconf)
@@ -44,7 +45,8 @@ PostgreSQL is a high-performance, free, open-source relational database server. 
 To configure a basic default PostgreSQL server, declare the `postgresql::server` class.
 
 ```puppet
-class { 'postgresql::server': }
+class { 'postgresql::server':
+}
 ```
 
 ## Usage
@@ -57,7 +59,6 @@ For default settings, declare the `postgresql::server` class as above. To custom
 class { 'postgresql::server':
   ip_mask_deny_postgres_user => '0.0.0.0/32',
   ip_mask_allow_all_users    => '0.0.0.0/0',
-  listen_addresses           => '*',
   ipv4acls                   => ['hostssl all johndoe 192.168.0.0/24 cert'],
   postgres_password          => 'TPSrep0rt!',
 }
@@ -79,7 +80,8 @@ For more details about server configuration parameters, consult the [PostgreSQL 
 You can set up a variety of PostgreSQL databases with the `postgresql::server::db` defined type. For instance, to set up a database for PuppetDB:
 
 ```puppet
-class { 'postgresql::server': }
+class { 'postgresql::server':
+}
 
 postgresql::server::db { 'mydatabasename':
   user     => 'mydatabaseuser',
@@ -92,10 +94,11 @@ postgresql::server::db { 'mydatabasename':
 To manage users, roles, and permissions:
 
 ```puppet
-class { 'postgresql::server': }
+class { 'postgresql::server':
+}
 
 postgresql::server::role { 'marmot':
-password_hash => postgresql_password('marmot', 'mypasswd'),
+  password_hash => postgresql_password('marmot', 'mypasswd'),
 }
 
 postgresql::server::database_grant { 'test1':
@@ -114,6 +117,24 @@ postgresql::server::table_grant { 'my_table of test2':
 
 This example grants **all** privileges on the test1 database and on the `my_table` table of the test2 database to the specified user or group. After the values are added into the PuppetDB config file, this database would be ready for use.
 
+### Manage ownership of DB objects
+
+To change the ownership of all objects within a database using REASSIGN OWNED:
+
+```puppet
+postgresql::server::reassign_owned_by { 'new owner is meerkat':
+  db        => 'test_db',
+  old_owner => 'marmot',
+  new_owner => 'meerkat',
+}
+```
+
+This would run the PostgreSQL statement 'REASSIGN OWNED' to update to ownership of all tables, sequences, functions and views currently owned by the role 'marmot' to be owned by the role 'meerkat' instead.
+
+This applies to objects within the nominated database, 'test_db' only.
+
+For Postgresql >= 9.3, the ownership of the database is also updated.
+
 ### Override defaults
 
 The `postgresql::globals` class allows you to configure the main settings for this module globally, so that other classes and defined resources can use them. By itself, it does nothing.
@@ -124,7 +145,8 @@ For example, to overwrite the default `locale` and `encoding` for all classes, u
 class { 'postgresql::globals':
   encoding => 'UTF-8',
   locale   => 'en_US.UTF-8',
-}->
+}
+
 class { 'postgresql::server':
 }
 ```
@@ -135,8 +157,10 @@ To use a specific version of the PostgreSQL package:
 class { 'postgresql::globals':
   manage_package_repo => true,
   version             => '9.2',
-}->
-class { 'postgresql::server': }
+}
+
+class { 'postgresql::server':
+}
 ```
 
 ### Manage remote users, roles, and permissions
@@ -151,32 +175,27 @@ You can provide a `connect_settings` hash for each of the Puppet resources, or y
 
 ```puppet
 $connection_settings_super2 = {
-                                 'PGUSER'     => "super2",
-                                 'PGPASSWORD' => "foobar2",
-                                 'PGHOST'     => "127.0.0.1",
-                                 'PGPORT'     => "5432",
-                                 'PGDATABASE' => "postgres",
-                                }
+  'PGUSER'     => 'super2',
+  'PGPASSWORD' => 'foobar2',
+  'PGHOST'     => '127.0.0.1',
+  'PGPORT'     => '5432',
+  'PGDATABASE' => 'postgres',
+}
 
 include postgresql::server
 
 # Connect with no special settings, i.e domain sockets, user postgres
-postgresql::server::role{'super2':
-  password_hash => "foobar2",
-  superuser     => true,
+postgresql::server::role { 'super2':
+  password_hash    => 'foobar2',
+  superuser        => true,
 
   connect_settings => {},
-  require          => [
-                       Class['postgresql::globals'],
-                       Class['postgresql::server::service'],
-                      ],
 }
 
 # Now using this new user connect via TCP
 postgresql::server::database { 'db1':
   connect_settings => $connection_settings_super2,
-
-require => Postgresql::Server::Role['super2'],
+  require          => Postgresql::Server::Role['super2'],
 }
 ```
 
@@ -186,7 +205,7 @@ To create an access rule for `pg_hba.conf`:
 
 ```puppet
 postgresql::server::pg_hba_rule { 'allow application network to access app database':
-  description => "Open up PostgreSQL for access from 200.1.2.0/24",
+  description => 'Open up PostgreSQL for access from 200.1.2.0/24',
   type        => 'host',
   database    => 'app',
   user        => 'app',
@@ -208,7 +227,7 @@ By default, `pg_hba_rule` requires that you include `postgresql::server`. Howeve
 
 ```puppet
 postgresql::server::pg_hba_rule { 'allow application network to access app database':
-  description        => "Open up postgresql for access from 200.1.2.0/24",
+  description        => 'Open up postgresql for access from 200.1.2.0/24',
   type               => 'host',
   database           => 'app',
   user               => 'app',
@@ -224,7 +243,7 @@ postgresql::server::pg_hba_rule { 'allow application network to access app datab
 To create a user name map for the pg_ident.conf:
 
 ```puppet
-postgresql::server::pg_ident_rule{ 'Map the SSL certificate of the backup server as a replication user':
+postgresql::server::pg_ident_rule { 'Map the SSL certificate of the backup server as a replication user':
   map_name          => 'sslrepli',
   system_username   => 'repli1.example.com',
   database_username => 'replication',
@@ -245,22 +264,22 @@ sslrepli  repli1.example.com  replication
 To create the recovery configuration file (`recovery.conf`):
 
 ```puppet
-postgresql::server::recovery{ 'Create a recovery.conf file with the following defined parameters':
-  restore_command                => 'cp /mnt/server/archivedir/%f %p',
-  archive_cleanup_command        => undef,
-  recovery_end_command           => undef,
-  recovery_target_name           => 'daily backup 2015-01-26',
-  recovery_target_time           => '2015-02-08 22:39:00 EST',
-  recovery_target_xid            => undef,
-  recovery_target_inclusive      => true,
-  recovery_target                => 'immediate',
-  recovery_target_timeline       => 'latest',
-  pause_at_recovery_target       => true,
-  standby_mode                   => 'on',
-  primary_conninfo               => 'host=localhost port=5432',
-  primary_slot_name              => undef,
-  trigger_file                   => undef,
- recovery_min_apply_delay        => 0,
+postgresql::server::recovery { 'Create a recovery.conf file with the following defined parameters':
+  restore_command           => 'cp /mnt/server/archivedir/%f %p',
+  archive_cleanup_command   => undef,
+  recovery_end_command      => undef,
+  recovery_target_name      => 'daily backup 2015-01-26',
+  recovery_target_time      => '2015-02-08 22:39:00 EST',
+  recovery_target_xid       => undef,
+  recovery_target_inclusive => true,
+  recovery_target           => 'immediate',
+  recovery_target_timeline  => 'latest',
+  pause_at_recovery_target  => true,
+  standby_mode              => 'on',
+  primary_conninfo          => 'host=localhost port=5432',
+  primary_slot_name         => undef,
+  trigger_file              => undef,
+  recovery_min_apply_delay  => 0,
 }
 ```
 
@@ -283,16 +302,16 @@ Only the specified parameters are recognized in the template. The `recovery.conf
 
 ### Validate connectivity
 
-To validate client connections to a remote PostgreSQL database before starting dependent tasks, use the `postgresql::validate_db_connection` resource. You can use this on any node where the PostgreSQL client software is installed. It is often chained to other tasks such as starting an application server or performing a database migration.
+To validate client connections to a remote PostgreSQL database before starting dependent tasks, use the `postgresql_conn_validator` resource. You can use this on any node where the PostgreSQL client software is installed. It is often chained to other tasks such as starting an application server or performing a database migration.
 
 Example usage:
 
 ```puppet
-postgresql::validate_db_connection { 'validate my postgres connection':
-  database_host           => 'my.postgres.host',
-  database_username       => 'mydbuser',
-  database_password       => 'mydbpassword',
-  database_name           => 'mydbname',
+postgresql_conn_validator { 'validate my postgres connection':
+  host              => 'my.postgres.host',
+  db_username       => 'mydbuser',
+  db_password       => 'mydbpassword',
+  db_name           => 'mydbname',
 }->
 exec { 'rake db:migrate':
   cwd => '/opt/myrubyapp',
@@ -329,18 +348,19 @@ The postgresql module comes with many options for configuring the server. While 
 * [postgresql::server::grant_role](#postgresqlservergrant_role)
 * [postgresql::server::pg_hba_rule](#postgresqlserverpg_hba_rule)
 * [postgresql::server::pg_ident_rule](#postgresqlserverpg_ident_rule)
+* [postgresql::server::reassign_owned_by](#postgresqlserverreassign_owned_by)
 * [postgresql::server::recovery](#postgresqlserverrecovery)
 * [postgresql::server::role](#postgresqlserverrole)
 * [postgresql::server::schema](#postgresqlserverschema)
 * [postgresql::server::table_grant](#postgresqlservertable_grant)
 * [postgresql::server::tablespace](#postgresqlservertablespace)
-* [postgresql::validate_db_connection](#postgresqlvalidate_db_connection)
 
 **Types:**
 
 * [postgresql_psql](#custom-resource-postgresql_psql)
 * [postgresql_replication_slot](#custom-resource-postgresql_replication_slot)
 * [postgresql_conf](#custom-resource-postgresql_conf)
+* [postgresql_conn_validator](#custom-resource-postgresql_conn_validator)
 
 **Functions:**
 
@@ -368,13 +388,6 @@ Default value: 'present'.
 Sets the name of the PostgreSQL client package.
 
 Default value: 'file'.
-
-##### `validcon_script_path`
-
-Specifies the path to validate the connection script.
-
-
-Default value: '/usr/local/bin/validate_postgresql_connection.sh'.
 
 #### postgresql::lib::docs
 
@@ -494,6 +507,16 @@ Default value: `undef`, which is effectively 'C'.
 
 **On Debian, you'll need to ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.**
 
+##### `data_checksums`
+
+Optional.
+
+Data type: Boolean.
+
+Turns on data checksums during `initdb`.
+
+Default value: `undef`, which is the same as `false`.
+
 ##### `timezone`
 
 Sets the default timezone of the postgresql server. The postgresql built-in default is taking the systems timezone information.
@@ -503,12 +526,6 @@ Sets the default timezone of the postgresql server. The postgresql built-in defa
 Overrides the default PostgreSQL log directory.
 
 Default value: initdb's default path.
-
-##### `log_line_prefix`
-
-Set a prefix for the server logs.
-
-Default value: '%t '.
 
 ##### `manage_package_repo`
 
@@ -644,7 +661,7 @@ Overrides the default PostgreSQL xlog directory.
 
 Default value: initdb's default path.
 
-####postgresql::lib::devel
+#### postgresql::lib::devel
 
 Installs the packages containing the development libraries for PostgreSQL and symlinks `pg_config` into `/usr/bin` (if not in `/usr/bin` or `/usr/local/bin`).
 
@@ -800,13 +817,6 @@ Specifies the IP mask from which remote connections should be denied for the pos
 
 Default value: '0.0.0.0/0', which denies any remote connection.
 
-##### `listen_addresses`
-
-Specifies the addresses the server accepts connections to. Valid values:
-  * 'localhost': Accept connections from local host only.
-  * '*': Accept connections from any remote machine.
-  * Specified comma-separated list of hostnames or IP addresses.
-
 ##### `locale`
 
 Sets the default database locale for all databases created with this module. On certain operating systems this is used during the `template1` initialization as well, so it becomes a default outside of the module.
@@ -814,12 +824,6 @@ Sets the default database locale for all databases created with this module. On 
 Default value: `undef`, which is effectively 'C'.
 
 **On Debian, you must ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.**
-
-##### `log_line_prefix`
-
-Set a prefix for the server logs.
-
-Default value: '%t'
 
 ##### `manage_pg_hba_conf`
 
@@ -1306,7 +1310,10 @@ Valid options: 'DATABASE', 'SCHEMA', 'SEQUENCE', 'ALL SEQUENCES IN SCHEMA', 'TAB
 
 ##### `object_name`
 
-Specifies name of `object_type` to which to grant access.
+Specifies name of `object_type` to which to grant access, can be either a string or a two element array.
+
+String: 'object_name'
+Array:  ['schema_name', 'object_name']
 
 ##### `port`
 
@@ -1475,6 +1482,40 @@ Provides the target for the rule and is generally an internal only property.
 
 **Use with caution.**
 
+#### postgresql::server::reassign_owned_by
+
+Runs the PostgreSQL command 'REASSIGN OWNED' on a database, to transfer the ownership of existing objects between database roles
+
+##### `db`
+
+Specifies the database to which the 'REASSIGN OWNED' will be applied
+
+##### `old_role`
+
+Specifies the role or user who is the current owner of the objects in the specified db
+
+##### `new_role`
+
+Specifies the role or user who will be the new owner of these objects
+
+##### `psql_user`
+
+Specifies the OS user for running `psql`.
+
+Default value: The default user for the module, usually 'postgres'.
+
+##### `port`
+
+Port to use when connecting.
+
+Default value: `undef`, which generally defaults to port 5432 depending on your PostgreSQL packaging.
+
+##### `connect_settings`
+
+Specifies a hash of environment variables used when connecting to a remote server.
+
+Default value: Connects to the local Postgres instance.
+
 #### postgresql::server::recovery
 
 Allows you to create the content for `recovery.conf`. For more details see the [usage example](#create-recovery-configuration) and the [PostgreSQL documentation](http://www.postgresql.org/docs/current/static/recovery-config.html).
@@ -1558,9 +1599,12 @@ Default value: `true`.
 ##### `password_hash`
 Sets the hash to use during password creation. If the password is not already pre-encrypted in a format that PostgreSQL supports, use the `postgresql_password` function to provide an MD5 hash here, for example:
 
+##### `update_password`
+If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.
+
 ```puppet
-postgresql::server::role { "myusername":
-password_hash => postgresql_password('myusername', 'mypassword'),
+postgresql::server::role { 'myusername':
+  password_hash => postgresql_password('myusername', 'mypassword'),
 }
 ```
 
@@ -1677,64 +1721,6 @@ Specifies the name of the tablespace.
 
 Default value: the namevar.
 
-#### postgresql::validate_db_connection
-
-Validates client connection with a remote PostgreSQL database.
-
-##### `connect_settings`
-
-Specifies a hash of environment variables used when connecting to a remote server. This is an alternative to providing individual parameters (`database_host`, etc). If provided, the individual parameters take precedence.
-
-##### `create_db_first`
-
-Ensures that the database is created before running the test. This only works if your test is local.
-
-Default value: `true`.
-
-##### `database_host`
-
-Sets the hostname of the database you wish to test.
-
-Default value: `undef`, which generally uses the designated local Unix socket.
-
-##### `database_name`
-
-Specifies the name of the database you wish to test.
-
-Default value: 'postgres'.
-
-##### `database_port`
-
-Defines the port to use when connecting.
-
-Default value: `undef`, which generally defaults to port 5432 depending on your PostgreSQL packaging.
-
-##### `database_password`
-
-Specifies the password to connect with. Can be left blank, not recommended.
-
-##### `database_username`
-
-Specifies the username to connect with.
-
-Default value: `undef`.
-
-When using a Unix socket and ident auth, this is the user you are running as.
-
-**If the host is remote you must provide a username.**
-
-##### `run_as`
-
-Specifies the user to run the `psql` command as. This is important when trying to connect to a database locally using Unix sockets and `ident` authentication. Not needed for remote testing.
-
-##### `sleep`
-
-Sets the number of seconds to sleep for before trying again after a failure.
-
-##### `tries`
-
-Sets the number of attempts after failure before giving up and failing the resource.
-
 ### Types
 
 #### postgresql_psql
@@ -1837,14 +1823,86 @@ Specifies the name of the slot to create. Must be a valid replication slot name.
 
 This is the namevar.
 
+##### `ensure`
+
+Required.
+
+Specifies the action to create or destroy named slot. 
+
+Valid values: 'present', 'absent'.
+
+Default value: 'present'.
+
+#### postgresql_conn_validator
+
+Validate the connection to a local or remote PostgreSQL database using this type.
+
+##### `connect_settings`
+
+Specifies a hash of environment variables used when connecting to a remote server. This is an alternative to providing individual parameters (`host`, etc). If provided, the individual parameters take precedence.
+
+Default value: {}
+
+##### `db_name`
+
+Specifies the name of the database you wish to test.
+
+Default value: ''
+
+##### `db_password`
+
+Specifies the password to connect with. Can be left blank if `.pgpass` is being used, otherwise not recommended.
+
+Default value: ''
+
+##### `db_username`
+
+Specifies the username to connect with.
+
+Default value: ''
+
+When using a Unix socket and ident auth, this is the user you are running as.
+
+##### `command`
+
+This is the command run against the target database to verify connectivity.
+
+Default value: 'SELECT 1'
+
+##### `host`
+
+Sets the hostname of the database you wish to test.
+
+Default value: '', which generally uses the designated local Unix socket.
+
+**If the host is remote you must provide a username.**
+
+##### `port`
+
+Defines the port to use when connecting.
+
+Default value: '' 
+
+##### `run_as`
+
+Specifies the user to run the `psql` command as. This is important when trying to connect to a database locally using Unix sockets and `ident` authentication. Not needed for remote testing.
+
+##### `sleep`
+
+Sets the number of seconds to sleep for before trying again after a failure.
+
+##### `tries`
+
+Sets the number of attempts after failure before giving up and failing the resource.
+
 ### Functions
 
 #### postgresql_password
 
 Generates a PostgreSQL encrypted password, use `postgresql_password`. Call it from the command line and then copy and paste the encrypted password into your manifest:
 
-```puppet
-puppet apply --execute 'notify { "test": message => postgresql_password("username", "password") }'
+```shell
+puppet apply --execute 'notify { 'test': message => postgresql_password('username', 'password') }'
 ```
 
 Alternatively, you can call this from your production manifests, but the manifests will then contain a clear text version of your passwords.
@@ -1929,4 +1987,4 @@ RSPEC_SET=debian-607-x64 bundle exec rspec spec/acceptance
 
 ### Contributors
 
-View the full list of contributors on [https://github.com/puppetlabs/puppetlabs-postgresql/graphs/contributors](GitHub).
+View the full list of contributors on [Github](https://github.com/puppetlabs/puppetlabs-postgresql/graphs/contributors).

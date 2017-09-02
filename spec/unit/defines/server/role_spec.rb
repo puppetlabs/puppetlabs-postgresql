@@ -75,9 +75,9 @@ describe 'postgresql::server::role', :type => :define do
       {
         :password_hash => 'new-pa$s',
         :connect_settings => { 'PGHOST'     => 'postgres-db-server',
-                           'DBVERSION'  => '9.1',
-                           'PGUSER'     => 'login-user',
-                           'PGPASSWORD' => 'login-pass' },
+                               'DBVERSION'  => '9.1',
+                               'PGUSER'     => 'login-user',
+                               'PGPASSWORD' => 'login-pass' },
       }
     end
 
@@ -119,10 +119,10 @@ describe 'postgresql::server::role', :type => :define do
       {
         :password_hash => 'new-pa$s',
         :connect_settings => { 'PGHOST'     => 'postgres-db-server',
-                           'DBVERSION'  => '9.1',
-                           'PGPORT'     => '1234',
-                           'PGUSER'     => 'login-user',
-                           'PGPASSWORD' => 'login-pass' },
+                               'DBVERSION'  => '9.1',
+                               'PGPORT'     => '1234',
+                               'PGUSER'     => 'login-user',
+                               'PGPASSWORD' => 'login-pass' },
       }
     end
 
@@ -157,14 +157,36 @@ describe 'postgresql::server::role', :type => :define do
     end
   end
 
-  context "drop user" do
+  context 'with update_password set to false' do
+    let :params do
+      {
+        :password_hash => 'new-pa$s',
+        :update_password => false,
+        :connect_settings => { 'PGHOST'     => 'postgres-db-server',
+                               'DBVERSION'  => '9.1',
+                               'PGPORT'     => '1234',
+                               'PGUSER'     => 'login-user',
+                               'PGPASSWORD' => 'login-pass' },
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server': dialect => 'postgres'}"
+    end
+
+    it 'should not have alter role for "test" user with password as **** if update_password is false' do
+      is_expected.not_to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
+    end
+  end
+
+  context "drop role" do
     let :params do
       {
         :connect_settings => { 'PGHOST'     => 'postgres-db-server',
-                           'DBVERSION'  => '9.1',
-                           'PGPORT'     => '1234',
-                           'PGUSER'     => 'login-user',
-                           'PGPASSWORD' => 'login-pass' },
+                               'DBVERSION'  => '9.1',
+                               'PGPORT'     => '1234',
+                               'PGUSER'     => 'login-user',
+                               'PGPASSWORD' => 'login-pass' },
         :ensure => 'absent',
       }
     end
@@ -244,9 +266,9 @@ describe 'postgresql::server::role', :type => :define do
       {
         :password_hash => 'new-pa$s',
         :connect_settings => { 'PGHOST'     => 'redshift-db-server',
-                           'DBVERSION'  => '9.1',
-                           'PGUSER'     => 'login-user',
-                           'PGPASSWORD' => 'login-pass' },
+                               'DBVERSION'  => '9.1',
+                               'PGUSER'     => 'login-user',
+                               'PGPASSWORD' => 'login-pass' },
       }
     end
 
@@ -287,10 +309,10 @@ describe 'postgresql::server::role', :type => :define do
       {
         :password_hash => 'new-pa$s',
         :connect_settings => { 'PGHOST'     => 'redshift-db-server',
-                           'DBVERSION'  => '9.1',
-                           'PGPORT'     => '1234',
-                           'PGUSER'     => 'login-user',
-                           'PGPASSWORD' => 'login-pass' },
+                               'DBVERSION'  => '9.1',
+                               'PGPORT'     => '1234',
+                               'PGUSER'     => 'login-user',
+                               'PGPASSWORD' => 'login-pass' },
       }
     end
 
@@ -328,10 +350,10 @@ describe 'postgresql::server::role', :type => :define do
     let :params do
       {
         :connect_settings => { 'PGHOST'     => 'redshift-db-server',
-                           'DBVERSION'  => '9.1',
-                           'PGPORT'     => '1234',
-                           'PGUSER'     => 'login-user',
-                           'PGPASSWORD' => 'login-pass' },
+                               'DBVERSION'  => '9.1',
+                               'PGPORT'     => '1234',
+                               'PGUSER'     => 'login-user',
+                               'PGPASSWORD' => 'login-pass' },
         :ensure => 'absent',
       }
     end
