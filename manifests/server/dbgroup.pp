@@ -1,7 +1,7 @@
 # Define for creating a redshift group. See README.md for more information
 define postgresql::server::dbgroup(
   $db               = $postgresql::server::default_database,
-  $port             = undef, 
+  $port             = undef,
   $ensure           = 'present',
   $groupname        = $title,
   $dialect          = $postgresql::server::dialect,
