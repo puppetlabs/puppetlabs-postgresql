@@ -141,18 +141,18 @@ define postgresql::server::role(
 
     postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${createdb_sql}":
       command => "ALTER ${role_keyword} \"${username}\" ${createdb_sql}",
-      unless => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}' AND ${role_column_prefix}createdb = ${createdb}",
+      unless  => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}' AND ${role_column_prefix}createdb = ${createdb}",
     }
 
     if ($dialect == 'postgres') {
       postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${createrole_sql}":
         command => "ALTER ${role_keyword} \"${username}\" ${createrole_sql}",
-        unless => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}' AND rolcreaterole = ${createrole}",
+        unless  => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}' AND rolcreaterole = ${createrole}",
       }
 
       postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${superuser_sql}":
         command => "ALTER ${role_keyword} \"${username}\" ${superuser_sql}",
-        unless => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolsuper = ${superuser}",
+        unless  => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolsuper = ${superuser}",
       }
 
       postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${login_sql}":
@@ -162,7 +162,7 @@ define postgresql::server::role(
 
       postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${inherit_sql}":
         command => "ALTER ${role_keyword} \"${username}\" ${inherit_sql}",
-        unless => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolinherit = ${inherit}",
+        unless  => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolinherit = ${inherit}",
       }
 
       if(versioncmp($version, '9.1') >= 0) {
@@ -174,7 +174,7 @@ define postgresql::server::role(
         } else {
           postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${replication_sql}":
             command => "ALTER ${role_keyword} \"${username}\" ${replication_sql}",
-            unless => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolreplication = ${replication}",
+            unless  => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolreplication = ${replication}",
           }
         }
       }
@@ -183,13 +183,13 @@ define postgresql::server::role(
       # CREATEUSER actually defines superuser privileges in Redshift: http://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html
       postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${createrole_sql}":
         command => "ALTER ${role_keyword} \"${username}\" ${createrole_sql}",
-        unless => "SELECT 1 FROM ${role_table} WHERE usename = '${username}' AND usesuper = ${createrole}",
+        unless  => "SELECT 1 FROM ${role_table} WHERE usename = '${username}' AND usesuper = ${createrole}",
       }
     }
 
     postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" CONNECTION LIMIT ${role_connection_limit}":
       command => "ALTER ${role_keyword} \"${username}\" CONNECTION LIMIT ${role_connection_limit}",
-      unless => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}' AND ${role_column_prefix}connlimit = '${role_connection_limit}'",
+      unless  => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}' AND ${role_column_prefix}connlimit = '${role_connection_limit}'",
     }
 
     if $password_hash and $update_password {
