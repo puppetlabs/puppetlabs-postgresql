@@ -27,7 +27,7 @@ describe 'postgresql::server::role', :type => :define do
     end
   
     let :pre_condition do
-     "class {'postgresql::server': dialect => 'postgres'}"
+     "class {'postgresql::server':}"
     end
   
     it { is_expected.to contain_postgresql__server__role('test') }

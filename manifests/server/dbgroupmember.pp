@@ -1,7 +1,7 @@
 # Define for creating a redshift group member. See README.md for more information
 define postgresql::server::dbgroupmember(
   $db               = $postgresql::server::default_database,
-  $port             = undef, 
+  $port             = undef,
   $ensure           = 'present',
   $groupname        = undef,
   $username         = $title,

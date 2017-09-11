@@ -15,4 +15,3 @@ ADD     . /code
 ENV     BASEPATH=/code
 WORKDIR /code
 RUN     bundle install
-CMD     ["bundle", "exec", "rake", "spec"]

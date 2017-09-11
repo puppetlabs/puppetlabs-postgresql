@@ -9,6 +9,7 @@ class postgresql::params inherits postgresql::globals {
   $ip_mask_allow_all_users    = '127.0.0.1/32'
   $ipv4acls                   = []
   $ipv6acls                   = []
+  $dialect                    = pick($dialect, 'postgres')
   $encoding                   = $postgresql::globals::encoding
   $locale                     = $postgresql::globals::locale
   $data_checksums             = $postgresql::globals::data_checksums
@@ -28,7 +29,6 @@ class postgresql::params inherits postgresql::globals {
   case $::osfamily {
     'RedHat', 'Linux': {
       $link_pg_config     = true
-      $dialect            = pick($dialect, 'postgres')
       $user               = pick($user, 'postgres')
       $group              = pick($group, 'postgres')
       $needs_initdb       = pick($needs_initdb, true)
