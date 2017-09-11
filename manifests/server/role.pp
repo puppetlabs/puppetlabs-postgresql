@@ -157,7 +157,7 @@ define postgresql::server::role(
 
       postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${login_sql}":
         command => "ALTER ${role_keyword} \"${username}\" ${login_sql}",
-        unless => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolcanlogin = ${login}",
+        unless  => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolcanlogin = ${login}",
       }
 
       postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${inherit_sql}":
@@ -169,7 +169,7 @@ define postgresql::server::role(
         if $replication_sql == '' {
           postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" NOREPLICATION":
             command => "ALTER ${role_keyword} \"${username}\" NOREPLICATION",
-            unless => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolreplication = ${replication}",
+            unless  => "SELECT 1 FROM ${role_table} WHERE rolname = '${username}' AND rolreplication = ${replication}",
           }
         } else {
           postgresql_psql {"${title}: ALTER ${role_keyword} \"${username}\" ${replication_sql}":
