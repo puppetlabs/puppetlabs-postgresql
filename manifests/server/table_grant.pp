@@ -5,6 +5,7 @@ define postgresql::server::table_grant(
   $table,
   $db,
   $role,
+  $ensure           = undef,
   $port             = undef,
   $psql_db          = undef,
   $psql_user        = undef,
@@ -12,6 +13,7 @@ define postgresql::server::table_grant(
   $onlyif_exists    = false,
 ) {
   postgresql::server::grant { "table:${name}":
+    ensure           => $ensure,
     role             => $role,
     db               => $db,
     port             => $port,
