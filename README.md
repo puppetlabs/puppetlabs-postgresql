@@ -1139,6 +1139,16 @@ Default value: 'template0'.
 
 Manages grant-based access privileges for users, wrapping the `postgresql::server::database_grant` for database specific permissions. Consult the [PostgreSQL documentation for `grant`](http://www.postgresql.org/docs/current/static/sql-grant.html) for more information.
 
+##### `ensure`
+
+Specifies whether to grant or revoke the privilege. Default is to grant the privilege.
+
+Valid values: 'present', 'absent'.
+* 'present' to grant the privilege
+* 'absent' to revoke the privilege
+
+Default value: 'present'.
+
 #### `connect_settings`
 
 Specifies a hash of environment variables used when connecting to a remote server. 
@@ -1204,6 +1214,16 @@ By default, the package specified with `package_name` is installed when the exte
 #### postgresql::server::grant
 
 Manages grant-based access privileges for roles. See [PostgreSQL documentation for `grant`](http://www.postgresql.org/docs/current/static/sql-grant.html) for more information.
+
+##### `ensure`
+
+Specifies whether to grant or revoke the privilege. Default is to grant the privilege.
+
+Valid values: 'present', 'absent'.
+* 'present' to grant the privilege
+* 'absent' to revoke the privilege
+
+Default value: 'present'.
 
 ##### `db`
 
@@ -1552,6 +1572,16 @@ Default value: the namevar.
 #### postgresql::server::table_grant
 
 Manages grant-based access privileges for users. Consult the PostgreSQL documentation for `grant` for more information.
+
+##### `ensure`
+
+Specifies whether to grant or revoke the privilege. Default is to grant the privilege.
+
+Valid values: 'present', 'absent'.
+* 'present' to grant the privilege
+* 'absent' to revoke the privilege
+
+Default value: 'present'.
 
 ##### `connect_settings`
 

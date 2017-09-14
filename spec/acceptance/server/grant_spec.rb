@@ -132,6 +132,7 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
     end
   end
 
+  ### SEQUENCE grants
   context 'sequence' do
     it 'should grant usage on a sequence to a user' do
       begin
@@ -167,8 +168,8 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
           apply_manifest(pp, :catch_changes => true)
 
           ## Check that the privilege was granted to the user
-          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq', 'USAGE')\"", user) do |r|
-            expect(r.stdout).to match(/\(1 row\)/)
+          psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_sequence_privilege('#{user}', 'test_seq', 'USAGE')\"", user) do |r|
+            expect(r.stdout).to match(/t/)
             expect(r.stderr).to eq('')
           end
         end
@@ -209,8 +210,8 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
           apply_manifest(pp, :catch_changes => true)
 
           ## Check that the privilege was granted to the user
-          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq', 'UPDATE')\"", user) do |r|
-            expect(r.stdout).to match(/\(1 row\)/)
+          psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_sequence_privilege('#{user}', 'test_seq', 'UPDATE')\"", user) do |r|
+            expect(r.stdout).to match(/t/)
             expect(r.stderr).to eq('')
           end
         end
@@ -253,8 +254,8 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
           apply_manifest(pp, :catch_changes => true)
 
           ## Check that the privileges were granted to the user, this check is not available on version < 9.0
-          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq2', 'USAGE') AND has_sequence_privilege('#{user}', 'test_seq3', 'USAGE')\"", user) do |r|
-            expect(r.stdout).to match(/\(1 row\)/)
+          psql("-d #{db} --tuples-only --command=\"SELECT has_sequence_privilege('#{user}', 'test_seq2', 'USAGE') AND has_sequence_privilege('#{user}', 'test_seq3', 'USAGE')\"", user) do |r|
+            expect(r.stdout).to match(/t/)
             expect(r.stderr).to eq('')
           end
         end
@@ -295,12 +296,226 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
           apply_manifest(pp, :catch_changes => true)
 
           ## Check that the privileges were granted to the user
-          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq2', 'UPDATE') AND has_sequence_privilege('#{user}', 'test_seq3', 'UPDATE')\"", user) do |r|
-            expect(r.stdout).to match(/\(1 row\)/)
+          psql("-d #{db} --tuples-only --command=\"SELECT has_sequence_privilege('#{user}', 'test_seq2', 'UPDATE') AND has_sequence_privilege('#{user}', 'test_seq3', 'UPDATE')\"", user) do |r|
+            expect(r.stdout).to match(/t/)
             expect(r.stderr).to eq('')
           end
         end
       end
     end
   end
+  ### TABLE grants
+  context 'table' do
+    describe 'GRANT ... ON TABLE' do
+      let(:pp_create_table) { pp_setup + <<-EOS.unindent
+          postgresql_psql { 'create test table':
+            command   => 'CREATE TABLE test_tbl (col1 integer)',
+            db        => $db,
+            psql_user => $owner,
+            unless    => "SELECT table_name FROM information_schema.tables WHERE table_name = 'test_tbl'",
+            require   => Postgresql::Server::Database[$db],
+          }
+        EOS
+      }
+
+      it 'should grant select on a table to a user' do
+        begin
+          pp = pp_create_table + <<-EOS.unindent
+
+            postgresql::server::grant { 'grant select on test_tbl':
+              privilege   => 'SELECT',
+              object_type => 'TABLE',
+              object_name => 'test_tbl',
+              db          => $db,
+              role        => $user,
+              require     => [ Postgresql_psql['create test table'],
+                               Postgresql::Server::Role[$user], ]
+            }
+          EOS
+
+          pp_revoke = pp_create_table + <<-EOS.unindent
+
+            postgresql::server::grant { 'revoke select on test_tbl':
+              ensure      => absent,
+              privilege   => 'SELECT',
+              object_type => 'TABLE',
+              object_name => 'test_tbl',
+              db          => $db,
+              role        => $user,
+              require     => [ Postgresql_psql['create test table'],
+                               Postgresql::Server::Role[$user], ]
+            }
+          EOS
+
+          apply_manifest(pp_install, :catch_failures => true)
+
+          #postgres version
+          result = shell('psql --version')
+          version = result.stdout.match(%r{\s(\d\.\d)})[1]
+
+          if version >= '9.0'
+            apply_manifest(pp, :catch_failures => true)
+            apply_manifest(pp, :catch_changes => true)
+
+            ## Check that the privilege was granted to the user
+            psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
+              expect(r.stdout).to match(/t/)
+              expect(r.stderr).to eq('')
+            end
+
+            apply_manifest(pp_revoke, :catch_failures => true)
+            apply_manifest(pp_revoke, :catch_changes => true)
+
+            ## Check that the privilege was revoked from the user
+            psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
+              expect(r.stdout).to match(/f/)
+              expect(r.stderr).to eq('')
+            end
+          end
+        end
+      end
+
+      it 'should grant update on all tables to a user' do
+        begin
+          pp = pp_create_table + <<-EOS.unindent
+
+            postgresql::server::grant { 'grant update on all tables':
+              privilege   => 'UPDATE',
+              object_type => 'ALL TABLES IN SCHEMA',
+              object_name => 'public',
+              db          => $db,
+              role        => $user,
+              require     => [ Postgresql_psql['create test table'],
+                               Postgresql::Server::Role[$user], ]
+            }
+          EOS
+
+          pp_revoke = pp_create_table + <<-EOS.unindent
+
+            postgresql::server::grant { 'revoke update on all tables':
+              ensure      => absent,
+              privilege   => 'UPDATE',
+              object_type => 'ALL TABLES IN SCHEMA',
+              object_name => 'public',
+              db          => $db,
+              role        => $user,
+              require     => [ Postgresql_psql['create test table'],
+                               Postgresql::Server::Role[$user], ]
+            }
+          EOS
+
+          apply_manifest(pp_install, :catch_failures => true)
+
+          #postgres version
+          result = shell('psql --version')
+          version = result.stdout.match(%r{\s(\d\.\d)})[1]
+
+          if version >= '9.0'
+            apply_manifest(pp, :catch_failures => true)
+            apply_manifest(pp, :catch_changes => true)
+
+            ## Check that all privileges were granted to the user
+            psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
+                  WHERE grantee = '#{user}' AND table_schema = 'public'\"", user) do |r|
+              expect(r.stdout).to match(/test_tbl[ |]*UPDATE\s*\(1 row\)/)
+              expect(r.stderr).to eq('')
+            end
+
+            apply_manifest(pp_revoke, :catch_failures => true)
+            apply_manifest(pp_revoke, :catch_changes => true)
+
+            ## Check that all privileges were revoked from the user
+            psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
+                  WHERE grantee = '#{user}' AND table_schema = 'public'\"", user) do |r|
+              expect(r.stdout).to match(/\(0 rows\)/)
+              expect(r.stderr).to eq('')
+            end
+          end
+        end
+      end
+
+      it 'should grant all on all tables to a user' do
+        begin
+          pp = pp_create_table + <<-EOS.unindent
+
+            postgresql::server::grant { 'grant all on all tables':
+              privilege   => 'ALL',
+              object_type => 'ALL TABLES IN SCHEMA',
+              object_name => 'public',
+              db          => $db,
+              role        => $user,
+              require     => [ Postgresql_psql['create test table'],
+                               Postgresql::Server::Role[$user], ]
+            }
+          EOS
+
+          pp_revoke = pp_create_table + <<-EOS.unindent
+
+            postgresql::server::grant { 'revoke all on all tables':
+              ensure      => absent,
+              privilege   => 'ALL',
+              object_type => 'ALL TABLES IN SCHEMA',
+              object_name => 'public',
+              db          => $db,
+              role        => $user,
+              require     => [ Postgresql_psql['create test table'],
+                               Postgresql::Server::Role[$user], ]
+            }
+          EOS
+
+          apply_manifest(pp_install, :catch_failures => true)
+
+          #postgres version
+          result = shell('psql --version')
+          version = result.stdout.match(%r{\s(\d\.\d)})[1]
+
+          if version >= '9.0'
+            apply_manifest(pp, :catch_failures => true)
+            apply_manifest(pp, :catch_changes => true)
+
+            ## Check that all privileges were granted to the user
+            psql("-d #{db} --tuples-only --command=\"SELECT table_name,count(privilege_type) FROM information_schema.role_table_grants
+                  WHERE grantee = '#{user}' AND table_schema = 'public'
+                  AND privilege_type IN ('SELECT','UPDATE','INSERT','DELETE','TRIGGER','REFERENCES','TRUNCATE')
+                  GROUP BY table_name\"", user) do |r|
+              expect(r.stdout).to match(/test_tbl[ |]*7$/)
+              expect(r.stderr).to eq('')
+            end
+
+            apply_manifest(pp_revoke, :catch_failures => true)
+            apply_manifest(pp_revoke, :catch_changes => true)
+
+            ## Check that all privileges were revoked from the user
+            psql("-d #{db} --command=\"SELECT table_name FROM information_schema.role_table_grants
+                  WHERE grantee = '#{user}' AND table_schema = 'public'\"", user) do |r|
+              expect(r.stdout).to match(/\(0 rows\)/)
+              expect(r.stderr).to eq('')
+            end
+          end
+        end
+      end
+    end
+  end
+  context 'database' do
+    describe 'REVOKE ... ON DATABASE...' do
+      it 'should not fail on revoke connect from non-existant user' do
+        begin
+          apply_manifest(pp_setup, :catch_failures => true)
+          pp = pp_setup + <<-EOS.unindent
+            postgresql::server::grant { 'revoke connect on db from norole':
+              ensure      => absent,
+              privilege   => 'CONNECT',
+              object_type => 'DATABASE',
+              db          => '#{db}',
+              role        => '#{user}_does_not_exist',
+            }
+          EOS
+          apply_manifest(pp, :catch_changes => true)
+          apply_manifest(pp, :catch_failures => true)
+
+        end
+      end
+    end
+  end
+  #####################
 end
