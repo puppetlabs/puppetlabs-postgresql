@@ -233,7 +233,11 @@ describe 'postgresql::server::grant', :type => :define do
       "class {'postgresql::server':}"
     end
 
-    it { is_expected.to compile.and_raise_error(/parameter 'object_name' variant 0 expects size to be 2, got 1/) }
+    if Puppet::Util::Package.versioncmp(Puppet.version, '5.2.0') >= 0
+      it { is_expected.to compile.and_raise_error(/parameter 'object_name' variant 1 expects size to be 2, got 1/) }
+    else
+      it { is_expected.to compile.and_raise_error(/parameter 'object_name' variant 0 expects size to be 2, got 1/) }
+    end
   end
 
   context 'invalid object_name - too many array elements' do
@@ -251,7 +255,10 @@ describe 'postgresql::server::grant', :type => :define do
       "class {'postgresql::server':}"
     end
 
-    it { is_expected.to compile.and_raise_error(/parameter 'object_name' variant 0 expects size to be 2, got 3/) }
+    if Puppet::Util::Package.versioncmp(Puppet.version, '5.2.0') >= 0
+      it { is_expected.to compile.and_raise_error(/parameter 'object_name' variant 1 expects size to be 2, got 3/) }
+    else
+      it { is_expected.to compile.and_raise_error(/parameter 'object_name' variant 0 expects size to be 2, got 3/) }
+    end
   end
-
 end
