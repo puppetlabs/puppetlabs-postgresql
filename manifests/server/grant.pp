@@ -323,7 +323,7 @@ define postgresql::server::grant (
   }
 
   $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${_togrant_object}\" TO
-      \"${role}\""
+      ${role}"
   postgresql_psql { "${title}: grant:${name}":
     command          => $grant_cmd,
     db               => $on_db,
@@ -337,8 +337,13 @@ define postgresql::server::grant (
     require          => Class['postgresql::server']
   }
 
-  if($role != undef and defined(Postgresql::Server::Role[$role])) {
-    Postgresql::Server::Role[$role]->Postgresql_psql["${title}: grant:${name}"]
+  if($role != undef) {
+    if $role =~ /^GROUP (.*)/ {
+      if defined(Postgresql::Server::Dbgroup["#$1"]) {
+        Postgresql::Server::Dbgroup["#$1"]->Postgresql_psql["${title}: grant:${name}"]
+    } else if defined(Postgresql::Server::Role[$role])) {
+      Postgresql::Server::Role[$role]->Postgresql_psql["${title}: grant:${name}"]
+    }
   }
 
   if($db != undef and defined(Postgresql::Server::Database[$db])) {

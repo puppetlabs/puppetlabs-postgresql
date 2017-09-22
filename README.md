@@ -1353,7 +1353,7 @@ Default value: the default user for the module, usually 'postgres'.
 
 ##### `role`
 
-Specifies the role or user whom you are granting access to.
+Specifies the role or user whom you are granting access to. In Redshift, this can be a username ("username") or a group ("GROUP groupname").
 
 #### postgresql::server::grant_role
 
