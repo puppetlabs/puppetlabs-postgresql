@@ -310,6 +310,10 @@ class postgresql::params inherits postgresql::globals {
     }
   }
 
+  if($data_checksums and versioncmp($version, '9.3') < 0) {
+    fail('data_checksums require version 9.3 or greater')
+  }
+
   $validcon_script_path = pick($validcon_script_path, '/usr/local/bin/validate_postgresql_connection.sh')
   $initdb_path          = pick($initdb_path, "${bindir}/initdb")
   $pg_hba_conf_path     = pick($pg_hba_conf_path, "${confdir}/pg_hba.conf")
