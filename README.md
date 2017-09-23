@@ -1395,6 +1395,11 @@ Sets the OS user to run `psql`.
 
 Default value: the default user for the module, usually `postgres`.
 
+##### `dialect`
+In vanilla postgres, uses has_*_privilege functions for UNLESS evaluation. In Redshift, custom functions are used instead when a group is provided (as these functions do not support groups).
+
+Default value: inherit from server settings.
+
 ##### `connect_settings`
 
 Specifies a hash of environment variables used when connecting to a remote server.

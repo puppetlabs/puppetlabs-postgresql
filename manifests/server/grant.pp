@@ -26,6 +26,7 @@ define postgresql::server::grant (
   String $psql_user                = $postgresql::server::user,
   Integer $port                    = $postgresql::server::port,
   Boolean $onlyif_exists           = false,
+  String $dialect                  = $postgresql::server::dialect,
   Hash $connect_settings           = $postgresql::server::default_connect_settings,
 ) {
 
@@ -309,11 +310,60 @@ define postgresql::server::grant (
     }
   }
 
-  $_unless = $unless_function ? {
-      false    => undef,
-      'custom' => $custom_unless,
-      default  => "SELECT 1 WHERE ${unless_function}('${role}',
-                  '${_granted_object}', '${unless_privilege}')",
+  if ($dialect == 'redshift' and $role =~ /^group (.*)/) {
+    # Built-in functions such as has_table_privilege don't work on groups in Redshift. As such, we have to dive into the low-level aclitem[] within pg_catalog.pg_class to find what we're looking for.
+    #
+    # This only works with object types that cleanly map to information_schema, and is incompatible with complex permission types. 
+    $_lowercase_object_type = $object_type ? {
+        'ALL TABLES IN SCHEMA'    => 'table',
+        'ALL SEQUENCES IN SCHEMA' => 'sequence',
+        default                   => downcase($_object_type)
+    }
+    $_custom_unless = "SELECT 1 FROM (
+      SELECT ${_lowercase_object_type}_name
+      FROM information_schema.${_lowercase_object_type}s
+      WHERE ${_lowercase_object_type}_schema='${schema}'
+        EXCEPT DISTINCT
+      SELECT object_name as ${_lowercase_object_type}_name
+      FROM (
+        SELECT object_schema,
+               object_name,
+               grantee,
+               CASE privs_split
+                 WHEN 'r' THEN 'SELECT'
+                 WHEN 'w' THEN 'UPDATE'
+                 WHEN 'U' THEN 'USAGE'
+               END AS privilege_type
+          FROM (
+            SELECT DISTINCT
+                   object_schema,
+                   object_name,
+                   (regexp_split_to_array(regexp_replace(privs,E'/.*',''),'='))[1] AS grantee,
+                   regexp_split_to_table((regexp_split_to_array(regexp_replace(privs,E'/.*',''),'='))[2],E'\\s*') AS privs_split
+              FROM (
+               SELECT n.nspname as object_schema,
+                       c.relname as object_name,
+                       regexp_split_to_table(array_to_string(c.relacl,','),',') AS privs
+                  FROM pg_catalog.pg_class c
+                       LEFT JOIN pg_catalog.pg_namespace n ON c.relnamespace = n.oid
+                 WHERE c.relkind = 'S'
+                       AND n.nspname NOT IN ( 'pg_catalog', 'information_schema' )
+              ) P1
+          ) P2
+      ) P3
+      WHERE grantee='${role}'
+      AND object_schema='${schema}'
+      AND privilege_type='${custom_privilege}'
+      ) P
+      HAVING count(P.${_lowercase_object_type}_name) = 0"
+    $_unless = $_custom_unless
+  } else {
+    $_unless = $unless_function ? {
+        false    => undef,
+        'custom' => $custom_unless,
+        default  => "SELECT 1 WHERE ${unless_function}('${role}',
+                    '${_granted_object}', '${unless_privilege}')",
+    }
   }
 
   $_onlyif = $onlyif_function ? {
@@ -338,10 +388,10 @@ define postgresql::server::grant (
   }
 
   if($role != undef) {
-    if $role =~ /^GROUP (.*)/ {
-      if defined(Postgresql::Server::Dbgroup["#$1"]) {
-        Postgresql::Server::Dbgroup["#$1"]->Postgresql_psql["${title}: grant:${name}"]
-    } else if defined(Postgresql::Server::Role[$role])) {
+    if ($role =~ /^group (.*)/ and defined(Postgresql::Server::Dbgroup["#$1"])) {
+      Postgresql::Server::Dbgroup["#$1"]->Postgresql_psql["${title}: grant:${name}"]
+    }
+    if defined(Postgresql::Server::Role[$role]) {
       Postgresql::Server::Role[$role]->Postgresql_psql["${title}: grant:${name}"]
     }
   }

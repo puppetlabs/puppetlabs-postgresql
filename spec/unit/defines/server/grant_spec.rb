@@ -17,7 +17,7 @@ describe 'postgresql::server::grant', :type => :define do
     'test'
   end
 
-  context 'plain' do
+  context 'plain (to user)' do
     let :params do
       {
         :db => 'test',
@@ -32,7 +32,7 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
   end
 
-  context 'sequence' do
+  context 'sequence (to user)' do
     let :params do
       {
         :db => 'test',
@@ -49,8 +49,94 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
-        'command' => /GRANT USAGE ON SEQUENCE "test" TO\s* "test"/m,
+        'command' => /GRANT USAGE ON SEQUENCE "test" TO\s* test/m,
         'unless'  => /SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)/m,
+      }
+    ) }
+  end
+
+  context 'all sequences (to user)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'test',
+        :privilege => 'usage',
+        :object_type => 'all sequences in schema',
+        :object_name => 'public',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* test/m,
+        'unless'  => /SELECT 1 FROM \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\) P\s* HAVING count\(P\.sequence_name\) = 0/m,
+      }
+    ) }
+  end
+
+  context 'plain (to group)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'GROUP test',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+  end
+
+  context 'sequence (to group)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'GROUP test',
+        :privilege => 'usage',
+        :object_type => 'sequence',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT USAGE ON SEQUENCE "test" TO\s* GROUP test/m,
+        'unless'  => /SELECT 1 WHERE has_sequence_privilege\('GROUP test',\s* 'test', 'USAGE'\)/m,
+      }
+    ) }
+  end
+
+  context 'all sequences (to group)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'GROUP test',
+        :privilege => 'usage',
+        :object_type => 'all sequences in schema',
+        :object_name => 'public',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* GROUP test/m,
+        'unless'  => /SELECT 1 FROM \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\) P\s* HAVING count\(P\.sequence_name\) = 0/m,
       }
     ) }
   end
@@ -72,32 +158,8 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
-        'command' => /GRANT USAGE ON SEQUENCE "test" TO\s* "test"/m,
+        'command' => /GRANT USAGE ON SEQUENCE "test" TO\s* test/m,
         'unless'  => /SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)/m,
-      }
-    ) }
-  end
-
-  context 'all sequences' do
-    let :params do
-      {
-        :db => 'test',
-        :role => 'test',
-        :privilege => 'usage',
-        :object_type => 'all sequences in schema',
-        :object_name => 'public',
-      }
-    end
-
-    let :pre_condition do
-      "class {'postgresql::server':}"
-    end
-
-    it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
-      {
-        'command' => /GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* "test"/m,
-        'unless'  => /SELECT 1 FROM \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\) P\s* HAVING count\(P\.sequence_name\) = 0/m,
       }
     ) }
   end
@@ -177,7 +239,7 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
-        'command' => /GRANT ALL ON TABLE "myschema"."mytable" TO\s* "test"/m,
+        'command' => /GRANT ALL ON TABLE "myschema"."mytable" TO\s* test/m,
         'unless'  => /SELECT 1 WHERE has_table_privilege\('test',\s*'myschema.mytable', 'INSERT'\)/m,
       }
     ) }
