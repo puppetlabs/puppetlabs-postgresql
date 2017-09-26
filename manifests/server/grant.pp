@@ -100,6 +100,9 @@ define postgresql::server::grant (
       $onlyif_function = undef
     }
     'SEQUENCE': {
+      if dialect == 'redshift' {
+        fail('redshift does not support sequences (object_type: SEQUENCE)')
+      }
       $unless_privilege = $_privilege ? {
         'ALL'   => 'USAGE',
         Pattern[
@@ -116,6 +119,9 @@ define postgresql::server::grant (
       $onlyif_function = undef
     }
     'ALL SEQUENCES IN SCHEMA': {
+      if dialect == 'redshift' {
+        fail('redshift does not support sequences (object_type: ALL SEQUENCES IN SCHEMA)')
+      }
       case $_privilege {
         Pattern[
           '^$',
@@ -253,18 +259,31 @@ define postgresql::server::grant (
       # If this number is not zero then there is at least one table for which
       # the role does not have the specified privilege, making it necessary to
       # execute the GRANT statement.
-      $custom_unless = "SELECT 1 FROM (
-        SELECT table_name
-        FROM information_schema.tables
-        WHERE table_schema='${schema}'
-          EXCEPT DISTINCT
-        SELECT table_name
-        FROM information_schema.role_table_grants
-        WHERE grantee='${role}'
-        AND table_schema='${schema}'
-        AND privilege_type='${custom_privilege}'
-        ) P
-        HAVING count(P.table_name) = 0"
+      if dialect == 'postgresql' {
+        $custom_unless = "SELECT 1 FROM (
+          SELECT table_name
+          FROM information_schema.tables
+          WHERE table_schema='${schema}'
+            EXCEPT DISTINCT
+          SELECT table_name
+          FROM information_schema.role_table_grants
+          WHERE grantee='${role}'
+          AND table_schema='${schema}'
+          AND privilege_type='${custom_privilege}'
+          ) P
+          HAVING count(P.table_name) = 0"
+      } elsif dialect == 'redshift' {
+        # Redshift's information_schema.role_table_grants are not
+        # consistent for user grants. As such, we instead call
+        # has_table_privilege(...) on each table in the schema. This
+        # is marginally slower, but unfortunately necessary short of
+        # low-level aclitem[] parsing.
+        $custom_unless = "SELECT 1
+          WHERE FALSE IN(
+          SELECT has_table_privilege('${role}', '${schema}.' + tablename, '${custom_privilege}')	
+          FROM pg_tables
+          WHERE schemaname = '${schema}')"
+      }
     }
     'LANGUAGE': {
       $unless_privilege = $_privilege ? {
@@ -310,7 +329,7 @@ define postgresql::server::grant (
     }
   }
 
-  if ($dialect == 'redshift') {
+  if (dialect == 'redshift' and $role =~ /^group (.*)/) {
     # Built-in functions such as has_table_privilege don't work on
     # groups in Redshift at this writing. Similarly,
     # information_schema role tables do not appear to be consistently
@@ -321,11 +340,7 @@ define postgresql::server::grant (
     # This only works with object types that cleanly map to
     # information_schema, and is incompatible with complex permission
     # types.
-    $_lowercase_object_type = $object_type ? {
-        'ALL TABLES IN SCHEMA'    => 'table',
-        'ALL SEQUENCES IN SCHEMA' => 'sequence',
-        default                   => downcase($_object_type)
-    }
+    $_lowercase_object_type = downcase($_object_type)
     $_custom_unless = "SELECT 1 FROM (
       SELECT ${_lowercase_object_type}_name
       FROM information_schema.${_lowercase_object_type}s
