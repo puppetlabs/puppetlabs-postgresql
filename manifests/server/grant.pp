@@ -310,10 +310,17 @@ define postgresql::server::grant (
     }
   }
 
-  if ($dialect == 'redshift' and $role =~ /^group (.*)/) {
-    # Built-in functions such as has_table_privilege don't work on groups in Redshift. As such, we have to dive into the low-level aclitem[] within pg_catalog.pg_class to find what we're looking for.
-    #
-    # This only works with object types that cleanly map to information_schema, and is incompatible with complex permission types. 
+  if ($dialect == 'redshift') {
+    # Built-in functions such as has_table_privilege don't work on
+    # groups in Redshift at this writing. Similarly,
+    # information_schema role tables do not appear to be consistently
+    # kept up to date. As such, we have to dive into the low-level
+    # aclitem[] within pg_catalog.pg_class to find what we're looking
+    # for.
+    # 
+    # This only works with object types that cleanly map to
+    # information_schema, and is incompatible with complex permission
+    # types.
     $_lowercase_object_type = $object_type ? {
         'ALL TABLES IN SCHEMA'    => 'table',
         'ALL SEQUENCES IN SCHEMA' => 'sequence',
