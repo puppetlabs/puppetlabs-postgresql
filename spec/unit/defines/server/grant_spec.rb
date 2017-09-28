@@ -152,7 +152,31 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT SELECT ON TABLE "test"."table" TO\s* group test/m,
-        'unless'  => /.*WHERE\s*nsp.nspname = 'test'\s*AND c.relname = 'table'\s*AND c.reltype = 'table'.*/m,
+        'unless'  => /WHERE\s*nsp.nspname = 'test'\s*AND c.relname = 'table'\s*AND c.reltype = 'table'/m,
+      }
+    ) }
+  end
+
+  context 'all tables (to redshift user)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'test',
+        :privilege => 'select',
+        :object_type => 'all tables in schema',
+        :object_name => 'public',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server': dialect => 'redshift'}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT SELECT ON ALL TABLES IN SCHEMA "public" TO\s* test/m,
+        'unless'  => /SELECT 1\s*WHERE FALSE IN\(\s*SELECT has_table_privilege\('test', 'public\.' \+ tablename, 'SELECT'\)\s*FROM pg_tables\s*WHERE schemaname = 'public'\)/m,
       }
     ) }
   end
