@@ -79,57 +79,95 @@ describe 'postgresql::server::grant', :type => :define do
     ) }
   end
 
-  context 'plain (to group)' do
+  context 'redshift dialect required for group syntax' do
     let :params do
       {
         :db => 'test',
-        :role => 'GROUP test',
+        :role => 'group test',
       }
     end
 
     let :pre_condition do
-      "class {'postgresql::server':}"
+      "class {'postgresql::server': dialect => 'postgres'}"
+    end
+
+    it { is_expected.to raise_error(Puppet::Error, /GROUP syntax is only available in the Redshift dialect/) }
+  end
+
+  context 'plain (to group)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'group test',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server': dialect => 'redshift'}"
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
   end
 
-  context 'sequence (to group)' do
+  context 'table (to redshift user)' do
     let :params do
       {
         :db => 'test',
-        :role => 'GROUP test',
-        :privilege => 'usage',
-        :object_type => 'sequence',
+        :role => 'test',
+        :privilege => 'select',
+        :object_type => 'table',
       }
     end
 
     let :pre_condition do
-      "class {'postgresql::server':}"
+      "class {'postgresql::server': dialect => 'redshift'}"
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
-        'command' => /GRANT USAGE ON SEQUENCE "test" TO\s* GROUP test/m,
-        'unless'  => /SELECT 1 WHERE has_sequence_privilege\('GROUP test',\s* 'test', 'USAGE'\)/m,
+        'command' => /GRANT USAGE ON TABLE "test" TO\s* GROUP test/m,
+        'unless'  => /SELECT 1 WHERE has_table_privilege\('GROUP test',\s* 'test', 'USAGE'\)/m,
       }
     ) }
   end
 
-  context 'all sequences (to group)' do
+  context 'table (to group)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'group test',
+        :privilege => 'select',
+        :object_type => 'table',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server': dialect => 'redshift'}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT USAGE ON TABLE "test" TO\s* GROUP test/m,
+        'unless'  => /SELECT 1 WHERE has_table_privilege\('GROUP test',\s* 'test', 'USAGE'\)/m,
+      }
+    ) }
+  end
+
+  context 'all tables (to group)' do
     let :params do
       {
         :db => 'test',
         :role => 'GROUP test',
-        :privilege => 'usage',
-        :object_type => 'all sequences in schema',
+        :privilege => 'select',
+        :object_type => 'all tables in schema',
         :object_name => 'public',
       }
     end
 
     let :pre_condition do
-      "class {'postgresql::server':}"
+      "class {'postgresql::server': dialect => 'redshift'}"
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }

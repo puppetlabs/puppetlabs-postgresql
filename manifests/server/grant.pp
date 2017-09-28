@@ -33,6 +33,11 @@ define postgresql::server::grant (
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
 
+  $_lowercase_role = downcase($role)
+  if ($_lowercase_role =~ /^group (.*)/ and $dialect != 'redshift') {
+    fail('GROUP syntax is only available in the Redshift dialect')
+  }
+
   if ! $object_name {
     $_object_name = $db
   } else {
@@ -341,43 +346,31 @@ define postgresql::server::grant (
     # information_schema, and is incompatible with complex permission
     # types.
     $_lowercase_object_type = downcase($_object_type)
-    $_custom_unless = "SELECT 1 FROM (
-      SELECT ${_lowercase_object_type}_name
-      FROM information_schema.${_lowercase_object_type}s
-      WHERE ${_lowercase_object_type}_schema='${schema}'
-        EXCEPT DISTINCT
-      SELECT object_name as ${_lowercase_object_type}_name
-      FROM (
-        SELECT object_schema,
-               object_name,
-               grantee,
-               CASE privs_split
-                 WHEN 'r' THEN 'SELECT'
-                 WHEN 'w' THEN 'UPDATE'
-                 WHEN 'U' THEN 'USAGE'
-               END AS privilege_type
-          FROM (
-            SELECT DISTINCT
-                   object_schema,
-                   object_name,
-                   (regexp_split_to_array(regexp_replace(privs,E'/.*',''),'='))[1] AS grantee,
-                   regexp_split_to_table((regexp_split_to_array(regexp_replace(privs,E'/.*',''),'='))[2],E'\\s*') AS privs_split
-              FROM (
-               SELECT n.nspname as object_schema,
-                       c.relname as object_name,
-                       regexp_split_to_table(array_to_string(c.relacl,','),',') AS privs
-                  FROM pg_catalog.pg_class c
-                       LEFT JOIN pg_catalog.pg_namespace n ON c.relnamespace = n.oid
-                 WHERE c.relkind = 'S'
-                       AND n.nspname NOT IN ( 'pg_catalog', 'information_schema' )
-              ) P1
-          ) P2
-      ) P3
-      WHERE grantee='${role}'
-      AND object_schema='${schema}'
-      AND privilege_type='${custom_privilege}'
-      ) P
-      HAVING count(P.${_lowercase_object_type}_name) = 0"
+    $object_lookup = split($object_name, '.')
+    $schema = $object_lookup[0]
+    $relation = $object_lookup[1]
+    $_custom_unless = "SELECT charindex('${custom_privilege}', (SELECT substring(
+            case when charindex('r',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'SELECT' else '' end
+          ||case when charindex('w',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'UPDATE' else '' end
+          ||case when charindex('a',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'INSERT' else '' end
+          ||case when charindex('d',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'DELETE' else '' end
+          ||case when charindex('R',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'RULE' else '' end
+          ||case when charindex('x',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'REFERENCES' else '' end
+          ||case when charindex('t',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'TRIGGER' else '' end
+          ||case when charindex('X',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'EXECUTE' else '' end
+          ||case when charindex('U',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'USAGE' else '' end
+          ||case when charindex('C',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'CREATE' else '' end
+          ||case when charindex('T',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'TEMPORARY' else '' end
+       , 2,10000)
+    from
+    (SELECT c.relacl FROM pg_class c
+     left join pg_namespace nsp on (c.relnamespace = nsp.oid)
+    WHERE
+     c.relowner = '${role}'
+     AND nsp.nspname = '${schema}'
+     AND c.relname = '${relation}'
+     AND c.reltype = '${_lowercase_object_type}'
+    ))) > 0"
     $_unless = $_custom_unless
   } else {
     $_unless = $unless_function ? {
