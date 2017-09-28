@@ -115,6 +115,7 @@ describe 'postgresql::server::grant', :type => :define do
         :db => 'test',
         :role => 'test',
         :privilege => 'select',
+        :object_name => ['test', 'table'],
         :object_type => 'table',
       }
     end
@@ -126,8 +127,8 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
-        'command' => /GRANT USAGE ON TABLE "test" TO\s* GROUP test/m,
-        'unless'  => /SELECT 1 WHERE has_table_privilege\('GROUP test',\s* 'test', 'USAGE'\)/m,
+        'command' => /GRANT SELECT ON TABLE "test"."table" TO\s* test/m,
+        'unless'  => /SELECT 1 WHERE has_table_privilege\('test',\s* 'test.table', 'SELECT'\)/m,
       }
     ) }
   end
@@ -138,6 +139,7 @@ describe 'postgresql::server::grant', :type => :define do
         :db => 'test',
         :role => 'group test',
         :privilege => 'select',
+        :object_name => ['test', 'table'],
         :object_type => 'table',
       }
     end
@@ -149,8 +151,8 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
-        'command' => /GRANT USAGE ON TABLE "test" TO\s* GROUP test/m,
-        'unless'  => /SELECT 1 WHERE has_table_privilege\('GROUP test',\s* 'test', 'USAGE'\)/m,
+        'command' => /GRANT SELECT ON TABLE "test"."table" TO\s* group test/m,
+        'unless'  => /.*WHERE\s*nsp.nspname = 'test'\s*AND c.relname = 'table'\s*AND c.reltype = 'table'.*/m,
       }
     ) }
   end
@@ -159,7 +161,7 @@ describe 'postgresql::server::grant', :type => :define do
     let :params do
       {
         :db => 'test',
-        :role => 'GROUP test',
+        :role => 'group test',
         :privilege => 'select',
         :object_type => 'all tables in schema',
         :object_name => 'public',
@@ -173,8 +175,8 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
-        'command' => /GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* GROUP test/m,
-        'unless'  => /SELECT 1 FROM \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\) P\s* HAVING count\(P\.sequence_name\) = 0/m,
+        'command' => /GRANT SELECT ON ALL TABLES IN SCHEMA "public" TO\s* group test/m,
+        'unless'  => nil,
       }
     ) }
   end

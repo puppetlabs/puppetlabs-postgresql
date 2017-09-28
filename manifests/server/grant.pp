@@ -105,7 +105,7 @@ define postgresql::server::grant (
       $onlyif_function = undef
     }
     'SEQUENCE': {
-      if dialect == 'redshift' {
+      if $dialect == 'redshift' {
         fail('redshift does not support sequences (object_type: SEQUENCE)')
       }
       $unless_privilege = $_privilege ? {
@@ -124,7 +124,7 @@ define postgresql::server::grant (
       $onlyif_function = undef
     }
     'ALL SEQUENCES IN SCHEMA': {
-      if dialect == 'redshift' {
+      if $dialect == 'redshift' {
         fail('redshift does not support sequences (object_type: ALL SEQUENCES IN SCHEMA)')
       }
       case $_privilege {
@@ -195,7 +195,7 @@ define postgresql::server::grant (
         ) P3
         WHERE grantee='${role}'
         AND object_schema='${schema}'
-        AND privilege_type='${custom_privilege}'
+        AND privilege_type='${_privilege}'
         ) P
         HAVING count(P.sequence_name) = 0"
     }
@@ -264,7 +264,7 @@ define postgresql::server::grant (
       # If this number is not zero then there is at least one table for which
       # the role does not have the specified privilege, making it necessary to
       # execute the GRANT statement.
-      if dialect == 'postgresql' {
+      if $dialect == 'postgresql' {
         $custom_unless = "SELECT 1 FROM (
           SELECT table_name
           FROM information_schema.tables
@@ -277,7 +277,7 @@ define postgresql::server::grant (
           AND privilege_type='${custom_privilege}'
           ) P
           HAVING count(P.table_name) = 0"
-      } elsif dialect == 'redshift' {
+      } elsif $dialect == 'redshift' {
         # Redshift's information_schema.role_table_grants are not
         # consistent for user grants. As such, we instead call
         # has_table_privilege(...) on each table in the schema. This
@@ -327,14 +327,18 @@ define postgresql::server::grant (
       $_togrant_object = join($_object_name, '"."')
       # Never put double quotes into has_*_privilege function
       $_granted_object = join($_object_name, '.')
+      $_schema = $_object_name[0]
+      $_relation = $_object_name[1]
     }
     default: {
       $_granted_object = $_object_name
       $_togrant_object = $_object_name
+      $_schema = $_object_name
+      $_relation = '%'
     }
   }
 
-  if (dialect == 'redshift' and $role =~ /^group (.*)/) {
+  if ($dialect == 'redshift' and $_lowercase_role =~ /^group (.*)/) {
     # Built-in functions such as has_table_privilege don't work on
     # groups in Redshift at this writing. Similarly,
     # information_schema role tables do not appear to be consistently
@@ -346,32 +350,33 @@ define postgresql::server::grant (
     # information_schema, and is incompatible with complex permission
     # types.
     $_lowercase_object_type = downcase($_object_type)
-    $object_lookup = split($object_name, '.')
-    $schema = $object_lookup[0]
-    $relation = $object_lookup[1]
-    $_custom_unless = "SELECT charindex('${custom_privilege}', (SELECT substring(
-            case when charindex('r',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'SELECT' else '' end
-          ||case when charindex('w',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'UPDATE' else '' end
-          ||case when charindex('a',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'INSERT' else '' end
-          ||case when charindex('d',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'DELETE' else '' end
-          ||case when charindex('R',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'RULE' else '' end
-          ||case when charindex('x',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'REFERENCES' else '' end
-          ||case when charindex('t',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'TRIGGER' else '' end
-          ||case when charindex('X',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'EXECUTE' else '' end
-          ||case when charindex('U',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'USAGE' else '' end
-          ||case when charindex('C',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'CREATE' else '' end
-          ||case when charindex('T',split_part(split_part(array_to_string(relacl, '|'),${role},2 ) ,'/',1)) > 0 then 'TEMPORARY' else '' end
+    $_custom_unless = "SELECT charindex('${_privilege}', (SELECT substring(
+            case when charindex('r',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'SELECT' else '' end
+          ||case when charindex('w',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'UPDATE' else '' end
+          ||case when charindex('a',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'INSERT' else '' end
+          ||case when charindex('d',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'DELETE' else '' end
+          ||case when charindex('R',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'RULE' else '' end
+          ||case when charindex('x',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'REFERENCES' else '' end
+          ||case when charindex('t',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'TRIGGER' else '' end
+          ||case when charindex('X',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'EXECUTE' else '' end
+          ||case when charindex('U',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'USAGE' else '' end
+          ||case when charindex('C',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'CREATE' else '' end
+          ||case when charindex('T',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'TEMPORARY' else '' end
        , 2,10000)
     from
     (SELECT c.relacl FROM pg_class c
      left join pg_namespace nsp on (c.relnamespace = nsp.oid)
     WHERE
-     c.relowner = '${role}'
-     AND nsp.nspname = '${schema}'
-     AND c.relname = '${relation}'
+     nsp.nspname = '${_schema}'
+     AND c.relname = '${_relation}'
      AND c.reltype = '${_lowercase_object_type}'
     ))) > 0"
-    $_unless = $_custom_unless
+    if $_lowercase_object_type == "all tables in schema" {
+      warning('UNLESS clause is not yet supported for ALL TABLES IN SCHEMA granted to groups')
+      $_unless = undef
+    } else {
+      $_unless = $_custom_unless
+    }
   } else {
     $_unless = $unless_function ? {
         false    => undef,
@@ -403,7 +408,7 @@ define postgresql::server::grant (
   }
 
   if($role != undef) {
-    if ($role =~ /^group (.*)/ and defined(Postgresql::Server::Dbgroup["#$1"])) {
+    if ($_lowercase_role =~ /^group (.*)/ and defined(Postgresql::Server::Dbgroup["#$1"])) {
       Postgresql::Server::Dbgroup["#$1"]->Postgresql_psql["${title}: grant:${name}"]
     }
     if defined(Postgresql::Server::Role[$role]) {

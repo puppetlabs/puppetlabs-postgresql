@@ -206,6 +206,7 @@ define postgresql::server::role(
           environment => $environment,
         }
       } elsif ($dialect == 'redshift') {
+        warning('UNLESS clause support is not yet supported for setting password on Redshift users')
         postgresql_psql { "${title}: ALTER ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
           command     => "ALTER ${role_keyword} \"${username}\" ${password_sql}",
           # pg_shadow cannot be selected from in Redshift, even by superusers. As such, this command will always be run when invoked.
