@@ -264,31 +264,18 @@ define postgresql::server::grant (
       # If this number is not zero then there is at least one table for which
       # the role does not have the specified privilege, making it necessary to
       # execute the GRANT statement.
-      if $dialect == 'postgresql' {
-        $custom_unless = "SELECT 1 FROM (
-          SELECT table_name
-          FROM information_schema.tables
-          WHERE table_schema='${schema}'
-            EXCEPT DISTINCT
-          SELECT table_name
-          FROM information_schema.role_table_grants
-          WHERE grantee='${role}'
-          AND table_schema='${schema}'
-          AND privilege_type='${custom_privilege}'
-          ) P
-          HAVING count(P.table_name) = 0"
-      } elsif $dialect == 'redshift' {
-        # Redshift's information_schema.role_table_grants are not
-        # consistent for user grants. As such, we instead call
-        # has_table_privilege(...) on each table in the schema. This
-        # is marginally slower, but unfortunately necessary short of
-        # low-level aclitem[] parsing.
-        $custom_unless = "SELECT 1
-          WHERE FALSE IN(
-          SELECT has_table_privilege('${role}', '${schema}.' + tablename, '${custom_privilege}')	
-          FROM pg_tables
-          WHERE schemaname = '${schema}')"
-      }
+      $custom_unless = "SELECT 1 FROM (
+        SELECT table_name
+        FROM information_schema.tables
+        WHERE table_schema='${schema}'
+          EXCEPT DISTINCT
+        SELECT table_name
+        FROM information_schema.role_table_grants
+        WHERE grantee='${role}'
+        AND table_schema='${schema}'
+        AND privilege_type='${custom_privilege}'
+        ) P
+        HAVING count(P.table_name) = 0"
     }
     'LANGUAGE': {
       $unless_privilege = $_privilege ? {
@@ -338,7 +325,7 @@ define postgresql::server::grant (
     }
   }
 
-  if ($dialect == 'redshift' and $_lowercase_role =~ /^group (.*)/) {
+  if ($dialect == 'redshift' and ($_lowercase_role =~ /^group (.*)/ or $_object_type == 'ALL TABLES IN SCHEMA')) {
     # Built-in functions such as has_table_privilege don't work on
     # groups in Redshift at this writing. Similarly,
     # information_schema role tables do not appear to be consistently
@@ -352,26 +339,27 @@ define postgresql::server::grant (
        'ALL TABLES IN SCHEMA' => 'table',
        default                => downcase($_object_type)
     }
-    $_custom_unless = "SELECT 1 WHERE ALL (SELECT charindex('${_privilege}', (SELECT substring(
-            case when charindex('r',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'SELECT' else '' end
-          ||case when charindex('w',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'UPDATE' else '' end
-          ||case when charindex('a',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'INSERT' else '' end
-          ||case when charindex('d',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'DELETE' else '' end
-          ||case when charindex('R',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'RULE' else '' end
-          ||case when charindex('x',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'REFERENCES' else '' end
-          ||case when charindex('t',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'TRIGGER' else '' end
-          ||case when charindex('X',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'EXECUTE' else '' end
-          ||case when charindex('U',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'USAGE' else '' end
-          ||case when charindex('C',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'CREATE' else '' end
-          ||case when charindex('T',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'TEMPORARY' else '' end
+    $_custom_unless = "SELECT 1 WHERE FALSE != ALL(SELECT charindex('${_privilege}', (SELECT substring(
+            case when charindex('r',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'SELECT' else '' end
+          ||case when charindex('w',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'UPDATE' else '' end
+          ||case when charindex('a',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'INSERT' else '' end
+          ||case when charindex('d',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'DELETE' else '' end
+          ||case when charindex('R',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'RULE' else '' end
+          ||case when charindex('x',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'REFERENCES' else '' end
+          ||case when charindex('t',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TRIGGER' else '' end
+          ||case when charindex('X',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'EXECUTE' else '' end
+          ||case when charindex('U',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'USAGE' else '' end
+          ||case when charindex('C',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'CREATE' else '' end
+          ||case when charindex('T',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TEMPORARY' else '' end
        , 2,10000)
     from
-    (SELECT c.relacl FROM pg_class c
+    (SELECT c.relacl, c.relname, c.reltype FROM pg_class c
      left join pg_namespace nsp on (c.relnamespace = nsp.oid)
+     left join pg_type t on (c.reltype = t.typnamespace)
     WHERE
      nsp.nspname = '${_schema}'
      AND c.relname LIKE '${_relation}'
-     AND c.reltype = '${_lowercase_object_type}'
+     AND t.typname = '${_lowercase_object_type}'
     ))) > 0)"
     $_unless = $_custom_unless
   } else {

@@ -152,7 +152,7 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT SELECT ON TABLE "test"."table" TO\s* group test/m,
-        'unless'  => /WHERE\s*nsp.nspname = 'test'\s*AND c.relname LIKE 'table'\s*AND c.reltype = 'table'/m,
+        'unless'  => /WHERE\s*nsp.nspname = 'test'\s*AND c.relname LIKE 'table'\s*AND t.typname = 'table'/m,
       }
     ) }
   end
@@ -176,7 +176,7 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT SELECT ON ALL TABLES IN SCHEMA "public" TO\s* test/m,
-        'unless'  => /SELECT 1\s*WHERE FALSE IN\(\s*SELECT has_table_privilege\('test', 'public\.' \+ tablename, 'SELECT'\)\s*FROM pg_tables\s*WHERE schemaname = 'public'\)/m,
+        'unless'  => /WHERE\s*nsp.nspname = 'public'\s*AND c.relname LIKE '%'\s*AND t.typname = 'table'/m,
       }
     ) }
   end
@@ -200,7 +200,7 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT SELECT ON ALL TABLES IN SCHEMA "public" TO\s* group test/m,
-        'unless'  => /WHERE\s*nsp.nspname = 'public'\s*AND c.relname LIKE '%'\s*AND c.reltype = 'table'/m,
+        'unless'  => /WHERE\s*nsp.nspname = 'public'\s*AND c.relname LIKE '%'\s*AND t.typname = 'table'/m,
       }
     ) }
   end
