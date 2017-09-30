@@ -345,12 +345,14 @@ define postgresql::server::grant (
     # kept up to date. As such, we have to dive into the low-level
     # aclitem[] within pg_catalog.pg_class to find what we're looking
     # for.
-    # 
-    # This only works with object types that cleanly map to
-    # information_schema, and is incompatible with complex permission
-    # types.
-    $_lowercase_object_type = downcase($_object_type)
-    $_custom_unless = "SELECT charindex('${_privilege}', (SELECT substring(
+    #
+    # See https://docs.aws.amazon.com/redshift/latest/dg/c_unsupported-postgresql-functions.html
+    # for why we can't use the same custom loop as for postgres.
+    $_lowercase_object_type = $_object_type ? {
+       'ALL TABLES IN SCHEMA' => 'table',
+       default                => downcase($_object_type)
+    }
+    $_custom_unless = "SELECT 1 WHERE ALL (SELECT charindex('${_privilege}', (SELECT substring(
             case when charindex('r',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'SELECT' else '' end
           ||case when charindex('w',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'UPDATE' else '' end
           ||case when charindex('a',split_part(split_part(array_to_string(relacl, '|'),${_lowercase_role},2 ) ,'/',1)) > 0 then 'INSERT' else '' end
@@ -368,15 +370,10 @@ define postgresql::server::grant (
      left join pg_namespace nsp on (c.relnamespace = nsp.oid)
     WHERE
      nsp.nspname = '${_schema}'
-     AND c.relname = '${_relation}'
+     AND c.relname LIKE '${_relation}'
      AND c.reltype = '${_lowercase_object_type}'
-    ))) > 0"
-    if $_lowercase_object_type == "all tables in schema" {
-      warning('UNLESS clause is not yet supported for ALL TABLES IN SCHEMA granted to groups')
-      $_unless = undef
-    } else {
-      $_unless = $_custom_unless
-    }
+    ))) > 0)"
+    $_unless = $_custom_unless
   } else {
     $_unless = $unless_function ? {
         false    => undef,
@@ -406,17 +403,16 @@ define postgresql::server::grant (
     onlyif           => $_onlyif,
     require          => Class['postgresql::server']
   }
-
-  if($role != undef) {
-    if ($_lowercase_role =~ /^group (.*)/ and defined(Postgresql::Server::Dbgroup["#$1"])) {
-      Postgresql::Server::Dbgroup["#$1"]->Postgresql_psql["${title}: grant:${name}"]
-    }
-    if defined(Postgresql::Server::Role[$role]) {
-      Postgresql::Server::Role[$role]->Postgresql_psql["${title}: grant:${name}"]
+  
+  if ($role != undef) {
+    if ($_lowercase_role =~ /^group (.*)/) {
+      Postgresql::Server::Dbgroup<| |> -> Postgresql_psql["${title}: grant:${name}"]
+    } else {
+      Postgresql::Server::Role<| |> -> Postgresql_psql["${title}: grant:${name}"]
     }
   }
 
-  if($db != undef and defined(Postgresql::Server::Database[$db])) {
-    Postgresql::Server::Database[$db]->Postgresql_psql["${title}: grant:${name}"]
+  if ($db != undef) {
+     Postgresql::Server::Database<| |> -> Postgresql_psql["${title}: grant:${name}"]
   }
 }

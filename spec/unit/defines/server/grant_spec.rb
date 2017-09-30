@@ -152,7 +152,7 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT SELECT ON TABLE "test"."table" TO\s* group test/m,
-        'unless'  => /WHERE\s*nsp.nspname = 'test'\s*AND c.relname = 'table'\s*AND c.reltype = 'table'/m,
+        'unless'  => /WHERE\s*nsp.nspname = 'test'\s*AND c.relname LIKE 'table'\s*AND c.reltype = 'table'/m,
       }
     ) }
   end
@@ -200,7 +200,7 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT SELECT ON ALL TABLES IN SCHEMA "public" TO\s* group test/m,
-        'unless'  => nil,
+        'unless'  => /WHERE\s*nsp.nspname = 'public'\s*AND c.relname LIKE '%'\s*AND c.reltype = 'table'/m,
       }
     ) }
   end

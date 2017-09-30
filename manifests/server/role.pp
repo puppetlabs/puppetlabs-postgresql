@@ -128,10 +128,6 @@ define postgresql::server::role(
       $options_sql = "${createrole_sql} ${createdb_sql}"
     }
 
-    postgresql_psql {"ALTER ROLE \"${username}\" CONNECTION LIMIT ${connection_limit}":
-      unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolconnlimit = ${connection_limit}",
-    }
-
     postgresql_psql { "${title}: CREATE ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
       command     => "CREATE ${role_keyword} \"${username}\" ${password_sql} ${options_sql} CONNECTION LIMIT ${role_connection_limit}",
       unless      => "SELECT 1 FROM ${role_table} WHERE ${role_column_prefix}name = '${username}'",
@@ -206,10 +202,10 @@ define postgresql::server::role(
           environment => $environment,
         }
       } elsif ($dialect == 'redshift') {
-        warning('UNLESS clause support is not yet supported for setting password on Redshift users')
+        # pg_shadow cannot be selected from in Redshift, even by superusers. As such, this command will always be run when invoked.
+        warning('Due to lack of pg_shadow access, UNLESS clause support is not yet supported for setting password on Redshift users')
         postgresql_psql { "${title}: ALTER ${role_keyword} ${username} ENCRYPTED PASSWORD ****":
           command     => "ALTER ${role_keyword} \"${username}\" ${password_sql}",
-          # pg_shadow cannot be selected from in Redshift, even by superusers. As such, this command will always be run when invoked.
           #unless      => "SELECT 1 FROM ${password_table} WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'",
           environment => $environment,
         }
