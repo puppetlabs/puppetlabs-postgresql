@@ -1353,7 +1353,7 @@ Default value: the default user for the module, usually 'postgres'.
 
 ##### `role`
 
-Specifies the role or user whom you are granting access to.
+Specifies the role or user whom you are granting access to. In Redshift, this can be a username ("username") or a group ("GROUP groupname").
 
 #### postgresql::server::grant_role
 
@@ -1394,6 +1394,11 @@ Default value: 'postgres'.
 Sets the OS user to run `psql`.
 
 Default value: the default user for the module, usually `postgres`.
+
+##### `dialect`
+In vanilla postgres, uses has_*_privilege functions for UNLESS evaluation. In Redshift, custom functions are used instead when a group is provided (as these functions do not support groups).
+
+Default value: inherit from server settings.
 
 ##### `connect_settings`
 
@@ -1582,7 +1587,7 @@ Specifies whether to grant the ability to create new databases with this role.
 Default value: `false`.
 
 ##### `createrole`
-Specifies whether to grant the ability to create new roles with this role.
+Specifies whether to grant the ability to create new roles with this role. In Redshift, this specifies the CREATEUSER permission instead.
 
 Default value: `false`.
 
@@ -1607,7 +1612,9 @@ Specifies whether to grant login capability for the new role.
 Default value: `true`.
 
 ##### `password_hash`
-Sets the hash to use during password creation. If the password is not already pre-encrypted in a format that PostgreSQL supports, use the `postgresql_password` function to provide an MD5 hash here, for example:
+Sets the hash to use during password creation. If the password is not already pre-encrypted in a format that PostgreSQL supports, use the `postgresql_password` function to provide an MD5 hash here.
+
+In Redshift, this can be set to false to specify PASSWORD DISABLE for new users. Note that this is not compatible with the CREATEUSER permission, and Redshift will raise an error if both are provided for the same user.
 
 ##### `update_password`
 If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.

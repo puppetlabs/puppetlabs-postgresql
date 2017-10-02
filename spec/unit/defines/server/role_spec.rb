@@ -175,7 +175,7 @@ describe 'postgresql::server::role', :type => :define do
     end
 
     it 'should not have alter role for "test" user with password as **** if update_password is false' do
-      is_expected.not_to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
+      is_expected.not_to contain_postgresql_psql('test: ALTER ROLE test ENCRYPTED PASSWORD ****')
     end
   end
 

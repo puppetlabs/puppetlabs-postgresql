@@ -26,11 +26,17 @@ define postgresql::server::grant (
   String $psql_user                = $postgresql::server::user,
   Integer $port                    = $postgresql::server::port,
   Boolean $onlyif_exists           = false,
+  String $dialect                  = $postgresql::server::dialect,
   Hash $connect_settings           = $postgresql::server::default_connect_settings,
 ) {
 
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
+
+  $_lowercase_role = downcase($role)
+  if ($_lowercase_role =~ /^group (.*)/ and $dialect != 'redshift') {
+    fail('GROUP syntax is only available in the Redshift dialect')
+  }
 
   if ! $object_name {
     $_object_name = $db
@@ -99,6 +105,9 @@ define postgresql::server::grant (
       $onlyif_function = undef
     }
     'SEQUENCE': {
+      if $dialect == 'redshift' {
+        fail('redshift does not support sequences (object_type: SEQUENCE)')
+      }
       $unless_privilege = $_privilege ? {
         'ALL'   => 'USAGE',
         Pattern[
@@ -115,6 +124,9 @@ define postgresql::server::grant (
       $onlyif_function = undef
     }
     'ALL SEQUENCES IN SCHEMA': {
+      if $dialect == 'redshift' {
+        fail('redshift does not support sequences (object_type: ALL SEQUENCES IN SCHEMA)')
+      }
       case $_privilege {
         Pattern[
           '^$',
@@ -183,7 +195,7 @@ define postgresql::server::grant (
         ) P3
         WHERE grantee='${role}'
         AND object_schema='${schema}'
-        AND privilege_type='${custom_privilege}'
+        AND privilege_type='${_privilege}'
         ) P
         HAVING count(P.sequence_name) = 0"
     }
@@ -302,18 +314,61 @@ define postgresql::server::grant (
       $_togrant_object = join($_object_name, '"."')
       # Never put double quotes into has_*_privilege function
       $_granted_object = join($_object_name, '.')
+      $_schema = $_object_name[0]
+      $_relation = $_object_name[1]
     }
     default: {
       $_granted_object = $_object_name
       $_togrant_object = $_object_name
+      $_schema = $_object_name
+      $_relation = '%'
     }
   }
 
-  $_unless = $unless_function ? {
-      false    => undef,
-      'custom' => $custom_unless,
-      default  => "SELECT 1 WHERE ${unless_function}('${role}',
-                  '${_granted_object}', '${unless_privilege}')",
+  if ($dialect == 'redshift' and ($_lowercase_role =~ /^group (.*)/ or $_object_type == 'ALL TABLES IN SCHEMA')) {
+    # Built-in functions such as has_table_privilege don't work on
+    # groups in Redshift at this writing. Similarly,
+    # information_schema role tables do not appear to be consistently
+    # kept up to date. As such, we have to dive into the low-level
+    # aclitem[] within pg_catalog.pg_class to find what we're looking
+    # for.
+    #
+    # See https://docs.aws.amazon.com/redshift/latest/dg/c_unsupported-postgresql-functions.html
+    # for why we can't use the same custom loop as for postgres.
+    $_lowercase_object_type = $_object_type ? {
+       'ALL TABLES IN SCHEMA' => 'table',
+       default                => downcase($_object_type)
+    }
+    $_custom_unless = "SELECT 1 WHERE FALSE != ALL(SELECT charindex('${_privilege}', (SELECT substring(
+            case when charindex('r',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'SELECT' else '' end
+          ||case when charindex('w',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'UPDATE' else '' end
+          ||case when charindex('a',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'INSERT' else '' end
+          ||case when charindex('d',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'DELETE' else '' end
+          ||case when charindex('R',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'RULE' else '' end
+          ||case when charindex('x',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'REFERENCES' else '' end
+          ||case when charindex('t',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TRIGGER' else '' end
+          ||case when charindex('X',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'EXECUTE' else '' end
+          ||case when charindex('U',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'USAGE' else '' end
+          ||case when charindex('C',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'CREATE' else '' end
+          ||case when charindex('T',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TEMPORARY' else '' end
+       , 2,10000)
+    from
+    (SELECT c.relacl, c.relname, c.reltype FROM pg_class c
+     left join pg_namespace nsp on (c.relnamespace = nsp.oid)
+     left join pg_type t on (c.reltype = t.typnamespace)
+    WHERE
+     nsp.nspname = '${_schema}'
+     AND c.relname LIKE '${_relation}'
+     AND t.typname = '${_lowercase_object_type}'
+    ))) > 0)"
+    $_unless = $_custom_unless
+  } else {
+    $_unless = $unless_function ? {
+        false    => undef,
+        'custom' => $custom_unless,
+        default  => "SELECT 1 WHERE ${unless_function}('${role}',
+                    '${_granted_object}', '${unless_privilege}')",
+    }
   }
 
   $_onlyif = $onlyif_function ? {
@@ -323,7 +378,7 @@ define postgresql::server::grant (
   }
 
   $grant_cmd = "GRANT ${_privilege} ON ${_object_type} \"${_togrant_object}\" TO
-      \"${role}\""
+      ${role}"
   postgresql_psql { "${title}: grant:${name}":
     command          => $grant_cmd,
     db               => $on_db,
@@ -336,12 +391,16 @@ define postgresql::server::grant (
     onlyif           => $_onlyif,
     require          => Class['postgresql::server']
   }
-
-  if($role != undef and defined(Postgresql::Server::Role[$role])) {
-    Postgresql::Server::Role[$role]->Postgresql_psql["${title}: grant:${name}"]
+  
+  if ($role != undef) {
+    if ($_lowercase_role =~ /^group (.*)/) {
+      Postgresql::Server::Dbgroup<| |> -> Postgresql_psql["${title}: grant:${name}"]
+    } else {
+      Postgresql::Server::Role<| |> -> Postgresql_psql["${title}: grant:${name}"]
+    }
   }
 
-  if($db != undef and defined(Postgresql::Server::Database[$db])) {
-    Postgresql::Server::Database[$db]->Postgresql_psql["${title}: grant:${name}"]
+  if ($db != undef) {
+     Postgresql::Server::Database<| |> -> Postgresql_psql["${title}: grant:${name}"]
   }
 }
