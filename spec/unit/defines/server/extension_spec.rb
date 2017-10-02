@@ -90,6 +90,36 @@ describe 'postgresql::server::extension', :type => :define do
       }
     end
   end
+
+  context "when extension version is specified" do
+    let (:params) { super().merge({
+      :ensure       => 'absent',
+      :package_name => 'postgis',
+      :version      => '99.99.99',
+    }) }
+
+    it {
+      is_expected.to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" UPDATE TO \'99.99.99\'').with({
+        :db      => 'template_postgis',
+        :unless  => "SELECT 1 FROM pg_extension WHERE extname='postgis' AND extversion='99.99.99'",
+      }).that_requires('Postgresql::Server::Database[template_postgis]')
+    }
+  end
+
+  context "when extension version is latest" do
+    let (:params) { super().merge({
+      :ensure       => 'absent',
+      :package_name => 'postgis',
+      :version      => 'latest',
+    }) }
+
+    it {
+      is_expected.to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" UPDATE').with({
+        :db      => 'template_postgis',
+        :unless  => "SELECT 1 FROM pg_available_extensions WHERE name = 'postgis' AND default_version = installed_version",
+      }).that_requires('Postgresql::Server::Database[template_postgis]')
+    }
+  end
 end
 
 describe 'postgresql::server::extension', :type => :define do
