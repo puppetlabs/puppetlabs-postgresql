@@ -336,8 +336,8 @@ define postgresql::server::grant (
     # See https://docs.aws.amazon.com/redshift/latest/dg/c_unsupported-postgresql-functions.html
     # for why we can't use the same custom loop as for postgres.
     $_lowercase_object_type = $_object_type ? {
-       'ALL TABLES IN SCHEMA' => 'table',
-       default                => downcase($_object_type)
+      'ALL TABLES IN SCHEMA' => 'table',
+      default                => downcase($_object_type)
     }
     $_custom_unless = "SELECT 1 WHERE FALSE != ALL(SELECT charindex('${_privilege}', (SELECT substring(
             case when charindex('r',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'SELECT' else '' end
@@ -391,7 +391,7 @@ define postgresql::server::grant (
     onlyif           => $_onlyif,
     require          => Class['postgresql::server']
   }
-  
+
   if ($role != undef) {
     if ($_lowercase_role =~ /^group (.*)/) {
       Postgresql::Server::Dbgroup<| |> -> Postgresql_psql["${title}: grant:${name}"]
@@ -401,6 +401,6 @@ define postgresql::server::grant (
   }
 
   if ($db != undef) {
-     Postgresql::Server::Database<| |> -> Postgresql_psql["${title}: grant:${name}"]
+    Postgresql::Server::Database<| |> -> Postgresql_psql["${title}: grant:${name}"]
   }
 }
