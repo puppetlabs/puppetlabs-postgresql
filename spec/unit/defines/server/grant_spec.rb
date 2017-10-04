@@ -109,14 +109,14 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
   end
 
-  context 'table (to redshift user)' do
+  context 'schema (to redshift user)' do
     let :params do
       {
         :db => 'test',
         :role => 'test',
-        :privilege => 'select',
-        :object_name => ['test', 'table'],
-        :object_type => 'table',
+        :privilege => 'usage',
+        :object_name => 'test',
+        :object_type => 'schema',
       }
     end
 
@@ -127,20 +127,20 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
-        'command' => /GRANT SELECT ON TABLE "test"."table" TO\s* test/m,
-        'unless'  => /SELECT 1 WHERE has_table_privilege\('test',\s* 'test.table', 'SELECT'\)/m,
+        'command' => /GRANT USAGE ON SCHEMA "test" TO\s* test/m,
+        'unless'  => /SELECT 1 WHERE has_schema_privilege\('test',\s* 'test', 'USAGE'\)/m,
       }
     ) }
   end
 
-  context 'table (to group)' do
+  context 'schema (to group)' do
     let :params do
       {
         :db => 'test',
         :role => 'group test',
-        :privilege => 'select',
-        :object_name => ['test', 'table'],
-        :object_type => 'table',
+        :privilege => 'usage',
+        :object_name => 'test',
+        :object_type => 'schema',
       }
     end
 
@@ -151,8 +151,8 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
-        'command' => /GRANT SELECT ON TABLE "test"."table" TO\s* group test/m,
-        'unless'  => /WHERE\s*nsp.nspname = 'test'\s*AND c.relname LIKE 'table'\s*AND t.typname = 'table'/m,
+        'command' => /GRANT USAGE ON SCHEMA "test" TO\s* group test/m,
+        'unless'  => /WHERE\s*nsp.nspname = 'test'/m,
       }
     ) }
   end
@@ -176,7 +176,7 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT SELECT ON ALL TABLES IN SCHEMA "public" TO\s* test/m,
-        'unless'  => /WHERE\s*nsp.nspname = 'public'\s*AND c.relname LIKE '%'\s*AND t.typname = 'table'/m,
+        'unless'  => nil,
       }
     ) }
   end
@@ -200,7 +200,7 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT SELECT ON ALL TABLES IN SCHEMA "public" TO\s* group test/m,
-        'unless'  => /WHERE\s*nsp.nspname = 'public'\s*AND c.relname LIKE '%'\s*AND t.typname = 'table'/m,
+        'unless'  => nil,
       }
     ) }
   end
