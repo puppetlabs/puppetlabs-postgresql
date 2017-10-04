@@ -358,7 +358,7 @@ define postgresql::server::grant (
       from
         pg_namespace nsp
       WHERE
-        nsp.nspname = '${_schema}'"
+        nsp.nspname = '${_schema}')"
       $_unless = $_custom_unless
     } else {
       warning('pg_class does not expose enough information to provide an UNLESS statement. Please ensure your code only runs this statement on catalog refresh!')
