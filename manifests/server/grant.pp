@@ -341,7 +341,7 @@ define postgresql::server::grant (
       $_custom_unless = "SELECT 1 WHERE EXISTS (
       SELECT nsp.oid
         from
-         pg_namespace nsp on
+         pg_namespace nsp
         WHERE nsp.nspname = '${_schema}')
       AND FALSE != ALL (SELECT charindex('USAGE',
               case when charindex('r',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'SELECT' else '' end
