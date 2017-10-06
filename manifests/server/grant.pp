@@ -27,6 +27,7 @@ define postgresql::server::grant (
   Integer $port                    = $postgresql::server::port,
   Boolean $onlyif_exists           = false,
   String $dialect                  = $postgresql::server::dialect,
+  Boolean $refreshonly             = $postgresql::server::refreshonly,
   Hash $connect_settings           = $postgresql::server::default_connect_settings,
 ) {
 
@@ -391,6 +392,7 @@ define postgresql::server::grant (
     psql_path        => $psql_path,
     unless           => $_unless,
     onlyif           => $_onlyif,
+    refreshonly      => $refreshonly,
     require          => Class['postgresql::server']
   }
 

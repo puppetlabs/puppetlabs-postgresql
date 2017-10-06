@@ -52,6 +52,7 @@ class postgresql::server (
   $locale                     = $postgresql::params::locale,
   $data_checksums             = $postgresql::params::data_checksums,
   $timezone                   = $postgresql::params::timezone,
+  $refreshonly                = $postgresql::params::refreshonly,
 
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,

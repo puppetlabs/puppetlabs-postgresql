@@ -10,6 +10,7 @@ class postgresql::params inherits postgresql::globals {
   $ipv4acls                   = []
   $ipv6acls                   = []
   $dialect                    = pick($dialect, 'postgres')
+  $refreshonly                = false
   $encoding                   = $postgresql::globals::encoding
   $locale                     = $postgresql::globals::locale
   $data_checksums             = $postgresql::globals::data_checksums

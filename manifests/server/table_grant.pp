@@ -8,6 +8,7 @@ define postgresql::server::table_grant(
   $port             = undef,
   $psql_db          = undef,
   $psql_user        = undef,
+  $refreshonly      = $postgresql::server::refreshonly,
   $connect_settings = undef,
   $onlyif_exists    = false,
 ) {
@@ -22,5 +23,6 @@ define postgresql::server::table_grant(
     psql_user        => $psql_user,
     onlyif_exists    => $onlyif_exists,
     connect_settings => $connect_settings,
+    refreshonly      => $refreshonly,
   }
 }

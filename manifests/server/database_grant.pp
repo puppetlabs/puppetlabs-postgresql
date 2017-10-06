@@ -5,6 +5,7 @@ define postgresql::server::database_grant(
   $role,
   $psql_db          = undef,
   $psql_user        = undef,
+  $refreshonly      = $postgresql::server::refreshonly,
   $connect_settings = undef,
 ) {
   postgresql::server::grant { "database:${name}":
@@ -16,5 +17,6 @@ define postgresql::server::database_grant(
     psql_db          => $psql_db,
     psql_user        => $psql_user,
     connect_settings => $connect_settings,
+    refreshonly      => $refreshonly,
   }
 }

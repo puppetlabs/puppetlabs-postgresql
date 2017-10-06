@@ -14,6 +14,7 @@ define postgresql::server::role(
   $connection_limit = '-1',
   $username         = $title,
   $dialect          = $postgresql::server::dialect,
+  $refreshonly      = $postgresql::server::refreshonly,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   $psql_user      = $postgresql::server::user
@@ -64,6 +65,7 @@ define postgresql::server::role(
       psql_path        => $psql_path,
       connect_settings => $connect_settings,
       cwd              => $module_workdir,
+      refreshonly      => $refreshonly,
       require          => [
         Postgresql_psql["${title}: DROP ${role_keyword} ${username}"],
         Class['postgresql::server'],
@@ -116,6 +118,7 @@ define postgresql::server::role(
       psql_path        => $psql_path,
       connect_settings => $connect_settings,
       cwd              => $module_workdir,
+      refreshonly      => $refreshonly,
       require          => [
         Postgresql_psql["${title}: CREATE ${role_keyword} ${username} ENCRYPTED PASSWORD ****"],
         Class['postgresql::server'],
