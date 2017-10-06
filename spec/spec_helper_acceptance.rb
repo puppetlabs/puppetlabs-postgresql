@@ -5,10 +5,39 @@ require 'beaker/module_install_helper'
 
 run_puppet_install_helper
 install_ca_certs unless ENV['PUPPET_INSTALL_TYPE'] =~ /pe/i
-install_module_on(hosts)
-install_module_dependencies_on(hosts)
 
 UNSUPPORTED_PLATFORMS = ['AIX','windows','Solaris','Suse']
+
+# monkey patch to get around apt/forge issue (PUP-8008)
+module Beaker::ModuleInstallHelper
+  include Beaker::DSL
+
+  def module_dependencies_from_metadata
+    metadata = module_metadata
+    return [] unless metadata.key?('dependencies')
+
+    dependencies = []
+
+    # get it outta here!
+    metadata['dependencies'].delete_if {|d| d['name'] == 'puppetlabs/apt' }
+
+    metadata['dependencies'].each do |d|
+      tmp = { module_name: d['name'].sub('/', '-') }
+
+      if d.key?('version_requirement')
+        tmp[:version] = module_version_from_requirement(tmp[:module_name],
+                                                        d['version_requirement'])
+      end
+      dependencies.push(tmp)
+    end
+
+    dependencies
+  end
+end
+
+install_module_on(hosts)
+install_module_dependencies_on(hosts)
+install_module_from_forge_on(hosts,'puppetlabs/apt','< 4.2.0')
 
 class String
   # Provide ability to remove indentation from strings, for the purpose of
