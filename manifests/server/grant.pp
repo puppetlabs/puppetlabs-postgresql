@@ -329,39 +329,41 @@ define postgresql::server::grant (
     # Built-in functions such as has_table_privilege don't work on
     # groups in Redshift at this writing. Similarly,
     # information_schema role tables do not appear to be consistently
-    # kept up to date. As such, we have to dive into the low-level
-    # aclitem[] within pg_catalog.pg_class to find what we're looking
-    # for.
+    # kept up to date. We can extract aclitem[] information from
+    # pg_default_acl or pg_namespace, but it seems pg_class no longer
+    # exposes its relacl attribute. As such, we warn when we cannot
+    # select a suitable UNLESS strategy, allowing the consumer to
+    # update their catalog runs accordingly.
     #
     # See https://docs.aws.amazon.com/redshift/latest/dg/c_unsupported-postgresql-functions.html
     # for why we can't use the same custom loop as for postgres.
-    $_lowercase_object_type = $_object_type ? {
-      'ALL TABLES IN SCHEMA' => 'table',
-      default                => downcase($_object_type)
+    if $_object_type == 'SCHEMA' {
+      $_custom_unless = "SELECT 1 WHERE EXISTS (
+      SELECT nsp.oid
+        from
+         pg_namespace nsp
+        WHERE nsp.nspname = '${_schema}')
+      AND FALSE != ALL (SELECT charindex('USAGE',
+              case when charindex('r',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'SELECT' else '' end
+            ||case when charindex('w',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'UPDATE' else '' end
+            ||case when charindex('a',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'INSERT' else '' end
+            ||case when charindex('d',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'DELETE' else '' end
+            ||case when charindex('R',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'RULE' else '' end
+            ||case when charindex('x',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'REFERENCES' else '' end
+            ||case when charindex('t',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TRIGGER' else '' end
+            ||case when charindex('X',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'EXECUTE' else '' end
+            ||case when charindex('U',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'USAGE' else '' end
+            ||case when charindex('C',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'CREATE' else '' end
+            ||case when charindex('T',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TEMPORARY' else '' end) > 0
+      from
+        pg_namespace nsp
+      WHERE
+        nsp.nspname = '${_schema}')"
+      $_unless = $_custom_unless
+    } else {
+      warning('pg_class does not expose enough information to provide an UNLESS statement. Please ensure your code only runs this statement on catalog refresh!')
+      $_unless = undef
     }
-    $_custom_unless = "SELECT 1 WHERE FALSE != ALL(SELECT charindex('${_privilege}', (SELECT substring(
-            case when charindex('r',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'SELECT' else '' end
-          ||case when charindex('w',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'UPDATE' else '' end
-          ||case when charindex('a',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'INSERT' else '' end
-          ||case when charindex('d',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'DELETE' else '' end
-          ||case when charindex('R',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'RULE' else '' end
-          ||case when charindex('x',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'REFERENCES' else '' end
-          ||case when charindex('t',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TRIGGER' else '' end
-          ||case when charindex('X',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'EXECUTE' else '' end
-          ||case when charindex('U',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'USAGE' else '' end
-          ||case when charindex('C',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'CREATE' else '' end
-          ||case when charindex('T',split_part(split_part(array_to_string(relacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TEMPORARY' else '' end
-       , 2,10000)
-    from
-    (SELECT c.relacl, c.relname, c.reltype FROM pg_class c
-     left join pg_namespace nsp on (c.relnamespace = nsp.oid)
-     left join pg_type t on (c.reltype = t.typnamespace)
-    WHERE
-     nsp.nspname = '${_schema}'
-     AND c.relname LIKE '${_relation}'
-     AND t.typname = '${_lowercase_object_type}'
-    ))) > 0)"
-    $_unless = $_custom_unless
   } else {
     $_unless = $unless_function ? {
         false    => undef,
