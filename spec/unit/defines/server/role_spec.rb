@@ -18,6 +18,21 @@ describe 'postgresql::server::role', :type => :define do
     'test'
   end
 
+  context 'refreshonly' do
+
+    let :params do
+      {
+        :password_hash => 'new-pa$s',
+      }
+    end
+
+    let :pre_condition do
+     "class {'postgresql::server': refreshonly => true}"
+    end
+
+    it { is_expected.to contain_postgresql__server__role('test') }
+  end
+
   context 'standalone' do
 
     let :params do
@@ -25,11 +40,11 @@ describe 'postgresql::server::role', :type => :define do
         :password_hash => 'new-pa$s',
       }
     end
-  
+
     let :pre_condition do
      "class {'postgresql::server':}"
     end
-  
+
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'should have create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('test: CREATE ROLE test ENCRYPTED PASSWORD ****').with({
@@ -54,11 +69,11 @@ describe 'postgresql::server::role', :type => :define do
     let :params do
       {}
     end
-  
+
     let :pre_condition do
      "class {'postgresql::server': dialect => 'postgres'}"
     end
-  
+
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'should have create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('test: CREATE ROLE test ENCRYPTED PASSWORD ****').with({
@@ -217,11 +232,11 @@ describe 'postgresql::server::role', :type => :define do
         :password_hash => 'new-pa$s',
       }
     end
-  
+
     let :pre_condition do
      "class {'postgresql::server': dialect => 'redshift'}"
     end
-  
+
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'should have create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('test: CREATE USER test ENCRYPTED PASSWORD ****').with({
@@ -245,11 +260,11 @@ describe 'postgresql::server::role', :type => :define do
     let :params do
       {}
     end
-  
+
     let :pre_condition do
      "class {'postgresql::server': dialect => 'redshift'}"
     end
-  
+
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'should have create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('test: CREATE USER test ENCRYPTED PASSWORD ****').with({

@@ -35,12 +35,12 @@ define postgresql::server::dbgroupmember(
       connect_settings => $connect_settings,
       cwd              => $module_workdir,
       require          => [
-        Postgresql_psql["${title}: ALTER GROUP ${groupname} DROP USER ${username}"],
+        Postgresql_psql["${title}: ALTER GROUP ${groupname} DROP USER \"${username}\""],
         Class['postgresql::server'],
       ],
     }
-    postgresql_psql { "${title}: ALTER GROUP ${groupname} DROP USER ${username}":
-      command     => "ALTER GROUP ${groupname} DROP USER ${username}",
+    postgresql_psql { "${title}: ALTER GROUP ${groupname} DROP USER \"${username}\"":
+      command     => "ALTER GROUP ${groupname} DROP USER \"${username}\"",
       unless      => "SELECT 1 WHERE NOT (SELECT usesysid from pg_user where usename = '${username}') = ANY((SELECT grolist from pg_group where groname = '${groupname}')::int[])",
       environment => [],
       require     => Class['Postgresql::Server'],
@@ -55,12 +55,12 @@ define postgresql::server::dbgroupmember(
       connect_settings => $connect_settings,
       cwd        => $module_workdir,
       require    => [
-        Postgresql_psql["${title}: ALTER GROUP ${groupname} ADD USER ${username}"],
+        Postgresql_psql["${title}: ALTER GROUP ${groupname} ADD USER \"${username}\""],
         Class['postgresql::server'],
       ],
     }
-    postgresql_psql { "${title}: ALTER GROUP ${groupname} ADD USER ${username}":
-      command     => "ALTER GROUP ${groupname} ADD USER ${username}",
+    postgresql_psql { "${title}: ALTER GROUP ${groupname} ADD USER \"${username}\"":
+      command     => "ALTER GROUP ${groupname} ADD USER \"${username}\"",
       unless      => "SELECT 1 WHERE (SELECT usesysid from pg_user where usename = '${username}') = ANY((SELECT grolist from pg_group where groname = '${groupname}')::int[])",
       environment => [],
       require     => Class['Postgresql::Server'],

@@ -937,6 +937,14 @@ Specifies the path to the `psql` command.
 
 Default value: OS dependent.
 
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: `false`.
+
 ##### `service_manage`
 
 Defines whether or not Puppet should manage the service. 
@@ -1047,6 +1055,14 @@ Creates a local database, user, and assigns necessary permissions.
 
 Defines a comment to be stored about the database using the PostgreSQL COMMENT command.
 
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
+
 ##### `connect_settings`
 
 Specifies a hash of environment variables used when connecting to a remote server. 
@@ -1113,6 +1129,14 @@ User to create and assign access to the database upon creation. Mandatory.
 
 Creates a Postgres group.
 
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
+
 ##### `connect_settings`
 Required.
 
@@ -1151,6 +1175,14 @@ Default value: inherit from `$connect_settings` or `postgresql::server::port`
 #### postgresql::server::dbgroupmember
 
 Creates a member for an existing Postgres group.
+
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
 
 ##### `connect_settings`
 Required.
@@ -1415,6 +1447,14 @@ In vanilla postgres, uses has_*_privilege functions for UNLESS evaluation. In Re
 
 Default value: inherit from server settings.
 
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
+
 ##### `connect_settings`
 
 Specifies a hash of environment variables used when connecting to a remote server.
@@ -1540,6 +1580,14 @@ Port to use when connecting.
 
 Default value: `undef`, which generally defaults to port 5432 depending on your PostgreSQL packaging.
 
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
+
 ##### `connect_settings`
 
 Specifies a hash of environment variables used when connecting to a remote server.
@@ -1590,6 +1638,14 @@ Creates a role or user in PostgreSQL. In the Redshift dialect, this creates a ne
 Specifies how many concurrent connections the role can make.
 
 Default value: '-1', meaning no limit.
+
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
 
 ##### `connect_settings`
 Specifies a hash of environment variables used when connecting to a remote server.
@@ -1667,6 +1723,14 @@ Default value: the namevar.
 
 Creates a schema.
 
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
+
 ##### `connect_settings`
 
 Specifies a hash of environment variables used when connecting to a remote server.
@@ -1692,6 +1756,14 @@ Default value: the namevar.
 #### postgresql::server::table_grant
 
 Manages grant-based access privileges for users. Consult the PostgreSQL documentation for `grant` for more information.
+
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
 
 ##### `connect_settings`
 
@@ -1732,6 +1804,14 @@ Specifies the table to which you are granting access.
 #### postgresql::server::tablespace
 
 Creates a tablespace. If necessary, also creates the location and assigns the same permissions as the PostgreSQL server.
+
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
 
 ##### `connect_settings`
 
