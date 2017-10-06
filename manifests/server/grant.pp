@@ -344,17 +344,17 @@ define postgresql::server::grant (
          pg_namespace nsp
         WHERE nsp.nspname = '${_schema}')
       AND FALSE != ALL (SELECT charindex('USAGE',
-              case when charindex('r',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'SELECT' else '' end
-            ||case when charindex('w',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'UPDATE' else '' end
-            ||case when charindex('a',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'INSERT' else '' end
-            ||case when charindex('d',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'DELETE' else '' end
-            ||case when charindex('R',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'RULE' else '' end
-            ||case when charindex('x',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'REFERENCES' else '' end
-            ||case when charindex('t',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TRIGGER' else '' end
-            ||case when charindex('X',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'EXECUTE' else '' end
-            ||case when charindex('U',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'USAGE' else '' end
-            ||case when charindex('C',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'CREATE' else '' end
-            ||case when charindex('T',split_part(split_part(array_to_string(nspname, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TEMPORARY' else '' end) > 0
+              case when charindex('r',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'SELECT' else '' end
+            ||case when charindex('w',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'UPDATE' else '' end
+            ||case when charindex('a',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'INSERT' else '' end
+            ||case when charindex('d',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'DELETE' else '' end
+            ||case when charindex('R',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'RULE' else '' end
+            ||case when charindex('x',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'REFERENCES' else '' end
+            ||case when charindex('t',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TRIGGER' else '' end
+            ||case when charindex('X',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'EXECUTE' else '' end
+            ||case when charindex('U',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'USAGE' else '' end
+            ||case when charindex('C',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'CREATE' else '' end
+            ||case when charindex('T',split_part(split_part(array_to_string(nspacl, '|'),'${_lowercase_role}',2 ) ,'/',1)) > 0 then 'TEMPORARY' else '' end) > 0
       from
         pg_namespace nsp
       WHERE
