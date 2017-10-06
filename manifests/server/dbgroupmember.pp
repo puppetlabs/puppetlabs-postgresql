@@ -6,6 +6,7 @@ define postgresql::server::dbgroupmember(
   $groupname        = undef,
   $username         = $title,
   $dialect          = $postgresql::server::dialect,
+  $refreshonly      = $postgresql::server::refreshonly,
   $connect_settings = undef,
 ) {
   $psql_user      = $postgresql::server::user

@@ -16,6 +16,7 @@ define postgresql::server::schema(
   $db               = $postgresql::server::default_database,
   $owner            = undef,
   $schema           = $title,
+  $refreshonly      = $postgresql::server::refreshonly,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   $user           = $postgresql::server::user
@@ -41,6 +42,7 @@ define postgresql::server::schema(
     port       => $port,
     cwd        => $module_workdir,
     connect_settings => $connect_settings,
+    refreshonly      => $refreshonly,
   }
 
   postgresql_psql { "${db}: CREATE SCHEMA \"${schema}\"":

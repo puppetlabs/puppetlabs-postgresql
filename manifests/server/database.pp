@@ -8,6 +8,7 @@ define postgresql::server::database(
   $encoding         = $postgresql::server::encoding,
   $locale           = $postgresql::server::locale,
   $istemplate       = false,
+  $refreshonly      = $postgresql::server::refreshonly,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   $createdb_path = $postgresql::server::createdb_path
@@ -39,6 +40,7 @@ define postgresql::server::database(
     psql_path        => $psql_path,
     port             => $port,
     connect_settings => $connect_settings,
+    refreshonly      => $refreshonly,
   }
 
   # Optionally set the locale switch. Older versions of createdb may not accept
