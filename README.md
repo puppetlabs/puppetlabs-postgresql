@@ -757,7 +757,7 @@ Optional.
 
 Data type: Boolean.
 
-Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent. Valid values: 'true' or 'false'. Default: initdb's default ('false').
+Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent. Valid values: `true` or `false`. Default: initdb's default (`false`).
 
 **Warning:** This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 

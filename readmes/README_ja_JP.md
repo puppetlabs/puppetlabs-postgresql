@@ -10,6 +10,7 @@
     * [サーバーの設定](#configure-a-server)
     * [データベースの作成](#create-a-database)
     * [ユーザ、ロール、パーミッションの管理](#manage-users-roles-and-permissions)
+    * [DBオブジェクトの所有権の管理](#manage-ownership-of-db-objects)
     * [デフォルトのオーバーライド](#override-defaults)
     * [pg_hba.confのアクセスルールの作成](#create-an-access-rule-for-pg_hbaconf)
     * [pg_ident.confのユーザ名マップの作成](#create-user-name-maps-for-pg_identconf)
@@ -23,7 +24,7 @@
 6. [開発 - モジュール貢献についてのガイド](#development)
     * [コントリビュータ - モジュール貢献者の一覧](#contributors)
 7. [テスト](#tests)
-8. [コントリビュータ - モジュール貢献者のリスト](#contributors)
+8. [コントリビュータ - モジュール貢献者の一覧](#contributors)
 
 ## モジュールの概要
 
@@ -115,6 +116,24 @@ postgresql::server::table_grant { 'my_table of test2':
 ```
 
 この例では、test1データベース上とtest2データベースの`my_table`テーブル上の**すべての**権限を、指定したユーザまたはグループに付与します。値がPuppetDB設定ファイルに追加されると、このデータベースは使用可能になります。
+
+### DBオブジェクトの所有権の管理
+
+REASSIGN OWNEDを使用して、データベース内にあるすべてのオブジェクトの所有権を変更するには、次のようにします。
+
+```puppet
+postgresql::server::reassign_owned_by { 'new owner is meerkat':
+  db        => 'test_db',
+  old_owner => 'marmot',
+  new_owner => 'meerkat',
+}
+```
+
+この例では、PostgreSQLの'REASSIGN OWNED'ステートメントを実行して所有権を更新し、現在、ロール'marmot'が所有しているすべてのテーブル、シーケンス、関数、ビューが、ロール'meerkat'に所有されるようにします。
+
+これは、指定された'test_db'内のオブジェクトに対してのみ適用されます。
+
+バージョン9.3以上のPostgresqlでは、データベースの所有権も更新されます。
 
 ### デフォルトのオーバーライド
 
@@ -327,6 +346,7 @@ postgresqlモジュールには、サーバー設定用に多数のオプショ�
 * [postgresql::server::grant_role](#postgresqlservergrant_role)
 * [postgresql::server::pg_hba_rule](#postgresqlserverpg_hba_rule)
 * [postgresql::server::pg_ident_rule](#postgresqlserverpg_ident_rule)
+* [postgresql::server::reassign_owned_by](#postgresqlserverreassign_owned_by)
 * [postgresql::server::recovery](#postgresqlserverrecovery)
 * [postgresql::server::role](#postgresqlserverrole)
 * [postgresql::server::schema](#postgresqlserverschema)
@@ -428,6 +448,16 @@ PostgreSQL docsパッケージリソースが存在する必要があるかど�
 **注意:** インストール後にdatadirを変更すると、変更が実行される前にサーバーが完全に停止します。Red Hatシステムでは、データディレクトリはSELinuxに適切にラベル付けする必要があります。Ubuntuでは、明示的に`needs_initdb = true`に設定して、Puppetが新しいdatadir内のデータベースを初期化できるようにする必要があります(他のシステムでは、`needs_initdb`はデフォルトでtrueになっています)。
 
 **警告:** datadirがデフォルトから変更された場合、Puppetは元のデータディレクトリのパージを管理しません。そのため、データディレクトリが元のディレクトリに戻ったときにエラーが発生します。
+
+##### `data_checksums`
+
+オプションです。
+
+データタイプ: 真偽値(boolean)
+
+データページに対してチェックサムを使用すると、その他の方法では発見の難しいI/Oシステムによる破損を検出するのに役立ちます。有効な値:  `true`、`false`。デフォルト値: initdbのデフォルト値('false')。
+
+**警告:** このオプションは、initdbによって初期化中に使用され、後から変更することはできません。設定された時点で、すべてのデータベース内のすべてのオブジェクトに対してチェックサムが計算されます。
 
 ##### `default_database`
 
@@ -721,6 +751,16 @@ PostgreSQL Pythonパッケージの名前。
 
 デフォルト値: '${bindir}/createdb'。
 
+##### `data_checksums`
+
+オプションです。
+
+データタイプ: 真偽値(boolean)
+
+データページに対してチェックサムを使用すると、その他の方法では発見の難しいI/Oシステムによる破損を検出するのに役立ちます。有効な値: `true`、`false`。デフォルト値: initdbのデフォルト値('false')。
+
+**警告:** このオプションは、initdbによって初期化中に使用され、後から変更することはできません。設定された時点で、すべてのデータベース内のすべてのオブジェクトに対してチェックサムが計算されます。
+
 ##### `default_database`
 
 接続するデフォルトのデータベースの名前を指定します。ほとんどのシステムで、'postgres'になります。
@@ -737,7 +777,7 @@ PostgreSQL Pythonパッケージの名前。
 
 ##### `group`
 
-ファイルシステムの関連ファイルに使用されるデフォルトのpostgresユーグループをオーバーライドします。
+ファイルシステムの関連ファイルに使用されるデフォルトのpostgresユーザグループをオーバーライドします。
 
 デフォルト値: OSによって異なります。
 
@@ -1177,7 +1217,10 @@ PostgreSQL拡張を管理します。
 
 ##### `object_name`
 
-アクセス権を付与する`object_type`の名前を指定します。
+アクセス権を付与する`object_type`の名前を、文字列または2要素の配列で指定します。
+
+String: 'object_name'
+Array:  ['schema_name', 'object_name']
 
 ##### `port`
 
@@ -1251,7 +1294,7 @@ PostgreSQL拡張を管理します。
 
 ##### `connect_settings`
 
-リモートサーバーに接続する際に使用される環境変数のハッシュを指定します。
+リモートサーバーへの接続時に使用する環境変数のハッシュを指定します。
 
 デフォルト値: ローカルのPostgresインスタンスに接続します。
 
@@ -1346,6 +1389,40 @@ PostgreSQLインスタンス全体を管理することなく、`pg_hba.conf`を
 
 **注意して使用してください。**
 
+#### postgresql::server::reassign_owned_by
+
+PostgreSQLコマンド'REASSIGN OWNED'をデータベースに対して実行し、既存オブジェクトの所有権を別のデータベースロールに移します。
+
+##### `db`
+
+ 'REASSIGN OWNED'コマンドを適用するデータベースを指定します。
+
+##### `old_role`
+
+指定したデータベース内のオブジェクトを現在所有しているロールまたはユーザを指定します。
+
+##### `new_role`
+
+対象オブジェクトの新しい所有者となるロールまたはユーザを指定します。
+
+##### `psql_user`
+
+`psql`を実行するOSユーザを指定します。
+
+デフォルト値: モジュールのデフォルトユーザ。通常、'postgres'。
+
+##### `port`
+
+接続に使用するポート。
+
+デフォルト値: `undef`。PostgreSQLのパッケージングに応じて、通常、デフォルトでポート5432になります。
+
+##### `connect_settings`
+
+リモートサーバーへの接続時に使用する環境変数のハッシュを指定します。
+
+デフォルト値: ローカルのPostgresインスタンスに接続します。
+
 #### postgresql::server::recovery
 
 `recovery.conf`の内容を作成可能にします。詳細については、[使用例](#create-recovery-configuration)および[PostgreSQLマニュアル](http://www.postgresql.org/docs/current/static/recovery-config.html)を参照してください。
@@ -1380,7 +1457,7 @@ PostgreSQLインスタンス全体を管理することなく、`pg_hba.conf`を
 
 ##### `target`
 ルールのターゲットを提供します。通常、内部使用のみのプロパティです。
- 
+
 **注意して使用してください。**
 
 #### postgresql::server::role
@@ -1392,7 +1469,7 @@ PostgreSQLのロールまたはユーザを作成します。
 デフォルト値: '-1'。これは、無制限を意味します。
 
 ##### `connect_settings`
-リモートサーバーに接続する際に使用される環境変数のハッシュを指定します。
+リモートサーバーへの接続時に使用する環境変数のハッシュを指定します。
 
 デフォルト値: ローカルのPostgresインスタンスに接続します。
 
@@ -1452,7 +1529,7 @@ postgresql::server::role { 'myusername':
 
 ##### `connect_settings`
 
-リモートサーバーに接続する際に使用される環境変数のハッシュを指定します。
+リモートサーバーへの接続時に使用する環境変数のハッシュを指定します。
 
 デフォルト値: ローカルのPostgresインスタンスに接続します。
 
@@ -1637,6 +1714,16 @@ PostgreSQLマスターサーバー上でウォームスタンバイレプリケ�
 作成するスロットの名前を指定します。有効なレプリケーションスロット名である必要があります。
 
 これはnamevarです。
+
+##### `ensure`
+
+必須。
+
+指定されたスロットに対して、作成または消去のいずれかのアクションを指定します。
+
+有効な値: 'present'、'absent'。
+
+デフォルト値: 'present'。
 
 #### postgresql_conn_validator
 
