@@ -7,9 +7,12 @@ Adds several new features including some work around OS support. Also includes a
 - Fedora 26 provides postgresql-server version 9.6 by default - Added support to manifests/globals.pp to avoid puppet failures on Fedora 26 nodes.
 - Use postgresql 9.6 for the newest SLES and openSUSE releases.
 - Enhanced --data-checksums on initdb.
+- Added support for Debian version 9.
+- Added a `version` parameter.
 
 #### Changed
 - Replaced validate_re calls with puppet datatype `Pattern` and is_array calls with puppet datatype `Array`.
+- Installation method for apt in the spec_helper_acceptance, this is a temporary workaround due to issues with module installation.
 
 #### Fixed
 - Updated spec tests to remove deprecation warnings.
@@ -21,6 +24,7 @@ Adds several new features including some work around OS support. Also includes a
 #### Removed
 - Removed unsupported Ubuntu versions 10.04 and 12.04 ([MODULES-5501](https://tickets.puppetlabs.com/browse/MODULES-5501))
 - Removed unsupported Debian version 6.
+- Removed numeric order override.
 
 ## Supported Release 5.1.0
 ### Summary
