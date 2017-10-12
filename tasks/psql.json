@@ -1,0 +1,30 @@
+{
+  "description": "Allows you to execute arbitary SQL via psql",
+  "input_method": "stdin",
+  "parameters": {
+    "host": {
+      "description": "Host to connect to",
+      "type": "Optional[String[1]]"
+    },
+    "port": {
+      "description": "Port to connect to",
+      "type": "Optional[String[1]]"
+    },
+    "database": {
+      "description": "Database to connect to",
+      "type": "Optional[String[1]]"
+    },
+    "user": {
+      "description": "The database user",
+      "type": "Optional[String[1]]"
+    },
+    "password": {
+      "description": "The database password",
+      "type": "Optional[String[1]]"
+    },
+     "sql": {
+      "description": "The SQL you want to execute",
+      "type": "String[1]"
+    }
+  }
+}
