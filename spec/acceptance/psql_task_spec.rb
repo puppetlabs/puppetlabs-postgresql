@@ -2,7 +2,7 @@
 require 'spec_helper_acceptance'
 
 describe 'postgresql tasks' do
-  describe 'execute some sql' do
+  describe 'execute some sql', if: pe_install? && puppet_version =~ %r{(5\.\d\.\d)} do
     pp = <<-EOS
         class { 'postgresql::server': } ->
         postgresql::server::db { 'spec1':
