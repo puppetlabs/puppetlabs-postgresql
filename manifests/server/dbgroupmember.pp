@@ -66,4 +66,6 @@ define postgresql::server::dbgroupmember(
       require     => Class['Postgresql::Server'],
     }
   }
+
+  Postgresql::Server::Role<| |> -> Postgresql_psql["${title}: ALTER GROUP ${groupname} ADD USER \"${username}\""]
 }
