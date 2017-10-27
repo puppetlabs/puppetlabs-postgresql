@@ -32,6 +32,12 @@ define postgresql::server::extension (
     }
   }
 
+  if( $database != 'postgres' ) {
+    # The database postgres cannot managed by this module, so it is exempt from this dependency
+    Postgresql_psql {
+      require => Postgresql::Server::Database[$database],
+    }
+  }
 
   postgresql_psql {"Add ${extension} extension to ${database}":
 
@@ -43,10 +49,6 @@ define postgresql::server::extension (
     db               => $database,
     command          => $command,
     unless           => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = '${extension}') as t WHERE t.count ${unless_comp} 1",
-  }
-
-  if($database != undef and defined(Postgresql::Server::Database[$database])) {
-    Postgresql::Server::Database[$database]->Postgresql_psql["Add ${extension} extension to ${database}"]
   }
 
   if $package_name {
@@ -78,9 +80,6 @@ define postgresql::server::extension (
       connect_settings => $connect_settings,
       command          => $alter_extension_sql,
       unless           => $update_unless,
-    }
-    if($database != undef and defined(Postgresql::Server::Database[$database])) {
-      Postgresql::Server::Database[$database]->Postgresql_psql["${database}: ${alter_extension_sql}"]
     }
   }
 }
