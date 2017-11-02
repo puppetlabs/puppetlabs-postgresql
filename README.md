@@ -20,6 +20,7 @@
     * [Defined Types](#defined-types)
     * [Types](#types)
     * [Functions](#functions)
+    * [Facts](#facts)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
     * [Contributors - List of module contributors](#contributors)
@@ -364,6 +365,9 @@ The postgresql module comes with many options for configuring the server. While 
 
 * [postgresql_password](#function-postgresql_password)
 * [postgresql_acls_to_resources_hash](#function-postgresql_acls_to_resources_hashacl_array-id-order_offset)
+
+**Facts:**
+* [db_is_master](#fact-db_is_master)
 
 ### Classes
 
@@ -1827,6 +1831,12 @@ Alternatively, you can call this from your production manifests, but the manifes
 This internal function converts a list of `pg_hba.conf` based ACLs (passed in as an array of strings) to a format compatible with the `postgresql::pg_hba_rule` resource.
 
 **This function should only be used internally by the module**.
+
+### Facts
+
+#### db_is_master
+
+Returns true if the node is a master, false if replica.  Based on `pg_is_in_recovery()`.
 
 ## Limitations
 
