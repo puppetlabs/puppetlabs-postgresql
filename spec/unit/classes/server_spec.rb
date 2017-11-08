@@ -7,7 +7,8 @@ describe 'postgresql::server', :type => :class do
         :family  => 'Debian',
         :name => 'Debian',
         :release => {
-          :full => '6.0'
+          :full => '6.0',
+          :major => '6'
         }
       },
       :osfamily => 'Debian',
