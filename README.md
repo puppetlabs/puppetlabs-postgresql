@@ -455,7 +455,11 @@ Optional.
 
 Data type: Boolean.
 
-Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent. Valid values: 'true' or 'false'. Default: initdb's default ('false').
+Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+
+Valid values: `true` or `false`.
+
+Default: initdb's default (`false`).
 
 **Warning:** This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 
@@ -757,7 +761,11 @@ Optional.
 
 Data type: Boolean.
 
-Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent. Valid values: `true` or `false`. Default: initdb's default (`false`).
+Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+
+Valid values: `true` or `false`.
+
+Default value: initdb's default (`false`).
 
 **Warning:** This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 
@@ -767,7 +775,7 @@ Specifies the name of the default database to connect with. On most systems this
 
 ##### `default_connect_settings`
 
-Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined-types. i.e. `postgresql::server::role`
+Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as `postgresql::server::role`.
 
 ##### `encoding`
 
