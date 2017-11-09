@@ -126,7 +126,7 @@ define postgresql::server::config_entry (
         }
         -> augeas { 'override PGPORT in /etc/sysconfig/pgsql/postgresql':
           lens    => 'Shellvars.lns',
-          incl    => '/etc/sysconfig/pgsql/*',
+          incl    => '/etc/sysconfig/pgsql/postgresql',
           context => '/files/etc/sysconfig/pgsql/postgresql',
           changes => "set PGPORT ${value}",
           require => File['/etc/sysconfig/pgsql/postgresql'],
@@ -145,7 +145,7 @@ define postgresql::server::config_entry (
         }
         -> augeas { 'override PGDATA in /etc/sysconfig/pgsql/postgresql':
           lens    => 'Shellvars.lns',
-          incl    => '/etc/sysconfig/pgsql/*',
+          incl    => '/etc/sysconfig/pgsql/postgresql',
           context => '/files/etc/sysconfig/pgsql/postgresql',
           changes => "set PGDATA ${value}",
           require => File['/etc/sysconfig/pgsql/postgresql'],
