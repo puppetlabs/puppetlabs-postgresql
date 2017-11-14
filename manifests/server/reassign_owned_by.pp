@@ -6,6 +6,7 @@ define postgresql::server::reassign_owned_by (
   String $db,
   String $psql_user                 = $postgresql::server::user,
   Integer $port                     = $postgresql::server::port,
+  Boolean $refreshonly              = $postgresql::server::refreshonly,
   Hash $connect_settings            = $postgresql::server::default_connect_settings,
 ) {
 
@@ -45,6 +46,7 @@ define postgresql::server::reassign_owned_by (
     psql_group       => $group,
     psql_path        => $psql_path,
     onlyif           => $onlyif,
+    refreshonly      => $refreshonly,
     require          => Class['postgresql::server']
   }
 

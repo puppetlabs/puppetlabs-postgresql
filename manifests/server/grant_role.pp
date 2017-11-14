@@ -6,6 +6,7 @@ define postgresql::server::grant_role (
   $psql_db                          = $postgresql::server::default_database,
   $psql_user                        = $postgresql::server::user,
   $port                             = $postgresql::server::port,
+  $refreshonly                      = $postgresql::server::refreshonly,
   $connect_settings                 = $postgresql::server::default_connect_settings,
 ) {
   case $ensure {
@@ -29,6 +30,7 @@ define postgresql::server::grant_role (
     psql_user        => $psql_user,
     port             => $port,
     connect_settings => $connect_settings,
+    refreshonly      => $refreshonly,
   }
 
   if ! $connect_settings or empty($connect_settings) {

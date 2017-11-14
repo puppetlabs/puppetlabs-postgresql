@@ -17,7 +17,7 @@ describe 'postgresql::server::grant', :type => :define do
     'test'
   end
 
-  context 'plain' do
+  context 'plain (to user)' do
     let :params do
       {
         :db => 'test',
@@ -32,7 +32,7 @@ describe 'postgresql::server::grant', :type => :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
   end
 
-  context 'sequence' do
+  context 'sequence (to user)' do
     let :params do
       {
         :db => 'test',
@@ -47,10 +47,160 @@ describe 'postgresql::server::grant', :type => :define do
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql('grant:test').with(
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT USAGE ON SEQUENCE "test" TO\s* "test"/m,
         'unless'  => /SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)/m,
+      }
+    ) }
+  end
+
+  context 'all sequences (to user)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'test',
+        :privilege => 'usage',
+        :object_type => 'all sequences in schema',
+        :object_name => 'public',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* "test"/m,
+        'unless'  => /SELECT 1 FROM \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\) P\s* HAVING count\(P\.sequence_name\) = 0/m,
+      }
+    ) }
+  end
+
+  context 'redshift dialect required for group syntax' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'group test',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server': dialect => 'postgres'}"
+    end
+
+    it { is_expected.to raise_error(Puppet::Error, /GROUP syntax is only available in the Redshift dialect/) }
+  end
+
+  context 'plain (to group)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'group test',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server': dialect => 'redshift'}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+  end
+
+  context 'schema (to redshift user)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'test',
+        :privilege => 'usage',
+        :object_name => 'test',
+        :object_type => 'schema',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server': dialect => 'redshift'}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT USAGE ON SCHEMA "test" TO\s* "test"/m,
+        'unless'  => /SELECT 1 WHERE has_schema_privilege\('test',\s* 'test', 'USAGE'\)/m,
+      }
+    ) }
+  end
+
+  context 'schema (to group)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'group test',
+        :privilege => 'usage',
+        :object_name => 'test',
+        :object_type => 'schema',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server': dialect => 'redshift'}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT USAGE ON SCHEMA "test" TO\s* group "test"/m,
+        'unless'  => /WHERE\s*nsp.nspname = 'test'/m,
+      }
+    ) }
+  end
+
+  context 'all tables (to redshift user)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'test',
+        :privilege => 'select',
+        :object_type => 'all tables in schema',
+        :object_name => 'public',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server': dialect => 'redshift'}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT SELECT ON ALL TABLES IN SCHEMA "public" TO\s* "test"/m,
+        'unless'  => nil,
+      }
+    ) }
+  end
+
+  context 'all tables (to group)' do
+    let :params do
+      {
+        :db => 'test',
+        :role => 'group test',
+        :privilege => 'select',
+        :object_type => 'all tables in schema',
+        :object_name => 'public',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server': dialect => 'redshift'}"
+    end
+
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
+      {
+        'command' => /GRANT SELECT ON ALL TABLES IN SCHEMA "public" TO\s* group "test"/m,
+        'unless'  => nil,
       }
     ) }
   end
@@ -70,34 +220,10 @@ describe 'postgresql::server::grant', :type => :define do
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql('grant:test').with(
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT USAGE ON SEQUENCE "test" TO\s* "test"/m,
         'unless'  => /SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)/m,
-      }
-    ) }
-  end
-
-  context 'all sequences' do
-    let :params do
-      {
-        :db => 'test',
-        :role => 'test',
-        :privilege => 'usage',
-        :object_type => 'all sequences in schema',
-        :object_name => 'public',
-      }
-    end
-
-    let :pre_condition do
-      "class {'postgresql::server':}"
-    end
-
-    it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql('grant:test').with(
-      {
-        'command' => /GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* "test"/m,
-        'unless'  => /SELECT 1 FROM \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\) P\s* HAVING count\(P\.sequence_name\) = 0/m,
       }
     ) }
   end
@@ -117,7 +243,7 @@ describe 'postgresql::server::grant', :type => :define do
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql("grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1' } ).with_port( 5432 ) }
+    it { is_expected.to contain_postgresql_psql("test: grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1' } ).with_port( 5432 ) }
   end
 
   context "with specific db connection settings - including port" do
@@ -136,7 +262,7 @@ describe 'postgresql::server::grant', :type => :define do
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql("grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ) }
+    it { is_expected.to contain_postgresql_psql("test: grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ) }
   end
 
   context "with specific db connection settings - port overriden by explicit parameter" do
@@ -156,7 +282,7 @@ describe 'postgresql::server::grant', :type => :define do
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql("grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ).with_port( '5678' ) }
+    it { is_expected.to contain_postgresql_psql("test: grant:test").with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ).with_port( '5678' ) }
   end
 
   context 'with specific schema name' do
@@ -175,7 +301,7 @@ describe 'postgresql::server::grant', :type => :define do
     end
 
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it { is_expected.to contain_postgresql_psql('grant:test').with(
+    it { is_expected.to contain_postgresql_psql('test: grant:test').with(
       {
         'command' => /GRANT ALL ON TABLE "myschema"."mytable" TO\s* "test"/m,
         'unless'  => /SELECT 1 WHERE has_table_privilege\('test',\s*'myschema.mytable', 'INSERT'\)/m,

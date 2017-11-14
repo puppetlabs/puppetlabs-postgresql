@@ -341,6 +341,8 @@ The postgresql module comes with many options for configuring the server. While 
 * [postgresql::server::database](#postgresqlserverdatabase)
 * [postgresql::server::database_grant](#postgresqlserverdatabase_grant)
 * [postgresql::server::db](#postgresqlserverdb)
+* [postgresql::server::dbgroup](#postgresqlserverdbgroup)
+* [postgresql::server::dbgroupmember](#postgresqlserverdbgroupmember)
 * [postgresql::server::extension](#postgresqlserverextension)
 * [postgresql::server::grant](#postgresqlservergrant)
 * [postgresql::server::grant_role](#postgresqlservergrant_role)
@@ -470,6 +472,12 @@ Default value: 'postgres' (for most systems).
 Overrides the default PostgreSQL devel package name.
 
 Default value: OS dependent.
+
+##### `dialect`
+
+Sets the dialect for all databases managed with this module. Select 'postgres' for managing vanilla postgres databases, or 'redshift' for Amazon Redshift databases. Note: local database software is only installable using the 'postgres' dialect.
+
+Default value: 'postgres'
 
 ##### `docs_package_name`
 
@@ -767,7 +775,13 @@ Specifies the name of the default database to connect with. On most systems this
 
 ##### `default_connect_settings`
 
-Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined-types. i.e. `postgresql::server::role`
+Specifies a puppet hash of environment variables used when connecting to a remote server. This should contain environment variables to be consumed by psql. Becomes the default for other defined-types. i.e. `postgresql::server::role`
+
+##### `dialect`
+
+Sets the dialect for all databases managed with this module. Select 'postgres' for managing vanilla postgres databases, or 'redshift' for Amazon Redshift databases. Note: local database software is only installable using the 'postgres' dialect.
+
+Default value: value set in `postgresql::params` or `postgresql::globals`
 
 ##### `encoding`
 
@@ -923,6 +937,14 @@ Specifies the path to the `psql` command.
 
 Default value: OS dependent.
 
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: `false`.
+
 ##### `service_manage`
 
 Defines whether or not Puppet should manage the service. 
@@ -958,6 +980,12 @@ Default value: `true`.
 Overrides the default status check command for your PostgreSQL service. 
 
 Default value: OS dependent.
+
+##### `skip_install`
+
+Overrides the installation of a local PostgreSQL instance, such as when performing tests or when an instance is managed remotely.
+
+Default value: `false`.
 
 ##### `user`
 
@@ -1027,6 +1055,14 @@ Creates a local database, user, and assigns necessary permissions.
 
 Defines a comment to be stored about the database using the PostgreSQL COMMENT command.
 
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
+
 ##### `connect_settings`
 
 Specifies a hash of environment variables used when connecting to a remote server. 
@@ -1088,6 +1124,105 @@ Defaults value: `template0`.
 ##### `user`
 
 User to create and assign access to the database upon creation. Mandatory.
+
+#### postgresql::server::dbgroup
+
+Creates a Postgres group.
+
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
+
+##### `connect_settings`
+Required.
+
+Specifies a hash of environment variables used when connecting to a remote server.
+
+Default value: `undef`, because groups only currently make sense in remotely-managed Redshift clusters.
+
+##### `db`
+Required.
+
+Specifies which database psql will use to perform certain checks, such as what settings exist for the current group prior to applying changes.
+
+##### `dialect`
+Reserved for future use. Currently both the 'postgres' and 'redshift' dialects are identical in operation.
+
+Default value: inherit from server settings.
+
+##### `ensure`
+
+Specifies whether to ensure the group exists or is removed.
+
+Valid options: 'present' or 'absent'.
+
+Default value: 'present'.
+
+##### `groupname`
+Defines the name of the group to create.
+
+Default value: the namevar.
+
+##### `port`
+Optional port override for connecting to postgres when applying this group.
+
+Default value: inherit from `$connect_settings` or `postgresql::server::port`
+
+#### postgresql::server::dbgroupmember
+
+Creates a member for an existing Postgres group.
+
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
+
+##### `connect_settings`
+Required.
+
+Specifies a hash of environment variables used when connecting to a remote server.
+
+Default value: `undef`, because groups only currently make sense in remotely-managed Redshift clusters.
+
+##### `db`
+Required.
+
+Specifies which database psql will use to perform certain checks, such as what settings exist for the current group prior to applying changes.
+
+##### `dialect`
+Reserved for future use. Currently both the 'postgres' and 'redshift' dialects are identical in operation.
+
+Default value: inherit from server settings.
+
+##### `ensure`
+
+Specifies whether to ensure the group member exists or is removed.
+
+Valid options: 'present' or 'absent'.
+
+Default value: 'present'.
+
+##### `groupname`
+Defines the name of the group to be appended to or removed from.
+
+Default value: the namevar.
+
+##### `port`
+Optional port override for connecting to postgres when applying this group.
+
+Default value: inherit from `$connect_settings` or `postgresql::server::port`
+
+##### `username`
+Defines the name of the user to add to the group.
+
+Default value: the namevar.
 
 #### postgresql::server::database
 
@@ -1265,7 +1400,7 @@ Default value: the default user for the module, usually 'postgres'.
 
 ##### `role`
 
-Specifies the role or user whom you are granting access to.
+Specifies the role or user whom you are granting access to. In Redshift, this can be a username ("username") or a group ("GROUP groupname").
 
 #### postgresql::server::grant_role
 
@@ -1306,6 +1441,19 @@ Default value: 'postgres'.
 Sets the OS user to run `psql`.
 
 Default value: the default user for the module, usually `postgres`.
+
+##### `dialect`
+In vanilla postgres, uses privilege functions for UNLESS evaluation. In Redshift, custom functions are used instead when a group is provided (as these functions do not support groups).
+
+Default value: inherit from server settings.
+
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
 
 ##### `connect_settings`
 
@@ -1432,6 +1580,14 @@ Port to use when connecting.
 
 Default value: `undef`, which generally defaults to port 5432 depending on your PostgreSQL packaging.
 
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
+
 ##### `connect_settings`
 
 Specifies a hash of environment variables used when connecting to a remote server.
@@ -1476,12 +1632,20 @@ Provides the target for the rule, and is generally an internal only property.
 **Use with caution.**
 
 #### postgresql::server::role
-Creates a role or user in PostgreSQL.
+Creates a role or user in PostgreSQL. In the Redshift dialect, this creates a new redshift user (see `postgresql::server::group` for groups).
 
 ##### `connection_limit`
 Specifies how many concurrent connections the role can make.
 
 Default value: '-1', meaning no limit.
+
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
 
 ##### `connect_settings`
 Specifies a hash of environment variables used when connecting to a remote server.
@@ -1494,9 +1658,19 @@ Specifies whether to grant the ability to create new databases with this role.
 Default value: `false`.
 
 ##### `createrole`
-Specifies whether to grant the ability to create new roles with this role.
+Specifies whether to grant the ability to create new roles with this role. In Redshift, this specifies the CREATEUSER permission instead.
 
 Default value: `false`.
+
+##### `db`
+Required.
+
+Specifies which database psql will use to perform certain checks, such as what settings exist for the current role prior to applying changes.
+
+##### `dialect`
+Determines whether to use postgres or redshift's definition of a user. Also determines the tables to query for user metadata.
+
+Default value: inherit from server settings.
 
 ##### `inherit`
 Specifies whether to grant inherit capability for the new role.
@@ -1509,7 +1683,9 @@ Specifies whether to grant login capability for the new role.
 Default value: `true`.
 
 ##### `password_hash`
-Sets the hash to use during password creation. If the password is not already pre-encrypted in a format that PostgreSQL supports, use the `postgresql_password` function to provide an MD5 hash here, for example:
+Sets the hash to use during password creation. If the password is not already pre-encrypted in a format that PostgreSQL supports, use the `postgresql_password` function to provide an MD5 hash here.
+
+In Redshift, this can be set to false to specify PASSWORD DISABLE for new users. Note that this is not compatible with the CREATEUSER permission, and Redshift will raise an error if both are provided for the same user.
 
 ##### `update_password`
 If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.
@@ -1519,6 +1695,11 @@ postgresql::server::role { 'myusername':
   password_hash => postgresql_password('myusername', 'mypassword'),
 }
 ```
+
+##### `port`
+Optional port override for connecting to postgres when applying this role.
+
+Default value: inherit from `$connect_settings` or `postgresql::server::port`
 
 ##### `replication`
 
@@ -1541,6 +1722,14 @@ Default value: the namevar.
 #### postgresql::server::schema
 
 Creates a schema.
+
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
 
 ##### `connect_settings`
 
@@ -1567,6 +1756,14 @@ Default value: the namevar.
 #### postgresql::server::table_grant
 
 Manages grant-based access privileges for users. Consult the PostgreSQL documentation for `grant` for more information.
+
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
 
 ##### `connect_settings`
 
@@ -1607,6 +1804,14 @@ Specifies the table to which you are granting access.
 #### postgresql::server::tablespace
 
 Creates a tablespace. If necessary, also creates the location and assigns the same permissions as the PostgreSQL server.
+
+##### `refreshonly`
+
+Specifies whether to execute the SQL only if there is a notify or subscribe event.
+
+Valid values: `true`, `false`.
+
+Default value: Inherit from server.
 
 ##### `connect_settings`
 

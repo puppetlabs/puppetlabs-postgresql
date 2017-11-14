@@ -27,7 +27,7 @@ describe 'postgresql::server::reassign_owned_by', :type => :define do
 
   let :pre_condition do
     <<-EOS
-      class {'postgresql::server':}
+      class {'postgresql::server': dialect => 'postgres'}
       postgresql::server::role{ ['test_old_role','test_new_role']: }
     EOS
   end

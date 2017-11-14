@@ -3,6 +3,7 @@ define postgresql::server::tablespace(
   $location,
   $owner   = undef,
   $spcname = $title,
+  $refreshonly      = $postgresql::server::refreshonly,
   $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   $user           = $postgresql::server::user
@@ -24,6 +25,7 @@ define postgresql::server::tablespace(
     port             => $port,
     connect_settings => $connect_settings,
     cwd              => $module_workdir,
+    refreshonly      => $refreshonly,
   }
 
   file { $location:

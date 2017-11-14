@@ -48,6 +48,7 @@ class postgresql::globals (
 
   $needs_initdb             = undef,
 
+  $dialect                  = undef,
   $encoding                 = undef,
   $locale                   = undef,
   $data_checksums           = undef,

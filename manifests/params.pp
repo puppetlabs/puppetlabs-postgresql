@@ -9,6 +9,8 @@ class postgresql::params inherits postgresql::globals {
   $ip_mask_allow_all_users    = '127.0.0.1/32'
   $ipv4acls                   = []
   $ipv6acls                   = []
+  $dialect                    = pick($dialect, 'postgres')
+  $refreshonly                = false
   $encoding                   = $postgresql::globals::encoding
   $locale                     = $postgresql::globals::locale
   $data_checksums             = $postgresql::globals::data_checksums
