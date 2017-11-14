@@ -455,7 +455,11 @@ PostgreSQL docsパッケージリソースが存在する必要があるかど�
 
 データタイプ: 真偽値(boolean)
 
-データページに対してチェックサムを使用すると、その他の方法では発見の難しいI/Oシステムによる破損を検出するのに役立ちます。有効な値:  `true`、`false`。デフォルト値: initdbのデフォルト値('false')。
+データページに対してチェックサムを使用すると、その他の方法では発見の難しいI/Oシステムによる破損を検出するのに役立ちます。
+
+有効な値: `true`、`false`。
+
+デフォルト値: initdbのデフォルト値(`false`)。
 
 **警告:** このオプションは、initdbによって初期化中に使用され、後から変更することはできません。設定された時点で、すべてのデータベース内のすべてのオブジェクトに対してチェックサムが計算されます。
 
@@ -757,7 +761,11 @@ PostgreSQL Pythonパッケージの名前。
 
 データタイプ: 真偽値(boolean)
 
-データページに対してチェックサムを使用すると、その他の方法では発見の難しいI/Oシステムによる破損を検出するのに役立ちます。有効な値: `true`、`false`。デフォルト値: initdbのデフォルト値('false')。
+データページに対してチェックサムを使用すると、その他の方法では発見の難しいI/Oシステムによる破損を検出するのに役立ちます。
+
+有効な値: `true`、`false`。
+
+デフォルト値: initdbのデフォルト値(`false`)。
 
 **警告:** このオプションは、initdbによって初期化中に使用され、後から変更することはできません。設定された時点で、すべてのデータベース内のすべてのオブジェクトに対してチェックサムが計算されます。
 
@@ -1191,6 +1199,21 @@ PostgreSQL拡張を管理します。
 
 有効化する拡張を指定します。空欄にした場合、リソースの名前が使用されます。
 
+#### `version`
+
+データベースが使用するエクステンションのバージョンを指定します。
+拡張パッケージが更新された場合、各データベースで有効なバージョンを自動的に変更することはありません。
+
+そのためには、PostgreSQLに固有のSQL `ALTER EXTENSION...`を使用して更新する必要があります
+
+`version`は`latest`に設定できます。この場合、SQL `ALTER EXTENSION "extension" UPDATE`がこのデータベースのみに適用されます。
+
+`version`は特定のバージョンに設定できます。この場合、拡張は`ALTER EXTENSION "extension" UPDATE TO 'version'`を使用して更新されます
+
+例えば、拡張を`postgis`、バージョンを`2.3.3`に設定した場合、SQL `ALTER EXTENSION "postgis" UPDATE TO '2.3.3'`がこのデータベースのみに適用されます。
+
+`version`は省略される場合もあります。この場合、SQL `ALTER EXTENSION...`は適用されません。バージョンは変更されず、そのままになります。
+
 ##### `package_name`
 
 拡張を有効化する前にインストールするパッケージを指定します。
@@ -1439,7 +1462,7 @@ PostgreSQLコマンド'REASSIGN OWNED'をデータベースに対して実行し
 * `archive_cleanup_command`
 * `recovery_end_command`
 
-##### [リカバリターゲット設定](http://www.postgresql.org/docs/current/static/recovery-target-settings.html)
+##### [Recovery Target Settings](http://www.postgresql.org/docs/current/static/recovery-target-settings.html)
 * `recovery_target_name`
 * `recovery_target_time`
 * `recovery_target_xid`
@@ -1448,7 +1471,7 @@ PostgreSQLコマンド'REASSIGN OWNED'をデータベースに対して実行し
 * `recovery_target_timeline`
 * `pause_at_recovery_target`
 
-##### [スタンバイサーバー設定](http://www.postgresql.org/docs/current/static/standby-settings.html)
+##### [Standby Server Settings](http://www.postgresql.org/docs/current/static/standby-settings.html)
 * `standby_mode`: 文字列('on'/'off')またはブール値(`true`/`false`)で指定できます。
 * `primary_conninfo`
 * `primary_slot_name`
@@ -1811,7 +1834,7 @@ PostgreSQLのバージョン8.1～9.5で動作します。
 
 現在、postgresqlモジュールは次のオペレーティングシステムでテスト済みです。
 
-* Debian 6.x、7.x、8.x。
+* Debian 6.x, 7.x, 8.x.
 * CentOS 5.x、6.x、7.x。
 * Ubuntu 10.04および12.04、14.04。
 
