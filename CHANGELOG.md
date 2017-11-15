@@ -1,3 +1,15 @@
+# Change log
+
+All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org).
+
+## Supported Release 5.2.1
+### Summary
+Bug fix for issue introduced in 5.2.0 
+
+#### Fixed
+- issue where the module was attempting to install extensions before a database was available. ([SERVER-2003](https://tickets.puppetlabs.com/browse/SERVER-2003))
+
 ## Supported Release 5.2.0
 ### Summary
 Adds several new features including some work around OS support. Also includes a couple of fixes to tests and the removal of unsupported Ubuntu versions.
