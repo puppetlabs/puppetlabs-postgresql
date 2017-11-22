@@ -33,7 +33,7 @@ class postgresql::server::config {
       warn   => true,
       notify => Class['postgresql::server::reload'],
       }
-  } 
+  }
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
     concat { $pg_hba_conf_path:
