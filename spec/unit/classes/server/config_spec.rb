@@ -1,5 +1,15 @@
 require 'spec_helper'
 
+
+describe 'manage postgresql.conf' do
+	let(:params) do { 'manage_postgresql_conf' => true } end
+	let(:params) do { 'postgresql_conf_path' => '/tmp/postgresql.conf' } end
+      it { should contain_concat('/tmp/postgresql.conf').
+        with(
+        'mode' => '0600',
+      )}
+    end
+
 describe 'postgresql::server::config', :type => :class do
   let (:pre_condition) do
     "include postgresql::server"

@@ -26,11 +26,10 @@ class postgresql::server::config {
 
   if ($manage_postgresql_conf == true) {
     # Prepare the main pg_hba file
-    concat { $postgresql_conf_path:
+    file { $postgresql_conf_path:
       owner  => $user,
       group  => $group,
       mode   => '0600',
-      warn   => true,
       notify => Class['postgresql::server::reload'],
       }
   }
