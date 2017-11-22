@@ -23,8 +23,8 @@ class postgresql::server::config {
   $service_name               = $postgresql::server::service_name
   $log_line_prefix            = $postgresql::server::log_line_prefix
   $timezone                   = $postgresql::server::timezone
-  
-   if ($manage_postgresql_conf == true) {
+
+  if ($manage_postgresql_conf == true) {
     # Prepare the main pg_hba file
     concat { $postgresql_conf_path:
       owner  => $user,
@@ -32,9 +32,8 @@ class postgresql::server::config {
       mode   => '0640',
       warn   => true,
       notify => Class['postgresql::server::reload'],
-    }
-} 
-
+      }
+  } 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
     concat { $pg_hba_conf_path:
@@ -44,7 +43,6 @@ class postgresql::server::config {
       warn   => true,
       notify => Class['postgresql::server::reload'],
     }
-  
     if $pg_hba_conf_defaults {
       Postgresql::Server::Pg_hba_rule {
         database => 'all',
