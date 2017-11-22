@@ -119,7 +119,7 @@ describe 'postgresql::server::config_entry', :type => :define do
         :operatingsystemrelease => '7.0',
         :kernel => 'Linux',
         :concat_basedir => tmpfilename('contrib'),
-        :id => 'root',
+        :id => 'postgres',
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         :selinux => true,
       }
