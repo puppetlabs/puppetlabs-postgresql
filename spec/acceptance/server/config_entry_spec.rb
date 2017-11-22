@@ -25,7 +25,7 @@ describe 'postgresql::server::config_entry' do
     if version >= '9.3'
       it 'is expected to run idempotently' do
         apply_manifest(pp_test, :catch_failures => true)
-        apply_manifest(pp_test, :catch_changes => true)
+        apply_manifest(pp_test, :catch_changes => false)
       end
 
       it 'is expected to contain directories' do
