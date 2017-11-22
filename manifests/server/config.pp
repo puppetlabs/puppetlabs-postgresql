@@ -29,7 +29,7 @@ class postgresql::server::config {
     concat { $postgresql_conf_path:
       owner  => $user,
       group  => $group,
-      mode   => '0640',
+      mode   => '0600',
       warn   => true,
       notify => Class['postgresql::server::reload'],
       }
