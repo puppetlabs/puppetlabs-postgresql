@@ -2,6 +2,13 @@ require 'spec_helper_acceptance'
 
 describe 'postgresql::server::config_entry' do
 
+  let(:pp_setup) { <<-EOS
+    class { 'postgresql::server':
+      postgresql_conf_path => '/tmp/postgresql.conf',
+      }
+    EOS
+  }
+
   context 'unix_socket_directories' do
     let(:pp_test) { pp_setup + <<-EOS
       postgresql::server::config_entry { 'unix_socket_directories':
@@ -22,7 +29,7 @@ describe 'postgresql::server::config_entry' do
       end
 
       it 'is expected to contain directories' do
-        shell('cat /etc/postgresql/9.5/main/postgresql.conf') do |output|
+        shell('cat /tmp/postgresql.conf') do |output|
           expect(output.stdout).to contain("unix_socket_directories = '/var/socket/, /root/'")
         end
       end
