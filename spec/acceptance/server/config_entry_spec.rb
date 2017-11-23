@@ -4,6 +4,7 @@ describe 'postgresql::server::config_entry' do
 
   let(:pp_setup) { <<-EOS
     class { 'postgresql::server':
+      postgresql_conf_path => '/tmp/postgresql.conf',
       }
     EOS
   }
