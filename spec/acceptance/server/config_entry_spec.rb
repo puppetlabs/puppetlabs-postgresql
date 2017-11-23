@@ -22,7 +22,7 @@ describe 'postgresql::server::config_entry' do
       end
 
       it 'is expected to contain directories' do
-        shell('cat /tmp/postgresql.conf') do |output|
+        shell('cat /etc/postgresql/9.5/main/postgresql.conf') do |output|
           expect(output.stdout).to contain("unix_socket_directories = '/var/socket/, /root/'")
         end
       end
