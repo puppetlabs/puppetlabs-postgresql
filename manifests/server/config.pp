@@ -30,7 +30,7 @@ class postgresql::server::config {
       owner  => $user,
       group  => $group,
       mode   => '0600',
-      notify => Class['postgresql::server::reload'],
+      notify => Class['postgresql::server::service'],
       }
   }
   if ($manage_pg_hba_conf == true) {
