@@ -3,8 +3,17 @@ require 'beaker-rspec/helpers/serverspec'
 require 'beaker/puppet_install_helper'
 require 'beaker/module_install_helper'
 
+def install_bolt_on(hosts)
+  on(hosts, "/opt/puppetlabs/puppet/bin/gem install --source http://rubygems.delivery.puppetlabs.net bolt -v '> 0.0.1'", acceptable_exit_codes: [0, 1]).stdout
+end
+
+def pe_install?
+  ENV['PUPPET_INSTALL_TYPE'] =~ %r{pe}i
+end
+
 run_puppet_install_helper
 install_ca_certs unless ENV['PUPPET_INSTALL_TYPE'] =~ /pe/i
+install_bolt_on(hosts) unless pe_install?
 
 UNSUPPORTED_PLATFORMS = ['AIX','windows','Solaris','Suse']
 
@@ -34,6 +43,16 @@ module Beaker::ModuleInstallHelper
     dependencies
   end
 end
+
+def puppet_version
+  (on default, puppet('--version')).output.chomp
+end
+
+DEFAULT_PASSWORD = if default[:hypervisor] == 'vagrant'
+                     'vagrant'
+                   elsif default[:hypervisor] == 'vcloud'
+                     'Qu@lity!'
+                   end
 
 install_module_on(hosts)
 install_module_dependencies_on(hosts)
@@ -72,6 +91,32 @@ def psql(psql_cmd, user = 'postgres', exit_codes = [0,1], &block)
   shell("su #{shellescape(user)} -c #{shellescape(psql)}", :acceptable_exit_codes => exit_codes, &block)
 end
 
+def run_puppet_access_login(user:, password: '~!@#$%^*-/ aZ', lifetime: '5y')
+  on(master, puppet('access', 'login', '--username', user, '--lifetime', lifetime), stdin: password)
+end
+
+def run_task(task_name:, params: nil, password: DEFAULT_PASSWORD)
+  if pe_install?
+    run_puppet_task(task_name: task_name, params: params)
+  else
+    run_bolt_task(task_name: task_name, params: params, password: password)
+  end
+end
+
+def run_bolt_task(task_name:, params: nil, password: DEFAULT_PASSWORD)
+  on(hosts, "/opt/puppetlabs/puppet/bin/bolt task run #{task_name} --modules /etc/puppetlabs/code/modules --nodes localhost --password #{password} #{params}", acceptable_exit_codes: [0, 1]).stdout # rubocop:disable Metrics/LineLength
+end
+
+def run_puppet_task(task_name:, params: nil)
+  on(master, puppet('task', 'run', task_name, '--nodes', fact_on(master, 'fqdn'), params.to_s), acceptable_exit_codes: [0, 1]).stdout
+end
+
+def expect_multiple_regexes(result:, regexes:)
+  regexes.each do |regex|
+    expect(result).to match(regex)
+  end
+end
+
 RSpec.configure do |c|
   # Readable test descriptions
   c.formatter = :documentation
@@ -96,6 +141,7 @@ RSpec.configure do |c|
         }
       EOS
 
+      run_puppet_access_login(user: 'admin') if pe_install?
       apply_manifest_on(agents, pp, :catch_failures => false)
     end
 
