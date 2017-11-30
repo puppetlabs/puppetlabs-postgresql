@@ -122,5 +122,35 @@ describe 'postgresql::server::pg_hba_rule', :type => :define do
       end
     end
 
+    context 'allows scram-sha-256 on postgres 10' do
+      let :pre_condition do
+        <<-EOS
+          class { 'postgresql::globals':
+            version => '10',
+          }
+          class { 'postgresql::server': }
+        EOS
+      end
+
+      let :params do
+        {
+          :type => 'local',
+          :database => 'all',
+          :user => 'all',
+          :address => '0.0.0.0/0',
+          :auth_method => 'scram-sha-256',
+          :target => target,
+        }
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(
+          {
+           :content => /local\s+all\s+all\s+0\.0\.0\.0\/0\s+scram-sha-256/
+          }
+        )
+      end
+    end
+
   end
 end
