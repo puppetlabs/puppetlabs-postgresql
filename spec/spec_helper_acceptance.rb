@@ -2,9 +2,10 @@ require 'beaker-rspec/spec_helper'
 require 'beaker-rspec/helpers/serverspec'
 require 'beaker/puppet_install_helper'
 require 'beaker/module_install_helper'
+require 'beaker/task_helper'
 
 run_puppet_install_helper
-install_ca_certs unless ENV['PUPPET_INSTALL_TYPE'] =~ /pe/i
+install_ca_certs unless pe_install?
 
 UNSUPPORTED_PLATFORMS = ['AIX','windows','Solaris','Suse']
 
@@ -35,9 +36,17 @@ module Beaker::ModuleInstallHelper
   end
 end
 
+
+install_bolt_on(hosts) unless pe_install?
 install_module_on(hosts)
 install_module_dependencies_on(hosts)
 install_module_from_forge_on(hosts,'puppetlabs/apt','< 4.2.0')
+
+DEFAULT_PASSWORD = if default[:hypervisor] == 'vagrant'
+                     'vagrant'
+                   elsif default[:hypervisor] == 'vcloud'
+                     'Qu@lity!'
+                   end
 
 class String
   # Provide ability to remove indentation from strings, for the purpose of
@@ -78,6 +87,7 @@ RSpec.configure do |c|
 
   # Configure all nodes in nodeset
   c.before :suite do
+    run_puppet_access_login(user: 'admin') if pe_install?
     # Set up selinux if appropriate.
     if fact('osfamily') == 'RedHat' && fact('selinux') == 'true'
       pp = <<-EOS
@@ -109,7 +119,6 @@ RSpec.configure do |c|
     end
 
     hosts.each do |host|
-      on host, "/bin/touch #{host['puppetpath']}/hiera.yaml"
       on host, 'chmod 755 /root'
       if fact_on(host, 'osfamily') == 'Debian'
         on host, "echo \"en_US ISO-8859-1\nen_NG.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\n\" > /etc/locale.gen"
