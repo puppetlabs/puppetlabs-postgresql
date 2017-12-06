@@ -71,11 +71,11 @@ define postgresql::server::grant (
         'ALL'            => 'CREATE',
         'ALL PRIVILEGES' => 'CREATE',
         Pattern[
-          '^$',
-          '^CONNECT$',
-          '^CREATE$',
-          '^TEMP$',
-          '^TEMPORARY$'
+          /^$/,
+          /^CONNECT$/,
+          /^CREATE$/,
+          /^TEMP$/,
+          /^TEMPORARY$/
         ]                => $_privilege,
         default          => fail('Illegal value for $privilege parameter'),
       }
@@ -88,9 +88,9 @@ define postgresql::server::grant (
         'ALL'            => 'CREATE',
         'ALL PRIVILEGES' => 'CREATE',
         Pattern[
-          '^$',
-          '^CREATE$',
-          '^USAGE$'
+          /^$/,
+          /^CREATE$/,
+          /^USAGE$/
         ]                => $_privilege,
         default          => fail('Illegal value for $privilege parameter'),
       }
@@ -102,11 +102,11 @@ define postgresql::server::grant (
       $unless_privilege = $_privilege ? {
         'ALL'   => 'USAGE',
         Pattern[
-          '^$',
-          '^ALL PRIVILEGES$',
-          '^SELECT$',
-          '^UPDATE$',
-          '^USAGE$'
+          /^$/,
+          /^ALL PRIVILEGES$/,
+          /^SELECT$/,
+          /^UPDATE$/,
+          /^USAGE$/
         ]       => $_privilege,
         default => fail('Illegal value for $privilege parameter'),
       }
@@ -117,12 +117,12 @@ define postgresql::server::grant (
     'ALL SEQUENCES IN SCHEMA': {
       case $_privilege {
         Pattern[
-          '^$',
-          '^ALL$',
-          '^ALL PRIVILEGES$',
-          '^SELECT$',
-          '^UPDATE$',
-          '^USAGE$'
+          /^$/,
+          /^ALL$/,
+          /^ALL PRIVILEGES$/,
+          /^SELECT$/,
+          /^UPDATE$/,
+          /^USAGE$/
         ]:       { }
         default: { fail('Illegal value for $privilege parameter') }
       }
@@ -191,15 +191,15 @@ define postgresql::server::grant (
       $unless_privilege = $_privilege ? {
         'ALL'   => 'INSERT',
         Pattern[
-          '^$',
-          '^ALL$',
-          '^ALL PRIVILEGES$',
-          '^DELETE$',
-          '^REFERENCES$',
-          '^SELECT$',
-          '^TRIGGER$',
-          '^TRUNCATE$',
-          '^UPDATE$'
+          /^$/,
+          /^ALL$/,
+          /^ALL PRIVILEGES$/,
+          /^DELETE$/,
+          /^REFERENCES$/,
+          /^SELECT$/,
+          /^TRIGGER$/,
+          /^TRUNCATE$/,
+          /^UPDATE$/
         ]       => $_privilege,
         default => fail('Illegal value for $privilege parameter'),
       }
@@ -213,16 +213,16 @@ define postgresql::server::grant (
     'ALL TABLES IN SCHEMA': {
       case $_privilege {
         Pattern[
-          '^$',
-          '^ALL$',
-          '^ALL PRIVILEGES$',
-          '^DELETE$',
-          '^INSERT$',
-          '^REFERENCES$',
-          '^SELECT$',
-          '^TRIGGER$',
-          '^TRUNCATE$',
-          '^UPDATE$'
+          /^$/,
+          /^ALL$/,
+          /^ALL PRIVILEGES$/,
+          /^DELETE$/,
+          /^INSERT$/,
+          /^REFERENCES$/,
+          /^SELECT$/,
+          /^TRIGGER$/,
+          /^TRUNCATE$/,
+          /^UPDATE$/
         ]:       { }
         default: { fail('Illegal value for $privilege parameter') }
       }
@@ -270,9 +270,9 @@ define postgresql::server::grant (
         'ALL'            => 'USAGE',
         'ALL PRIVILEGES' => 'USAGE',
         Pattern[
-          '^$',
-          '^CREATE$',
-          '^USAGE$'
+          /^$/,
+          /^CREATE$/,
+          /^USAGE$/
         ]                => $_privilege,
         default          => fail('Illegal value for $privilege parameter'),
       }
