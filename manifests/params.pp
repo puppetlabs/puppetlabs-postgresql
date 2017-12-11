@@ -20,6 +20,7 @@ class postgresql::params inherits postgresql::globals {
   $service_provider           = $postgresql::globals::service_provider
   $manage_pg_hba_conf         = pick($manage_pg_hba_conf, true)
   $manage_pg_ident_conf       = pick($manage_pg_ident_conf, true)
+  $manage_postgresql_conf     = pick($manage_postgresql_conf, true)
   $manage_recovery_conf       = pick($manage_recovery_conf, false)
   $package_ensure             = 'present'
   $module_workdir             = pick($module_workdir,'/tmp')

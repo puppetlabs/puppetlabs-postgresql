@@ -53,6 +53,7 @@ class postgresql::server (
 
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
+  $manage_postgresql_conf     = $postgresql::params::manage_postgresql_conf,
   $manage_recovery_conf       = $postgresql::params::manage_recovery_conf,
   $module_workdir             = $postgresql::params::module_workdir,
   #Deprecated
