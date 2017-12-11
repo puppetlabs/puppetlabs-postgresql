@@ -22,10 +22,14 @@ describe 'postgresql::server::config_entry' do
     result = shell('psql --version')
     version = result.stdout.match(%r{\s(\d\.\d)})[1]
 
+binding.pry
     if version >= '9.3'
-      it 'is expected to run idempotently' do
+      it 'moving postgresql.conf will trigger a service refresh' do
         apply_manifest(pp_test, :catch_failures => true)
-        apply_manifest(pp_test, :catch_changes => true)
+binding.pry
+        apply_manifest(pp_test, :catch_changes => false)
+binding.pry
+        apply_manifest(pp_test, :catch_changes => false)
       end
 
       it 'is expected to contain directories' do

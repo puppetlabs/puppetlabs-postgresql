@@ -16,6 +16,7 @@ class postgresql::server::config {
   $version                    = $postgresql::server::_version
   $manage_pg_hba_conf         = $postgresql::server::manage_pg_hba_conf
   $manage_pg_ident_conf       = $postgresql::server::manage_pg_ident_conf
+  $manage_postgresql_conf     = $postgresql::server::manage_postgresql_conf
   $manage_recovery_conf       = $postgresql::server::manage_recovery_conf
   $datadir                    = $postgresql::server::datadir
   $logdir                     = $postgresql::server::logdir
@@ -23,6 +24,7 @@ class postgresql::server::config {
   $log_line_prefix            = $postgresql::server::log_line_prefix
   $timezone                   = $postgresql::server::timezone
 
+ 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
     concat { $pg_hba_conf_path:
@@ -104,6 +106,15 @@ class postgresql::server::config {
     postgresql::server::config_entry { 'listen_addresses':
       value => $listen_addresses,
     }
+  }
+
+ if ($manage_postgresql_conf == true) {
+    # Prepare the main pg_hba file
+    file { $postgresql_conf_path:
+      owner  => $user,
+      group  => $group,
+      mode   => '0600',
+      }
   }
 
   postgresql::server::config_entry { 'port':
