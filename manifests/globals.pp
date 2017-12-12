@@ -65,6 +65,7 @@ class postgresql::globals (
   $default_version = $::osfamily ? {
     /^(RedHat|Linux)/ => $::operatingsystem ? {
       'Fedora' => $::operatingsystemrelease ? {
+        /^(26|27)$/    => '9.6',
         /^(24|25)$/    => '9.5',
         /^(22|23)$/    => '9.4',
         /^(21)$/       => '9.3',
@@ -114,10 +115,12 @@ class postgresql::globals (
       'SLES' => $::operatingsystemrelease ? {
         /11\.[0-4]/ => '91',
         /12\.0/     => '93',
-        default     => '94',
+        /12\.[1-2]/ => '94',
+        default     => '96',
       },
       'OpenSuSE' => $::operatingsystemrelease ? {
-        default => '94',
+        /42\.[1-2]/ => '94',
+        default     => '96',
       },
       default => undef,
     },

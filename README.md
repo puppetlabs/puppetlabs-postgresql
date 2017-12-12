@@ -20,6 +20,7 @@
     * [Defined Types](#defined-types)
     * [Types](#types)
     * [Functions](#functions)
+    * [Tasks](#tasks)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
     * [Contributors - List of module contributors](#contributors)
@@ -365,6 +366,8 @@ The postgresql module comes with many options for configuring the server. While 
 * [postgresql_password](#function-postgresql_password)
 * [postgresql_acls_to_resources_hash](#function-postgresql_acls_to_resources_hashacl_array-id-order_offset)
 
+**Tasks:**
+
 ### Classes
 
 #### postgresql::client
@@ -455,7 +458,11 @@ Optional.
 
 Data type: Boolean.
 
-Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent. Valid values: 'true' or 'false'. Default: initdb's default ('false').
+Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+
+Valid values: `true` or `false`.
+
+Default: initdb's default (`false`).
 
 **Warning:** This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 
@@ -757,7 +764,11 @@ Optional.
 
 Data type: Boolean.
 
-Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent. Valid values: 'true' or 'false'. Default: initdb's default ('false').
+Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+
+Valid values: `true` or `false`.
+
+Default value: initdb's default (`false`).
 
 **Warning:** This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 
@@ -767,7 +778,7 @@ Specifies the name of the default database to connect with. On most systems this
 
 ##### `default_connect_settings`
 
-Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined-types. i.e. `postgresql::server::role`
+Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as `postgresql::server::role`.
 
 ##### `encoding`
 
@@ -1200,6 +1211,21 @@ Valid options: 'present' or 'absent'.
 #### `extension`
 
 Specifies the extension to activate. If left blank, uses the name of the resource.
+
+#### `version`
+
+Specifies the version of the extension which the database uses.
+When an extension package is updated, this does not automatically change the effective version in each database.
+
+This needs be updated using the PostgreSQL-specific SQL `ALTER EXTENSION...`
+
+`version` may be set to `latest`, in which case the SQL `ALTER EXTENSION "extension" UPDATE` is applied to this database (only).
+
+`version` may be set to a specific version, in which case the extension is updated using `ALTER EXTENSION "extension" UPDATE TO 'version'`
+
+eg. If extension is set to `postgis` and version is set to `2.3.3`, this will apply the SQL `ALTER EXTENSION "postgis" UPDATE TO '2.3.3'` to this database only.
+
+`version` may be omitted, in which case no `ALTER EXTENSION...` SQL is applied, and the version will be left unchanged.
 
 ##### `package_name`
 
@@ -1834,6 +1860,10 @@ Alternatively, you can call this from your production manifests, but the manifes
 This internal function converts a list of `pg_hba.conf` based ACLs (passed in as an array of strings) to a format compatible with the `postgresql::pg_hba_rule` resource.
 
 **This function should only be used internally by the module**.
+
+### Tasks
+
+The Postgresql module has an example task that allows a user to execute arbitary SQL against a database. Please refer to to the [PE documentation](https://puppet.com/docs/pe/2017.3/orchestrator/running_tasks.html) or [Bolt documentation](https://puppet.com/docs/bolt/latest/bolt.html) on how to execute a task. 
 
 ## Limitations
 
