@@ -205,7 +205,7 @@ class postgresql::params inherits postgresql::globals {
 
     'FreeBSD': {
       case $version {
-        '96': {
+        '96', '10': {
           $user                 = pick($user, 'postgres')
           $group                = pick($group, 'postgres')
           $datadir              = pick($datadir, "/var/db/postgres/data${version}")
