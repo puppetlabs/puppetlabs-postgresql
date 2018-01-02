@@ -24,7 +24,7 @@ describe 'postgresql::server::schema:', :unless => UNSUPPORTED_PLATFORMS.include
         }
 
         postgresql::server::role { $user:
-          password_hash => postgresql_password($user, $password),
+          password_hash => postgresql::password($user, $password),
         }
 
         postgresql::server::database { $db:

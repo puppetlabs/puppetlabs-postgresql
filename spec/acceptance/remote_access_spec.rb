@@ -29,7 +29,7 @@ describe 'remote-access', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfami
 
         postgresql::server::db { 'puppet':
           user     => 'puppet',
-          password => postgresql_password('puppet', 'puppet'),
+          password => postgresql::password('puppet', 'puppet'),
         }
 
         postgresql::server::pg_hba_rule { 'allow full yolo access password':

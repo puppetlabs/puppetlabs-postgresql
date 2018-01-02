@@ -29,7 +29,7 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
         }
 
         postgresql::server::role { $user:
-          password_hash => postgresql_password($user, $password),
+          password_hash => postgresql::password($user, $password),
         }
 
         postgresql::server::database { $db:
@@ -95,7 +95,7 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
         }
 
         postgresql::server::role { $user:
-          password_hash => postgresql_password($user, $password),
+          password_hash => postgresql::password($user, $password),
           superuser     => true,
         }
 
@@ -163,7 +163,7 @@ describe 'postgresql::server::grant_role:', :unless => UNSUPPORTED_PLATFORMS.inc
         }
 
         postgresql::server::role { $user:
-          password_hash => postgresql_password($user, $password),
+          password_hash => postgresql::password($user, $password),
         }
 
         postgresql::server::database { $db:

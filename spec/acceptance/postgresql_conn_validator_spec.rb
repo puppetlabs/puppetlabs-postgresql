@@ -7,7 +7,7 @@ describe 'postgresql_conn_validator', :unless => UNSUPPORTED_PLATFORMS.include?(
       postgres_password => 'space password',
     }->
     postgresql::server::role { 'testuser':
-      password_hash => postgresql_password('testuser','test1'),
+      password_hash => postgresql::password('testuser','test1'),
     }->
     postgresql::server::database { 'testdb':
       owner   => 'testuser',

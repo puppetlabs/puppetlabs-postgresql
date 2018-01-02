@@ -85,7 +85,7 @@ class { 'postgresql::server':
 
 postgresql::server::db { 'mydatabasename':
   user     => 'mydatabaseuser',
-  password => postgresql_password('mydatabaseuser', 'mypassword'),
+  password => postgresql::password('mydatabaseuser', 'mypassword'),
 }
 ```
 
@@ -98,7 +98,7 @@ class { 'postgresql::server':
 }
 
 postgresql::server::role { 'marmot':
-  password_hash => postgresql_password('marmot', 'mypasswd'),
+  password_hash => postgresql::password('marmot', 'mypasswd'),
 }
 
 postgresql::server::database_grant { 'test1':
@@ -362,8 +362,8 @@ postgresqlモジュールには、サーバー設定用に多数のオプショ�
 
 **関数:**
 
-* [postgresql_password](#function-postgresql_password)
-* [postgresql_acls_to_resources_hash](#function-postgresql_acls_to_resources_hashacl_array-id-order_offset)
+* [postgresql::password](#function-postgresql_password)
+* [postgresql::acls_to_resources_hash](#function-postgresql_acls_to_resources_hashacl_array-id-order_offset)
 
 ### クラス
 
@@ -1517,14 +1517,14 @@ PostgreSQLのロールまたはユーザを作成します。
 デフォルト値: `true`。
 
 ##### `password_hash`
-パスワード作成中に使用するハッシュを設定します。PostgreSQLがサポートする形式でパスワードが暗号化されていない場合、ここで、`postgresql_password`関数を使用して、MD5ハッシュを提供します。例は次のとおりです。
+パスワード作成中に使用するハッシュを設定します。PostgreSQLがサポートする形式でパスワードが暗号化されていない場合、ここで、`postgresql::password`関数を使用して、MD5ハッシュを提供します。例は次のとおりです。
 
 ##### `update_password`
 trueに設定すると、変更時にパスワードが更新されます。作成後にロールのパスワードを変更しない場合は、falseに設定してください。
 
 ```puppet
 postgresql::server::role { 'myusername':
-  password_hash => postgresql_password('myusername', 'mypassword'),
+  password_hash => postgresql::password('myusername', 'mypassword'),
 }
 ```
 
@@ -1814,10 +1814,10 @@ Unixソケットとident認証を使用するとき、このユーザとして�
 
 #### postgresql_password
 
-PostgreSQL暗号化パスワードを生成します。次のように、`postgresql_password`をコマンドラインから呼び出し、暗号化されたパスワードをマニフェストにコピーペーストします。
+PostgreSQL暗号化パスワードを生成します。次のように、`postgresql::password`をコマンドラインから呼び出し、暗号化されたパスワードをマニフェストにコピーペーストします。
 
 ```shell
-puppet apply --execute 'notify { 'test': message => postgresql_password('username', 'password') }'
+puppet apply --execute 'notify { 'test': message => postgresql::password('username', 'password') }'
 ```
 
 本番マニフェストからこの関数を呼び出すことも可能ですが、その場合、マニフェストには暗号化していない平文のパスワードを含める必要があります。

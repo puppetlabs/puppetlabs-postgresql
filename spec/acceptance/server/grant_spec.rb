@@ -17,7 +17,7 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
     class { 'postgresql::server': }
 
     postgresql::server::role { $owner:
-      password_hash => postgresql_password($owner, $password),
+      password_hash => postgresql::password($owner, $password),
     }
 
     # Since we are not testing pg_hba or any of that, make a local user for ident auth
