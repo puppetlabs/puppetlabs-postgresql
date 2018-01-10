@@ -34,6 +34,16 @@ describe 'postgresql::server::extension', :type => :define do
     }
   end
 
+  context "when schema is specified" do
+    let (:params) { super().merge({
+      :schema => 'pg_catalog',
+    }) }
+
+    it {
+      is_expected.to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" SET SCHEMA "pg_catalog"')
+    }
+  end
+
   context "when setting package name" do
     let (:params) { super().merge({
       :package_name => 'postgis',
