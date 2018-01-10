@@ -17,13 +17,13 @@ define postgresql::server::extension (
       $command = "CREATE EXTENSION \"${extension}\""
       $unless_mod = ''
       $package_require = []
-      $package_before = Postgresql_psql["Add ${extension} extension to ${database}"]
+      $package_before = Postgresql_psql["${database}: ${command}"]
     }
 
     'absent': {
       $command = "DROP EXTENSION \"${extension}\""
       $unless_mod = 'NOT '
-      $package_require = Postgresql_psql["Add ${extension} extension to ${database}"]
+      $package_require = Postgresql_psql["${database}: ${command}"]
       $package_before = []
     }
 
@@ -39,7 +39,7 @@ define postgresql::server::extension (
     }
   }
 
-  postgresql_psql {"Add ${extension} extension to ${database}":
+  postgresql_psql { "${database}: ${command}":
 
     psql_user        => $user,
     psql_group       => $group,
