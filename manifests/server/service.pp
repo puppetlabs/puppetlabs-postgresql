@@ -9,7 +9,7 @@ class postgresql::server::service {
   $user             = $postgresql::server::user
   $port             = $postgresql::server::port
   $default_database = $postgresql::server::default_database
-  $psql_path        = $postgresql::params::psql_path
+  $psql_path        = $postgresql::server::psql_path
   $connect_settings = $postgresql::server::default_connect_settings
 
   anchor { 'postgresql::server::service::begin': }
