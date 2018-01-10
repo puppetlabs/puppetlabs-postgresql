@@ -1192,6 +1192,10 @@ Manages a PostgreSQL extension.
 
 Specifies the database on which to activate the extension.
 
+##### `schema`
+
+Specifies the schema on which to activate the extension.
+
 ##### `ensure`
 
 Specifies whether to activate or deactivate the extension.
