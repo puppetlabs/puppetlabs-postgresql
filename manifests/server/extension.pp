@@ -15,14 +15,14 @@ define postgresql::server::extension (
   case $ensure {
     'present': {
       $command = "CREATE EXTENSION \"${extension}\""
-      $unless_comp = '='
+      $unless_mod = ''
       $package_require = []
       $package_before = Postgresql_psql["Add ${extension} extension to ${database}"]
     }
 
     'absent': {
       $command = "DROP EXTENSION \"${extension}\""
-      $unless_comp = '!='
+      $unless_mod = 'NOT '
       $package_require = Postgresql_psql["Add ${extension} extension to ${database}"]
       $package_before = []
     }
@@ -48,7 +48,7 @@ define postgresql::server::extension (
 
     db               => $database,
     command          => $command,
-    unless           => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = '${extension}') as t WHERE t.count ${unless_comp} 1",
+    unless           => "SELECT 1 WHERE ${unless_mod}EXISTS (SELECT 1 FROM pg_extension WHERE extname = '${extension}')",
   }
 
   if $package_name {
