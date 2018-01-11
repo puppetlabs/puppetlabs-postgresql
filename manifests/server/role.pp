@@ -118,7 +118,7 @@ define postgresql::server::role(
     }
     postgresql_psql { "ALTER ROLE ${username} ENCRYPTED PASSWORD ****":
       command     => "ALTER ROLE \"${username}\" ${password_sql}",
-      unless      => "SELECT 1 FROM pg_shadow WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'",
+      unless      => "SELECT 1 FROM pg_user WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'",
       environment => $environment,
     }
   }
