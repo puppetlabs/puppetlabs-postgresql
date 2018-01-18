@@ -149,4 +149,20 @@ describe 'postgresql::server::role', :type => :define do
     end
   end
 
+  context 'with ensure set to absent' do
+    let :params do
+      {
+          :ensure => 'absent',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it 'should have drop role for "test" user if ensure absent' do
+      is_expected.to contain_postgresql_psql('DROP ROLE "test"')
+    end
+  end
+
 end
