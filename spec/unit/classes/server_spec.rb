@@ -163,4 +163,58 @@ describe 'postgresql::server', type: :class do
       is_expected.to contain_class('postgresql::repo').with_version('99.5')
     end
   end
+
+  describe 'additional roles' do
+    let(:params) do
+      {
+        roles: {
+          username: { createdb: true },
+        },
+      }
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__role('username').with_createdb(true) }
+  end
+
+  describe 'additional config_entries' do
+    let(:params) do
+      {
+        config_entries: {
+          fsync: 'off',
+          checkpoint_segments: '20',
+        },
+      }
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__config_entry('fsync').with_value('off') }
+    it { is_expected.to contain_postgresql__server__config_entry('checkpoint_segments').with_value('20') }
+  end
+
+  describe 'additional pg_hba_rules' do
+    let(:params) do
+      {
+        pg_hba_rules: {
+          from_remote_host: {
+            type: 'host',
+            database: 'mydb',
+            user: 'myuser',
+            auth_method: 'md5',
+            address: '192.0.2.100',
+          },
+        },
+      }
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it do
+      is_expected.to contain_postgresql__server__pg_hba_rule('from_remote_host')
+        .with_type('host')
+        .with_database('mydb')
+        .with_user('myuser')
+        .with_auth_method('md5')
+        .with_address('192.0.2.100')
+    end
+  end
 end
