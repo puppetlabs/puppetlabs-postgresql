@@ -74,11 +74,15 @@ class postgresql::server (
   # Reload has its own ordering, specified by other defines
   class { "${pg}::reload": require => Class["${pg}::install"] }
 
-  anchor { "${pg}::start": }
-  -> class { "${pg}::install": }
-  -> class { "${pg}::initdb": }
-  -> class { "${pg}::config": }
-  -> class { "${pg}::service": }
-  -> class { "${pg}::passwd": }
-  -> anchor { "${pg}::end": }
+  contain postgresql::server::install
+  contain postgresql::server::initdb
+  contain postgresql::server::config
+  contain postgresql::server::service
+  contain postgresql::server::passwd
+
+  Class['postgresql::server::install']
+  -> Class['postgresql::server::initdb']
+  -> Class['postgresql::server::config']
+  -> Class['postgresql::server::service']
+  -> Class['postgresql::server::passwd']
 }
