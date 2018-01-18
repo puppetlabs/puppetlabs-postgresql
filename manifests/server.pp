@@ -55,6 +55,11 @@ class postgresql::server (
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
   $manage_recovery_conf       = $postgresql::params::manage_recovery_conf,
   $module_workdir             = $postgresql::params::module_workdir,
+
+  Hash[String, Hash] $roles         = {},
+  Hash[String, Any] $config_entries = {},
+  Hash[String, Hash] $pg_hba_rules  = {},
+
   #Deprecated
   $version                    = undef,
 ) inherits postgresql::params {
@@ -85,4 +90,22 @@ class postgresql::server (
   -> Class['postgresql::server::config']
   -> Class['postgresql::server::service']
   -> Class['postgresql::server::passwd']
+
+  $roles.each |$rolename, $role| {
+    postgresql::server::role { $rolename:
+      * => $role,
+    }
+  }
+
+  $config_entries.each |$entry, $value| {
+    postgresql::server::config_entry { $entry:
+      value => $value,
+    }
+  }
+
+  $pg_hba_rules.each |$rule_name, $rule| {
+    postgresql::server::pg_hba_rule { $rule_name:
+      * => $rule,
+    }
+  }
 }
