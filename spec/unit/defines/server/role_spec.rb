@@ -61,10 +61,11 @@ describe 'postgresql::server::role', type: :define do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'has create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-        .with('command' => "CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1", 'environment' => 'NEWPGPASSWD=new-pa$s',
-              'unless'  => "SELECT 1 FROM pg_roles WHERE rolname = 'test'", 'port' => '5432',
-              'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
-                                      'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
+        .with_command("CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1")
+        .with_environment('NEWPGPASSWD=new-pa$s')
+        .with_unless("SELECT 1 FROM pg_roles WHERE rolname = 'test'")
+        .with_port(5432)
+        .with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass')
     end
     it 'has alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
