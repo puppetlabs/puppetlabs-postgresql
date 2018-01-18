@@ -187,6 +187,33 @@ describe 'postgresql::server::grant', type: :define do
     end
   end
 
+  context 'with a role defined' do
+    let :params do
+      {
+        db: 'test',
+        role: 'test',
+        privilege: 'all',
+        object_name: %w[myschema mytable],
+        object_type: 'table',
+      }
+    end
+
+    let :pre_condition do
+      <<-EOS
+      class {'postgresql::server':}
+      postgresql::server::role { 'test': }
+      EOS
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it do
+      is_expected.to contain_postgresql_psql('grant:test') \
+        .that_requires('Postgresql::Server::Role[test]')
+    end
+  end
+
   context 'invalid object_type' do
     let :params do
       {
