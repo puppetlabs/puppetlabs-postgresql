@@ -51,6 +51,7 @@ class postgresql::server (
   $data_checksums             = $postgresql::params::data_checksums,
   $timezone                   = $postgresql::params::timezone,
 
+  $manage_postgresql_conf     = $postgresql::params::manage_postgresql_conf,
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
   $manage_recovery_conf       = $postgresql::params::manage_recovery_conf,
