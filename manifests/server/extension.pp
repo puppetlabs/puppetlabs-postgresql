@@ -2,6 +2,7 @@
 define postgresql::server::extension (
   $database,
   $extension                   = $name,
+  Optional[String[1]] $schema  = undef,
   Optional[String[1]] $version = undef,
   String[1] $ensure            = 'present',
   $package_name                = undef,
@@ -15,15 +16,15 @@ define postgresql::server::extension (
   case $ensure {
     'present': {
       $command = "CREATE EXTENSION \"${extension}\""
-      $unless_comp = '='
+      $unless_mod = ''
       $package_require = []
-      $package_before = Postgresql_psql["Add ${extension} extension to ${database}"]
+      $package_before = Postgresql_psql["${database}: ${command}"]
     }
 
     'absent': {
       $command = "DROP EXTENSION \"${extension}\""
-      $unless_comp = '!='
-      $package_require = Postgresql_psql["Add ${extension} extension to ${database}"]
+      $unless_mod = 'NOT '
+      $package_require = Postgresql_psql["${database}: ${command}"]
       $package_before = []
     }
 
@@ -39,7 +40,7 @@ define postgresql::server::extension (
     }
   }
 
-  postgresql_psql {"Add ${extension} extension to ${database}":
+  postgresql_psql { "${database}: ${command}":
 
     psql_user        => $user,
     psql_group       => $group,
@@ -48,7 +49,34 @@ define postgresql::server::extension (
 
     db               => $database,
     command          => $command,
-    unless           => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = '${extension}') as t WHERE t.count ${unless_comp} 1",
+    unless           => "SELECT 1 WHERE ${unless_mod}EXISTS (SELECT 1 FROM pg_extension WHERE extname = '${extension}')",
+  }
+
+  if $ensure == 'present' and $schema {
+    $set_schema_command = "ALTER EXTENSION \"${extension}\" SET SCHEMA \"${schema}\""
+
+    postgresql_psql { "${database}: ${set_schema_command}":
+      command          => $set_schema_command,
+      unless           => @("END")
+        SELECT 1
+        WHERE EXISTS (
+          SELECT 1
+          FROM pg_extension e
+            JOIN pg_namespace n ON e.extnamespace = n.oid
+          WHERE e.extname = '${extension}' AND
+                n.nspname = '${schema}'
+        )
+        |-END
+        ,
+      psql_user        => $user,
+      psql_group       => $group,
+      psql_path        => $psql_path,
+      connect_settings => $connect_settings,
+      db               => $database,
+      require          => Postgresql_psql["${database}: ${command}"],
+    }
+
+    Postgresql::Server::Schema <| db == $database and schema == $schema |> -> Postgresql_psql["${database}: ${set_schema_command}"]
   }
 
   if $package_name {
