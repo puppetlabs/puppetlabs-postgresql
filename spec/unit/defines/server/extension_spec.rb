@@ -27,11 +27,20 @@ describe 'postgresql::server::extension', :type => :define do
 
   context "with mandatory arguments only" do
     it {
-      is_expected.to contain_postgresql_psql('Add postgis extension to template_postgis').with({
+      is_expected.to contain_postgresql_psql('template_postgis: CREATE EXTENSION "postgis"').with({
         :db      => 'template_postgis',
         :command => 'CREATE EXTENSION "postgis"',
-        :unless  => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = 'postgis') as t WHERE t.count = 1",
       }).that_requires('Postgresql::Server::Database[template_postgis]')
+    }
+  end
+
+  context "when schema is specified" do
+    let (:params) { super().merge({
+      :schema => 'pg_catalog',
+    }) }
+
+    it {
+      is_expected.to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" SET SCHEMA "pg_catalog"')
     }
   end
 
@@ -44,7 +53,7 @@ describe 'postgresql::server::extension', :type => :define do
       is_expected.to contain_package('postgis').with({
         :ensure  => 'present',
         :name    => 'postgis',
-      }).that_comes_before('Postgresql_psql[Add postgis extension to template_postgis]')
+      }).that_comes_before('Postgresql_psql[template_postgis: CREATE EXTENSION "postgis"]')
     }
   end
 
@@ -55,10 +64,9 @@ describe 'postgresql::server::extension', :type => :define do
     }) }
 
     it {
-      is_expected.to contain_postgresql_psql('Add postgis extension to template_postgis').with({
+      is_expected.to contain_postgresql_psql('template_postgis: DROP EXTENSION "postgis"').with({
         :db      => 'template_postgis',
         :command => 'DROP EXTENSION "postgis"',
-        :unless  => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = 'postgis') as t WHERE t.count != 1",
       }).that_requires('Postgresql::Server::Database[template_postgis]')
     }
 
@@ -75,10 +83,9 @@ describe 'postgresql::server::extension', :type => :define do
       }) }
 
       it {
-        is_expected.to contain_postgresql_psql('Add postgis extension to template_postgis').with({
+        is_expected.to contain_postgresql_psql('template_postgis: DROP EXTENSION "postgis"').with({
           :db      => 'template_postgis',
           :command => 'DROP EXTENSION "postgis"',
-          :unless  => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = 'postgis') as t WHERE t.count != 1",
         }).that_requires('Postgresql::Server::Database[template_postgis]')
       }
 
@@ -86,7 +93,7 @@ describe 'postgresql::server::extension', :type => :define do
         is_expected.to contain_package('postgis').with({
           :ensure  => 'present',
           :name    => 'postgis',
-        }).that_requires('Postgresql_psql[Add postgis extension to template_postgis]')
+        }).that_requires('Postgresql_psql[template_postgis: DROP EXTENSION "postgis"]')
       }
     end
   end
@@ -150,10 +157,9 @@ describe 'postgresql::server::extension', :type => :define do
 
   context "with mandatory arguments only" do
     it {
-      is_expected.to contain_postgresql_psql('Add postgis extension to template_postgis2').with({
+      is_expected.to contain_postgresql_psql('template_postgis2: CREATE EXTENSION "postgis"').with({
         :db      => 'template_postgis2',
         :command => 'CREATE EXTENSION "postgis"',
-        :unless  => "SELECT t.count FROM (SELECT count(extname) FROM pg_extension WHERE extname = 'postgis') as t WHERE t.count = 1",
       }).that_requires('Postgresql::Server::Database[template_postgis2]')
     }
   end
