@@ -47,10 +47,7 @@ define postgresql::server::role(
     psql_path  => $psql_path,
     connect_settings => $connect_settings,
     cwd        => $module_workdir,
-    require    => [
-      Postgresql_psql["CREATE ROLE ${username} ENCRYPTED PASSWORD ****"],
-      Class['postgresql::server'],
-    ],
+    require    => Postgresql_psql["CREATE ROLE ${username} ENCRYPTED PASSWORD ****"],
   }
 
   if $ensure == 'present' {
@@ -72,7 +69,7 @@ define postgresql::server::role(
       command     => "CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}",
       unless      => "SELECT 1 FROM pg_roles WHERE rolname = '${username}'",
       environment => $environment,
-      require     => Class['Postgresql::Server'],
+      require     => undef,
     }
 
     postgresql_psql {"ALTER ROLE \"${username}\" ${superuser_sql}":
@@ -128,7 +125,7 @@ define postgresql::server::role(
     # ensure == absent
     postgresql_psql { "DROP ROLE \"${username}\"":
       onlyif  => "SELECT 1 FROM pg_roles WHERE rolname = '${username}'",
-      require => Class['Postgresql::Server'],
+      require => undef,
     }
   }
 }
