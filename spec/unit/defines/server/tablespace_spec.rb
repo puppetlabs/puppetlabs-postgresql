@@ -28,6 +28,7 @@ describe 'postgresql::server::tablespace', type: :define do
   end
 
   it { is_expected.to contain_postgresql__server__tablespace('test') }
+  it { is_expected.to contain_postgresql_psql('CREATE TABLESPACE "test"').that_requires('Class[postgresql::server::service]') }
 
   context 'with different owner' do
     let :params do

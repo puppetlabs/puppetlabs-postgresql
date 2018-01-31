@@ -210,7 +210,7 @@ describe 'postgresql::server::grant', type: :define do
     it { is_expected.to contain_postgresql__server__role('test') }
     it do
       is_expected.to contain_postgresql_psql('grant:test') \
-        .that_requires('Postgresql::Server::Role[test]')
+        .that_requires(['Class[postgresql::server::service]', 'Postgresql::Server::Role[test]'])
     end
   end
 
