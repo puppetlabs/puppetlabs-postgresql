@@ -1,5 +1,6 @@
+# postgresql_acls_to_resources_hash.rb
 module Puppet::Parser::Functions
-  newfunction(:postgresql_acls_to_resources_hash, :type => :rvalue, :doc => <<-EOS
+  newfunction(:postgresql_acls_to_resources_hash, type: :rvalue, doc: <<-EOS
     This internal function translates the ipv(4|6)acls format into a resource
     suitable for create_resources. It is not intended to be used outside of the
     postgresql internal classes/defined resources.
@@ -14,11 +15,13 @@ module Puppet::Parser::Functions
     The third parameter is an order offset, so you can start the order at an
     arbitrary starting point.
     EOS
-  ) do |args|
-    func_name = "postgresql_acls_to_resources_hash()"
+             ) do |args|
+    func_name = 'postgresql_acls_to_resources_hash()'
 
-    raise(Puppet::ParseError, "#{func_name}: Wrong number of arguments " +
-      "given (#{args.size} for 3)") if args.size != 3
+    if args.size != 3
+      raise(Puppet::ParseError, "#{func_name}: Wrong number of arguments " \
+        "given (#{args.size} for 3)")
+    end
 
     acls = args[0]
     raise(Puppet::ParseError, "#{func_name}: first argument must be an array") \
@@ -38,36 +41,32 @@ module Puppet::Parser::Functions
 
       parts = acl.split
 
-      raise(Puppet::ParseError, "#{func_name}: acl line #{index} does not " +
-        "have enough parts") unless parts.length >= 4
+      unless parts.length >= 4
+        raise(Puppet::ParseError, "#{func_name}: acl line #{index} does not " \
+          'have enough parts')
+      end
 
       resource = {
         'type' => parts[0],
         'database' => parts[1],
         'user' => parts[2],
-        'order' => format('%03d', offset + index),
+        'order' => format('%03d', offset + index), # rubocop:disable Style/FormatString
       }
-      if parts[0] == 'local' then
+      if parts[0] == 'local'
         resource['auth_method'] = parts[3]
-        if parts.length > 4 then
-          resource['auth_option'] = parts.last(parts.length - 4).join(" ")
+        if parts.length > 4
+          resource['auth_option'] = parts.last(parts.length - 4).join(' ')
         end
+      elsif parts[4] =~ %r{^\d}
+        resource['address'] = parts[3] + ' ' + parts[4]
+        resource['auth_method'] = parts[5]
+
+        resource['auth_option'] = parts.last(parts.length - 6).join(' ') if parts.length > 6
       else
-        if parts[4] =~ /^\d/
-          resource['address'] = parts[3] + ' ' + parts[4]
-          resource['auth_method'] = parts[5]
+        resource['address'] = parts[3]
+        resource['auth_method'] = parts[4]
 
-          if parts.length > 6 then
-            resource['auth_option'] = parts.last(parts.length - 6).join(" ")
-          end
-        else
-          resource['address'] = parts[3]
-          resource['auth_method'] = parts[4]
-
-          if parts.length > 5 then
-            resource['auth_option'] = parts.last(parts.length - 5).join(" ")
-          end
-        end
+        resource['auth_option'] = parts.last(parts.length - 5).join(' ') if parts.length > 5
       end
       resources["postgresql class generated rule #{id} #{index}"] = resource
     end
