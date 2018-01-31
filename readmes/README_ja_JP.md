@@ -1902,4 +1902,4 @@ RSPEC_SET=debian-607-x64 bundle exec rspec spec/acceptance
 
 ### コントリビュータ
 
-貢献してくださった方々の一覧を[Github](https://github.com/puppetlabs/puppetlabs-postgresql/graphs/contributors)でご覧いただけます。
+貢献してくださった方々の一覧を[GitHub](https://github.com/puppetlabs/puppetlabs-postgresql/graphs/contributors)でご覧いただけます。
