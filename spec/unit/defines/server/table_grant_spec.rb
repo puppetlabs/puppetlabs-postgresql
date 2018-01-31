@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe 'postgresql::server::table_grant', :type => :define do
+describe 'postgresql::server::table_grant', type: :define do
   let :facts do
     {
-      :osfamily => 'Debian',
-      :operatingsystem => 'Debian',
-      :operatingsystemrelease => '6.0',
-      :kernel => 'Linux',
-      :concat_basedir => tmpfilename('table_grant'),
-      :id => 'root',
-      :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      osfamily: 'Debian',
+      operatingsystem: 'Debian',
+      operatingsystemrelease: '6.0',
+      kernel: 'Linux',
+      concat_basedir: tmpfilename('table_grant'),
+      id: 'root',
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
   end
 
@@ -19,10 +19,10 @@ describe 'postgresql::server::table_grant', :type => :define do
 
   let :params do
     {
-      :privilege => 'ALL',
-      :db => 'test',
-      :role => 'test',
-      :table => 'foo',
+      privilege: 'ALL',
+      db: 'test',
+      role: 'test',
+      table: 'foo',
     }
   end
 

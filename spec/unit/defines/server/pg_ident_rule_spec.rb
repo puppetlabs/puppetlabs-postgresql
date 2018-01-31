@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe 'postgresql::server::pg_ident_rule', :type => :define do
+describe 'postgresql::server::pg_ident_rule', type: :define do
   let :facts do
     {
-      :osfamily => 'Debian',
-      :operatingsystem => 'Debian',
-      :operatingsystemrelease => '6.0',
-      :kernel => 'Linux',
-      :concat_basedir => tmpfilename('pg_ident'),
-      :id => 'root',
-      :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      osfamily: 'Debian',
+      operatingsystem: 'Debian',
+      operatingsystemrelease: '6.0',
+      kernel: 'Linux',
+      concat_basedir: tmpfilename('pg_ident'),
+      id: 'root',
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
   end
   let :title do
@@ -21,46 +21,46 @@ describe 'postgresql::server::pg_ident_rule', :type => :define do
 
   context 'managing pg_ident' do
     let :pre_condition do
-      <<-EOS
+      <<-MANIFEST
         class { 'postgresql::globals':
           manage_pg_ident_conf => true,
         }
         class { 'postgresql::server': }
-      EOS
+      MANIFEST
     end
 
     let :params do
       {
-        :map_name => 'thatsmymap',
-        :system_username => 'systemuser',
-        :database_username => 'dbuser',
+        map_name: 'thatsmymap',
+        system_username: 'systemuser',
+        database_username: 'dbuser',
       }
     end
+
     it do
-      is_expected.to contain_concat__fragment('pg_ident_rule_test').with({
-        :content => /thatsmymap\s+systemuser\s+dbuser/
-      })
+      is_expected.to contain_concat__fragment('pg_ident_rule_test').with(content: %r{thatsmymap\s+systemuser\s+dbuser})
     end
   end
   context 'not managing pg_ident' do
     let :pre_condition do
-      <<-EOS
+      <<-MANIFEST
         class { 'postgresql::globals':
           manage_pg_ident_conf => false,
         }
         class { 'postgresql::server': }
-      EOS
+      MANIFEST
     end
     let :params do
       {
-          :map_name => 'thatsmymap',
-          :system_username => 'systemuser',
-          :database_username => 'dbuser',
+        map_name: 'thatsmymap',
+        system_username: 'systemuser',
+        database_username: 'dbuser',
       }
     end
-    it 'should fail because $manage_pg_ident_conf is false' do
+
+    it 'fails because $manage_pg_ident_conf is false' do
       expect { catalogue }.to raise_error(Puppet::Error,
-                                      /postgresql::server::manage_pg_ident_conf has been disabled/)
+                                          %r{postgresql::server::manage_pg_ident_conf has been disabled})
     end
   end
 end
