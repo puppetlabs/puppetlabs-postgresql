@@ -86,7 +86,7 @@ class { 'postgresql::server':
 
 postgresql::server::db { 'mydatabasename':
   user     => 'mydatabaseuser',
-  password => postgresql_password('mydatabaseuser', 'mypassword'),
+  password => postgresql::password('mydatabaseuser', 'mypassword'),
 }
 ```
 
@@ -99,7 +99,7 @@ class { 'postgresql::server':
 }
 
 postgresql::server::role { 'marmot':
-  password_hash => postgresql_password('marmot', 'mypasswd'),
+  password_hash => postgresql::password('marmot', 'mypasswd'),
 }
 
 postgresql::server::database_grant { 'test1':
@@ -363,8 +363,8 @@ The postgresql module comes with many options for configuring the server. While 
 
 **Functions:**
 
-* [postgresql_password](#function-postgresql_password)
-* [postgresql_acls_to_resources_hash](#function-postgresql_acls_to_resources_hashacl_array-id-order_offset)
+* [postgresql::password](#function-postgresql_password)
+* [postgresql::acls_to_resources_hash](#function-postgresql_acls_to_resources_hashacl_array-id-order_offset)
 
 **Tasks:**
 
@@ -1533,14 +1533,14 @@ Specifies whether to grant login capability for the new role.
 Default value: `true`.
 
 ##### `password_hash`
-Sets the hash to use during password creation. If the password is not already pre-encrypted in a format that PostgreSQL supports, use the `postgresql_password` function to provide an MD5 hash here, for example:
+Sets the hash to use during password creation. If the password is not already pre-encrypted in a format that PostgreSQL supports, use the `postgresql::password` function to provide an MD5 hash here, for example:
 
 ##### `update_password`
 If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.
 
 ```puppet
 postgresql::server::role { 'myusername':
-  password_hash => postgresql_password('myusername', 'mypassword'),
+  password_hash => postgresql::password('myusername', 'mypassword'),
 }
 ```
 
@@ -1830,10 +1830,10 @@ Sets the number of attempts after failure before giving up and failing the resou
 
 #### postgresql_password
 
-Generates a PostgreSQL encrypted password, use `postgresql_password`. Call it from the command line and then copy and paste the encrypted password into your manifest:
+Generates a PostgreSQL encrypted password, use `postgresql::password`. Call it from the command line and then copy and paste the encrypted password into your manifest:
 
 ```shell
-puppet apply --execute 'notify { 'test': message => postgresql_password('username', 'password') }'
+puppet apply --execute 'notify { 'test': message => postgresql::password('username', 'password') }'
 ```
 
 Alternatively, you can call this from your production manifests, but the manifests will then contain a clear text version of your passwords.

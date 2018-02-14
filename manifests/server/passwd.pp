@@ -20,7 +20,7 @@ class postgresql::server::passwd {
     #  configured to allow the postgres system user to connect via psql
     #  without specifying a password ('ident' or 'trust' security). This is
     #  the default for pg_hba.conf.
-    $escaped = postgresql_escape($postgres_password)
+    $escaped = postgresql::escape($postgres_password)
     exec { 'set_postgres_postgrespw':
       # This command works w/no password because we run it as postgres system
       # user

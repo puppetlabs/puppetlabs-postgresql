@@ -7,7 +7,7 @@ describe 'postgresql task', if: puppet_version =~ %r{(5\.\d\.\d)} && !pe_install
         class { 'postgresql::server': } ->
         postgresql::server::db { 'spec1':
           user     => 'root1',
-          password => postgresql_password('root1', 'password'),
+          password => postgresql::password('root1', 'password'),
         }
     EOS
 
