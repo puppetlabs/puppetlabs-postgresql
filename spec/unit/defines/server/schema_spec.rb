@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe 'postgresql::server::schema', :type => :define do
+describe 'postgresql::server::schema', type: :define do
   let :facts do
     {
-      :osfamily => 'Debian',
-      :operatingsystem => 'Debian',
-      :operatingsystemrelease => '6.0',
-      :kernel => 'Linux',
-      :concat_basedir => tmpfilename('schema'),
-      :id => 'root',
-      :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      osfamily: 'Debian',
+      operatingsystem: 'Debian',
+      operatingsystemrelease: '6.0',
+      kernel: 'Linux',
+      concat_basedir: tmpfilename('schema'),
+      id: 'root',
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
   end
 
@@ -19,8 +19,8 @@ describe 'postgresql::server::schema', :type => :define do
 
   let :params do
     {
-      :owner => 'jane',
-      :db    => 'janedb',
+      owner: 'jane',
+      db: 'janedb',
     }
   end
 
@@ -28,13 +28,13 @@ describe 'postgresql::server::schema', :type => :define do
     "class {'postgresql::server':}"
   end
 
-  it { should contain_postgresql__server__schema('test') }
+  it { is_expected.to contain_postgresql__server__schema('test') }
 
-  context "with different owner" do
+  context 'with different owner' do
     let :params do
       {
-        :owner => 'nate',
-        :db    => 'natedb',
+        owner: 'nate',
+        db: 'natedb',
       }
     end
 

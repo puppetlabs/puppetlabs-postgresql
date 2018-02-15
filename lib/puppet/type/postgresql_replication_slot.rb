@@ -9,8 +9,8 @@ master server.
   ensurable
 
   newparam(:name) do
-    desc "The name of the slot to create. Must be a valid replication slot name."
+    desc 'The name of the slot to create. Must be a valid replication slot name.'
     isnamevar
-    newvalues /^[a-z0-9_]+$/
+    newvalues %r{^[a-z0-9_]+$}
   end
 end

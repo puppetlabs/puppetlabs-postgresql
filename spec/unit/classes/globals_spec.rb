@@ -2,26 +2,26 @@ require 'spec_helper'
 
 describe 'postgresql::globals', type: :class do
   context 'on a debian 6' do
-    let (:facts) do
+    let(:facts) do
       {
-        :os => {
-          :family               => 'Debian',
-          :name                 => 'Debian',
-          :release => {
-            :full => '6.0',
-            :major => '6'
-          }
+        os: {
+          family: 'Debian',
+          name: 'Debian',
+          release: {
+            full: '6.0',
+            major: '6',
+          },
         },
-        :osfamily               => 'Debian',
-        :operatingsystem        => 'Debian',
-        :operatingsystemrelease => '6.0',
-        :lsbdistid              => 'Debian',
-        :lsbdistcodename        => 'squeeze'
+        osfamily: 'Debian',
+        operatingsystem: 'Debian',
+        operatingsystemrelease: '6.0',
+        lsbdistid: 'Debian',
+        lsbdistcodename: 'squeeze',
       }
     end
 
     describe 'with no parameters' do
-      it 'should work' do
+      it 'works' do
         is_expected.to contain_class('postgresql::globals')
       end
     end
@@ -29,25 +29,27 @@ describe 'postgresql::globals', type: :class do
     describe 'manage_package_repo => true' do
       let(:params) do
         {
-          manage_package_repo: true
+          manage_package_repo: true,
         }
       end
-      it 'should pull in class postgresql::repo' do
+
+      it 'pulls in class postgresql::repo' do
         is_expected.to contain_class('postgresql::repo')
       end
     end
   end
 
   context 'on redhat family systems' do
-    let (:facts) do
+    let(:facts) do
       {
         osfamily: 'RedHat',
         operatingsystem: 'RedHat',
-        operatingsystemrelease: '7.1'
+        operatingsystemrelease: '7.1',
       }
     end
+
     describe 'with no parameters' do
-      it 'should work' do
+      it 'works' do
         is_expected.to contain_class('postgresql::globals')
       end
     end
@@ -56,19 +58,19 @@ describe 'postgresql::globals', type: :class do
       let(:params) do
         {
           manage_package_repo: true,
-          repo_proxy: 'http://proxy-server:8080'
+          repo_proxy: 'http://proxy-server:8080',
         }
       end
 
-      it 'should pull in class postgresql::repo' do
+      it 'pulls in class postgresql::repo' do
         is_expected.to contain_class('postgresql::repo')
       end
 
       it do
-        should contain_yumrepo('yum.postgresql.org').with(
+        is_expected.to contain_yumrepo('yum.postgresql.org').with(
           'enabled' => '1',
-          'proxy'   => 'http://proxy-server:8080'
-          )
+          'proxy'   => 'http://proxy-server:8080',
+        )
       end
     end
 
@@ -76,18 +78,18 @@ describe 'postgresql::globals', type: :class do
       let(:params) do
         {
           manage_package_repo: true,
-          repo_baseurl: 'http://mirror.localrepo.com'
+          repo_baseurl: 'http://mirror.localrepo.com',
         }
       end
 
-      it 'should pull in class postgresql::repo' do
+      it 'pulls in class postgresql::repo' do
         is_expected.to contain_class('postgresql::repo')
       end
 
       it do
-        should contain_yumrepo('yum.postgresql.org').with(
+        is_expected.to contain_yumrepo('yum.postgresql.org').with(
           'enabled' => '1',
-          'baseurl' => 'http://mirror.localrepo.com'
+          'baseurl' => 'http://mirror.localrepo.com',
         )
       end
     end

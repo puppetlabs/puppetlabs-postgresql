@@ -1,73 +1,84 @@
 require 'spec_helper'
 
-describe 'postgresql::lib::devel', :type => :class do
+describe 'postgresql::lib::devel', type: :class do
   let :facts do
     {
-      :osfamily => 'Debian',
-      :operatingsystem => 'Debian',
-      :operatingsystemrelease => '6.0',
+      osfamily: 'Debian',
+      operatingsystem: 'Debian',
+      operatingsystemrelease: '6.0',
     }
   end
-  it { is_expected.to contain_class("postgresql::lib::devel") }
+
+  it { is_expected.to contain_class('postgresql::lib::devel') }
 
   describe 'link pg_config to /usr/bin' do
-    it { should_not contain_file('/usr/bin/pg_config') \
-      .with_ensure('link') \
-      .with_target('/usr/lib/postgresql/8.4/bin/pg_config')
+    it {
+      is_expected.not_to contain_file('/usr/bin/pg_config') \
+        .with_ensure('link') \
+        .with_target('/usr/lib/postgresql/8.4/bin/pg_config')
     }
   end
 
   describe 'disable link_pg_config' do
-    let(:params) {{
-      :link_pg_config => false,
-    }}
-    it { should_not contain_file('/usr/bin/pg_config') }
+    let(:params) do
+      {
+        link_pg_config: false,
+      }
+    end
+
+    it { is_expected.not_to contain_file('/usr/bin/pg_config') }
   end
 
   describe 'should not link pg_config on RedHat with default version' do
-    let(:facts) {{
-      :osfamily                  => 'RedHat',
-      :operatingsystem           => 'CentOS',
-      :operatingsystemrelease    => '6.3',
-      :operatingsystemmajrelease => '6',
-    }}
-    it { should_not contain_file('/usr/bin/pg_config') }
+    let(:facts) do
+      {
+        osfamily: 'RedHat',
+        operatingsystem: 'CentOS',
+        operatingsystemrelease: '6.3',
+        operatingsystemmajrelease: '6',
+      }
+    end
+
+    it { is_expected.not_to contain_file('/usr/bin/pg_config') }
   end
 
   describe 'link pg_config on RedHat with non-default version' do
-    let(:facts) {{
-      :osfamily                  => 'RedHat',
-      :operatingsystem           => 'CentOS',
-      :operatingsystemrelease    => '6.3',
-      :operatingsystemmajrelease => '6',
-    }}
+    let(:facts) do
+      {
+        osfamily: 'RedHat',
+        operatingsystem: 'CentOS',
+        operatingsystemrelease: '6.3',
+        operatingsystemmajrelease: '6',
+      }
+    end
     let :pre_condition do
-    "class { '::postgresql::globals': version => '9.3' }"
+      "class { '::postgresql::globals': version => '9.3' }"
     end
 
-    it { should contain_file('/usr/bin/pg_config') \
-      .with_ensure('link') \
-      .with_target('/usr/pgsql-9.3/bin/pg_config')
+    it {
+      is_expected.to contain_file('/usr/bin/pg_config') \
+        .with_ensure('link') \
+        .with_target('/usr/pgsql-9.3/bin/pg_config')
     }
   end
 
   describe 'on Gentoo' do
     let :facts do
       {
-        :osfamily => 'Gentoo',
-        :operatingsystem => 'Gentoo',
+        osfamily: 'Gentoo',
+        operatingsystem: 'Gentoo',
       }
     end
     let :params do
       {
-        :link_pg_config => false,
+        link_pg_config: false,
       }
     end
 
-    it 'should fail to compile' do
+    it 'fails to compile' do # rubocop:disable RSpec/MultipleExpectations
       expect {
         is_expected.to compile
-      }.to raise_error(/is not supported/)
+      }.to raise_error(%r{is not supported})
     end
   end
 end
