@@ -368,6 +368,8 @@ The postgresql module comes with many options for configuring the server. While 
 
 **Tasks:**
 
+* [`sql`](#tasks)
+
 ### Classes
 
 #### postgresql::client
@@ -1491,16 +1493,17 @@ Provides the target for the rule, and is generally an internal only property.
 **Use with caution.**
 
 #### postgresql::server::role
+
 Creates or drops a role or user in PostgreSQL.
 
 ##### `ensure`
 
 Specify whether to create or drop the role.
 
-Specifying `present` will create the role.
-Specifying `absent` will drop the role.
+Specifying 'present' creates the role.
+Specifying 'absent' drops the role.
 
-Default value: `present`.
+Default value: 'present'.
 
 ##### `connection_limit`
 Specifies how many concurrent connections the role can make.
@@ -1846,7 +1849,7 @@ This internal function converts a list of `pg_hba.conf` based ACLs (passed in as
 
 ### Tasks
 
-The Postgresql module has an example task that allows a user to execute arbitary SQL against a database. Please refer to to the [PE documentation](https://puppet.com/docs/pe/2017.3/orchestrator/running_tasks.html) or [Bolt documentation](https://puppet.com/docs/bolt/latest/bolt.html) on how to execute a task.
+The postgresql module `sql` example task executes arbitary SQL against a database. Please refer to to the [PE documentation](https://puppet.com/docs/pe/2017.3/orchestrator/running_tasks.html) or [Bolt documentation](https://puppet.com/docs/bolt/latest/bolt.html) on how to execute a task.
 
 ## Limitations
 
@@ -1862,7 +1865,7 @@ Other systems might be compatible, but are not being actively tested.
 
 ### Apt module support
 
-While this module supports both 1.x and 2.x versions of the 'puppetlabs-apt' module, it does not support 'puppetlabs-apt' 2.0.0 or 2.0.1.
+While this module supports both 1.x and 2.x versions of the `puppetlabs-apt` module, it does not support `puppetlabs-apt` 2.0.0 or 2.0.1.
 
 ### PostGIS support
 
