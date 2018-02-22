@@ -22,7 +22,7 @@ describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(fac
   end
 
   context 'local connection' do
-    it 'validates successfully with defaults' do # rubocop:disable RSpec/ExampleLength
+    it 'validates successfully with defaults' do
       pp = <<-MANIFEST
         #{install_pp}->
         postgresql_conn_validator { 'validate this':
@@ -38,7 +38,7 @@ describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(fac
       apply_manifest(pp, catch_changes: true)
     end
 
-    it 'works with connect settings hash' do # rubocop:disable RSpec/ExampleLength
+    it 'works with connect settings hash' do
       pp = <<-MANIFEST
         #{install_pp}->
         postgresql_conn_validator { 'validate this':
@@ -57,7 +57,7 @@ describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(fac
       apply_manifest(pp, catch_changes: true)
     end
 
-    it 'fails gracefully' do # rubocop:disable RSpec/ExampleLength
+    it 'fails gracefully' do
       pp = <<-MANIFEST
         #{install_pp}->
         postgresql_conn_validator { 'validate this':

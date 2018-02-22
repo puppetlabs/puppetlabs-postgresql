@@ -31,7 +31,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
         }
       end
 
-      it 'executes with the given psql_path on the given DB' do # rubocop:disable RSpec/MultipleExpectations
+      it 'executes with the given psql_path on the given DB' do
         expect(Dir).to receive(:chdir).with(attributes[:cwd]).and_yield
         expect(provider).to receive(:run_command).with([attributes[:psql_path],
                                                         '-d', attributes[:db], '-t', '-c', '"SELECT \'something\' as \"Custom column\""'],
