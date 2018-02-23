@@ -20,6 +20,7 @@
     * [定義できるタイプ](#defined-types)
     * [タイプ](#types)
     * [関数](#functions)
+    * [タスク](#tasks)
 5. [制約事項 - OSの互換性など](#limitations)
 6. [開発 - モジュール貢献についてのガイド](#development)
     * [コントリビュータ - モジュール貢献者の一覧](#contributors)
@@ -318,7 +319,7 @@ exec { 'rake db:migrate':
 }
 ```
 
-## 参考
+## リファレンス
 
 postgresqlモジュールには、サーバー設定用に多数のオプションがあります。以下の設定をすべて使うことはないかもしれませんが、これらを使用することで、セキュリティ設定をかなり制御することができます。
 
@@ -364,6 +365,10 @@ postgresqlモジュールには、サーバー設定用に多数のオプショ�
 
 * [postgresql_password](#function-postgresql_password)
 * [postgresql_acls_to_resources_hash](#function-postgresql_acls_to_resources_hashacl_array-id-order_offset)
+
+**タスク:**
+
+* [`sql`](#tasks)
 
 ### クラス
 
@@ -421,7 +426,7 @@ PostgreSQL docsパッケージリソースが存在する必要があるかど�
 
 デフォルト値: OSによって異なります。
 
-##### `confdir`
+##### `confdir`　
 
 ターゲットプラットフォームのデフォルトのPostgreSQL設定ディレクトリをオーバーライドします。
 
@@ -957,7 +962,7 @@ PostgreSQLサービスのデフォルトのリロードコマンドをオーバ�
 
 ##### `service_restart_on_change`
 
-設定変更をアクティブにするにはサービスの再起動が必要な設定エントリが変更された場合に、PostgreSQLサービスを再起動する際のデフォルト動作をオーバーライドします。
+設定変更をアクティブにするためにサービスの再起動が必要な設定エントリが変更された場合に、PostgreSQLサービスを再起動する際のデフォルト動作をオーバーライドします。
 
 デフォルト値: `true`。
 
@@ -969,7 +974,7 @@ PostgreSQLサービスのデフォルトのステータスチェックコマン�
 
 ##### `user`
 
-ファイルシステム内のPostgreSQL関連ファイルのデフォルトのPostgreSQLスーパーユーザおよびオーナーをオーバーライドします。
+ファイルシステム内のPostgreSQL関連ファイルのデフォルトのPostgreSQLスーパーユーザおよび所有者をオーバーライドします。
 
 デフォルト値: 'postgres'。
 
@@ -1037,7 +1042,7 @@ PostgreSQLのCOMMENTコマンドを使用して、データベースについて
 
 ##### `connect_settings`
 
-リモートサーバーに接続する際に使用される環境変数のハッシュを指定します。
+リモートサーバーへの接続時に使用する環境変数のハッシュを指定します。
 
 デフォルト値: ローカルのPostgresインスタンスに接続します。
 
@@ -1149,7 +1154,7 @@ PostgreSQLのCOMMENTコマンドを使用して、データベースについて
 
 #### `connect_settings`
 
-リモートサーバーに接続する際に使用される環境変数のハッシュを指定します。
+リモートサーバーへの接続時に使用する環境変数のハッシュを指定します。
 
 デフォルト値: ローカルのPostgresインスタンスに接続します。
 
@@ -1188,6 +1193,10 @@ PostgreSQL拡張を管理します。
 ##### `database`
 
 拡張を有効化するデータベースを指定します。
+
+##### `schema`
+
+拡張を有効化するスキーマを指定します。
 
 ##### `ensure`
 
@@ -1484,7 +1493,16 @@ PostgreSQLコマンド'REASSIGN OWNED'をデータベースに対して実行し
 **注意して使用してください。**
 
 #### postgresql::server::role
-PostgreSQLのロールまたはユーザを作成します。
+
+PostgreSQLのロールまたはユーザを作成もしくは削除します。
+
+##### `ensure`
+
+ロールを作成するか削除するかを指定します。
+
+'present'を指定するとロールが作成され、'absent'を指定するとロールが削除されます。
+
+デフォルト値: 'present'。
 
 ##### `connection_limit`
 ロールが同時に接続可能な数を指定します。
@@ -1796,7 +1814,7 @@ Unixソケットとident認証を使用するとき、このユーザとして�
 
 接続するときに使用するポートを定義します。
 
-デフォルト値: '' 
+デフォルト値: ''
 
 ##### `run_as`
 
@@ -1828,6 +1846,10 @@ puppet apply --execute 'notify { 'test': message => postgresql_password('usernam
 
 **この関数は、モジュールによる内部的な使用のみ可能です。**
 
+### タスク
+
+postgresqlモジュールの'sqlサンプルタスクは、データベースに対して任意のSQLを実行します。タスクの実行方法については、[Puppet Enterpriseマニュアル](https://puppet.com/docs/pe/2017.3/orchestrator/running_tasks.html)または[Boltマニュアル](https://puppet.com/docs/bolt/latest/bolt.html)を参照してください。
+
 ## 制約事項
 
 PostgreSQLのバージョン8.1～9.5で動作します。
@@ -1842,7 +1864,7 @@ PostgreSQLのバージョン8.1～9.5で動作します。
 
 ### Aptモジュールのサポート
 
-このモジュールは1.xと2.x両方のバージョンの'puppetlabs-apt'モジュールをサポートしていますが、'puppetlabs-apt'の2.0.0と2.0.1はサポートしていません。
+このモジュールは1.xと2.x両方のバージョンの`puppetlabs-apt` モジュールをサポートしていますが、2.0.0と2.0.1の`puppetlabs-apt`はサポートしていません。
 
 ### PostGISのサポート
 
