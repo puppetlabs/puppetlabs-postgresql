@@ -411,6 +411,8 @@ amount of control over your security settings.
 
 **Tasks:**
 
+* [`sql`](#tasks)
+
 ### Classes
 
 #### postgresql::client
@@ -1668,10 +1670,10 @@ Creates or drops a role or user in PostgreSQL.
 
 Specify whether to create or drop the role.
 
-Specifying `present` will create the role.
-Specifying `absent` will drop the role.
+Specifying 'present' creates the role.
+Specifying 'absent' drops the role.
 
-Default value: `present`.
+Default value: 'present'.
 
 ##### `connection_limit`
 
@@ -2067,6 +2069,7 @@ arbitrary SQL against a database.  Please refer to to
 [the Bolt documentation](https://puppet.com/docs/bolt/latest/bolt.html) on how
 to execute a task.
 
+
 ## Limitations
 
 Works with versions of PostgreSQL from 8.1 through 9.5.
@@ -2083,6 +2086,7 @@ Other systems might be compatible, but are not being actively tested.
 
 While this module supports both 1.x and 2.x versions of the puppetlabs-apt
 module, it does not support puppetlabs-apt 2.0.0 or 2.0.1.
+
 
 ### PostGIS support
 
