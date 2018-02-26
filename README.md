@@ -139,9 +139,9 @@ To change the ownership of all objects within a database using
 
 ```puppet
 postgresql::server::reassign_owned_by { 'new owner is meerkat':
-  db        => 'test_db',
-  old_owner => 'marmot',
-  new_owner => 'meerkat',
+  db       => 'test_db',
+  old_role => 'marmot',
+  new_role => 'meerkat',
 }
 ```
 
