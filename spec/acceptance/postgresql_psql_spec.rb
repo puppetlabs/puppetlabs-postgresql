@@ -135,7 +135,7 @@ describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamil
   end
 
   context 'with secure password passing by environment' do
-    it 'runs SQL that contanins password passed by environment' do # rubocop:disable RSpec/ExampleLength
+    it 'runs SQL that contanins password passed by environment' do
       select = "select \\'$PASS_TO_EMBED\\'"
       pp = <<-MANIFEST.unindent
         class { 'postgresql::server': } ->
@@ -151,7 +151,7 @@ describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamil
       apply_manifest(pp, catch_failures: true)
       apply_manifest(pp, expect_changes: false)
     end
-    it 'runs SQL that contanins password passed by environment in check' do # rubocop:disable RSpec/ExampleLength
+    it 'runs SQL that contanins password passed by environment in check' do
       select = "select 1 where \\'$PASS_TO_EMBED\\'=\\'passwD\\'"
       pp = <<-MANIFEST.unindent
         class { 'postgresql::server': } ->
