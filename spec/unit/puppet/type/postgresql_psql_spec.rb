@@ -16,7 +16,7 @@ describe Puppet::Type.type(:postgresql_psql) do # rubocop:disable RSpec/Multiple
   end
 end
 
-describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_windows? do
+describe Puppet::Type.type(:postgresql_psql), unless: Puppet::Util::Platform.windows? do
   subject do
     Puppet::Type.type(:postgresql_psql).new({ name: 'rspec' }.merge(attributes))
   end
