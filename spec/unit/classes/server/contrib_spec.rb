@@ -46,7 +46,7 @@ describe 'postgresql::server::contrib', type: :class do
       }
     end
 
-    it 'fails to compile' do # rubocop:disable RSpec/MultipleExpectations
+    it 'fails to compile' do
       expect {
         is_expected.to compile
       }.to raise_error(%r{is not supported})

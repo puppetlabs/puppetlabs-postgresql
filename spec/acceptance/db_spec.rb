@@ -1,8 +1,6 @@
 require 'spec_helper_acceptance'
 
 describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
-  # rubocop:disable RSpec/ExampleLength
-  # rubocop:disable RSpec/MultipleExpectations
   # rubocop:disable Metrics/LineLength
   it 'creates a database' do
     begin

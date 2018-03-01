@@ -74,8 +74,6 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
     end
   end
 
-  # rubocop:disable RSpec/MultipleExpectations
-  # rubocop:disable RSpec/MessageSpies
   # rubocop:disable RSpec/NamedSubject
   # rubocop:disable RSpec/SubjectStub
   describe '#command' do
@@ -124,7 +122,6 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
       end
     end
   end
-  # rubocop:enable RSpec/MultipleExpectations
 
   describe "#should_run_sql without 'unless'" do
     [true, :true].each do |refreshonly|
@@ -253,13 +250,13 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
   describe '#refresh' do
     let(:attributes) { {} }
 
-    it 'syncs command property when command should run' do # rubocop:disable RSpec/MultipleExpectations
+    it 'syncs command property when command should run' do
       expect(subject).to receive(:should_run_sql).with(true).and_return(true)
       expect(subject.property(:command)).to receive(:sync)
       subject.refresh
     end
 
-    it 'does not sync command property when command should not run' do # rubocop:disable RSpec/MultipleExpectations
+    it 'does not sync command property when command should not run' do
       expect(subject).to receive(:should_run_sql).with(true).and_return(false)
       expect(subject.property(:command)).not_to receive(:sync)
       subject.refresh
