@@ -53,7 +53,6 @@ describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.includ
       # Create a role to grant to the user
       postgresql::server::role { $group:
         login   => false,
-        require => Postgresql::Server::Database[$db],
       }
 
       # Grant the role to the user
@@ -106,7 +105,6 @@ describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.includ
       # Create a role to grant to the user
       postgresql::server::role { $group:
         login   => false,
-        require => Postgresql::Server::Database[$db],
       }
 
       # Grant the role to the user
@@ -159,7 +157,6 @@ describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.includ
       # Create a role to grant to the user
       postgresql::server::role { $group:
         login   => false,
-        require => Postgresql::Server::Database[$db],
       }
 
       # Grant the role to the user
@@ -195,7 +192,6 @@ describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.includ
        # Create a role to grant to the nonexistent user
        postgresql::server::role { $group:
          login   => false,
-         require => Postgresql::Server::Database[$db],
        }
 
        # Grant the role to the nonexistent user

@@ -30,7 +30,7 @@ describe 'postgresql::server::extension', type: :define do # rubocop:disable RSp
   context 'with mandatory arguments only' do
     it {
       is_expected.to contain_postgresql_psql('template_postgis: CREATE EXTENSION "postgis"')
-        .with(db: 'template_postgis', command: 'CREATE EXTENSION "postgis"').that_requires('Postgresql::Server::Database[template_postgis]')
+        .with(db: 'template_postgis', command: 'CREATE EXTENSION "postgis"')
     }
   end
 
@@ -63,7 +63,7 @@ describe 'postgresql::server::extension', type: :define do # rubocop:disable RSp
 
     it {
       is_expected.to contain_postgresql_psql('template_postgis: DROP EXTENSION "postgis"')
-        .with(db: 'template_postgis', command: 'DROP EXTENSION "postgis"').that_requires('Postgresql::Server::Database[template_postgis]')
+        .with(db: 'template_postgis', command: 'DROP EXTENSION "postgis"')
     }
 
     it {
@@ -78,7 +78,7 @@ describe 'postgresql::server::extension', type: :define do # rubocop:disable RSp
 
       it {
         is_expected.to contain_postgresql_psql('template_postgis: DROP EXTENSION "postgis"')
-          .with(db: 'template_postgis', command: 'DROP EXTENSION "postgis"').that_requires('Postgresql::Server::Database[template_postgis]')
+          .with(db: 'template_postgis', command: 'DROP EXTENSION "postgis"')
       }
 
       it {
@@ -97,7 +97,7 @@ describe 'postgresql::server::extension', type: :define do # rubocop:disable RSp
 
     it {
       is_expected.to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" UPDATE TO \'99.99.99\'')
-        .with(db: 'template_postgis', unless: "SELECT 1 FROM pg_extension WHERE extname='postgis' AND extversion='99.99.99'").that_requires('Postgresql::Server::Database[template_postgis]')
+        .with(db: 'template_postgis', unless: "SELECT 1 FROM pg_extension WHERE extname='postgis' AND extversion='99.99.99'")
     }
   end
 
@@ -111,7 +111,7 @@ describe 'postgresql::server::extension', type: :define do # rubocop:disable RSp
     it {
       is_expected.to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" UPDATE')
         .with(db: 'template_postgis',
-              unless: "SELECT 1 FROM pg_available_extensions WHERE name = 'postgis' AND default_version = installed_version").that_requires('Postgresql::Server::Database[template_postgis]')
+              unless: "SELECT 1 FROM pg_available_extensions WHERE name = 'postgis' AND default_version = installed_version")
     }
   end
 end
@@ -147,7 +147,7 @@ describe 'postgresql::server::extension', type: :define do
   context 'with mandatory arguments only' do
     it {
       is_expected.to contain_postgresql_psql('template_postgis2: CREATE EXTENSION "postgis"')
-        .with(db: 'template_postgis2', command: 'CREATE EXTENSION "postgis"').that_requires('Postgresql::Server::Database[template_postgis2]')
+        .with(db: 'template_postgis2', command: 'CREATE EXTENSION "postgis"')
     }
   end
 end

@@ -79,6 +79,13 @@ define postgresql::server::database(
     require => Class['postgresql::server::service']
   }
 
+  # Automatically require the database for the statements that requires it
+  #
+  # XXX: We should probably do everything in this class before.  Postgresql_psql resource could
+  # specify this better, but currently it is impossible to use "autorequire" against custom
+  # resources.  We can improve this when a better way is available.
+  Postgresql_psql["CREATE DATABASE \"${dbname}\""] -> Postgresql_psql <| db == $dbname |>
+
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
   postgresql_psql { "REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":

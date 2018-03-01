@@ -33,13 +33,6 @@ define postgresql::server::extension (
     }
   }
 
-  if( $database != 'postgres' ) {
-    # The database postgres cannot managed by this module, so it is exempt from this dependency
-    Postgresql_psql {
-      require => Postgresql::Server::Database[$database],
-    }
-  }
-
   postgresql_psql { "${database}: ${command}":
 
     psql_user        => $user,

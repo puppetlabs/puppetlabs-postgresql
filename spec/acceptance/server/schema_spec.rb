@@ -48,7 +48,6 @@ describe 'postgresql::server::schema:', unless: UNSUPPORTED_PLATFORMS.include?(f
       postgresql::server::schema { $user:
         db      => $db,
         owner   => $user,
-        require => Postgresql::Server::Database[$db],
       }
     MANIFEST
   end

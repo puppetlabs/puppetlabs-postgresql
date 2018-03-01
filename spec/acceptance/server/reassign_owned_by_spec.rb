@@ -78,14 +78,13 @@ describe 'postgresql::server::reassign_owned_by:', unless: UNSUPPORTED_PLATFORMS
             db        => '#{db}',
             psql_user => '#{old_owner}',
             unless    => "SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = 'test_tbl'",
-            require   => Postgresql::Server::Database['#{db}'],
           }
           postgresql_psql { 'create test sequence':
             command   => 'CREATE SEQUENCE test_seq',
             db        => '#{db}',
             psql_user => '#{old_owner}',
             unless    => "SELECT relname FROM pg_catalog.pg_class WHERE relkind='S' AND relname = 'test_seq'",
-            require   => [ Postgresql_psql['create test table'], Postgresql::Server::Database['#{db}'] ],
+            require   => Postgresql_psql['create test table'],
           }
         MANIFEST
       end

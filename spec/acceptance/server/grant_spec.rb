@@ -58,7 +58,6 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(fa
             db        => $db,
             psql_user => '#{superuser}',
             unless    => "SELECT 1 from pg_language where lanname = 'plpgsql'",
-            require   => Postgresql::Server::Database[$db],
           }
 
           postgresql::server::grant { 'grant usage on plpgsql':
@@ -138,7 +137,6 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(fa
             db        => $db,
             psql_user => $owner,
             unless    => "SELECT 1 FROM information_schema.sequences WHERE sequence_name = 'test_seq'",
-            require   => Postgresql::Server::Database[$db],
           }
 
           postgresql::server::grant { 'grant usage on test_seq':
@@ -159,7 +157,6 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(fa
             db        => $db,
             psql_user => $owner,
             unless    => "SELECT 1 FROM information_schema.sequences WHERE sequence_name = 'test_seq'",
-            require   => Postgresql::Server::Database[$db],
           }
 
           postgresql::server::grant { 'grant update on test_seq':
@@ -224,7 +221,6 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(fa
             db        => $db,
             psql_user => $owner,
             unless    => "SELECT 1 FROM information_schema.sequences WHERE sequence_name = 'test_seq2'",
-            require   => Postgresql::Server::Database[$db],
           }
 
           postgresql::server::grant { 'grant usage on all sequences':
@@ -246,7 +242,6 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(fa
             db        => $db,
             psql_user => $owner,
             unless    => "SELECT 1 FROM information_schema.sequences WHERE sequence_name = 'test_seq2'",
-            require   => Postgresql::Server::Database[$db],
           }
 
           postgresql::server::grant { 'grant usage on all sequences':

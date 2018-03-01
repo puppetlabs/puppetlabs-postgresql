@@ -418,8 +418,4 @@ define postgresql::server::grant (
   if($role != undef and defined(Postgresql::Server::Role[$role])) {
     Postgresql::Server::Role[$role]->Postgresql_psql["grant:${name}"]
   }
-
-  if($db != undef and defined(Postgresql::Server::Database[$db])) {
-    Postgresql::Server::Database[$db]->Postgresql_psql["grant:${name}"]
-  }
 }
