@@ -102,8 +102,6 @@ describe 'postgresql::server::reassign_owned_by:', unless: UNSUPPORTED_PLATFORMS
         MANIFEST
       end
 
-      # rubocop:disable RSpec/ExampleLength
-      # rubocop:disable RSpec/MultipleExpectations
       it 'reassigns all objects to new_owner' do
         begin
           # postgres version
