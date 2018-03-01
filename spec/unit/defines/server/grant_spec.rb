@@ -97,7 +97,7 @@ describe 'postgresql::server::grant', type: :define do
     it {
       is_expected.to contain_postgresql_psql('grant:test').with(
         'command' => %r{GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* "test"}m,
-        'unless' => %r{SELECT 1 FROM \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\) P\s* HAVING count\(P\.sequence_name\) = 0}m, # rubocop:disable Metrics/LineLength
+        'unless' => %r{SELECT 1 WHERE NOT EXISTS \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\)}m, # rubocop:disable Metrics/LineLength
       )
     }
   end

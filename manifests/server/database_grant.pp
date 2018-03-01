@@ -3,11 +3,13 @@ define postgresql::server::database_grant(
   $privilege,
   $db,
   $role,
+  $ensure           = undef,
   $psql_db          = undef,
   $psql_user        = undef,
   $connect_settings = undef,
 ) {
   postgresql::server::grant { "database:${name}":
+    ensure           => $ensure,
     role             => $role,
     db               => $db,
     privilege        => $privilege,
