@@ -53,8 +53,6 @@ describe 'postgresql::server::schema:', unless: UNSUPPORTED_PLATFORMS.include?(f
     MANIFEST
   end
 
-  # rubocop:disable RSpec/ExampleLength
-  # rubocop:disable RSpec/MultipleExpectations
   it 'creates a schema for a user' do
     begin
       apply_manifest(pp, catch_failures: true)

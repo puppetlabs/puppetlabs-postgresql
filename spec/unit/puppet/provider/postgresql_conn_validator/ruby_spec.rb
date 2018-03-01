@@ -57,7 +57,7 @@ describe Puppet::Type.type(:postgresql_conn_validator).provider(:ruby) do
     end
 
     it 'tries the correct number of times' do
-      expect(provider.validator).to receive(:execute_command).exactly(3).times # rubocop:disable RSpec/MessageSpies
+      expect(provider.validator).to receive(:execute_command).exactly(3).times
 
       provider.validator.attempt_connection(sleep_length, tries)
     end

@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
-  # rubocop:disable RSpec/MessageSpies
   let(:name) { 'rspec psql test' }
   let(:resource) do
     Puppet::Type.type(:postgresql_psql).new({ name: name, provider: :ruby }.merge(attributes))
@@ -31,7 +30,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
         }
       end
 
-      it 'executes with the given psql_path on the given DB' do # rubocop:disable RSpec/MultipleExpectations
+      it 'executes with the given psql_path on the given DB' do
         expect(Dir).to receive(:chdir).with(attributes[:cwd]).and_yield
         expect(provider).to receive(:run_command).with([attributes[:psql_path],
                                                         '-d', attributes[:db], '-t', '-c', '"SELECT \'something\' as \"Custom column\""'],
@@ -105,5 +104,4 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
       provider.run_unless_sql_command('SELECT 1')
     end
   end
-  # rubocop:enable RSpec/MessageSpies
 end

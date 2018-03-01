@@ -210,8 +210,6 @@ describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.includ
     MANIFEST
   end
 
-  # rubocop:disable RSpec/ExampleLength
-  # rubocop:disable RSpec/MultipleExpectations
   it 'grants a role to a user' do
     begin
       apply_manifest(pp_one, catch_failures: true)
