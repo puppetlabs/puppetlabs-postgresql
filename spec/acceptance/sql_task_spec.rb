@@ -3,16 +3,16 @@ require 'spec_helper_acceptance'
 
 describe 'postgresql task', if: puppet_version =~ %r{(5\.\d\.\d)} && !pe_install? do
   describe 'sql task' do
-    pp = <<-EOS
+    pp = <<-MANIFEST
         class { 'postgresql::server': } ->
         postgresql::server::db { 'spec1':
           user     => 'root1',
           password => postgresql_password('root1', 'password'),
         }
-    EOS
+    MANIFEST
 
     it 'sets up a postgres db' do
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     it 'execute some sql' do

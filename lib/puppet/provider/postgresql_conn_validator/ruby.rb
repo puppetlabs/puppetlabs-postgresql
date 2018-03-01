@@ -1,4 +1,4 @@
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', '..', '..'))
 require 'puppet/util/postgresql_validator'
 
 # This file contains a provider for the resource type `postgresql_conn_validator`,
@@ -38,6 +38,4 @@ Puppet::Type.type(:postgresql_conn_validator).provide(:ruby) do
   def validator
     @validator ||= Puppet::Util::PostgresqlValidator.new(resource)
   end
-
 end
-

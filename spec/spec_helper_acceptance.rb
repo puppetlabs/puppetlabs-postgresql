@@ -1,3 +1,4 @@
+require 'puppet'
 require 'beaker-rspec/spec_helper'
 require 'beaker-rspec/helpers/serverspec'
 require 'beaker/puppet_install_helper'
@@ -7,7 +8,7 @@ require 'beaker/task_helper'
 run_puppet_install_helper
 install_ca_certs unless pe_install?
 
-UNSUPPORTED_PLATFORMS = ['AIX','windows','Solaris','Suse']
+UNSUPPORTED_PLATFORMS = %w[AIX windows Solaris Suse].freeze
 
 # monkey patch to get around apt/forge issue (PUP-8008)
 module Beaker::ModuleInstallHelper
@@ -20,7 +21,7 @@ module Beaker::ModuleInstallHelper
     dependencies = []
 
     # get it outta here!
-    metadata['dependencies'].delete_if {|d| d['name'] == 'puppetlabs/apt' }
+    metadata['dependencies'].delete_if { |d| d['name'] == 'puppetlabs/apt' }
 
     metadata['dependencies'].each do |d|
       tmp = { module_name: d['name'].sub('/', '-') }
@@ -36,11 +37,10 @@ module Beaker::ModuleInstallHelper
   end
 end
 
-
 install_bolt_on(hosts) unless pe_install?
 install_module_on(hosts)
 install_module_dependencies_on(hosts)
-install_module_from_forge_on(hosts,'puppetlabs/apt','< 4.2.0')
+install_module_from_forge_on(hosts, 'puppetlabs/apt', '< 4.2.0')
 
 DEFAULT_PASSWORD = if default[:hypervisor] == 'vagrant'
                      'vagrant'
@@ -52,7 +52,7 @@ class String
   # Provide ability to remove indentation from strings, for the purpose of
   # left justifying heredoc blocks.
   def unindent
-    gsub(/^#{scan(/^\s*/).min_by{|l|l.length}}/, "")
+    gsub(%r{^#{scan(%r{^\s*}).min_by { |l| l.length }}}, '')
   end
 end
 
@@ -67,18 +67,18 @@ def shellescape(str)
   # Treat multibyte characters as is.  It is caller's responsibility
   # to encode the string in the right encoding for the shell
   # environment.
-  str.gsub!(/([^A-Za-z0-9_\-.,:\/@\n])/, "\\\\\\1")
+  str.gsub!(%r{([^A-Za-z0-9_\-.,:\/@\n])}, '\\\\\\1')
 
   # A LF cannot be escaped with a backslash because a backslash + LF
   # combo is regarded as line continuation and simply ignored.
-  str.gsub!(/\n/, "'\n'")
+  str.gsub!(%r{\n}, "'\n'")
 
-  return str
+  str
 end
 
-def psql(psql_cmd, user = 'postgres', exit_codes = [0,1], &block)
+def psql(psql_cmd, user = 'postgres', exit_codes = [0, 1], &block)
   psql = "psql #{psql_cmd}"
-  shell("su #{shellescape(user)} -c #{shellescape(psql)}", :acceptable_exit_codes => exit_codes, &block)
+  shell("su #{shellescape(user)} -c #{shellescape(psql)}", acceptable_exit_codes: exit_codes, &block)
 end
 
 RSpec.configure do |c|
@@ -106,7 +106,7 @@ RSpec.configure do |c|
         }
       EOS
 
-      apply_manifest_on(agents, pp, :catch_failures => false)
+      apply_manifest_on(agents, pp, catch_failures: false)
     end
 
     # net-tools required for netstat utility being used by be_listening
@@ -115,16 +115,15 @@ RSpec.configure do |c|
         package { 'net-tools': ensure => installed }
       EOS
 
-      apply_manifest_on(agents, pp, :catch_failures => false)
+      apply_manifest_on(agents, pp, catch_failures: false)
     end
 
     hosts.each do |host|
       on host, 'chmod 755 /root'
-      if fact_on(host, 'osfamily') == 'Debian'
-        on host, "echo \"en_US ISO-8859-1\nen_NG.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\n\" > /etc/locale.gen"
-        on host, '/usr/sbin/locale-gen'
-        on host, '/usr/sbin/update-locale'
-      end
+      next unless fact_on(host, 'osfamily') == 'Debian'
+      on host, "echo \"en_US ISO-8859-1\nen_NG.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\n\" > /etc/locale.gen"
+      on host, '/usr/sbin/locale-gen'
+      on host, '/usr/sbin/update-locale'
     end
   end
 end

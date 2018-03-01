@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe 'postgresql::server::database', :type => :define do
+describe 'postgresql::server::database', type: :define do
   let :facts do
     {
-      :osfamily => 'Debian',
-      :operatingsystem => 'Debian',
-      :operatingsystemrelease => '6.0',
-      :kernel => 'Linux',
-      :concat_basedir => tmpfilename('contrib'),
-      :id => 'root',
-      :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      osfamily: 'Debian',
+      operatingsystem: 'Debian',
+      operatingsystemrelease: '6.0',
+      kernel: 'Linux',
+      concat_basedir: tmpfilename('contrib'),
+      id: 'root',
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
   end
   let :title do
@@ -24,38 +24,41 @@ describe 'postgresql::server::database', :type => :define do
   it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"') }
 
   context "with comment set to 'test comment'" do
-    let (:params) {{ :comment => 'test comment' }}
+    let(:params) { { comment: 'test comment' } }
 
-    it { is_expected.to contain_postgresql_psql("COMMENT ON DATABASE \"test\" IS 'test comment'").with_connect_settings( {} ) }
+    it { is_expected.to contain_postgresql_psql("COMMENT ON DATABASE \"test\" IS 'test comment'").with_connect_settings({}) }
   end
 
-  context "with specific db connection settings - default port" do
+  context 'with specific db connection settings - default port' do
     let :pre_condition do
       "class {'postgresql::server':}"
     end
 
-    let (:params) {{ :connect_settings => { 'PGHOST'    => 'postgres-db-server',
-                                            'DBVERSION' => '9.1', }}}
+    let(:params) do
+      { connect_settings: { 'PGHOST' => 'postgres-db-server',
+                            'DBVERSION' => '9.1' } }
+    end
 
-    it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1' } ).with_port( 5432 ) }
+    it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1').with_port(5432) }
   end
 
-  context "with specific db connection settings - including port" do
+  context 'with specific db connection settings - including port' do
     let :pre_condition do
       "class {'postgresql::globals':}
 
        class {'postgresql::server':}"
     end
 
-    let (:params) {{ :connect_settings => { 'PGHOST'    => 'postgres-db-server',
-                                            'DBVERSION' => '9.1',
-                                            'PGPORT'    => '1234' }}}
+    let(:params) do
+      { connect_settings: { 'PGHOST' => 'postgres-db-server',
+                            'DBVERSION' => '9.1',
+                            'PGPORT'    => '1234' } }
+    end
 
-    it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.1','PGPORT'    => '1234' } ).with_port( nil ) }
-
+    it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234').with_port(nil) }
   end
 
-  context "with global db connection settings - including port" do
+  context 'with global db connection settings - including port' do
     let :pre_condition do
       "class {'postgresql::globals':
            default_connect_settings => { 'PGHOST'    => 'postgres-db-server',
@@ -66,12 +69,11 @@ describe 'postgresql::server::database', :type => :define do
        class {'postgresql::server':}"
     end
 
-    it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').with_connect_settings( { 'PGHOST'    => 'postgres-db-server','DBVERSION' => '9.2','PGPORT'    => '1234' } ).with_port( nil ) }
-
+    it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.2', 'PGPORT' => '1234').with_port(nil) }
   end
 
-  context "with different owner" do
-    let (:params) {{ :owner => 'test_owner' }}
+  context 'with different owner' do
+    let(:params) { { owner: 'test_owner' } }
 
     it { is_expected.to contain_postgresql_psql('ALTER DATABASE "test" OWNER TO "test_owner"') }
   end
