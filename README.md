@@ -1282,6 +1282,16 @@ Consult
 [the PostgreSQL documentation for `GRANT`](http://www.postgresql.org/docs/current/static/sql-grant.html)
 for more information.
 
+##### `ensure`
+
+Specifies whether to grant or revoke the privilege. Default is to grant the privilege.
+
+Valid values: 'present', 'absent'.
+* 'present' to grant the privilege
+* 'absent' to revoke the privilege
+
+Default value: 'present'.
+
 #### `connect_settings`
 
 Specifies a hash of environment variables used when connecting to a remote
@@ -1378,6 +1388,16 @@ To override this behavior, set the `ensure` value for the package.
 Manages grant-based access privileges for roles.  See
 [PostgreSQL documentation for `grant`](http://www.postgresql.org/docs/current/static/sql-grant.html)
 for more information.
+
+##### `ensure`
+
+Specifies whether to grant or revoke the privilege. Default is to grant the privilege.
+
+Valid values: 'present', 'absent'.
+* 'present' to grant the privilege
+* 'absent' to revoke the privilege
+
+Default value: 'present'.
 
 ##### `db`
 
@@ -1779,6 +1799,16 @@ Default value: the namevar.
 Manages grant-based access privileges for users.  Consult
 [the PostgreSQL documentation for `GRANT`](http://www.postgresql.org/docs/current/static/sql-grant.html)
 for more information.
+
+##### `ensure`
+
+Specifies whether to grant or revoke the privilege. Default is to grant the privilege.
+
+Valid values: 'present', 'absent'.
+* 'present' to grant the privilege
+* 'absent' to revoke the privilege
+
+Default value: 'present'.
 
 ##### `connect_settings`
 
