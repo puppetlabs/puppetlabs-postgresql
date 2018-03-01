@@ -1,9 +1,8 @@
 Puppet::Type.type(:postgresql_psql).provide(:ruby) do
-
   def run_unless_sql_command(sql)
     # for the 'unless' queries, we wrap the user's query in a 'SELECT COUNT',
     # which makes it easier to parse and process the output.
-    run_sql_command('SELECT COUNT(*) FROM (' <<  sql << ') count')
+    run_sql_command('SELECT COUNT(*) FROM (' << sql << ') count')
   end
 
   def run_sql_command(sql)
@@ -12,9 +11,9 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
     end
 
     command = [resource[:psql_path]]
-    command.push("-d", resource[:db]) if resource[:db]
-    command.push("-p", resource[:port]) if resource[:port]
-    command.push("-t", "-c", '"' + sql.gsub('"', '\"') + '"')
+    command.push('-d', resource[:db]) if resource[:db]
+    command.push('-p', resource[:port]) if resource[:port]
+    command.push('-t', '-c', '"' + sql.gsub('"', '\"') + '"')
 
     environment = get_environment
 
@@ -29,28 +28,29 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
 
   private
 
-  def get_environment
+  def get_environment # rubocop:disable Style/AccessorMethodName : Refactor does not work correctly
     environment = (resource[:connect_settings] || {}).dup
-    if envlist = resource[:environment]
-      envlist = [envlist] unless envlist.is_a? Array
-      envlist.each do |setting|
-        if setting =~ /^(\w+)=((.|\n)+)$/
-          env_name = $1
-          value = $2
-          if environment.include?(env_name) || environment.include?(env_name.to_sym)
-            if env_name == 'NEWPGPASSWD'
-              warning "Overriding environment setting '#{env_name}' with '****'"
-            else
-              warning "Overriding environment setting '#{env_name}' with '#{value}'"
-            end
+    envlist = resource[:environment]
+    return environment unless envlist
+
+    envlist = [envlist] unless envlist.is_a? Array
+    envlist.each do |setting|
+      if setting =~ %r{^(\w+)=((.|\n)+)$}
+        env_name = Regexp.last_match(1)
+        value = Regexp.last_match(2)
+        if environment.include?(env_name) || environment.include?(env_name.to_sym)
+          if env_name == 'NEWPGPASSWD'
+            warning "Overriding environment setting '#{env_name}' with '****'"
+          else
+            warning "Overriding environment setting '#{env_name}' with '#{value}'"
           end
-          environment[env_name] = value
-        else
-          warning "Cannot understand environment setting #{setting.inspect}"
         end
+        environment[env_name] = value
+      else
+        warning "Cannot understand environment setting #{setting.inspect}"
       end
     end
-    return environment
+    environment
   end
 
   def run_command(command, user, group, environment)
@@ -65,16 +65,13 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
         Puppet::Util::SUIDManager.run_and_capture(command, user, group)
       end
     else
-      output = Puppet::Util::Execution.execute(command, {
-        :uid                => user,
-        :gid                => group,
-        :failonfail         => false,
-        :combine            => true,
-        :override_locale    => true,
-        :custom_environment => environment,
-      })
+      output = Puppet::Util::Execution.execute(command, uid: user,
+                                                        gid: group,
+                                                        failonfail: false,
+                                                        combine: true,
+                                                        override_locale: true,
+                                                        custom_environment: environment)
       [output, $CHILD_STATUS.dup]
     end
   end
-
 end

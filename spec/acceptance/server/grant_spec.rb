@@ -1,61 +1,62 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
-
+describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+  # rubocop:disable RSpec/ExampleLength
+  # rubocop:disable RSpec/MultipleExpectations
   let(:db) { 'grant_priv_test' }
   let(:owner) { 'psql_grant_priv_owner' }
   let(:user) { 'psql_grant_priv_tester' }
   let(:password) { 'psql_grant_role_pw' }
-  let(:pp_install) { "class {'postgresql::server': }"}
+  let(:pp_install) { "class {'postgresql::server': }" }
+  let(:pp_setup) do
+    <<-MANIFEST.unindent
+      $db = #{db}
+      $owner = #{owner}
+      $user = #{user}
+      $password = #{password}
 
-  let(:pp_setup) { pp_setup = <<-EOS.unindent
-    $db = #{db}
-    $owner = #{owner}
-    $user = #{user}
-    $password = #{password}
+      class { 'postgresql::server': }
 
-    class { 'postgresql::server': }
+      postgresql::server::role { $owner:
+        password_hash => postgresql_password($owner, $password),
+      }
 
-    postgresql::server::role { $owner:
-      password_hash => postgresql_password($owner, $password),
-    }
+      # Since we are not testing pg_hba or any of that, make a local user for ident auth
+      user { $owner:
+        ensure => present,
+      }
 
-    # Since we are not testing pg_hba or any of that, make a local user for ident auth
-    user { $owner:
-      ensure => present,
-    }
+      postgresql::server::database { $db:
+        owner   => $owner,
+        require => Postgresql::Server::Role[$owner],
+      }
 
-    postgresql::server::database { $db:
-      owner   => $owner,
-      require => Postgresql::Server::Role[$owner],
-    }
+      # Create a user to grant privileges to
+      postgresql::server::role { $user:
+        db      => $db,
+        require => Postgresql::Server::Database[$db],
+      }
 
-    # Create a user to grant privileges to
-    postgresql::server::role { $user:
-      db      => $db,
-      require => Postgresql::Server::Database[$db],
-    }
+      # Make a local user for ident auth
+      user { $user:
+        ensure => present,
+      }
 
-    # Make a local user for ident auth
-    user { $user:
-      ensure => present,
-    }
-
-    # Grant them connect to the database
-    postgresql::server::database_grant { "allow connect for ${user}":
-      privilege => 'CONNECT',
-      db        => $db,
-      role      => $user,
-    }
-    EOS
-  }
+      # Grant them connect to the database
+      postgresql::server::database_grant { "allow connect for ${user}":
+        privilege => 'CONNECT',
+        db        => $db,
+        role      => $user,
+      }
+    MANIFEST
+  end
 
   context 'LANGUAGE' do
     describe 'GRANT * ON LANGUAGE' do
-      #testing grants on language requires a superuser
+      # testing grants on language requires a superuser
       let(:superuser) { 'postgres' }
-      let(:pp_lang) { pp_setup + <<-EOS.unindent
-
+      let(:pp_lang) do
+        pp_setup + <<-MANIFEST.unindent
           postgresql_psql { 'make sure plpgsql exists':
             command   => 'CREATE LANGUAGE plpgsql',
             db        => $db,
@@ -74,36 +75,10 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
             require       => [ Postgresql_psql['make sure plpgsql exists'],
                                Postgresql::Server::Role[$user], ]
         }
-        EOS
-      }
-
-        it 'is expected to run idempotently' do
-          apply_manifest(pp_install)
-
-          #postgres version
-          result = shell('psql --version')
-          version = result.stdout.match(%r{\s(\d\.\d)})[1]
-
-          if version >= '8.4.0'
-            apply_manifest(pp_lang, :catch_failures => true)
-            apply_manifest(pp_lang, :catch_changes => true)
-          end
-        end
-
-        it 'is expected to GRANT USAGE ON LANGUAGE plpgsql to ROLE' do
-          result = shell('psql --version')
-          version = result.stdout.match(%r{\s(\d\.\d)})[1]
-
-          if version >= '8.4.0'
-            ## Check that the privilege was granted to the user
-            psql("-d #{db} --command=\"SELECT 1 WHERE has_language_privilege('#{user}', 'plpgsql', 'USAGE')\"", superuser) do |r|
-              expect(r.stdout).to match(/\(1 row\)/)
-              expect(r.stderr).to eq('')
-            end
-          end
-        end
-
-      let(:pp_onlyif) { pp_setup + <<-EOS.unindent
+        MANIFEST
+      end
+      let(:pp_onlyif) do
+        pp_setup + <<-MANIFEST.unindent
           postgresql::server::grant { 'grant usage on BSql':
             psql_user     => '#{superuser}',
             privilege     => 'USAGE',
@@ -113,20 +88,46 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
             db            => $db,
             onlyif_exists => true,
         }
-        EOS
-      }
+        MANIFEST
+      end
 
-      #test onlyif_exists function
-      it 'is expected to not GRANT USAGE ON (dummy)LANGUAGE BSql to ROLE' do
+      it 'is expected to run idempotently' do
         apply_manifest(pp_install)
 
-        #postgres version
+        # postgres version
         result = shell('psql --version')
         version = result.stdout.match(%r{\s(\d\.\d)})[1]
 
         if version >= '8.4.0'
-          apply_manifest(pp_onlyif, :catch_failures => true)
-          apply_manifest(pp_onlyif, :catch_changes => true)
+          apply_manifest(pp_lang, catch_failures: true)
+          apply_manifest(pp_lang, catch_changes: true)
+        end
+      end
+
+      it 'is expected to GRANT USAGE ON LANGUAGE plpgsql to ROLE' do
+        result = shell('psql --version')
+        version = result.stdout.match(%r{\s(\d\.\d)})[1]
+
+        if version >= '8.4.0'
+          ## Check that the privilege was granted to the user
+          psql("-d #{db} --command=\"SELECT 1 WHERE has_language_privilege('#{user}', 'plpgsql', 'USAGE')\"", superuser) do |r|
+            expect(r.stdout).to match(%r{\(1 row\)})
+            expect(r.stderr).to eq('')
+          end
+        end
+      end
+
+      # test onlyif_exists function
+      it 'is expected to not GRANT USAGE ON (dummy)LANGUAGE BSql to ROLE' do
+        apply_manifest(pp_install)
+
+        # postgres version
+        result = shell('psql --version')
+        version = result.stdout.match(%r{\s(\d\.\d)})[1]
+
+        if version >= '8.4.0'
+          apply_manifest(pp_onlyif, catch_failures: true)
+          apply_manifest(pp_onlyif, catch_changes: true)
         end
       end
     end
@@ -134,10 +135,8 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
 
   ### SEQUENCE grants
   context 'sequence' do
-    it 'should grant usage on a sequence to a user' do
-      begin
-        pp = pp_setup + <<-EOS.unindent
-
+    let(:pp_one) do
+      pp_setup + <<-MANIFEST.unindent
           postgresql_psql { 'create test sequence':
             command   => 'CREATE SEQUENCE test_seq',
             db        => $db,
@@ -155,31 +154,10 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
             require     => [ Postgresql_psql['create test sequence'],
                              Postgresql::Server::Role[$user], ]
           }
-        EOS
-
-        apply_manifest(pp_install, :catch_failures => true)
-
-        #postgres version
-        result = shell('psql --version')
-        version = result.stdout.match(%r{\s(\d\.\d)})[1]
-
-        if version >= '9.0'
-          apply_manifest(pp, :catch_failures => true)
-          apply_manifest(pp, :catch_changes => true)
-
-          ## Check that the privilege was granted to the user
-          psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_sequence_privilege('#{user}', 'test_seq', 'USAGE')\"", user) do |r|
-            expect(r.stdout).to match(/t/)
-            expect(r.stderr).to eq('')
-          end
-        end
-      end
+      MANIFEST
     end
-
-    it 'should grant update on a sequence to a user' do
-      begin
-        pp = pp_setup + <<-EOS.unindent
-
+    let(:pp_two) do
+      pp_setup + <<-MANIFEST.unindent
           postgresql_psql { 'create test sequence':
             command   => 'CREATE SEQUENCE test_seq',
             db        => $db,
@@ -197,21 +175,43 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
             require     => [ Postgresql_psql['create test sequence'],
                              Postgresql::Server::Role[$user], ]
           }
-        EOS
+      MANIFEST
+    end
+    let(:result) do
+      shell('psql --version')
+    end
+    let(:version) do
+      result.stdout.match(%r{\s(\d\.\d)})[1]
+    end
 
-        apply_manifest(pp_install, :catch_failures => true)
+    before(:each) do
+      apply_manifest(pp_install, catch_failures: true)
+    end
 
-        #postgres version
-        result = shell('psql --version')
-        version = result.stdout.match(%r{\s(\d\.\d)})[1]
-
+    it 'grants usage on a sequence to a user' do
+      begin
         if version >= '9.0'
-          apply_manifest(pp, :catch_failures => true)
-          apply_manifest(pp, :catch_changes => true)
+          apply_manifest(pp_one, catch_failures: true)
+          apply_manifest(pp_one, catch_changes: true)
 
           ## Check that the privilege was granted to the user
-          psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_sequence_privilege('#{user}', 'test_seq', 'UPDATE')\"", user) do |r|
-            expect(r.stdout).to match(/t/)
+          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq', 'USAGE')\"", user) do |r|
+            expect(r.stdout).to match(%r{\(1 row\)})
+            expect(r.stderr).to eq('')
+          end
+        end
+      end
+    end
+
+    it 'grants update on a sequence to a user' do
+      begin
+        if version >= '9.0'
+          apply_manifest(pp_two, catch_failures: true)
+          apply_manifest(pp_two, catch_changes: true)
+
+          ## Check that the privilege was granted to the user
+          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq', 'UPDATE')\"", user) do |r|
+            expect(r.stdout).to match(%r{\(1 row\)})
             expect(r.stderr).to eq('')
           end
         end
@@ -220,9 +220,8 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
   end
 
   context 'all sequences' do
-    it 'should grant usage on all sequences to a user' do
-      begin
-        pp = pp_setup + <<-EOS.unindent
+    let(:pp_one) do
+      pp_setup + <<-MANIFEST.unindent
 
           postgresql_psql { 'create test sequences':
             command   => 'CREATE SEQUENCE test_seq2; CREATE SEQUENCE test_seq3;',
@@ -241,30 +240,10 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
             require     => [ Postgresql_psql['create test sequences'],
                              Postgresql::Server::Role[$user], ]
           }
-        EOS
-
-        apply_manifest(pp_install, :catch_failures => true)
-
-        #postgres version
-        result = shell('psql --version')
-        version = result.stdout.match(%r{\s(\d\.\d)})[1]
-
-        if version >= '9.0'
-          apply_manifest(pp, :catch_failures => true)
-          apply_manifest(pp, :catch_changes => true)
-
-          ## Check that the privileges were granted to the user, this check is not available on version < 9.0
-          psql("-d #{db} --tuples-only --command=\"SELECT has_sequence_privilege('#{user}', 'test_seq2', 'USAGE') AND has_sequence_privilege('#{user}', 'test_seq3', 'USAGE')\"", user) do |r|
-            expect(r.stdout).to match(/t/)
-            expect(r.stderr).to eq('')
-          end
-        end
-      end
+      MANIFEST
     end
-
-    it 'should grant update on all sequences to a user' do
-      begin
-        pp = pp_setup + <<-EOS.unindent
+    let(:pp_two) do
+      pp_setup + <<-MANIFEST.unindent
 
           postgresql_psql { 'create test sequences':
             command   => 'CREATE SEQUENCE test_seq2; CREATE SEQUENCE test_seq3;',
@@ -283,21 +262,43 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
             require     => [ Postgresql_psql['create test sequences'],
                              Postgresql::Server::Role[$user], ]
           }
-        EOS
+      MANIFEST
+    end
+    let(:result) do
+      shell('psql --version')
+    end
+    let(:version) do
+      result.stdout.match(%r{\s(\d\.\d)})[1]
+    end
 
-        apply_manifest(pp_install, :catch_failures => true)
+    before(:each) do
+      apply_manifest(pp_install, catch_failures: true)
+    end
 
-        #postgres version
-        result = shell('psql --version')
-        version = result.stdout.match(%r{\s(\d\.\d)})[1]
-
+    it 'grants usage on all sequences to a user' do
+      begin
         if version >= '9.0'
-          apply_manifest(pp, :catch_failures => true)
-          apply_manifest(pp, :catch_changes => true)
+          apply_manifest(pp_one, catch_failures: true)
+          apply_manifest(pp_one, catch_changes: true)
+
+          ## Check that the privileges were granted to the user, this check is not available on version < 9.0
+          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq2', 'USAGE') AND has_sequence_privilege('#{user}', 'test_seq3', 'USAGE')\"", user) do |r|
+            expect(r.stdout).to match(%r{\(1 row\)})
+            expect(r.stderr).to eq('')
+          end
+        end
+      end
+    end
+
+    it 'grants update on all sequences to a user' do
+      begin
+        if version >= '9.0'
+          apply_manifest(pp_two, catch_failures: true)
+          apply_manifest(pp_two, catch_changes: true)
 
           ## Check that the privileges were granted to the user
-          psql("-d #{db} --tuples-only --command=\"SELECT has_sequence_privilege('#{user}', 'test_seq2', 'UPDATE') AND has_sequence_privilege('#{user}', 'test_seq3', 'UPDATE')\"", user) do |r|
-            expect(r.stdout).to match(/t/)
+          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq2', 'UPDATE') AND has_sequence_privilege('#{user}', 'test_seq3', 'UPDATE')\"", user) do |r|
+            expect(r.stdout).to match(%r{\(1 row\)})
             expect(r.stderr).to eq('')
           end
         end
@@ -307,7 +308,8 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
   ### TABLE grants
   context 'table' do
     describe 'GRANT ... ON TABLE' do
-      let(:pp_create_table) { pp_setup + <<-EOS.unindent
+      let(:pp_create_table) do
+        pp_setup + <<-EOS.unindent
           postgresql_psql { 'create test table':
             command   => 'CREATE TABLE test_tbl (col1 integer)',
             db        => $db,
@@ -316,9 +318,9 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
             require   => Postgresql::Server::Database[$db],
           }
         EOS
-      }
+      end
 
-      it 'should grant select on a table to a user' do
+      it 'grant select on a table to a user' do
         begin
           pp = pp_create_table + <<-EOS.unindent
 
@@ -347,35 +349,35 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
             }
           EOS
 
-          apply_manifest(pp_install, :catch_failures => true)
+          apply_manifest(pp_install, catch_failures: true)
 
-          #postgres version
+          # postgres version
           result = shell('psql --version')
           version = result.stdout.match(%r{\s(\d\.\d)})[1]
 
           if version >= '9.0'
-            apply_manifest(pp, :catch_failures => true)
-            apply_manifest(pp, :catch_changes => true)
+            apply_manifest(pp, catch_failures: true)
+            apply_manifest(pp, catch_changes: true)
 
             ## Check that the privilege was granted to the user
             psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
-              expect(r.stdout).to match(/t/)
+              expect(r.stdout).to match(%r{t})
               expect(r.stderr).to eq('')
             end
 
-            apply_manifest(pp_revoke, :catch_failures => true)
-            apply_manifest(pp_revoke, :catch_changes => true)
+            apply_manifest(pp_revoke, catch_failures: true)
+            apply_manifest(pp_revoke, catch_changes: true)
 
             ## Check that the privilege was revoked from the user
             psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
-              expect(r.stdout).to match(/f/)
+              expect(r.stdout).to match(%r{f})
               expect(r.stderr).to eq('')
             end
           end
         end
       end
 
-      it 'should grant update on all tables to a user' do
+      it 'grant update on all tables to a user' do
         begin
           pp = pp_create_table + <<-EOS.unindent
 
@@ -404,37 +406,37 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
             }
           EOS
 
-          apply_manifest(pp_install, :catch_failures => true)
+          apply_manifest(pp_install, catch_failures: true)
 
-          #postgres version
+          # postgres version
           result = shell('psql --version')
           version = result.stdout.match(%r{\s(\d\.\d)})[1]
 
           if version >= '9.0'
-            apply_manifest(pp, :catch_failures => true)
-            apply_manifest(pp, :catch_changes => true)
+            apply_manifest(pp, catch_failures: true)
+            apply_manifest(pp, catch_changes: true)
 
             ## Check that all privileges were granted to the user
             psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
                   WHERE grantee = '#{user}' AND table_schema = 'public'\"", user) do |r|
-              expect(r.stdout).to match(/test_tbl[ |]*UPDATE\s*\(1 row\)/)
+              expect(r.stdout).to match(%r{test_tbl[ |]*UPDATE\s*\(1 row\)})
               expect(r.stderr).to eq('')
             end
 
-            apply_manifest(pp_revoke, :catch_failures => true)
-            apply_manifest(pp_revoke, :catch_changes => true)
+            apply_manifest(pp_revoke, catch_failures: true)
+            apply_manifest(pp_revoke, catch_changes: true)
 
             ## Check that all privileges were revoked from the user
             psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
                   WHERE grantee = '#{user}' AND table_schema = 'public'\"", user) do |r|
-              expect(r.stdout).to match(/\(0 rows\)/)
+              expect(r.stdout).to match(%r{\(0 rows\)})
               expect(r.stderr).to eq('')
             end
           end
         end
       end
 
-      it 'should grant all on all tables to a user' do
+      it 'grant all on all tables to a user' do
         begin
           pp = pp_create_table + <<-EOS.unindent
 
@@ -463,32 +465,32 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
             }
           EOS
 
-          apply_manifest(pp_install, :catch_failures => true)
+          apply_manifest(pp_install, catch_failures: true)
 
-          #postgres version
+          # postgres version
           result = shell('psql --version')
           version = result.stdout.match(%r{\s(\d\.\d)})[1]
 
           if version >= '9.0'
-            apply_manifest(pp, :catch_failures => true)
-            apply_manifest(pp, :catch_changes => true)
+            apply_manifest(pp, catch_failures: true)
+            apply_manifest(pp, catch_changes: true)
 
             ## Check that all privileges were granted to the user
             psql("-d #{db} --tuples-only --command=\"SELECT table_name,count(privilege_type) FROM information_schema.role_table_grants
                   WHERE grantee = '#{user}' AND table_schema = 'public'
                   AND privilege_type IN ('SELECT','UPDATE','INSERT','DELETE','TRIGGER','REFERENCES','TRUNCATE')
                   GROUP BY table_name\"", user) do |r|
-              expect(r.stdout).to match(/test_tbl[ |]*7$/)
+              expect(r.stdout).to match(%r{test_tbl[ |]*7$})
               expect(r.stderr).to eq('')
             end
 
-            apply_manifest(pp_revoke, :catch_failures => true)
-            apply_manifest(pp_revoke, :catch_changes => true)
+            apply_manifest(pp_revoke, catch_failures: true)
+            apply_manifest(pp_revoke, catch_changes: true)
 
             ## Check that all privileges were revoked from the user
             psql("-d #{db} --command=\"SELECT table_name FROM information_schema.role_table_grants
                   WHERE grantee = '#{user}' AND table_schema = 'public'\"", user) do |r|
-              expect(r.stdout).to match(/\(0 rows\)/)
+              expect(r.stdout).to match(%r{\(0 rows\)})
               expect(r.stderr).to eq('')
             end
           end
@@ -498,9 +500,9 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
   end
   context 'database' do
     describe 'REVOKE ... ON DATABASE...' do
-      it 'should not fail on revoke connect from non-existant user' do
+      it 'do not fail on revoke connect from non-existant user' do
         begin
-          apply_manifest(pp_setup, :catch_failures => true)
+          apply_manifest(pp_setup, catch_failures: true)
           pp = pp_setup + <<-EOS.unindent
             postgresql::server::grant { 'revoke connect on db from norole':
               ensure      => absent,
@@ -510,9 +512,8 @@ describe 'postgresql::server::grant:', :unless => UNSUPPORTED_PLATFORMS.include?
               role        => '#{user}_does_not_exist',
             }
           EOS
-          apply_manifest(pp, :catch_changes => true)
-          apply_manifest(pp, :catch_failures => true)
-
+          apply_manifest(pp, catch_changes: true)
+          apply_manifest(pp, catch_failures: true)
         end
       end
     end

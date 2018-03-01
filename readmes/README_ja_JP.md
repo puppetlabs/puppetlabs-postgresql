@@ -1061,7 +1061,7 @@ PostgreSQLのCOMMENTコマンドを使用して、データベースについて
 
 ##### `istemplate`
 
-`true`に設定すると、そのデータベースをテンプレートとして指定します。 
+`true`に設定すると、そのデータベースをテンプレートとして指定します。
 
 デフォルト値: `false`。
 
@@ -1796,7 +1796,7 @@ Unixソケットとident認証を使用するとき、このユーザとして�
 
 接続するときに使用するポートを定義します。
 
-デフォルト値: '' 
+デフォルト値: ''
 
 ##### `run_as`
 
@@ -1902,4 +1902,4 @@ RSPEC_SET=debian-607-x64 bundle exec rspec spec/acceptance
 
 ### コントリビュータ
 
-貢献してくださった方々の一覧を[Github](https://github.com/puppetlabs/puppetlabs-postgresql/graphs/contributors)でご覧いただけます。
+貢献してくださった方々の一覧を[GitHub](https://github.com/puppetlabs/puppetlabs-postgresql/graphs/contributors)でご覧いただけます。
