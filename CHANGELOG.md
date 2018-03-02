@@ -10,11 +10,6 @@ This release uses the PDK convert functionality which in return makes the module
 #### Added
 - PDK convert [MODULES-6330](https://tickets.puppetlabs.com/browse/MODULES-6330).
 
-#### Changed
-- Formatting of README.
-- Formatting of README_ja_JP.
-- Fix syntax error in README.
-
 ## Supported Release [5.3.0]
 ### Summary
 Implements rubocop changes within the module, alongside other smaller changes.
