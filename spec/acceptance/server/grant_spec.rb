@@ -31,8 +31,6 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(fa
 
       # Create a user to grant privileges to
       postgresql::server::role { $user:
-        db      => $db,
-        require => Postgresql::Server::Database[$db],
       }
 
       # Make a local user for ident auth

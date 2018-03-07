@@ -27,8 +27,6 @@ describe 'postgresql::server::reassign_owned_by:', unless: UNSUPPORTED_PLATFORMS
 
       # Create a user to reassign ownership to
       postgresql::server::role { $new_owner:
-        db      => $db,
-        require => Postgresql::Server::Database[$db],
       }
 
       # Make a local user for ident auth

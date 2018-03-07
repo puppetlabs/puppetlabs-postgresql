@@ -4,7 +4,6 @@ define postgresql::server::role(
   $password_hash    = false,
   $createdb         = false,
   $createrole       = false,
-  $db               = $postgresql::server::default_database,
   $port             = undef,
   $login            = true,
   $inherit          = true,
@@ -15,6 +14,7 @@ define postgresql::server::role(
   $connect_settings = $postgresql::server::default_connect_settings,
   Enum['present', 'absent'] $ensure = 'present',
 ) {
+  $psql_db        = $postgresql::server::default_database
   $psql_user      = $postgresql::server::user
   $psql_group     = $postgresql::server::group
   $psql_path      = $postgresql::server::psql_path
@@ -40,7 +40,7 @@ define postgresql::server::role(
   }
 
   Postgresql_psql {
-    db               => $db,
+    db               => $psql_db,
     port             => $port_override,
     psql_user        => $psql_user,
     psql_group       => $psql_group,
