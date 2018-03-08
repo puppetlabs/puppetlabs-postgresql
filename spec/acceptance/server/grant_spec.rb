@@ -500,18 +500,25 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(fa
     describe 'REVOKE ... ON DATABASE...' do
       it 'do not fail on revoke connect from non-existant user' do
         begin
-          apply_manifest(pp_setup, catch_failures: true)
-          pp = pp_setup + <<-EOS.unindent
-            postgresql::server::grant { 'revoke connect on db from norole':
-              ensure      => absent,
-              privilege   => 'CONNECT',
-              object_type => 'DATABASE',
-              db          => '#{db}',
-              role        => '#{user}_does_not_exist',
-            }
-          EOS
-          apply_manifest(pp, catch_changes: true)
-          apply_manifest(pp, catch_failures: true)
+          # Test fail's on postgresql versions earlier than 9.1.24
+          # postgres version
+          result = shell('psql --version')
+          version = result.stdout.match(%r{\s(\d\.\d)})[1]
+
+          if version >= '9.1.24'
+            apply_manifest(pp_setup, catch_failures: true)
+            pp = pp_setup + <<-EOS.unindent
+              postgresql::server::grant { 'revoke connect on db from norole':
+                ensure      => absent,
+                privilege   => 'CONNECT',
+                object_type => 'DATABASE',
+                db          => '#{db}',
+                role        => '#{user}_does_not_exist',
+              }
+            EOS
+            apply_manifest(pp, catch_changes: true)
+            apply_manifest(pp, catch_failures: true)
+          end
         end
       end
     end
