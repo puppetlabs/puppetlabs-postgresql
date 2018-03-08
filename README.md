@@ -1154,7 +1154,7 @@ Manages grant-based access privileges for users, wrapping the `postgresql::serve
 
 ##### `ensure`
 
-Specifies whether to grant or revoke the privilege. Default is to grant the privilege.
+Specifies whether to grant or revoke the privilege. Revoke or 'absent' works only in PostgreSQL version 9.1.24 or later.
 
 Valid values: 'present', 'absent'.
 * 'present' to grant the privilege
