@@ -24,7 +24,7 @@ class postgresql::server::config {
   $log_line_prefix            = $postgresql::server::log_line_prefix
   $timezone                   = $postgresql::server::timezone
 
-  if ($confdir) {
+  if ($confdir and $confdir != $datadir ) {
     file { $confdir:
       ensure => directory,
       owner  => $user,
