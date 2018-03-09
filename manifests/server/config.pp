@@ -17,11 +17,21 @@ class postgresql::server::config {
   $manage_pg_hba_conf         = $postgresql::server::manage_pg_hba_conf
   $manage_pg_ident_conf       = $postgresql::server::manage_pg_ident_conf
   $manage_recovery_conf       = $postgresql::server::manage_recovery_conf
+  $confdir                    = $postgresql::server::confdir
   $datadir                    = $postgresql::server::datadir
   $logdir                     = $postgresql::server::logdir
   $service_name               = $postgresql::server::service_name
   $log_line_prefix            = $postgresql::server::log_line_prefix
   $timezone                   = $postgresql::server::timezone
+
+  if ($confdir) {
+    file { $confdir:
+      ensure => directory,
+      owner  => $user,
+      group  => $group,
+      mode   => '0750',
+    }
+  }
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
