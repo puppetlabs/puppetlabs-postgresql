@@ -81,13 +81,14 @@ define postgresql::server::database(
 
   # This will prevent users from connecting to the database unless they've been
   #  granted privileges.
-  ~> postgresql_psql { "REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
+  postgresql_psql { "REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
     refreshonly => true,
+    subscribe   => Postgresql_psql["CREATE DATABASE \"${dbname}\""],
   }
 
-  Postgresql_psql["CREATE DATABASE \"${dbname}\""]
-  -> postgresql_psql { "UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
-    unless => "SELECT 1 FROM pg_database WHERE datname = '${dbname}' AND datistemplate = ${istemplate}",
+  postgresql_psql { "UPDATE pg_database SET datistemplate = ${istemplate} WHERE datname = '${dbname}'":
+    unless  => "SELECT 1 FROM pg_database WHERE datname = '${dbname}' AND datistemplate = ${istemplate}",
+    require => Postgresql_psql["CREATE DATABASE \"${dbname}\""],
   }
 
   if $comment {
@@ -96,10 +97,11 @@ define postgresql::server::database(
       '8.1'   => 'obj_description',
       default => 'shobj_description',
     }
-    Postgresql_psql["CREATE DATABASE \"${dbname}\""]
-    -> postgresql_psql { "COMMENT ON DATABASE \"${dbname}\" IS '${comment}'":
-      unless => "SELECT 1 FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'",
-      db     => $dbname,
+
+    postgresql_psql { "COMMENT ON DATABASE \"${dbname}\" IS '${comment}'":
+      unless  => "SELECT 1 FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'",
+      db      => $dbname,
+      require => Postgresql_psql["CREATE DATABASE \"${dbname}\""],
     }
   }
 
@@ -109,9 +111,7 @@ define postgresql::server::database(
       require => Postgresql_psql["CREATE DATABASE \"${dbname}\""],
     }
 
-    if defined(Postgresql::Server::Role[$owner]) {
-      Postgresql::Server::Role[$owner]->Postgresql_psql["ALTER DATABASE \"${dbname}\" OWNER TO \"${owner}\""]
-    }
+    Postgresql::Server::Role <| username == $owner |> -> Postgresql_psql["ALTER DATABASE \"${dbname}\" OWNER TO \"${owner}\""]
   }
 
   if $tablespace {
@@ -120,9 +120,6 @@ define postgresql::server::database(
       require => Postgresql_psql["CREATE DATABASE \"${dbname}\""],
     }
 
-    if defined(Postgresql::Server::Tablespace[$tablespace]) {
-      # The tablespace must be there, before we create the database.
-      Postgresql::Server::Tablespace[$tablespace]->Postgresql_psql["CREATE DATABASE \"${dbname}\""]
-    }
+    Postgresql::Server::Tablespace <| spcname == $tablespace |> -> Postgresql_psql["CREATE DATABASE \"${dbname}\""]
   }
 }
