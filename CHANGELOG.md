@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
+## Supported Release [5.4.0]
+### Summary
+This is a minor release, it makes this module PDK-compliant for easier maintenance and includes a roll up of maintenance changes.
+
+#### Added
+- PDK conversion [MODULES-6330](https://tickets.puppetlabs.com/browse/MODULES-6330).
+- Parameter for `postgresql::server::database`:
+  - `ensure` Capability to revoke database privileges [PostgreSQL documentation for `grant`](http://www.postgresql.org/docs/current/static/sql-grant.html).
+- Parameter for `postgresql::server::database_grant`:
+  - `ensure` Capability to revoke database privileges [PostgreSQL documentation for `grant`](http://www.postgresql.org/docs/current/static/sql-grant.html).
+
+#### Fixed
+- Documentation error, `reassign_owned_by` uses `*_role` not `*_owner`.
+
 ## Supported Release [5.3.0]
 ### Summary
 Implements rubocop changes within the module, alongside other smaller changes.
@@ -25,7 +39,7 @@ Implements rubocop changes within the module, alongside other smaller changes.
 
 ## Supported Release 5.2.1
 ### Summary
-Bug fix for issue introduced in 5.2.0 
+Bug fix for issue introduced in 5.2.0
 
 #### Fixed
 - issue where the module was attempting to install extensions before a database was available. ([SERVER-2003](https://tickets.puppetlabs.com/browse/SERVER-2003))
@@ -977,4 +991,5 @@ Notable features:
 
 2012-08-16 - Version 0.2.0 released
 
+[5.4.0]:https://github.com/puppetlabs/puppetlabs-apache/compare/5.3.0...5.4.0
 [5.3.0]:https://github.com/puppetlabs/puppetlabs-apache/compare/5.2.1...5.3.0
