@@ -124,9 +124,9 @@ REASSIGN OWNEDを使用して、データベース内にあるすべてのオブ
 
 ```puppet
 postgresql::server::reassign_owned_by { 'new owner is meerkat':
-  db        => 'test_db',
-  old_owner => 'marmot',
-  new_owner => 'meerkat',
+  db       => 'test_db',
+  old_role => 'marmot',
+  new_role => 'meerkat',
 }
 ```
 
@@ -1152,6 +1152,16 @@ PostgreSQLのCOMMENTコマンドを使用して、データベースについて
 
 データベース固有のパーミッションについて`postgresql::server::database_grant`をラッピングして、grantベースのユーザアクセス権を管理します。詳細については、[PostgreSQLマニュアルの`grant`](http://www.postgresql.org/docs/current/static/sql-grant.html)を参照してください。
 
+##### `ensure`
+
+権限を付与するか、無効化するかを指定します。無効化する'absent'はPostgreSQLバージョン9.1.24以降でのみ機能します。
+
+有効な値: 'present'、'absent'。
+* 権限を付与するには'present'を指定します。
+* 権限を無効化するには'absent'を指定します。
+
+デフォルト値: 'present'。
+
 #### `connect_settings`
 
 リモートサーバーへの接続時に使用する環境変数のハッシュを指定します。
@@ -1236,6 +1246,16 @@ PostgreSQL拡張を管理します。
 #### postgresql::server::grant
 
 ロールのgrantベースのアクセス権を管理します。詳細については、[PostgreSQLマニュアルの`grant`](http://www.postgresql.org/docs/current/static/sql-grant.html)を参照してください。
+
+##### `ensure`
+
+権限を付与するか、無効化するかを指定します。デフォルトでは権限を付与します。
+
+有効な値: 'present'、'absent'。
+* 権限を付与するには'present'を指定します。
+* 権限を無効化するには'absent'を指定します。
+
+デフォルト値: 'present'。
 
 ##### `db`
 
@@ -1493,7 +1513,6 @@ PostgreSQLコマンド'REASSIGN OWNED'をデータベースに対して実行し
 **注意して使用してください。**
 
 #### postgresql::server::role
-
 PostgreSQLのロールまたはユーザを作成もしくは削除します。
 
 ##### `ensure`
@@ -1593,6 +1612,16 @@ postgresql::server::role { 'myusername':
 #### postgresql::server::table_grant
 
 ユーザのgrantベースのアクセス権を管理します。詳細については、PostgreSQLマニュアルの`grant`の項を参照してください。
+
+##### `ensure`
+
+権限を付与するか、無効化するかを指定します。デフォルトでは権限を付与します。
+
+有効な値: 'present'、'absent'。
+* 権限を付与するには'present'を指定します。
+* 権限を無効化するには'absent'を指定します。
+
+デフォルト値: 'present'。
 
 ##### `connect_settings`
 
@@ -1814,7 +1843,7 @@ Unixソケットとident認証を使用するとき、このユーザとして�
 
 接続するときに使用するポートを定義します。
 
-デフォルト値: '' 
+デフォルト値: ''
 
 ##### `run_as`
 
@@ -1848,7 +1877,8 @@ puppet apply --execute 'notify { 'test': message => postgresql_password('usernam
 
 ### タスク
 
-postgresqlモジュールの'sqlサンプルタスクは、データベースに対して任意のSQLを実行します。タスクの実行方法については、[Puppet Enterpriseマニュアル](https://puppet.com/docs/pe/2017.3/orchestrator/running_tasks.html)または[Boltマニュアル](https://puppet.com/docs/bolt/latest/bolt.html)を参照してください。
+Postgresqlモジュールにはサンプルタスクがあり、ユーザはデータベースに対して任意のSQLを実行できます。[PEマニュアル](https://puppet.com/docs/pe/2017.3/orchestrator/running_tasks.html)または[Boltマニュアル](https://puppet.com/docs/bolt/latest/bolt.html) で、タスクを実行する方法に関する情報を参照してください。
+
 
 ## 制約事項
 
@@ -1864,7 +1894,8 @@ PostgreSQLのバージョン8.1～9.5で動作します。
 
 ### Aptモジュールのサポート
 
-このモジュールは1.xと2.x両方のバージョンの`puppetlabs-apt` モジュールをサポートしていますが、2.0.0と2.0.1の`puppetlabs-apt`はサポートしていません。
+このモジュールは1.xと2.x両方のバージョンの'puppetlabs-apt'モジュールをサポートしていますが、'puppetlabs-apt'の2.0.0と2.0.1はサポートしていません。
+
 
 ### PostGISのサポート
 
