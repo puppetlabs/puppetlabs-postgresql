@@ -120,6 +120,8 @@ Puppet::Type.newtype(:postgresql_psql) do
     newvalues(:true, :false)
   end
 
+  autorequire(:class) { ['Postgresql::Server::Service'] }
+
   def should_run_sql(refreshing = false)
     onlyif_param = @parameters[:onlyif]
     unless_param = @parameters[:unless]
