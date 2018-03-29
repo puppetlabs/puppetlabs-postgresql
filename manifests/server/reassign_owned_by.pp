@@ -45,7 +45,6 @@ define postgresql::server::reassign_owned_by (
     psql_group       => $group,
     psql_path        => $psql_path,
     onlyif           => $onlyif,
-    require          => Class['postgresql::server']
   }
 
   if($old_role != undef and defined(Postgresql::Server::Role[$old_role])) {

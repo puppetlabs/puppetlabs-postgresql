@@ -40,7 +40,7 @@ define postgresql::server::tablespace(
   postgresql_psql { "CREATE TABLESPACE \"${spcname}\"":
     command => "CREATE TABLESPACE \"${spcname}\" LOCATION '${location}'",
     unless  => "SELECT 1 FROM pg_tablespace WHERE spcname = '${spcname}'",
-    require => [Class['postgresql::server'], File[$location]],
+    require => File[$location],
   }
 
   if $owner {
