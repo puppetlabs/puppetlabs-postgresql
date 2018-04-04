@@ -12,7 +12,7 @@ describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfa
         },
       },
       config_entries => {
-        max_connections => 200,
+        max_connections => 21,
       },
       pg_hba_rules   => {
         'from_remote_host' => {
