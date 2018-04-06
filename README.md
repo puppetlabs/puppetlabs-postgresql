@@ -754,6 +754,12 @@ The name of the PostgreSQL Python package.
 
 #### postgresql::server
 
+##### `config_entries`
+
+Specifies a hash from which to generate `postgresql::server::config_entry` resources.
+
+Default value: `{}`
+
 ##### `createdb_path`
 
 **Deprecated.** Specifies the path to the `createdb` command.
@@ -894,6 +900,12 @@ If `false`, disables the defaults supplied with the module for `pg_hba.conf`. Th
 
 Specifies the path to your `pg_hba.conf` file.
 
+##### `pg_hba_rules`
+
+Specifies a hash from which to generate `postgresql::server::pg_hba_rule` resources.
+
+Default value: `{}`
+
 ##### `pg_ident_conf_path`
 
 Specifies the path to your `pg_ident.conf` file.
@@ -935,6 +947,12 @@ Default value: '${confdir}/postgresql.conf'.
 Specifies the path to the `psql` command.
 
 Default value: OS dependent.
+
+##### `roles`
+
+Specifies a hash from which to generate `postgresql::server::role` resources.
+
+Default value: `{}`
 
 ##### `service_manage`
 
