@@ -32,12 +32,13 @@ describe 'postgresql::server::reassign_owned_by', type: :define do
     MANIFEST
   end
 
+  it { is_expected.to compile.with_all_deps }
   it { is_expected.to contain_postgresql__server__reassign_owned_by('test') }
 
   it {
     is_expected.to contain_postgresql_psql('reassign_owned_by:test:REASSIGN OWNED BY "test_old_role" TO "test_new_role"')
-      .with('command' => 'REASSIGN OWNED BY "test_old_role" TO "test_new_role"',
-            'onlyif' => %r{SELECT tablename FROM pg_catalog.pg_tables WHERE\s*schemaname NOT IN \('pg_catalog', 'information_schema'\) AND\s*tableowner = 'test_old_role'.*}m)
-      .that_requires('Class[postgresql::server]')
+      .with_command('REASSIGN OWNED BY "test_old_role" TO "test_new_role"')
+      .with_onlyif(%r{SELECT tablename FROM pg_catalog.pg_tables WHERE\s*schemaname NOT IN \('pg_catalog', 'information_schema'\) AND\s*tableowner = 'test_old_role'.*}m)
+      .that_requires('Class[Postgresql::Server::Service]')
   }
 end

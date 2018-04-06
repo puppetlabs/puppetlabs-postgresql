@@ -55,6 +55,11 @@ class postgresql::server (
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
   $manage_recovery_conf       = $postgresql::params::manage_recovery_conf,
   $module_workdir             = $postgresql::params::module_workdir,
+
+  Hash[String, Hash] $roles         = {},
+  Hash[String, Any] $config_entries = {},
+  Hash[String, Hash] $pg_hba_rules  = {},
+
   #Deprecated
   $version                    = undef,
 ) inherits postgresql::params {
@@ -74,11 +79,33 @@ class postgresql::server (
   # Reload has its own ordering, specified by other defines
   class { "${pg}::reload": require => Class["${pg}::install"] }
 
-  anchor { "${pg}::start": }
-  -> class { "${pg}::install": }
-  -> class { "${pg}::initdb": }
-  -> class { "${pg}::config": }
-  -> class { "${pg}::service": }
-  -> class { "${pg}::passwd": }
-  -> anchor { "${pg}::end": }
+  contain postgresql::server::install
+  contain postgresql::server::initdb
+  contain postgresql::server::config
+  contain postgresql::server::service
+  contain postgresql::server::passwd
+
+  Class['postgresql::server::install']
+  -> Class['postgresql::server::initdb']
+  -> Class['postgresql::server::config']
+  -> Class['postgresql::server::service']
+  -> Class['postgresql::server::passwd']
+
+  $roles.each |$rolename, $role| {
+    postgresql::server::role { $rolename:
+      * => $role,
+    }
+  }
+
+  $config_entries.each |$entry, $value| {
+    postgresql::server::config_entry { $entry:
+      value => $value,
+    }
+  }
+
+  $pg_hba_rules.each |$rule_name, $rule| {
+    postgresql::server::pg_hba_rule { $rule_name:
+      * => $rule,
+    }
+  }
 }

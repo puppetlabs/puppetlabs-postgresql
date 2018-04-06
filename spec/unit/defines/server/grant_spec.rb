@@ -29,6 +29,7 @@ describe 'postgresql::server::grant', type: :define do
       "class {'postgresql::server':}"
     end
 
+    it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
   end
 
@@ -46,13 +47,13 @@ describe 'postgresql::server::grant', type: :define do
       "class {'postgresql::server':}"
     end
 
+    it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it {
-      is_expected.to contain_postgresql_psql('grant:test').with(
-        'command' => %r{GRANT USAGE ON SEQUENCE "test" TO\s* "test"}m,
-        'unless' => %r{SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)}m,
-      )
-    }
+    it do
+      is_expected.to contain_postgresql_psql('grant:test')
+        .with_command(%r{GRANT USAGE ON SEQUENCE "test" TO\s* "test"}m)
+        .with_unless(%r{SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)}m)
+    end
   end
 
   context 'SeQuEnCe case insensitive object_type match' do
@@ -69,13 +70,13 @@ describe 'postgresql::server::grant', type: :define do
       "class {'postgresql::server':}"
     end
 
+    it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it {
-      is_expected.to contain_postgresql_psql('grant:test').with(
-        'command' => %r{GRANT USAGE ON SEQUENCE "test" TO\s* "test"}m,
-        'unless' => %r{SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)}m,
-      )
-    }
+    it do
+      is_expected.to contain_postgresql_psql('grant:test')
+        .with_command(%r{GRANT USAGE ON SEQUENCE "test" TO\s* "test"}m)
+        .with_unless(%r{SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)}m)
+    end
   end
 
   context 'all sequences' do
@@ -93,13 +94,13 @@ describe 'postgresql::server::grant', type: :define do
       "class {'postgresql::server':}"
     end
 
+    it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it {
-      is_expected.to contain_postgresql_psql('grant:test').with(
-        'command' => %r{GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* "test"}m,
-        'unless' => %r{SELECT 1 WHERE NOT EXISTS \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\)}m, # rubocop:disable Metrics/LineLength
-      )
-    }
+    it do
+      is_expected.to contain_postgresql_psql('grant:test')
+        .with_command(%r{GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* "test"}m)
+        .with_unless(%r{SELECT 1 WHERE NOT EXISTS \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\)}m) # rubocop:disable Metrics/LineLength
+    end
   end
 
   context 'with specific db connection settings - default port' do
@@ -116,6 +117,7 @@ describe 'postgresql::server::grant', type: :define do
       "class {'postgresql::server':}"
     end
 
+    it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('grant:test').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1').with_port(5432) }
   end
@@ -135,6 +137,7 @@ describe 'postgresql::server::grant', type: :define do
       "class {'postgresql::server':}"
     end
 
+    it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('grant:test').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234') }
   end
@@ -155,6 +158,7 @@ describe 'postgresql::server::grant', type: :define do
       "class {'postgresql::server':}"
     end
 
+    it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql_psql('grant:test').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234').with_port('5678') }
   end
@@ -174,13 +178,40 @@ describe 'postgresql::server::grant', type: :define do
       "class {'postgresql::server':}"
     end
 
+    it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
-    it {
-      is_expected.to contain_postgresql_psql('grant:test').with(
-        'command' => %r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* "test"}m,
-        'unless' => %r{SELECT 1 WHERE has_table_privilege\('test',\s*'myschema.mytable', 'INSERT'\)}m,
-      )
-    }
+    it do
+      is_expected.to contain_postgresql_psql('grant:test')
+        .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* "test"}m)
+        .with_unless(%r{SELECT 1 WHERE has_table_privilege\('test',\s*'myschema.mytable', 'INSERT'\)}m)
+    end
+  end
+
+  context 'with a role defined' do
+    let :params do
+      {
+        db: 'test',
+        role: 'test',
+        privilege: 'all',
+        object_name: %w[myschema mytable],
+        object_type: 'table',
+      }
+    end
+
+    let :pre_condition do
+      <<-EOS
+      class {'postgresql::server':}
+      postgresql::server::role { 'test': }
+      EOS
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it do
+      is_expected.to contain_postgresql_psql('grant:test') \
+        .that_requires(['Class[postgresql::server::service]', 'Postgresql::Server::Role[test]'])
+    end
   end
 
   context 'invalid object_type' do
