@@ -51,7 +51,7 @@ define postgresql::server::schema(
 
   if $owner {
     postgresql_psql { "${db}: ALTER SCHEMA \"${schema}\" OWNER TO \"${owner}\"":
-      command => "ALTER SCHEMA \"${schema}\" OWNER TO ${owner}",
+      command => "ALTER SCHEMA \"${schema}\" OWNER TO \"${owner}\"",
       unless  => "SELECT 1 FROM pg_namespace JOIN pg_roles rol ON nspowner = rol.oid WHERE nspname = '${schema}' AND rolname = '${owner}'",
       require => Postgresql_psql["${db}: CREATE SCHEMA \"${schema}\""],
     }
