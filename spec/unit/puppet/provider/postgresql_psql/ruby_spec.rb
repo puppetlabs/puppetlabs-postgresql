@@ -57,7 +57,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
     describe 'with search_path array' do
       let(:attributes) do
         {
-          search_path: %w[schema1 schema2],
+          search_path: ['schema1', 'schema2'],
         }
       end
 
