@@ -31,7 +31,7 @@ def |        | physical  |        |          | t      |      |              | 0/
     end
     let(:attributes) { {} }
     let(:instances) { provider.class.instances }
-    let(:expected) { %w[abc def] }
+    let(:expected) { ['abc', 'def'] }
 
     it 'lists instances #size' do
       expect(instances.size).to eq 2
