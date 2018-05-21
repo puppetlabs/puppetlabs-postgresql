@@ -8,7 +8,7 @@ require 'beaker/task_helper'
 run_puppet_install_helper
 install_ca_certs unless pe_install?
 
-UNSUPPORTED_PLATFORMS = %w[AIX windows Solaris Suse].freeze
+UNSUPPORTED_PLATFORMS = ['AIX', 'windows', 'Solaris', 'Suse'].freeze
 
 install_bolt_on(hosts) unless pe_install?
 install_module_on(hosts)
@@ -20,9 +20,9 @@ DEFAULT_PASSWORD = if default[:hypervisor] == 'vagrant'
                      'Qu@lity!'
                    end
 
+# Class String - unindent - Provide ability to remove indentation from strings, for the purpose of
+# left justifying heredoc blocks.
 class String
-  # Provide ability to remove indentation from strings, for the purpose of
-  # left justifying heredoc blocks.
   def unindent
     gsub(%r{^#{scan(%r{^\s*}).min_by { |l| l.length }}}, '')
   end

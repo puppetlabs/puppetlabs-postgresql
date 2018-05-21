@@ -2,11 +2,13 @@ require 'spec_helper'
 
 type = Puppet::Type.type(:postgresql_replication_slot)
 describe type.provider(:ruby) do
+  # class SuccessStatus
   class SuccessStatus
     def success?
       true
     end
   end
+  # class FailStatus
   class FailStatus
     def success?
       false
@@ -31,7 +33,7 @@ def |        | physical  |        |          | t      |      |              | 0/
     end
     let(:attributes) { {} }
     let(:instances) { provider.class.instances }
-    let(:expected) { %w[abc def] }
+    let(:expected) { ['abc', 'def'] }
 
     it 'lists instances #size' do
       expect(instances.size).to eq 2

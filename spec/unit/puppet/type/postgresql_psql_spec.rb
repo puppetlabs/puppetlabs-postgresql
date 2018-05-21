@@ -32,7 +32,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
       psql_group: 'postgres',
       cwd: '/var/lib',
       refreshonly: :true,
-      search_path: %w[schema1 schema2],
+      search_path: ['schema1', 'schema2'],
       connect_settings: { 'PGHOST' => 'postgres-db-server',
                           'DBVERSION' => '9.1' },
     }.each do |attr, value|
