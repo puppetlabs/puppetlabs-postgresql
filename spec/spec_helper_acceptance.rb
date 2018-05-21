@@ -20,9 +20,9 @@ DEFAULT_PASSWORD = if default[:hypervisor] == 'vagrant'
                      'Qu@lity!'
                    end
 
+# Class String - unindent - Provide ability to remove indentation from strings, for the purpose of
+# left justifying heredoc blocks.
 class String
-  # Provide ability to remove indentation from strings, for the purpose of
-  # left justifying heredoc blocks.
   def unindent
     gsub(%r{^#{scan(%r{^\s*}).min_by { |l| l.length }}}, '')
   end

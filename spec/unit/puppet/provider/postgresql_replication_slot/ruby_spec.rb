@@ -2,11 +2,13 @@ require 'spec_helper'
 
 type = Puppet::Type.type(:postgresql_replication_slot)
 describe type.provider(:ruby) do
+  # class SuccessStatus
   class SuccessStatus
     def success?
       true
     end
   end
+  # class FailStatus
   class FailStatus
     def success?
       false
