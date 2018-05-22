@@ -10,9 +10,8 @@ class postgresql::server::install {
     default => $package_ensure,
   }
 
-  package { 'postgresql-server':
+  package { $package_name:
     ensure => $_package_ensure,
-    name   => $package_name,
 
     # This is searched for to create relationships with the package repos, be
     # careful about its removal
