@@ -7,9 +7,8 @@ class postgresql::client (
 ) inherits postgresql::params {
 
   if $package_name != 'UNSET' {
-    package { 'postgresql-client':
+    package { $package_name:
       ensure => $package_ensure,
-      name   => $package_name,
       tag    => 'postgresql',
     }
   }
