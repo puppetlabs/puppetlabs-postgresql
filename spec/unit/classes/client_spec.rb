@@ -14,14 +14,13 @@ describe 'postgresql::client', type: :class do
       {
         validcon_script_path: '/opt/bin/my-validate-con.sh',
         package_ensure: 'absent',
-        package_name: 'mypackage',
+        package_name: 'postgresql99-client',
         file_ensure: 'file',
       }
     end
 
     it 'modifies package' do
-      is_expected.to contain_package('postgresql-client').with(ensure: 'absent',
-                                                               name: 'mypackage',
+      is_expected.to contain_package('postgresql99-client').with(ensure: 'absent',
                                                                tag: 'postgresql')
     end
 
