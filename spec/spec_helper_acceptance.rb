@@ -82,7 +82,7 @@ RSpec.configure do |c|
     end
 
     # net-tools required for netstat utility being used by be_listening
-    if fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '7'
+    if fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '7' || fact('osfamily') == 'Debian' && fact('operatingsystemmajrelease') == '9'
       pp = <<-EOS
         package { 'net-tools': ensure => installed }
       EOS
