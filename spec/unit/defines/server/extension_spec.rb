@@ -12,7 +12,7 @@ describe 'postgresql::server::extension', type: :define do # rubocop:disable RSp
     {
       osfamily: 'Debian',
       operatingsystem: 'Debian',
-      operatingsystemrelease: '6.0',
+      operatingsystemrelease: '8.0',
       kernel: 'Linux',
       concat_basedir: tmpfilename('postgis'),
       id: 'root',
