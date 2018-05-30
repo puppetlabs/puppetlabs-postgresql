@@ -1,22 +1,22 @@
 require 'spec_helper'
 
 describe 'postgresql::globals', type: :class do
-  context 'on a debian 6' do
+  context 'on a debian 8' do
     let(:facts) do
       {
         os: {
           family: 'Debian',
           name: 'Debian',
           release: {
-            full: '6.0',
-            major: '6',
+            full: '8.0',
+            major: '8',
           },
         },
         osfamily: 'Debian',
         operatingsystem: 'Debian',
-        operatingsystemrelease: '6.0',
+        operatingsystemrelease: '8.0',
         lsbdistid: 'Debian',
-        lsbdistcodename: 'squeeze',
+        lsbdistcodename: 'jessie',
       }
     end
 
