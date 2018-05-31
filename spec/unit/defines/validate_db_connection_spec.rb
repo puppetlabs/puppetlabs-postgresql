@@ -5,7 +5,7 @@ describe 'postgresql::validate_db_connection', type: :define do
     {
       osfamily: 'Debian',
       operatingsystem: 'Debian',
-      operatingsystemrelease: '6.0',
+      operatingsystemrelease: '8.0',
     }
   end
 

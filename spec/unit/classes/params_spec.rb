@@ -5,7 +5,7 @@ describe 'postgresql::params', type: :class do
     {
       osfamily: 'Debian',
       operatingsystem: 'Debian',
-      operatingsystemrelease: '6.0',
+      operatingsystemrelease: '8.0',
     }
   end
 
