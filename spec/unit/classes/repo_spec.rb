@@ -7,15 +7,15 @@ describe 'postgresql::repo', type: :class do
         name: 'Debian',
         family: 'Debian',
         release: {
-          full: '6.0',
-          major: '6',
+          full: '8.0',
+          major: '8',
         },
       },
       osfamily: 'Debian',
       operatingsystem: 'Debian',
-      operatingsystemrelease: '6.0',
+      operatingsystemrelease: '8.0',
       lsbdistid: 'Debian',
-      lsbdistcodename: 'squeeze',
+      lsbdistcodename: 'jessie',
     }
   end
 
