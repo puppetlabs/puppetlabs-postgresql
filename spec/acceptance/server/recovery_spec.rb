@@ -46,7 +46,7 @@ describe 'postgresql::server::recovery', unless: UNSUPPORTED_PLATFORMS.include?(
         }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     it 'does not add conf file' do
@@ -59,8 +59,8 @@ describe 'postgresql::server::recovery', unless: UNSUPPORTED_PLATFORMS.include?(
         class { 'postgresql::server': }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
-      apply_manifest(pp, :catch_changes => true)
+      apply_manifest(pp, catch_failures: true)
+      apply_manifest(pp, catch_changes: true)
     end
 
     describe file('/tmp/recovery.conf') do
