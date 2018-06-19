@@ -1501,6 +1501,8 @@ Every parameter value is a string set in the template except `recovery_target_in
 
 A detailed description of all listed parameters can be found in the [PostgreSQL documentation](http://www.postgresql.org/docs/current/static/recovery-config.html).
 
+Only the specified parameters are recognized in the template. The `recovery.conf` is only be created if at least one parameter is set **and** [manage_recovery_conf](#manage_recovery_conf) is set to true.
+
 The parameters are grouped into these three sections:
 
 ##### [Archive Recovery Parameters](http://www.postgresql.org/docs/current/static/archive-recovery-settings.html)
