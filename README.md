@@ -299,7 +299,7 @@ primary_conninfo = 'host=localhost port=5432'
 recovery_min_apply_delay = 0
 ```
 
-Only the specified parameters are recognized in the template. The `recovery.conf` is only be created if at least one parameter is set **and** [manage_recovery_conf](#manage_recovery_conf) is set to true.
+Only the specified parameters are recognized in the template. The `recovery.conf` is only created if at least one parameter is set **and** [manage_recovery_conf](#manage_recovery_conf) is set to true.
 
 ### Validate connectivity
 
@@ -1501,7 +1501,7 @@ Every parameter value is a string set in the template except `recovery_target_in
 
 A detailed description of all listed parameters can be found in the [PostgreSQL documentation](http://www.postgresql.org/docs/current/static/recovery-config.html).
 
-Only the specified parameters are recognized in the template. The `recovery.conf` is only be created if at least one parameter is set **and** [manage_recovery_conf](#manage_recovery_conf) is set to true.
+Only the specified parameters are recognized in the template. The `recovery.conf` is only created if at least one parameter is set **and** [manage_recovery_conf](#manage_recovery_conf) is set to true.
 
 The parameters are grouped into these three sections:
 
