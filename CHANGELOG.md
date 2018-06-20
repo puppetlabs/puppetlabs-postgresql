@@ -1,8 +1,26 @@
-# Changelog
+# Change log
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [5.5.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.5.0) (2018-04-05)
+## [5.6.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.6.0) (2018-06-20)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.5.0...5.6.0)
+
+### Changed
+
+- Fix creation of recovery.conf file when recovery configuration is not specified [\#995](https://github.com/puppetlabs/puppetlabs-postgresql/pull/995) ([cdloh](https://github.com/cdloh))
+
+### Added
+
+- Add compatibility for Fedora 28 [\#994](https://github.com/puppetlabs/puppetlabs-postgresql/pull/994) ([jflorian](https://github.com/jflorian))
+- \(MODULES-5994\) Add debian 9 [\#992](https://github.com/puppetlabs/puppetlabs-postgresql/pull/992) ([hunner](https://github.com/hunner))
+- Adding default Postgresql version for Ubuntu 18.04 [\#981](https://github.com/puppetlabs/puppetlabs-postgresql/pull/981) ([lutaylor](https://github.com/lutaylor))
+
+### Fixed
+
+- Fix quoting on schema owners [\#979](https://github.com/puppetlabs/puppetlabs-postgresql/pull/979) ([hasegeli](https://github.com/hasegeli))
+
+## [5.5.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.5.0) (2018-04-06)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.4.0...5.5.0)
 
