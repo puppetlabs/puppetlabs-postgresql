@@ -387,17 +387,22 @@ define postgresql::server::grant (
     }
   }
 
+  # Function like has_database_privilege() refer the PUBLIC pseudo role as 'public'
+  # So we need to replace 'PUBLIC' by 'public'.
+
   $_unless = $unless_function ? {
       false    => undef,
       'custom' => $custom_unless,
-      default  => "SELECT 1 WHERE ${unless_function}('${role}',
-                  '${_granted_object}', '${unless_privilege}') = ${unless_is}",
+      default  => $role ? {
+        'PUBLIC' => "SELECT 1 WHERE ${unless_function}('public', '${_granted_object}', '${unless_privilege}') = ${unless_is}",
+        default  => "SELECT 1 WHERE ${unless_function}('${role}', '${_granted_object}', '${unless_privilege}') = ${unless_is}",
+      }
   }
 
   $_onlyif = $onlyif_function ? {
     'table_exists'    => "SELECT true FROM pg_tables WHERE tablename = '${_togrant_object}'",
     'language_exists' => "SELECT true from pg_language WHERE lanname = '${_togrant_object}'",
-    'role_exists'     => "SELECT 1 FROM pg_roles WHERE rolname = '${role}'",
+    'role_exists'     => "SELECT 1 FROM pg_roles WHERE rolname = '${role}' OR '${role}' = 'PUBLIC'",
     default           => undef,
   }
 
