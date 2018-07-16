@@ -434,6 +434,32 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(fa
         end
       end
 
+      it 'grant insert on single table test' do
+        begin
+          # postgres version
+          result = shell('psql --version')
+          version = result.stdout.match(%r{\s(\d\.\d)})[1]
+
+          if version >= '9.0'
+            pp = pp_create_table + <<-EOS.unindent
+            postgresql::server::table_grant { 'INSERT priviledge to table':
+              privilege => 'INSERT',
+              table     => 'test_tbl',
+              db        => $db,
+              role      => $user,
+              }
+            EOS
+            result = apply_manifest(pp, catch_failures: true)
+            expect(result.stdout).to match(%r{GRANT INSERT ON TABLE \"test_tbl\" TO \"psql_grant_priv_tester\"})
+
+            ## Check that the privilege was granted to the user
+            psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'INSERT')\"", user) do |r|
+              expect(r.stdout).to match(%r{t})
+            end
+          end
+        end
+      end
+
       it 'grant all on all tables to a user' do
         begin
           pp = pp_create_table + <<-EOS.unindent

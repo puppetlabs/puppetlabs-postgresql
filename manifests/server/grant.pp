@@ -248,6 +248,7 @@ define postgresql::server::grant (
           /^ALL$/,
           /^ALL PRIVILEGES$/,
           /^DELETE$/,
+          /^INSERT$/,
           /^REFERENCES$/,
           /^SELECT$/,
           /^TRIGGER$/,
