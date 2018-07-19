@@ -36,7 +36,7 @@ define postgresql::server::grant (
   case $ensure {
     default: {
       # default is 'present'
-      $sql_command = 'GRANT %s ON %s "%s" TO "%s" "%s"'
+      $sql_command = 'GRANT %s ON %s "%s" TO "%s" %s'
       $unless_is = true
     }
     'absent': {
