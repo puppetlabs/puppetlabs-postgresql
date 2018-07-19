@@ -7,7 +7,7 @@ define postgresql::server::grant (
     /(?i:^ALL SEQUENCES IN SCHEMA$)/,
     /(?i:^ALL TABLES IN SCHEMA$)/,
     /(?i:^DATABASE$)/,
-    #/(?i:^FOREIGN DATA WRAPPER$)/,
+    /(?i:^FOREIGN DATA WRAPPER$)/,
     #/(?i:^FOREIGN SERVER$)/,
     #/(?i:^FUNCTION$)/,
     /(?i:^LANGUAGE$)/,
@@ -27,6 +27,7 @@ define postgresql::server::grant (
   Integer $port                    = $postgresql::server::port,
   Boolean $onlyif_exists           = false,
   Hash $connect_settings           = $postgresql::server::default_connect_settings,
+  Optional[String] $option         = undef,
   Enum['present',
         'absent'
   ] $ensure                        = 'present',
@@ -35,7 +36,7 @@ define postgresql::server::grant (
   case $ensure {
     default: {
       # default is 'present'
-      $sql_command = 'GRANT %s ON %s "%s" TO "%s"'
+      $sql_command = 'GRANT %s ON %s "%s" TO "%s" "%s"'
       $unless_is = true
     }
     'absent': {
@@ -363,6 +364,23 @@ define postgresql::server::grant (
       }
     }
 
+    'FOREIGN DATA WRAPPER': {
+      $unless_privilege = $_privilege ? {
+        'ALL'            => 'USAGE',
+        Pattern[
+          '^ALL$',
+          '^USAGE$'
+        ]       => $_privilege,
+        default => fail('Illegal value for $privilege parameter'),
+      }
+      $unless_function = 'has_foreign_data_wrapper_privilege'
+      $on_db = $db
+      $onlyif_function = $onlyif_exists ? {
+        true    => 'extension_exists',
+        default => undef,
+      }
+    }
+
     default: {
       fail("Missing privilege validation for object type ${_object_type}")
     }
@@ -398,11 +416,18 @@ define postgresql::server::grant (
   $_onlyif = $onlyif_function ? {
     'table_exists'    => "SELECT true FROM pg_tables WHERE tablename = '${_togrant_object}'",
     'language_exists' => "SELECT true from pg_language WHERE lanname = '${_togrant_object}'",
+    'extension_exists'  => "SELECT true FROM pg_extension WHERE extname = '${_togrant_object}'",
     'role_exists'     => "SELECT 1 FROM pg_roles WHERE rolname = '${role}'",
     default           => undef,
   }
 
-  $grant_cmd = sprintf($sql_command, $_privilege, $_object_type, $_togrant_object, $role)
+  $_option =   $option ? {
+    'GRANT'     => " WITH GRANT OPTION",
+    'ADMIN'     => " WITH ADMIN OPTION",
+    default     => undef,
+  }
+
+  $grant_cmd = sprintf($sql_command, $_privilege, $_object_type, $_togrant_object, $role, $_option)
 
   postgresql_psql { "grant:${name}":
     command          => $grant_cmd,
