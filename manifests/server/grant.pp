@@ -422,8 +422,8 @@ define postgresql::server::grant (
   }
 
   $_option =   $option ? {
-    'GRANT'     => " WITH GRANT OPTION",
-    'ADMIN'     => " WITH ADMIN OPTION",
+    'GRANT'     => ' WITH GRANT OPTION',
+    'ADMIN'     => ' WITH ADMIN OPTION',
     default     => undef,
   }
 
