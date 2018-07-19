@@ -754,6 +754,12 @@ PostgreSQL Pythonパッケージの名前。
 
 #### postgresql::server
 
+##### `config_entries`
+
+`postgresql::server::config_entry` のリソースを構築するハッシュを指定します。
+
+デフォルト値: `{}`
+
 ##### `createdb_path`
 
 **非推奨** `createdb`コマンドへのパスを指定します。
@@ -894,6 +900,12 @@ pg_ident.confファイルを上書きします。
 
 `pg_hba.conf`ファイルへのパスを指定します。
 
+##### `pg_hba_rules`
+
+`postgresql::server::pg_hba_rule` のリソースを構築するハッシュを指定します。
+
+デフォルト値: `{}`
+
 ##### `pg_ident_conf_path`
 
 `pg_ident.conf`ファイルへのパスを指定します。
@@ -935,6 +947,12 @@ postgresユーザのパスワードを特定の値に設定します。デフォ
 `psql`コマンドへのパスを指定します。
 
 デフォルト値: OSによって異なります。
+
+##### `roles`
+
+`postgresql::server::role` のリソースを構築するハッシュを指定します。
+
+デフォルト値: `{}`
 
 ##### `service_manage`
 
@@ -1482,6 +1500,8 @@ PostgreSQLコマンド'REASSIGN OWNED'をデータベースに対して実行し
 `recovery_target_inclusive`、 `pause_at_recovery_target`、`standby_mode`、`recovery_min_apply_delay`を除くすべてのパラメータ値は、テンプレートに含まれる文字列セットです。
 
 全パラメータリストの詳細な説明は、[PostgreSQLマニュアル](http://www.postgresql.org/docs/current/static/recovery-config.html)にあります。
+
+テンプレートでは、指定されたパラメータのみが認識されます。`recovery.conf`は、少なくとも1つのパラメータが設定済みで、**かつ**、[manage_recovery_conf](#manage_recovery_conf)がtrueの場合のみ作成されます。
 
 パラメータは、次の3つのセクションにグループ分けされています。
 
