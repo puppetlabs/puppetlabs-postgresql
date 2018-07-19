@@ -38,8 +38,8 @@ describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(fact('
       end
 
       result = shell('psql --version')
-      version = result.stdout.match(%r{\s(\d\.\d)})[1]
-      comment_information_function = if version > '8.1'
+      version = result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
+      comment_information_function = if version.to_f > 8.1
                                        'shobj_description'
                                      else
                                        'obj_description'
