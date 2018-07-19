@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [5.7.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.7.0) (2018-07-19)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.6.0...5.7.0)
+
+### Added
+
+- \(MODULES-7479\) Update postgresql to support Ubuntu 18.04 [\#1005](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1005) ([david22swan](https://github.com/david22swan))
+- \(MODULES-6542\) - Adding SLES 11 & 12 to metadata [\#1001](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1001) ([pmcmaw](https://github.com/pmcmaw))
+
+### Fixed
+
+- \(MODULES-7479\) Ensure net-tools is installed when testing on Ubuntu 18.04 [\#1006](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1006) ([david22swan](https://github.com/david22swan))
+- \(MODULES-7460\) - Updating grant table to include INSERT privileges [\#1004](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1004) ([pmcmaw](https://github.com/pmcmaw))
+- Fix packages choice for ubuntu 17.10 [\#1000](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1000) ([fflorens](https://github.com/fflorens))
+
 ## [5.6.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.6.0) (2018-06-20)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.5.0...5.6.0)
