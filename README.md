@@ -1905,13 +1905,7 @@ The Postgresql module has an example task that allows a user to execute arbitary
 
 Works with versions of PostgreSQL from 8.1 through 9.5.
 
-Currently, the postgresql module is tested on the following operating systems:
-
-* Debian 6.x, 7.x, 8.x.
-* CentOS 5.x, 6.x, and 7.x.
-* Ubuntu 10.04 and 12.04, 14.04.
-
-Other systems might be compatible, but are not being actively tested.
+For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-postgresql/blob/master/metadata.json)
 
 ### Apt module support
 
