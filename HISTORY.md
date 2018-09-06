@@ -1,4 +1,4 @@
-## Supported Release [5.3.0]
+## 5.3.0
 ### Summary
 Implements rubocop changes within the module, alongside other smaller changes.
 
