@@ -59,6 +59,7 @@ class postgresql::server (
   Hash[String, Hash] $roles         = {},
   Hash[String, Any] $config_entries = {},
   Hash[String, Hash] $pg_hba_rules  = {},
+  Hash[String, Hash] $databases     = {},
 
   #Deprecated
   $version                    = undef,
@@ -90,6 +91,12 @@ class postgresql::server (
   -> Class['postgresql::server::config']
   -> Class['postgresql::server::service']
   -> Class['postgresql::server::passwd']
+
+  $databases.each |$databasename, $databases| {
+    postgresql::server::db { $databasename:
+      * => $databases,
+    }
+  }
 
   $roles.each |$rolename, $role| {
     postgresql::server::role { $rolename:
