@@ -2,7 +2,7 @@
 define postgresql::server::grant (
   String $role,
   String $db,
-  Optional[String] $privilege      = undef,
+  String $privilege      = '',
   Pattern[#/(?i:^COLUMN$)/,
     /(?i:^ALL SEQUENCES IN SCHEMA$)/,
     /(?i:^ALL TABLES IN SCHEMA$)/,
