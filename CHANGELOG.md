@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [5.10.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.10.0) (2018-09-27)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.9.0...5.10.0)
+
+### Added
+
+- pdksync - \(MODULES-6805\) metadata.json shows support for puppet 6 [\#1026](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1026) ([tphoney](https://github.com/tphoney))
+
 ## [5.9.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.9.0) (2018-09-06)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.8.0...5.9.0)
