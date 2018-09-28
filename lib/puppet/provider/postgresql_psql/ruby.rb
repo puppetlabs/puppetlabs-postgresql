@@ -11,6 +11,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
     end
 
     command = [resource[:psql_path]]
+    command.push('--no-psqlrc')
     command.push('-d', resource[:db]) if resource[:db]
     command.push('-p', resource[:port]) if resource[:port]
     command.push('-t', '-c', '"' + sql.gsub('"', '\"') + '"')
