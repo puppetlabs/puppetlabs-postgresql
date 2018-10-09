@@ -1,27 +1,19 @@
-require 'beaker-pe'
-require 'beaker-puppet'
-require 'puppet'
-require 'beaker-rspec/spec_helper'
-require 'beaker-rspec/helpers/serverspec'
-require 'beaker/puppet_install_helper'
-require 'beaker/module_install_helper'
-require 'beaker-task_helper'
+require 'serverspec'
+require 'solid_waffle'
+include SolidWaffle
 
-run_puppet_install_helper
-configure_type_defaults_on(hosts)
-install_ca_certs unless pe_install?
+set :backend, :ssh
+
+options = Net::SSH::Config.for(host)
+options[:user] = 'root'
+inventory_hash = load_inventory_hash
+targets = find_targets(nil, inventory_hash)
+host = targets.first.to_s
+
+set :host,        options[:host_name] || host
+set :ssh_options, options
 
 UNSUPPORTED_PLATFORMS = ['AIX', 'windows', 'Solaris', 'Suse'].freeze
-
-install_bolt_on(hosts) unless pe_install?
-install_module_on(hosts)
-install_module_dependencies_on(hosts)
-
-DEFAULT_PASSWORD = if default[:hypervisor] == 'vagrant'
-                     'vagrant'
-                   elsif default[:hypervisor] == 'vcloud'
-                     'Qu@lity!'
-                   end
 
 # Class String - unindent - Provide ability to remove indentation from strings, for the purpose of
 # left justifying heredoc blocks.
@@ -52,55 +44,11 @@ def shellescape(str)
 end
 
 def psql(psql_cmd, user = 'postgres', exit_codes = [0, 1], &block)
-  psql = "psql #{psql_cmd}"
-  shell("su #{shellescape(user)} -c #{shellescape(psql)}", acceptable_exit_codes: exit_codes, &block)
+  psql = "psql #{psql_cmd}" 
+inventory_hash = load_inventory_hash
+targets = find_targets(nil, inventory_hash)
+host = targets.first.to_s
+  run_command("su #{shellescape(user)} -c #{shellescape(psql)}", host, config: nil, inventory: inventory_hash)  
+#  shell("su #{shellescape(user)} -c #{shellescape(psql)}", acceptable_exit_codes: exit_codes, &block)
 end
 
-RSpec.configure do |c|
-  # Readable test descriptions
-  c.formatter = :documentation
-
-  # Configure all nodes in nodeset
-  c.before :suite do
-    run_puppet_access_login(user: 'admin') if pe_install? && (Gem::Version.new(puppet_version) >= Gem::Version.new('5.0.0'))
-    # Set up selinux if appropriate.
-    if fact('osfamily') == 'RedHat' && fact('selinux') == 'true'
-      pp = <<-EOS
-        if $::osfamily == 'RedHat' and $::selinux == 'true' {
-          $semanage_package = $::operatingsystemmajrelease ? {
-            '5'     => 'policycoreutils',
-            default => 'policycoreutils-python',
-          }
-
-          package { $semanage_package: ensure => installed }
-          exec { 'set_postgres':
-            command     => 'semanage port -a -t postgresql_port_t -p tcp 5433',
-            path        => '/bin:/usr/bin/:/sbin:/usr/sbin',
-            subscribe   => Package[$semanage_package],
-          }
-        }
-      EOS
-
-      apply_manifest_on(agents, pp, catch_failures: false)
-    end
-
-    # net-tools required for netstat utility being used by be_listening
-    if fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '7' ||
-       fact('osfamily') == 'Debian' && fact('operatingsystemmajrelease') == '9' ||
-       fact('osfamily') == 'Debian' && fact('operatingsystemmajrelease') == '18.04'
-      pp = <<-EOS
-        package { 'net-tools': ensure => installed }
-      EOS
-
-      apply_manifest_on(agents, pp, catch_failures: false)
-    end
-
-    hosts.each do |host|
-      on host, 'chmod 755 /root'
-      next unless fact_on(host, 'osfamily') == 'Debian'
-      on host, "echo \"en_US ISO-8859-1\nen_NG.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\n\" > /etc/locale.gen"
-      on host, '/usr/sbin/locale-gen'
-      on host, '/usr/sbin/update-locale'
-    end
-  end
-end
