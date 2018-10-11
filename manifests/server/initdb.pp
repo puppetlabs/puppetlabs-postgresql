@@ -72,7 +72,7 @@ class postgresql::server::initdb {
     $ic_base = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
     $ic_xlog = $xlogdir ? {
       undef   => $ic_base,
-      default => "${ic_base} --xlogdir '${xlogdir}'"
+      default => "${ic_base} -X '${xlogdir}'"
     }
 
     # The xlogdir need to be present before initdb runs.
