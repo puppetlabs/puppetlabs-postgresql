@@ -2,21 +2,44 @@ require 'serverspec'
 require 'solid_waffle'
 include SolidWaffle
 
-set :backend, :ssh
-
-options = Net::SSH::Config.for(host)
-options[:user] = 'root'
-inventory_hash = load_inventory_hash
-targets = find_targets(nil, inventory_hash)
-host = targets.first.to_s
-
-set :host,        options[:host_name] || host
-set :ssh_options, options
-
 UNSUPPORTED_PLATFORMS = ['AIX', 'windows', 'Solaris', 'Suse'].freeze
 
-# Class String - unindent - Provide ability to remove indentation from strings, for the purpose of
-# left justifying heredoc blocks.
+if ENV['TARGET_HOST'].nil?
+  puts 'Running tests against this machine !'
+else
+  puts "TARGET_HOST #{ENV['TARGET_HOST']}"
+  # load inventory
+  inventory_hash = load_inventory_hash
+  if host_in_group(inventory_hash, ENV['TARGET_HOST'], 'ssh_nodes')
+    set :backend, :ssh
+    options = Net::SSH::Config.for(host)
+    options[:user] = 'root'
+    host = ENV['TARGET_HOST']
+    set :host,        options[:host_name] || host
+    set :ssh_options, options
+  elsif host_in_group(inventory_hash, ENV['TARGET_HOST'], 'win_rm_nodes')
+    require 'winrm'
+
+    set :backend, :winrm
+    set :os, :family => 'windows'
+    user = 'Administrator'
+    pass = 'Qu@lity!'
+    endpoint = "http://#{ENV['TARGET_HOST']}:5985/wsman"
+
+    opts = {
+       user: user,
+       password: pass,
+       endpoint: endpoint,
+       operation_timeout: 300,
+    }
+
+    winrm = WinRM::Connection.new ( opts)
+    Specinfra.configuration.winrm = winrm
+  else
+    raise "#{ENV['TARGET_HOST']} is not a member of any handled groups, check inventory.yaml"
+  end
+end
+
 class String
   def unindent
     gsub(%r{^#{scan(%r{^\s*}).min_by { |l| l.length }}}, '')
