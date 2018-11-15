@@ -46,7 +46,7 @@ describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family
   end
 
   it 'can connect with psql as testusername' do
-    shelly('PGPASSWORD=supersecret psql -U testusername -h localhost --command="\l"') do |r|
+    run_shell('PGPASSWORD=supersecret psql -U testusername -h localhost --command="\l"') do |r|
       expect(r.stdout).to match(%r{List of databases})
     end
   end

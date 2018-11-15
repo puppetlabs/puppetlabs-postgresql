@@ -20,7 +20,7 @@ describe 'postgresql::server::config_entry' do
 
     # get postgresql version
     apply_manifest("class { 'postgresql::server': }")
-    result = shelly('psql --version')
+    result = run_shell('psql --version')
     version = result.to_s.match(%r{\s(\d{1,2}\.\d)})[1]
 
     if version >= '9.3'
@@ -30,7 +30,7 @@ describe 'postgresql::server::config_entry' do
       end
 
       it 'is expected to contain directories' do
-        result = shelly('cat /tmp/postgresql.conf')
+        result = run_shell('cat /tmp/postgresql.conf')
         expect(result.to_s).to contain("unix_socket_directories = '/var/socket/, /root/'")
       end
     end

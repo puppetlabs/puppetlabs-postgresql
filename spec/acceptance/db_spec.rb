@@ -5,7 +5,7 @@ describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(os[:fa
   it 'creates a database' do
     begin
 # need to create tmp folder on remote system
-      tmpdir = shelly('mktemp').first['result']['stdout']
+      tmpdir = run_shell('mktemp').first['result']['stdout']
       pp = <<-MANIFEST
         class { 'postgresql::server':
           postgres_password => 'space password',
@@ -25,9 +25,9 @@ describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(os[:fa
       apply_manifest(pp, catch_changes: true)
 
       # Verify that the postgres password works
-      shelly("echo 'localhost:*:*:postgres:\'space password\'' > /root/.pgpass")
-      shelly('chmod 600 /root/.pgpass')
-      shelly("psql -U postgres -h localhost --command='\\l'")
+      run_shell("echo 'localhost:*:*:postgres:\'space password\'' > /root/.pgpass")
+      run_shell('chmod 600 /root/.pgpass')
+      run_shell("psql -U postgres -h localhost --command='\\l'")
 
       psql('--command="select datname from pg_database" "postgresql-test-db"') do |r|
         expect(r.stdout).to match(%r{postgresql-test-db})
@@ -38,7 +38,7 @@ describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(os[:fa
         expect(r.stdout).to match(%r{\(1 row\)})
       end
 
-      result = shelly('psql --version')
+      result = run_shell('psql --version')
       version = result.first['result']['stdout'].match(%r{\s(\d{1,2}\.\d)})[1]
       comment_information_function = if version.to_f > 8.1
                                        'shobj_description'

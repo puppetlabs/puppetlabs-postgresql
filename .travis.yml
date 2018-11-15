@@ -33,14 +33,6 @@ matrix:
       services: docker
       sudo: required
     -
-      bundler_args: 
-      dist: trusty
-      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_PUPPET_COLLECTION=puppet6 BEAKER_set=docker/ubuntu-14.04 BEAKER_TESTMODE=apply
-      rvm: 2.5.0
-      script: bundle exec rake beaker
-      services: docker
-      sudo: required
-    -
       env: CHECK="syntax lint metadata_lint check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop"
     -
       env: CHECK=parallel_spec
