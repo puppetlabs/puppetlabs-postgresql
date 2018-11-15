@@ -39,7 +39,7 @@ describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(os[:fa
       end
 
       result = shelly('psql --version')
-      version = result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
+      version = result.first['result']['stdout'].match(%r{\s(\d{1,2}\.\d)})[1]
       comment_information_function = if version.to_f > 8.1
                                        'shobj_description'
                                      else

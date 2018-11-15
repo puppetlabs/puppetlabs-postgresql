@@ -106,7 +106,7 @@ describe 'postgresql::server::reassign_owned_by:', unless: UNSUPPORTED_PLATFORMS
         begin
           # postgres version
           result = shelly('psql --version')
-          version = result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
+          version = result.first['result']['stdout'].match(%r{\s(\d{1,2}\.\d)})[1]
           if version >= '9.0'
 
             apply_manifest(pp_setup + pp_db_old_owner + pp_setup_objects, catch_failures: true)
