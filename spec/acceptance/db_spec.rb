@@ -1,10 +1,11 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   # rubocop:disable Metrics/LineLength
   it 'creates a database' do
     begin
-      tmpdir = default.tmpdir('postgresql')
+# need to create tmp folder on remote system
+      tmpdir = shelly('mktemp').first['result']['stdout']
       pp = <<-MANIFEST
         class { 'postgresql::server':
           postgres_password => 'space password',
@@ -24,9 +25,9 @@ describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(fact('
       apply_manifest(pp, catch_changes: true)
 
       # Verify that the postgres password works
-      shell("echo 'localhost:*:*:postgres:\'space password\'' > /root/.pgpass")
-      shell('chmod 600 /root/.pgpass')
-      shell("psql -U postgres -h localhost --command='\\l'")
+      shelly("echo 'localhost:*:*:postgres:\'space password\'' > /root/.pgpass")
+      shelly('chmod 600 /root/.pgpass')
+      shelly("psql -U postgres -h localhost --command='\\l'")
 
       psql('--command="select datname from pg_database" "postgresql-test-db"') do |r|
         expect(r.stdout).to match(%r{postgresql-test-db})
@@ -37,7 +38,7 @@ describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(fact('
         expect(r.stdout).to match(%r{\(1 row\)})
       end
 
-      result = shell('psql --version')
+      result = shelly('psql --version')
       version = result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
       comment_information_function = if version.to_f > 8.1
                                        'shobj_description'

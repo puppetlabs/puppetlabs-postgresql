@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 # These tests are designed to ensure that the module, when ran overrides,
 # sets up everything correctly and allows us to connect to Postgres.
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   pp = <<-MANIFEST
     class { 'postgresql::server':
       roles          => {
@@ -46,7 +46,7 @@ describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfa
   end
 
   it 'can connect with psql as testusername' do
-    shell('PGPASSWORD=supersecret psql -U testusername -h localhost --command="\l"') do |r|
+    shelly('PGPASSWORD=supersecret psql -U testusername -h localhost --command="\l"') do |r|
       expect(r.stdout).to match(%r{List of databases})
     end
   end

@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   let(:install_pp) do
     <<-MANIFEST
       class { 'postgresql::server':
@@ -67,7 +67,7 @@ describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(fac
       MANIFEST
 
       result = apply_manifest(pp)
-      expect(result.stderr).to match %r{Unable to connect to PostgreSQL server}
+      expect(result.first['result']['stderr']).to match %r{Unable to connect to PostgreSQL server}
     end
   end
 end

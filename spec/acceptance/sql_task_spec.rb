@@ -1,7 +1,7 @@
 # run a test task
 require 'spec_helper_acceptance'
 
-describe 'postgresql task', if: puppet_version =~ %r{(5\.\d\.\d)} && !pe_install? do
+describe 'postgresql task', if: '6.0.3' =~ %r{(5\.\d\.\d)} && !pe_install? do
   describe 'sql task' do
     pp = <<-MANIFEST
         class { 'postgresql::server': } ->

@@ -2,7 +2,7 @@ require 'spec_helper_acceptance' # rubocop:disable Style/FileName
 
 # These tests are designed to ensure that the module, when ran with defaults,
 # sets up everything correctly and allows us to connect to Postgres.
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   pp = <<-MANIFEST
       class { 'postgresql::globals':
         encoding => 'UTF8',

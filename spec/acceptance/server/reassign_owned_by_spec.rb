@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::reassign_owned_by:', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server::reassign_owned_by:', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   let(:db) { 'reassign_test' }
   let(:old_owner) { 'psql_reassign_old_owner' }
   let(:new_owner) { 'psql_reassign_new_owner' }
@@ -105,7 +105,7 @@ describe 'postgresql::server::reassign_owned_by:', unless: UNSUPPORTED_PLATFORMS
       it 'reassigns all objects to new_owner' do
         begin
           # postgres version
-          result = shell('psql --version')
+          result = shelly('psql --version')
           version = result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
           if version >= '9.0'
 

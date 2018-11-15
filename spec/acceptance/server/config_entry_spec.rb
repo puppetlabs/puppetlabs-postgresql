@@ -20,8 +20,8 @@ describe 'postgresql::server::config_entry' do
 
     # get postgresql version
     apply_manifest("class { 'postgresql::server': }")
-    result = shell('psql --version')
-    version = result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
+    result = shelly('psql --version')
+    version = result.to_s.match(%r{\s(\d{1,2}\.\d)})[1]
 
     if version >= '9.3'
       it 'is expected to run idempotently' do
@@ -30,9 +30,8 @@ describe 'postgresql::server::config_entry' do
       end
 
       it 'is expected to contain directories' do
-        shell('cat /tmp/postgresql.conf') do |output|
-          expect(output.stdout).to contain("unix_socket_directories = '/var/socket/, /root/'")
-        end
+        result = shelly('cat /tmp/postgresql.conf')
+        expect(result.to_s).to contain("unix_socket_directories = '/var/socket/, /root/'")
       end
     end
   end

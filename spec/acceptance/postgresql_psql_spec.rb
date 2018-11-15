@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   pp_one = <<-MANIFEST
     class { 'postgresql::server': } ->
     postgresql_psql { 'foobar':

@@ -1,12 +1,12 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   let(:db) { 'grant_role_test' }
   let(:user) { 'psql_grant_role_tester' }
   let(:group) { 'test_group' }
   let(:password) { 'psql_grant_role_pw' }
   let(:version) do
-    if fact('osfamily') == 'RedHat' && fact('operatingsystemrelease') =~ %r{5}
+    if os[:family] == 'RedHat' && fact('operatingsystemrelease') =~ %r{5}
       '8.1'
     end
   end
@@ -253,8 +253,8 @@ describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.includ
       apply_manifest(pp_four, expect_failures: true)
 
       psql('--command="SELECT 1 WHERE pg_has_role(\'psql_grant_role_tester\', \'test_group\', \'MEMBER\') = true" grant_role_test', 'psql_grant_role_tester') do |r|
-        expect(r.stdout).to match(%r{\(0 rows\)})
-        expect(r.stderr).to eq('')
+        expect(r.first['result']['stdout']).to match(%r{\(0 rows\)})
+        expect(r.first['result']['stderr']).to eq('')
       end
     end
   end
