@@ -204,7 +204,7 @@ describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.includ
 
        # Grant the role to the nonexistent user
        postgresql::server::grant_role { "grant_role ${group} to ${user}":
-         role  => $user
+         role  => $user,
          group => $group,
        }
     MANIFEST
