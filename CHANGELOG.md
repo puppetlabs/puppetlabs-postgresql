@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [5.11.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.11.0) (2018-11-21)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.10.0...5.11.0)
+
+### Added
+
+- Add postgis support for postgres 10 [\#1032](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1032) ([smussie](https://github.com/smussie))
+
+### Fixed
+
+- Strip quotes from role names [\#1034](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1034) ([jstuart](https://github.com/jstuart))
+- Ignore .psqlrc so output is clean and doesn't break Puppet [\#1021](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1021) ([flaviogurgel](https://github.com/flaviogurgel))
+- Change initdb option '--xlogdir' to '-X' for PG10 compatibility [\#976](https://github.com/puppetlabs/puppetlabs-postgresql/pull/976) ([fcanovai](https://github.com/fcanovai))
+
 ## [5.10.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.10.0) (2018-09-27)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.9.0...5.10.0)
