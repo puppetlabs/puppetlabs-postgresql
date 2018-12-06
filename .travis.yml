@@ -21,15 +21,56 @@ matrix:
   fast_finish: true
   include:
     -
-      bundler_args: 
+      bundler_args:
       dist: trusty
-      env: PLATFORM=ubuntu:14.04 
+      env: PLATFORM=centos:6_7
+      rvm: 2.5.0
+      script:
+      - bundle exec rake 'waffle:provision[docker, centos:6]'
+      - bundle exec rake 'waffle:provision[docker, centos:7]'
+      - bundle exec rake waffle:install_agent
+      - bundle exec rake waffle:install_module
+      - bundle exec rake acceptance:all -j10 -m
+      services: docker
+      sudo: required
+    -
+      bundler_args:
+      dist: trusty
+      env: PLATFORM=debian:8_9
+      rvm: 2.5.0
+      script:
+      - bundle exec rake 'waffle:provision[docker, debian:8]'
+      - bundle exec rake 'waffle:provision[docker, debian:9]'
+      - bundle exec bolt command run 'apt-get install wget -y' --inventoryfile inventory.yaml --nodes='localhost*'
+      - bundle exec rake waffle:install_agent
+      - bundle exec rake waffle:install_module
+      - bundle exec rake acceptance:all -j10 -m
+      services: docker
+      sudo: required
+    -
+      bundler_args:
+      dist: trusty
+      env: PLATFORM=oraclelinux:6_7
+      rvm: 2.5.0
+      script:
+      - bundle exec rake 'waffle:provision[docker, oraclelinux:6]'
+      - bundle exec rake 'waffle:provision[docker, oraclelinux:7]'
+      - bundle exec rake waffle:install_agent
+      - bundle exec rake waffle:install_module
+      - bundle exec rake acceptance:all -j10 -m
+      services: docker
+      sudo: required
+    -
+      bundler_args:
+      dist: trusty
+      env: PLATFORM=ubuntu:14.04_16.04_18.04
       rvm: 2.5.0
       script:
       - bundle exec rake 'waffle:provision[docker, ubuntu:14.04]'
+      - bundle exec rake 'waffle:provision[docker, ubuntu:18.04]'
       - bundle exec rake waffle:install_agent
       - bundle exec rake waffle:install_module
-      - bundle exec rake acceptance:all
+      - bundle exec rake acceptance:all -j10 -m
       services: docker
       sudo: required
     -

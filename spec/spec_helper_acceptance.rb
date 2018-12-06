@@ -3,9 +3,13 @@ require 'solid_waffle'
 include SolidWaffle
 
 UNSUPPORTED_PLATFORMS = ['AIX', 'windows', 'Solaris', 'Suse'].freeze
-
-if ENV['TARGET_HOST'].nil?
+if ENV['TARGET_HOST'].nil? || ENV['TARGET_HOST'] == 'localhost'
   puts 'Running tests against this machine !'
+  if Gem.win_platform?
+    set :backend, :cmd
+  else
+    set :backend, :exec
+  end
 else
   puts "TARGET_HOST #{ENV['TARGET_HOST']}"
   # load inventory
