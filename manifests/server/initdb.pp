@@ -69,7 +69,12 @@ class postgresql::server::initdb {
     # We optionally add the locale switch if specified. Older versions of the
     # initdb command don't accept this switch. So if the user didn't pass the
     # parameter, lets not pass the switch at all.
-    $ic_base = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
+    $ic_encoding = $encoding ? {
+      undef => '',
+      default => "--encoding '${ic_encoding}'"
+    }
+
+    $ic_base = "${initdb_path} ${ic_encoding} --pgdata '${datadir}'"
     $ic_xlog = $xlogdir ? {
       undef   => $ic_base,
       default => "${ic_base} -X '${xlogdir}'"
