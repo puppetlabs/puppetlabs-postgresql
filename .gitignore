@@ -12,6 +12,7 @@
 /doc/
 /Gemfile.local
 /Gemfile.lock
+/inventory.yaml
 /junit/
 /log/
 /pkg/

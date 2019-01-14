@@ -1,0 +1,25 @@
+tphoney/puppetlabs-postgresql:
+  PreBuild:
+    - source /home/distelli/.rvm/scripts/rvm
+    - rvm install 2.3.0 # Modules need at least 2.3 to run properly
+    - rvm use 2.3.0 --default
+    - gem install -v '1.15' bundler # Bundler dependancy issues mean we need to pin a version
+    - bundle -v
+    - bundle update --full-index # We require the fullindex option because bundle complains we have too many gems
+  Build: 
+    - source /home/distelli/.rvm/scripts/rvm
+    - bundle exec rake 'waffle:provision_from_metadata[vmpooler]'
+    - cat inventory.yaml
+    - bundle exec rake waffle:install_agent
+    - bundle exec rake waffle:install_module
+    - bundle exec rake waffle:parallel
+  AfterBuildSuccess:
+    - source /home/distelli/.rvm/scripts/rvm
+    - bundle exec rake waffle:tear_down
+  AfterBuildFailure:
+    - source /home/distelli/.rvm/scripts/rvm
+    - bundle exec rake waffle:tear_down
+  CommitData:
+    - RepoType: Git
+    - RepoPath: .
+
