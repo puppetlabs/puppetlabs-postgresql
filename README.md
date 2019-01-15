@@ -1400,6 +1400,12 @@ Specifies a way to uniquely identify this resource, but functionally does nothin
 
 Sets an order for placing the rule in `pg_hba.conf`.
 
+This can be either a string or an integer.
+If it is an integer, it will be converted to a string by zero-padding it to three digits.
+E.g. `42` will be zero-padded to the string `'042'`.
+
+The `pg_hba_rule` fragments are sorted using the `alpha` sorting [order](https://forge.puppet.com/puppetlabs/concat/reference#order).
+
 Default value: 150.
 
 #### `postgresql_version`
