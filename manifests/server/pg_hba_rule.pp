@@ -32,6 +32,13 @@ define postgresql::server::pg_hba_rule(
       fail('You must specify an address property when type is host based')
     }
 
+    if $order =~ Integer {
+      $_order = sprintf('%03d', $order)
+    }
+    else {
+      $_order = $order
+    }
+
     $allowed_auth_methods = $postgresql_version ? {
       '10'  => ['trust', 'reject', 'scram-sha-256', 'md5', 'password', 'gss', 'sspi', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam', 'bsd'],
       '9.6' => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam', 'bsd'],
@@ -55,7 +62,7 @@ define postgresql::server::pg_hba_rule(
     concat::fragment { $fragname:
       target  => $target,
       content => template('postgresql/pg_hba_rule.conf'),
-      order   => $order,
+      order   => $_order,
     }
   }
 }
