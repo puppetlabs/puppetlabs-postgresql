@@ -145,4 +145,93 @@ describe 'postgresql::server::pg_hba_rule', type: :define do
       end
     end
   end
+
+  context 'order' do
+    context 'default' do
+      let :pre_condition do
+        <<-MANIFEST
+          class { 'postgresql::server': }
+        MANIFEST
+      end
+
+      let :params do
+        {
+          type: 'local',
+          database: 'all',
+          user: 'all',
+          auth_method: 'ident',
+        }
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(order: '150')
+      end
+    end
+
+    context 'string' do
+      let :pre_condition do
+        <<-MANIFEST
+          class { 'postgresql::server': }
+        MANIFEST
+      end
+
+      let :params do
+        {
+          type: 'local',
+          database: 'all',
+          user: 'all',
+          auth_method: 'ident',
+          order: '12',
+        }
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(order: '12')
+      end
+    end
+
+    context 'short integer' do
+      let :pre_condition do
+        <<-MANIFEST
+          class { 'postgresql::server': }
+        MANIFEST
+      end
+
+      let :params do
+        {
+          type: 'local',
+          database: 'all',
+          user: 'all',
+          auth_method: 'ident',
+          order: 12,
+        }
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(order: '012')
+      end
+    end
+
+    context 'long integer' do
+      let :pre_condition do
+        <<-MANIFEST
+          class { 'postgresql::server': }
+        MANIFEST
+      end
+
+      let :params do
+        {
+          type: 'local',
+          database: 'all',
+          user: 'all',
+          auth_method: 'ident',
+          order: 1234,
+        }
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(order: '1234')
+      end
+    end
+  end
 end
