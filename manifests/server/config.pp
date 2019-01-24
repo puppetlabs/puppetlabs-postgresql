@@ -162,6 +162,11 @@ class postgresql::server::config {
   }
 
   if $::osfamily == 'RedHat' {
+    if ${version} =~ /^9\./ {
+      $include_file = "postgresql-${version}"
+    } else {
+      $include_file = "postgresql" # 10+ does not append version number
+    }    
     if $::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora' {
       # Template uses:
       # - $::operatingsystem
