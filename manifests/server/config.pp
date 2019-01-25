@@ -162,7 +162,7 @@ class postgresql::server::config {
   }
 
   if $::osfamily == 'RedHat' {
-    if ${version} =~ /^9\./ {
+    if $version =~ /^9\./ {
       $include_file = "postgresql-${version}"
     } else {
       $include_file = "postgresql" # 10+ does not append version number
