@@ -200,6 +200,7 @@ class postgresql::server::config {
   }
 
   if $::osfamily == 'RedHat' {
+    $include_file = "postgresql-${version}"
     if $::operatingsystemrelease =~ /^7|^8/ or $::operatingsystem == 'Fedora' {
       # Template uses:
       # - $::operatingsystem
