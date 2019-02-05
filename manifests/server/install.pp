@@ -16,7 +16,7 @@ class postgresql::server::install {
 
     # This is searched for to create relationships with the package repos, be
     # careful about its removal
-    tag    => 'postgresql',
+    tag    => 'puppetlabs-postgresql',
   }
 
 }

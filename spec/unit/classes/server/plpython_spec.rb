@@ -22,7 +22,7 @@ describe 'postgresql::server::plpython', type: :class do
     it { is_expected.to contain_class('postgresql::server::plpython') }
     it 'creates package' do
       is_expected.to contain_package('postgresql-plpython').with(ensure: 'present',
-                                                                 tag: 'postgresql')
+                                                                 tag: 'puppetlabs-postgresql')
     end
   end
 
@@ -38,7 +38,7 @@ describe 'postgresql::server::plpython', type: :class do
     it 'creates package with correct params' do
       is_expected.to contain_package('postgresql-plpython').with(ensure: 'absent',
                                                                  name: 'mypackage',
-                                                                 tag: 'postgresql')
+                                                                 tag: 'puppetlabs-postgresql')
     end
   end
 end

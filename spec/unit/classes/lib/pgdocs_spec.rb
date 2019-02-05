@@ -14,7 +14,7 @@ describe 'postgresql::lib::docs', type: :class do
       is_expected.to contain_package('postgresql-docs').with(
         name: 'postgresql-docs',
         ensure: 'present',
-        tag: 'postgresql',
+        tag: 'puppetlabs-postgresql',
       )
     }
     describe 'when parameters are supplied' do
@@ -26,7 +26,7 @@ describe 'postgresql::lib::docs', type: :class do
         is_expected.to contain_package('postgresql-docs').with(
           name: 'somepackage',
           ensure: 'latest',
-          tag: 'postgresql',
+          tag: 'puppetlabs-postgresql',
         )
       }
     end

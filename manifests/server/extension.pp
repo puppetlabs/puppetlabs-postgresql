@@ -87,7 +87,7 @@ define postgresql::server::extension (
 
     ensure_packages($package_name, {
       ensure  => $_package_ensure,
-      tag     => 'postgresql',
+      tag     => 'puppetlabs-postgresql',
       require => $package_require,
       before  => $package_before,
     })
