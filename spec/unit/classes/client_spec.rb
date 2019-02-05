@@ -22,7 +22,7 @@ describe 'postgresql::client', type: :class do
     it 'modifies package' do
       is_expected.to contain_package('postgresql-client').with(ensure: 'absent',
                                                                name: 'mypackage',
-                                                               tag: 'postgresql')
+                                                               tag: 'puppetlabs-postgresql')
     end
 
     it 'has specified validate connexion' do
@@ -35,7 +35,7 @@ describe 'postgresql::client', type: :class do
 
   describe 'with no parameters' do
     it 'creates package with postgresql tag' do
-      is_expected.to contain_package('postgresql-client').with(tag: 'postgresql')
+      is_expected.to contain_package('postgresql-client').with(tag: 'puppetlabs-postgresql')
     end
   end
 

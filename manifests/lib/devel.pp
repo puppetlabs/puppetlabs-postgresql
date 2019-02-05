@@ -13,7 +13,7 @@ class postgresql::lib::devel(
   package { 'postgresql-devel':
     ensure => $package_ensure,
     name   => $package_name,
-    tag    => 'postgresql',
+    tag    => 'puppetlabs-postgresql',
   }
 
   if $link_pg_config {
