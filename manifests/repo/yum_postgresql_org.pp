@@ -32,5 +32,5 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     proxy    => $postgresql::repo::proxy,
   }
 
-  Yumrepo['yum.postgresql.org'] -> Package<|tag == 'postgresql'|>
+  Yumrepo['yum.postgresql.org'] -> Package<|tag == 'puppetlabs-postgresql'|>
 }

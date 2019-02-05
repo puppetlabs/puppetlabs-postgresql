@@ -10,7 +10,7 @@ class postgresql::client (
     package { 'postgresql-client':
       ensure => $package_ensure,
       name   => $package_name,
-      tag    => 'postgresql',
+      tag    => 'puppetlabs-postgresql',
     }
   }
 

@@ -7,7 +7,7 @@ class postgresql::server::postgis (
   package { 'postgresql-postgis':
     ensure => $package_ensure,
     name   => $package_name,
-    tag    => 'postgresql',
+    tag    => 'puppetlabs-postgresql',
   }
 
   anchor { 'postgresql::server::postgis::start': }

@@ -8,7 +8,7 @@ class postgresql::lib::docs (
   package { 'postgresql-docs':
     ensure => $package_ensure,
     name   => $package_name,
-    tag    => 'postgresql',
+    tag    => 'puppetlabs-postgresql',
   }
 
 }
