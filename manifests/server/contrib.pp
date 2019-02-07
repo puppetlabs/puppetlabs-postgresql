@@ -11,7 +11,7 @@ class postgresql::server::contrib (
   package { 'postgresql-contrib':
     ensure => $package_ensure,
     name   => $package_name,
-    tag    => 'postgresql',
+    tag    => 'puppetlabs-postgresql',
   }
 
   anchor { 'postgresql::server::contrib::start': }

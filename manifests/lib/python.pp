@@ -8,6 +8,7 @@ class postgresql::lib::python(
   package { 'python-psycopg2':
     ensure => $package_ensure,
     name   => $package_name,
+    tag    => 'puppetlabs-postgresql',
   }
 
 }

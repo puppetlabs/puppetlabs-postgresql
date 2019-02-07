@@ -28,13 +28,13 @@ describe 'postgresql::server::postgis', type: :class do
     it 'creates package with correct params' do
       is_expected.to contain_package('postgresql-postgis').with(ensure: 'absent',
                                                                 name: 'mypackage',
-                                                                tag: 'postgresql')
+                                                                tag: 'puppetlabs-postgresql')
     end
   end
 
   describe 'with no parameters' do
     it 'creates package with postgresql tag' do
-      is_expected.to contain_package('postgresql-postgis').with(tag: 'postgresql')
+      is_expected.to contain_package('postgresql-postgis').with(tag: 'puppetlabs-postgresql')
     end
   end
 end
