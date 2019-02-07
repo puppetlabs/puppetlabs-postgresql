@@ -7,7 +7,7 @@ class postgresql::server::plpython(
   package { 'postgresql-plpython':
     ensure => $package_ensure,
     name   => $package_name,
-    tag    => 'postgresql',
+    tag    => 'puppetlabs-postgresql',
   }
 
   anchor { 'postgresql::server::plpython::start': }
