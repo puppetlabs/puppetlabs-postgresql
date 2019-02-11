@@ -316,14 +316,10 @@ define postgresql::server::grant (
         } else {
           # GRANT $_privilege
           $custom_unless = "SELECT 1 WHERE NOT EXISTS
-             ( SELECT 1 FROM pg_catalog.pg_tables AS t
-               WHERE t.schemaname = '${schema}'
-                 AND NOT EXISTS (
-                   SELECT 1 FROM information_schema.role_table_grants AS g
-                   WHERE g.grantee = '${role}'
-                     AND g.table_schema = '${schema}'
-                     AND g.privilege_type = '${_privilege}'
-                   )
+             ( SELECT 1
+               FROM pg_catalog.pg_tables AS t
+               LEFT JOIN information_schema.role_table_grants AS g ON t.tablename = g.table_name AND g.grantee = '${role}' AND g.table_schema = '${schema}' AND g.privilege_type = '${_privilege}'
+               WHERE t.schemaname = '${schema}' AND g.table_name IS NULL
              )"
         }
       } else {
