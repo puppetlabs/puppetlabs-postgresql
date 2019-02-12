@@ -9,6 +9,12 @@ if fact('osfamily') == 'RedHat' && fact('selinux') == 'true'
 end
 
 describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+  before(:each) do
+    if fact('osfamily') == 'Suse'
+      skip "These test's currently do not work on SLES/Suse modules"
+    end
+  end
+
   it 'on an alternative pgdata location' do
     pp = <<-MAIFEST
       #file { '/var/lib/pgsql': ensure => directory, } ->
