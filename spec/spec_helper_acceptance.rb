@@ -11,7 +11,7 @@ run_puppet_install_helper
 configure_type_defaults_on(hosts)
 install_ca_certs unless pe_install?
 
-UNSUPPORTED_PLATFORMS = ['AIX', 'windows', 'Solaris', 'Suse'].freeze
+UNSUPPORTED_PLATFORMS = ['AIX', 'windows', 'Solaris'].freeze
 
 install_bolt_on(hosts) unless pe_install?
 install_module_on(hosts)
