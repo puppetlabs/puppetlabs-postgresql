@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [5.12.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.12.0) (2019-01-31)
+## [5.12.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.12.1) (2019-02-14)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.12.0...5.12.1)
+
+### Fixed
+
+- \(FM-7811\) - Use postgresql 9.4 for SLES 11 sp4 [\#1057](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1057) ([david22swan](https://github.com/david22swan))
+- \(MODULES-8553\) Further cleanup for package tag issues [\#1055](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1055) ([HelenCampbell](https://github.com/HelenCampbell))
+
+## [5.12.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.12.0) (2019-02-01)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.11.0...5.12.0)
 
