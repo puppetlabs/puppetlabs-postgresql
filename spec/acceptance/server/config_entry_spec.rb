@@ -1,17 +1,13 @@
 require 'spec_helper_acceptance'
 
 describe 'postgresql::server::config_entry' do
-  let(:pp_setup) do
-    <<-MANIFEST
-    class { 'postgresql::server':
-      postgresql_conf_path => '/tmp/postgresql.conf',
-      }
-    MANIFEST
-  end
-
   context 'unix_socket_directories' do
     let(:pp_test) do
-      pp_setup + <<-MANIFEST
+      <<-MANIFEST
+      class { 'postgresql::server':
+        postgresql_conf_path => '/tmp/postgresql.conf',
+      }
+
       postgresql::server::config_entry { 'unix_socket_directories':
         value => '/var/socket/, /root/'
       }
@@ -25,8 +21,7 @@ describe 'postgresql::server::config_entry' do
 
     if version >= '9.3'
       it 'is expected to run idempotently' do
-        apply_manifest(pp_test, catch_failures: true)
-        apply_manifest(pp_test, catch_changes: true)
+        idempotent_apply(default, pp_test)
       end
 
       it 'is expected to contain directories' do

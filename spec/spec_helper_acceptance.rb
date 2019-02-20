@@ -56,6 +56,20 @@ def psql(psql_cmd, user = 'postgres', exit_codes = [0, 1], &block)
   shell("su #{shellescape(user)} -c #{shellescape(psql)}", acceptable_exit_codes: exit_codes, &block)
 end
 
+def idempotent_apply(hosts, manifest, opts = {}, &block)
+  block_on hosts, opts do |host|
+    file_path = host.tmpfile('apply_manifest.pp')
+    create_remote_file(host, file_path, manifest + "\n")
+
+    puppet_apply_opts = { :verbose => nil, 'detailed-exitcodes' => nil }
+    on_options = { acceptable_exit_codes: [0, 2] }
+    on host, puppet('apply', file_path, puppet_apply_opts), on_options, &block
+    puppet_apply_opts2 = { :verbose => nil, 'detailed-exitcodes' => nil }
+    on_options2 = { acceptable_exit_codes: [0] }
+    on host, puppet('apply', file_path, puppet_apply_opts2), on_options2, &block
+  end
+end
+
 RSpec.configure do |c|
   # Readable test descriptions
   c.formatter = :documentation
@@ -86,8 +100,8 @@ RSpec.configure do |c|
 
     # net-tools required for netstat utility being used by be_listening
     if fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '7' ||
-       fact('osfamily') == 'Debian' && fact('operatingsystemmajrelease') == '9' ||
-       fact('osfamily') == 'Debian' && fact('operatingsystemmajrelease') == '18.04'
+       fact('osfamily') == 'Debian' && (fact('operatingsystemmajrelease') == '9' ||
+                                        fact('operatingsystemmajrelease') == '18.04')
       pp = <<-EOS
         package { 'net-tools': ensure => installed }
       EOS

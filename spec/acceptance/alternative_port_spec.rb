@@ -8,8 +8,7 @@ describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfa
       class { 'postgresql::server': port => '55433' }
     MANIFEST
 
-    apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_changes: true)
+    idempotent_apply(default, pp)
   end
 
   describe port(55433) do # rubocop:disable Style/NumericLiterals
