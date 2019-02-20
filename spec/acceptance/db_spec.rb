@@ -20,8 +20,7 @@ describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(fact('
         }
       MANIFEST
 
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      idempotent_apply(default, pp)
 
       # Verify that the postgres password works
       shell("echo 'localhost:*:*:postgres:\'space password\'' > /root/.pgpass")

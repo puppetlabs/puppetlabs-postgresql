@@ -9,4 +9,8 @@ describe 'postgresql_password', type: :puppet_function do
     is_expected.to run.with_params('foo', 1234)
                       .and_return('md539a0e1b308278a8de5e007cd1f795920')
   }
+  it {
+    is_expected.to run.with_params('foo')
+                      .and_raise_error(%r{Wrong number of arguments})
+  }
 end

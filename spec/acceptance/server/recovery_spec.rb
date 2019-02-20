@@ -27,8 +27,7 @@ describe 'postgresql::server::recovery', unless: UNSUPPORTED_PLATFORMS.include?(
       }
     MANIFEST
     it 'adds conf file' do
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      idempotent_apply(default, pp)
     end
 
     describe file('/tmp/recovery.conf') do
@@ -39,16 +38,6 @@ describe 'postgresql::server::recovery', unless: UNSUPPORTED_PLATFORMS.include?(
   end
 
   describe 'should not create recovery if recovery config not specified' do
-    after(:all) do
-      pp = <<-EOS.unindent
-        file { '/tmp/recovery.conf':
-          ensure => absent,
-        }
-      EOS
-
-      apply_manifest(pp, catch_failures: true)
-    end
-
     it 'does not add conf file' do
       pp = <<-EOS.unindent
         class { 'postgresql::globals':
@@ -59,26 +48,7 @@ describe 'postgresql::server::recovery', unless: UNSUPPORTED_PLATFORMS.include?(
         class { 'postgresql::server': }
       EOS
 
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
-    end
-
-    describe file('/tmp/recovery.conf') do
-      it { is_expected.not_to be_file }
-    end
-  end
-
-  describe 'should not manage recovery' do
-    pp = <<-MANIFEST.unindent
-      class { 'postgresql::globals':
-        manage_recovery_conf => false,
-      }
-
-      class { 'postgresql::server': }
-    MANIFEST
-    it 'does not add conf file' do
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      idempotent_apply(default, pp)
     end
 
     describe file('/tmp/recovery.conf') do

@@ -31,8 +31,7 @@ describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfa
   MANIFEST
 
   it 'with additional hiera entries' do
-    apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_changes: true)
+    idempotent_apply(default, pp)
   end
 
   describe port(5432) do

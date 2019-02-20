@@ -23,8 +23,7 @@ describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfa
       class { 'postgresql::server': datadir => '/tmp/data', needs_initdb => true }
     MAIFEST
 
-    apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_changes: true)
+    idempotent_apply(default, pp)
   end
 
   describe file('/tmp/data') do

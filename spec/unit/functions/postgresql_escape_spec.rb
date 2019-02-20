@@ -18,4 +18,10 @@ describe 'postgresql_escape' do
                         .and_return('$a$foo$$a$')
     }
   end
+  describe 'postgresql_escape', type: :puppet_function do
+    it {
+      is_expected.to run.with_params(['foo'], ['foo'])
+                        .and_raise_error(%r{Wrong number of arguments})
+    }
+  end
 end
