@@ -1400,6 +1400,12 @@ Array:  ['schema_name', 'object_name']
 
 `pg_hba.conf`にルールを配置する順序を設定します。
 
+文字列または整数を使用できます。
+整数の場合、ゼロパディングで3桁にして文字列に変換します。
+例えば`42`はゼロパディングされて文字列`'042'`になります。
+
+`pg_hba_rule`フラグメントのソートでは、[順序]を`alpha`に設定します(https://forge.puppet.com/puppetlabs/concat/reference#order)。
+
 デフォルト値: 150。
 
 #### `postgresql_version`
@@ -1904,13 +1910,7 @@ Postgresqlモジュールにはサンプルタスクがあり、ユーザはデ�
 
 PostgreSQLのバージョン8.1～9.5で動作します。
 
-現在、postgresqlモジュールは次のオペレーティングシステムでテスト済みです。
-
-* Debian 6.x, 7.x, 8.x.
-* CentOS 5.x、6.x、7.x。
-* Ubuntu 10.04および12.04、14.04。
-
-その他のシステムとも互換性がある可能性がありますが、積極的なテストは行っておりません。
+サポートされているオペレーティングシステムの一覧については、[metadata.json](https://github.com/puppetlabs/puppetlabs-postgresql/blob/master/metadata.json)を参照してください。
 
 ### Aptモジュールのサポート
 
