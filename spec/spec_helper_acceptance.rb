@@ -11,7 +11,7 @@ run_puppet_install_helper
 configure_type_defaults_on(hosts)
 install_ca_certs unless pe_install?
 
-UNSUPPORTED_PLATFORMS = ['AIX', 'windows', 'Solaris'].freeze
+UNSUPPORTED_PLATFORMS = ['aix', 'windows', 'solaris'].freeze
 
 install_bolt_on(hosts) unless pe_install?
 install_module_on(hosts)
@@ -78,7 +78,7 @@ RSpec.configure do |c|
   c.before :suite do
     run_puppet_access_login(user: 'admin') if pe_install? && (Gem::Version.new(puppet_version) >= Gem::Version.new('5.0.0'))
     # Set up selinux if appropriate.
-    if fact('osfamily') == 'RedHat' && fact('selinux') == 'true'
+    if os[:family] == 'redhat' && fact('selinux') == 'true'
       pp = <<-EOS
         if $::osfamily == 'RedHat' and $::selinux == 'true' {
           $semanage_package = $::operatingsystemmajrelease ? {
@@ -99,9 +99,8 @@ RSpec.configure do |c|
     end
 
     # net-tools required for netstat utility being used by be_listening
-    if fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '7' ||
-       fact('osfamily') == 'Debian' && (fact('operatingsystemmajrelease') == '9' ||
-                                        fact('operatingsystemmajrelease') == '18.04')
+    if os[:family] == 'redhat' && os[:release].start_with?('7') ||
+       os[:family] == 'debian' && os[:release].start_with?('9', '18.04')
       pp = <<-EOS
         package { 'net-tools': ensure => installed }
       EOS
