@@ -1,12 +1,12 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   let(:db) { 'grant_role_test' }
   let(:user) { 'psql_grant_role_tester' }
   let(:group) { 'test_group' }
   let(:password) { 'psql_grant_role_pw' }
   let(:version) do
-    if fact('osfamily') == 'RedHat' && fact('operatingsystemrelease') =~ %r{5}
+    if os[:family] == 'redhat' && os[:release].start_with?('5')
       '8.1'
     end
   end

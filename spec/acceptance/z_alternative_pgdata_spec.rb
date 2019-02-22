@@ -4,13 +4,13 @@ require 'spec_helper_acceptance'
 # location properly.
 
 # Allow postgresql to use /tmp/* as a datadir
-if fact('osfamily') == 'RedHat' && fact('selinux') == 'true'
+if os[:family] == 'redhat' && fact('selinux') == 'true'
   shell 'setenforce 0'
 end
 
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   before(:each) do
-    if fact('osfamily') == 'Suse'
+    if os[:family] == 'sles'
       skip "These test's currently do not work on SLES/Suse modules"
     end
   end

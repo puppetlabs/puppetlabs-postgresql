@@ -1,8 +1,8 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::schema:', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server::schema:', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   let(:version) do
-    if fact('osfamily') == 'RedHat' && fact('operatingsystemrelease') =~ %r{5}
+    if os[:family] == 'redhat' && os[:release].start_with?('5')
       '8.1'
     end
   end
