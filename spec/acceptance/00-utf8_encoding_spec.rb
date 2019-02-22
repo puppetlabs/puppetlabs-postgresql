@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance' # rubocop:disable Style/FileName
 
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   pp = <<-MANIFEST
       class { 'postgresql::globals':
         encoding => 'UTF8',

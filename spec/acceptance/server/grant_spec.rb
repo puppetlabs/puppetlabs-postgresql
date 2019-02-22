@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   let(:version) do
     result = shell('psql --version')
     result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
