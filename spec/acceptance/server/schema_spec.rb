@@ -1,8 +1,8 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::schema:', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server::schema:', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   let(:version) do
-    if fact('osfamily') == 'RedHat' && fact('operatingsystemrelease') =~ %r{5}
+    if os[:family] == 'redhat' && os[:release].start_with?('5')
       '8.1'
     end
   end
@@ -55,8 +55,7 @@ describe 'postgresql::server::schema:', unless: UNSUPPORTED_PLATFORMS.include?(f
 
   it 'creates a schema for a user' do
     begin
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      idempotent_apply(default, pp)
 
       ## Check that the user can create a table in the database
       psql('--command="create table psql_schema_tester.foo (foo int)" schema_test', 'psql_schema_tester') do |r|

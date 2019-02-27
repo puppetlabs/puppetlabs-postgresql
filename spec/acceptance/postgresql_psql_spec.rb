@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   pp_one = <<-MANIFEST
     class { 'postgresql::server': } ->
     postgresql_psql { 'foobar':
@@ -38,8 +38,7 @@ describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamil
     }
   MANIFEST
   it 'does not run SQL when the unless query returns rows' do
-    apply_manifest(pp_three, catch_failures: true)
-    apply_manifest(pp_three, catch_changes: true)
+    idempotent_apply(default, pp_three)
   end
 
   pp_four = <<-MANIFEST
@@ -69,8 +68,7 @@ describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamil
       }
     MANIFEST
     it 'does not run SQL when the unless query returns no rows' do
-      apply_manifest(pp_five, catch_failures: true)
-      apply_manifest(pp_five, catch_changes: true)
+      idempotent_apply(default, pp_five)
     end
 
     pp_six = <<-MANIFEST.unindent
@@ -166,8 +164,7 @@ describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamil
         }
       MANIFEST
 
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, expect_changes: false)
+      idempotent_apply(default, pp)
     end
   end
 end

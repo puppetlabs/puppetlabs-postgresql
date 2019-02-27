@@ -68,6 +68,24 @@ describe 'postgresql_acls_to_resources_hash', type: :puppet_function do
     end
   end
 
+  context 'error catching tests' do
+    it do
+      is_expected.to run.with_params(['test'], 'test').and_raise_error(%r{Wrong number of arguments})
+    end
+
+    it do
+      is_expected.to run.with_params('test', 'test', 100).and_raise_error(%r{first argument must be an array})
+    end
+
+    it do
+      is_expected.to run.with_params(['test'], 100, 'test').and_raise_error(%r{second argument must be a string})
+    end
+
+    it do
+      is_expected.to run.with_params(['test'], 'test', 1).and_raise_error(%r{does not have enough parts})
+    end
+  end
+
   it 'returns an empty hash when input is empty array' do
     is_expected.to run.with_params([], 'test', 100).and_return({})
   end

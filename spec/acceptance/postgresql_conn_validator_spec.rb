@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   let(:install_pp) do
     <<-MANIFEST
       class { 'postgresql::server':
@@ -34,8 +34,7 @@ describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(fac
         }
       MANIFEST
 
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      idempotent_apply(default, pp)
     end
 
     it 'works with connect settings hash' do
@@ -53,8 +52,7 @@ describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(fac
         }
       MANIFEST
 
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      idempotent_apply(default, pp)
     end
 
     it 'fails gracefully' do
