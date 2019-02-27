@@ -55,23 +55,12 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
 
   def run_command(command, user, group, environment)
     command = command.join ' '
-    if Puppet::PUPPETVERSION.to_f < 3.0
-      require 'puppet/util/execution'
-      Puppet::Util::Execution.withenv environment do
-        Puppet::Util::SUIDManager.run_and_capture(command, user, group)
-      end
-    elsif Puppet::PUPPETVERSION.to_f < 3.4
-      Puppet::Util.withenv environment do
-        Puppet::Util::SUIDManager.run_and_capture(command, user, group)
-      end
-    else
-      output = Puppet::Util::Execution.execute(command, uid: user,
-                                                        gid: group,
-                                                        failonfail: false,
-                                                        combine: true,
-                                                        override_locale: true,
-                                                        custom_environment: environment)
-      [output, $CHILD_STATUS.dup]
-    end
+    output = Puppet::Util::Execution.execute(command, uid: user,
+                                                      gid: group,
+                                                      failonfail: false,
+                                                      combine: true,
+                                                      override_locale: true,
+                                                      custom_environment: environment)
+    [output, $CHILD_STATUS.dup]
   end
 end
