@@ -112,7 +112,7 @@ define postgresql::server::config_entry (
     }
   }
   if $::osfamily == 'RedHat' {
-    if ! ($::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora') {
+    if ! ($::operatingsystemrelease =~ /^7|^8/ or $::operatingsystem == 'Fedora') {
       if $name == 'port' {
         # We need to force postgresql to stop before updating the port
         # because puppet becomes confused and is unable to manage the
