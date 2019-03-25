@@ -63,8 +63,6 @@ class postgresql::server (
   #Deprecated
   $version                    = undef,
 ) inherits postgresql::params {
-  $pg = 'postgresql::server'
-
   if $version != undef {
     warning('Passing "version" to postgresql::server is deprecated; please use postgresql::globals instead.')
     $_version = $version
@@ -77,7 +75,9 @@ class postgresql::server (
   }
 
   # Reload has its own ordering, specified by other defines
-  class { "${pg}::reload": require => Class["${pg}::install"] }
+  class { 'postgresql::server::reload':
+    require => Class['postgresql::server::install'],
+  }
 
   contain postgresql::server::install
   contain postgresql::server::initdb
