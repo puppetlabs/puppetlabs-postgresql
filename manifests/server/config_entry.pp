@@ -1,4 +1,10 @@
-# Manage a postgresql.conf entry. See README.md for more details.
+# @summary Manage a postgresql.conf entry.
+#
+# @param ensure
+# @param value
+# @param path
+#   Boolean. Defaults to false.
+#
 define postgresql::server::config_entry (
   $ensure = 'present',
   $value  = undef,

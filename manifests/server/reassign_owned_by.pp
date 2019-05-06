@@ -1,5 +1,14 @@
-# Define for reassigning the ownership of objects within a database. See README.md for more details.
-# This enables us to force the a particular ownership for objects within a database
+# @summary Define for reassigning the ownership of objects within a database.
+# @note
+#   This enables us to force the a particular ownership for objects within a database
+# 
+# @param old_role
+# @param new_role
+# @param db
+# @param psql_user
+# @param port
+# @param connect_settings
+#
 define postgresql::server::reassign_owned_by (
   String $old_role,
   String $new_role,

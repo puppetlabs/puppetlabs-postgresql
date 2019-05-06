@@ -1,5 +1,12 @@
-# This resource manages an individual rule that applies to the file defined in
-# $target. See README.md for more details.
+# @summary This resource manages an individual rule that applies to the file defined in target.
+#
+# @param map_name
+# @param system_username
+# @param database_username
+# @param description
+# @param order
+# @param target
+#
 define postgresql::server::pg_ident_rule(
   $map_name,
   $system_username,

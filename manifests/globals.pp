@@ -1,5 +1,65 @@
-# Class for setting cross-class global overrides. See README.md for more
-# details.
+# @summary Class for setting cross-class global overrides.
+#
+# @param client_package_name      
+# @param server_package_name      
+# @param contrib_package_name     
+# @param devel_package_name       
+# @param java_package_name        
+# @param docs_package_name        
+# @param perl_package_name        
+# @param plperl_package_name      
+# @param plpython_package_name    
+# @param python_package_name      
+# @param postgis_package_name     
+#
+# @param service_name             
+# @param service_provider         
+# @param service_status           
+# @param default_database         
+#
+# @param validcon_script_path     
+#
+# @param initdb_path              
+# @param createdb_path            
+# @param psql_path                
+# @param pg_hba_conf_path         
+# @param pg_ident_conf_path       
+# @param postgresql_conf_path     
+# @param recovery_conf_path       
+# @param default_connect_settings
+#
+# @param pg_hba_conf_defaults     
+#
+# @param datadir                  
+# @param confdir                  
+# @param bindir                   
+# @param xlogdir                  
+# @param logdir                   
+# @param log_line_prefix          
+#
+# @param user                     
+# @param group                    
+#
+# @param version                  
+# @param postgis_version          
+# @param repo_proxy               
+# @param repo_baseurl             
+#
+# @param needs_initdb             
+#
+# @param encoding                 
+# @param locale                   
+# @param data_checksums           
+# @param timezone                 
+#
+# @param manage_pg_hba_conf       
+# @param manage_pg_ident_conf     
+# @param manage_recovery_conf     
+#
+# @param manage_package_repo      
+# @param module_workdir           
+#
+#
 class postgresql::globals (
   $client_package_name      = undef,
   $server_package_name      = undef,

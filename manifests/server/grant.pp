@@ -1,4 +1,17 @@
-# Define for granting permissions to roles. See README.md for more details.
+# @summary Define for granting permissions to roles.
+#
+# @param role
+# @param db
+# @param privilege
+# @param object_type
+# @param object_name
+# @param psql_db
+# @param psql_user
+# @param port
+# @param onlyif_exists
+# @param connect_settings
+# @param ensure
+#
 define postgresql::server::grant (
   String $role,
   String $db,

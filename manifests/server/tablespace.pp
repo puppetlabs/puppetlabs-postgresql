@@ -1,4 +1,10 @@
-# This module creates tablespace. See README.md for more details.
+# @summary This module creates tablespace. 
+#
+# @param location
+# @param owner
+# @param spcname
+# @param connect_settings
+#
 define postgresql::server::tablespace(
   $location,
   $owner   = undef,

@@ -1,5 +1,18 @@
-# Define for conveniently creating a role, database and assigning the correct
-# permissions. See README.md for more details.
+# @ summary Define for conveniently creating a role, database and assigning the correctpermissions.
+# 
+# @param user
+# @param password
+# @param comment
+# @param dbname
+# @param encoding
+# @param locale
+# @param grant
+# @param tablespace
+# @param template
+# @param istemplate
+# @param owner 
+#
+#
 define postgresql::server::db (
   $user,
   $password,

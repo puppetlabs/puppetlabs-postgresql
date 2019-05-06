@@ -1,4 +1,18 @@
-# Install client cli tool. See README.md for more details.
+# @summary Install client cli tool. 
+#
+# @param file_ensure
+#   Enum['file','absent'].
+# 
+# @param validcon_script_path
+#   Optional. Absolute path for the postgresql connection validation script.
+#
+# @param package_name
+#   String. Client package name.
+#
+# @param package_ensure
+#   String. Defaults to 'present'.
+#
+#
 class postgresql::client (
   Enum['file', 'absent'] $file_ensure        = 'file',
   Stdlib::Absolutepath $validcon_script_path = $postgresql::params::validcon_script_path,

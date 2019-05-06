@@ -1,4 +1,22 @@
-# This resource manages the parameters that applies to the recovery.conf template. See README.md for more details.
+# @summary This resource manages the parameters that applies to the recovery.conf template.
+#
+# @param restore_command
+# @param archive_cleanup_command
+# @param recovery_end_command
+# @param recovery_target_name
+# @param recovery_target_time
+# @param recovery_target_xid
+# @param recovery_target_inclusive
+# @param recovery_target
+# @param recovery_target_timeline
+# @param pause_at_recovery_target
+# @param standby_mode
+# @param primary_conninfo
+# @param primary_slot_name
+# @param trigger_file
+# @param recovery_min_apply_delay
+# @param target
+#
 define postgresql::server::recovery(
   $restore_command                = undef,
   $archive_cleanup_command        = undef,

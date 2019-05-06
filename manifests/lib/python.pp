@@ -1,5 +1,10 @@
-# This class installs the python libs for postgresql. See README.md for more
-# details.
+# @summary This class installs the python libs for postgresql.
+#
+# @param package_name
+#  String.
+# @param package_ensure
+#  String. Defaults to 'present'.
+#
 class postgresql::lib::python(
   String[1] $package_name   = $postgresql::params::python_package_name,
   String[1] $package_ensure = 'present'

@@ -1,4 +1,20 @@
-# Define for creating a database role. See README.md for more information
+# @summary Define for creating a database role.
+#
+# @param update_password
+# @param password_hash
+# @param createdb
+# @param createrole
+# @param db
+# @param port
+# @param login
+# @param inherit
+# @param superuser
+# @param replication
+# @param connection_limit
+# @param username
+# @param connect_settings
+# @param ensure
+#
 define postgresql::server::role(
   $update_password = true,
   $password_hash    = false,

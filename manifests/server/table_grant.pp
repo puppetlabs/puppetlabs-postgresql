@@ -1,5 +1,16 @@
-# This resource wraps the grant resource to manage table grants specifically.
-# See README.md for more details.
+# @summary This resource wraps the grant resource to manage table grants specifically.
+#
+# @param privilege
+# @param table
+# @param db
+# @param role
+# @param ensure
+# @param port
+# @param psql_db
+# @param psql_user
+# @param connect_settings
+# @param onlyif_exists
+#
 define postgresql::server::table_grant(
   $privilege,
   $table,

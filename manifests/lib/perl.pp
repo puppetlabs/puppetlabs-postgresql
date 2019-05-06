@@ -1,5 +1,10 @@
-# This class installs the perl libs for postgresql. See README.md for more
-# details.
+# @summary This class installs the perl libs for postgresql.
+#
+# @param package_name
+#   String.
+# @param package_ensure
+#   String. Defaults to 'present'.
+#
 class postgresql::lib::perl(
   String $package_name      = $postgresql::params::perl_package_name,
   String[1] $package_ensure = 'present'
