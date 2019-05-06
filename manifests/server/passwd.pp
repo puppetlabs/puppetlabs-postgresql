@@ -1,4 +1,4 @@
-# PRIVATE CLASS: do not call directly
+# @api private
 class postgresql::server::passwd {
   $postgres_password = $postgresql::server::postgres_password
   $user              = $postgresql::server::user

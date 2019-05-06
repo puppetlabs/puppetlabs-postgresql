@@ -1,4 +1,15 @@
-# Define for creating a database. See README.md for more details.
+# @summary Define for creating a database.
+#
+# @param comment 
+# @param dbname
+# @param owner
+# @param tablespace
+# @param template
+# @param encoding
+# @param locale
+# @param istemplate
+# @param connect_settings
+#
 define postgresql::server::database(
   $comment          = undef,
   $dbname           = $title,

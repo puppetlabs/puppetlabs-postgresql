@@ -1,4 +1,14 @@
-# Activate an extension on a postgresql database
+# @summary Activate an extension on a postgresql database.
+#
+# @param database
+# @param extension
+# @param schema
+# @param version
+# @param ensure
+# @param package_name
+# @param package_ensure
+# @param connect_settings
+#
 define postgresql::server::extension (
   $database,
   $extension                   = $name,

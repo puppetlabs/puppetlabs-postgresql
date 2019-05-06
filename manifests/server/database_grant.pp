@@ -1,4 +1,13 @@
-# Manage a database grant. See README.md for more details.
+# @summary Manage a database grant.
+#
+# @param privilege
+# @param db
+# @param role
+# @param ensure
+# @param psql_db
+# @param psql_user
+# @param connect_settings
+#
 define postgresql::server::database_grant(
   $privilege,
   $db,

@@ -1,5 +1,13 @@
-# This class installs postgresql development libraries. See README.md for more
-# details.
+# @summary This class installs postgresql development libraries. 
+#
+# @param package_name
+#   String.
+# @param package_ensure
+#   String. Defaults to 'present'.
+# @param link_pg_config
+#   Boolean. 
+#
+#
 class postgresql::lib::devel(
   String $package_name      = $postgresql::params::devel_package_name,
   String[1] $package_ensure = 'present',

@@ -1,4 +1,13 @@
-# Define for granting membership to a role. See README.md for more information
+# @summary Define for granting membership to a role.
+#
+# @param group
+# @param role
+# @param ensure
+# @param psql_db
+# @param psql_user
+# @param port
+# @param connect_settings
+#
 define postgresql::server::grant_role (
   String[1] $group,
   String[1] $role                   = $name,

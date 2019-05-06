@@ -1,5 +1,17 @@
-# This resource manages an individual rule that applies to the file defined in
-# $target. See README.md for more details.
+# @summary This resource manages an individual rule that applies to the file defined in target.
+#
+# @param type
+#   Enum['local','host','hostssl','hostnossl'].
+# @param database
+# @param user
+# @param auth_method
+# @param address
+# @param description
+# @param auth_option
+# @param order
+# @param target
+# @param postgresql_version
+#
 define postgresql::server::pg_hba_rule(
   Enum['local', 'host', 'hostssl', 'hostnossl'] $type,
   String $database,

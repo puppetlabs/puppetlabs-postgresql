@@ -1,16 +1,20 @@
-# = Type: postgresql::server::schema
+# @summary
+#  Create a new schema.
 #
-# Create a new schema. See README.md for more details.
+# @note
+#  The database must exist and the PostgreSQL user should have enough privileges
 #
-# == Requires:
+# @param db
+# @param owner
+# @param schema
+# @param connect_settings
 #
-# The database must exist and the PostgreSQL user should have enough privileges
+# 
+# @example
+#   postgresql::server::schema {'private':
+#       db => 'template1',
+#   }
 #
-# == Sample Usage:
-#
-# postgresql::server::schema {'private':
-#     db => 'template1',
-# }
 #
 define postgresql::server::schema(
   $db               = $postgresql::server::default_database,

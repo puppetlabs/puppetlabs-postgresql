@@ -1,4 +1,4 @@
-# PRIVATE CLASS: do not call directly
+# @api private
 class postgresql::server::initdb {
   $needs_initdb   = $postgresql::server::needs_initdb
   $initdb_path    = $postgresql::server::initdb_path

@@ -1,4 +1,67 @@
-# This installs a PostgreSQL server. See README.md for more details.
+# @summary This installs a PostgreSQL server
+#
+# @param postgres_password
+# @param package_name
+# @param package_ensure
+#
+# @param plperl_package_name
+# @param plpython_package_name
+#
+# @param service_ensure
+# @param service_enable
+# @param service_manage
+# @param service_name
+# @param service_restart_on_change
+# @param service_provider
+# @param service_reload
+# @param service_status
+# @param default_database
+# @param default_connect_settings
+# @param listen_addresses
+# @param port
+# @param ip_mask_deny_postgres_user
+# @param ip_mask_allow_all_users
+# @param ipv4acls
+# @param ipv6acls
+#
+# @param initdb_path
+# @param createdb_path
+# @param psql_path
+# @param pg_hba_conf_path
+# @param pg_ident_conf_path
+# @param postgresql_conf_path
+# @param recovery_conf_path
+#
+# @param datadir
+# @param xlogdir
+# @param logdir
+#
+# @param log_line_prefix
+#
+# @param pg_hba_conf_defaults
+#
+# @param user
+# @param group
+#
+# @param needs_initdb
+#
+# @param encoding
+# @param locale
+# @param data_checksums
+# @param timezone
+#
+# @param manage_pg_hba_conf
+# @param manage_pg_ident_conf
+# @param manage_recovery_conf
+# @param module_workdir
+#
+# @param roles
+# @param config_entries
+# @param pg_hba_rules
+#
+# @param version
+#
+#
 class postgresql::server (
   $postgres_password          = undef,
 
