@@ -63,4 +63,5 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
                                                       custom_environment: environment)
     [output, $CHILD_STATUS.dup]
   end
+
 end
