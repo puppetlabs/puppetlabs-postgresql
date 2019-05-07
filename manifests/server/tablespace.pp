@@ -3,8 +3,7 @@
 # @param location Specifies the path to locate this tablespace.
 # @param owner Specifies the default owner of the tablespace.
 # @param spcname Specifies the name of the tablespace.
-# @param connect_settings
-#
+# @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 define postgresql::server::tablespace(
   $location,
   $owner   = undef,

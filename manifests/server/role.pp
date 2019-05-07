@@ -4,8 +4,8 @@
 # @param password_hash Sets the hash to use during password creation.
 # @param createdb Specifies whether to grant the ability to create new databases with this role.
 # @param createrole Specifies whether to grant the ability to create new roles with this role. 
-# @param db
-# @param port
+# @param db Database used to connect to. 
+# @param port Port to use when connecting.
 # @param login Specifies whether to grant login capability for the new role.
 # @param inherit Specifies whether to grant inherit capability for the new role.
 # @param superuser Specifies whether to grant super user capability for the new role.
@@ -14,7 +14,6 @@
 # @param username Defines the username of the role to create.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param ensure Specify whether to create or drop the role. Specifying 'present' creates the role. Specifying 'absent' drops the role.
-#
 define postgresql::server::role(
   $update_password = true,
   $password_hash    = false,

@@ -7,7 +7,6 @@
 # @param psql_user Sets the OS user to run psql.
 # @param port Port to use when connecting.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
-#
 define postgresql::server::grant_role (
   String[1] $group,
   String[1] $role                   = $name,

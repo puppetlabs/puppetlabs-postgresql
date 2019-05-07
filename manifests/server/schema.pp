@@ -7,15 +7,11 @@
 # @param db Required. Sets the name of the database in which to create this schema.
 # @param owner Sets the default owner of the schema.
 # @param schema Sets the name of the schema.
-# @param connect_settings
-#
-# 
+# @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @example
 #   postgresql::server::schema {'private':
 #       db => 'template1',
 #   }
-#
-#
 define postgresql::server::schema(
   $db               = $postgresql::server::default_database,
   $owner            = undef,

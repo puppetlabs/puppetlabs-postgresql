@@ -248,7 +248,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Scipt path for the connection validation check.
 
 Default value: `undef`
 
@@ -312,7 +312,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Default connection settings.
 
 Default value: {}
 
@@ -377,7 +377,6 @@ Default value: `undef`
 Data type: `Any`
 
 Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
-Default value: 'postgres'.
 
 Default value: `undef`
 
@@ -466,7 +465,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Allow Puppet to manage the pg_hba.conf file.
 
 Default value: `undef`
 
@@ -474,7 +473,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Allow Puppet to manage the pg_ident.conf file.
 
 Default value: `undef`
 
@@ -482,7 +481,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Allow Puppet to manage the recovery.conf file.
 
 Default value: `undef`
 
@@ -1059,7 +1058,7 @@ Default value: $postgresql::params::contrib_package_name
 
 Data type: `String[1]`
 
-Enum['present','absent']. Defaults to 'present'.
+Enum['present','absent'].
 
 Default value: 'present'
 
@@ -1123,7 +1122,7 @@ The following parameters are available in the `postgresql::server::postgis` clas
 
 Data type: `String`
 
-
+Sets the package name.
 
 Default value: $postgresql::params::postgis_package_name
 
@@ -1131,7 +1130,7 @@ Default value: $postgresql::params::postgis_package_name
 
 Data type: `String[1]`
 
-
+Specifies if the package is present or not.
 
 Default value: 'present'
 
@@ -1181,7 +1180,7 @@ The following parameters are available in the `postgresql::server::database` def
 
 Data type: `Any`
 
-
+Sets a comment on the database.
 
 Default value: `undef`
 
@@ -1245,7 +1244,7 @@ Default value: `false`
 
 Data type: `Any`
 
-
+Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: $postgresql::server::default_connect_settings
 
@@ -1470,7 +1469,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: $postgresql::server::default_connect_settings
 
@@ -2015,7 +2014,7 @@ Default value: `false`
 
 Data type: `Any`
 
-
+Database used to connect to.
 
 Default value: $postgresql::server::default_database
 
@@ -2023,7 +2022,7 @@ Default value: $postgresql::server::default_database
 
 Data type: `Any`
 
-
+Port to use when connecting.
 
 Default value: `undef`
 
@@ -2139,7 +2138,7 @@ Default value: $title
 
 Data type: `Any`
 
-
+Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: $postgresql::server::default_connect_settings
 
@@ -2187,7 +2186,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Port to use when connecting.
 
 Default value: `undef`
 
@@ -2257,7 +2256,7 @@ Default value: $title
 
 Data type: `Any`
 
-
+Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: $postgresql::server::default_connect_settings
 
@@ -2493,11 +2492,17 @@ An arbitrary tag for your own reference; the name of the message.
 
 ##### `unless`
 
-Optional SQL command to execute before the main command
+An optional SQL command to execute prior to the main :command;
+this is generally intended to be used for idempotency, to check
+for the existence of an object in the database to determine whether
+or not the main SQL command needs to be executed at all.'
 
 ##### `onlyif`
 
-Optional SQL command executed before the main command - return true if matching row found
+An optional SQL command to execute prior to the main :command;
+this is generally intended to be used for idempotency, to check
+for the existence of an object in the database to determine whether
+or not the main SQL command needs to be executed at all.
 
 ##### `connect_settings`
 
