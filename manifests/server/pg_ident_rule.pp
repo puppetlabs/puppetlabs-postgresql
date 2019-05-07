@@ -6,7 +6,6 @@
 # @param description Sets a longer description for this rule if required. This description is placed in the comments above the rule in pg_ident.conf. Default value: 'none'.
 # @param order Defines an order for placing the mapping in pg_ident.conf. Default value: 150.
 # @param target Provides the target for the rule and is generally an internal only property. Use with caution.
-#
 define postgresql::server::pg_ident_rule(
   $map_name,
   $system_username,

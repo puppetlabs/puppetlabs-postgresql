@@ -22,7 +22,7 @@
 # @param service_status Overrides the default status check command for your PostgreSQL service.
 # @param default_database Specifies the name of the default database to connect with.
 #
-# @param validcon_script_path     
+# @param validcon_script_path Scipt path for the connection validation check.
 #
 # @param initdb_path Path to the initdb command.
 # @param createdb_path Deprecated. Path to the createdb command.
@@ -31,7 +31,7 @@
 # @param pg_ident_conf_path Specifies the path to your pg_ident.conf file.
 # @param postgresql_conf_path Sets the path to your postgresql.conf file.
 # @param recovery_conf_path Path to your recovery.conf file.
-# @param default_connect_settings
+# @param default_connect_settings Default connection settings. 
 #
 # @param pg_hba_conf_defaults Disables the defaults supplied with the module for pg_hba.conf if set to false. This is useful if you want to override the defaults. Be sure that your changes align with the rest of the module, as some access is required to perform some operations, such as basic psql operations.    
 #
@@ -47,7 +47,6 @@
 # @param log_line_prefix Overrides the default PostgreSQL log prefix.          
 #
 # @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
-#  Default value: 'postgres'.                    
 # @param group Overrides the default postgres user group to be used for related files in the file system.
 #
 # @param version The version of PostgreSQL to install and manage.                 
@@ -68,9 +67,9 @@
 #         
 # @param timezone Sets the default timezone of the postgresql server. The postgresql built-in default is taking the systems timezone information.
 #
-# @param manage_pg_hba_conf       
-# @param manage_pg_ident_conf     
-# @param manage_recovery_conf     
+# @param manage_pg_hba_conf Allow Puppet to manage the pg_hba.conf file.
+# @param manage_pg_ident_conf Allow Puppet to manage the pg_ident.conf file.
+# @param manage_recovery_conf Allow Puppet to manage the recovery.conf file.
 #
 # @param manage_package_repo Sets up official PostgreSQL repositories on your host if set to true.
 # @param module_workdir Specifies working directory under which the psql command should be executed. May need to specify if '/tmp' is on volume mounted with noexec option.

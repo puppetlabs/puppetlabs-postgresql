@@ -3,9 +3,7 @@
 # @param package_name
 #   String. The name of the PostgreSQL contrib package.
 # @param package_ensure
-#   Enum['present','absent']. Defaults to 'present'.
-# 
-#
+#   Enum['present','absent'].
 class postgresql::server::contrib (
   String $package_name      = $postgresql::params::contrib_package_name,
   String[1] $package_ensure = 'present'

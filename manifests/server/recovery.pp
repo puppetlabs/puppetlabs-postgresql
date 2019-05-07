@@ -9,7 +9,7 @@
 # @param restore_command
 # @param archive_cleanup_command
 # @param recovery_end_command
-# @param recovery_target_name
+# @param recovery_target_name 
 # @param recovery_target_time
 # @param recovery_target_xid
 # @param recovery_target_inclusive
@@ -22,7 +22,6 @@
 # @param trigger_file
 # @param recovery_min_apply_delay
 # @param target Provides the target for the rule, and is generally an internal only property. Use with caution.
-#
 define postgresql::server::recovery(
   $restore_command                = undef,
   $archive_cleanup_command        = undef,

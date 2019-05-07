@@ -11,7 +11,6 @@
 # @param order Sets an order for placing the rule in pg_hba.conf. This can be either a string or an integer. If it is an integer, it will be converted to a string by zero-padding it to three digits. E.g. 42 will be zero-padded to the string '042'. The pg_hba_rule fragments are sorted using the alpha sorting order. Default value: 150.
 # @param target Provides the target for the rule, and is generally an internal only property. Use with caution.
 # @param postgresql_version Manages pg_hba.conf without managing the entire PostgreSQL instance.
-#
 define postgresql::server::pg_hba_rule(
   Enum['local', 'host', 'hostssl', 'hostnossl'] $type,
   String $database,

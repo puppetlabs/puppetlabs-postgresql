@@ -13,8 +13,7 @@
 # @param ensure Specifies whether to activate or deactivate the extension. Valid options: 'present' or 'absent'.
 # @param package_name Specifies a package to install prior to activating the extension.
 # @param package_ensure Overrides default package deletion behavior. By default, the package specified with package_name is installed when the extension is activated and removed when the extension is deactivated. To override this behavior, set the ensure value for the package.
-# @param connect_settings 
-#
+# @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 define postgresql::server::extension (
   $database,
   $extension                   = $name,

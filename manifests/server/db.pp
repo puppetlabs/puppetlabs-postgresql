@@ -11,8 +11,6 @@
 # @param template Specifies the name of the template database from which to build this database. Defaults value: template0.
 # @param istemplate Specifies that the database is a template, if set to true.
 # @param owner Sets a user as the owner of the database.
-#
-#
 define postgresql::server::db (
   $user,
   $password,

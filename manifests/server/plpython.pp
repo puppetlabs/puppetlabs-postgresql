@@ -4,7 +4,6 @@
 #   Enum['present','absent']. Specifies whether the package is present.
 # @param package_name
 #   Specifies the name of the postgresql PL/Python package.
-#
 class postgresql::server::plpython(
   $package_ensure = 'present',
   $package_name   = $postgresql::server::plpython_package_name,

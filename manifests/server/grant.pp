@@ -11,7 +11,6 @@
 # @param onlyif_exists
 # @param connect_settings
 # @param ensure Specifies whether to grant or revoke the privilege. Default is to grant the privilege. Valid values: 'present', 'absent'.
-#
 define postgresql::server::grant (
   String $role,
   String $db,

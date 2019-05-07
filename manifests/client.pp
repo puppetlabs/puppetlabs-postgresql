@@ -5,17 +5,12 @@
 #
 # @param file_ensure
 #   Enum['file','absent'].
-# 
 # @param validcon_script_path
 #   Optional. Absolute path for the postgresql connection validation script.
-#
 # @param package_name
 #   String. Sets the name of the PostgreSQL client package.
-#
 # @param package_ensure 
 #   Enum['present','absent'].
-#
-#
 class postgresql::client (
   Enum['file', 'absent'] $file_ensure        = 'file',
   Stdlib::Absolutepath $validcon_script_path = $postgresql::params::validcon_script_path,

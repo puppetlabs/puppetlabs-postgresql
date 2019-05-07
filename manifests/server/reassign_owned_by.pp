@@ -8,7 +8,6 @@
 # @param psql_user Specifies the OS user for running psql.
 # @param port Port to use when connecting.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
-#
 define postgresql::server::reassign_owned_by (
   String $old_role,
   String $new_role,
