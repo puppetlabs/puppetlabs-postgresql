@@ -2378,7 +2378,7 @@ The following properties are available in the `postgresql_conn_validator` type.
 
 Valid values: present, absent
 
-The basic property that the resource should be in.
+Ensure connection validation
 
 Default value: present
 
@@ -2466,11 +2466,11 @@ An arbitrary tag for your own reference; the name of the message.
 
 ##### `unless`
 
-
+Optional SQL command to execute before the main command
 
 ##### `onlyif`
 
-
+Optional SQL command executed before the main command - return true if matching row found
 
 ##### `connect_settings`
 

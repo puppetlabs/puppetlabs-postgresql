@@ -26,7 +26,9 @@ Puppet::Type.newtype(:postgresql_psql) do
   end
 
   newparam(:unless) do
-    Desc 'An optional SQL command to execute prior to the main :command; ' \
+    desc 'Optional SQL command to execute before the main command'
+
+    desc 'An optional SQL command to execute prior to the main :command; ' \
          'this is generally intended to be used for idempotency, to check ' \
          'for the existence of an object in the database to determine whether ' \
          'or not the main SQL command needs to be executed at all.'
@@ -45,7 +47,9 @@ Puppet::Type.newtype(:postgresql_psql) do
   end
 
   newparam(:onlyif) do
-    Desc 'An optional SQL command to execute prior to the main :command; ' \
+    desc 'Optional SQL command executed before the main command - return true if matching row found'
+
+    desc 'An optional SQL command to execute prior to the main :command; ' \
          'this is generally intended to be used for idempotency, to check ' \
          'for the existence of an object in the database to determine whether ' \
          'or not the main SQL command needs to be executed at all.'
