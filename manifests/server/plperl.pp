@@ -1,7 +1,7 @@
 # @summary This class installs the PL/Perl procedural language for postgresql.
 # 
-# @param package_ensure
-# @param package_name
+# @param package_ensure The ensure parameter passed on to PostgreSQL PL/Perl package resource.
+# @param package_name The name of the PostgreSQL PL/Perl package.
 #
 class postgresql::server::plperl(
   $package_ensure = 'present',

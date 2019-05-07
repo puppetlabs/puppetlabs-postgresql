@@ -1,9 +1,8 @@
 # @summary Manage a postgresql.conf entry.
 #
-# @param ensure
-# @param value
+# @param ensure Removes an entry if set to 'absent'.
+# @param value Defines the value for the setting.
 # @param path
-#   Boolean. Defaults to false.
 #
 define postgresql::server::config_entry (
   $ensure = 'present',

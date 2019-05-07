@@ -4,9 +4,9 @@
 # @note
 #  The database must exist and the PostgreSQL user should have enough privileges
 #
-# @param db
-# @param owner
-# @param schema
+# @param db Required. Sets the name of the database in which to create this schema.
+# @param owner Sets the default owner of the schema.
+# @param schema Sets the name of the schema.
 # @param connect_settings
 #
 # 

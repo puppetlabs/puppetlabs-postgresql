@@ -7,10 +7,10 @@
 
 _Public Classes_
 
-* [`postgresql::client`](#postgresqlclient): Install client cli tool.
+* [`postgresql::client`](#postgresqlclient): Installs PostgreSQL client software. Set the following parameters if you have a custom version you would like to install.
 * [`postgresql::globals`](#postgresqlglobals): Class for setting cross-class global overrides.
 * [`postgresql::lib::devel`](#postgresqllibdevel): This class installs postgresql development libraries.
-* [`postgresql::lib::docs`](#postgresqllibdocs): This class installs the postgresql-docs
+* [`postgresql::lib::docs`](#postgresqllibdocs): Installs PostgreSQL bindings for Postgres-Docs. Set the following parameters if you have a custom version you would like to install.
 * [`postgresql::lib::java`](#postgresqllibjava): This class installs the postgresql jdbc connector.
 * [`postgresql::lib::perl`](#postgresqllibperl): This class installs the perl libs for postgresql.
 * [`postgresql::lib::python`](#postgresqllibpython): This class installs the python libs for postgresql.
@@ -73,7 +73,9 @@ _Private Classes_
 
 ### postgresql::client
 
-Install client cli tool.
+Installs PostgreSQL client software. Set the following parameters if you have a custom version you would like to install.
+
+* **Note** Make sure to add any necessary yum or apt repositories if specifying a custom version.
 
 #### Parameters
 
@@ -99,7 +101,7 @@ Default value: $postgresql::params::validcon_script_path
 
 Data type: `String[1]`
 
-String. Client package name.
+String. Sets the name of the PostgreSQL client package.
 
 Default value: $postgresql::params::client_package_name
 
@@ -107,13 +109,16 @@ Default value: $postgresql::params::client_package_name
 
 Data type: `String[1]`
 
-String. Defaults to 'present'.
+Enum['present','absent'].
 
 Default value: 'present'
 
 ### postgresql::globals
 
-Class for setting cross-class global overrides.
+Debian is currently not supported.
+
+* **Note** Most server-specific defaults should be overridden in the postgresql::server class.
+This class should be used only if you are using a non-standard OS, or if you are changing elements that can only be changed here, such as version or manage_package_repo.
 
 #### Parameters
 
@@ -123,7 +128,7 @@ The following parameters are available in the `postgresql::globals` class.
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL client package name.
 
 Default value: `undef`
 
@@ -131,7 +136,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL server package name.
 
 Default value: `undef`
 
@@ -139,7 +144,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL contrib package name.
 
 Default value: `undef`
 
@@ -147,7 +152,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL devel package name.
 
 Default value: `undef`
 
@@ -155,7 +160,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL java package name.
 
 Default value: `undef`
 
@@ -163,7 +168,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL docs package name.
 
 Default value: `undef`
 
@@ -171,7 +176,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL Perl package name.
 
 Default value: `undef`
 
@@ -179,7 +184,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL PL/Perl package name.
 
 Default value: `undef`
 
@@ -187,7 +192,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL PL/Python package name.
 
 Default value: `undef`
 
@@ -195,7 +200,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL Python package name.
 
 Default value: `undef`
 
@@ -203,7 +208,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL PostGIS package name.
 
 Default value: `undef`
 
@@ -211,7 +216,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL service name.
 
 Default value: `undef`
 
@@ -219,7 +224,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL service provider.
 
 Default value: `undef`
 
@@ -227,7 +232,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default status check command for your PostgreSQL service.
 
 Default value: `undef`
 
@@ -235,7 +240,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the name of the default database to connect with.
 
 Default value: `undef`
 
@@ -251,7 +256,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Path to the initdb command.
 
 Default value: `undef`
 
@@ -259,7 +264,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Deprecated. Path to the createdb command.
 
 Default value: `undef`
 
@@ -267,7 +272,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets the path to the psql command.
 
 Default value: `undef`
 
@@ -275,7 +280,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the path to your pg_hba.conf file.
 
 Default value: `undef`
 
@@ -283,7 +288,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the path to your pg_ident.conf file.
 
 Default value: `undef`
 
@@ -291,7 +296,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets the path to your postgresql.conf file.
 
 Default value: `undef`
 
@@ -299,7 +304,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Path to your recovery.conf file.
 
 Default value: `undef`
 
@@ -315,7 +320,7 @@ Default value: {}
 
 Data type: `Any`
 
-
+Disables the defaults supplied with the module for pg_hba.conf if set to false. This is useful if you want to override the defaults. Be sure that your changes align with the rest of the module, as some access is required to perform some operations, such as basic psql operations.
 
 Default value: `undef`
 
@@ -323,7 +328,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL data directory for the target platform.
 
 Default value: `undef`
 
@@ -331,7 +336,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL configuration directory for the target platform.
 
 Default value: `undef`
 
@@ -339,7 +344,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL binaries directory for the target platform.
 
 Default value: `undef`
 
@@ -347,7 +352,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL xlog directory.
 
 Default value: `undef`
 
@@ -355,7 +360,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL log directory.
 
 Default value: `undef`
 
@@ -363,7 +368,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL log prefix.
 
 Default value: `undef`
 
@@ -371,7 +376,8 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
+Default value: 'postgres'.
 
 Default value: `undef`
 
@@ -379,7 +385,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides the default postgres user group to be used for related files in the file system.
 
 Default value: `undef`
 
@@ -387,7 +393,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+The version of PostgreSQL to install and manage.
 
 Default value: `undef`
 
@@ -395,7 +401,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Defines the version of PostGIS to install, if you install PostGIS.
 
 Default value: `undef`
 
@@ -403,7 +409,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets the proxy option for the official PostgreSQL yum-repositories only. This is useful if your server is behind a corporate firewall and needs to use proxy servers for outside connectivity.
 
 Default value: `undef`
 
@@ -411,7 +417,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets the baseurl for the PostgreSQL repository. Useful if you host your own mirror of the repository.
 
 Default value: `undef`
 
@@ -419,7 +425,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Explicitly calls the initdb operation after the server package is installed and before the PostgreSQL service is started.
 
 Default value: `undef`
 
@@ -427,7 +433,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets the default encoding for all databases created with this module. On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
 
 Default value: `undef`
 
@@ -435,7 +441,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets the default database locale for all databases created with this module. On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
 
 Default value: `undef`
 
@@ -443,7 +449,8 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 
 Default value: `undef`
 
@@ -451,7 +458,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets the default timezone of the postgresql server. The postgresql built-in default is taking the systems timezone information.
 
 Default value: `undef`
 
@@ -483,7 +490,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets up official PostgreSQL repositories on your host if set to true.
 
 Default value: `undef`
 
@@ -491,7 +498,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies working directory under which the psql command should be executed. May need to specify if '/tmp' is on volume mounted with noexec option.
 
 Default value: `undef`
 
@@ -523,13 +530,15 @@ Default value: 'present'
 
 Data type: `Boolean`
 
-Boolean.
+Boolean. If the bin directory used by the PostgreSQL page is not /usr/bin or /usr/local/bin, symlinks pg_config from the package's bin dir into usr/bin (not applicable to Debian systems). Set to false to disable this behavior.
 
 Default value: $postgresql::params::link_pg_config
 
 ### postgresql::lib::docs
 
-This class installs the postgresql-docs
+Installs PostgreSQL bindings for Postgres-Docs. Set the following parameters if you have a custom version you would like to install.
+
+* **Note** Make sure to add any necessary yum or apt repositories if specifying a custom version.
 
 #### Parameters
 
@@ -539,7 +548,7 @@ The following parameters are available in the `postgresql::lib::docs` class.
 
 Data type: `String`
 
-String.
+String. Specifies the name of the PostgreSQL docs package.
 
 Default value: $postgresql::params::docs_package_name
 
@@ -547,13 +556,15 @@ Default value: $postgresql::params::docs_package_name
 
 Data type: `String[1]`
 
-String. Defaults to 'present'.
+Enum['present','absent']. Whether the PostgreSQL docs package resource should be present.
 
 Default value: 'present'
 
 ### postgresql::lib::java
 
 This class installs the postgresql jdbc connector.
+
+* **Note** Make sure to add any necessary yum or apt repositories if specifying a custom version.
 
 #### Parameters
 
@@ -563,7 +574,7 @@ The following parameters are available in the `postgresql::lib::java` class.
 
 Data type: `String`
 
-String.
+String. Specifies the name of the PostgreSQL java package.
 
 Default value: $postgresql::params::java_package_name
 
@@ -571,7 +582,7 @@ Default value: $postgresql::params::java_package_name
 
 Data type: `String[1]`
 
-String. Defaults to 'present'.
+Enum['present','absent']. Specifies whether the package is present.
 
 Default value: 'present'
 
@@ -587,7 +598,7 @@ The following parameters are available in the `postgresql::lib::perl` class.
 
 Data type: `String`
 
-String.
+String. Specifies the name of the PostgreSQL perl package to install.
 
 Default value: $postgresql::params::perl_package_name
 
@@ -595,7 +606,7 @@ Default value: $postgresql::params::perl_package_name
 
 Data type: `String[1]`
 
-String. Defaults to 'present'.
+Enum['present','absent'].
 
 Default value: 'present'
 
@@ -611,7 +622,7 @@ The following parameters are available in the `postgresql::lib::python` class.
 
 Data type: `String[1]`
 
-String.
+String. The name of the PostgreSQL Python package.
 
 Default value: $postgresql::params::python_package_name
 
@@ -619,7 +630,7 @@ Default value: $postgresql::params::python_package_name
 
 Data type: `String[1]`
 
-String. Defaults to 'present'.
+Enum['present','absent']
 
 Default value: 'present'
 
@@ -643,7 +654,7 @@ The following parameters are available in the `postgresql::server` class.
 
 Data type: `Any`
 
-
+Sets the password for the postgres user to your specified value. By default, this setting uses the superuser account in the Postgres database, with a user called postgres and no password.
 
 Default value: `undef`
 
@@ -651,7 +662,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the name of the package to use for installing the server software.
 
 Default value: $postgresql::params::server_package_name
 
@@ -659,7 +670,7 @@ Default value: $postgresql::params::server_package_name
 
 Data type: `Any`
 
-
+Passes a value through to the package resource when creating the server instance.
 
 Default value: $postgresql::params::package_ensure
 
@@ -667,7 +678,7 @@ Default value: $postgresql::params::package_ensure
 
 Data type: `Any`
 
-
+Sets the default package name for the PL/Perl extension.
 
 Default value: $postgresql::params::plperl_package_name
 
@@ -675,7 +686,7 @@ Default value: $postgresql::params::plperl_package_name
 
 Data type: `Any`
 
-
+Sets the default package name for the PL/Python extension.
 
 Default value: $postgresql::params::plpython_package_name
 
@@ -699,7 +710,7 @@ Default value: $postgresql::params::service_enable
 
 Data type: `Any`
 
-
+Defines whether or not Puppet should manage the service.
 
 Default value: $postgresql::params::service_manage
 
@@ -707,7 +718,7 @@ Default value: $postgresql::params::service_manage
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL service name.
 
 Default value: $postgresql::params::service_name
 
@@ -715,7 +726,7 @@ Default value: $postgresql::params::service_name
 
 Data type: `Any`
 
-
+Overrides the default behavior to restart your PostgreSQL service when a config entry has been changed that requires a service restart to become active.
 
 Default value: $postgresql::params::service_restart_on_change
 
@@ -723,7 +734,7 @@ Default value: $postgresql::params::service_restart_on_change
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL service provider.
 
 Default value: $postgresql::params::service_provider
 
@@ -731,7 +742,7 @@ Default value: $postgresql::params::service_provider
 
 Data type: `Any`
 
-
+Overrides the default reload command for your PostgreSQL service.
 
 Default value: $postgresql::params::service_reload
 
@@ -739,7 +750,7 @@ Default value: $postgresql::params::service_reload
 
 Data type: `Any`
 
-
+Overrides the default status check command for your PostgreSQL service.
 
 Default value: $postgresql::params::service_status
 
@@ -747,7 +758,7 @@ Default value: $postgresql::params::service_status
 
 Data type: `Any`
 
-
+Specifies the name of the default database to connect with. On most systems this is 'postgres'.
 
 Default value: $postgresql::params::default_database
 
@@ -755,7 +766,7 @@ Default value: $postgresql::params::default_database
 
 Data type: `Any`
 
-
+Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as postgresql::server::role.
 
 Default value: $postgresql::globals::default_connect_settings
 
@@ -771,7 +782,8 @@ Default value: $postgresql::params::listen_addresses
 
 Data type: `Any`
 
-
+Specifies the port for the PostgreSQL server to listen on. Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems, changing the port causes the server to come to a full stop before being able to make the change.
+Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
 
 Default value: $postgresql::params::port
 
@@ -779,7 +791,8 @@ Default value: $postgresql::params::port
 
 Data type: `Any`
 
-
+Specifies the IP mask from which remote connections should be denied for the postgres superuser.
+Default value: '0.0.0.0/0', which denies any remote connection.
 
 Default value: $postgresql::params::ip_mask_deny_postgres_user
 
@@ -787,7 +800,9 @@ Default value: $postgresql::params::ip_mask_deny_postgres_user
 
 Data type: `Any`
 
-
+Overrides PostgreSQL defaults for remote connections. By default, PostgreSQL does not allow database user accounts to connect via TCP from remote machines. If you'd like to allow this, you can override this setting.
+Set to '0.0.0.0/0' to allow database users to connect from any remote machine, or '192.168.0.0/1' to allow connections from any machine on your local '192.168' subnet.
+Default value: '127.0.0.1/32'.
 
 Default value: $postgresql::params::ip_mask_allow_all_users
 
@@ -795,7 +810,7 @@ Default value: $postgresql::params::ip_mask_allow_all_users
 
 Data type: `Any`
 
-
+Lists strings for access control for connection method, users, databases, IPv4 addresses;
 
 Default value: $postgresql::params::ipv4acls
 
@@ -803,7 +818,7 @@ Default value: $postgresql::params::ipv4acls
 
 Data type: `Any`
 
-
+Lists strings for access control for connection method, users, databases, IPv6 addresses.
 
 Default value: $postgresql::params::ipv6acls
 
@@ -811,7 +826,7 @@ Default value: $postgresql::params::ipv6acls
 
 Data type: `Any`
 
-
+Specifies the path to the initdb command.
 
 Default value: $postgresql::params::initdb_path
 
@@ -819,7 +834,7 @@ Default value: $postgresql::params::initdb_path
 
 Data type: `Any`
 
-
+Deprecated. Specifies the path to the createdb command.
 
 Default value: $postgresql::params::createdb_path
 
@@ -827,7 +842,7 @@ Default value: $postgresql::params::createdb_path
 
 Data type: `Any`
 
-
+Specifies the path to the psql command.
 
 Default value: $postgresql::params::psql_path
 
@@ -835,7 +850,7 @@ Default value: $postgresql::params::psql_path
 
 Data type: `Any`
 
-
+Specifies the path to your pg_hba.conf file.
 
 Default value: $postgresql::params::pg_hba_conf_path
 
@@ -843,7 +858,7 @@ Default value: $postgresql::params::pg_hba_conf_path
 
 Data type: `Any`
 
-
+Specifies the path to your pg_ident.conf file.
 
 Default value: $postgresql::params::pg_ident_conf_path
 
@@ -851,7 +866,7 @@ Default value: $postgresql::params::pg_ident_conf_path
 
 Data type: `Any`
 
-
+Specifies the path to your postgresql.conf file.
 
 Default value: $postgresql::params::postgresql_conf_path
 
@@ -899,7 +914,7 @@ Default value: $postgresql::params::log_line_prefix
 
 Data type: `Any`
 
-
+If false, disables the defaults supplied with the module for pg_hba.conf. This is useful if you disagree with the defaults and wish to override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform basic psql operations for example.
 
 Default value: $postgresql::params::pg_hba_conf_defaults
 
@@ -907,7 +922,7 @@ Default value: $postgresql::params::pg_hba_conf_defaults
 
 Data type: `Any`
 
-
+Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 
 Default value: $postgresql::params::user
 
@@ -915,7 +930,7 @@ Default value: $postgresql::params::user
 
 Data type: `Any`
 
-
+Overrides the default postgres user group to be used for related files in the file system.
 
 Default value: $postgresql::params::group
 
@@ -923,7 +938,7 @@ Default value: $postgresql::params::group
 
 Data type: `Any`
 
-
+Explicitly calls the initdb operation after server package is installed, and before the PostgreSQL service is started.
 
 Default value: $postgresql::params::needs_initdb
 
@@ -931,7 +946,7 @@ Default value: $postgresql::params::needs_initdb
 
 Data type: `Any`
 
-
+Sets the default encoding for all databases created with this module. On certain operating systems this is also used during the template1 initialization, so it becomes a default outside of the module as well.
 
 Default value: $postgresql::params::encoding
 
@@ -939,7 +954,7 @@ Default value: $postgresql::params::encoding
 
 Data type: `Any`
 
-
+Sets the default database locale for all databases created with this module. On certain operating systems this is used during the template1 initialization as well, so it becomes a default outside of the module.
 
 Default value: $postgresql::params::locale
 
@@ -947,7 +962,8 @@ Default value: $postgresql::params::locale
 
 Data type: `Any`
 
-
+Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 
 Default value: $postgresql::params::data_checksums
 
@@ -963,7 +979,7 @@ Default value: $postgresql::params::timezone
 
 Data type: `Any`
 
-
+Boolean. Whether to manage the pg_hba.conf.
 
 Default value: $postgresql::params::manage_pg_hba_conf
 
@@ -971,7 +987,7 @@ Default value: $postgresql::params::manage_pg_hba_conf
 
 Data type: `Any`
 
-
+Boolean. Overwrites the pg_ident.conf file.
 
 Default value: $postgresql::params::manage_pg_ident_conf
 
@@ -979,7 +995,7 @@ Default value: $postgresql::params::manage_pg_ident_conf
 
 Data type: `Any`
 
-
+Boolean. Specifies whether or not manage the recovery.conf.
 
 Default value: $postgresql::params::manage_recovery_conf
 
@@ -995,7 +1011,7 @@ Default value: $postgresql::params::module_workdir
 
 Data type: `Hash[String, Hash]`
 
-
+Specifies a hash from which to generate postgresql::server::role resources.
 
 Default value: {}
 
@@ -1003,7 +1019,7 @@ Default value: {}
 
 Data type: `Hash[String, Any]`
 
-
+Specifies a hash from which to generate postgresql::server::config_entry resources.
 
 Default value: {}
 
@@ -1011,7 +1027,7 @@ Default value: {}
 
 Data type: `Hash[String, Hash]`
 
-
+Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
 
 Default value: {}
 
@@ -1035,7 +1051,7 @@ The following parameters are available in the `postgresql::server::contrib` clas
 
 Data type: `String`
 
-String.
+String. The name of the PostgreSQL contrib package.
 
 Default value: $postgresql::params::contrib_package_name
 
@@ -1043,7 +1059,7 @@ Default value: $postgresql::params::contrib_package_name
 
 Data type: `String[1]`
 
-String. Defaults to 'present'.
+Enum['present','absent']. Defaults to 'present'.
 
 Default value: 'present'
 
@@ -1059,7 +1075,7 @@ The following parameters are available in the `postgresql::server::plperl` class
 
 Data type: `Any`
 
-
+The ensure parameter passed on to PostgreSQL PL/Perl package resource.
 
 Default value: 'present'
 
@@ -1067,7 +1083,7 @@ Default value: 'present'
 
 Data type: `Any`
 
-
+The name of the PostgreSQL PL/Perl package.
 
 Default value: $postgresql::server::plperl_package_name
 
@@ -1083,7 +1099,7 @@ The following parameters are available in the `postgresql::server::plpython` cla
 
 Data type: `Any`
 
-
+Enum['present','absent']. Specifies whether the package is present.
 
 Default value: 'present'
 
@@ -1091,7 +1107,7 @@ Default value: 'present'
 
 Data type: `Any`
 
-
+Specifies the name of the postgresql PL/Python package.
 
 Default value: $postgresql::server::plpython_package_name
 
@@ -1133,7 +1149,7 @@ The following parameters are available in the `postgresql::server::config_entry`
 
 Data type: `Any`
 
-
+Removes an entry if set to 'absent'.
 
 Default value: 'present'
 
@@ -1141,7 +1157,7 @@ Default value: 'present'
 
 Data type: `Any`
 
-
+Defines the value for the setting.
 
 Default value: `undef`
 
@@ -1149,7 +1165,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-Boolean. Defaults to false.
+
 
 Default value: `false`
 
@@ -1173,7 +1189,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets the name of the database.
 
 Default value: $title
 
@@ -1181,7 +1197,7 @@ Default value: $title
 
 Data type: `Any`
 
-
+Sets name of the database owner.
 
 Default value: `undef`
 
@@ -1189,7 +1205,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets tablespace for where to create this database.
 
 Default value: `undef`
 
@@ -1197,7 +1213,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the name of the template database from which to build this database. Default value: 'template0'.
 
 Default value: 'template0'
 
@@ -1205,7 +1221,7 @@ Default value: 'template0'
 
 Data type: `Any`
 
-
+Overrides the character set during creation of the database.
 
 Default value: $postgresql::server::encoding
 
@@ -1213,7 +1229,7 @@ Default value: $postgresql::server::encoding
 
 Data type: `Any`
 
-
+Overrides the locale during creation of the database.
 
 Default value: $postgresql::server::locale
 
@@ -1221,7 +1237,7 @@ Default value: $postgresql::server::locale
 
 Data type: `Any`
 
-
+Defines the database as a template if set to true.
 
 Default value: `false`
 
@@ -1245,25 +1261,25 @@ The following parameters are available in the `postgresql::server::database_gran
 
 Data type: `Any`
 
-
+Specifies comma-separated list of privileges to grant. Valid options: 'ALL', 'CREATE', 'CONNECT', 'TEMPORARY', 'TEMP'.
 
 ##### `db`
 
 Data type: `Any`
 
-
+Specifies the database to which you are granting access.
 
 ##### `role`
 
 Data type: `Any`
 
-
+Specifies the role or user whom you are granting access to.
 
 ##### `ensure`
 
 Data type: `Any`
 
-
+Specifies whether to grant or revoke the privilege. Revoke or 'absent' works only in PostgreSQL version 9.1.24 or later.
 
 Default value: `undef`
 
@@ -1271,7 +1287,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Defines the database to execute the grant against. This should not ordinarily be changed from the default
 
 Default value: `undef`
 
@@ -1279,7 +1295,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the OS user for running psql. Default value: The default user for the module, usually 'postgres'.
 
 Default value: `undef`
 
@@ -1287,7 +1303,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: `undef`
 
@@ -1303,19 +1319,19 @@ The following parameters are available in the `postgresql::server::db` defined t
 
 Data type: `Any`
 
-
+User to create and assign access to the database upon creation. Mandatory.
 
 ##### `password`
 
 Data type: `Any`
 
-
+Required Sets the password for the created user.
 
 ##### `comment`
 
 Data type: `Any`
 
-
+Defines a comment to be stored about the database using the PostgreSQL COMMENT command.
 
 Default value: `undef`
 
@@ -1323,7 +1339,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets the name of the database to be created.
 
 Default value: $title
 
@@ -1331,7 +1347,7 @@ Default value: $title
 
 Data type: `Any`
 
-
+Overrides the character set during creation of the database.
 
 Default value: $postgresql::server::encoding
 
@@ -1339,7 +1355,7 @@ Default value: $postgresql::server::encoding
 
 Data type: `Any`
 
-
+Overrides the locale during creation of the database.
 
 Default value: $postgresql::server::locale
 
@@ -1347,7 +1363,7 @@ Default value: $postgresql::server::locale
 
 Data type: `Any`
 
-
+Specifies the permissions to grant during creation. Default value: 'ALL'.
 
 Default value: 'ALL'
 
@@ -1355,7 +1371,7 @@ Default value: 'ALL'
 
 Data type: `Any`
 
-
+Defines the name of the tablespace to allocate the created database to.
 
 Default value: `undef`
 
@@ -1363,7 +1379,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the name of the template database from which to build this database. Defaults value: template0.
 
 Default value: 'template0'
 
@@ -1371,7 +1387,7 @@ Default value: 'template0'
 
 Data type: `Any`
 
-
+Specifies that the database is a template, if set to true.
 
 Default value: `false`
 
@@ -1379,7 +1395,7 @@ Default value: `false`
 
 Data type: `Any`
 
-
+Sets a user as the owner of the database.
 
 Default value: `undef`
 
@@ -1395,13 +1411,13 @@ The following parameters are available in the `postgresql::server::extension` de
 
 Data type: `Any`
 
-
+Specifies the database on which to activate the extension.
 
 ##### `extension`
 
 Data type: `Any`
 
-
+Specifies the extension to activate. If left blank, uses the name of the resource.
 
 Default value: $name
 
@@ -1409,7 +1425,7 @@ Default value: $name
 
 Data type: `Optional[String[1]]`
 
-
+Specifies the schema on which to activate the extension.
 
 Default value: `undef`
 
@@ -1417,7 +1433,12 @@ Default value: `undef`
 
 Data type: `Optional[String[1]]`
 
-
+Specifies the version of the extension which the database uses. When an extension package is updated, this does not automatically change the effective version in each database.
+This needs be updated using the PostgreSQL-specific SQL ALTER EXTENSION...
+version may be set to latest, in which case the SQL ALTER EXTENSION "extension" UPDATE is applied to this database (only).
+version may be set to a specific version, in which case the extension is updated using ALTER EXTENSION "extension" UPDATE TO 'version'
+eg. If extension is set to postgis and version is set to 2.3.3, this will apply the SQL ALTER EXTENSION "postgis" UPDATE TO '2.3.3' to this database only.
+version may be omitted, in which case no ALTER EXTENSION... SQL is applied, and the version will be left unchanged.
 
 Default value: `undef`
 
@@ -1425,7 +1446,7 @@ Default value: `undef`
 
 Data type: `String[1]`
 
-
+Specifies whether to activate or deactivate the extension. Valid options: 'present' or 'absent'.
 
 Default value: 'present'
 
@@ -1433,7 +1454,7 @@ Default value: 'present'
 
 Data type: `Any`
 
-
+Specifies a package to install prior to activating the extension.
 
 Default value: `undef`
 
@@ -1441,7 +1462,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Overrides default package deletion behavior. By default, the package specified with package_name is installed when the extension is activated and removed when the extension is deactivated. To override this behavior, set the ensure value for the package.
 
 Default value: `undef`
 
@@ -1465,19 +1486,19 @@ The following parameters are available in the `postgresql::server::grant` define
 
 Data type: `String`
 
-
+Specifies the role or user whom you are granting access to.
 
 ##### `db`
 
 Data type: `String`
 
-
+Specifies the database to which you are granting access.
 
 ##### `privilege`
 
 Data type: `String`
 
-
+Specifies the privilege to grant. Valid options: 'ALL', 'ALL PRIVILEGES' or 'object_type' dependent string.
 
 Default value: ''
 
@@ -1499,7 +1520,7 @@ Data type: `Pattern[#/(?i:^COLUMN$)/,
     #/(?i:^VIEW$)/
   ]`
 
-
+Specifies the type of object to which you are granting privileges. Valid options: 'DATABASE', 'SCHEMA', 'SEQUENCE', 'ALL SEQUENCES IN SCHEMA', 'TABLE' or 'ALL TABLES IN SCHEMA'.
 
 Default value: 'database'
 
@@ -1510,7 +1531,7 @@ Data type: `Optional[Variant[
             String[1]]
   ]`
 
-
+Specifies name of object_type to which to grant access, can be either a string or a two element array. String: 'object_name' Array: ['schema_name', 'object_name']
 
 Default value: `undef`
 
@@ -1518,7 +1539,7 @@ Default value: `undef`
 
 Data type: `String`
 
-
+Specifies the database to execute the grant against. This should not ordinarily be changed from the default
 
 Default value: $postgresql::server::default_database
 
@@ -1526,7 +1547,7 @@ Default value: $postgresql::server::default_database
 
 Data type: `String`
 
-
+Sets the OS user to run psql.
 
 Default value: $postgresql::server::user
 
@@ -1534,7 +1555,7 @@ Default value: $postgresql::server::user
 
 Data type: `Integer`
 
-
+Port to use when connecting.
 
 Default value: $postgresql::server::port
 
@@ -1560,7 +1581,7 @@ Data type: `Enum['present',
         'absent'
   ]`
 
-
+Specifies whether to grant or revoke the privilege. Default is to grant the privilege. Valid values: 'present', 'absent'.
 
 Default value: 'present'
 
@@ -1576,13 +1597,13 @@ The following parameters are available in the `postgresql::server::grant_role` d
 
 Data type: `String[1]`
 
-
+Specifies the group role to which you are assigning a role.
 
 ##### `role`
 
 Data type: `String[1]`
 
-
+Specifies the role you want to assign to a group. If left blank, uses the name of the resource.
 
 Default value: $name
 
@@ -1590,7 +1611,7 @@ Default value: $name
 
 Data type: `Enum['present', 'absent']`
 
-
+Specifies whether to grant or revoke the membership. Valid options: 'present' or 'absent'.
 
 Default value: 'present'
 
@@ -1598,7 +1619,7 @@ Default value: 'present'
 
 Data type: `Any`
 
-
+Specifies the database to execute the grant against. This should not ordinarily be changed from the default
 
 Default value: $postgresql::server::default_database
 
@@ -1606,7 +1627,7 @@ Default value: $postgresql::server::default_database
 
 Data type: `Any`
 
-
+Sets the OS user to run psql.
 
 Default value: $postgresql::server::user
 
@@ -1614,7 +1635,7 @@ Default value: $postgresql::server::user
 
 Data type: `Any`
 
-
+Port to use when connecting.
 
 Default value: $postgresql::server::port
 
@@ -1622,7 +1643,7 @@ Default value: $postgresql::server::port
 
 Data type: `Any`
 
-
+Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: $postgresql::server::default_connect_settings
 
@@ -1638,31 +1659,32 @@ The following parameters are available in the `postgresql::server::pg_hba_rule` 
 
 Data type: `Enum['local', 'host', 'hostssl', 'hostnossl']`
 
+Sets the type of rule.
 Enum['local','host','hostssl','hostnossl'].
 
 ##### `database`
 
 Data type: `String`
 
-
+Sets a comma-separated list of databases that this rule matches.
 
 ##### `user`
 
 Data type: `String`
 
-
+Sets a comma-separated list of users that this rule matches.
 
 ##### `auth_method`
 
 Data type: `String`
 
-
+Provides the method that is used for authentication for the connection that this rule matches. Described further in the PostgreSQL pg_hba.conf documentation.
 
 ##### `address`
 
 Data type: `Optional[String]`
 
-
+Sets a CIDR based address for this rule matching when the type is not 'local'.
 
 Default value: `undef`
 
@@ -1670,7 +1692,7 @@ Default value: `undef`
 
 Data type: `String`
 
-
+Defines a longer description for this rule, if required. This description is placed in the comments above the rule in pg_hba.conf. Default value: 'none'.
 
 Default value: 'none'
 
@@ -1678,7 +1700,7 @@ Default value: 'none'
 
 Data type: `Optional[String]`
 
-
+For certain auth_method settings there are extra options that can be passed. Consult the PostgreSQL pg_hba.conf documentation for further details.
 
 Default value: `undef`
 
@@ -1686,7 +1708,7 @@ Default value: `undef`
 
 Data type: `Variant[String, Integer]`
 
-
+Sets an order for placing the rule in pg_hba.conf. This can be either a string or an integer. If it is an integer, it will be converted to a string by zero-padding it to three digits. E.g. 42 will be zero-padded to the string '042'. The pg_hba_rule fragments are sorted using the alpha sorting order. Default value: 150.
 
 Default value: 150
 
@@ -1694,7 +1716,7 @@ Default value: 150
 
 Data type: `Stdlib::Absolutepath`
 
-
+Provides the target for the rule, and is generally an internal only property. Use with caution.
 
 Default value: $postgresql::server::pg_hba_conf_path
 
@@ -1702,7 +1724,7 @@ Default value: $postgresql::server::pg_hba_conf_path
 
 Data type: `String`
 
-
+Manages pg_hba.conf without managing the entire PostgreSQL instance.
 
 Default value: $postgresql::server::_version
 
@@ -1718,25 +1740,25 @@ The following parameters are available in the `postgresql::server::pg_ident_rule
 
 Data type: `Any`
 
-
+Sets the name of the user map that is used to refer to this mapping in pg_hba.conf.
 
 ##### `system_username`
 
 Data type: `Any`
 
-
+Specifies the operating system user name (the user name used to connect to the database).
 
 ##### `database_username`
 
 Data type: `Any`
 
-
+Specifies the user name of the database user. The system_username is mapped to this user name.
 
 ##### `description`
 
 Data type: `Any`
 
-
+Sets a longer description for this rule if required. This description is placed in the comments above the rule in pg_ident.conf. Default value: 'none'.
 
 Default value: 'none'
 
@@ -1744,7 +1766,7 @@ Default value: 'none'
 
 Data type: `Any`
 
-
+Defines an order for placing the mapping in pg_ident.conf. Default value: 150.
 
 Default value: '150'
 
@@ -1752,7 +1774,7 @@ Default value: '150'
 
 Data type: `Any`
 
-
+Provides the target for the rule and is generally an internal only property. Use with caution.
 
 Default value: $postgresql::server::pg_ident_conf_path
 
@@ -1770,25 +1792,25 @@ The following parameters are available in the `postgresql::server::reassign_owne
 
 Data type: `String`
 
-
+Specifies the role or user who is the current owner of the objects in the specified db
 
 ##### `new_role`
 
 Data type: `String`
 
-
+Specifies the role or user who will be the new owner of these objects
 
 ##### `db`
 
 Data type: `String`
 
-
+Specifies the database to which the 'REASSIGN OWNED' will be applied
 
 ##### `psql_user`
 
 Data type: `String`
 
-
+Specifies the OS user for running psql.
 
 Default value: $postgresql::server::user
 
@@ -1796,7 +1818,7 @@ Default value: $postgresql::server::user
 
 Data type: `Integer`
 
-
+Port to use when connecting.
 
 Default value: $postgresql::server::port
 
@@ -1804,13 +1826,18 @@ Default value: $postgresql::server::port
 
 Data type: `Hash`
 
-
+Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: $postgresql::server::default_connect_settings
 
 ### postgresql::server::recovery
 
 This resource manages the parameters that applies to the recovery.conf template.
+
+* **Note** Allows you to create the content for recovery.conf. For more details see the usage example and the PostgreSQL documentation.
+Every parameter value is a string set in the template except recovery_target_inclusive, pause_at_recovery_target, standby_mode and recovery_min_apply_delay.
+A detailed description of all listed parameters can be found in the PostgreSQL documentation.
+Only the specified parameters are recognized in the template. The recovery.conf is only created if at least one parameter is set and manage_recovery_conf is set to true.
 
 #### Parameters
 
@@ -1900,7 +1927,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Can be specified with the string ('on'/'off'), or by using a Boolean value (true/false).
 
 Default value: `undef`
 
@@ -1940,7 +1967,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Provides the target for the rule, and is generally an internal only property. Use with caution.
 
 Default value: $postgresql::server::recovery_conf_path
 
@@ -1956,7 +1983,7 @@ The following parameters are available in the `postgresql::server::role` defined
 
 Data type: `Any`
 
-
+If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.
 
 Default value: `true`
 
@@ -1964,7 +1991,7 @@ Default value: `true`
 
 Data type: `Any`
 
-
+Sets the hash to use during password creation.
 
 Default value: `false`
 
@@ -1972,7 +1999,7 @@ Default value: `false`
 
 Data type: `Any`
 
-
+Specifies whether to grant the ability to create new databases with this role.
 
 Default value: `false`
 
@@ -1980,7 +2007,7 @@ Default value: `false`
 
 Data type: `Any`
 
-
+Specifies whether to grant the ability to create new roles with this role.
 
 Default value: `false`
 
@@ -2004,7 +2031,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies whether to grant login capability for the new role.
 
 Default value: `true`
 
@@ -2012,7 +2039,7 @@ Default value: `true`
 
 Data type: `Any`
 
-
+Specifies whether to grant inherit capability for the new role.
 
 Default value: `true`
 
@@ -2020,7 +2047,7 @@ Default value: `true`
 
 Data type: `Any`
 
-
+Specifies whether to grant super user capability for the new role.
 
 Default value: `false`
 
@@ -2028,7 +2055,7 @@ Default value: `false`
 
 Data type: `Any`
 
-
+Provides provides replication capabilities for this role if set to true.
 
 Default value: `false`
 
@@ -2036,7 +2063,7 @@ Default value: `false`
 
 Data type: `Any`
 
-
+Specifies how many concurrent connections the role can make. Default value: '-1', meaning no limit.
 
 Default value: '-1'
 
@@ -2044,7 +2071,7 @@ Default value: '-1'
 
 Data type: `Any`
 
-
+Defines the username of the role to create.
 
 Default value: $title
 
@@ -2052,7 +2079,7 @@ Default value: $title
 
 Data type: `Any`
 
-
+Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: $postgresql::server::default_connect_settings
 
@@ -2060,7 +2087,7 @@ Default value: $postgresql::server::default_connect_settings
 
 Data type: `Enum['present', 'absent']`
 
-
+Specify whether to create or drop the role. Specifying 'present' creates the role. Specifying 'absent' drops the role.
 
 Default value: 'present'
 
@@ -2088,7 +2115,7 @@ The following parameters are available in the `postgresql::server::schema` defin
 
 Data type: `Any`
 
-
+Required. Sets the name of the database in which to create this schema.
 
 Default value: $postgresql::server::default_database
 
@@ -2096,7 +2123,7 @@ Default value: $postgresql::server::default_database
 
 Data type: `Any`
 
-
+Sets the default owner of the schema.
 
 Default value: `undef`
 
@@ -2104,7 +2131,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets the name of the schema.
 
 Default value: $title
 
@@ -2128,31 +2155,31 @@ The following parameters are available in the `postgresql::server::table_grant` 
 
 Data type: `Any`
 
-
+Specifies comma-separated list of privileges to grant. Valid options: 'ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER'.
 
 ##### `table`
 
 Data type: `Any`
 
-
+Specifies the table to which you are granting access.
 
 ##### `db`
 
 Data type: `Any`
 
-
+Specifies which database the table is in.
 
 ##### `role`
 
 Data type: `Any`
 
-
+Specifies the role or user to whom you are granting access.
 
 ##### `ensure`
 
 Data type: `Any`
 
-
+Specifies whether to grant or revoke the privilege. Default is to grant the privilege.
 
 Default value: `undef`
 
@@ -2168,7 +2195,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the database to execute the grant against. This should not ordinarily be changed from the default.
 
 Default value: `undef`
 
@@ -2176,7 +2203,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the OS user for running psql.
 
 Default value: `undef`
 
@@ -2184,7 +2211,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: `undef`
 
@@ -2208,13 +2235,13 @@ The following parameters are available in the `postgresql::server::tablespace` d
 
 Data type: `Any`
 
-
+Specifies the path to locate this tablespace.
 
 ##### `owner`
 
 Data type: `Any`
 
-
+Specifies the default owner of the tablespace.
 
 Default value: `undef`
 
@@ -2222,7 +2249,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the name of the tablespace.
 
 Default value: $title
 
