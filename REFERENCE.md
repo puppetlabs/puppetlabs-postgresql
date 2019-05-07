@@ -62,8 +62,8 @@ _Private Classes_
 **Functions**
 
 * [`postgresql_acls_to_resources_hash`](#postgresql_acls_to_resources_hash): This internal function translates the ipv(4|6)acls format into a resource suitable for create_resources. It is not intended to be used outsid
-* [`postgresql_escape`](#postgresql_escape): Safely escapes a string using $$ using a random tag which should be consistent
-* [`postgresql_password`](#postgresql_password): Returns the postgresql password hash from the clear text username / password.
+* [`postgresql_escape`](#postgresql_escape): 
+* [`postgresql_password`](#postgresql_password): 
 
 **Tasks**
 
@@ -2568,7 +2568,6 @@ This internal function translates the ipv(4|6)acls format into a resource
 suitable for create_resources. It is not intended to be used outside of the
 postgresql internal classes/defined resources.
 
-This function accepts an array of strings that are pg_hba.conf rules. It
 will return a hash that can be fed into create_resources to create multiple
 individual pg_hba_rule resources.
 
@@ -2584,7 +2583,6 @@ This internal function translates the ipv(4|6)acls format into a resource
 suitable for create_resources. It is not intended to be used outside of the
 postgresql internal classes/defined resources.
 
-This function accepts an array of strings that are pg_hba.conf rules. It
 will return a hash that can be fed into create_resources to create multiple
 individual pg_hba_rule resources.
 
@@ -2594,31 +2592,31 @@ to provide uniqueness. It must be a string.
 The third parameter is an order offset, so you can start the order at an
 arbitrary starting point.
 
-Returns: `Any`
+Returns: `Any` This function accepts an array of strings that are pg_hba.conf rules. It
 
 ### postgresql_escape
 
 Type: Ruby 3.x API
 
-Safely escapes a string using $$ using a random tag which should be consistent
+The postgresql_escape function.
 
 #### `postgresql_escape()`
 
-Safely escapes a string using $$ using a random tag which should be consistent
+The postgresql_escape function.
 
-Returns: `Any`
+Returns: `Any` Safely escapes a string using $$ using a random tag which should be consistent
 
 ### postgresql_password
 
 Type: Ruby 3.x API
 
-Returns the postgresql password hash from the clear text username / password.
+The postgresql_password function.
 
 #### `postgresql_password()`
 
-Returns the postgresql password hash from the clear text username / password.
+The postgresql_password function.
 
-Returns: `Any`
+Returns: `Any` Returns the postgresql password hash from the clear text username / password.
 
 ## Tasks
 
