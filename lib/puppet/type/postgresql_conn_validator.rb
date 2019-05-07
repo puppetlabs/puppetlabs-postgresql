@@ -6,6 +6,7 @@ Puppet::Type.newtype(:postgresql_conn_validator) do
           purposes such as monitoring."
 
   ensurable do
+    desc 'Ensure connection validation'
     defaultvalues
     defaultto :present
   end
