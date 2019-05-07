@@ -1,4 +1,7 @@
-# @summary Install client cli tool. 
+# @summary Installs PostgreSQL client software. Set the following parameters if you have a custom version you would like to install.
+# 
+# @note
+#  Make sure to add any necessary yum or apt repositories if specifying a custom version.
 #
 # @param file_ensure
 #   Enum['file','absent'].
@@ -7,10 +10,10 @@
 #   Optional. Absolute path for the postgresql connection validation script.
 #
 # @param package_name
-#   String. Client package name.
+#   String. Sets the name of the PostgreSQL client package.
 #
-# @param package_ensure
-#   String. Defaults to 'present'.
+# @param package_ensure 
+#   Enum['present','absent'].
 #
 #
 class postgresql::client (

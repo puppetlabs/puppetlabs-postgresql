@@ -1,9 +1,12 @@
-# @summary This class installs the postgresql-docs
+# @summary Installs PostgreSQL bindings for Postgres-Docs. Set the following parameters if you have a custom version you would like to install.
+#
+# @note
+#   Make sure to add any necessary yum or apt repositories if specifying a custom version.
 #
 # @param package_name
-#   String.
+#   String. Specifies the name of the PostgreSQL docs package.
 # @param package_ensure
-#   String. Defaults to 'present'.
+#   Enum['present','absent']. Whether the PostgreSQL docs package resource should be present.
 # 
 #
 class postgresql::lib::docs (

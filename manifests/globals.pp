@@ -1,63 +1,79 @@
 # @summary Class for setting cross-class global overrides.
 #
-# @param client_package_name      
-# @param server_package_name      
-# @param contrib_package_name     
-# @param devel_package_name       
-# @param java_package_name        
-# @param docs_package_name        
-# @param perl_package_name        
-# @param plperl_package_name      
-# @param plpython_package_name    
-# @param python_package_name      
-# @param postgis_package_name     
+# @note
+#   Most server-specific defaults should be overridden in the postgresql::server class. 
+#   This class should be used only if you are using a non-standard OS, or if you are changing elements that can only be changed here, such as version or manage_package_repo.
 #
-# @param service_name             
-# @param service_provider         
-# @param service_status           
-# @param default_database         
+#
+# @param client_package_name  Overrides the default PostgreSQL client package name.    
+# @param server_package_name Overrides the default PostgreSQL server package name.
+# @param contrib_package_name Overrides the default PostgreSQL contrib package name.
+# @param devel_package_name Overrides the default PostgreSQL devel package name.
+# @param java_package_name Overrides the default PostgreSQL java package name.
+# @param docs_package_name Overrides the default PostgreSQL docs package name.
+# @param perl_package_name Overrides the default PostgreSQL Perl package name.
+# @param plperl_package_name Overrides the default PostgreSQL PL/Perl package name.
+# @param plpython_package_name Overrides the default PostgreSQL PL/Python package name.
+# @param python_package_name Overrides the default PostgreSQL Python package name.
+# @param postgis_package_name Overrides the default PostgreSQL PostGIS package name.     
+#
+# @param service_name Overrides the default PostgreSQL service name.
+# @param service_provider Overrides the default PostgreSQL service provider.
+# @param service_status Overrides the default status check command for your PostgreSQL service.
+# @param default_database Specifies the name of the default database to connect with.
 #
 # @param validcon_script_path     
 #
-# @param initdb_path              
-# @param createdb_path            
-# @param psql_path                
-# @param pg_hba_conf_path         
-# @param pg_ident_conf_path       
-# @param postgresql_conf_path     
-# @param recovery_conf_path       
+# @param initdb_path Path to the initdb command.
+# @param createdb_path Deprecated. Path to the createdb command.
+# @param psql_path Sets the path to the psql command.
+# @param pg_hba_conf_path Specifies the path to your pg_hba.conf file.
+# @param pg_ident_conf_path Specifies the path to your pg_ident.conf file.
+# @param postgresql_conf_path Sets the path to your postgresql.conf file.
+# @param recovery_conf_path Path to your recovery.conf file.
 # @param default_connect_settings
 #
-# @param pg_hba_conf_defaults     
+# @param pg_hba_conf_defaults Disables the defaults supplied with the module for pg_hba.conf if set to false. This is useful if you want to override the defaults. Be sure that your changes align with the rest of the module, as some access is required to perform some operations, such as basic psql operations.    
 #
-# @param datadir                  
-# @param confdir                  
-# @param bindir                   
-# @param xlogdir                  
-# @param logdir                   
-# @param log_line_prefix          
+# @param datadir Overrides the default PostgreSQL data directory for the target platform.
+# 
+# @note Changing the datadir after installation causes the server to come to a full stop before making the change. For Red Hat systems, the data directory must be labeled appropriately for SELinux. On Ubuntu, you must explicitly set needs_initdb = true to allow Puppet to initialize the database in the new datadir (needs_initdb defaults to true on other systems).
+# @note Warning! If datadir is changed from the default, Puppet does not manage purging of the original data directory, which causes it to fail if the data directory is changed back to the original
+# 
+# @param confdir Overrides the default PostgreSQL configuration directory for the target platform.                  
+# @param bindir Overrides the default PostgreSQL binaries directory for the target platform.
+# @param xlogdir Overrides the default PostgreSQL xlog directory.                 
+# @param logdir Overrides the default PostgreSQL log directory.
+# @param log_line_prefix Overrides the default PostgreSQL log prefix.          
 #
-# @param user                     
-# @param group                    
+# @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
+#  Default value: 'postgres'.                    
+# @param group Overrides the default postgres user group to be used for related files in the file system.
 #
-# @param version                  
-# @param postgis_version          
-# @param repo_proxy               
-# @param repo_baseurl             
+# @param version The version of PostgreSQL to install and manage.                 
+# @param postgis_version Defines the version of PostGIS to install, if you install PostGIS.         
+# @param repo_proxy Sets the proxy option for the official PostgreSQL yum-repositories only. This is useful if your server is behind a corporate firewall and needs to use proxy servers for outside connectivity.
+# Debian is currently not supported.              
 #
-# @param needs_initdb             
+# @param repo_baseurl Sets the baseurl for the PostgreSQL repository. Useful if you host your own mirror of the repository.
 #
-# @param encoding                 
-# @param locale                   
-# @param data_checksums           
-# @param timezone                 
+# @param needs_initdb Explicitly calls the initdb operation after the server package is installed and before the PostgreSQL service is started.            
+#
+# @param encoding Sets the default encoding for all databases created with this module. On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
+# @param locale Sets the default database locale for all databases created with this module. On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
+# @note On Debian, you'll need to ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.
+# @param data_checksums 
+#   Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+#   Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
+#         
+# @param timezone Sets the default timezone of the postgresql server. The postgresql built-in default is taking the systems timezone information.
 #
 # @param manage_pg_hba_conf       
 # @param manage_pg_ident_conf     
 # @param manage_recovery_conf     
 #
-# @param manage_package_repo      
-# @param module_workdir           
+# @param manage_package_repo Sets up official PostgreSQL repositories on your host if set to true.
+# @param module_workdir Specifies working directory under which the psql command should be executed. May need to specify if '/tmp' is on volume mounted with noexec option.
 #
 #
 class postgresql::globals (

@@ -1,5 +1,11 @@
 # @summary This resource manages the parameters that applies to the recovery.conf template.
 #
+# @note
+#  Allows you to create the content for recovery.conf. For more details see the usage example and the PostgreSQL documentation.
+#  Every parameter value is a string set in the template except recovery_target_inclusive, pause_at_recovery_target, standby_mode and recovery_min_apply_delay.
+#  A detailed description of all listed parameters can be found in the PostgreSQL documentation.
+#  Only the specified parameters are recognized in the template. The recovery.conf is only created if at least one parameter is set and manage_recovery_conf is set to true.
+#
 # @param restore_command
 # @param archive_cleanup_command
 # @param recovery_end_command
@@ -10,12 +16,12 @@
 # @param recovery_target
 # @param recovery_target_timeline
 # @param pause_at_recovery_target
-# @param standby_mode
+# @param standby_mode Can be specified with the string ('on'/'off'), or by using a Boolean value (true/false).
 # @param primary_conninfo
 # @param primary_slot_name
 # @param trigger_file
 # @param recovery_min_apply_delay
-# @param target
+# @param target Provides the target for the rule, and is generally an internal only property. Use with caution.
 #
 define postgresql::server::recovery(
   $restore_command                = undef,

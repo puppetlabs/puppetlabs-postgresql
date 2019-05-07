@@ -2,12 +2,12 @@
 # @note
 #   This enables us to force the a particular ownership for objects within a database
 # 
-# @param old_role
-# @param new_role
-# @param db
-# @param psql_user
-# @param port
-# @param connect_settings
+# @param old_role Specifies the role or user who is the current owner of the objects in the specified db
+# @param new_role Specifies the role or user who will be the new owner of these objects
+# @param db Specifies the database to which the 'REASSIGN OWNED' will be applied
+# @param psql_user Specifies the OS user for running psql.
+# @param port Port to use when connecting.
+# @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 #
 define postgresql::server::reassign_owned_by (
   String $old_role,

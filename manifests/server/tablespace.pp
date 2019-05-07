@@ -1,8 +1,8 @@
 # @summary This module creates tablespace. 
 #
-# @param location
-# @param owner
-# @param spcname
+# @param location Specifies the path to locate this tablespace.
+# @param owner Specifies the default owner of the tablespace.
+# @param spcname Specifies the name of the tablespace.
 # @param connect_settings
 #
 define postgresql::server::tablespace(

@@ -1,19 +1,19 @@
 # @summary Define for creating a database role.
 #
-# @param update_password
-# @param password_hash
-# @param createdb
-# @param createrole
+# @param update_password If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.
+# @param password_hash Sets the hash to use during password creation.
+# @param createdb Specifies whether to grant the ability to create new databases with this role.
+# @param createrole Specifies whether to grant the ability to create new roles with this role. 
 # @param db
 # @param port
-# @param login
-# @param inherit
-# @param superuser
-# @param replication
-# @param connection_limit
-# @param username
-# @param connect_settings
-# @param ensure
+# @param login Specifies whether to grant login capability for the new role.
+# @param inherit Specifies whether to grant inherit capability for the new role.
+# @param superuser Specifies whether to grant super user capability for the new role.
+# @param replication Provides provides replication capabilities for this role if set to true.
+# @param connection_limit Specifies how many concurrent connections the role can make. Default value: '-1', meaning no limit.
+# @param username Defines the username of the role to create.
+# @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param ensure Specify whether to create or drop the role. Specifying 'present' creates the role. Specifying 'absent' drops the role.
 #
 define postgresql::server::role(
   $update_password = true,

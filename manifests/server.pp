@@ -1,35 +1,43 @@
 # @summary This installs a PostgreSQL server
 #
-# @param postgres_password
-# @param package_name
-# @param package_ensure
+# @param postgres_password Sets the password for the postgres user to your specified value. By default, this setting uses the superuser account in the Postgres database, with a user called postgres and no password.
+# @param package_name Specifies the name of the package to use for installing the server software.
+# @param package_ensure Passes a value through to the package resource when creating the server instance.
 #
-# @param plperl_package_name
-# @param plpython_package_name
+# @param plperl_package_name Sets the default package name for the PL/Perl extension.
+# @param plpython_package_name Sets the default package name for the PL/Python extension.
 #
 # @param service_ensure
 # @param service_enable
-# @param service_manage
-# @param service_name
-# @param service_restart_on_change
-# @param service_provider
-# @param service_reload
-# @param service_status
-# @param default_database
-# @param default_connect_settings
-# @param listen_addresses
-# @param port
-# @param ip_mask_deny_postgres_user
-# @param ip_mask_allow_all_users
-# @param ipv4acls
-# @param ipv6acls
+# @param service_manage Defines whether or not Puppet should manage the service.
+# @param service_name Overrides the default PostgreSQL service name.
+# @param service_restart_on_change Overrides the default behavior to restart your PostgreSQL service when a config entry has been changed that requires a service restart to become active.
+# @param service_provider Overrides the default PostgreSQL service provider.
+# @param service_reload Overrides the default reload command for your PostgreSQL service.
+# @param service_status Overrides the default status check command for your PostgreSQL service.
+# @param default_database Specifies the name of the default database to connect with. On most systems this is 'postgres'.
+# @param default_connect_settings Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as postgresql::server::role.
 #
-# @param initdb_path
-# @param createdb_path
-# @param psql_path
-# @param pg_hba_conf_path
-# @param pg_ident_conf_path
-# @param postgresql_conf_path
+# @param listen_addresses
+# @param port Specifies the port for the PostgreSQL server to listen on. Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems, changing the port causes the server to come to a full stop before being able to make the change.
+#   Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
+#
+# @param ip_mask_deny_postgres_user Specifies the IP mask from which remote connections should be denied for the postgres superuser.
+#   Default value: '0.0.0.0/0', which denies any remote connection.
+#
+# @param ip_mask_allow_all_users Overrides PostgreSQL defaults for remote connections. By default, PostgreSQL does not allow database user accounts to connect via TCP from remote machines. If you'd like to allow this, you can override this setting.
+#   Set to '0.0.0.0/0' to allow database users to connect from any remote machine, or '192.168.0.0/1' to allow connections from any machine on your local '192.168' subnet.
+#   Default value: '127.0.0.1/32'.
+#
+# @param ipv4acls Lists strings for access control for connection method, users, databases, IPv4 addresses;
+# @param ipv6acls Lists strings for access control for connection method, users, databases, IPv6 addresses.
+#
+# @param initdb_path Specifies the path to the initdb command.
+# @param createdb_path Deprecated. Specifies the path to the createdb command.
+# @param psql_path Specifies the path to the psql command.
+# @param pg_hba_conf_path Specifies the path to your pg_hba.conf file.
+# @param pg_ident_conf_path Specifies the path to your pg_ident.conf file.
+# @param postgresql_conf_path Specifies the path to your postgresql.conf file.
 # @param recovery_conf_path
 #
 # @param datadir
@@ -38,26 +46,28 @@
 #
 # @param log_line_prefix
 #
-# @param pg_hba_conf_defaults
+# @param pg_hba_conf_defaults If false, disables the defaults supplied with the module for pg_hba.conf. This is useful if you disagree with the defaults and wish to override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform basic psql operations for example.
 #
-# @param user
-# @param group
+# @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
+# @param group Overrides the default postgres user group to be used for related files in the file system.
 #
-# @param needs_initdb
+# @param needs_initdb Explicitly calls the initdb operation after server package is installed, and before the PostgreSQL service is started.
 #
-# @param encoding
-# @param locale
-# @param data_checksums
+# @param encoding Sets the default encoding for all databases created with this module. On certain operating systems this is also used during the template1 initialization, so it becomes a default outside of the module as well.
+# @param locale Sets the default database locale for all databases created with this module. On certain operating systems this is used during the template1 initialization as well, so it becomes a default outside of the module.
+# @param data_checksums Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+#   Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
+#
 # @param timezone
 #
-# @param manage_pg_hba_conf
-# @param manage_pg_ident_conf
-# @param manage_recovery_conf
+# @param manage_pg_hba_conf Boolean. Whether to manage the pg_hba.conf.
+# @param manage_pg_ident_conf Boolean. Overwrites the pg_ident.conf file.
+# @param manage_recovery_conf Boolean. Specifies whether or not manage the recovery.conf.
 # @param module_workdir
 #
-# @param roles
-# @param config_entries
-# @param pg_hba_rules
+# @param roles Specifies a hash from which to generate postgresql::server::role resources.
+# @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
+# @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
 #
 # @param version
 #

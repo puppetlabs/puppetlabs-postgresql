@@ -1,9 +1,9 @@
 # @summary Install the contrib postgresql packaging.
 #
 # @param package_name
-#   String.
+#   String. The name of the PostgreSQL contrib package.
 # @param package_ensure
-#   String. Defaults to 'present'.
+#   Enum['present','absent']. Defaults to 'present'.
 # 
 #
 class postgresql::server::contrib (

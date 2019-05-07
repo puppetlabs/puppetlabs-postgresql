@@ -5,7 +5,7 @@
 # @param package_ensure
 #   String. Defaults to 'present'.
 # @param link_pg_config
-#   Boolean. 
+#   Boolean. If the bin directory used by the PostgreSQL page is not /usr/bin or /usr/local/bin, symlinks pg_config from the package's bin dir into usr/bin (not applicable to Debian systems). Set to false to disable this behavior.
 #
 #
 class postgresql::lib::devel(

@@ -1,16 +1,16 @@
 # @summary This resource manages an individual rule that applies to the file defined in target.
 #
-# @param type
+# @param type Sets the type of rule.
 #   Enum['local','host','hostssl','hostnossl'].
-# @param database
-# @param user
-# @param auth_method
-# @param address
-# @param description
-# @param auth_option
-# @param order
-# @param target
-# @param postgresql_version
+# @param database Sets a comma-separated list of databases that this rule matches.
+# @param user Sets a comma-separated list of users that this rule matches.
+# @param auth_method Provides the method that is used for authentication for the connection that this rule matches. Described further in the PostgreSQL pg_hba.conf documentation.
+# @param address Sets a CIDR based address for this rule matching when the type is not 'local'.
+# @param description Defines a longer description for this rule, if required. This description is placed in the comments above the rule in pg_hba.conf. Default value: 'none'.
+# @param auth_option For certain auth_method settings there are extra options that can be passed. Consult the PostgreSQL pg_hba.conf documentation for further details.
+# @param order Sets an order for placing the rule in pg_hba.conf. This can be either a string or an integer. If it is an integer, it will be converted to a string by zero-padding it to three digits. E.g. 42 will be zero-padded to the string '042'. The pg_hba_rule fragments are sorted using the alpha sorting order. Default value: 150.
+# @param target Provides the target for the rule, and is generally an internal only property. Use with caution.
+# @param postgresql_version Manages pg_hba.conf without managing the entire PostgreSQL instance.
 #
 define postgresql::server::pg_hba_rule(
   Enum['local', 'host', 'hostssl', 'hostnossl'] $type,
