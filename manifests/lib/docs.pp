@@ -4,9 +4,9 @@
 #   Make sure to add any necessary yum or apt repositories if specifying a custom version.
 #
 # @param package_name
-#   String. Specifies the name of the PostgreSQL docs package.
+#   Specifies the name of the PostgreSQL docs package.
 # @param package_ensure
-#   Enum['present','absent']. Whether the PostgreSQL docs package resource should be present.
+#   Whether the PostgreSQL docs package resource should be present.
 # 
 #
 class postgresql::lib::docs (

@@ -1,7 +1,7 @@
 # @summary This class installs the PL/Python procedural language for postgresql.
 #
 # @param package_ensure 
-#   Enum['present','absent']. Specifies whether the package is present.
+#   Specifies whether the package is present.
 # @param package_name
 #   Specifies the name of the postgresql PL/Python package.
 class postgresql::server::plpython(

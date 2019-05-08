@@ -4,13 +4,13 @@
 #  Make sure to add any necessary yum or apt repositories if specifying a custom version.
 #
 # @param file_ensure
-#   Enum['file','absent'].
+#   Ensure the connection validation script is present
 # @param validcon_script_path
 #   Optional. Absolute path for the postgresql connection validation script.
 # @param package_name
-#   String. Sets the name of the PostgreSQL client package.
+#   Sets the name of the PostgreSQL client package.
 # @param package_ensure 
-#   Enum['present','absent'].
+#   Ensure the client package is installed
 class postgresql::client (
   Enum['file', 'absent'] $file_ensure        = 'file',
   Stdlib::Absolutepath $validcon_script_path = $postgresql::params::validcon_script_path,

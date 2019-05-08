@@ -7,8 +7,8 @@
 # @param plperl_package_name Sets the default package name for the PL/Perl extension.
 # @param plpython_package_name Sets the default package name for the PL/Python extension.
 #
-# @param service_ensure
-# @param service_enable
+# @param service_ensure Ensure service is installed
+# @param service_enable Enable the PostgreSQL service
 # @param service_manage Defines whether or not Puppet should manage the service.
 # @param service_name Overrides the default PostgreSQL service name.
 # @param service_restart_on_change Overrides the default behavior to restart your PostgreSQL service when a config entry has been changed that requires a service restart to become active.
@@ -18,7 +18,7 @@
 # @param default_database Specifies the name of the default database to connect with. On most systems this is 'postgres'.
 # @param default_connect_settings Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as postgresql::server::role.
 #
-# @param listen_addresses
+# @param listen_addresses Address list on which the PostgreSQL service will listen
 # @param port Specifies the port for the PostgreSQL server to listen on. Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems, changing the port causes the server to come to a full stop before being able to make the change.
 #   Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
 #
@@ -38,13 +38,13 @@
 # @param pg_hba_conf_path Specifies the path to your pg_hba.conf file.
 # @param pg_ident_conf_path Specifies the path to your pg_ident.conf file.
 # @param postgresql_conf_path Specifies the path to your postgresql.conf file.
-# @param recovery_conf_path
+# @param recovery_conf_path Specifies the path to your recovery.conf file.
 #
-# @param datadir
-# @param xlogdir
-# @param logdir
+# @param datadir PostgreSQL data directory
+# @param xlogdir PostgreSQL xlog directory
+# @param logdir PostgreSQL log directory
 #
-# @param log_line_prefix
+# @param log_line_prefix PostgreSQL log line prefix
 #
 # @param pg_hba_conf_defaults If false, disables the defaults supplied with the module for pg_hba.conf. This is useful if you disagree with the defaults and wish to override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform basic psql operations for example.
 #
@@ -58,18 +58,18 @@
 # @param data_checksums Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
 #   Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 #
-# @param timezone
+# @param timezone Set timezone for the PostgreSQL instance
 #
 # @param manage_pg_hba_conf Boolean. Whether to manage the pg_hba.conf.
 # @param manage_pg_ident_conf Boolean. Overwrites the pg_ident.conf file.
 # @param manage_recovery_conf Boolean. Specifies whether or not manage the recovery.conf.
-# @param module_workdir
+# @param module_workdir Working directory for the PostgreSQL module 
 #
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
 #
-# @param version
+# @param version Sets PostgreSQL version 
 #
 #
 class postgresql::server (

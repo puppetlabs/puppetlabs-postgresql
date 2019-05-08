@@ -8,8 +8,8 @@
 # @param psql_db Specifies the database to execute the grant against. This should not ordinarily be changed from the default
 # @param psql_user Sets the OS user to run psql.
 # @param port Port to use when connecting.
-# @param onlyif_exists
-# @param connect_settings
+# @param onlyif_exists Create grant only if doesn't exist
+# @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param ensure Specifies whether to grant or revoke the privilege. Default is to grant the privilege. Valid values: 'present', 'absent'.
 define postgresql::server::grant (
   String $role,
