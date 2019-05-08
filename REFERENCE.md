@@ -115,7 +115,7 @@ Default value: 'present'
 
 ### postgresql::globals
 
-Debian is currently not supported.
+Class for setting cross-class global overrides.
 
 * **Note** Most server-specific defaults should be overridden in the postgresql::server class.
 This class should be used only if you are using a non-standard OS, or if you are changing elements that can only be changed here, such as version or manage_package_repo.
@@ -320,7 +320,7 @@ Default value: {}
 
 Data type: `Any`
 
-Disables the defaults supplied with the module for pg_hba.conf if set to false. This is useful if you want to override the defaults. Be sure that your changes align with the rest of the module, as some access is required to perform some operations, such as basic psql operations.
+Disables the defaults supplied with the module for pg_hba.conf if set to false.
 
 Default value: `undef`
 
@@ -329,6 +329,10 @@ Default value: `undef`
 Data type: `Any`
 
 Overrides the default PostgreSQL data directory for the target platform.
+Changing the datadir after installation causes the server to come to a full stop before making the change.
+For Red Hat systems, the data directory must be labeled appropriately for SELinux.
+On Ubuntu, you must explicitly set needs_initdb = true to allow Puppet to initialize the database in the new datadir (needs_initdb defaults to true on other systems).
+Warning! If datadir is changed from the default, Puppet does not manage purging of the original data directory, which causes it to fail if the data directory is changed back to the original
 
 Default value: `undef`
 
@@ -408,7 +412,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-Sets the proxy option for the official PostgreSQL yum-repositories only. This is useful if your server is behind a corporate firewall and needs to use proxy servers for outside connectivity.
+Sets the proxy option for the official PostgreSQL yum-repositories only.
 
 Default value: `undef`
 
@@ -432,7 +436,8 @@ Default value: `undef`
 
 Data type: `Any`
 
-Sets the default encoding for all databases created with this module. On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
+Sets the default encoding for all databases created with this module.
+On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
 
 Default value: `undef`
 
@@ -440,7 +445,9 @@ Default value: `undef`
 
 Data type: `Any`
 
-Sets the default database locale for all databases created with this module. On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
+Sets the default database locale for all databases created with this module.
+On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
+On Debian, you'll need to ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.
 
 Default value: `undef`
 
@@ -448,8 +455,8 @@ Default value: `undef`
 
 Data type: `Any`
 
-Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
-Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
+Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+Warning: This option is used during initialization by initdb, and cannot be changed later.
 
 Default value: `undef`
 
