@@ -9,7 +9,7 @@
 # @param psql_db Specifies the database to execute the grant against. This should not ordinarily be changed from the default.
 # @param psql_user Specifies the OS user for running psql.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
-# @param onlyif_exists
+# @param onlyif_exists Create grant only if it doesn't exist.
 define postgresql::server::table_grant(
   $privilege,
   $table,

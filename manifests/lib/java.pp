@@ -4,9 +4,9 @@
 #   Make sure to add any necessary yum or apt repositories if specifying a custom version.
 #
 # @param package_name
-#  String. Specifies the name of the PostgreSQL java package.
+#  Specifies the name of the PostgreSQL java package.
 # @param package_ensure
-#  Enum['present','absent']. Specifies whether the package is present.
+#  Specifies whether the package is present.
 #
 class postgresql::lib::java (
   String $package_name      = $postgresql::params::java_package_name,

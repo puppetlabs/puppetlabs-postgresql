@@ -14,8 +14,6 @@ _Public Classes_
 * [`postgresql::lib::java`](#postgresqllibjava): This class installs the postgresql jdbc connector.
 * [`postgresql::lib::perl`](#postgresqllibperl): This class installs the perl libs for postgresql.
 * [`postgresql::lib::python`](#postgresqllibpython): This class installs the python libs for postgresql.
-* [`postgresql::repo::apt_postgresql_org`](#postgresqlrepoapt_postgresql_org): PRIVATE CLASS: do not use directly
-* [`postgresql::repo::yum_postgresql_org`](#postgresqlrepoyum_postgresql_org): PRIVATE CLASS: do not use directly
 * [`postgresql::server`](#postgresqlserver): This installs a PostgreSQL server
 * [`postgresql::server::contrib`](#postgresqlservercontrib): Install the contrib postgresql packaging.
 * [`postgresql::server::plperl`](#postgresqlserverplperl): This class installs the PL/Perl procedural language for postgresql.
@@ -26,6 +24,8 @@ _Private Classes_
 
 * `postgresql::params`: 
 * `postgresql::repo`: 
+* `postgresql::repo::apt_postgresql_org`: 
+* `postgresql::repo::yum_postgresql_org`: 
 * `postgresql::server::config`: 
 * `postgresql::server::initdb`: 
 * `postgresql::server::install`: 
@@ -38,7 +38,7 @@ _Private Classes_
 * [`postgresql::server::config_entry`](#postgresqlserverconfig_entry): Manage a postgresql.conf entry.
 * [`postgresql::server::database`](#postgresqlserverdatabase): Define for creating a database.
 * [`postgresql::server::database_grant`](#postgresqlserverdatabase_grant): Manage a database grant.
-* [`postgresql::server::db`](#postgresqlserverdb): @ summary Define for conveniently creating a role, database and assigning the correctpermissions.
+* [`postgresql::server::db`](#postgresqlserverdb): Define for conveniently creating a role, database and assigning the correctpermissions.
 * [`postgresql::server::extension`](#postgresqlserverextension): Activate an extension on a postgresql database.
 * [`postgresql::server::grant`](#postgresqlservergrant): Define for granting permissions to roles.
 * [`postgresql::server::grant_role`](#postgresqlservergrant_role): Define for granting membership to a role.
@@ -55,15 +55,15 @@ _Private Classes_
 **Resource types**
 
 * [`postgresql_conf`](#postgresql_conf): This type allows puppet to manage postgresql.conf parameters.
-* [`postgresql_conn_validator`](#postgresql_conn_validator): Verify that a connection can be successfully established between a node and the PostgreSQL server.  Its primary use is as a precondition to p
+* [`postgresql_conn_validator`](#postgresql_conn_validator): Verify if a connection can be successfully established
 * [`postgresql_psql`](#postgresql_psql): An arbitrary tag for your own reference; the name of the message.
-* [`postgresql_replication_slot`](#postgresql_replication_slot): Manages Postgresql replication slots.  This type allows to create and destroy replication slots to register warm standby replication on a Pos
+* [`postgresql_replication_slot`](#postgresql_replication_slot): Manages Postgresql replication slots.
 
 **Functions**
 
 * [`postgresql_acls_to_resources_hash`](#postgresql_acls_to_resources_hash): This internal function translates the ipv(4|6)acls format into a resource suitable for create_resources. It is not intended to be used outsid
-* [`postgresql_escape`](#postgresql_escape): 
-* [`postgresql_password`](#postgresql_password): 
+* [`postgresql_escape`](#postgresql_escape): This function safely escapes a string using a consistent random tag
+* [`postgresql_password`](#postgresql_password): This function returns the postgresql password hash from the clear text username / password
 
 **Tasks**
 
@@ -85,7 +85,7 @@ The following parameters are available in the `postgresql::client` class.
 
 Data type: `Enum['file', 'absent']`
 
-Enum['file','absent'].
+Ensure the connection validation script is present
 
 Default value: 'file'
 
@@ -101,7 +101,7 @@ Default value: $postgresql::params::validcon_script_path
 
 Data type: `String[1]`
 
-String. Sets the name of the PostgreSQL client package.
+Sets the name of the PostgreSQL client package.
 
 Default value: $postgresql::params::client_package_name
 
@@ -109,7 +109,7 @@ Default value: $postgresql::params::client_package_name
 
 Data type: `String[1]`
 
-Enum['present','absent'].
+Ensure the client package is installed
 
 Default value: 'present'
 
@@ -513,7 +513,7 @@ The following parameters are available in the `postgresql::lib::devel` class.
 
 Data type: `String`
 
-String.
+Override devel package name
 
 Default value: $postgresql::params::devel_package_name
 
@@ -521,7 +521,7 @@ Default value: $postgresql::params::devel_package_name
 
 Data type: `String[1]`
 
-String. Defaults to 'present'.
+Ensure the development libraries are installed
 
 Default value: 'present'
 
@@ -529,7 +529,7 @@ Default value: 'present'
 
 Data type: `Boolean`
 
-Boolean. If the bin directory used by the PostgreSQL page is not /usr/bin or /usr/local/bin, symlinks pg_config from the package's bin dir into usr/bin (not applicable to Debian systems). Set to false to disable this behavior.
+If the bin directory used by the PostgreSQL page is not /usr/bin or /usr/local/bin, symlinks pg_config from the package's bin dir into usr/bin (not applicable to Debian systems). Set to false to disable this behavior.
 
 Default value: $postgresql::params::link_pg_config
 
@@ -547,7 +547,7 @@ The following parameters are available in the `postgresql::lib::docs` class.
 
 Data type: `String`
 
-String. Specifies the name of the PostgreSQL docs package.
+Specifies the name of the PostgreSQL docs package.
 
 Default value: $postgresql::params::docs_package_name
 
@@ -555,7 +555,7 @@ Default value: $postgresql::params::docs_package_name
 
 Data type: `String[1]`
 
-Enum['present','absent']. Whether the PostgreSQL docs package resource should be present.
+Whether the PostgreSQL docs package resource should be present.
 
 Default value: 'present'
 
@@ -573,7 +573,7 @@ The following parameters are available in the `postgresql::lib::java` class.
 
 Data type: `String`
 
-String. Specifies the name of the PostgreSQL java package.
+Specifies the name of the PostgreSQL java package.
 
 Default value: $postgresql::params::java_package_name
 
@@ -581,7 +581,7 @@ Default value: $postgresql::params::java_package_name
 
 Data type: `String[1]`
 
-Enum['present','absent']. Specifies whether the package is present.
+Specifies whether the package is present.
 
 Default value: 'present'
 
@@ -597,7 +597,7 @@ The following parameters are available in the `postgresql::lib::perl` class.
 
 Data type: `String`
 
-String. Specifies the name of the PostgreSQL perl package to install.
+Specifies the name of the PostgreSQL perl package to install.
 
 Default value: $postgresql::params::perl_package_name
 
@@ -605,7 +605,7 @@ Default value: $postgresql::params::perl_package_name
 
 Data type: `String[1]`
 
-Enum['present','absent'].
+Ensure the perl libs for postgresql are installed.
 
 Default value: 'present'
 
@@ -621,7 +621,7 @@ The following parameters are available in the `postgresql::lib::python` class.
 
 Data type: `String[1]`
 
-String. The name of the PostgreSQL Python package.
+The name of the PostgreSQL Python package.
 
 Default value: $postgresql::params::python_package_name
 
@@ -629,17 +629,9 @@ Default value: $postgresql::params::python_package_name
 
 Data type: `String[1]`
 
-Enum['present','absent']
+Ensure the python libs for postgresql are installed.
 
 Default value: 'present'
-
-### postgresql::repo::apt_postgresql_org
-
-PRIVATE CLASS: do not use directly
-
-### postgresql::repo::yum_postgresql_org
-
-PRIVATE CLASS: do not use directly
 
 ### postgresql::server
 
@@ -693,7 +685,7 @@ Default value: $postgresql::params::plpython_package_name
 
 Data type: `Any`
 
-
+Ensure service is installed
 
 Default value: $postgresql::params::service_ensure
 
@@ -701,7 +693,7 @@ Default value: $postgresql::params::service_ensure
 
 Data type: `Any`
 
-
+Enable the PostgreSQL service
 
 Default value: $postgresql::params::service_enable
 
@@ -773,7 +765,7 @@ Default value: $postgresql::globals::default_connect_settings
 
 Data type: `Any`
 
-
+Address list on which the PostgreSQL service will listen
 
 Default value: $postgresql::params::listen_addresses
 
@@ -873,7 +865,7 @@ Default value: $postgresql::params::postgresql_conf_path
 
 Data type: `Any`
 
-
+Specifies the path to your recovery.conf file.
 
 Default value: $postgresql::params::recovery_conf_path
 
@@ -881,7 +873,7 @@ Default value: $postgresql::params::recovery_conf_path
 
 Data type: `Any`
 
-
+PostgreSQL data directory
 
 Default value: $postgresql::params::datadir
 
@@ -889,7 +881,7 @@ Default value: $postgresql::params::datadir
 
 Data type: `Any`
 
-
+PostgreSQL xlog directory
 
 Default value: $postgresql::params::xlogdir
 
@@ -897,7 +889,7 @@ Default value: $postgresql::params::xlogdir
 
 Data type: `Any`
 
-
+PostgreSQL log directory
 
 Default value: $postgresql::params::logdir
 
@@ -905,7 +897,7 @@ Default value: $postgresql::params::logdir
 
 Data type: `Any`
 
-
+PostgreSQL log line prefix
 
 Default value: $postgresql::params::log_line_prefix
 
@@ -970,7 +962,7 @@ Default value: $postgresql::params::data_checksums
 
 Data type: `Any`
 
-
+Set timezone for the PostgreSQL instance
 
 Default value: $postgresql::params::timezone
 
@@ -1002,7 +994,7 @@ Default value: $postgresql::params::manage_recovery_conf
 
 Data type: `Any`
 
-
+Working directory for the PostgreSQL module
 
 Default value: $postgresql::params::module_workdir
 
@@ -1034,7 +1026,7 @@ Default value: {}
 
 Data type: `Any`
 
-
+Sets PostgreSQL version
 
 Default value: `undef`
 
@@ -1050,7 +1042,7 @@ The following parameters are available in the `postgresql::server::contrib` clas
 
 Data type: `String`
 
-String. The name of the PostgreSQL contrib package.
+The name of the PostgreSQL contrib package.
 
 Default value: $postgresql::params::contrib_package_name
 
@@ -1058,7 +1050,7 @@ Default value: $postgresql::params::contrib_package_name
 
 Data type: `String[1]`
 
-Enum['present','absent'].
+Ensure the contrib package is installed.
 
 Default value: 'present'
 
@@ -1098,7 +1090,7 @@ The following parameters are available in the `postgresql::server::plpython` cla
 
 Data type: `Any`
 
-Enum['present','absent']. Specifies whether the package is present.
+Specifies whether the package is present.
 
 Default value: 'present'
 
@@ -1164,7 +1156,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Path for postgresql.conf
 
 Default value: `false`
 
@@ -1308,7 +1300,7 @@ Default value: `undef`
 
 ### postgresql::server::db
 
-@ summary Define for conveniently creating a role, database and assigning the correctpermissions.
+Define for conveniently creating a role, database and assigning the correctpermissions.
 
 #### Parameters
 
@@ -1562,7 +1554,7 @@ Default value: $postgresql::server::port
 
 Data type: `Boolean`
 
-
+Create grant only if doesn't exist
 
 Default value: `false`
 
@@ -1570,7 +1562,7 @@ Default value: `false`
 
 Data type: `Hash`
 
-
+Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: $postgresql::server::default_connect_settings
 
@@ -2218,7 +2210,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Create grant only if it doesn't exist.
 
 Default value: `false`
 
@@ -2560,8 +2552,6 @@ Default value: `false`
 
 ### postgresql_replication_slot
 
-Manages Postgresql replication slots.
-
 This type allows to create and destroy replication slots
 to register warm standby replication on a Postgresql
 master server.
@@ -2630,11 +2620,11 @@ Returns: `Any` This function accepts an array of strings that are pg_hba.conf ru
 
 Type: Ruby 3.x API
 
-The postgresql_escape function.
+This function safely escapes a string using a consistent random tag
 
 #### `postgresql_escape()`
 
-The postgresql_escape function.
+This function safely escapes a string using a consistent random tag
 
 Returns: `Any` Safely escapes a string using $$ using a random tag which should be consistent
 
@@ -2642,11 +2632,11 @@ Returns: `Any` Safely escapes a string using $$ using a random tag which should 
 
 Type: Ruby 3.x API
 
-The postgresql_password function.
+This function returns the postgresql password hash from the clear text username / password
 
 #### `postgresql_password()`
 
-The postgresql_password function.
+This function returns the postgresql password hash from the clear text username / password
 
 Returns: `Any` Returns the postgresql password hash from the clear text username / password.
 

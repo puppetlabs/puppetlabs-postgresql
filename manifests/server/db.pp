@@ -1,4 +1,4 @@
-# @ summary Define for conveniently creating a role, database and assigning the correctpermissions.
+# @summary Define for conveniently creating a role, database and assigning the correctpermissions.
 # 
 # @param user User to create and assign access to the database upon creation. Mandatory.
 # @param password Required Sets the password for the created user.
