@@ -33,12 +33,14 @@
 # @param recovery_conf_path Path to your recovery.conf file.
 # @param default_connect_settings Default connection settings. 
 #
-# @param pg_hba_conf_defaults Disables the defaults supplied with the module for pg_hba.conf if set to false. This is useful if you want to override the defaults. Be sure that your changes align with the rest of the module, as some access is required to perform some operations, such as basic psql operations.    
+# @param pg_hba_conf_defaults Disables the defaults supplied with the module for pg_hba.conf if set to false. 
 #
-# @param datadir Overrides the default PostgreSQL data directory for the target platform.
-# 
-# @note Changing the datadir after installation causes the server to come to a full stop before making the change. For Red Hat systems, the data directory must be labeled appropriately for SELinux. On Ubuntu, you must explicitly set needs_initdb = true to allow Puppet to initialize the database in the new datadir (needs_initdb defaults to true on other systems).
-# @note Warning! If datadir is changed from the default, Puppet does not manage purging of the original data directory, which causes it to fail if the data directory is changed back to the original
+# @param datadir 
+#    Overrides the default PostgreSQL data directory for the target platform.
+#    Changing the datadir after installation causes the server to come to a full stop before making the change. 
+#    For Red Hat systems, the data directory must be labeled appropriately for SELinux. 
+#    On Ubuntu, you must explicitly set needs_initdb = true to allow Puppet to initialize the database in the new datadir (needs_initdb defaults to true on other systems).
+#    Warning! If datadir is changed from the default, Puppet does not manage purging of the original data directory, which causes it to fail if the data directory is changed back to the original
 # 
 # @param confdir Overrides the default PostgreSQL configuration directory for the target platform.                  
 # @param bindir Overrides the default PostgreSQL binaries directory for the target platform.
@@ -51,19 +53,22 @@
 #
 # @param version The version of PostgreSQL to install and manage.                 
 # @param postgis_version Defines the version of PostGIS to install, if you install PostGIS.         
-# @param repo_proxy Sets the proxy option for the official PostgreSQL yum-repositories only. This is useful if your server is behind a corporate firewall and needs to use proxy servers for outside connectivity.
-# Debian is currently not supported.              
+# @param repo_proxy Sets the proxy option for the official PostgreSQL yum-repositories only. 
 #
 # @param repo_baseurl Sets the baseurl for the PostgreSQL repository. Useful if you host your own mirror of the repository.
 #
 # @param needs_initdb Explicitly calls the initdb operation after the server package is installed and before the PostgreSQL service is started.            
 #
-# @param encoding Sets the default encoding for all databases created with this module. On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
-# @param locale Sets the default database locale for all databases created with this module. On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
-# @note On Debian, you'll need to ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.
+# @param encoding 
+#   Sets the default encoding for all databases created with this module. 
+#   On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
+# @param locale 
+#   Sets the default database locale for all databases created with this module.
+#   On certain operating systems, this is also used during the template1 initialization, so it becomes a default outside of the module as well.
+#   On Debian, you'll need to ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.
 # @param data_checksums 
-#   Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
-#   Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
+#   Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+#   Warning: This option is used during initialization by initdb, and cannot be changed later.
 #         
 # @param timezone Sets the default timezone of the postgresql server. The postgresql built-in default is taking the systems timezone information.
 #
