@@ -1838,7 +1838,7 @@ The following parameters are available in the `postgresql::server::recovery` def
 
 Data type: `Any`
 
-
+The shell command to execute to retrieve an archived segment of the WAL file series.
 
 Default value: `undef`
 
@@ -1846,7 +1846,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+This optional parameter specifies a shell command that will be executed at every restartpoint.
 
 Default value: `undef`
 
@@ -1854,7 +1854,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+This parameter specifies a shell command that will be executed once only at the end of recovery.
 
 Default value: `undef`
 
@@ -1862,7 +1862,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+This parameter specifies the named restore point (created with pg_create_restore_point()) to which recovery will proceed.
 
 Default value: `undef`
 
@@ -1870,7 +1870,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+This parameter specifies the time stamp up to which recovery will proceed.
 
 Default value: `undef`
 
@@ -1878,7 +1878,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+This parameter specifies the transaction ID up to which recovery will proceed.
 
 Default value: `undef`
 
@@ -1886,7 +1886,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies whether to stop just after the specified recovery target (true), or just before the recovery target (false).
 
 Default value: `undef`
 
@@ -1894,7 +1894,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+This parameter specifies that recovery should end as soon as a consistent state is reached, i.e. as early as possible.
 
 Default value: `undef`
 
@@ -1902,7 +1902,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies recovering into a particular timeline.
 
 Default value: `undef`
 
@@ -1910,7 +1910,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies whether recovery should pause when the recovery target is reached.
 
 Default value: `undef`
 
@@ -1918,7 +1918,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-Can be specified with the string ('on'/'off'), or by using a Boolean value (true/false).
+Specifies whether to start the PostgreSQL server as a standby.
 
 Default value: `undef`
 
@@ -1926,7 +1926,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies a connection string to be used for the standby server to connect with the primary.
 
 Default value: `undef`
 
@@ -1934,7 +1934,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Optionally specifies an existing replication slot to be used when connecting to the primary via streaming replication to control resource removal on the upstream node.
 
 Default value: `undef`
 
@@ -1942,7 +1942,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies a trigger file whose presence ends recovery in the standby.
 
 Default value: `undef`
 
@@ -1950,7 +1950,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+This parameter allows you to delay recovery by a fixed period of time, measured in milliseconds if no unit is specified.
 
 Default value: `undef`
 
@@ -2266,7 +2266,7 @@ The following parameters are available in the `postgresql::validate_db_connectio
 
 Data type: `Any`
 
-
+Database host address
 
 Default value: `undef`
 
@@ -2274,7 +2274,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the name of the database you wish to test.
 
 Default value: `undef`
 
@@ -2282,7 +2282,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the password to connect with.
 
 Default value: `undef`
 
@@ -2290,7 +2290,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the username to connect with.
 
 Default value: `undef`
 
@@ -2298,7 +2298,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Defines the port to use when connecting.
 
 Default value: `undef`
 
@@ -2306,7 +2306,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: `undef`
 
@@ -2314,7 +2314,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Specifies the user to run the psql command as.
 
 Default value: `undef`
 
@@ -2322,7 +2322,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Sets the number of seconds to sleep for before trying again after a failure.
 
 Default value: 2
 
@@ -2330,7 +2330,7 @@ Default value: 2
 
 Data type: `Any`
 
-
+Sets the number of attempts after failure before giving up and failing the resource.
 
 Default value: 10
 
@@ -2338,7 +2338,7 @@ Default value: 10
 
 Data type: `Any`
 
-
+Creates the database when obtaining a successful connection.
 
 Default value: `true`
 
