@@ -4,7 +4,8 @@ require 'digest/md5'
 # postgresql_password.rb
 module Puppet::Parser::Functions
   newfunction(:postgresql_password, type: :rvalue, doc: <<-EOS
-    Returns the postgresql password hash from the clear text username / password.
+    This function returns the postgresql password hash from the clear text username / password
+    @return Returns the postgresql password hash from the clear text username / password.
     EOS
              ) do |args|
 

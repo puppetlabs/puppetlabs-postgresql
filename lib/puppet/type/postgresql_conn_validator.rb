@@ -1,11 +1,16 @@
 Puppet::Type.newtype(:postgresql_conn_validator) do
-  @doc = "Verify that a connection can be successfully established between a node
+  @doc = <<-EOS
+          @summary Verify if a connection can be successfully established
+
+          Verify that a connection can be successfully established between a node
           and the PostgreSQL server.  Its primary use is as a precondition to
           prevent configuration changes from being applied if the PostgreSQL
           server cannot be reached, but it could potentially be used for other
-          purposes such as monitoring."
+          purposes such as monitoring.
+  EOS
 
   ensurable do
+    desc 'Ensure connection validation'
     defaultvalues
     defaultto :present
   end

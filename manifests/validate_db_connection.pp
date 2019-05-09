@@ -1,8 +1,22 @@
-# This type validates that a successful postgres connection can be established
+# @summary This type validates that a successful postgres connection.
+# 
+# @note
+# This validated if the postgres connection can be established
 # between the node on which this resource is run and a specified postgres
 # instance (host/port/user/password/database name).
 #
-# See README.md for more details.
+#
+# @param database_host Database host address
+# @param database_name Specifies the name of the database you wish to test.
+# @param database_password Specifies the password to connect with.
+# @param database_username Specifies the username to connect with.
+# @param database_port Defines the port to use when connecting.
+# @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param run_as Specifies the user to run the psql command as.
+# @param sleep Sets the number of seconds to sleep for before trying again after a failure.
+# @param tries Sets the number of attempts after failure before giving up and failing the resource.
+# @param create_db_first Creates the database when obtaining a successful connection.
+#
 define postgresql::validate_db_connection(
   $database_host     = undef,
   $database_name     = undef,

@@ -1,5 +1,5 @@
 Puppet::Type.type(:postgresql_replication_slot).provide(:ruby) do
-  # For confinement
+  desc 'For confinement'
   commands psql: 'psql'
 
   def self.instances

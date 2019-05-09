@@ -1,5 +1,13 @@
-# This class installs postgresql development libraries. See README.md for more
-# details.
+# @summary This class installs postgresql development libraries. 
+#
+# @param package_name
+#   Override devel package name
+# @param package_ensure
+#   Ensure the development libraries are installed
+# @param link_pg_config
+#   If the bin directory used by the PostgreSQL page is not /usr/bin or /usr/local/bin, symlinks pg_config from the package's bin dir into usr/bin (not applicable to Debian systems). Set to false to disable this behavior.
+#
+#
 class postgresql::lib::devel(
   String $package_name      = $postgresql::params::devel_package_name,
   String[1] $package_ensure = 'present',

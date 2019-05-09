@@ -3,7 +3,8 @@ require 'digest/md5'
 # postgresql_escape.rb
 module Puppet::Parser::Functions
   newfunction(:postgresql_escape, type: :rvalue, doc: <<-EOS
-    Safely escapes a string using $$ using a random tag which should be consistent
+    This function safely escapes a string using a consistent random tag
+    @return Safely escapes a string using $$ using a random tag which should be consistent
     EOS
              ) do |args|
 

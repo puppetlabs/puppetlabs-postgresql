@@ -1,5 +1,16 @@
-# Define for conveniently creating a role, database and assigning the correct
-# permissions. See README.md for more details.
+# @summary Define for conveniently creating a role, database and assigning the correctpermissions.
+# 
+# @param user User to create and assign access to the database upon creation. Mandatory.
+# @param password Required Sets the password for the created user.
+# @param comment Defines a comment to be stored about the database using the PostgreSQL COMMENT command.
+# @param dbname Sets the name of the database to be created.
+# @param encoding Overrides the character set during creation of the database.
+# @param locale Overrides the locale during creation of the database.
+# @param grant Specifies the permissions to grant during creation. Default value: 'ALL'.
+# @param tablespace Defines the name of the tablespace to allocate the created database to.
+# @param template Specifies the name of the template database from which to build this database. Defaults value: template0.
+# @param istemplate Specifies that the database is a template, if set to true.
+# @param owner Sets a user as the owner of the database.
 define postgresql::server::db (
   $user,
   $password,
