@@ -1,4 +1,7 @@
-# Install the postgis postgresql packaging. See README.md for more details.
+# @summary Install the postgis postgresql packaging.
+#
+# @param package_name Sets the package name.
+# @param package_ensure Specifies if the package is present or not.
 class postgresql::server::postgis (
   String $package_name      = $postgresql::params::postgis_package_name,
   String[1] $package_ensure = 'present'

@@ -1,4 +1,4 @@
-# PRIVATE CLASS: do not use directly
+# @api private
 class postgresql::params inherits postgresql::globals {
   $version                    = $postgresql::globals::globals_version
   $postgis_version            = $postgresql::globals::globals_postgis_version

@@ -1,4 +1,4 @@
-# PRIVATE CLASS: do not use directly
+# @api private
 class postgresql::repo (
   $version = undef,
   $proxy = undef,

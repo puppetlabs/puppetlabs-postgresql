@@ -1,4 +1,5 @@
 Puppet::Type.type(:postgresql_psql).provide(:ruby) do
+  desc 'Postgres psql provider'
   def run_unless_sql_command(sql)
     # for the 'unless' queries, we wrap the user's query in a 'SELECT COUNT',
     # which makes it easier to parse and process the output.

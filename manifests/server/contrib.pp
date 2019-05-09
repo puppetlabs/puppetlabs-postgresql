@@ -1,4 +1,9 @@
-# Install the contrib postgresql packaging. See README.md for more details.
+# @summary Install the contrib postgresql packaging.
+#
+# @param package_name
+#   The name of the PostgreSQL contrib package.
+# @param package_ensure
+#   Ensure the contrib package is installed.
 class postgresql::server::contrib (
   String $package_name      = $postgresql::params::contrib_package_name,
   String[1] $package_ensure = 'present'

@@ -1,4 +1,4 @@
-# PRIVATE CLASS: do not call directly
+# @api private
 class postgresql::server::install {
   $package_ensure      = $postgresql::server::package_ensure
   $package_name        = $postgresql::server::package_name

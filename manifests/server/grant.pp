@@ -1,4 +1,16 @@
-# Define for granting permissions to roles. See README.md for more details.
+# @summary Define for granting permissions to roles.
+#
+# @param role Specifies the role or user whom you are granting access to.
+# @param db Specifies the database to which you are granting access.
+# @param privilege Specifies the privilege to grant. Valid options: 'ALL', 'ALL PRIVILEGES' or 'object_type' dependent string.
+# @param object_type Specifies the type of object to which you are granting privileges. Valid options: 'DATABASE', 'SCHEMA', 'SEQUENCE', 'ALL SEQUENCES IN SCHEMA', 'TABLE' or 'ALL TABLES IN SCHEMA'.
+# @param object_name Specifies name of object_type to which to grant access, can be either a string or a two element array. String: 'object_name' Array: ['schema_name', 'object_name']
+# @param psql_db Specifies the database to execute the grant against. This should not ordinarily be changed from the default
+# @param psql_user Sets the OS user to run psql.
+# @param port Port to use when connecting.
+# @param onlyif_exists Create grant only if doesn't exist
+# @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param ensure Specifies whether to grant or revoke the privilege. Default is to grant the privilege. Valid values: 'present', 'absent'.
 define postgresql::server::grant (
   String $role,
   String $db,
