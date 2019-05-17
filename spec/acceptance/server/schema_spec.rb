@@ -55,7 +55,7 @@ describe 'postgresql::server::schema:', unless: UNSUPPORTED_PLATFORMS.include?(o
 
   it 'creates a schema for a user' do
     begin
-      idempotent_apply(default, pp)
+      idempotent_apply(pp)
 
       ## Check that the user can create a table in the database
       psql('--command="create table psql_schema_tester.foo (foo int)" schema_test', 'psql_schema_tester') do |r|

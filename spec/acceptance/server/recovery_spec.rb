@@ -27,7 +27,7 @@ describe 'postgresql::server::recovery', unless: UNSUPPORTED_PLATFORMS.include?(
       }
     MANIFEST
     it 'adds conf file' do
-      idempotent_apply(default, pp)
+      idempotent_apply(pp)
     end
 
     describe file('/tmp/recovery.conf') do
@@ -48,7 +48,7 @@ describe 'postgresql::server::recovery', unless: UNSUPPORTED_PLATFORMS.include?(
         class { 'postgresql::server': }
       EOS
 
-      idempotent_apply(default, pp)
+      idempotent_apply(pp)
     end
 
     describe file('/tmp/recovery.conf') do

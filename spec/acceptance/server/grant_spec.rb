@@ -1,11 +1,6 @@
 require 'spec_helper_acceptance'
 
 describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
-  let(:version) do
-    result = shell('psql --version')
-    result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
-  end
-
   let(:db) { 'grant_priv_test' }
   let(:owner) { 'psql_grant_priv_owner' }
   let(:user) { 'psql_grant_priv_tester' }
@@ -82,13 +77,13 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
       end
 
       it 'is expected to run idempotently' do
-        if version >= '8.4.0'
-          idempotent_apply(default, pp)
+        if Gem::Version.new(postgresql_version) >= Gem::Version.new('8.4.0')
+          idempotent_apply(pp)
         end
       end
 
       it 'is expected to GRANT USAGE ON LANGUAGE plpgsql to ROLE' do
-        if version >= '8.4.0'
+        if Gem::Version.new(postgresql_version) >= Gem::Version.new('8.4.0')
           ## Check that the privilege was granted to the user
           psql("-d #{db} --command=\"SELECT 1 WHERE has_language_privilege('#{user}', 'plpgsql', 'USAGE')\"", superuser) do |r|
             expect(r.stdout).to match(%r{\(1 row\)})
@@ -135,8 +130,8 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
 
     it 'grants usage/update on a sequence to a user' do
       begin
-        if version >= '9.0'
-          idempotent_apply(default, pp)
+        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+          idempotent_apply(pp)
 
           ## Check that the privilege was granted to the user
           psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq', 'USAGE')\"", user) do |r|
@@ -190,10 +185,10 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
 
     it 'grants usage on all sequences to a user' do
       begin
-        if version >= '9.0'
-          idempotent_apply(default, pp)
+        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+          idempotent_apply(pp)
 
-          ## Check that the privileges were granted to the user, this check is not available on version < 9.0
+          ## Check that the privileges were granted to the user, this check is not available on postgresql_version < 9.0
           psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq2', 'USAGE') AND has_sequence_privilege('#{user}', 'test_seq3', 'USAGE')\"", user) do |r|
             expect(r.stdout).to match(%r{\(1 row\)})
             expect(r.stderr).to eq('')
@@ -267,8 +262,8 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
             }
           EOS
 
-          if version >= '9.0'
-            idempotent_apply(default, pp)
+          if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+            idempotent_apply(pp)
 
             ## Check that the SELECT privilege was granted to the user
             psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
@@ -281,7 +276,7 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               expect(r.stdout).to match(%r{t})
             end
 
-            idempotent_apply(default, pp_revoke)
+            idempotent_apply(pp_revoke)
 
             ## Check that the SELECT privilege was revoked from the user
             psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
@@ -321,8 +316,8 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
             }
           EOS
 
-          if version >= '9.0'
-            idempotent_apply(default, pp)
+          if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+            idempotent_apply(pp)
 
             ## Check that all privileges were granted to the user
             psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
@@ -331,7 +326,7 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               expect(r.stderr).to eq('')
             end
 
-            idempotent_apply(default, pp_revoke)
+            idempotent_apply(pp_revoke)
 
             ## Check that all privileges were revoked from the user
             psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
@@ -372,8 +367,8 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
             }
           EOS
 
-          if version >= '9.0'
-            idempotent_apply(default, pp)
+          if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+            idempotent_apply(pp)
 
             ## Check that all privileges were granted to the user
             psql("-d #{db} --tuples-only --command=\"SELECT table_name,count(privilege_type) FROM information_schema.role_table_grants
@@ -384,7 +379,7 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               expect(r.stderr).to eq('')
             end
 
-            idempotent_apply(default, pp_revoke)
+            idempotent_apply(pp_revoke)
 
             ## Check that all privileges were revoked from the user
             psql("-d #{db} --command=\"SELECT table_name FROM information_schema.role_table_grants
@@ -401,7 +396,7 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
     describe 'REVOKE ... ON DATABASE...' do
       it 'do not fail on revoke connect from non-existant user' do
         begin
-          if version >= '9.1.24'
+          if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.1.24')
             apply_manifest(pp_setup, catch_failures: true)
             pp = pp_setup + <<-EOS.unindent
               postgresql::server::grant { 'revoke connect on db from norole':
@@ -412,7 +407,7 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
                 role        => '#{user}_does_not_exist',
               }
             EOS
-            idempotent_apply(default, pp)
+            idempotent_apply(pp)
           end
         end
       end

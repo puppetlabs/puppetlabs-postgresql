@@ -158,7 +158,7 @@ describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.includ
 
   it 'grants a role to a user/superuser' do
     begin
-      idempotent_apply(default, pp_one)
+      idempotent_apply(pp_one)
 
       ## Check that the role was granted to the user
       psql('--command="SELECT 1 WHERE pg_has_role(\'psql_grant_role_tester\', \'test_group\', \'MEMBER\') = true" grant_role_test', 'psql_grant_role_tester') do |r|
