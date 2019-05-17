@@ -34,7 +34,7 @@ describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(os[
         }
       MANIFEST
 
-      idempotent_apply(default, pp)
+      idempotent_apply(pp)
     end
 
     it 'works with connect settings hash' do
@@ -52,7 +52,7 @@ describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(os[
         }
       MANIFEST
 
-      idempotent_apply(default, pp)
+      idempotent_apply(pp)
     end
 
     it 'fails gracefully' do
