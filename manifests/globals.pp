@@ -158,6 +158,7 @@ class postgresql::globals (
       },
       'Amazon' => '9.2',
       default => $::operatingsystemrelease ? {
+        /^8\./ => '10',
         /^7\./ => '9.2',
         /^6\./ => '8.4',
         /^5\./ => '8.1',
