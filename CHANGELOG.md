@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.0.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.0.1) (2019-06-04)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.0.0...v6.0.1)
+
+### Fixed
+
+- \(MODULES-9120\) - Allow compatibility with puppetlabs-concat 6 [\#1079](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1079) ([lionce](https://github.com/lionce))
+
 ## [v6.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.0.0) (2019-05-14)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.12.1...v6.0.0)
