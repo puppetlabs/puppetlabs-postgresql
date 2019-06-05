@@ -38,7 +38,7 @@ describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) 
     }
   MANIFEST
   it 'does not run SQL when the unless query returns rows' do
-    idempotent_apply(default, pp_three)
+    idempotent_apply(pp_three)
   end
 
   pp_four = <<-MANIFEST
@@ -68,7 +68,7 @@ describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) 
       }
     MANIFEST
     it 'does not run SQL when the unless query returns no rows' do
-      idempotent_apply(default, pp_five)
+      idempotent_apply(pp_five)
     end
 
     pp_six = <<-MANIFEST.unindent
@@ -164,7 +164,7 @@ describe 'postgresql_psql', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) 
         }
       MANIFEST
 
-      idempotent_apply(default, pp)
+      idempotent_apply(pp)
     end
   end
 end
