@@ -14,21 +14,9 @@ describe 'postgresql::server::config_entry' do
       MANIFEST
     end
 
-    # get postgresql version
-    apply_manifest("class { 'postgresql::server': }")
-    result = shell('psql --version')
-    version = result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
-
-    if version >= '9.3'
-      it 'is expected to run idempotently' do
-        idempotent_apply(default, pp_test)
-      end
-
-      it 'is expected to contain directories' do
-        shell('cat /tmp/postgresql.conf') do |output|
-          expect(output.stdout).to contain("unix_socket_directories = '/var/socket/, /root/'")
-        end
-      end
+    it 'is expected to run idempotently' do
+      idempotent_apply(pp_test)
+      expect(run_shell('cat /tmp/postgresql.conf').stdout).to match "unix_socket_directories = '/var/socket/, /root/'"
     end
   end
 end
