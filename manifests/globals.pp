@@ -202,6 +202,7 @@ class postgresql::globals (
         /11\.4/     => '94',
         /12\.0/     => '93',
         /12\.[1-2]/ => '94',
+        /15\.0/     => '10',
         default     => '96',
       },
       'OpenSuSE' => $::operatingsystemrelease ? {
