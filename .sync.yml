@@ -13,23 +13,6 @@ appveyor.yml:
   delete: true
 
 Gemfile:
-  required:
-    ':system_tests':
-      - gem: 'puppet-module-posix-system-r#{minor_version}'
-        platforms: ruby
-      - gem: 'puppet-module-win-system-r#{minor_version}'
-        platforms:
-          - mswin
-          - mingw
-          - x64_mingw
-    ':development':
-    - gem: 'puppet_litmus'
-      platforms:
-        - ruby
-        - mswin
-        - mingw
-        - x64_mingw
-      condition: "ENV['PUPPET_GEM_VERSION'].nil? or ENV['PUPPET_GEM_VERSION'] !~ %r{ 5}"
   optional:
     ':development':
       - gem: 'github_changelog_generator'
@@ -39,7 +22,6 @@ Gemfile:
 
 Rakefile:
   changelog_user: puppetlabs
-  use_litmus_tasks: true
 
 spec/spec_helper.rb:
   mock_with: ':rspec'
