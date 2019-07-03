@@ -5,6 +5,9 @@ class postgresql::server::initdb {
   $datadir        = $postgresql::server::datadir
   $xlogdir        = $postgresql::server::xlogdir
   $logdir         = $postgresql::server::logdir
+  $manage_datadir = $postgresql::server::manage_datadir
+  $manage_logdir  = $postgresql::server::manage_logdir
+  $manage_xlogdir = $postgresql::server::manage_xlogdir
   $encoding       = $postgresql::server::encoding
   $locale         = $postgresql::server::locale
   $data_checksums = $postgresql::server::data_checksums
@@ -33,18 +36,19 @@ class postgresql::server::initdb {
     $logdir_type = undef
   }
 
-  # Make sure the data directory exists, and has the correct permissions.
-  file { $datadir:
-    ensure  => directory,
-    owner   => $user,
-    group   => $group,
-    mode    => '0700',
-    seltype => $seltype,
-  }
-
-  if($xlogdir) {
-    # Make sure the xlog directory exists, and has the correct permissions.
-    file { $xlogdir:
+  if($manage_datadir) {
+    # Make sure the data directory exists, and has the correct permissions.
+    file { "postgresql_${datadir}":
+      ensure  => directory,
+      path    => $datadir,
+      owner   => $user,
+      group   => $group,
+      mode    => '0700',
+      seltype => $seltype,
+    }
+  } else {
+    # change already defined datadir
+    File <| title == $datadir |> {
       ensure  => directory,
       owner   => $user,
       group   => $group,
@@ -53,13 +57,45 @@ class postgresql::server::initdb {
     }
   }
 
+  if($xlogdir) {
+    if($manage_xlogdir) {
+      # Make sure the xlog directory exists, and has the correct permissions.
+      file { $xlogdir:
+        ensure  => directory,
+        owner   => $user,
+        group   => $group,
+        mode    => '0700',
+        seltype => $seltype,
+      }
+    } else {
+      # change already defined xlogdir
+      File <| title == $xlogdir |>  {
+        ensure  => directory,
+        owner   => $user,
+        group   => $group,
+        mode    => '0700',
+        seltype => $seltype,
+      }
+    }
+  }
+
   if($logdir) {
-    # Make sure the log directory exists, and has the correct permissions.
-    file { $logdir:
-      ensure  => directory,
-      owner   => $user,
-      group   => $group,
-      seltype => $logdir_type,
+    if($manage_logdir) {
+      # Make sure the log directory exists, and has the correct permissions.
+      file { $logdir:
+        ensure  => directory,
+        owner   => $user,
+        group   => $group,
+        seltype => $logdir_type,
+      }
+    } else {
+      # change already defined logdir
+      File <| title == $logdir |> {
+        ensure  => directory,
+        owner   => $user,
+        group   => $group,
+        seltype => $logdir_type,
+      }
     }
   }
 
