@@ -38,16 +38,15 @@ class postgresql::server::initdb {
 
   if($manage_datadir) {
     # Make sure the data directory exists, and has the correct permissions.
-    file { "postgresql_${datadir}":
+    file { $datadir:
       ensure  => directory,
-      path    => $datadir,
       owner   => $user,
       group   => $group,
       mode    => '0700',
       seltype => $seltype,
     }
   } else {
-    # change already defined datadir
+    # changes an already defined datadir
     File <| title == $datadir |> {
       ensure  => directory,
       owner   => $user,
@@ -68,7 +67,7 @@ class postgresql::server::initdb {
         seltype => $seltype,
       }
     } else {
-      # change already defined xlogdir
+      # changes an already defined xlogdir
       File <| title == $xlogdir |>  {
         ensure  => directory,
         owner   => $user,
@@ -89,7 +88,7 @@ class postgresql::server::initdb {
         seltype => $logdir_type,
       }
     } else {
-      # change already defined logdir
+      # changes an already defined logdir
       File <| title == $logdir |> {
         ensure  => directory,
         owner   => $user,
