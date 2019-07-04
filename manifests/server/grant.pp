@@ -314,28 +314,21 @@ define postgresql::server::grant (
         if $_privilege == 'ALL' or $_privilege == 'ALL PRIVILEGES' {
           # GRANT ALL
           $custom_unless = "SELECT 1 WHERE NOT EXISTS
-             ( SELECT 1 FROM pg_catalog.pg_tables AS t,
-               (VALUES ('SELECT'), ('UPDATE'), ('INSERT'), ('DELETE'), ('TRIGGER'), ('REFERENCES'), ('TRUNCATE')) AS p(privilege_type)
-               WHERE t.schemaname = '${schema}'
-                 AND NOT EXISTS (
-                   SELECT 1 FROM information_schema.role_table_grants AS g
-                   WHERE g.grantee = '${role}'
-                     AND g.table_schema = '${schema}'
-                     AND g.privilege_type = p.privilege_type
-                   )
+             ( SELECT 1 FROM
+               ( SELECT t.tablename,count(privilege_type) AS priv_count FROM pg_catalog.pg_tables AS t
+                 LEFT JOIN information_schema.role_table_grants AS g ON t.tablename = g.table_name AND g.grantee = '${role}' AND g.table_schema = '${schema}'
+                 WHERE t.schemaname = '${schema}' AND
+                 ( g.grantee = '${role}' AND privilege_type IN ('SELECT','UPDATE','INSERT','DELETE','TRIGGER','REFERENCES','TRUNCATE') OR privilege_type IS NULL )
+                 GROUP BY t.tablename
+               ) AS j WHERE j.priv_count < 7
              )"
 
         } else {
           # GRANT $_privilege
           $custom_unless = "SELECT 1 WHERE NOT EXISTS
              ( SELECT 1 FROM pg_catalog.pg_tables AS t
-               WHERE t.schemaname = '${schema}'
-                 AND NOT EXISTS (
-                   SELECT 1 FROM information_schema.role_table_grants AS g
-                   WHERE g.grantee = '${role}'
-                     AND g.table_schema = '${schema}'
-                     AND g.privilege_type = '${_privilege}'
-                   )
+               LEFT JOIN information_schema.role_table_grants AS g ON t.tablename = g.table_name AND g.grantee = '${role}' AND g.table_schema = '${schema}' AND g.privilege_type = '${_privilege}'
+               WHERE t.schemaname = '${schema}' AND g.table_name IS NULL
              )"
         }
       } else {
