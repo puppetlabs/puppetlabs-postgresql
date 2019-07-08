@@ -22,6 +22,7 @@ class postgresql::server::config {
   $service_name               = $postgresql::server::service_name
   $log_line_prefix            = $postgresql::server::log_line_prefix
   $timezone                   = $postgresql::server::timezone
+  $jit_enable                 = $postgresql::server::jit_enable
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -127,6 +128,15 @@ class postgresql::server::config {
   if $log_line_prefix {
     postgresql::server::config_entry {'log_line_prefix':
       value => $log_line_prefix,
+    }
+  }
+
+  if $jit_enable {
+    postgresql::server::config_entry {'jit':
+      value => 'on',
+    }
+    postgresql::server::config_entry {'jit_provider':
+      value => 'llvmjit',
     }
   }
 

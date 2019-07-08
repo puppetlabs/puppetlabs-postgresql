@@ -2,6 +2,7 @@
 class postgresql::params inherits postgresql::globals {
   $version                    = $postgresql::globals::globals_version
   $postgis_version            = $postgresql::globals::globals_postgis_version
+  $pgsql_llvmjit_package_name = $postgresql::globals::pgsql_llvmjit_package_name
   $listen_addresses           = undef
   $port                       = 5432
   $log_line_prefix            = undef
@@ -17,6 +18,7 @@ class postgresql::params inherits postgresql::globals {
   $service_enable             = true
   $service_manage             = true
   $service_restart_on_change  = true
+  $jit_enable                 = false
   $service_provider           = $postgresql::globals::service_provider
   $manage_pg_hba_conf         = pick($manage_pg_hba_conf, true)
   $manage_pg_ident_conf       = pick($manage_pg_ident_conf, true)
@@ -32,7 +34,12 @@ class postgresql::params inherits postgresql::globals {
       $group              = pick($group, 'postgres')
       $needs_initdb       = pick($needs_initdb, true)
       $version_parts      = split($version, '[.]')
-      $package_version    = "${version_parts[0]}${version_parts[1]}"
+
+      if $version_parts.scanf("%i") >= 10 {
+        $package_version = $version_parts[0]
+      } else {
+        $package_version = "${version_parts[0]}${version_parts[1]}"
+      }
 
       if $version == $postgresql::globals::default_version and $::operatingsystem != 'Amazon' {
         $client_package_name    = pick($client_package_name, 'postgresql')
@@ -88,6 +95,17 @@ class postgresql::params inherits postgresql::globals {
         $postgis_package_name = "postgis${package_version}"
       } else {
         $postgis_package_name = "postgis2_${package_version}"
+      }
+
+      #JIT is only available from PostgreSQL 11
+      if $version_parts.scanf("%i") >= 11 and $jit_enable == true {
+        if $postgresql::globals::pgsql_llvmjit_package_name {
+          $pgsql_llvmjit_package_name = $postgresql::globals::postgis_package_name
+        } else {
+          $pgsql_llvmjit_package_name = "postgresql${version}-llvmjit"
+        }
+      }else {
+        $pgsql_llvmjit_package_name = undef
       }
     }
 

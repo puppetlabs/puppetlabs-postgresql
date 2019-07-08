@@ -15,7 +15,8 @@
 # @param plperl_package_name Overrides the default PostgreSQL PL/Perl package name.
 # @param plpython_package_name Overrides the default PostgreSQL PL/Python package name.
 # @param python_package_name Overrides the default PostgreSQL Python package name.
-# @param postgis_package_name Overrides the default PostgreSQL PostGIS package name.     
+# @param postgis_package_name Overrides the default PostgreSQL PostGIS package name.
+# @param pgsql_llvmjit_package_name Overrides the default PostgreSQL postgresql11-llvmjit package name.
 #
 # @param service_name Overrides the default PostgreSQL service name.
 # @param service_provider Overrides the default PostgreSQL service provider.
@@ -81,64 +82,64 @@
 #
 #
 class postgresql::globals (
-  $client_package_name      = undef,
-  $server_package_name      = undef,
-  $contrib_package_name     = undef,
-  $devel_package_name       = undef,
-  $java_package_name        = undef,
-  $docs_package_name        = undef,
-  $perl_package_name        = undef,
-  $plperl_package_name      = undef,
-  $plpython_package_name    = undef,
-  $python_package_name      = undef,
-  $postgis_package_name     = undef,
+  $client_package_name        = undef,
+  $server_package_name        = undef,
+  $contrib_package_name       = undef,
+  $devel_package_name         = undef,
+  $java_package_name          = undef,
+  $docs_package_name          = undef,
+  $perl_package_name          = undef,
+  $plperl_package_name        = undef,
+  $plpython_package_name      = undef,
+  $python_package_name        = undef,
+  $postgis_package_name       = undef,
+  $pgsql_llvmjit_package_name = undef,
+  $service_name               = undef,
+  $service_provider           = undef,
+  $service_status             = undef,
+  $default_database           = undef,
 
-  $service_name             = undef,
-  $service_provider         = undef,
-  $service_status           = undef,
-  $default_database         = undef,
+  $validcon_script_path       = undef,
 
-  $validcon_script_path     = undef,
+  $initdb_path                = undef,
+  $createdb_path              = undef,
+  $psql_path                  = undef,
+  $pg_hba_conf_path           = undef,
+  $pg_ident_conf_path         = undef,
+  $postgresql_conf_path       = undef,
+  $recovery_conf_path         = undef,
+  $default_connect_settings   = {},
 
-  $initdb_path              = undef,
-  $createdb_path            = undef,
-  $psql_path                = undef,
-  $pg_hba_conf_path         = undef,
-  $pg_ident_conf_path       = undef,
-  $postgresql_conf_path     = undef,
-  $recovery_conf_path       = undef,
-  $default_connect_settings = {},
+  $pg_hba_conf_defaults       = undef,
 
-  $pg_hba_conf_defaults     = undef,
+  $datadir                    = undef,
+  $confdir                    = undef,
+  $bindir                     = undef,
+  $xlogdir                    = undef,
+  $logdir                     = undef,
+  $log_line_prefix            = undef,
 
-  $datadir                  = undef,
-  $confdir                  = undef,
-  $bindir                   = undef,
-  $xlogdir                  = undef,
-  $logdir                   = undef,
-  $log_line_prefix          = undef,
+  $user                       = undef,
+  $group                      = undef,
 
-  $user                     = undef,
-  $group                    = undef,
+  $version                    = undef,
+  $postgis_version            = undef,
+  $repo_proxy                 = undef,
+  $repo_baseurl               = undef,
 
-  $version                  = undef,
-  $postgis_version          = undef,
-  $repo_proxy               = undef,
-  $repo_baseurl             = undef,
+  $needs_initdb               = undef,
 
-  $needs_initdb             = undef,
+  $encoding                   = undef,
+  $locale                     = undef,
+  $data_checksums             = undef,
+  $timezone                   = undef,
 
-  $encoding                 = undef,
-  $locale                   = undef,
-  $data_checksums           = undef,
-  $timezone                 = undef,
+  $manage_pg_hba_conf         = undef,
+  $manage_pg_ident_conf       = undef,
+  $manage_recovery_conf       = undef,
 
-  $manage_pg_hba_conf       = undef,
-  $manage_pg_ident_conf     = undef,
-  $manage_recovery_conf     = undef,
-
-  $manage_package_repo      = undef,
-  $module_workdir           = undef,
+  $manage_package_repo        = undef,
+  $module_workdir             = undef,
 ) {
   # We are determining this here, because it is needed by the package repo
   # class.

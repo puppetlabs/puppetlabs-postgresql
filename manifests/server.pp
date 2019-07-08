@@ -9,6 +9,7 @@
 #
 # @param service_ensure Ensure service is installed
 # @param service_enable Enable the PostgreSQL service
+# @param jit_enable Enable the PostgreSQL JIT implementation (Only available from PostgreSQL 11)
 # @param service_manage Defines whether or not Puppet should manage the service.
 # @param service_name Overrides the default PostgreSQL service name.
 # @param service_restart_on_change Overrides the default behavior to restart your PostgreSQL service when a config entry has been changed that requires a service restart to become active.
@@ -90,6 +91,7 @@ class postgresql::server (
   $service_reload             = $postgresql::params::service_reload,
   $service_status             = $postgresql::params::service_status,
   $default_database           = $postgresql::params::default_database,
+  $jit_enable                 = $postgresql::params::jit_enable
   $default_connect_settings   = $postgresql::globals::default_connect_settings,
   $listen_addresses           = $postgresql::params::listen_addresses,
   $port                       = $postgresql::params::port,
