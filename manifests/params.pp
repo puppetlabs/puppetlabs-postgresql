@@ -102,7 +102,7 @@ class postgresql::params inherits postgresql::globals {
         if $postgresql::globals::pgsql_llvmjit_package_name {
           $pgsql_llvmjit_package_name = $postgresql::globals::postgis_package_name
         } else {
-          $pgsql_llvmjit_package_name = "postgresql${version}-llvmjit"
+          $pgsql_llvmjit_package_name = "postgresql${package_version}-llvmjit"
         }
       }else {
         $pgsql_llvmjit_package_name = undef
