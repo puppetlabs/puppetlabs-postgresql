@@ -155,3 +155,32 @@ describe 'postgresql::server::extension', type: :define do
     }
   end
 end
+
+describe 'postgresql::server::extension', type: :define do
+  let :facts do
+    {
+      osfamily: 'Debian',
+      operatingsystem: 'Debian',
+      operatingsystemrelease: '6.0',
+      kernel: 'Linux',
+      concat_basedir: tmpfilename('postgis'),
+      id: 'root',
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+    }
+  end
+
+  let(:title) { 'pg_repack' }
+  let(:params) do
+    {
+      database: 'postgres',
+      extension: 'pg_repack',
+    }
+  end
+
+  context 'without including postgresql::server' do
+    it {
+      is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
+        .with(db: 'postgres', command: 'CREATE EXTENSION "pg_repack"')
+    }
+  end
+end
