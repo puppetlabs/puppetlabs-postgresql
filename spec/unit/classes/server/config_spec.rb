@@ -47,7 +47,7 @@ describe 'postgresql::server::config', type: :class do
     end
     it 'has the correct systemd-override file #content' do
       is_expected.to contain_file('systemd-override') \
-        .with_content(%r{.include \/usr\/lib\/systemd\/system\/postgresql.service})
+        .with_content(%r{.include \/usr\/lib\/systemd\/system\/postgresql-\d[.]\d.service})
     end
 
     describe 'with manage_package_repo => true and a version' do
