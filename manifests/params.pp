@@ -35,7 +35,7 @@ class postgresql::params inherits postgresql::globals {
       $needs_initdb       = pick($needs_initdb, true)
       $version_parts      = split($version, '[.]')
 
-      if $version_parts[0].scanf('%i') >= 10 {
+      if $version_parts[0].scanf('%i')[0] >= 10 {
         $package_version = $version_parts[0]
       } else {
         $package_version = "${version_parts[0]}${version_parts[1]}"
@@ -98,7 +98,7 @@ class postgresql::params inherits postgresql::globals {
       }
 
       #JIT is only available from PostgreSQL 11
-      if $version_parts[0].scanf('%i') >= 11 and $jit_enable == true {
+      if $version_parts[0].scanf('%i')[0] >= 11 and $jit_enable == true {
         if $postgresql::globals::pgsql_llvmjit_package_name {
           $pgsql_llvmjit_package_name = $postgresql::globals::postgis_package_name
         } else {

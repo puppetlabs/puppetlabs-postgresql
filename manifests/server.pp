@@ -64,13 +64,13 @@
 # @param manage_pg_hba_conf Boolean. Whether to manage the pg_hba.conf.
 # @param manage_pg_ident_conf Boolean. Overwrites the pg_ident.conf file.
 # @param manage_recovery_conf Boolean. Specifies whether or not manage the recovery.conf.
-# @param module_workdir Working directory for the PostgreSQL module 
+# @param module_workdir Working directory for the PostgreSQL module
 #
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
 #
-# @param version Sets PostgreSQL version 
+# @param version Sets PostgreSQL version
 #
 #
 class postgresql::server (
@@ -91,7 +91,7 @@ class postgresql::server (
   $service_reload             = $postgresql::params::service_reload,
   $service_status             = $postgresql::params::service_status,
   $default_database           = $postgresql::params::default_database,
-  $jit_enable                 = $postgresql::params::jit_enable
+  $jit_enable                 = $postgresql::params::jit_enable,
   $default_connect_settings   = $postgresql::globals::default_connect_settings,
   $listen_addresses           = $postgresql::params::listen_addresses,
   $port                       = $postgresql::params::port,

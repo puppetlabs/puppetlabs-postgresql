@@ -3,7 +3,7 @@ class postgresql::server::install {
   $package_ensure             = $postgresql::server::package_ensure
   $package_name               = $postgresql::server::package_name
   $jit_enable                 = $postgresql::server::jit_enable
-  $pgsql_llvmjit_package_name = $postgresql::server::install::pgsql_llvmjit_package_name
+  $pgsql_llvmjit_package_name = $postgresql::server::pgsql_llvmjit_package_name
 
   $_package_ensure = $package_ensure ? {
     true     => 'present',
