@@ -335,6 +335,7 @@ define postgresql::server::grant (
                    WHERE g.grantee = '${role}'
                      AND g.table_schema = '${schema}'
                      AND g.privilege_type = '${_privilege}'
+                     AND g.table_name = t.tablename
                    )
              )"
         }
