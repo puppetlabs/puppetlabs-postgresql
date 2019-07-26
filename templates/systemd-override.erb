@@ -1,11 +1,11 @@
 <%- if scope.lookupvar('::osfamily') == 'Gentoo' -%>
-.include /usr/lib64/systemd/system/<%= @service_name %>.service
+.include /usr/lib64/systemd/system/<%= @include_file %>.service
 <%- elsif scope.lookupvar('::operatingsystem') == 'Fedora' -%>
-.include /lib/systemd/system/<%= @service_name %>.service
+.include /lib/systemd/system/<%= @include_file %>.service
 <%- elsif scope.lookupvar('::operatingsystem') == 'CentOS' -%>
 .include /usr/lib/systemd/system/<%= @include_file %>.service
 <% else -%>
-.include /usr/lib/systemd/system/<%= @service_name %>.service
+.include /usr/lib/systemd/system/<%= @include_file %>.service
 <% end -%>
 [Service]
 Environment=PGPORT=<%= @port %>
