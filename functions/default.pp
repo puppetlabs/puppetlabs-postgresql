@@ -1,3 +1,14 @@
+# @summary This function pull default values
+# from the params or globals classes as
+# appropriate
+#
+# This function pull default values
+# from the params or globals classes as
+# appropriate
+#
+# @example
+#   postgresql::default('variable')
+
 function postgresql::default(
   String $parameter_name
 ){
