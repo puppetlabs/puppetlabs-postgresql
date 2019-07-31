@@ -61,6 +61,7 @@ _Private Classes_
 
 **Functions**
 
+* [`postgresql::default`](#postgresqldefault): 
 * [`postgresql_acls_to_resources_hash`](#postgresql_acls_to_resources_hash): This internal function translates the ipv(4|6)acls format into a resource suitable for create_resources. It is not intended to be used outsid
 * [`postgresql_escape`](#postgresql_escape): This function safely escapes a string using a consistent random tag
 * [`postgresql_password`](#postgresql_password): This function returns the postgresql password hash from the clear text username / password
@@ -1478,7 +1479,7 @@ Data type: `Any`
 
 Specifies a hash of environment variables used when connecting to a remote server.
 
-Default value: $postgresql::server::default_connect_settings
+Default value: postgresql::default('default_connect_settings')
 
 ### postgresql::server::grant
 
@@ -2596,6 +2597,24 @@ namevar
 The name of the slot to create. Must be a valid replication slot name.
 
 ## Functions
+
+### postgresql::default
+
+Type: Puppet Language
+
+The postgresql::default function.
+
+#### `postgresql::default(String $parameter_name)`
+
+The postgresql::default function.
+
+Returns: `Any`
+
+##### `parameter_name`
+
+Data type: `String`
+
+
 
 ### postgresql_acls_to_resources_hash
 
