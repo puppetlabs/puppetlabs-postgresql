@@ -171,6 +171,7 @@ class postgresql::globals (
         /^(wheezy|7\.)/  => '9.1',
         /^(jessie|8\.)/  => '9.4',
         /^(stretch|9\.)/ => '9.6',
+        /^(buster|10\.)/ => '11',
         default => undef,
       },
       'Ubuntu' => $::operatingsystemrelease ? {
