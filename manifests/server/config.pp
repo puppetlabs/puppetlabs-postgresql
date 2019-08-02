@@ -106,9 +106,18 @@ class postgresql::server::config {
     }
   }
 
+  # ensure that SELinux has a proper label for the port defined
+  if $postgresql::server::manage_selinux == true and $facts['selinux'] == true {
+    exec { "/usr/sbin/semanage port -a -t postgresql_port_t -p tcp ${port}":
+        unless => "/usr/sbin/semanage port -l | grep -qw ${port}",
+        before => Postgresql::Server::Config_entry['port'],
+    }
+  }
+
   postgresql::server::config_entry { 'port':
     value => $port,
   }
+
   postgresql::server::config_entry { 'data_directory':
     value => $datadir,
   }
