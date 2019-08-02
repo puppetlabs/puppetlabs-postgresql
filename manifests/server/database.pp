@@ -76,7 +76,7 @@ define postgresql::server::database(
 
   $tablespace_option = $tablespace ? {
     undef   => '',
-    default => "TABLESPACE = \"${tablespace}\"",
+    default => "TABLESPACE \"${tablespace}\"",
   }
 
   if $createdb_path != undef {
