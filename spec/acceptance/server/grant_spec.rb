@@ -225,6 +225,7 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
           postgresql_psql { "grant all on table test_tbl2 to ${user}":
             command   => "GRANT ALL ON TABLE test_tbl2 TO ${user}",
             db        => $db,
+            psql_user => $owner,
             unless    => "SELECT 1 FROM information_schema.role_table_grants WHERE table_name = 'test_tbl2' AND grantee = '${user}' HAVING count(*)>=7",
             require   => [ Postgresql::Server::Database[$db], Postgresql_psql['create test table 2'], Postgresql::Server::Role[$user] ],
           }
@@ -233,7 +234,7 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
 
       it 'grant select on a table to a user' do
         begin
-          pp = pp_create_table + <<-EOS.unindent
+          pp_grant = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'grant select on test_tbl':
               privilege   => 'SELECT',
@@ -241,9 +242,7 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               object_name => 'test_tbl',
               db          => $db,
               role        => $user,
-              require     => [ Postgresql_psql['create test table'],
-                               Postgresql::Server::Role[$user],
-                               Postgresql_psql["grant all on table test_tbl2 to ${user}"] ]
+              require     => [ Postgresql::Server::Role[$user] ],
             }
 
             postgresql::server::table_grant { 'INSERT priviledge to table':
@@ -251,10 +250,11 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               table     => 'test_tbl',
               db        => $db,
               role      => $user,
+              require     => [ Postgresql::Server::Role[$user] ],
             }
           EOS
 
-          pp_revoke = pp_create_table + <<-EOS.unindent
+          pp_revoke = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'revoke select on test_tbl':
               ensure      => absent,
@@ -263,8 +263,7 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               object_name => 'test_tbl',
               db          => $db,
               role        => $user,
-              require     => [ Postgresql_psql['create test table'],
-                               Postgresql::Server::Role[$user], ]
+              require     => [ Postgresql::Server::Role[$user] ],
             }
 
             postgresql::server::table_grant { 'INSERT priviledge to table':
@@ -273,11 +272,13 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               table     => 'test_tbl',
               db        => $db,
               role      => $user,
+              require     => [ Postgresql::Server::Role[$user] ],
             }
           EOS
 
           if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
-            apply_manifest(pp, expect_changes: true)
+            idempotent_apply(pp_create_table)
+            idempotent_apply(pp_grant)
 
             ## Check that the SELECT privilege was granted to the user
             psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
@@ -290,7 +291,8 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               expect(r.stdout).to match(%r{t})
             end
 
-            apply_manifest(pp_revoke, expect_changes: true)
+            idempotent_apply(pp_create_table)
+            idempotent_apply(pp_revoke)
 
             ## Check that the SELECT privilege was revoked from the user
             psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
@@ -303,7 +305,7 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
 
       it 'grant update on all tables to a user' do
         begin
-          pp = pp_create_table + <<-EOS.unindent
+          pp_grant = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'grant update on all tables':
               privilege   => 'UPDATE',
@@ -311,13 +313,11 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               object_name => 'public',
               db          => $db,
               role        => $user,
-              require     => [ Postgresql_psql['create test table'],
-                               Postgresql::Server::Role[$user],
-                               Postgresql_psql["grant all on table test_tbl2 to ${user}"] ]
+              require     => [ Postgresql::Server::Role[$user] ],
             }
           EOS
 
-          pp_revoke = pp_create_table + <<-EOS.unindent
+          pp_revoke = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'revoke update on all tables':
               ensure      => absent,
@@ -326,13 +326,14 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               object_name => 'public',
               db          => $db,
               role        => $user,
-              require     => [ Postgresql_psql['create test table'],
-                               Postgresql::Server::Role[$user], ]
+              require     => [ Postgresql::Server::Role[$user] ],
             }
           EOS
 
           if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
-            apply_manifest(pp, expect_changes: true)
+            ## pp_create_table sets up the permissions that pp_grant 'fixes', so these to steps cannot be rolled into one
+            idempotent_apply(pp_create_table)
+            idempotent_apply(pp_grant)
 
             ## Check that all privileges were granted to the user
             psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
@@ -343,7 +344,8 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               expect(r.stderr).to eq('')
             end
 
-            apply_manifest(pp_revoke, expect_changes: true)
+            ## idempotent_apply(pp_create_table)
+            idempotent_apply(pp_revoke)
 
             ## Check that all privileges were revoked from the user
             psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
@@ -357,7 +359,7 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
 
       it 'grant all on all tables to a user' do
         begin
-          pp = pp_create_table + <<-EOS.unindent
+          pp_grant = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'grant all on all tables':
               privilege   => 'ALL',
@@ -365,12 +367,11 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               object_name => 'public',
               db          => $db,
               role        => $user,
-              require     => [ Postgresql_psql['create test table'],
-                               Postgresql::Server::Role[$user], ]
+              require     => [ Postgresql::Server::Role[$user] ],
             }
           EOS
 
-          pp_revoke = pp_create_table + <<-EOS.unindent
+          pp_revoke = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'revoke all on all tables':
               ensure      => absent,
@@ -379,13 +380,14 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               object_name => 'public',
               db          => $db,
               role        => $user,
-              require     => [ Postgresql_psql['create test table'],
-                               Postgresql::Server::Role[$user], ]
+              require     => [ Postgresql::Server::Role[$user] ],
             }
           EOS
 
           if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
-            apply_manifest(pp, expect_changes: true)
+            ## pp_create_table sets up the permissions that pp_grant 'fixes', so these to steps cannot be rolled into one
+            idempotent_apply(pp_create_table)
+            idempotent_apply(pp_grant)
 
             ## Check that all privileges were granted to the user
             psql("-d #{db} --tuples-only --command=\"SELECT table_name,count(privilege_type) FROM information_schema.role_table_grants
@@ -397,7 +399,8 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
               expect(r.stderr).to eq('')
             end
 
-            apply_manifest(pp_revoke, expect_changes: true)
+            ## idempotent_apply(pp_create_table)
+            idempotent_apply(pp_revoke)
 
             ## Check that all privileges were revoked from the user
             psql("-d #{db} --command=\"SELECT table_name FROM information_schema.role_table_grants
