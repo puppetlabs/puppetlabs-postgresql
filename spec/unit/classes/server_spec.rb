@@ -26,6 +26,7 @@ describe 'postgresql::server', type: :class do
   describe 'with no parameters' do
     it { is_expected.to contain_class('postgresql::params') }
     it { is_expected.to contain_class('postgresql::server') }
+    it { is_expected.to contain_file('/var/lib/postgresql/9.4/main') }
     it {
       is_expected.to contain_exec('postgresql_reload').with('command' => 'service postgresql reload')
     }
@@ -161,6 +162,7 @@ describe 'postgresql::server', type: :class do
 
     it 'contains the correct package version' do
       is_expected.to contain_class('postgresql::repo').with_version('99.5')
+      is_expected.to contain_file('/var/lib/postgresql/99.5/main')
     end
   end
 
