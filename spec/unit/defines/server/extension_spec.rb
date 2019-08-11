@@ -144,6 +144,8 @@ describe 'postgresql::server::extension', type: :define do
     }
   end
 
+  it { is_expected.to contain_file('/var/lib/postgresql/8.4/main') }
+
   context 'with mandatory arguments only' do
     it {
       is_expected.to contain_postgresql_psql('template_postgis2: CREATE EXTENSION "postgis"')
