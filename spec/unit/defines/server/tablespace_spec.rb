@@ -49,13 +49,14 @@ describe 'postgresql::server::tablespace', type: :define do
         manage_location: false,
       }
     end
+
     let :pre_condition do
       "
       class {'postgresql::server':}
       file {'/srv/data/foo': ensure => 'directory'}
       "
     end
+
     it { is_expected.to contain_file('/srv/data/foo').with_ensure('directory') }
   end
-
 end
