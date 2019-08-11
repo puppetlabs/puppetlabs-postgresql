@@ -20,7 +20,21 @@ describe 'postgresql::server::initdb', type: :class do
     end
 
     it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory') }
+
+    context 'with manage_datadir set to false' do
+      let :pre_condition do
+        "
+        class {'postgresql::server':
+          manage_datadir => false,
+        }
+        file {'/var/lib/pgsql/data': ensure => 'directory'}
+        "
+      end
+
+      it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory') }
+    end
   end
+
   describe 'on Amazon' do
     let :facts do
       {
@@ -36,6 +50,19 @@ describe 'postgresql::server::initdb', type: :class do
     end
 
     it { is_expected.to contain_file('/var/lib/pgsql92/data').with_ensure('directory') }
+
+    context 'with manage_datadir set to false' do
+      let :pre_condition do
+        "
+        class {'postgresql::server':
+          manage_datadir => false,
+        }
+        file {'/var/lib/pgsql92/data': ensure => 'directory'}
+        "
+      end
+
+      it { is_expected.to contain_file('/var/lib/pgsql92/data').with_ensure('directory') }
+    end
   end
 
   describe 'exec with module_workdir => /var/tmp' do
