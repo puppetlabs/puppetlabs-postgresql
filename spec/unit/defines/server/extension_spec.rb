@@ -144,7 +144,9 @@ describe 'postgresql::server::extension', type: :define do
     }
   end
 
-  it { is_expected.to contain_file('/var/lib/postgresql/8.4/main') }
+  it { is_expected.to contain_file('/var/lib/postgresql/8.4/main') } # FIXME: be more precise
+  it { is_expected.to contain_concat('/etc/postgresql/8.4/main/pg_hba.conf') } # FIXME: be more precise
+  it { is_expected.to contain_concat('/etc/postgresql/8.4/main/pg_ident.conf') } # FIXME: be more precise
 
   context 'with mandatory arguments only' do
     it {
