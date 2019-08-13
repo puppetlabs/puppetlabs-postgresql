@@ -162,7 +162,9 @@ describe 'postgresql::server', type: :class do
 
     it 'contains the correct package version' do
       is_expected.to contain_class('postgresql::repo').with_version('99.5')
-      is_expected.to contain_file('/var/lib/postgresql/99.5/main')
+      is_expected.to contain_file('/var/lib/postgresql/99.5/main') # FIXME: be more precise
+      is_expected.to contain_concat('/etc/postgresql/99.5/main/pg_hba.conf') # FIXME: be more precise
+      is_expected.to contain_concat('/etc/postgresql/99.5/main/pg_ident.conf') # FIXME: be more precise
     end
   end
 
