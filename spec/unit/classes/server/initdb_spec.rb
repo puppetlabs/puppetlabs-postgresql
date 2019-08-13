@@ -21,17 +21,25 @@ describe 'postgresql::server::initdb', type: :class do
 
     it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory') }
 
-    context 'with manage_datadir set to false' do
+    context 'with (log,manage,xlog)_datadir set to false' do
       let :pre_condition do
         "
         class {'postgresql::server':
+          manage_logdir  => false,
           manage_datadir => false,
+          manage_xlogdir => false,
+          logdir         => '/var/lib/pgsql/data/log',
+          xlogdir        => '/var/lib/pgsql/data/xlog',
         }
         file {'/var/lib/pgsql/data': ensure => 'directory'}
+        file {'/var/lib/pgsql/data/log': ensure => 'directory'}
+        file {'/var/lib/pgsql/data/xlog': ensure => 'directory'}
         "
       end
 
       it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory') }
+      it { is_expected.to contain_file('/var/lib/pgsql/data/log').with_ensure('directory') }
+      it { is_expected.to contain_file('/var/lib/pgsql/data/xlog').with_ensure('directory') }
     end
   end
 
