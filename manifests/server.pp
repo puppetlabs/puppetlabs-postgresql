@@ -63,13 +63,17 @@
 # @param manage_pg_hba_conf Boolean. Whether to manage the pg_hba.conf.
 # @param manage_pg_ident_conf Boolean. Overwrites the pg_ident.conf file.
 # @param manage_recovery_conf Boolean. Specifies whether or not manage the recovery.conf.
-# @param module_workdir Working directory for the PostgreSQL module 
+# @param module_workdir Working directory for the PostgreSQL module
+#
+# @param manage_datadir Set to false if you have file{ $datadir: } already defined
+# @param manage_logdir Set to false if you have file{ $logdir: } already defined
+# @param manage_xlogdir Set to false if you have file{ $xlogdir: } already defined
 #
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
 #
-# @param version Sets PostgreSQL version 
+# @param version Sets PostgreSQL version
 #
 #
 class postgresql::server (
@@ -128,6 +132,10 @@ class postgresql::server (
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
   $manage_recovery_conf       = $postgresql::params::manage_recovery_conf,
   $module_workdir             = $postgresql::params::module_workdir,
+
+  $manage_datadir             = $postgresql::params::manage_datadir,
+  $manage_logdir              = $postgresql::params::manage_logdir,
+  $manage_xlogdir             = $postgresql::params::manage_xlogdir,
 
   Hash[String, Hash] $roles         = {},
   Hash[String, Any] $config_entries = {},

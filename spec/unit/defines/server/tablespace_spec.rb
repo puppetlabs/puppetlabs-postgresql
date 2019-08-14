@@ -27,6 +27,7 @@ describe 'postgresql::server::tablespace', type: :define do
     "class {'postgresql::server':}"
   end
 
+  it { is_expected.to contain_file('/srv/data/foo').with_ensure('directory') }
   it { is_expected.to contain_postgresql__server__tablespace('test') }
   it { is_expected.to contain_postgresql_psql('CREATE TABLESPACE "test"').that_requires('Class[postgresql::server::service]') }
 
@@ -39,5 +40,23 @@ describe 'postgresql::server::tablespace', type: :define do
     end
 
     it { is_expected.to contain_postgresql_psql('ALTER TABLESPACE "test" OWNER TO "test_owner"') }
+  end
+
+  context 'with manage_location set to false' do
+    let :params do
+      {
+        location: '/srv/data/foo',
+        manage_location: false,
+      }
+    end
+
+    let :pre_condition do
+      "
+      class {'postgresql::server':}
+      file {'/srv/data/foo': ensure => 'directory'}
+      "
+    end
+
+    it { is_expected.to contain_file('/srv/data/foo').with_ensure('directory') }
   end
 end
