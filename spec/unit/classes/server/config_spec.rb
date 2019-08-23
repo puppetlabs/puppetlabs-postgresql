@@ -31,9 +31,12 @@ describe 'postgresql::server::config', type: :class do
     end
 
     it 'has SELinux port defined' do
+      is_expected.to contain_package('policycoreutils-python-utils') .with(ensure: 'present')
+
       is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
         .that_comes_before('Postgresql::Server::Config_entry[port]')
+        .that_requires('Package[policycoreutils-python-utils]')
     end
 
     it 'has the correct systemd-override file' do
@@ -96,9 +99,12 @@ describe 'postgresql::server::config', type: :class do
     end
 
     it 'has SELinux port defined' do
+      is_expected.to contain_package('policycoreutils-python-utils') .with(ensure: 'present')
+
       is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
         .that_comes_before('Postgresql::Server::Config_entry[port]')
+        .that_requires('Package[policycoreutils-python-utils]')
     end
 
     it 'has the correct systemd-override file' do
@@ -133,6 +139,30 @@ describe 'postgresql::server::config', type: :class do
         is_expected.to contain_file('systemd-override') \
           .with_content(%r{.include \/lib\/systemd\/system\/postgresql-9.4.service})
       end
+    end
+  end
+
+  describe 'on Amazon' do
+    let :facts do
+      {
+        osfamily: 'RedHat',
+        operatingsystem: 'Amazon',
+        operatingsystemrelease: '1.0',
+        concat_basedir: tmpfilename('server'),
+        kernel: 'Linux',
+        id: 'root',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        selinux: true,
+      }
+    end
+
+    it 'has SELinux port defined' do
+      is_expected.to contain_package('policycoreutils') .with(ensure: 'present')
+
+      is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
+        .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
+        .that_comes_before('Postgresql::Server::Config_entry[port]')
+        .that_requires('Package[policycoreutils]')
     end
   end
 
