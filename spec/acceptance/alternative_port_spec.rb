@@ -8,7 +8,7 @@ describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family
   end
   it 'on an alternative port' do
     pp = <<-MANIFEST
-      class { 'postgresql::server': port => '55433' }
+      class { 'postgresql::server': port => '55433', manage_selinux => true }
     MANIFEST
 
     idempotent_apply(pp)
