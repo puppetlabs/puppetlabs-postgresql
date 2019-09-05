@@ -333,9 +333,9 @@ While this module supports both 1.x and 2.x versions of the 'puppetlabs-apt' mod
 
 PostGIS is currently considered an unsupported feature, as it doesn't work on all platforms correctly.
 
-### All versions of RHEL/CentOS
+### All versions of RHEL/CentOS with manage_selinux => false
 
-If you have SELinux enabled you must add any custom ports you use to the `postgresql_port_t` context.  You can do this as follows:
+If you have SELinux enabled and you are *not* using the selinux module to manage SELinux (this is the default configuration) you will need to label any custom ports you use with the `postgresql_port_t` context.  The postgresql service will not start until this is done.  To label a port use the semanage command as follows:
 
 ```shell
 semanage port -a -t postgresql_port_t -p tcp $customport

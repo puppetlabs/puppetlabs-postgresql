@@ -107,9 +107,37 @@ class postgresql::server::config {
     }
   }
 
+  # ensure that SELinux has a proper label for the port defined
+  if $postgresql::server::manage_selinux == true and $facts['selinux'] == true {
+    case $facts['osfamily'] {
+      'RedHat', 'Linux': {
+        if $facts['operatingsystem'] == 'Amazon' {
+          $package_name = 'policycoreutils'
+        }
+        else {
+          $package_name = $facts['operatingsystemmajrelease'] ? {
+            '5'     => 'policycoreutils',
+            '6'     => 'policycoreutils-python',
+            '7'     => 'policycoreutils-python',
+            default => 'policycoreutils-python-utils',
+          }
+        }
+      }
+    }
+
+    ensure_packages([$package_name])
+
+    exec { "/usr/sbin/semanage port -a -t postgresql_port_t -p tcp ${port}":
+        unless  => "/usr/sbin/semanage port -l | grep -qw ${port}",
+        before  => Postgresql::Server::Config_entry['port'],
+        require => Package[$package_name],
+    }
+  }
+
   postgresql::server::config_entry { 'port':
     value => $port,
   }
+
   postgresql::server::config_entry { 'data_directory':
     value => $datadir,
   }

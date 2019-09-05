@@ -23,8 +23,13 @@ class postgresql::params inherits postgresql::globals {
   $manage_pg_hba_conf         = pick($manage_pg_hba_conf, true)
   $manage_pg_ident_conf       = pick($manage_pg_ident_conf, true)
   $manage_recovery_conf       = pick($manage_recovery_conf, false)
+  $manage_selinux             = pick($manage_selinux, false)
   $package_ensure             = 'present'
   $module_workdir             = pick($module_workdir,'/tmp')
+
+  $manage_datadir             = true
+  $manage_logdir              = true
+  $manage_xlogdir             = true
 
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $::osfamily {
@@ -80,10 +85,33 @@ class postgresql::params inherits postgresql::globals {
         }
         $confdir                = pick($confdir, $datadir)
       }
+
+      case $::operatingsystem {
+        'Amazon': {
+          $service_reload = "service ${service_name} reload"
+          $service_status = "service ${service_name} status"
+        }
+
+        # RHEL 5 uses SysV init, RHEL 6 uses upstart.  RHEL 7 and 8 both use systemd.
+        'RedHat', 'CentOS', 'Scientific', 'OracleLinux': {
+          if $::operatingsystemrelease =~ /^[78].*/ {
+            $service_reload = "systemctl reload ${service_name}"
+            $service_status = "systemctl status ${service_name}"
+          } else {
+            $service_reload = "service ${service_name} reload"
+            $service_status = "service ${service_name} status"
+          }
+        }
+
+        # Default will catch Fedora which uses systemd
+        default: {
+          $service_reload = "systemctl reload ${service_name}"
+          $service_status = "systemctl status ${service_name}"
+        }
+      }
+
       $psql_path           = pick($psql_path, "${bindir}/psql")
 
-      $service_status      = $service_status
-      $service_reload      = "service ${service_name} reload"
       $perl_package_name   = pick($perl_package_name, 'perl-DBD-Pg')
       $python_package_name = pick($python_package_name, 'python-psycopg2')
 
