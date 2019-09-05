@@ -2,7 +2,6 @@
 class postgresql::params inherits postgresql::globals {
   $version                    = $postgresql::globals::globals_version
   $postgis_version            = $postgresql::globals::globals_postgis_version
-  $pgsql_llvmjit_package_name = $postgresql::globals::pgsql_llvmjit_package_name
   $listen_addresses           = undef
   $port                       = 5432
   $log_line_prefix            = undef
