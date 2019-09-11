@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.2.0) (2019-09-12)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.1.0...v6.2.0)
+
+### Added
+
+- FM-8408 - add support on Debian10 [\#1103](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1103) ([lionce](https://github.com/lionce))
+- Fix/directory defined twice [\#1089](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1089) ([arcenik](https://github.com/arcenik))
+- Adding SLES 15 [\#1087](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1087) ([msurato](https://github.com/msurato))
+- \(FM-7500\) conversion to use litmus [\#1081](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1081) ([tphoney](https://github.com/tphoney))
+
+### Fixed
+
+- \(MODULES-9658\) - custom ports are not labeled correctly [\#1099](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1099) ([blackknight36](https://github.com/blackknight36))
+- Fix: When assigning a tablespace to a database, no equal sign is needed in the query [\#1098](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1098) ([biertie](https://github.com/biertie))
+- Grant all tables in schema fixup [\#1096](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1096) ([georgehansper](https://github.com/georgehansper))
+- \(MODULES-9219\) - puppetlabs-postgresql : catalog compilation fails when the service command is not installed [\#1093](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1093) ([blackknight36](https://github.com/blackknight36))
+
 ## [v6.1.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.1.0) (2019-06-04)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.0.0...v6.1.0)
