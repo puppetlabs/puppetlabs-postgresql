@@ -122,6 +122,9 @@ class postgresql::server::config {
           }
         }
       }
+      default: {
+        $package_name = 'policycoreutils'
+      }
     }
 
     ensure_packages([$package_name])
