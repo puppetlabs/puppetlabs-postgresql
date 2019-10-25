@@ -137,6 +137,7 @@ class postgresql::server (
   $manage_datadir             = $postgresql::params::manage_datadir,
   $manage_logdir              = $postgresql::params::manage_logdir,
   $manage_xlogdir             = $postgresql::params::manage_xlogdir,
+  $password_encryption        = $postgresql::params::password_encryption,
 
   Hash[String, Hash] $roles         = {},
   Hash[String, Any] $config_entries = {},
