@@ -22,6 +22,7 @@ class postgresql::server::config {
   $service_name               = $postgresql::server::service_name
   $log_line_prefix            = $postgresql::server::log_line_prefix
   $timezone                   = $postgresql::server::timezone
+  $password_encryption        = $postgresql::server::password_encryption
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
@@ -138,6 +139,12 @@ class postgresql::server::config {
 
   postgresql::server::config_entry { 'port':
     value => $port,
+  }
+
+  if ($password_encryption) and ($version >= 10){
+    postgresql::server::config_entry { 'password_encryption':
+      value => $password_encryption,
+    }
   }
 
   postgresql::server::config_entry { 'data_directory':

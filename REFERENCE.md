@@ -973,6 +973,14 @@ Set timezone for the PostgreSQL instance
 
 Default value: $postgresql::params::timezone
 
+##### `password_encryption`
+
+Data type: `Any`
+
+Set Password Authentication when password-based authentication methods used
+
+Default value: $postgresql::params::password_encryption
+
 ##### `manage_pg_hba_conf`
 
 Data type: `Any`
