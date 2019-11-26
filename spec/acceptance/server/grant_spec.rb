@@ -203,6 +203,44 @@ describe 'postgresql::server::grant:', unless: UNSUPPORTED_PLATFORMS.include?(os
       end
     end
   end
+  ### FUNCTION grants
+  context 'sequence' do
+    let(:pp) do
+      pp_setup + <<-MANIFEST.unindent
+          postgresql_psql { 'create test function':
+            command   => "CREATE FUNCTION test_func() RETURNS boolean AS 'SELECT true' LANGUAGE 'sql'",
+            db        => $db,
+            psql_user => $owner,
+            unless    => "SELECT 1 FROM information_schema.routines WHERE routine_name = 'test_func'",
+            require   => Postgresql::Server::Database[$db],
+          }
+
+          postgresql::server::grant { 'grant execute on test_func':
+            privilege   => 'EXECUTE',
+            object_type => 'FUNCTION',
+            object_name => 'test_func',
+            db          => $db,
+            role        => $user,
+            require     => [ Postgresql_psql['create test function'],
+                             Postgresql::Server::Role[$user], ]
+          }
+      MANIFEST
+    end
+
+    it 'grants execute on a function to a user' do
+      begin
+        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+          idempotent_apply(pp)
+
+          ## Check that the privilege was granted to the user
+          psql("-d #{db} --command=\"SELECT 1 WHERE has_function_privilege('#{user}', 'test_func()', 'EXECUTE')\"", user) do |r|
+            expect(r.stdout).to match(%r{\(1 row\)})
+            expect(r.stderr).to eq('')
+          end
+        end
+      end
+    end
+  end
   ### TABLE grants
   context 'table' do
     describe 'GRANT ... ON TABLE' do
