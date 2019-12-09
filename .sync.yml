@@ -3,6 +3,8 @@
   delete: true
 ".travis.yml":
   dist: trusty
+  deploy_to_forge:
+    enabled: false
   user: puppet
   secure: ''
   branches:
