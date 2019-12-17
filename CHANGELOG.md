@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.3.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.2.0) (2019-12-17)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.2.0...v6.2.0)
+
+### Added
+
+- Add support for granting privileges on functions [\#1118](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1118) ([crispygoth](https://github.com/crispygoth))
+- \(FM-8679\) - Support added for CentOS 8 [\#1117](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1117) ([david22swan](https://github.com/david22swan))
+- MODULES-10041 - allow define password\_encryption for version above 10 [\#1111](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1111) ([k2patel](https://github.com/k2patel))
+
 ## [v6.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.2.0) (2019-09-12)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.1.0...v6.2.0)
