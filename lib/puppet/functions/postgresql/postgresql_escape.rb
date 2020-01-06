@@ -30,10 +30,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_escape') do
     repeated_param 'Any', :args
   end
 
-
   def default_impl(*args)
-    
-
     if args.size != 1
       raise(Puppet::ParseError, 'postgresql_escape(): Wrong number of arguments ' \
         "given (#{args.size} for 1)")
@@ -51,6 +48,5 @@ Puppet::Functions.create_function(:'postgresql::postgresql_escape') do
       retval = "$#{escape}$#{password}$#{escape}$"
     end
     retval
-  
   end
 end

@@ -31,10 +31,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
     repeated_param 'Any', :args
   end
 
-
   def default_impl(*args)
-    
-
     if args.size != 2
       raise(Puppet::ParseError, 'postgresql_password(): Wrong number of arguments ' \
         "given (#{args.size} for 2)")
@@ -44,6 +41,5 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
     password = args[1]
 
     'md5' + Digest::MD5.hexdigest(password.to_s + username.to_s)
-  
   end
 end
