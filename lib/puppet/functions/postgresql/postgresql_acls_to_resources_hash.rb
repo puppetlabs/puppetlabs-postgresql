@@ -39,9 +39,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_acls_to_resources_has
     repeated_param 'Any', :args
   end
 
-
   def default_impl(*args)
-    
     func_name = 'postgresql_acls_to_resources_hash()'
 
     if args.size != 3
@@ -97,6 +95,5 @@ Puppet::Functions.create_function(:'postgresql::postgresql_acls_to_resources_has
       resources["postgresql class generated rule #{id} #{index}"] = resource
     end
     resources
-  
   end
 end
