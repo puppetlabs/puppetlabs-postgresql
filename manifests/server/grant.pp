@@ -436,7 +436,7 @@ define postgresql::server::grant (
   $_onlyif = $onlyif_function ? {
     'table_exists'    => "SELECT true FROM pg_tables WHERE tablename = '${_togrant_object}'",
     'language_exists' => "SELECT true from pg_language WHERE lanname = '${_togrant_object}'",
-    'role_exists'     => "SELECT 1 FROM pg_roles WHERE rolname = '${role}' or ${role} = 'PUBLIC'",
+    'role_exists'     => "SELECT 1 FROM pg_roles WHERE rolname = '${role}' or '${role}' = 'PUBLIC'",
     'function_exists' => "SELECT true FROM pg_proc WHERE (oid::regprocedure)::text = '${_togrant_object}${arguments}'",
     default           => undef,
   }
