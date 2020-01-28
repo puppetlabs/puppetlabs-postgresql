@@ -214,6 +214,34 @@ describe 'postgresql::server::grant', type: :define do
     end
   end
 
+  context 'with a role defined to PUBLIC' do
+    let :params do
+      {
+        db: 'test',
+        role: 'PUBLIC',
+        privilege: 'all',
+        object_name: ['myschema', 'mytable'],
+        object_type: 'table',
+      }
+    end
+
+    let :pre_condition do
+      <<-EOS
+      class {'postgresql::server':}
+      postgresql::server::role { 'test': }
+      EOS
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it do
+      is_expected.to contain_postgresql_psql('grant:test')
+        .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* "PUBLIC"}m)
+        .with_unless(%r{SELECT 1 WHERE has_table_privilege\('public',\s*'myschema.mytable', 'INSERT'\)}m)
+    end
+  end
+
   context 'function' do
     let :params do
       {
