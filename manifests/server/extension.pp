@@ -23,6 +23,7 @@ define postgresql::server::extension (
   $package_name                = undef,
   $package_ensure              = undef,
   $connect_settings            = $postgresql::server::default_connect_settings,
+  $database_resource_name      = $database,
 ) {
   $user             = $postgresql::server::user
   $group            = $postgresql::server::group
@@ -51,7 +52,7 @@ define postgresql::server::extension (
   if( $database != 'postgres' ) {
     # The database postgres cannot managed by this module, so it is exempt from this dependency
     Postgresql_psql {
-      require => Postgresql::Server::Database[$database],
+      require => Postgresql::Server::Database[$database_resource_name],
     }
   }
 
