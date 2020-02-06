@@ -14,6 +14,7 @@
 # @param package_name Specifies a package to install prior to activating the extension.
 # @param package_ensure Overrides default package deletion behavior. By default, the package specified with package_name is installed when the extension is activated and removed when the extension is deactivated. To override this behavior, set the ensure value for the package.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param database_resource_name Specifies the resource name of the DB being managed. Defaults to the parameter $database, if left blank.
 define postgresql::server::extension (
   $database,
   $extension                   = $name,
@@ -23,6 +24,7 @@ define postgresql::server::extension (
   $package_name                = undef,
   $package_ensure              = undef,
   $connect_settings            = $postgresql::server::default_connect_settings,
+  $database_resource_name      = $database,
 ) {
   $user             = $postgresql::server::user
   $group            = $postgresql::server::group
@@ -51,7 +53,7 @@ define postgresql::server::extension (
   if( $database != 'postgres' ) {
     # The database postgres cannot managed by this module, so it is exempt from this dependency
     Postgresql_psql {
-      require => Postgresql::Server::Database[$database],
+      require => Postgresql::Server::Database[$database_resource_name],
     }
   }
 
