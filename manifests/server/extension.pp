@@ -23,12 +23,12 @@ define postgresql::server::extension (
   String[1] $ensure            = 'present',
   $package_name                = undef,
   $package_ensure              = undef,
-  $connect_settings            = $postgresql::server::default_connect_settings,
+  $connect_settings            = postgresql::default('default_connect_settings'),
   $database_resource_name      = $database,
 ) {
-  $user             = $postgresql::server::user
-  $group            = $postgresql::server::group
-  $psql_path        = $postgresql::server::psql_path
+  $user             = postgresql::default('user')
+  $group            = postgresql::default('group')
+  $psql_path        = postgresql::default('psql_path')
 
   case $ensure {
     'present': {

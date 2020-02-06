@@ -142,4 +142,9 @@ describe 'postgresql::server::role', type: :define do
       is_expected.to contain_postgresql_psql('DROP ROLE "test"').that_requires('Class[postgresql::server::service]')
     end
   end
+
+  context 'without including postgresql::server' do
+    it { is_expected.to compile }
+    it { is_expected.to contain_postgresql__server__role('test') }
+  end
 end
