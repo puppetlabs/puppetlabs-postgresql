@@ -23,7 +23,7 @@ define postgresql::server::extension (
   String[1] $ensure            = 'present',
   $package_name                = undef,
   $package_ensure              = undef,
-  $connect_settings            = $postgresql::server('default_connect_settings'),
+  $connect_settings            = postgresql::default('default_connect_settings'),
   $database_resource_name      = $database,
 ) {
   $user             = postgresql::default('user')
