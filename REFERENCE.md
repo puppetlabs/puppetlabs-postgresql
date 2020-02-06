@@ -61,7 +61,7 @@ _Private Classes_
 
 **Functions**
 
-* [`postgresql::default`](#postgresqldefault): 
+* [`postgresql::default`](#postgresqldefault): This function pull default values from the `params` class  or `globals` class if the value is not present in `params`.
 * [`postgresql_acls_to_resources_hash`](#postgresql_acls_to_resources_hash): This internal function translates the ipv(4|6)acls format into a resource suitable for create_resources. It is not intended to be used outsid
 * [`postgresql_escape`](#postgresql_escape): This function safely escapes a string using a consistent random tag
 * [`postgresql_password`](#postgresql_password): This function returns the postgresql password hash from the clear text username / password
@@ -1479,7 +1479,7 @@ Data type: `Any`
 
 Specifies a hash of environment variables used when connecting to a remote server.
 
-Default value: postgresql::default('default_connect_settings')
+Default value: $postgresql::server::default_connect_settings
 
 ### postgresql::server::grant
 
@@ -1517,7 +1517,7 @@ Data type: `Pattern[#/(?i:^COLUMN$)/,
     /(?i:^DATABASE$)/,
     #/(?i:^FOREIGN DATA WRAPPER$)/,
     #/(?i:^FOREIGN SERVER$)/,
-    #/(?i:^FUNCTION$)/,
+    /(?i:^FUNCTION$)/,
     /(?i:^LANGUAGE$)/,
     #/(?i:^PROCEDURAL LANGUAGE$)/,
     /(?i:^TABLE$)/,
@@ -2602,13 +2602,29 @@ The name of the slot to create. Must be a valid replication slot name.
 
 Type: Puppet Language
 
-The postgresql::default function.
+This function pull default values from the `params` class  or `globals` class if the value is not present in `params`.
+
+#### Examples
+
+##### 
+
+```puppet
+postgresql::default('variable')
+```
 
 #### `postgresql::default(String $parameter_name)`
 
 The postgresql::default function.
 
 Returns: `Any`
+
+##### Examples
+
+###### 
+
+```puppet
+postgresql::default('variable')
+```
 
 ##### `parameter_name`
 
