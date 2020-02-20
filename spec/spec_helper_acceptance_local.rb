@@ -13,8 +13,14 @@ class String
   end
 end
 
-def install_iproute2
-  pp = <<-MANIFEST
+RSpec.configure do |c|
+  c.before :suite do
+    install_dependencies
+  end
+end
+
+def install_dependencies
+  iproute2 = <<-MANIFEST
     package { 'iproute2': ensure => installed }
   MANIFEST
   LitmusHelper.instance.apply_manifest(iproute2) if os[:family] == 'ubuntu' && os[:release].start_with?('18.04')

@@ -3,10 +3,6 @@ require 'spec_helper_acceptance'
 # These tests are designed to ensure that the module, when ran overrides,
 # sets up everything correctly and allows us to connect to Postgres.
 describe 'postgresql::server' do
-  before(:all) do
-    install_iproute2
-  end
-
   let(:pp) do
     <<-MANIFEST
     class { 'postgresql::server':

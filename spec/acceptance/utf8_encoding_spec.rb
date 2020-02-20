@@ -1,9 +1,6 @@
 require 'spec_helper_acceptance'
 
 describe 'postgresql::server' do
-  before(:all) do
-    install_iproute2
-  end
   let(:pp) do
     <<-MANIFEST
       class { 'postgresql::globals':
