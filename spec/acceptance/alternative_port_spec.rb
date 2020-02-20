@@ -3,9 +3,6 @@ require 'spec_helper_acceptance'
 # These tests ensure that postgres can change itself to an alternative port
 # properly.
 describe 'postgresql::server' do
-  before(:all) do
-    install_iproute2
-  end
   it 'on an alternative port' do
     pp = <<-MANIFEST
       class { 'postgresql::server': port => '55433', manage_selinux => true }
