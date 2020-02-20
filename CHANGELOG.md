@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [v6.3.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.2.0) (2019-12-17)
 
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.2.0...v6.2.0)
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.2.0...v6.3.0)
 
 ### Added
 
