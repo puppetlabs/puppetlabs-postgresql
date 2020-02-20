@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::recovery', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql::server::recovery' do
   describe 'should manage recovery' do
     after(:all) do
       pp = <<-MANIFEST.unindent

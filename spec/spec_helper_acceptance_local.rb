@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-UNSUPPORTED_PLATFORMS = ['aix', 'windows', 'solaris'].freeze
 class String
   def unindent
     gsub(%r{^#{scan(%r{^\s*}).min_by { |l| l.length }}}, '')
