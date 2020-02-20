@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql::server' do
   before(:all) do
     install_iproute2
   end

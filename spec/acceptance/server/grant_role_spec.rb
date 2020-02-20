@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql::server::grant_role:' do
   let(:db) { 'grant_role_test' }
   let(:user) { 'psql_grant_role_tester' }
   let(:group) { 'test_group' }

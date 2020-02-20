@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 # These tests ensure that postgres can change itself to an alternative port
 # properly.
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql::server' do
   before(:all) do
     install_iproute2
   end

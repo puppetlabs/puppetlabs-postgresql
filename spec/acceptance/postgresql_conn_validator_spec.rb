@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql_conn_validator' do
   let(:install_pp) do
     <<-MANIFEST
       class { 'postgresql::server':

@@ -3,7 +3,7 @@ require 'spec_helper_acceptance'
 # These tests ensure that postgres can change itself to an alternative pgdata
 # location properly.
 
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql::server' do
   before(:each) do
     if os[:family] == 'sles'
       skip "These test's currently do not work on SLES/Suse modules"
