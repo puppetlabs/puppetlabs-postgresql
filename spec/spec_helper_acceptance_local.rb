@@ -1,27 +1,43 @@
 # frozen_string_literal: true
 
-UNSUPPORTED_PLATFORMS = ['aix', 'windows', 'solaris'].freeze
+require 'singleton'
+
+class LitmusHelper
+  include Singleton
+  include PuppetLitmus
+end
+
 class String
   def unindent
     gsub(%r{^#{scan(%r{^\s*}).min_by { |l| l.length }}}, '')
   end
 end
 
-def install_iproute2
-  pp = <<-MANIFEST
+RSpec.configure do |c|
+  c.before :suite do
+    install_dependencies
+  end
+end
+
+def install_dependencies
+  iproute2 = <<-MANIFEST
     package { 'iproute2': ensure => installed }
   MANIFEST
-  apply_manifest(pp) if os[:family] == 'ubuntu' && os[:release].start_with?('18.04')
+  LitmusHelper.instance.apply_manifest(iproute2) if os[:family] == 'ubuntu' && os[:release].start_with?('18.04')
+  selinux = <<-MANIFEST
+    package { 'policycoreutils-python': ensure => installed }
+  MANIFEST
+  LitmusHelper.instance.apply_manifest(selinux) if os[:family] == 'redhat' && os[:release].start_with?('6', '7')
 end
 
 def postgresql_version
-  result = run_shell('psql --version')
+  result = LitmusHelper.instance.run_shell('psql --version')
   result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
 end
 
 def psql(psql_cmd, user = 'postgres', exit_codes = [0, 1], &block)
   psql = "psql #{psql_cmd}"
-  run_shell("cd /tmp; su #{shellescape(user)} -c #{shellescape(psql)}", acceptable_exit_codes: exit_codes, &block)
+  LitmusHelper.instance.run_shell("cd /tmp; su #{shellescape(user)} -c #{shellescape(psql)}", acceptable_exit_codes: exit_codes, &block)
 end
 
 def shellescape(str)

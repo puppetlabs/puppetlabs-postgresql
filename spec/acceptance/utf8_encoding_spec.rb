@@ -1,9 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
-  before(:all) do
-    install_iproute2
-  end
+describe 'postgresql::server' do
   let(:pp) do
     <<-MANIFEST
       class { 'postgresql::globals':
