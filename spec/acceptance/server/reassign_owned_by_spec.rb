@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::reassign_owned_by:', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql::server::reassign_owned_by:' do
   let(:db) { 'reassign_test' }
   let(:old_owner) { 'psql_reassign_old_owner' }
   let(:new_owner) { 'psql_reassign_new_owner' }

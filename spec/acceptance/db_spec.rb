@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql::server::db' do
   it 'creates a database' do
     begin
       tmpdir = run_shell('mktemp').stdout
