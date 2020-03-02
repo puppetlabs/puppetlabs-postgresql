@@ -49,11 +49,11 @@ define postgresql::server::grant (
   case $ensure {
     default: {
       # default is 'present'
-      $sql_command = 'GRANT %s ON %s "%s"%s TO "%s"'
+      $sql_command = 'GRANT %s ON %s "%s%s" TO "%s"'
       $unless_is = true
     }
     'absent': {
-      $sql_command = 'REVOKE %s ON %s "%s"%s FROM "%s"'
+      $sql_command = 'REVOKE %s ON %s "%s%s" FROM "%s"'
       $unless_is = false
     }
   }
