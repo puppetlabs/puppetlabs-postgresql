@@ -50,10 +50,12 @@ define postgresql::server::grant (
     default: {
       # default is 'present'
       $sql_command = 'GRANT %s ON %s "%s%s" TO "%s"'
+      $sql_command_unquoted = 'GRANT %s ON %s %s%s TO "%s"'
       $unless_is = true
     }
     'absent': {
       $sql_command = 'REVOKE %s ON %s "%s%s" FROM "%s"'
+      $sql_command_unquoted = 'REVOKE %s ON %s %s%s FROM "%s"'
       $unless_is = false
     }
   }
@@ -115,6 +117,7 @@ define postgresql::server::grant (
         'absent' =>  'role_exists',
       }
       $arguments = ''
+      $_enquote_object = true
     }
     'SCHEMA': {
       $unless_privilege = $_privilege ? {
@@ -131,6 +134,7 @@ define postgresql::server::grant (
       $on_db = $db
       $onlyif_function = undef
       $arguments = ''
+      $_enquote_object = true
     }
     'SEQUENCE': {
       $unless_privilege = $_privilege ? {
@@ -148,6 +152,7 @@ define postgresql::server::grant (
       $on_db = $db
       $onlyif_function = undef
       $arguments = ''
+      $_enquote_object = true
     }
     'ALL SEQUENCES IN SCHEMA': {
       case $_privilege {
@@ -165,6 +170,7 @@ define postgresql::server::grant (
       $on_db = $db
       $onlyif_function = undef
       $arguments = ''
+      $_enquote_object = true
 
       $schema = $object_name
 
@@ -282,6 +288,7 @@ define postgresql::server::grant (
         default => undef,
       }
       $arguments = ''
+      $_enquote_object = true
     }
     'ALL TABLES IN SCHEMA': {
       case $_privilege {
@@ -303,6 +310,7 @@ define postgresql::server::grant (
       $on_db = $db
       $onlyif_function = undef
       $arguments = ''
+      $_enquote_object = true
 
       $schema = $object_name
 
@@ -375,6 +383,7 @@ define postgresql::server::grant (
         default => undef,
       }
       $arguments = ''
+     $_enquote_object = false
     }
     'FUNCTION': {
       $unless_privilege = $_privilege ? {
@@ -392,8 +401,9 @@ define postgresql::server::grant (
         true    => 'function_exists',
         default => undef,
       }
-      $_quoted_args = join($object_arguments, ',')
-      $arguments = "(${_quoted_args})"
+      $_joined_args = join($object_arguments, ',')
+      $arguments = "(${_joined_args})"
+      $_enquote_object = false
     }
 
     default: {
@@ -441,7 +451,10 @@ define postgresql::server::grant (
     default           => undef,
   }
 
-  $grant_cmd = sprintf($sql_command, $_privilege, $_object_type, $_togrant_object, $arguments, $role)
+  $grant_cmd = $_enquote_object ? {
+      false   => sprintf($sql_command_unquoted, $_privilege, $_object_type, $_togrant_object, $arguments, $role),
+      default => sprintf($sql_command, $_privilege, $_object_type, $_togrant_object, $arguments, $role),
+  }
 
   postgresql_psql { "grant:${name}":
     command          => $grant_cmd,
