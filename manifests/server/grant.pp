@@ -392,7 +392,7 @@ define postgresql::server::grant (
         true    => 'function_exists',
         default => undef,
       }
-      $_quoted_args = join($object_arguments.map |$arg| { "\"${arg}\"" }, ',')
+      $_quoted_args = join($object_arguments, ',')
       $arguments = "(${_quoted_args})"
     }
 
