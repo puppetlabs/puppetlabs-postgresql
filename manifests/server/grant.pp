@@ -383,7 +383,7 @@ define postgresql::server::grant (
         default => undef,
       }
       $arguments = ''
-     $_enquote_object = false
+      $_enquote_object = false
     }
     'FUNCTION': {
       $unless_privilege = $_privilege ? {
