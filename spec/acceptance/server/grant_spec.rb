@@ -224,6 +224,25 @@ describe 'postgresql::server::grant:' do
             require     => [ Postgresql_psql['create test function'],
                              Postgresql::Server::Role[$user], ]
           }
+
+          postgresql_psql { 'create test function with argument':
+            command   => "CREATE FUNCTION test_func_with_arg(val integer) RETURNS integer AS 'SELECT val + 1' LANGUAGE 'sql'",
+            db        => $db,
+            psql_user => $owner,
+            unless    => "SELECT 1 FROM (SELECT format('%I.%I(%s)', ns.nspname, p.proname, oidvectortypes(p.proargtypes)) as func_with_args FROM pg_proc p INNER JOIN pg_namespace ns ON (p.pronamespace = ns.oid) WHERE ns.nspname not in ('pg_catalog', 'information_schema')) as funclist WHERE func_with_args='public.test_func_with_arg(integer)'",
+            require   => Postgresql::Server::Database[$db],
+          }
+
+          postgresql::server::grant { 'grant execute on test_func_with_arg':
+            privilege         => 'EXECUTE',
+            object_type       => 'FUNCTION',
+            object_name       => 'test_func_with_arg',
+            object_arguments  => ['integer'],
+            db                => $db,
+            role              => $user,
+            require           => [ Postgresql_psql['create test function with argument'],
+                                   Postgresql::Server::Role[$user], ]
+          }
       MANIFEST
     end
 
@@ -234,6 +253,19 @@ describe 'postgresql::server::grant:' do
 
           ## Check that the privilege was granted to the user
           psql("-d #{db} --command=\"SELECT 1 WHERE has_function_privilege('#{user}', 'test_func()', 'EXECUTE')\"", user) do |r|
+            expect(r.stdout).to match(%r{\(1 row\)})
+            expect(r.stderr).to eq('')
+          end
+        end
+      end
+    end
+    it 'grants execute on a function with argument to a user' do
+      begin
+        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+          idempotent_apply(pp)
+
+          ## Check that the privilege was granted to the user
+          psql("-d #{db} --command=\"SELECT 1 WHERE has_function_privilege('#{user}', 'test_func_with_arg(integer)', 'EXECUTE')\"", user) do |r|
             expect(r.stdout).to match(%r{\(1 row\)})
             expect(r.stderr).to eq('')
           end
