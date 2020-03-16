@@ -249,7 +249,7 @@ describe 'postgresql::server::grant', type: :define do
         role: 'test',
         privilege: 'execute',
         object_name: 'test',
-        object_arguments: ['text', 'text'],
+        object_arguments: ['text', 'boolean'],
         object_type: 'function',
       }
     end
@@ -262,8 +262,8 @@ describe 'postgresql::server::grant', type: :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
     it do
       is_expected.to contain_postgresql_psql('grant:test')
-        .with_command(%r{GRANT EXECUTE ON FUNCTION "test"\("text","text"\) TO\s* "test"}m)
-        .with_unless(%r{SELECT 1 WHERE has_function_privilege\('test',\s* 'test\("text","text"\)', 'EXECUTE'\)}m)
+        .with_command(%r{GRANT EXECUTE ON FUNCTION test\(text,boolean\) TO\s* "test"}m)
+        .with_unless(%r{SELECT 1 WHERE has_function_privilege\('test',\s* 'test\(text,boolean\)', 'EXECUTE'\)}m)
     end
   end
 
@@ -274,7 +274,7 @@ describe 'postgresql::server::grant', type: :define do
         role: 'test',
         privilege: 'execute',
         object_name: ['myschema', 'test'],
-        object_arguments: ['text', 'text'],
+        object_arguments: ['text', 'boolean'],
         object_type: 'function',
       }
     end
@@ -287,8 +287,8 @@ describe 'postgresql::server::grant', type: :define do
     it { is_expected.to contain_postgresql__server__grant('test') }
     it do
       is_expected.to contain_postgresql_psql('grant:test')
-        .with_command(%r{GRANT EXECUTE ON FUNCTION "myschema"."test"\("text","text"\) TO\s* "test"}m)
-        .with_unless(%r{SELECT 1 WHERE has_function_privilege\('test',\s* 'myschema.test\("text","text"\)', 'EXECUTE'\)}m)
+        .with_command(%r{GRANT EXECUTE ON FUNCTION myschema.test\(text,boolean\) TO\s* "test"}m)
+        .with_unless(%r{SELECT 1 WHERE has_function_privilege\('test',\s* 'myschema.test\(text,boolean\)', 'EXECUTE'\)}m)
     end
   end
 
