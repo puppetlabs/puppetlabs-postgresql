@@ -2,7 +2,26 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v6.3.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.3.0) (2019-12-17)
+## [v6.4.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.4.0) (2020-03-17)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.3.0...v6.4.0)
+
+### Added
+
+- Add Fedora 31 compatibility [\#1141](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1141) ([blackknight36](https://github.com/blackknight36))
+- feat: enable different database resource name in extension [\#1136](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1136) ([jfroche](https://github.com/jfroche))
+- pdksync - \(FM-8581\) - Debian 10 added to travis and provision file refactored [\#1130](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1130) ([david22swan](https://github.com/david22swan))
+- Puppet 4 functions [\#1129](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1129) ([binford2k](https://github.com/binford2k))
+
+### Fixed
+
+- Fix incorrectly quoted GRANT cmd on functions [\#1150](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1150) ([olifre](https://github.com/olifre))
+- Correct versioncmp logic in config.pp [\#1137](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1137) ([boydtom](https://github.com/boydtom))
+- Treat $version as an integer for comparison, defaults to string [\#1135](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1135) ([boydtom](https://github.com/boydtom))
+- Allow usage of PUBLIC role [\#1134](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1134) ([Vampouille](https://github.com/Vampouille))
+- fix missing systemd override config for EL8 \(CentOS and RHEL\) [\#1131](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1131) ([david-barbion](https://github.com/david-barbion))
+
+## [v6.3.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.3.0) (2019-12-18)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.2.0...v6.3.0)
 
@@ -11,6 +30,10 @@ All notable changes to this project will be documented in this file. The format 
 - Add support for granting privileges on functions [\#1118](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1118) ([crispygoth](https://github.com/crispygoth))
 - \(FM-8679\) - Support added for CentOS 8 [\#1117](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1117) ([david22swan](https://github.com/david22swan))
 - MODULES-10041 - allow define password\_encryption for version above 10 [\#1111](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1111) ([k2patel](https://github.com/k2patel))
+
+### Fixed
+
+- Remove duplicate REFERENCE.md file with strange unicode character at end of filename [\#1108](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1108) ([nudgegoonies](https://github.com/nudgegoonies))
 
 ## [v6.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.2.0) (2019-09-12)
 
