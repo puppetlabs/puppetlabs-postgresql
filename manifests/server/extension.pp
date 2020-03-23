@@ -50,8 +50,8 @@ define postgresql::server::extension (
     }
   }
 
-  if( $database != 'postgres' ) {
-    # The database postgres cannot managed by this module, so it is exempt from this dependency
+  if( ($database != 'postgres') and ($database != 'template1') ) {
+    # The system databases postgres and template1 cannot managed by this module, so they is exempt from this dependency
     Postgresql_psql {
       require => Postgresql::Server::Database[$database_resource_name],
     }
