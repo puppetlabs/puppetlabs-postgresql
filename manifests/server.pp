@@ -75,6 +75,7 @@
 #
 # @param version Sets PostgreSQL version
 #
+# @param extra_systemd_config Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
 #
 class postgresql::server (
   $postgres_password          = undef,
