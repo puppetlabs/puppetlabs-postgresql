@@ -23,6 +23,7 @@ class postgresql::server::config {
   $log_line_prefix            = $postgresql::server::log_line_prefix
   $timezone                   = $postgresql::server::timezone
   $password_encryption        = $postgresql::server::password_encryption
+  $extra_systemd_config       = $postgresql::server::extra_systemd_config
 
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
