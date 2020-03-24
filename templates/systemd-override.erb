@@ -12,3 +12,4 @@ Environment=DATA_DIR=<%= @datadir %>
 <%- else -%>
 Environment=PGDATA=<%= @datadir %>
 <%- end -%>
+<%= @extra_systemd_config %>
