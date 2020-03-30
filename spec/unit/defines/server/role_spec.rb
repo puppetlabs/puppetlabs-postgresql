@@ -147,4 +147,29 @@ describe 'postgresql::server::role', type: :define do
     it { is_expected.to compile }
     it { is_expected.to contain_postgresql__server__role('test') }
   end
+
+  context 'standalone not managing server' do
+    let :params do
+      {
+        password_hash: 'new-pa$s',
+        connect_settings: { 'PGHOST' => 'postgres-db-server',
+                            'DBVERSION'  => '9.1',
+                            'PGPORT'     => '1234',
+                            'PGUSER'     => 'login-user',
+                            'PGPASSWORD' => 'login-pass' },
+        psql_user: 'postgresql',
+        psql_group: 'postgresql',
+        psql_path: '/usr/bin',
+        module_workdir: '/tmp',
+        db: 'db',
+      }
+    end
+
+    let :pre_condition do
+      ''
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.not_to contain_class('postgresql::server') }
+  end
 end
