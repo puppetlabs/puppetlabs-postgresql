@@ -292,6 +292,28 @@ describe 'postgresql::server::grant', type: :define do
     end
   end
 
+  context 'standalone not managing server' do
+    let :params do
+      {
+        db: 'test',
+        role: 'test',
+        privilege: 'execute',
+        object_name: ['myschema', 'test'],
+        object_arguments: ['text', 'boolean'],
+        object_type: 'function',
+        group: 'postgresql',
+        psql_path: '/usr/bin',
+        psql_user: 'postgres',
+        psql_db: 'db',
+        port: 1542,
+        connect_settings: {},
+      }
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.not_to contain_class('postgresql::server') }
+  end
+
   context 'invalid object_type' do
     let :params do
       {

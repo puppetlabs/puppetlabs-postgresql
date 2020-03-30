@@ -11,6 +11,8 @@
 # @param onlyif_exists Create grant only if doesn't exist
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param ensure Specifies whether to grant or revoke the privilege. Default is to grant the privilege. Valid values: 'present', 'absent'.
+# @param group Sets the OS group to run psql
+# @param psql_path Sets the path to psql command
 define postgresql::server::grant (
   String $role,
   String $db,
@@ -44,6 +46,8 @@ define postgresql::server::grant (
   Enum['present',
         'absent'
   ] $ensure                        = 'present',
+  String $group                    = $postgresql::server::group,
+  String $psql_path                = $postgresql::server::psql_path,
 ) {
 
   case $ensure {
@@ -60,8 +64,6 @@ define postgresql::server::grant (
     }
   }
 
-  $group     = $postgresql::server::group
-  $psql_path = $postgresql::server::psql_path
 
   if ! $object_name {
     $_object_name = $db
