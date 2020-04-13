@@ -81,7 +81,7 @@ class { 'postgresql::server':
 
 postgresql::server::db { 'mydatabasename':
   user     => 'mydatabaseuser',
-  password => postgresql_password('mydatabaseuser', 'mypassword'),
+  password => postgresql::postgresql_password('mydatabaseuser', 'mypassword'),
 }
 ```
 
@@ -94,7 +94,7 @@ class { 'postgresql::server':
 }
 
 postgresql::server::role { 'marmot':
-  password_hash => postgresql_password('marmot', 'mypasswd'),
+  password_hash => postgresql::postgresql_password('marmot', 'mypasswd'),
 }
 
 postgresql::server::database_grant { 'test1':
