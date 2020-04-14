@@ -15,12 +15,12 @@ class postgresql::server::passwd {
     default => ''
   }
 
-  if ($postgres_password != undef) {
+  if $postgres_password {
     # NOTE: this password-setting logic relies on the pg_hba.conf being
     #  configured to allow the postgres system user to connect via psql
     #  without specifying a password ('ident' or 'trust' security). This is
     #  the default for pg_hba.conf.
-    $escaped = postgresql_escape($postgres_password)
+    $escaped = postgresql::postgresql_escape($postgres_password)
     exec { 'set_postgres_postgrespw':
       # This command works w/no password because we run it as postgres system
       # user
