@@ -88,18 +88,16 @@ class postgresql::server::config {
       }
     }
 
-    # ipv4acls are passed as an array of rule strings, here we transform
-    # them into a resources hash, and pass the result to create_resources
-    $ipv4acl_resources = postgresql::postgresql_acls_to_resources_hash($ipv4acls,
-    'ipv4acls', 10)
-    create_resources('postgresql::server::pg_hba_rule', $ipv4acl_resources)
-
-
-    # ipv6acls are passed as an array of rule strings, here we transform
-    # them into a resources hash, and pass the result to create_resources
-    $ipv6acl_resources = postgresql::postgresql_acls_to_resources_hash($ipv6acls,
-    'ipv6acls', 102)
-    create_resources('postgresql::server::pg_hba_rule', $ipv6acl_resources)
+    # $ipv4acls and $ipv6acls are arrays of rule strings
+    # They are converted into hashes we can iterate over to create postgresql::server::pg_hba_rule resources.
+    (
+      postgresql::postgresql_acls_to_resources_hash($ipv4acls, 'ipv4acls', 10) +
+      postgresql::postgresql_acls_to_resources_hash($ipv6acls, 'ipv6acls', 102)
+    ).each | String $key, Hash $attrs| {
+      postgresql::server::pg_hba_rule { $key:
+        * => $attrs,
+      }
+    }
   }
 
   if $listen_addresses {
