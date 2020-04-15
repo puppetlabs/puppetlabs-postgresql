@@ -846,7 +846,7 @@ Default value: $postgresql::params::ip_mask_allow_all_users
 
 ##### `ipv4acls`
 
-Data type: `Any`
+Data type: `Array[String[1]]`
 
 Lists strings for access control for connection method, users, databases, IPv4 addresses;
 
@@ -854,7 +854,7 @@ Default value: $postgresql::params::ipv4acls
 
 ##### `ipv6acls`
 
-Data type: `Any`
+Data type: `Array[String[1]]`
 
 Lists strings for access control for connection method, users, databases, IPv6 addresses.
 
