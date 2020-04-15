@@ -90,14 +90,14 @@ class postgresql::server::config {
 
     # ipv4acls are passed as an array of rule strings, here we transform
     # them into a resources hash, and pass the result to create_resources
-    $ipv4acl_resources = postgresql_acls_to_resources_hash($ipv4acls,
+    $ipv4acl_resources = postgresql::postgresql_acls_to_resources_hash($ipv4acls,
     'ipv4acls', 10)
     create_resources('postgresql::server::pg_hba_rule', $ipv4acl_resources)
 
 
     # ipv6acls are passed as an array of rule strings, here we transform
     # them into a resources hash, and pass the result to create_resources
-    $ipv6acl_resources = postgresql_acls_to_resources_hash($ipv6acls,
+    $ipv6acl_resources = postgresql::postgresql_acls_to_resources_hash($ipv6acls,
     'ipv6acls', 102)
     create_resources('postgresql::server::pg_hba_rule', $ipv6acl_resources)
   }
