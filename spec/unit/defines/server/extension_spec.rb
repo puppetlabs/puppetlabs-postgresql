@@ -178,7 +178,6 @@ describe 'postgresql::server::extension', type: :define do
   end
 
   context 'without including postgresql::server' do
-
     let :pre_condition do
       "class {'postgresql::server':}"
     end
@@ -238,7 +237,11 @@ describe 'postgresql::server::extension', type: :define do
     end
 
     it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234').with_port(nil) }
+    it {
+      is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
+        .with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234')
+        .with_port(nil)
+    }
   end
 
   context 'with specific db connection settings - port overriden by explicit parameter' do
@@ -258,6 +261,10 @@ describe 'postgresql::server::extension', type: :define do
     end
 
     it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234').with_port('5678') }
+    it {
+      is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
+        .with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234')
+        .with_port('5678')
+    }
   end
 end
