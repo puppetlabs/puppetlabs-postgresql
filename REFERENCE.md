@@ -67,7 +67,7 @@ _Private Classes_
 * [`postgresql::postgresql_password`](#postgresqlpostgresql_password): This function returns the postgresql password hash from the clear text username / password
 * [`postgresql_acls_to_resources_hash`](#postgresql_acls_to_resources_hash): This internal function translates the ipv(4|6)acls format into a resource suitable for create_resources. It is not intended to be used outsid
 * [`postgresql_escape`](#postgresql_escape): This function safely escapes a string using a consistent random tag
-* [`postgresql_password`](#postgresql_password): This function returns the postgresql password hash from the clear text username / password
+* [`postgresql_password`](#postgresql_password): DEPRECATED.  Use the namespaced function [`postgresql::postgresql_password`](#postgresqlpostgresql_password) instead.
 
 **Tasks**
 
@@ -1097,6 +1097,14 @@ Sets PostgreSQL version
 
 Default value: `undef`
 
+##### `extra_systemd_config`
+
+Data type: `Any`
+
+Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
+
+Default value: $postgresql::params::extra_systemd_config
+
 ##### `manage_selinux`
 
 Data type: `Boolean`
@@ -1667,6 +1675,22 @@ Specifies whether to grant or revoke the privilege. Default is to grant the priv
 
 Default value: 'present'
 
+##### `group`
+
+Data type: `String`
+
+Sets the OS group to run psql
+
+Default value: $postgresql::server::group
+
+##### `psql_path`
+
+Data type: `String`
+
+Sets the path to psql command
+
+Default value: $postgresql::server::psql_path
+
 ##### `object_arguments`
 
 Data type: `Array[String[1],0]`
@@ -2180,6 +2204,38 @@ Data type: `Enum['present', 'absent']`
 Specify whether to create or drop the role. Specifying 'present' creates the role. Specifying 'absent' drops the role.
 
 Default value: 'present'
+
+##### `psql_user`
+
+Data type: `Any`
+
+Sets the OS user to run psql
+
+Default value: $postgresql::server::user
+
+##### `psql_group`
+
+Data type: `Any`
+
+Sets the OS group to run psql
+
+Default value: $postgresql::server::group
+
+##### `psql_path`
+
+Data type: `Any`
+
+Sets path to psql command
+
+Default value: $postgresql::server::psql_path
+
+##### `module_workdir`
+
+Data type: `Any`
+
+Specifies working directory under which the psql command should be executed. May need to specify if '/tmp' is on volume mounted with noexec option.
+
+Default value: $postgresql::server::module_workdir
 
 ### postgresql::server::schema
 
@@ -2815,26 +2871,25 @@ to get the full benefit of the modern function API.
 
 Type: Ruby 4.x API
 
-postgresql_password.rb
----- original file header ----
+This function returns the postgresql password hash from the clear text username / password
 
-   @return Returns the postgresql password hash from the clear text username / password.
+#### `postgresql::postgresql_password(Variant[String[1],Integer] $username, Variant[String[1],Integer] $password)`
 
-#### `postgresql::postgresql_password(Any *$args)`
+The postgresql::postgresql_password function.
 
-postgresql_password.rb
----- original file header ----
+Returns: `String` The postgresql password hash from the clear text username / password.
 
-   @return Returns the postgresql password hash from the clear text username / password.
+##### `username`
 
-Returns: `Data type` Describe what the function returns here
+Data type: `Variant[String[1],Integer]`
 
-##### `*args`
+The clear text `username`
 
-Data type: `Any`
+##### `password`
 
-The original array of arguments. Port this to individually managed params
-to get the full benefit of the modern function API.
+Data type: `Variant[String[1],Integer]`
+
+The clear text `password`
 
 ### postgresql_acls_to_resources_hash
 
@@ -2884,15 +2939,21 @@ Returns: `Any` Safely escapes a string using $$ using a random tag which should 
 
 ### postgresql_password
 
-Type: Ruby 3.x API
+Type: Ruby 4.x API
 
-This function returns the postgresql password hash from the clear text username / password
+DEPRECATED.  Use the namespaced function [`postgresql::postgresql_password`](#postgresqlpostgresql_password) instead.
 
-#### `postgresql_password()`
+#### `postgresql_password(Any *$args)`
 
-This function returns the postgresql password hash from the clear text username / password
+The postgresql_password function.
 
-Returns: `Any` Returns the postgresql password hash from the clear text username / password.
+Returns: `Any`
+
+##### `*args`
+
+Data type: `Any`
+
+
 
 ## Tasks
 
