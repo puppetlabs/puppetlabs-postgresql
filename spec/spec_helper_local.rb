@@ -55,3 +55,23 @@ shared_examples 'postgresql_password function' do
     is_expected.to run.with_params('foo').and_raise_error(StandardError)
   end
 end
+
+shared_examples 'postgresql_escape function' do
+  it { is_expected.not_to eq(nil) }
+  it {
+    is_expected.to run.with_params('foo')
+                      .and_return('$$foo$$')
+  }
+  it {
+    is_expected.to run.with_params('fo$$o')
+                      .and_return('$ed$fo$$o$ed$')
+  }
+  it {
+    is_expected.to run.with_params('foo$')
+                      .and_return('$a$foo$$a$')
+  }
+  it 'raises an error if there is more than 1 argument' do
+    is_expected.to run.with_params(['foo'], ['foo'])
+                      .and_raise_error(StandardError)
+  end
+end

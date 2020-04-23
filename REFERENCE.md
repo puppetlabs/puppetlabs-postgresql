@@ -64,9 +64,9 @@ _Private Classes_
 _Public Functions_
 
 * [`postgresql::default`](#postgresqldefault): This function pull default values from the `params` class  or `globals` class if the value is not present in `params`.
-* [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape): This function safely escapes a string using a consistent random tag
+* [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape): This function escapes a string using [Dollar Quoting](https://www.postgresql.org/docs/12/sql-syntax-lexical.html#SQL-SYNTAX-DOLLAR-QUOTING) using a randomly generated tag if required.
 * [`postgresql::postgresql_password`](#postgresqlpostgresql_password): This function returns the postgresql password hash from the clear text username / password
-* [`postgresql_escape`](#postgresql_escape): This function safely escapes a string using a consistent random tag
+* [`postgresql_escape`](#postgresql_escape): DEPRECATED.  Use the namespaced function [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape) instead.
 * [`postgresql_password`](#postgresql_password): DEPRECATED.  Use the namespaced function [`postgresql::postgresql_password`](#postgresqlpostgresql_password) instead.
 
 _Private Functions_
@@ -2787,26 +2787,19 @@ Data type: `String`
 
 Type: Ruby 4.x API
 
-postgresql_escape.rb
----- original file header ----
+This function escapes a string using [Dollar Quoting](https://www.postgresql.org/docs/12/sql-syntax-lexical.html#SQL-SYNTAX-DOLLAR-QUOTING) using a randomly generated tag if required.
 
-   @return Safely escapes a string using $$ using a random tag which should be consistent
+#### `postgresql::postgresql_escape(String[1] $input_string)`
 
-#### `postgresql::postgresql_escape(Any *$args)`
+The postgresql::postgresql_escape function.
 
-postgresql_escape.rb
----- original file header ----
+Returns: `String` A `Dollar Quoted` string
 
-   @return Safely escapes a string using $$ using a random tag which should be consistent
+##### `input_string`
 
-Returns: `Data type` Describe what the function returns here
+Data type: `String[1]`
 
-##### `*args`
-
-Data type: `Any`
-
-The original array of arguments. Port this to individually managed params
-to get the full benefit of the modern function API.
+The unescaped string you want to escape using `dollar quoting`
 
 ### postgresql::postgresql_password
 
@@ -2834,15 +2827,21 @@ The clear text `password`
 
 ### postgresql_escape
 
-Type: Ruby 3.x API
+Type: Ruby 4.x API
 
-This function safely escapes a string using a consistent random tag
+DEPRECATED.  Use the namespaced function [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape) instead.
 
-#### `postgresql_escape()`
+#### `postgresql_escape(Any *$args)`
 
-This function safely escapes a string using a consistent random tag
+The postgresql_escape function.
 
-Returns: `Any` Safely escapes a string using $$ using a random tag which should be consistent
+Returns: `Any`
+
+##### `*args`
+
+Data type: `Any`
+
+
 
 ### postgresql_password
 
