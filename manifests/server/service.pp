@@ -25,7 +25,7 @@ class postgresql::server::service {
       status    => $service_status,
     }
 
-    if $service_ensure == 'running' {
+    if $service_ensure in ['running', true] {
       # This blocks the class before continuing if chained correctly, making
       # sure the service really is 'up' before continuing.
       #
