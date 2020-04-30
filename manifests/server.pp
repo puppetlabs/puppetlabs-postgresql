@@ -73,7 +73,7 @@
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
 #
-# @param version Sets PostgreSQL version
+# @param version Deprecated. Use postgresql::globals instead. Sets PostgreSQL version
 #
 # @param extra_systemd_config Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
 #
