@@ -57,6 +57,28 @@ describe 'postgresql::server', type: :class do
     end
   end
 
+  describe 'service_ensure => true' do
+    let(:params) do
+      {
+        service_ensure: true,
+        postgres_password: 'new-p@s$word-to-set',
+      }
+    end
+
+    it { is_expected.to contain_class('postgresql::params') }
+    it { is_expected.to contain_class('postgresql::server') }
+    it { is_expected.to contain_class('postgresql::server::passwd') }
+    it 'validates connection' do
+      is_expected.to contain_postgresql_conn_validator('validate_service_is_running')
+    end
+    it 'sets postgres password' do
+      is_expected.to contain_exec('set_postgres_postgrespw').with('command' => '/usr/bin/psql -c "ALTER ROLE \"postgres\" PASSWORD ${NEWPASSWD_ESCAPED}"',
+                                                                  'user'        => 'postgres',
+                                                                  'environment' => ['PGPASSWORD=new-p@s$word-to-set', 'PGPORT=5432', 'NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$'],
+                                                                  'unless' => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null")
+    end
+  end
+
   describe 'service_ensure => stopped' do
     let(:params) { { service_ensure: 'stopped' } }
 
