@@ -1097,7 +1097,7 @@ Default value: {}
 
 Data type: `Any`
 
-Sets PostgreSQL version
+Deprecated. Use postgresql::globals instead. Sets PostgreSQL version
 
 Default value: `undef`
 
