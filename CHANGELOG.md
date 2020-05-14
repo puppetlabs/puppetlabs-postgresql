@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.5.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.5.0) (2020-05-13)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.4.0...v6.5.0)
+
+### Added
+
+- service\_ensure =\> true is now an allowed value \(aliased to running\)  [\#1167](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1167) ([binford2k](https://github.com/binford2k))
+- Finish conversion of `postgresql\_acls\_to\_resources\_hash` function [\#1163](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1163) ([alexjfisher](https://github.com/alexjfisher))
+- Finish conversion of `postgresql\_escape` function [\#1162](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1162) ([alexjfisher](https://github.com/alexjfisher))
+- Finish conversion of `postgresql\_password` function [\#1161](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1161) ([alexjfisher](https://github.com/alexjfisher))
+- Allow usage of grant and role when not managing postgresql::server [\#1159](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1159) ([tuxmea](https://github.com/tuxmea))
+- Add version configs for SLES 12 SP 3 to 5 [\#1158](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1158) ([XnS](https://github.com/XnS))
+- Add extra parameter "extra\_systemd\_config"  [\#1156](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1156) ([veninga](https://github.com/veninga))
+
+### Fixed
+
+- \(MODULES-10610\) Use correct lower bound for concat version [\#1160](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1160) ([ghoneycutt](https://github.com/ghoneycutt))
+
 ## [v6.4.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.4.0) (2020-03-17)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.3.0...v6.4.0)
