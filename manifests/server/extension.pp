@@ -9,10 +9,11 @@
 #   version may be set to a specific version, in which case the extension is updated using ALTER EXTENSION "extension" UPDATE TO 'version'
 #   eg. If extension is set to postgis and version is set to 2.3.3, this will apply the SQL ALTER EXTENSION "postgis" UPDATE TO '2.3.3' to this database only.
 #   version may be omitted, in which case no ALTER EXTENSION... SQL is applied, and the version will be left unchanged.
-# 
+#
 # @param ensure Specifies whether to activate or deactivate the extension. Valid options: 'present' or 'absent'.
 # @param package_name Specifies a package to install prior to activating the extension.
 # @param package_ensure Overrides default package deletion behavior. By default, the package specified with package_name is installed when the extension is activated and removed when the extension is deactivated. To override this behavior, set the ensure value for the package.
+# @param port Port to use when connecting.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param database_resource_name Specifies the resource name of the DB being managed. Defaults to the parameter $database, if left blank.
 define postgresql::server::extension (
@@ -23,6 +24,7 @@ define postgresql::server::extension (
   String[1] $ensure            = 'present',
   $package_name                = undef,
   $package_ensure              = undef,
+  Optional[Integer] $port      = undef,
   $connect_settings            = postgresql::default('default_connect_settings'),
   $database_resource_name      = $database,
 ) {
@@ -33,7 +35,7 @@ define postgresql::server::extension (
   case $ensure {
     'present': {
       $command = "CREATE EXTENSION \"${extension}\""
-      $unless_mod = ''
+      $unless_mod = undef
       $package_require = []
       $package_before = Postgresql_psql["${database}: ${command}"]
     }
@@ -57,6 +59,17 @@ define postgresql::server::extension (
     }
   }
 
+  #
+  # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
+  #
+  if $port != undef {
+    $port_override = $port
+  } elsif $connect_settings != undef and has_key( $connect_settings, 'PGPORT') {
+    $port_override = undef
+  } else {
+    $port_override = $postgresql::server::port
+  }
+
   postgresql_psql { "${database}: ${command}":
 
     psql_user        => $user,
@@ -65,6 +78,7 @@ define postgresql::server::extension (
     connect_settings => $connect_settings,
 
     db               => $database,
+    port             => $port_override,
     command          => $command,
     unless           => "SELECT 1 WHERE ${unless_mod}EXISTS (SELECT 1 FROM pg_extension WHERE extname = '${extension}')",
   }
@@ -90,6 +104,7 @@ define postgresql::server::extension (
       psql_path        => $psql_path,
       connect_settings => $connect_settings,
       db               => $database,
+      port             => $port_override,
       require          => Postgresql_psql["${database}: ${command}"],
     }
 
@@ -119,6 +134,7 @@ define postgresql::server::extension (
     }
     postgresql_psql { "${database}: ${alter_extension_sql}":
       db               => $database,
+      port             => $port_override,
       psql_user        => $user,
       psql_group       => $group,
       psql_path        => $psql_path,
