@@ -1552,6 +1552,14 @@ Overrides default package deletion behavior. By default, the package specified w
 
 Default value: `undef`
 
+##### `port`
+
+Data type: `Optional[Integer]`
+
+Port to use when connecting.
+
+Default value: `undef`
+
 ##### `connect_settings`
 
 Data type: `Any`
