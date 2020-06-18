@@ -32,30 +32,40 @@ define postgresql::server::extension (
   $group            = postgresql::default('group')
   $psql_path        = postgresql::default('psql_path')
 
+  if( $database != 'postgres' ) {
+    # The database postgres cannot managed by this module, so it is exempt from this dependency
+    $default_psql_require = Postgresql::Server::Database[$database_resource_name]
+
+    Postgresql_psql {
+      require => $default_psql_require,
+    }
+  } else {
+    $default_psql_require = undef
+  }
+
   case $ensure {
     'present': {
       $command = "CREATE EXTENSION \"${extension}\""
       $unless_mod = undef
-      $package_require = []
-      $package_before = Postgresql_psql["${database}: ${command}"]
+      $psql_cmd_require = $package_name ? {
+        undef   => $default_psql_require,
+        default => [$default_psql_require, Package[$package_name]],
+      }
+      $psql_cmd_before = []
     }
 
     'absent': {
       $command = "DROP EXTENSION \"${extension}\""
       $unless_mod = 'NOT '
-      $package_require = Postgresql_psql["${database}: ${command}"]
-      $package_before = []
+      $psql_cmd_require = $default_psql_require
+      $psql_cmd_before = $package_name ? {
+        undef   => [],
+        default => Package[$package_name],
+      }
     }
 
     default: {
       fail("Unknown value for ensure '${ensure}'.")
-    }
-  }
-
-  if( $database != 'postgres' ) {
-    # The database postgres cannot managed by this module, so it is exempt from this dependency
-    Postgresql_psql {
-      require => Postgresql::Server::Database[$database_resource_name],
     }
   }
 
@@ -81,6 +91,8 @@ define postgresql::server::extension (
     port             => $port_override,
     command          => $command,
     unless           => "SELECT 1 WHERE ${unless_mod}EXISTS (SELECT 1 FROM pg_extension WHERE extname = '${extension}')",
+    require          => $psql_cmd_require,
+    before           => $psql_cmd_before,
   }
 
   if $ensure == 'present' and $schema {
@@ -120,8 +132,6 @@ define postgresql::server::extension (
     ensure_packages($package_name, {
       ensure  => $_package_ensure,
       tag     => 'puppetlabs-postgresql',
-      require => $package_require,
-      before  => $package_before,
     })
   }
   if $version {
