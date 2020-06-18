@@ -36,15 +36,21 @@ define postgresql::server::extension (
     'present': {
       $command = "CREATE EXTENSION \"${extension}\""
       $unless_mod = undef
-      $package_require = []
-      $package_before = Postgresql_psql["${database}: ${command}"]
+      $psql_require = $package_name ? {
+        undef   => [],
+        default => Package[$package_name],
+      }
+      $psql_before = []
     }
 
     'absent': {
       $command = "DROP EXTENSION \"${extension}\""
       $unless_mod = 'NOT '
-      $package_require = Postgresql_psql["${database}: ${command}"]
-      $package_before = []
+      $psql_require = []
+      $psql_before = $package_name ? {
+        undef   => [],
+        default => Package[$package_name],
+      }
     }
 
     default: {
@@ -120,8 +126,6 @@ define postgresql::server::extension (
     ensure_packages($package_name, {
       ensure  => $_package_ensure,
       tag     => 'puppetlabs-postgresql',
-      require => $package_require,
-      before  => $package_before,
     })
   }
   if $version {
@@ -141,6 +145,8 @@ define postgresql::server::extension (
       connect_settings => $connect_settings,
       command          => $alter_extension_sql,
       unless           => $update_unless,
+      require          => $psql_require,
+      before           => $psql_before,
     }
   }
 }
