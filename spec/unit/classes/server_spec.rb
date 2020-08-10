@@ -209,13 +209,15 @@ describe 'postgresql::server', type: :class do
         config_entries: {
           fsync: 'off',
           checkpoint_segments: '20',
+          remove_me: :undef,
         },
       }
     end
 
     it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_postgresql__server__config_entry('fsync').with_value('off') }
-    it { is_expected.to contain_postgresql__server__config_entry('checkpoint_segments').with_value('20') }
+    it { is_expected.to contain_postgresql__server__config_entry('fsync').with_value('off').with_ensure('present') }
+    it { is_expected.to contain_postgresql__server__config_entry('checkpoint_segments').with_value('20').with_ensure('present') }
+    it { is_expected.to contain_postgresql__server__config_entry('remove_me').with_value(nil).with_ensure('absent') }
   end
 
   describe 'additional pg_hba_rules' do
