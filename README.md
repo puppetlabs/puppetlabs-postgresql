@@ -320,7 +320,7 @@ For information on the classes and types, see the [REFERENCE.md](https://github.
 
 ## Limitations
 
-Works with versions of PostgreSQL from 8.1 through 9.5.
+Works with versions of PostgreSQL on supported OSes.  
 
 For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-postgresql/blob/master/metadata.json)
 
