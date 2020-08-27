@@ -187,7 +187,7 @@ class postgresql::params inherits postgresql::globals {
           /^6/    => pick($java_package_name, 'libpg-java'),
           default => pick($java_package_name, 'libpostgresql-jdbc-java'),
         },
-      default  => pick($java_package_name, 'libpostgresql-jdbc-java'),
+        default  => pick($java_package_name, 'libpostgresql-jdbc-java'),
       }
       $perl_package_name      = pick($perl_package_name, 'libdbd-pg-perl')
       $plperl_package_name    = pick($plperl_package_name, "postgresql-plperl-${version}")
