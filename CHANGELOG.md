@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.7.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.7.0) (2020-08-28)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.6.0...v6.7.0)
+
+### Added
+
+- pdksync - \(IAC-973\) - Update travis/appveyor to run on new default branch `main` [\#1182](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1182) ([david22swan](https://github.com/david22swan))
+
+### Fixed
+
+- Invert psql/package dependency logic [\#1179](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1179) ([raphink](https://github.com/raphink))
+
 ## [v6.6.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.6.0) (2020-06-02)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.5.0...v6.6.0)
