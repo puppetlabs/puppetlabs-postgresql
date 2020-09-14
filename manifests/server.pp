@@ -155,7 +155,7 @@ class postgresql::server (
     $_version = $postgresql::params::version
   }
 
-  if $createdb_path != undef{
+  if $createdb_path != undef {
     warning('Passing "createdb_path" to postgresql::server is deprecated, it can be removed safely for the same behaviour')
   }
 

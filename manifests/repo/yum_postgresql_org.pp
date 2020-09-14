@@ -9,10 +9,10 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     owner  => 'root',
     group  => 'root',
     mode   => '0644',
-    before => Yumrepo['yum.postgresql.org']
+    before => Yumrepo['yum.postgresql.org'],
   }
 
-  if($::operatingsystem == 'Fedora') {
+  if($facts['os']['name'] == 'Fedora') {
     $label1 = 'fedora'
     $label2 = $label1
   } else {

@@ -7,9 +7,11 @@ describe 'postgresql::server::postgis', type: :class do
 
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0' },
+      },
       kernel: 'Linux',
       concat_basedir: tmpfilename('postgis'),
       id: 'root',

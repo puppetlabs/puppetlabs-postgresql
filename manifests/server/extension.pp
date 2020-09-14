@@ -110,7 +110,7 @@ define postgresql::server::extension (
                 n.nspname = '${schema}'
         )
         |-END
-        ,
+      ,
       psql_user        => $user,
       psql_group       => $group,
       psql_path        => $psql_path,
@@ -130,8 +130,8 @@ define postgresql::server::extension (
     }
 
     ensure_packages($package_name, {
-      ensure  => $_package_ensure,
-      tag     => 'puppetlabs-postgresql',
+        ensure  => $_package_ensure,
+        tag     => 'puppetlabs-postgresql',
     })
   }
   if $version {

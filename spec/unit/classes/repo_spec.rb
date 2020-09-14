@@ -11,9 +11,6 @@ describe 'postgresql::repo', type: :class do
           major: '8',
         },
       },
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
       lsbdistid: 'Debian',
       lsbdistcodename: 'jessie',
     }

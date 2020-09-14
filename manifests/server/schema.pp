@@ -12,7 +12,7 @@
 #   postgresql::server::schema {'private':
 #       db => 'template1',
 #   }
-define postgresql::server::schema(
+define postgresql::server::schema (
   $db               = $postgresql::server::default_database,
   $owner            = undef,
   $schema           = $title,

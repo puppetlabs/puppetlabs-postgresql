@@ -8,9 +8,6 @@ describe 'postgresql::server::config', type: :class do
   describe 'on RedHat 7' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'CentOS',
-        operatingsystemrelease: '7.0',
         concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
@@ -77,9 +74,6 @@ describe 'postgresql::server::config', type: :class do
   describe 'on Fedora 21' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'Fedora',
-        operatingsystemrelease: '21',
         concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
@@ -145,9 +139,11 @@ describe 'postgresql::server::config', type: :class do
   describe 'on Amazon' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'Amazon',
-        operatingsystemrelease: '1.0',
+        os: {
+          family: 'RedHat',
+          name: 'Amazon',
+          release: { 'full' => '1.0' },
+        },
         concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
@@ -177,9 +173,11 @@ describe 'postgresql::server::config', type: :class do
     end
     let(:facts) do
       {
-        osfamily: 'Gentoo',
-        operatingsystem: 'Gentoo',
-        operatingsystemrelease: 'unused',
+        os: {
+          family: 'Gentoo',
+          name: 'Gentoo',
+          release: { 'full' => 'unused' },
+        },
         concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
@@ -221,9 +219,11 @@ describe 'postgresql::server::config', type: :class do
     end
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'CentOS',
-        operatingsystemrelease: '7.0',
+        os: {
+          family: 'RedHat',
+          name: 'CentOS',
+          release: { 'full' => '7.0' },
+        },
         concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
