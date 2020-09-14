@@ -18,7 +18,7 @@
 # @param psql_group Sets the OS group to run psql
 # @param psql_path Sets path to psql command
 # @param module_workdir Specifies working directory under which the psql command should be executed. May need to specify if '/tmp' is on volume mounted with noexec option.
-define postgresql::server::role(
+define postgresql::server::role (
   $update_password = true,
   $password_hash    = false,
   $createdb         = false,
@@ -38,7 +38,6 @@ define postgresql::server::role(
   $module_workdir   = $postgresql::server::module_workdir,
   Enum['present', 'absent'] $ensure = 'present',
 ) {
-
   #
   # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
   #
@@ -91,39 +90,39 @@ define postgresql::server::role(
       require     => undef,
     }
 
-    postgresql_psql {"ALTER ROLE \"${username}\" ${superuser_sql}":
+    postgresql_psql { "ALTER ROLE \"${username}\" ${superuser_sql}":
       unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolsuper = ${superuser}",
     }
 
-    postgresql_psql {"ALTER ROLE \"${username}\" ${createdb_sql}":
+    postgresql_psql { "ALTER ROLE \"${username}\" ${createdb_sql}":
       unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolcreatedb = ${createdb}",
     }
 
-    postgresql_psql {"ALTER ROLE \"${username}\" ${createrole_sql}":
+    postgresql_psql { "ALTER ROLE \"${username}\" ${createrole_sql}":
       unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolcreaterole = ${createrole}",
     }
 
-    postgresql_psql {"ALTER ROLE \"${username}\" ${login_sql}":
+    postgresql_psql { "ALTER ROLE \"${username}\" ${login_sql}":
       unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolcanlogin = ${login}",
     }
 
-    postgresql_psql {"ALTER ROLE \"${username}\" ${inherit_sql}":
+    postgresql_psql { "ALTER ROLE \"${username}\" ${inherit_sql}":
       unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolinherit = ${inherit}",
     }
 
     if(versioncmp($version, '9.1') >= 0) {
       if $replication_sql == '' {
-        postgresql_psql {"ALTER ROLE \"${username}\" NOREPLICATION":
+        postgresql_psql { "ALTER ROLE \"${username}\" NOREPLICATION":
           unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolreplication = ${replication}",
         }
       } else {
-        postgresql_psql {"ALTER ROLE \"${username}\" ${replication_sql}":
+        postgresql_psql { "ALTER ROLE \"${username}\" ${replication_sql}":
           unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolreplication = ${replication}",
         }
       }
     }
 
-    postgresql_psql {"ALTER ROLE \"${username}\" CONNECTION LIMIT ${connection_limit}":
+    postgresql_psql { "ALTER ROLE \"${username}\" CONNECTION LIMIT ${connection_limit}":
       unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolconnlimit = ${connection_limit}",
     }
 

@@ -3,9 +3,11 @@ require 'spec_helper'
 describe 'postgresql::server::config_entry', type: :define do
   let :facts do
     {
-      osfamily: 'RedHat',
-      operatingsystem: 'RedHat',
-      operatingsystemrelease: '6.4',
+      os: {
+        family: 'RedHat',
+        name: 'RedHat',
+        release: { 'full' => '6.4' },
+      },
       kernel: 'Linux',
       concat_basedir: tmpfilename('contrib'),
       id: 'root',
@@ -34,9 +36,11 @@ describe 'postgresql::server::config_entry', type: :define do
     context 'redhat 6' do
       let :facts do
         {
-          osfamily: 'RedHat',
-          operatingsystem: 'RedHat',
-          operatingsystemrelease: '6.4',
+          os: {
+            family: 'RedHat',
+            name: 'RedHat',
+            release: { 'full' => '6.4' },
+          },
           kernel: 'Linux',
           concat_basedir: tmpfilename('contrib'),
           id: 'root',
@@ -56,9 +60,11 @@ describe 'postgresql::server::config_entry', type: :define do
     context 'redhat 7' do
       let :facts do
         {
-          osfamily: 'RedHat',
-          operatingsystem: 'RedHat',
-          operatingsystemrelease: '7.0',
+          os: {
+            family: 'RedHat',
+            name: 'RedHat',
+            release: { 'full' => '7.0' },
+          },
           kernel: 'Linux',
           concat_basedir: tmpfilename('contrib'),
           id: 'root',
@@ -78,9 +84,11 @@ describe 'postgresql::server::config_entry', type: :define do
     context 'fedora 19' do
       let :facts do
         {
-          osfamily: 'RedHat',
-          operatingsystem: 'Fedora',
-          operatingsystemrelease: '19',
+          os: {
+            family: 'RedHat',
+            name: 'Fedora',
+            release: { 'full' => '19' },
+          },
           kernel: 'Linux',
           concat_basedir: tmpfilename('contrib'),
           id: 'root',
@@ -122,9 +130,11 @@ describe 'postgresql::server::config_entry', type: :define do
   context 'unix_socket_directories' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemrelease: '7.0',
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { 'full' => '7.0' },
+        },
         kernel: 'Linux',
         concat_basedir: tmpfilename('contrib'),
         id: 'root',

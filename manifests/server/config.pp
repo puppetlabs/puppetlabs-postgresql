@@ -107,14 +107,14 @@ class postgresql::server::config {
   }
 
   # ensure that SELinux has a proper label for the port defined
-  if $postgresql::server::manage_selinux == true and $facts['selinux'] == true {
-    case $facts['osfamily'] {
+  if $postgresql::server::manage_selinux == true and $facts['os']['selinux']['enabled'] == true {
+    case $facts['os']['family'] {
       'RedHat', 'Linux': {
-        if $facts['operatingsystem'] == 'Amazon' {
+        if $facts['os']['name'] == 'Amazon' {
           $package_name = 'policycoreutils'
         }
         else {
-          $package_name = $facts['operatingsystemmajrelease'] ? {
+          $package_name = $facts['os']['release']['major'] ? {
             '5'     => 'policycoreutils',
             '6'     => 'policycoreutils-python',
             '7'     => 'policycoreutils-python',
@@ -130,9 +130,9 @@ class postgresql::server::config {
     ensure_packages([$package_name])
 
     exec { "/usr/sbin/semanage port -a -t postgresql_port_t -p tcp ${port}":
-        unless  => "/usr/sbin/semanage port -l | grep -qw ${port}",
-        before  => Postgresql::Server::Config_entry['port'],
-        require => Package[$package_name],
+      unless  => "/usr/sbin/semanage port -l | grep -qw ${port}",
+      before  => Postgresql::Server::Config_entry['port'],
+      require => Package[$package_name],
     }
   }
 
@@ -140,7 +140,7 @@ class postgresql::server::config {
     value => $port,
   }
 
-  if ($password_encryption) and (versioncmp($version, '10') >= 0){
+  if ($password_encryption) and (versioncmp($version, '10') >= 0) {
     postgresql::server::config_entry { 'password_encryption':
       value => $password_encryption,
     }
@@ -158,20 +158,19 @@ class postgresql::server::config {
     postgresql::server::config_entry { 'log_directory':
       value => $logdir,
     }
-
   }
   # Allow timestamps in log by default
   if $log_line_prefix {
-    postgresql::server::config_entry {'log_line_prefix':
+    postgresql::server::config_entry { 'log_line_prefix':
       value => $log_line_prefix,
     }
   }
 
   # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
   # in /etc/sysconfig/pgsql/postgresql. Create a blank file so we can manage it with augeas later.
-  if ($::osfamily == 'RedHat') and ($::operatingsystemrelease !~ /^7|^8/) and ($::operatingsystem != 'Fedora') {
+  if ($facts['os']['family'] == 'RedHat') and ($facts['os']['release']['full'] !~ /^7|^8/) and ($facts['os']['name'] != 'Fedora') {
     file { '/etc/sysconfig/pgsql/postgresql':
-      ensure  => present,
+      ensure  => file,
       replace => false,
     }
 
@@ -182,11 +181,9 @@ class postgresql::server::config {
     file { "/etc/sysconfig/pgsql/postgresql-${version}":
       ensure  => link,
       target  => '/etc/sysconfig/pgsql/postgresql',
-      require => File[ '/etc/sysconfig/pgsql/postgresql' ],
+      require => File['/etc/sysconfig/pgsql/postgresql'],
     }
-
   }
-
 
   if ($manage_pg_ident_conf == true) {
     concat { $pg_ident_conf_path:
@@ -198,48 +195,48 @@ class postgresql::server::config {
     }
   }
 
-  if $::osfamily == 'RedHat' {
-    if $::operatingsystemrelease =~ /^7|^8/ or $::operatingsystem == 'Fedora' {
+  if $facts['os']['family'] == 'RedHat' {
+    if $facts['os']['release']['full'] =~ /^7|^8/ or $facts['os']['name'] == 'Fedora' {
       # Template uses:
       # - $::operatingsystem
       # - $service_name
       # - $port
       # - $datadir
       file { 'systemd-override':
-        ensure  => present,
+        ensure  => file,
         path    => "/etc/systemd/system/${service_name}.service",
         owner   => root,
         group   => root,
         content => template('postgresql/systemd-override.erb'),
-        notify  => [ Exec['restart-systemd'], Class['postgresql::server::service'] ],
+        notify  => [Exec['restart-systemd'], Class['postgresql::server::service']],
         before  => Class['postgresql::server::reload'],
       }
       exec { 'restart-systemd':
         command     => 'systemctl daemon-reload',
         refreshonly => true,
-        path        => '/bin:/usr/bin:/usr/local/bin'
+        path        => '/bin:/usr/bin:/usr/local/bin',
       }
     }
   }
-  elsif $::osfamily == 'Gentoo' {
+  elsif $facts['os']['family'] == 'Gentoo' {
     # Template uses:
     # - $::operatingsystem
     # - $service_name
     # - $port
     # - $datadir
     file { 'systemd-override':
-      ensure  => present,
+      ensure  => file,
       path    => "/etc/systemd/system/${service_name}.service",
       owner   => root,
       group   => root,
       content => template('postgresql/systemd-override.erb'),
-      notify  => [ Exec['restart-systemd'], Class['postgresql::server::service'] ],
+      notify  => [Exec['restart-systemd'], Class['postgresql::server::service']],
       before  => Class['postgresql::server::reload'],
     }
     exec { 'restart-systemd':
       command     => 'systemctl daemon-reload',
       refreshonly => true,
-      path        => '/bin:/usr/bin:/usr/local/bin'
+      path        => '/bin:/usr/bin:/usr/local/bin',
     }
   }
 }

@@ -12,9 +12,6 @@ describe 'postgresql::globals', type: :class do
             major: '8',
           },
         },
-        osfamily: 'Debian',
-        operatingsystem: 'Debian',
-        operatingsystemrelease: '8.0',
         lsbdistid: 'Debian',
         lsbdistcodename: 'jessie',
       }
@@ -42,9 +39,11 @@ describe 'postgresql::globals', type: :class do
   context 'on redhat family systems' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemrelease: '7.1',
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { 'full' => '7.1' },
+        },
       }
     end
 
