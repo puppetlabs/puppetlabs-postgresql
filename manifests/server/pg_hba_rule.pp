@@ -1,7 +1,7 @@
 # @summary This resource manages an individual rule that applies to the file defined in target.
 #
 # @param type Sets the type of rule.
-#   Enum['local','host','hostssl','hostnossl'].
+#   Enum['local','host','hostssl','hostnossl', 'hostgssenc'].
 # @param database Sets a comma-separated list of databases that this rule matches.
 # @param user Sets a comma-separated list of users that this rule matches.
 # @param auth_method Provides the method that is used for authentication for the connection that this rule matches. Described further in the PostgreSQL pg_hba.conf documentation.
