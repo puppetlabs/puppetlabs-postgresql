@@ -1,7 +1,7 @@
 ---
 default:
   provisioner: docker
-  images: ['litmusimage/centos7']
+  images: ['litmusimage/centos:7']
 vagrant:
   provisioner: vagrant
   images: ['centos/7', 'generic/ubuntu1804']
