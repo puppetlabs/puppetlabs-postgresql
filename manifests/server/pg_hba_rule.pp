@@ -12,7 +12,7 @@
 # @param target Provides the target for the rule, and is generally an internal only property. Use with caution.
 # @param postgresql_version Manages pg_hba.conf without managing the entire PostgreSQL instance.
 define postgresql::server::pg_hba_rule(
-  Enum['local', 'host', 'hostssl', 'hostnossl'] $type,
+  Enum['local', 'host', 'hostssl', 'hostnossl', 'hostgssenc'] $type,
   String $database,
   String $user,
   String $auth_method,
