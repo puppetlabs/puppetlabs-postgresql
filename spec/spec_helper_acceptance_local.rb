@@ -24,10 +24,19 @@ def install_dependencies
     package { 'iproute2': ensure => installed }
   MANIFEST
   LitmusHelper.instance.apply_manifest(iproute2) if os[:family] == 'ubuntu' && os[:release].start_with?('18.04')
-  selinux = <<-MANIFEST
+
+  return unless os[:family] == 'redhat'
+
+  selinux = if os[:release].start_with?('6', '7')
+              <<-MANIFEST
     package { 'policycoreutils-python': ensure => installed }
-  MANIFEST
-  LitmusHelper.instance.apply_manifest(selinux) if os[:family] == 'redhat' && os[:release].start_with?('6', '7')
+              MANIFEST
+            elsif os[:release].start_with?('8')
+              <<-MANIFEST
+    package { 'policycoreutils-python-utils': ensure => installed }
+              MANIFEST
+            end
+  LitmusHelper.instance.apply_manifest(selinux)
 end
 
 def postgresql_version
