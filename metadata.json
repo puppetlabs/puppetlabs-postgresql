@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-postgresql",
-  "version": "6.7.0",
+  "version": "6.8.0",
   "author": "Inkling/Puppet Labs",
   "summary": "Offers support for basic management of PostgreSQL databases.",
   "license": "Apache-2.0",
