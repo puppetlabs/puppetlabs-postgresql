@@ -25,17 +25,15 @@ def install_dependencies
   MANIFEST
   LitmusHelper.instance.apply_manifest(iproute2) if os[:family] == 'ubuntu' && os[:release].start_with?('18.04')
 
-  return unless os[:family] == 'redhat'
+  return unless os[:family] == 'redhat' && os[:release].start_with?('6', '7', '8')
 
-  selinux = if os[:release].start_with?('6', '7')
-              <<-MANIFEST
-    package { 'policycoreutils-python': ensure => installed }
-              MANIFEST
-            elsif os[:release].start_with?('8')
-              <<-MANIFEST
-    package { 'policycoreutils-python-utils': ensure => installed }
-              MANIFEST
-            end
+  policycoreutils_pkg = 'policycoreutils-python' if os[:release].start_with?('6', '7')
+  policycoreutils_pkg = 'policycoreutils-python-utils' if os[:release].start_with?('8')
+
+  selinux = <<-MANIFEST
+    package { '#{policycoreutils_pkg}': ensure => installed }
+  MANIFEST
+
   LitmusHelper.instance.apply_manifest(selinux)
 end
 
