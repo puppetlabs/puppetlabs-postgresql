@@ -1784,10 +1784,10 @@ The following parameters are available in the `postgresql::server::pg_hba_rule` 
 
 ##### `type`
 
-Data type: `Enum['local', 'host', 'hostssl', 'hostnossl']`
+Data type: `Enum['local', 'host', 'hostssl', 'hostnossl', 'hostgssenc']`
 
 Sets the type of rule.
-Enum['local','host','hostssl','hostnossl'].
+Enum['local','host','hostssl','hostnossl','hostgssenc'].
 
 ##### `database`
 
