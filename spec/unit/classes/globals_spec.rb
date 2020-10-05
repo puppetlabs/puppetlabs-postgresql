@@ -11,7 +11,9 @@ describe 'postgresql::globals', type: :class do
             full: '8.0',
             major: '8',
           },
+          distro: { 'codename' => 'jessie' },
         },
+        osfamily: 'Debian',
         lsbdistid: 'Debian',
         lsbdistcodename: 'jessie',
       }
@@ -44,6 +46,7 @@ describe 'postgresql::globals', type: :class do
           name: 'RedHat',
           release: { 'full' => '7.1' },
         },
+        osfamily: 'RedHat',
       }
     end
 
