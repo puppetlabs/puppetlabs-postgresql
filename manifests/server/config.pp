@@ -117,7 +117,6 @@ class postgresql::server::config {
           $package_name = $facts['os']['release']['major'] ? {
             '5'     => 'policycoreutils',
             '6'     => 'policycoreutils-python',
-            '7'     => 'policycoreutils-python',
             default => 'policycoreutils-python-utils',
           }
         }

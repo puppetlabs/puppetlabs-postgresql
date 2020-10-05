@@ -7,6 +7,7 @@ describe 'postgresql::server::plpython', type: :class do
         family: 'RedHat',
         name: 'CentOS',
         release: { 'full' => '6.8' },
+        selinux: { 'enabled' => true },
       },
       concat_basedir: tmpfilename('plpython'),
       kernel: 'Linux',

@@ -184,7 +184,8 @@ class postgresql::server (
 
   $config_entries.each |$entry, $value| {
     postgresql::server::config_entry { $entry:
-      value => $value,
+      ensure => bool2str($value =~ Undef, 'absent', 'present'),
+      value  => $value,
     }
   }
 

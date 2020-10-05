@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-postgresql",
-  "version": "6.6.0",
+  "version": "6.8.0",
   "author": "Inkling/Puppet Labs",
   "summary": "Offers support for basic management of PostgreSQL databases.",
   "license": "Apache-2.0",
@@ -87,7 +87,7 @@
       "version_requirement": ">= 5.5.10 < 7.0.0"
     }
   ],
-  "pdk-version": "1.18.0",
+  "pdk-version": "1.18.1",
   "template-url": "https://github.com/puppetlabs/pdk-templates#master",
-  "template-ref": "heads/master-0-g9c14433"
+  "template-ref": "heads/master-0-gd610ead"
 }

@@ -5,7 +5,7 @@
 # @param path Path for postgresql.conf 
 #
 define postgresql::server::config_entry (
-  $ensure = 'present',
+  Enum['present', 'absent'] $ensure = 'present',
   $value  = undef,
   $path   = false
 ) {
@@ -161,18 +161,10 @@ define postgresql::server::config_entry (
     }
   }
 
-  case $ensure {
-    /present|absent/: {
-      postgresql_conf { $name:
-        ensure  => $ensure,
-        target  => $target,
-        value   => $value,
-        require => Class['postgresql::server::initdb'],
-      }
-    }
-
-    default: {
-      fail("Unknown value for ensure '${ensure}'.")
-    }
+  postgresql_conf { $name:
+    ensure  => $ensure,
+    target  => $target,
+    value   => $value,
+    require => Class['postgresql::server::initdb'],
   }
 }
