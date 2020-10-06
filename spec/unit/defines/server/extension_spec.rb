@@ -10,9 +10,11 @@ describe 'postgresql::server::extension', type: :define do # rubocop:disable RSp
 
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0' },
+      },
       kernel: 'Linux',
       concat_basedir: tmpfilename('postgis'),
       id: 'root',
@@ -126,9 +128,11 @@ describe 'postgresql::server::extension', type: :define do
 
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '6.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '6.0' },
+      },
       kernel: 'Linux',
       concat_basedir: tmpfilename('postgis'),
       id: 'root',
@@ -159,9 +163,11 @@ end
 describe 'postgresql::server::extension', type: :define do
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '6.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '6.0' },
+      },
       kernel: 'Linux',
       concat_basedir: tmpfilename('postgis'),
       id: 'root',

@@ -17,7 +17,7 @@
 # @param tries Sets the number of attempts after failure before giving up and failing the resource.
 # @param create_db_first Creates the database when obtaining a successful connection.
 #
-define postgresql::validate_db_connection(
+define postgresql::validate_db_connection (
   $database_host     = undef,
   $database_name     = undef,
   $database_password = undef,

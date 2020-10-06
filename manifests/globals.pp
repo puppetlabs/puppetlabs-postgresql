@@ -150,9 +150,9 @@ class postgresql::globals (
 ) {
   # We are determining this here, because it is needed by the package repo
   # class.
-  $default_version = $::osfamily ? {
-    /^(RedHat|Linux)/ => $::operatingsystem ? {
-      'Fedora' => $::operatingsystemrelease ? {
+  $default_version = $facts['os']['family'] ? {
+    /^(RedHat|Linux)/ => $facts['os']['name'] ? {
+      'Fedora' => $facts['os']['release']['full'] ? {
         /^(32)$/       => '12',
         /^(31)$/       => '11.6',
         /^(30)$/       => '11.2',
@@ -167,7 +167,7 @@ class postgresql::globals (
         default        => undef,
       },
       'Amazon' => '9.2',
-      default => $::operatingsystemrelease ? {
+      default => $facts['os']['release']['full'] ? {
         /^8\./ => '10',
         /^7\./ => '9.2',
         /^6\./ => '8.4',
@@ -175,8 +175,8 @@ class postgresql::globals (
         default => undef,
       },
     },
-    'Debian' => $::operatingsystem ? {
-      'Debian' => $::operatingsystemrelease ? {
+    'Debian' => $facts['os']['name'] ? {
+      'Debian' => $facts['os']['release']['full'] ? {
         /^(squeeze|6\.)/ => '8.4',
         /^(wheezy|7\.)/  => '9.1',
         /^(jessie|8\.)/  => '9.4',
@@ -184,7 +184,7 @@ class postgresql::globals (
         /^(buster|10\.)/ => '11',
         default => undef,
       },
-      'Ubuntu' => $::operatingsystemrelease ? {
+      'Ubuntu' => $facts['os']['release']['full'] ? {
         /^(10.04|10.10|11.04)$/ => '8.4',
         /^(11.10|12.04|12.10|13.04|13.10)$/ => '9.1',
         /^(14.04)$/ => '9.3',
@@ -197,19 +197,19 @@ class postgresql::globals (
       },
       default => undef,
     },
-    'Archlinux' => $::operatingsystem ? {
+    'Archlinux' => $facts['os']['name'] ? {
       /Archlinux/ => '9.2',
       default => '9.2',
     },
     'Gentoo' => '9.5',
     'FreeBSD' => '93',
-    'OpenBSD' => $::operatingsystemrelease ? {
+    'OpenBSD' => $facts['os']['release']['full'] ? {
       /5\.6/ => '9.3',
       /5\.[7-9]/ => '9.4',
       /6\.[0-9]/ => '9.5',
     },
-    'Suse' => $::operatingsystem ? {
-      'SLES' => $::operatingsystemrelease ? {
+    'Suse' => $facts['os']['name'] ? {
+      'SLES' => $facts['os']['release']['full'] ? {
         /11\.[0-3]/ => '91',
         /11\.4/     => '94',
         /12\.0/     => '93',
@@ -218,7 +218,7 @@ class postgresql::globals (
         /15\.0/     => '10',
         default     => '96',
       },
-      'OpenSuSE' => $::operatingsystemrelease ? {
+      'OpenSuSE' => $facts['os']['release']['full'] ? {
         /42\.[1-2]/ => '94',
         default     => '96',
       },

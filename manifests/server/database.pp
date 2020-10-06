@@ -9,7 +9,7 @@
 # @param locale Overrides the locale during creation of the database.
 # @param istemplate Defines the database as a template if set to true.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
-define postgresql::server::database(
+define postgresql::server::database (
   $comment          = undef,
   $dbname           = $title,
   $owner            = undef,
@@ -86,7 +86,7 @@ define postgresql::server::database(
   postgresql_psql { "CREATE DATABASE \"${dbname}\"":
     command => "CREATE DATABASE \"${dbname}\" WITH ${template_option} ${encoding_option} ${locale_option} ${tablespace_option}",
     unless  => "SELECT 1 FROM pg_database WHERE datname = '${dbname}'",
-    require => Class['postgresql::server::service']
+    require => Class['postgresql::server::service'],
   }
 
   # This will prevent users from connecting to the database unless they've been

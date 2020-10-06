@@ -49,7 +49,6 @@ define postgresql::server::grant (
   String $group                    = $postgresql::server::group,
   String $psql_path                = $postgresql::server::psql_path,
 ) {
-
   case $ensure {
     default: {
       # default is 'present'
@@ -63,7 +62,6 @@ define postgresql::server::grant (
       $unless_is = false
     }
   }
-
 
   if ! $object_name {
     $_object_name = $db
@@ -108,7 +106,7 @@ define postgresql::server::grant (
           /^CONNECT$/,
           /^CREATE$/,
           /^TEMP$/,
-          /^TEMPORARY$/
+          /^TEMPORARY$/,
         ]                => $_privilege,
         default          => fail('Illegal value for $privilege parameter'),
       }
@@ -116,7 +114,7 @@ define postgresql::server::grant (
       $on_db = $psql_db
       $onlyif_function = $ensure ? {
         default  => undef,
-        'absent' =>  'role_exists',
+        'absent' => 'role_exists',
       }
       $arguments = ''
       $_enquote_object = true
@@ -128,7 +126,7 @@ define postgresql::server::grant (
         Pattern[
           /^$/,
           /^CREATE$/,
-          /^USAGE$/
+          /^USAGE$/,
         ]                => $_privilege,
         default          => fail('Illegal value for $privilege parameter'),
       }
@@ -146,7 +144,7 @@ define postgresql::server::grant (
           /^ALL PRIVILEGES$/,
           /^SELECT$/,
           /^UPDATE$/,
-          /^USAGE$/
+          /^USAGE$/,
         ]       => $_privilege,
         default => fail('Illegal value for $privilege parameter'),
       }
@@ -164,8 +162,8 @@ define postgresql::server::grant (
           /^ALL PRIVILEGES$/,
           /^SELECT$/,
           /^UPDATE$/,
-          /^USAGE$/
-        ]:       { }
+          /^USAGE$/,
+        ]:       {}
         default: { fail('Illegal value for $privilege parameter') }
       }
       $unless_function = 'custom'
@@ -279,7 +277,7 @@ define postgresql::server::grant (
           /^SELECT$/,
           /^TRIGGER$/,
           /^TRUNCATE$/,
-          /^UPDATE$/
+          /^UPDATE$/,
         ]       => $_privilege,
         default => fail('Illegal value for $privilege parameter'),
       }
@@ -304,8 +302,8 @@ define postgresql::server::grant (
           /^SELECT$/,
           /^TRIGGER$/,
           /^TRUNCATE$/,
-          /^UPDATE$/
-        ]:       { }
+          /^UPDATE$/,
+        ]:       {}
         default: { fail('Illegal value for $privilege parameter') }
       }
       $unless_function = 'custom'
@@ -340,7 +338,6 @@ define postgresql::server::grant (
                  GROUP BY t.tablename
                ) AS j WHERE j.priv_count < 7
              )"
-
         } else {
           # GRANT $_privilege
           $custom_unless = "SELECT 1 WHERE NOT EXISTS
@@ -365,7 +362,6 @@ define postgresql::server::grant (
              )"
         }
       }
-
     }
     'LANGUAGE': {
       $unless_privilege = $_privilege ? {
@@ -374,7 +370,7 @@ define postgresql::server::grant (
         Pattern[
           /^$/,
           /^CREATE$/,
-          /^USAGE$/
+          /^USAGE$/,
         ]                => $_privilege,
         default          => fail('Illegal value for $privilege parameter'),
       }
@@ -440,12 +436,12 @@ define postgresql::server::grant (
   # So we need to replace 'PUBLIC' by 'public'.
 
   $_unless = $unless_function ? {
-      false    => undef,
-      'custom' => $custom_unless,
-      default  => $role ? {
-        'PUBLIC' => "SELECT 1 WHERE ${unless_function}('public', '${_granted_object}${arguments}', '${unless_privilege}') = ${unless_is}",
-        default  => "SELECT 1 WHERE ${unless_function}('${role}', '${_granted_object}${arguments}', '${unless_privilege}') = ${unless_is}",
-      }
+    false    => undef,
+    'custom' => $custom_unless,
+    default  => $role ? {
+      'PUBLIC' => "SELECT 1 WHERE ${unless_function}('public', '${_granted_object}${arguments}', '${unless_privilege}') = ${unless_is}",
+      default  => "SELECT 1 WHERE ${unless_function}('${role}', '${_granted_object}${arguments}', '${unless_privilege}') = ${unless_is}",
+    }
   }
 
   $_onlyif = $onlyif_function ? {
@@ -457,8 +453,8 @@ define postgresql::server::grant (
   }
 
   $grant_cmd = $_enquote_object ? {
-      false   => sprintf($sql_command_unquoted, $_privilege, $_object_type, $_togrant_object, $arguments, $role),
-      default => sprintf($sql_command, $_privilege, $_object_type, $_togrant_object, $arguments, $role),
+    false   => sprintf($sql_command_unquoted, $_privilege, $_object_type, $_togrant_object, $arguments, $role),
+    default => sprintf($sql_command, $_privilege, $_object_type, $_togrant_object, $arguments, $role),
   }
 
   postgresql_psql { "grant:${name}":

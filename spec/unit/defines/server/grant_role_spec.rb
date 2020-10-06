@@ -6,12 +6,16 @@ describe 'postgresql::server::grant_role', type: :define do
   end
 
   let(:facts) do
-    { osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
+    {
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0' },
+      },
       kernel: 'Linux', concat_basedir: tmpfilename('postgis'),
       id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' }
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+    }
   end
 
   let(:title) { 'test' }

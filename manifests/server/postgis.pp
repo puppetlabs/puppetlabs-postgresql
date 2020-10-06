@@ -6,7 +6,6 @@ class postgresql::server::postgis (
   String $package_name      = $postgresql::params::postgis_package_name,
   String[1] $package_ensure = 'present'
 ) inherits postgresql::params {
-
   package { 'postgresql-postgis':
     ensure => $package_ensure,
     name   => $package_name,

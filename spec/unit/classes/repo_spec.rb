@@ -10,10 +10,9 @@ describe 'postgresql::repo', type: :class do
           full: '8.0',
           major: '8',
         },
+        distro: { 'codename' => 'jessie' },
       },
       osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
       lsbdistid: 'Debian',
       lsbdistcodename: 'jessie',
     }

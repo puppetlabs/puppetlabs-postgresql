@@ -7,9 +7,11 @@ describe 'postgresql::server::contrib', type: :class do
 
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0' },
+      },
       kernel: 'Linux',
       concat_basedir: tmpfilename('contrib'),
       id: 'root',
@@ -41,8 +43,10 @@ describe 'postgresql::server::contrib', type: :class do
   describe 'on Gentoo' do
     let :facts do
       {
-        osfamily: 'Gentoo',
-        operatingsystem: 'Gentoo',
+        os: {
+          family: 'Gentoo',
+          name: 'Gentoo',
+        },
       }
     end
 

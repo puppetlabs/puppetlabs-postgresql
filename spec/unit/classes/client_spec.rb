@@ -3,9 +3,11 @@ require 'spec_helper'
 describe 'postgresql::client', type: :class do
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0' },
+      },
     }
   end
 

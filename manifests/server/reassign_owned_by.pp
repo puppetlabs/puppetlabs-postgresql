@@ -16,7 +16,6 @@ define postgresql::server::reassign_owned_by (
   Integer $port                     = $postgresql::server::port,
   Hash $connect_settings            = $postgresql::server::default_connect_settings,
 ) {
-
   $sql_command = "REASSIGN OWNED BY \"${old_role}\" TO \"${new_role}\""
 
   $group     = $postgresql::server::group

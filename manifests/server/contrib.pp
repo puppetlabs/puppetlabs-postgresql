@@ -8,8 +8,7 @@ class postgresql::server::contrib (
   String $package_name      = $postgresql::params::contrib_package_name,
   String[1] $package_ensure = 'present'
 ) inherits postgresql::params {
-
-  if $::osfamily == 'Gentoo' {
+  if $facts['os']['family'] == 'Gentoo' {
     fail('osfamily Gentoo does not have a separate "contrib" package, postgresql::server::contrib is not supported.')
   }
 
