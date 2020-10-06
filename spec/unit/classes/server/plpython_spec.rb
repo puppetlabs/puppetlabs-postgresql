@@ -3,9 +3,12 @@ require 'spec_helper'
 describe 'postgresql::server::plpython', type: :class do
   let :facts do
     {
-      osfamily: 'RedHat',
-      operatingsystem: 'CentOS',
-      operatingsystemrelease: '6.0',
+      os: {
+        family: 'RedHat',
+        name: 'CentOS',
+        release: { 'full' => '6.8' },
+        selinux: { 'enabled' => true },
+      },
       concat_basedir: tmpfilename('plpython'),
       kernel: 'Linux',
       id: 'root',

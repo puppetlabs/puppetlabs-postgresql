@@ -8,9 +8,6 @@ describe 'postgresql::server::config', type: :class do
   describe 'on RedHat 7' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'CentOS',
-        operatingsystemrelease: '7.0',
         concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
@@ -26,6 +23,7 @@ describe 'postgresql::server::config', type: :class do
             'major' => '7',
             'minor' => '6',
           },
+          selinux: { 'enabled' => true },
         },
       }
     end
@@ -41,7 +39,7 @@ describe 'postgresql::server::config', type: :class do
 
     it 'has the correct systemd-override file' do
       is_expected.to contain_file('systemd-override').with(
-        ensure: 'present', path: '/etc/systemd/system/postgresql.service',
+        ensure: 'file', path: '/etc/systemd/system/postgresql.service',
         owner: 'root', group: 'root'
       )
     end
@@ -63,7 +61,7 @@ describe 'postgresql::server::config', type: :class do
 
       it 'has the correct systemd-override file' do
         is_expected.to contain_file('systemd-override').with(
-          ensure: 'present', path: '/etc/systemd/system/postgresql-9.4.service',
+          ensure: 'file', path: '/etc/systemd/system/postgresql-9.4.service',
           owner: 'root', group: 'root'
         )
       end
@@ -77,9 +75,6 @@ describe 'postgresql::server::config', type: :class do
   describe 'on Fedora 21' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'Fedora',
-        operatingsystemrelease: '21',
         concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
@@ -94,7 +89,9 @@ describe 'postgresql::server::config', type: :class do
             'full'  => '21',
             'major' => '21',
           },
+          selinux: { 'enabled' => true },
         },
+        operatingsystem: 'Fedora',
       }
     end
 
@@ -109,7 +106,7 @@ describe 'postgresql::server::config', type: :class do
 
     it 'has the correct systemd-override file' do
       is_expected.to contain_file('systemd-override').with(
-        ensure: 'present', path: '/etc/systemd/system/postgresql.service',
+        ensure: 'file', path: '/etc/systemd/system/postgresql.service',
         owner: 'root', group: 'root'
       )
     end
@@ -131,7 +128,7 @@ describe 'postgresql::server::config', type: :class do
 
       it 'has the correct systemd-override file' do
         is_expected.to contain_file('systemd-override').with(
-          ensure: 'present', path: '/etc/systemd/system/postgresql-9.4.service',
+          ensure: 'file', path: '/etc/systemd/system/postgresql-9.4.service',
           owner: 'root', group: 'root'
         )
       end
@@ -145,9 +142,12 @@ describe 'postgresql::server::config', type: :class do
   describe 'on Amazon' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'Amazon',
-        operatingsystemrelease: '1.0',
+        os: {
+          family: 'RedHat',
+          name: 'Amazon',
+          release: { 'full' => '1.0' },
+          selinux: { 'enabled' => true },
+        },
         concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
@@ -177,9 +177,13 @@ describe 'postgresql::server::config', type: :class do
     end
     let(:facts) do
       {
+        os: {
+          family: 'Gentoo',
+          name: 'Gentoo',
+          release: { 'full' => 'unused' },
+          selinux: { 'enabled' => true },
+        },
         osfamily: 'Gentoo',
-        operatingsystem: 'Gentoo',
-        operatingsystemrelease: 'unused',
         concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
@@ -194,7 +198,7 @@ describe 'postgresql::server::config', type: :class do
 
     it 'has the correct systemd-override file' do
       is_expected.to contain_file('systemd-override').with(
-        ensure: 'present', path: '/etc/systemd/system/postgresql-9.5.service',
+        ensure: 'file', path: '/etc/systemd/system/postgresql-9.5.service',
         owner: 'root', group: 'root'
       )
     end
@@ -221,9 +225,12 @@ describe 'postgresql::server::config', type: :class do
     end
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'CentOS',
-        operatingsystemrelease: '7.0',
+        os: {
+          family: 'RedHat',
+          name: 'CentOS',
+          release: { 'full' => '7.0' },
+          selinux: { 'enabled' => true },
+        },
         concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',

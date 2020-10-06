@@ -15,7 +15,6 @@ class postgresql::server::service {
   anchor { 'postgresql::server::service::begin': }
 
   if $service_manage {
-
     service { 'postgresqld':
       ensure    => $service_ensure,
       enable    => $service_enable,
@@ -31,7 +30,7 @@ class postgresql::server::service {
       #
       # Without it, we may continue doing more work before the database is
       # prepared leading to a nasty race condition.
-      postgresql_conn_validator{ 'validate_service_is_running':
+      postgresql_conn_validator { 'validate_service_is_running':
         run_as           => $user,
         db_name          => $default_database,
         port             => $port,
@@ -40,7 +39,7 @@ class postgresql::server::service {
         tries            => 60,
         psql_path        => $psql_path,
         require          => Service['postgresqld'],
-        before           => Anchor['postgresql::server::service::end']
+        before           => Anchor['postgresql::server::service::end'],
       }
       Postgresql::Server::Database <| title == $default_database |> -> Postgresql_conn_validator['validate_service_is_running']
     }

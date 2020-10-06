@@ -1,6 +1,6 @@
 # @api private
 class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
-  include ::apt
+  include apt
 
   # Here we have tried to replicate the instructions on the PostgreSQL site:
   #
@@ -16,7 +16,7 @@ class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
   }
   -> apt::source { 'apt.postgresql.org':
     location => $_baseurl,
-    release  => "${::lsbdistcodename}-pgdg",
+    release  => "${facts['os']['distro']['codename']}-pgdg",
     repos    => "main ${postgresql::repo::version}",
     key      => {
       id     => 'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',

@@ -11,7 +11,7 @@
 # @param order Sets an order for placing the rule in pg_hba.conf. This can be either a string or an integer. If it is an integer, it will be converted to a string by zero-padding it to three digits. E.g. 42 will be zero-padded to the string '042'. The pg_hba_rule fragments are sorted using the alpha sorting order. Default value: 150.
 # @param target Provides the target for the rule, and is generally an internal only property. Use with caution.
 # @param postgresql_version Manages pg_hba.conf without managing the entire PostgreSQL instance.
-define postgresql::server::pg_hba_rule(
+define postgresql::server::pg_hba_rule (
   Enum['local', 'host', 'hostssl', 'hostnossl', 'hostgssenc'] $type,
   String $database,
   String $user,
@@ -26,7 +26,6 @@ define postgresql::server::pg_hba_rule(
   Stdlib::Absolutepath $target  = $postgresql::server::pg_hba_conf_path,
   String $postgresql_version    = $postgresql::server::_version
 ) {
-
   #Allow users to manage pg_hba.conf even if they are not managing the whole PostgreSQL instance
   if !defined( 'postgresql::server' ) {
     $manage_pg_hba_conf = true
@@ -36,9 +35,8 @@ define postgresql::server::pg_hba_rule(
   }
 
   if $manage_pg_hba_conf == false {
-      fail('postgresql::server::manage_pg_hba_conf has been disabled, so this resource is now unused and redundant, either enable that option or remove this resource from your manifests')
+    fail('postgresql::server::manage_pg_hba_conf has been disabled, so this resource is now unused and redundant, either enable that option or remove this resource from your manifests')
   } else {
-
     if($type =~ /^host/ and $address == undef) {
       fail('You must specify an address property when type is host based')
     }

@@ -3,9 +3,11 @@ require 'spec_helper'
 describe 'postgresql::server::pg_ident_rule', type: :define do
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0' },
+      },
       kernel: 'Linux',
       concat_basedir: tmpfilename('pg_ident'),
       id: 'root',
