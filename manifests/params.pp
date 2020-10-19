@@ -1,34 +1,35 @@
 # @api private
 class postgresql::params inherits postgresql::globals {
-  $version                    = $postgresql::globals::globals_version
-  $postgis_version            = $postgresql::globals::globals_postgis_version
-  $listen_addresses           = undef
-  $port                       = 5432
-  $log_line_prefix            = undef
-  $ip_mask_deny_postgres_user = '0.0.0.0/0'
-  $ip_mask_allow_all_users    = '127.0.0.1/32'
-  $ipv4acls                   = []
-  $ipv6acls                   = []
-  $encoding                   = $postgresql::globals::encoding
-  $locale                     = $postgresql::globals::locale
-  $data_checksums             = $postgresql::globals::data_checksums
-  $timezone                   = $postgresql::globals::timezone
-  $service_ensure             = 'running'
-  $service_enable             = true
-  $service_manage             = true
-  $service_restart_on_change  = true
-  $service_provider           = $postgresql::globals::service_provider
-  $manage_pg_hba_conf         = pick($manage_pg_hba_conf, true)
-  $manage_pg_ident_conf       = pick($manage_pg_ident_conf, true)
-  $manage_recovery_conf       = pick($manage_recovery_conf, false)
-  $manage_selinux             = pick($manage_selinux, false)
-  $package_ensure             = 'present'
-  $module_workdir             = pick($module_workdir,'/tmp')
-  $password_encryption        = undef
-  $extra_systemd_config       = ''
-  $manage_datadir             = true
-  $manage_logdir              = true
-  $manage_xlogdir             = true
+  $version                      = $postgresql::globals::globals_version
+  $postgis_version              = $postgresql::globals::globals_postgis_version
+  $listen_addresses             = undef
+  $port                         = 5432
+  $log_line_prefix              = undef
+  $ip_mask_deny_postgres_user   = '0.0.0.0/0'
+  $ip_mask_allow_all_users      = '127.0.0.1/32'
+  $ipv4acls                     = []
+  $ipv6acls                     = []
+  $encoding                     = $postgresql::globals::encoding
+  $locale                       = $postgresql::globals::locale
+  $data_checksums               = $postgresql::globals::data_checksums
+  $timezone                     = $postgresql::globals::timezone
+  $service_ensure               = 'running'
+  $service_enable               = true
+  $service_manage               = true
+  $service_restart_on_change    = true
+  $service_provider             = $postgresql::globals::service_provider
+  $manage_pg_hba_conf           = pick($manage_pg_hba_conf, true)
+  $manage_pg_ident_conf         = pick($manage_pg_ident_conf, true)
+  $manage_recovery_conf         = pick($manage_recovery_conf, false)
+  $manage_postgresql_conf_perms = pick($manage_postgresql_conf_perms, true)
+  $manage_selinux               = pick($manage_selinux, false)
+  $package_ensure               = 'present'
+  $module_workdir               = pick($module_workdir,'/tmp')
+  $password_encryption          = undef
+  $extra_systemd_config         = ''
+  $manage_datadir               = true
+  $manage_logdir                = true
+  $manage_xlogdir               = true
 
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $facts['os']['family'] {
@@ -78,6 +79,7 @@ class postgresql::params inherits postgresql::globals {
           default  => pick($datadir, "/var/lib/pgsql/${version}/data"),
         }
         $confdir                = pick($confdir, $datadir)
+        $postgresql_conf_mode   = pick($postgresql_conf_mode, '0600')
       }
 
       case $facts['os']['name'] {
@@ -212,6 +214,7 @@ class postgresql::params inherits postgresql::globals {
       }
       $service_reload         = "service ${service_name} reload"
       $psql_path              = pick($psql_path, '/usr/bin/psql')
+      $postgresql_conf_mode   = pick($postgresql_conf_mode, '0644')
     }
 
     'Gentoo': {
