@@ -30,6 +30,7 @@
 # @param pg_hba_conf_path Specifies the path to your pg_hba.conf file.
 # @param pg_ident_conf_path Specifies the path to your pg_ident.conf file.
 # @param postgresql_conf_path Sets the path to your postgresql.conf file.
+# @param postgresql_conf_mode Sets the mode of your postgresql.conf file. Only relevant if manage_postgresql_conf_perms is true.
 # @param recovery_conf_path Path to your recovery.conf file.
 # @param default_connect_settings Default connection settings.
 #
@@ -75,6 +76,10 @@
 # @param manage_pg_hba_conf Allow Puppet to manage the pg_hba.conf file.
 # @param manage_pg_ident_conf Allow Puppet to manage the pg_ident.conf file.
 # @param manage_recovery_conf Allow Puppet to manage the recovery.conf file.
+# @param manage_postgresql_conf_perms
+#   Whether to manage the postgresql conf file permissions. This means owner,
+#   group and mode. Contents are not managed but should be managed through
+#   postgresql::server::config_entry.
 #
 # @param manage_datadir Set to false if you have file{ $datadir: } already defined
 # @param manage_logdir Set to false if you have file{ $logdir: } already defined
@@ -85,68 +90,70 @@
 #
 #
 class postgresql::globals (
-  $client_package_name      = undef,
-  $server_package_name      = undef,
-  $contrib_package_name     = undef,
-  $devel_package_name       = undef,
-  $java_package_name        = undef,
-  $docs_package_name        = undef,
-  $perl_package_name        = undef,
-  $plperl_package_name      = undef,
-  $plpython_package_name    = undef,
-  $python_package_name      = undef,
-  $postgis_package_name     = undef,
+  $client_package_name                             = undef,
+  $server_package_name                             = undef,
+  $contrib_package_name                            = undef,
+  $devel_package_name                              = undef,
+  $java_package_name                               = undef,
+  $docs_package_name                               = undef,
+  $perl_package_name                               = undef,
+  $plperl_package_name                             = undef,
+  $plpython_package_name                           = undef,
+  $python_package_name                             = undef,
+  $postgis_package_name                            = undef,
 
-  $service_name             = undef,
-  $service_provider         = undef,
-  $service_status           = undef,
-  $default_database         = undef,
+  $service_name                                    = undef,
+  $service_provider                                = undef,
+  $service_status                                  = undef,
+  $default_database                                = undef,
 
-  $validcon_script_path     = undef,
+  $validcon_script_path                            = undef,
 
-  $initdb_path              = undef,
-  $createdb_path            = undef,
-  $psql_path                = undef,
-  $pg_hba_conf_path         = undef,
-  $pg_ident_conf_path       = undef,
-  $postgresql_conf_path     = undef,
-  $recovery_conf_path       = undef,
-  $default_connect_settings = {},
+  $initdb_path                                     = undef,
+  $createdb_path                                   = undef,
+  $psql_path                                       = undef,
+  $pg_hba_conf_path                                = undef,
+  $pg_ident_conf_path                              = undef,
+  $postgresql_conf_path                            = undef,
+  Optional[Stdlib::Filemode] $postgresql_conf_mode = undef,
+  $recovery_conf_path                              = undef,
+  $default_connect_settings                        = {},
 
-  $pg_hba_conf_defaults     = undef,
+  $pg_hba_conf_defaults                            = undef,
 
-  $datadir                  = undef,
-  $confdir                  = undef,
-  $bindir                   = undef,
-  $xlogdir                  = undef,
-  $logdir                   = undef,
-  $log_line_prefix          = undef,
-  $manage_datadir           = undef,
-  $manage_logdir            = undef,
-  $manage_xlogdir           = undef,
+  $datadir                                         = undef,
+  $confdir                                         = undef,
+  $bindir                                          = undef,
+  $xlogdir                                         = undef,
+  $logdir                                          = undef,
+  $log_line_prefix                                 = undef,
+  $manage_datadir                                  = undef,
+  $manage_logdir                                   = undef,
+  $manage_xlogdir                                  = undef,
 
-  $user                     = undef,
-  $group                    = undef,
+  $user                                            = undef,
+  $group                                           = undef,
 
-  $version                  = undef,
-  $postgis_version          = undef,
-  $repo_proxy               = undef,
-  $repo_baseurl             = undef,
+  $version                                         = undef,
+  $postgis_version                                 = undef,
+  $repo_proxy                                      = undef,
+  $repo_baseurl                                    = undef,
 
-  $needs_initdb             = undef,
+  $needs_initdb                                    = undef,
 
-  $encoding                 = undef,
-  $locale                   = undef,
-  $data_checksums           = undef,
-  $timezone                 = undef,
+  $encoding                                        = undef,
+  $locale                                          = undef,
+  $data_checksums                                  = undef,
+  $timezone                                        = undef,
 
-  $manage_pg_hba_conf       = undef,
-  $manage_pg_ident_conf     = undef,
-  $manage_recovery_conf     = undef,
-  $manage_selinux           = undef,
+  $manage_pg_hba_conf                              = undef,
+  $manage_pg_ident_conf                            = undef,
+  $manage_recovery_conf                            = undef,
+  $manage_postgresql_conf_perms                    = undef,
+  $manage_selinux                                  = undef,
 
-  $manage_package_repo      = undef,
-  $module_workdir           = undef,
+  $manage_package_repo                             = undef,
+  $module_workdir                                  = undef,
 ) {
   # We are determining this here, because it is needed by the package repo
   # class.

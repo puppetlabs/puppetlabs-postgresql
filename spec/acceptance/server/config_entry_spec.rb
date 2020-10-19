@@ -5,7 +5,7 @@ describe 'postgresql::server::config_entry' do
     let(:pp_test) do
       <<-MANIFEST
       class { 'postgresql::server':
-        postgresql_conf_path => '/tmp/postgresql.conf',
+        postgresql_conf_path => '/etc/postgresql-puppet.conf',
       }
 
       postgresql::server::config_entry { 'unix_socket_directories':
@@ -16,7 +16,7 @@ describe 'postgresql::server::config_entry' do
 
     it 'is expected to run idempotently' do
       idempotent_apply(pp_test)
-      expect(run_shell('cat /tmp/postgresql.conf').stdout).to match "unix_socket_directories = '/var/socket/, /root/'"
+      expect(run_shell('cat /etc/postgresql-puppet.conf').stdout).to match "unix_socket_directories = '/var/socket/, /root/'"
     end
   end
 end
