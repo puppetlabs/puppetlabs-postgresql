@@ -205,48 +205,50 @@ class postgresql::server::config {
     }
   }
 
-  if $facts['os']['family'] == 'RedHat' {
-    if $facts['os']['release']['full'] =~ /^7|^8/ or $facts['os']['name'] == 'Fedora' {
+  # RHEL 7 and 8 both support drop-in files for systemd units.  The old include directive is deprecated and may be removed in future systemd releases.
+  # Gentoo also supports drop-in files.
+  if $facts['os']['family'] in ['RedHat', 'Gentoo'] and $facts['service_provider'] == 'systemd' {
       # Template uses:
-      # - $::operatingsystem
+      # - $facts['os']['name']
+      # - $facts['os']['release']['major']
       # - $service_name
       # - $port
       # - $datadir
-      file { 'systemd-override':
-        ensure  => file,
-        path    => "/etc/systemd/system/${service_name}.service",
-        owner   => root,
-        group   => root,
-        content => template('postgresql/systemd-override.erb'),
-        notify  => [Exec['restart-systemd'], Class['postgresql::server::service']],
-        before  => Class['postgresql::server::reload'],
-      }
-      exec { 'restart-systemd':
-        command     => 'systemctl daemon-reload',
-        refreshonly => true,
-        path        => '/bin:/usr/bin:/usr/local/bin',
-      }
+      # - @extra_systemd_config
+
+    if (versioncmp($facts['puppetversion'], '5.0.0') <= 0) {
+      $systemd_notify = [Exec['restart-systemd'], Class['postgresql::server::service']]
     }
-  }
-  elsif $facts['os']['family'] == 'Gentoo' {
-    # Template uses:
-    # - $::operatingsystem
-    # - $service_name
-    # - $port
-    # - $datadir
-    file { 'systemd-override':
-      ensure  => file,
-      path    => "/etc/systemd/system/${service_name}.service",
-      owner   => root,
-      group   => root,
-      content => template('postgresql/systemd-override.erb'),
-      notify  => [Exec['restart-systemd'], Class['postgresql::server::service']],
-      before  => Class['postgresql::server::reload'],
+    else {
+      $systemd_notify = Class['postgresql::server::service']
     }
-    exec { 'restart-systemd':
-      command     => 'systemctl daemon-reload',
-      refreshonly => true,
-      path        => '/bin:/usr/bin:/usr/local/bin',
+
+    file {
+      default:
+          ensure => file,
+          owner  => root,
+          group  => root,
+          notify => $systemd_notify,
+          before => Class['postgresql::server::reload'],
+
+      ;
+
+      'systemd-conf-dir':
+          ensure => directory,
+          path   => "/etc/systemd/system/${service_name}.service.d",
+      ;
+
+      'systemd-override':
+          path    => "/etc/systemd/system/${service_name}.service.d/${service_name}.conf",
+          content => template('postgresql/systemd-override.erb'),
+          require => File['systemd-conf-dir'],
+      ;
+
+      # Remove old unit file to avoid conflicts
+      'old-systemd-override':
+          ensure => absent,
+          path   => "/etc/systemd/system/${service_name}.service",
+      ;
     }
   }
 }

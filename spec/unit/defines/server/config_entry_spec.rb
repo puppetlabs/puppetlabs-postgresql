@@ -6,7 +6,11 @@ describe 'postgresql::server::config_entry', type: :define do
       os: {
         family: 'RedHat',
         name: 'RedHat',
-        release: { 'full' => '6.4' },
+        release: {
+          'full'  => '6.4',
+          'major' => '6',
+          'minor' => '4',
+        },
         selinux: { 'enabled' => true },
       },
       kernel: 'Linux',
@@ -63,46 +67,24 @@ describe 'postgresql::server::config_entry', type: :define do
           os: {
             family: 'RedHat',
             name: 'RedHat',
-            release: { 'full' => '7.0' },
+            release: {
+              'full'  => '7.9.2009',
+              'major' => '7',
+              'minor' => '9',
+            },
             selinux: { 'enabled' => true },
           },
           kernel: 'Linux',
           id: 'root',
           path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           selinux: true,
+          service_provider: 'systemd',
         }
       end
       let(:params) { { ensure: 'present', name: 'port_spec', value: '5432' } }
 
       it 'stops postgresql and changes the port #file' do
         is_expected.to contain_file('systemd-override')
-      end
-      it 'stops postgresql and changes the port #exec' do
-        is_expected.to contain_exec('restart-systemd')
-      end
-    end
-    context 'fedora 19' do
-      let :facts do
-        {
-          os: {
-            family: 'RedHat',
-            name: 'Fedora',
-            release: { 'full' => '19' },
-            selinux: { 'enabled' => true },
-          },
-          kernel: 'Linux',
-          id: 'root',
-          path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          selinux: true,
-        }
-      end
-      let(:params) { { ensure: 'present', name: 'port_spec', value: '5432' } }
-
-      it 'stops postgresql and changes the port #file' do
-        is_expected.to contain_file('systemd-override')
-      end
-      it 'stops postgresql and changes the port #exec' do
-        is_expected.to contain_exec('restart-systemd')
       end
     end
   end
