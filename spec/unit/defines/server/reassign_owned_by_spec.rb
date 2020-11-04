@@ -9,7 +9,6 @@ describe 'postgresql::server::reassign_owned_by', type: :define do
         release: { 'full' => '8.0' },
       },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('reassign_owned_by'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }

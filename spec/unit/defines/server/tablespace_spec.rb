@@ -9,7 +9,6 @@ describe 'postgresql::server::tablespace', type: :define do
         release: { 'full' => '8.0' },
       },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('tablespace'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }

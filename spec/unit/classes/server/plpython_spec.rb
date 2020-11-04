@@ -9,7 +9,6 @@ describe 'postgresql::server::plpython', type: :class do
         release: { 'full' => '6.8' },
         selinux: { 'enabled' => true },
       },
-      concat_basedir: tmpfilename('plpython'),
       kernel: 'Linux',
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
