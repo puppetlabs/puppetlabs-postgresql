@@ -7,7 +7,7 @@ describe 'postgresql task' do
         class { 'postgresql::server': } ->
         postgresql::server::db { 'spec1':
           user     => 'root1',
-          password => postgresql_password('root1', 'password'),
+          password => postgresql::postgresql_password('root1', 'password'),
         }
     MANIFEST
 
