@@ -17,7 +17,7 @@ describe 'postgresql::server::reassign_owned_by:' do
       class { 'postgresql::server': }
 
       postgresql::server::role { $old_owner:
-        password_hash => postgresql_password($old_owner, $password),
+        password_hash => postgresql::postgresql_password($old_owner, $password),
       }
 
       # Since we are not testing pg_hba or any of that, make a local user for ident auth

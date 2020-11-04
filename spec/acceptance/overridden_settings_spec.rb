@@ -8,7 +8,7 @@ describe 'postgresql::server' do
     class { 'postgresql::server':
       roles          => {
         'testusername' => {
-          password_hash => postgresql_password('testusername', 'supersecret'),
+          password_hash => postgresql::postgresql_password('testusername', 'supersecret'),
           createdb      => true,
         },
       },
