@@ -8,7 +8,6 @@ describe 'postgresql::server::config', type: :class do
   describe 'on RedHat 7' do
     let(:facts) do
       {
-        concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
@@ -75,7 +74,6 @@ describe 'postgresql::server::config', type: :class do
   describe 'on Fedora 21' do
     let(:facts) do
       {
-        concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
@@ -148,7 +146,6 @@ describe 'postgresql::server::config', type: :class do
           release: { 'full' => '1.0' },
           selinux: { 'enabled' => true },
         },
-        concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
@@ -184,7 +181,6 @@ describe 'postgresql::server::config', type: :class do
           selinux: { 'enabled' => true },
         },
         osfamily: 'Gentoo',
-        concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
@@ -231,7 +227,6 @@ describe 'postgresql::server::config', type: :class do
           release: { 'full' => '7.0' },
           selinux: { 'enabled' => true },
         },
-        concat_basedir: tmpfilename('server'),
         kernel: 'Linux',
         id: 'root',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',

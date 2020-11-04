@@ -9,7 +9,6 @@ describe 'postgresql::server::pg_hba_rule', type: :define do
         release: { 'full' => '8.0' },
       },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('pg_hba'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }

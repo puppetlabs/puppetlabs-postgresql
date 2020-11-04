@@ -9,7 +9,6 @@ describe 'postgresql::server::table_grant', type: :define do
         release: { 'full' => '8.0' },
       },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('table_grant'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }

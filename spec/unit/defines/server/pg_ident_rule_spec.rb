@@ -9,7 +9,6 @@ describe 'postgresql::server::pg_ident_rule', type: :define do
         release: { 'full' => '8.0' },
       },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('pg_ident'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
