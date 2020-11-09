@@ -26,7 +26,7 @@ describe 'postgresql::server::grant_role:' do
       }
 
       postgresql::server::role { $user:
-        password_hash => postgresql_password($user, $password),
+        password_hash => postgresql::postgresql_password($user, $password),
       }
 
       postgresql::server::database { $db:
@@ -80,7 +80,7 @@ describe 'postgresql::server::grant_role:' do
       }
 
       postgresql::server::role { $user:
-        password_hash => postgresql_password($user, $password),
+        password_hash => postgresql::postgresql_password($user, $password),
       }
 
       postgresql::server::database { $db:
