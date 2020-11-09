@@ -16,7 +16,6 @@ describe 'postgresql::server::extension', type: :define do # rubocop:disable RSp
         release: { 'full' => '8.0' },
       },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('postgis'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
@@ -134,7 +133,6 @@ describe 'postgresql::server::extension', type: :define do
         release: { 'full' => '6.0' },
       },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('postgis'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
@@ -169,7 +167,6 @@ describe 'postgresql::server::extension', type: :define do
         release: { 'full' => '6.0' },
       },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('postgis'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }

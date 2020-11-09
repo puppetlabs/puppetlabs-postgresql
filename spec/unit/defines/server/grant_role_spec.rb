@@ -12,9 +12,9 @@ describe 'postgresql::server::grant_role', type: :define do
         name: 'Debian',
         release: { 'full' => '8.0' },
       },
-      kernel: 'Linux', concat_basedir: tmpfilename('postgis'),
+      kernel: 'Linux',
       id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
   end
 
