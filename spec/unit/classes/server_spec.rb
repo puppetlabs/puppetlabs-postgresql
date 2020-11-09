@@ -15,7 +15,6 @@ describe 'postgresql::server', type: :class do
       osfamily: 'Debian',
       lsbdistid: 'Debian',
       lsbdistcodename: 'jessie',
-      concat_basedir: tmpfilename('server'),
       kernel: 'Linux',
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
