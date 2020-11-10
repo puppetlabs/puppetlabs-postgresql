@@ -4,7 +4,7 @@ Puppet::Type.newtype(:postgresql_replication_slot) do
 
 This type allows to create and destroy replication slots
 to register warm standby replication on a Postgresql
-master server.
+primary server.
 EOS
 
   ensurable

@@ -1910,7 +1910,7 @@ Postgresqlモジュールにはサンプルタスクがあり、ユーザはデ�
 
 PostgreSQLのバージョン8.1～9.5で動作します。
 
-サポートされているオペレーティングシステムの一覧については、[metadata.json](https://github.com/puppetlabs/puppetlabs-postgresql/blob/master/metadata.json)を参照してください。
+サポートされているオペレーティングシステムの一覧については、[metadata.json](https://github.com/puppetlabs/puppetlabs-postgresql/blob/main/metadata.json)を参照してください。
 
 ### Aptモジュールのサポート
 
