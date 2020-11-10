@@ -2745,7 +2745,7 @@ or not the main SQL command needs to be executed at all.'
 
 This type allows to create and destroy replication slots
 to register warm standby replication on a Postgresql
-master server.
+primary server.
 
 #### Properties
 
