@@ -316,13 +316,13 @@ exec { 'rake db:migrate':
 
 ## Reference
 
-For information on the classes and types, see the [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-postgresql/blob/master/REFERENCE.md)
+For information on the classes and types, see the [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-postgresql/blob/main/REFERENCE.md)
 
 ## Limitations
 
 Works with versions of PostgreSQL on supported OSes.  
 
-For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-postgresql/blob/master/metadata.json)
+For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-postgresql/blob/main/metadata.json)
 
 ### Apt module support
 
