@@ -46,3 +46,7 @@ spec/spec_helper.rb:
   unmanaged: false
 .github/workflows/pr_test.yml:
   unmanaged: false
+.gitpod.Dockerfile:
+  unmanaged: false
+.gitpod.yml:
+  unmanaged: false
