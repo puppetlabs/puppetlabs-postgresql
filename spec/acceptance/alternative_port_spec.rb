@@ -2,12 +2,11 @@ require 'spec_helper_acceptance'
 
 # These tests ensure that postgres can change itself to an alternative port
 # properly.
-describe 'postgresql::server' do
+describe 'postgresql::server', skip: 'IAC-1286' do
   it 'on an alternative port' do
     pp = <<-MANIFEST
       class { 'postgresql::server': port => '55433', manage_selinux => true }
     MANIFEST
-
     idempotent_apply(pp)
   end
 
