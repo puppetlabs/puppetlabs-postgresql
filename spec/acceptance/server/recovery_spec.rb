@@ -1,7 +1,10 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::recovery' do
+describe 'postgresql::server::recovery' , skip: 'IAC-1286' do
   describe 'should manage recovery' do
+    before(:all) do
+      pre_run
+    end
     after(:all) do
       pp = <<-MANIFEST.unindent
         file { '/tmp/recovery.conf':
