@@ -48,45 +48,52 @@ class postgresql::server::config {
         '8.1'   => 'sameuser',
         default => undef,
       }
-      postgresql::server::pg_hba_rule { 'local access as postgres user':
-        type        => 'local',
-        user        => $user,
-        auth_method => 'ident',
-        auth_option => $local_auth_option,
-        order       => 1,
-      }
-      postgresql::server::pg_hba_rule { 'local access to database with same name':
-        type        => 'local',
-        auth_method => 'ident',
-        auth_option => $local_auth_option,
-        order       => 2,
-      }
-      postgresql::server::pg_hba_rule { 'allow localhost TCP access to postgresql user':
-        type        => 'host',
-        user        => $user,
-        address     => '127.0.0.1/32',
-        auth_method => 'md5',
-        order       => 3,
-      }
-      postgresql::server::pg_hba_rule { 'deny access to postgresql user':
-        type        => 'host',
-        user        => $user,
-        address     => $ip_mask_deny_postgres_user,
-        auth_method => 'reject',
-        order       => 4,
-      }
 
-      postgresql::server::pg_hba_rule { 'allow access to all users':
-        type        => 'host',
-        address     => $ip_mask_allow_all_users,
-        auth_method => 'md5',
-        order       => 100,
-      }
-      postgresql::server::pg_hba_rule { 'allow access to ipv6 localhost':
-        type        => 'host',
-        address     => '::1/128',
-        auth_method => 'md5',
-        order       => 101,
+      postgresql::server::pg_hba_rule {
+        'local access as postgres user':
+            type        => 'local',
+            user        => $user,
+            auth_method => 'ident',
+            auth_option => $local_auth_option,
+            order       => 1,
+        ;
+
+        'local access to database with same name':
+            type        => 'local',
+            auth_method => 'ident',
+            auth_option => $local_auth_option,
+            order       => 2,
+        ;
+
+        'allow localhost TCP access to postgresql user':
+            type        => 'host',
+            user        => $user,
+            address     => '127.0.0.1/32',
+            auth_method => 'md5',
+            order       => 3,
+        ;
+
+        'deny access to postgresql user':
+            type        => 'host',
+            user        => $user,
+            address     => $ip_mask_deny_postgres_user,
+            auth_method => 'reject',
+            order       => 4,
+        ;
+
+        'allow access to all users':
+            type        => 'host',
+            address     => $ip_mask_allow_all_users,
+            auth_method => 'md5',
+            order       => 100,
+        ;
+
+        'allow access to ipv6 localhost':
+            type        => 'host',
+            address     => '::1/128',
+            auth_method => 'md5',
+            order       => 101,
+        ;
       }
     }
 
