@@ -216,7 +216,12 @@ class postgresql::server::config {
       # - $datadir
       # - @extra_systemd_config
 
-    if (versioncmp($facts['puppetversion'], '5.0.0') <= 0) {
+    if (versioncmp($facts['puppetversion'], '6.1.0') < 0) {
+      exec { 'restart-systemd':
+        command     => 'systemctl daemon-reload',
+        refreshonly => true,
+        path        => '/bin:/usr/bin:/usr/local/bin',
+      }
       $systemd_notify = [Exec['restart-systemd'], Class['postgresql::server::service']]
     }
     else {
