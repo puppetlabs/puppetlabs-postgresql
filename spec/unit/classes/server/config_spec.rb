@@ -28,12 +28,12 @@ describe 'postgresql::server::config', type: :class do
     end
 
     it 'has SELinux port defined' do
-      is_expected.to contain_package('policycoreutils-python-utils') .with(ensure: 'present')
+      is_expected.to contain_package('policycoreutils-python') .with(ensure: 'present')
 
       is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
         .that_comes_before('Postgresql::Server::Config_entry[port]')
-        .that_requires('Package[policycoreutils-python-utils]')
+        .that_requires('Package[policycoreutils-python]')
     end
 
     it 'has the correct systemd-override file' do
