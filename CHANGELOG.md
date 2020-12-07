@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.9.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.9.0) (2020-12-07)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.8.0...v6.9.0)
+
+### Added
+
+- Manage postgresql\_conf\_path file permissions [\#1199](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1199) ([ekohl](https://github.com/ekohl))
+
+### Fixed
+
+- \(maint\) updated defaults for rhel7 policycoreutils [\#1212](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1212) ([sheenaajay](https://github.com/sheenaajay))
+- \(IAC-1189\) - Fix for SLES 15 SP 1 and later [\#1209](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1209) ([david22swan](https://github.com/david22swan))
+- Change - Use systemd drop-in directory for unit overrides [\#1201](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1201) ([blackknight36](https://github.com/blackknight36))
+
 ## [v6.8.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.8.0) (2020-09-28)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.7.0...v6.8.0)
@@ -67,6 +81,7 @@ All notable changes to this project will be documented in this file. The format 
 - feat: enable different database resource name in extension [\#1136](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1136) ([jfroche](https://github.com/jfroche))
 - pdksync - \(FM-8581\) - Debian 10 added to travis and provision file refactored [\#1130](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1130) ([david22swan](https://github.com/david22swan))
 - Puppet 4 functions [\#1129](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1129) ([binford2k](https://github.com/binford2k))
+- \(FM-8679\) - Support added for CentOS 8 [\#1117](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1117) ([david22swan](https://github.com/david22swan))
 
 ### Fixed
 
@@ -83,7 +98,6 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
 
 - Add support for granting privileges on functions [\#1118](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1118) ([crispygoth](https://github.com/crispygoth))
-- \(FM-8679\) - Support added for CentOS 8 [\#1117](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1117) ([david22swan](https://github.com/david22swan))
 - MODULES-10041 - allow define password\_encryption for version above 10 [\#1111](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1111) ([k2patel](https://github.com/k2patel))
 
 ### Fixed

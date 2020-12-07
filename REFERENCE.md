@@ -309,6 +309,14 @@ Sets the path to your postgresql.conf file.
 
 Default value: ``undef``
 
+##### `postgresql_conf_mode`
+
+Data type: `Optional[Stdlib::Filemode]`
+
+Sets the mode of your postgresql.conf file. Only relevant if manage_postgresql_conf_perms is true.
+
+Default value: ``undef``
+
 ##### `recovery_conf_path`
 
 Data type: `Any`
@@ -498,6 +506,16 @@ Default value: ``undef``
 Data type: `Any`
 
 Allow Puppet to manage the recovery.conf file.
+
+Default value: ``undef``
+
+##### `manage_postgresql_conf_perms`
+
+Data type: `Any`
+
+Whether to manage the postgresql conf file permissions. This means owner,
+group and mode. Contents are not managed but should be managed through
+postgresql::server::config_entry.
 
 Default value: ``undef``
 
@@ -909,6 +927,14 @@ Specifies the path to your postgresql.conf file.
 
 Default value: `$postgresql::params::postgresql_conf_path`
 
+##### `postgresql_conf_mode`
+
+Data type: `Optional[Stdlib::Filemode]`
+
+Sets the mode of your postgresql.conf file. Only relevant if manage_postgresql_conf_perms is true.
+
+Default value: `$postgresql::params::postgresql_conf_mode`
+
 ##### `recovery_conf_path`
 
 Data type: `Any`
@@ -1037,6 +1063,16 @@ Data type: `Any`
 Boolean. Specifies whether or not manage the recovery.conf.
 
 Default value: `$postgresql::params::manage_recovery_conf`
+
+##### `manage_postgresql_conf_perms`
+
+Data type: `Boolean`
+
+Whether to manage the postgresql conf file permissions. This means owner,
+group and mode. Contents are not managed but should be managed through
+postgresql::server::config_entry.
+
+Default value: `$postgresql::params::manage_postgresql_conf_perms`
 
 ##### `module_workdir`
 
