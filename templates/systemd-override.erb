@@ -1,13 +1,9 @@
-<%- if scope.lookupvar('::osfamily') == 'Gentoo' -%>
-.include /usr/lib64/systemd/system/<%= @service_name %>.service
-<%- elsif scope.lookupvar('::operatingsystem') == 'Fedora' -%>
-.include /lib/systemd/system/<%= @service_name %>.service
-<% else -%>
+<%- if @os['name'] == 'Fedora' and @os['release']['major'] <= '31' -%>
 .include /usr/lib/systemd/system/<%= @service_name %>.service
 <% end -%>
 [Service]
 Environment=PGPORT=<%= @port %>
-<%- if scope.lookupvar('::osfamily') == 'Gentoo' -%>
+<%- if @os['family'] == 'Gentoo' -%>
 Environment=DATA_DIR=<%= @datadir %>
 <%- else -%>
 Environment=PGDATA=<%= @datadir %>
