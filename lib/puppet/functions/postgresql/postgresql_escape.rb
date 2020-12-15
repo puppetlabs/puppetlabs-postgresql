@@ -17,14 +17,12 @@ Puppet::Functions.create_function(:'postgresql::postgresql_escape') do
 
     # Keep generating possible values for tag until we find one that doesn't appear in the input string
     tag = Digest::MD5.hexdigest(input_string)[0..5].gsub(%r{\d}, '')
-    until input_string !~ %r{#{tag}}
-      tag = Digest::MD5.hexdigest(tag)[0..5].gsub(%r{\d}, '')
-    end
+    tag = Digest::MD5.hexdigest(tag)[0..5].gsub(%r{\d}, '') until input_string !~ %r{#{tag}}
 
     "$#{tag}$#{input_string}$#{tag}$"
   end
 
   def tag_needed?(input_string)
-    input_string =~ %r{\$\$} || input_string.end_with?('$')
+    input_string =~ %r{\$\$} || input_string.end_with?('$') # rubocop:disable Performance/StringInclude
   end
 end

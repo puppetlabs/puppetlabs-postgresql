@@ -21,7 +21,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
     def sync
       output, status = provider.run_sql_command(value)
-      raise("Error executing SQL; psql returned #{status}: '#{output}'") unless status == 0 # rubocop:disable Style/NumericPredicate
+      raise("Error executing SQL; psql returned #{status}: '#{output}'") unless status == 0
     end
   end
 
@@ -36,7 +36,6 @@ Puppet::Type.newtype(:postgresql_psql) do
     # Return true if a matching row is found
     def matches(value)
       output, status = provider.run_unless_sql_command(value)
-      # rubocop:disable Style/NumericPredicate
       fail("Error evaluating 'unless' clause, returned #{status}: '#{output}'") unless status == 0 # rubocop:disable Style/SignalException
       # rubocop:enable Style/NumericPredicate
 
@@ -59,8 +58,7 @@ Puppet::Type.newtype(:postgresql_psql) do
       output, status = provider.run_unless_sql_command(value)
       status = output.exitcode if status.nil?
 
-      raise("Error evaluating 'onlyif' clause, returned #{status}: '#{output}'") unless status == 0 # rubocop:disable Style/NumericPredicate
-
+      raise("Error evaluating 'onlyif' clause, returned #{status}: '#{output}'") unless status == 0
       result_count = output.strip.to_i
       debug("Found #{result_count} row(s) executing 'onlyif' clause")
       result_count > 0
@@ -110,7 +108,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
     validate do |values|
       Array(values).each do |value|
-        unless value =~ %r{\w+=}
+        unless %r{\w+=}.match?(value)
           raise ArgumentError, "Invalid environment setting '#{value}'"
         end
       end

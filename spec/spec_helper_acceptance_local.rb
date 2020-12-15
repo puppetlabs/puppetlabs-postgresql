@@ -63,7 +63,7 @@ def install_dependencies
   MANIFEST
 
   LitmusHelper.instance.apply_manifest(selinux)
-  LitmusHelper.instance.run_shell('sudo setenforce 0', expect_failures: true) if os[:family] =~ %r{redhat|oracle}
+  #LitmusHelper.instance.run_shell('sudo setenforce 0', expect_failures: true) if %r{redhat|oracle}.match?(os[:family])
 end
 
 def postgresql_version
