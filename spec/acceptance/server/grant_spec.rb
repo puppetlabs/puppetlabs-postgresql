@@ -129,21 +129,19 @@ describe 'postgresql::server::grant:' do
     end
 
     it 'grants usage/update on a sequence to a user' do
-      begin
-        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
-          idempotent_apply(pp)
+      if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+        idempotent_apply(pp)
 
-          ## Check that the privilege was granted to the user
-          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq', 'USAGE')\"", user) do |r|
-            expect(r.stdout).to match(%r{\(1 row\)})
-            expect(r.stderr).to eq('')
-          end
+        ## Check that the privilege was granted to the user
+        psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq', 'USAGE')\"", user) do |r|
+          expect(r.stdout).to match(%r{\(1 row\)})
+          expect(r.stderr).to eq('')
+        end
 
-          ## Check that the privilege was granted to the user
-          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq', 'UPDATE')\"", user) do |r|
-            expect(r.stdout).to match(%r{\(1 row\)})
-            expect(r.stderr).to eq('')
-          end
+        ## Check that the privilege was granted to the user
+        psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq', 'UPDATE')\"", user) do |r|
+          expect(r.stdout).to match(%r{\(1 row\)})
+          expect(r.stderr).to eq('')
         end
       end
     end
@@ -184,21 +182,19 @@ describe 'postgresql::server::grant:' do
     end
 
     it 'grants usage on all sequences to a user' do
-      begin
-        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
-          idempotent_apply(pp)
+      if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+        idempotent_apply(pp)
 
-          ## Check that the privileges were granted to the user, this check is not available on postgresql_version < 9.0
-          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq2', 'USAGE') AND has_sequence_privilege('#{user}', 'test_seq3', 'USAGE')\"", user) do |r|
-            expect(r.stdout).to match(%r{\(1 row\)})
-            expect(r.stderr).to eq('')
-          end
+        ## Check that the privileges were granted to the user, this check is not available on postgresql_version < 9.0
+        psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq2', 'USAGE') AND has_sequence_privilege('#{user}', 'test_seq3', 'USAGE')\"", user) do |r|
+          expect(r.stdout).to match(%r{\(1 row\)})
+          expect(r.stderr).to eq('')
+        end
 
-          ## Check that the privileges were granted to the user
-          psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq2', 'UPDATE') AND has_sequence_privilege('#{user}', 'test_seq3', 'UPDATE')\"", user) do |r|
-            expect(r.stdout).to match(%r{\(1 row\)})
-            expect(r.stderr).to eq('')
-          end
+        ## Check that the privileges were granted to the user
+        psql("-d #{db} --command=\"SELECT 1 WHERE has_sequence_privilege('#{user}', 'test_seq2', 'UPDATE') AND has_sequence_privilege('#{user}', 'test_seq3', 'UPDATE')\"", user) do |r|
+          expect(r.stdout).to match(%r{\(1 row\)})
+          expect(r.stderr).to eq('')
         end
       end
     end
@@ -247,28 +243,24 @@ describe 'postgresql::server::grant:' do
     end
 
     it 'grants execute on a function to a user' do
-      begin
-        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
-          idempotent_apply(pp)
+      if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+        idempotent_apply(pp)
 
-          ## Check that the privilege was granted to the user
-          psql("-d #{db} --command=\"SELECT 1 WHERE has_function_privilege('#{user}', 'test_func()', 'EXECUTE')\"", user) do |r|
-            expect(r.stdout).to match(%r{\(1 row\)})
-            expect(r.stderr).to eq('')
-          end
+        ## Check that the privilege was granted to the user
+        psql("-d #{db} --command=\"SELECT 1 WHERE has_function_privilege('#{user}', 'test_func()', 'EXECUTE')\"", user) do |r|
+          expect(r.stdout).to match(%r{\(1 row\)})
+          expect(r.stderr).to eq('')
         end
       end
     end
     it 'grants execute on a function with argument to a user' do
-      begin
-        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
-          idempotent_apply(pp)
+      if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+        idempotent_apply(pp)
 
-          ## Check that the privilege was granted to the user
-          psql("-d #{db} --command=\"SELECT 1 WHERE has_function_privilege('#{user}', 'test_func_with_arg(integer)', 'EXECUTE')\"", user) do |r|
-            expect(r.stdout).to match(%r{\(1 row\)})
-            expect(r.stderr).to eq('')
-          end
+        ## Check that the privilege was granted to the user
+        psql("-d #{db} --command=\"SELECT 1 WHERE has_function_privilege('#{user}', 'test_func_with_arg(integer)', 'EXECUTE')\"", user) do |r|
+          expect(r.stdout).to match(%r{\(1 row\)})
+          expect(r.stderr).to eq('')
         end
       end
     end
@@ -303,8 +295,7 @@ describe 'postgresql::server::grant:' do
       end
 
       it 'grant select on a table to a user' do
-        begin
-          pp_grant = pp_setup + <<-EOS.unindent
+        pp_grant = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'grant select on test_tbl':
               privilege   => 'SELECT',
@@ -324,7 +315,7 @@ describe 'postgresql::server::grant:' do
             }
           EOS
 
-          pp_revoke = pp_setup + <<-EOS.unindent
+        pp_revoke = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'revoke select on test_tbl':
               ensure      => absent,
@@ -346,36 +337,34 @@ describe 'postgresql::server::grant:' do
             }
           EOS
 
-          if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
-            idempotent_apply(pp_create_table)
-            idempotent_apply(pp_grant)
+        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+          idempotent_apply(pp_create_table)
+          idempotent_apply(pp_grant)
 
-            ## Check that the SELECT privilege was granted to the user
-            psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
-              expect(r.stdout).to match(%r{t})
-              expect(r.stderr).to eq('')
-            end
+          ## Check that the SELECT privilege was granted to the user
+          psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
+            expect(r.stdout).to match(%r{t})
+            expect(r.stderr).to eq('')
+          end
 
-            ## Check that the INSERT privilege was granted to the user
-            psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'INSERT')\"", user) do |r|
-              expect(r.stdout).to match(%r{t})
-            end
+          ## Check that the INSERT privilege was granted to the user
+          psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'INSERT')\"", user) do |r|
+            expect(r.stdout).to match(%r{t})
+          end
 
-            idempotent_apply(pp_create_table)
-            idempotent_apply(pp_revoke)
+          idempotent_apply(pp_create_table)
+          idempotent_apply(pp_revoke)
 
-            ## Check that the SELECT privilege was revoked from the user
-            psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
-              expect(r.stdout).to match(%r{f})
-              expect(r.stderr).to eq('')
-            end
+          ## Check that the SELECT privilege was revoked from the user
+          psql("-d #{db} --tuples-only --command=\"SELECT * FROM has_table_privilege('#{user}', 'test_tbl', 'SELECT')\"", user) do |r|
+            expect(r.stdout).to match(%r{f})
+            expect(r.stderr).to eq('')
           end
         end
       end
 
       it 'grant update on all tables to a user' do
-        begin
-          pp_grant = pp_setup + <<-EOS.unindent
+        pp_grant = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'grant update on all tables':
               privilege   => 'UPDATE',
@@ -387,7 +376,7 @@ describe 'postgresql::server::grant:' do
             }
           EOS
 
-          pp_revoke = pp_setup + <<-EOS.unindent
+        pp_revoke = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'revoke update on all tables':
               ensure      => absent,
@@ -400,36 +389,34 @@ describe 'postgresql::server::grant:' do
             }
           EOS
 
-          if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
-            ## pp_create_table sets up the permissions that pp_grant 'fixes', so these to steps cannot be rolled into one
-            idempotent_apply(pp_create_table)
-            idempotent_apply(pp_grant)
+        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+          ## pp_create_table sets up the permissions that pp_grant 'fixes', so these to steps cannot be rolled into one
+          idempotent_apply(pp_create_table)
+          idempotent_apply(pp_grant)
 
-            ## Check that all privileges were granted to the user
-            psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
+          ## Check that all privileges were granted to the user
+          psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
                   WHERE grantee = '#{user}' AND table_schema = 'public' AND privilege_type='UPDATE'\"", user) do |r|
-              expect(r.stdout).to match(%r{test_tbl[ |]*UPDATE})
-              expect(r.stdout).to match(%r{test_tbl2[ |]*UPDATE})
-              expect(r.stdout).to match(%r{\(2 rows\)})
-              expect(r.stderr).to eq('')
-            end
+            expect(r.stdout).to match(%r{test_tbl[ |]*UPDATE})
+            expect(r.stdout).to match(%r{test_tbl2[ |]*UPDATE})
+            expect(r.stdout).to match(%r{\(2 rows\)})
+            expect(r.stderr).to eq('')
+          end
 
-            ## idempotent_apply(pp_create_table)
-            idempotent_apply(pp_revoke)
+          ## idempotent_apply(pp_create_table)
+          idempotent_apply(pp_revoke)
 
-            ## Check that all privileges were revoked from the user
-            psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
+          ## Check that all privileges were revoked from the user
+          psql("-d #{db} --command=\"SELECT table_name,privilege_type FROM information_schema.role_table_grants
                   WHERE grantee = '#{user}' AND table_schema = 'public' AND privilege_type='UPDATE'\"", user) do |r|
-              expect(r.stdout).to match(%r{\(0 rows\)})
-              expect(r.stderr).to eq('')
-            end
+            expect(r.stdout).to match(%r{\(0 rows\)})
+            expect(r.stderr).to eq('')
           end
         end
       end
 
       it 'grant all on all tables to a user' do
-        begin
-          pp_grant = pp_setup + <<-EOS.unindent
+        pp_grant = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'grant all on all tables':
               privilege   => 'ALL',
@@ -441,7 +428,7 @@ describe 'postgresql::server::grant:' do
             }
           EOS
 
-          pp_revoke = pp_setup + <<-EOS.unindent
+        pp_revoke = pp_setup + <<-EOS.unindent
 
             postgresql::server::grant { 'revoke all on all tables':
               ensure      => absent,
@@ -454,30 +441,29 @@ describe 'postgresql::server::grant:' do
             }
           EOS
 
-          if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
-            ## pp_create_table sets up the permissions that pp_grant 'fixes', so these to steps cannot be rolled into one
-            idempotent_apply(pp_create_table)
-            idempotent_apply(pp_grant)
+        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
+          ## pp_create_table sets up the permissions that pp_grant 'fixes', so these to steps cannot be rolled into one
+          idempotent_apply(pp_create_table)
+          idempotent_apply(pp_grant)
 
-            ## Check that all privileges were granted to the user
-            psql("-d #{db} --tuples-only --command=\"SELECT table_name,count(privilege_type) FROM information_schema.role_table_grants
+          ## Check that all privileges were granted to the user
+          psql("-d #{db} --tuples-only --command=\"SELECT table_name,count(privilege_type) FROM information_schema.role_table_grants
                   WHERE grantee = '#{user}' AND table_schema = 'public'
                   AND privilege_type IN ('SELECT','UPDATE','INSERT','DELETE','TRIGGER','REFERENCES','TRUNCATE')
                   GROUP BY table_name\"", user) do |r|
-              expect(r.stdout).to match(%r{test_tbl[ |]*7$})
-              expect(r.stdout).to match(%r{test_tbl2[ |]*7$})
-              expect(r.stderr).to eq('')
-            end
+            expect(r.stdout).to match(%r{test_tbl[ |]*7$})
+            expect(r.stdout).to match(%r{test_tbl2[ |]*7$})
+            expect(r.stderr).to eq('')
+          end
 
-            ## idempotent_apply(pp_create_table)
-            idempotent_apply(pp_revoke)
+          ## idempotent_apply(pp_create_table)
+          idempotent_apply(pp_revoke)
 
-            ## Check that all privileges were revoked from the user
-            psql("-d #{db} --command=\"SELECT table_name FROM information_schema.role_table_grants
+          ## Check that all privileges were revoked from the user
+          psql("-d #{db} --command=\"SELECT table_name FROM information_schema.role_table_grants
                   WHERE grantee = '#{user}' AND table_schema = 'public'\"", user) do |r|
-              expect(r.stdout).to match(%r{\(0 rows\)})
-              expect(r.stderr).to eq('')
-            end
+            expect(r.stdout).to match(%r{\(0 rows\)})
+            expect(r.stderr).to eq('')
           end
         end
       end
@@ -486,10 +472,9 @@ describe 'postgresql::server::grant:' do
   context 'database' do
     describe 'REVOKE ... ON DATABASE...' do
       it 'do not fail on revoke connect from non-existant user' do
-        begin
-          if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.1.24')
-            apply_manifest(pp_setup, catch_failures: true)
-            pp = pp_setup + <<-EOS.unindent
+        if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.1.24')
+          apply_manifest(pp_setup, catch_failures: true)
+          pp = pp_setup + <<-EOS.unindent
               postgresql::server::grant { 'revoke connect on db from norole':
                 ensure      => absent,
                 privilege   => 'CONNECT',
@@ -498,8 +483,7 @@ describe 'postgresql::server::grant:' do
                 role        => '#{user}_does_not_exist',
               }
             EOS
-            idempotent_apply(pp)
-          end
+          idempotent_apply(pp)
         end
       end
     end

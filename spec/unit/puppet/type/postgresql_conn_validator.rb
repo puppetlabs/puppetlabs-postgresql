@@ -10,7 +10,7 @@ describe Puppet::Type.type(:postgresql_conn_validator) do
 
   describe 'when validating attributes' do
     [:name, :db_name, :db_username, :command, :host, :port, :connect_settings, :sleep, :tries, :psql_path].each do |param|
-      it "should have a #{param} parameter" do
+      it "has a #{param} parameter" do
         expect(described_class.attrtype(param)).to eq(:param)
       end
     end
