@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet::Util
   # postgresql_validator.rb
   class PostgresqlValidator

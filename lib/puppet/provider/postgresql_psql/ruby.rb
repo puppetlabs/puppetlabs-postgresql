@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   desc 'Postgres psql provider'
   def run_unless_sql_command(sql)
@@ -29,7 +31,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
 
   private
 
-  def get_environment # rubocop:disable Style/AccessorMethodName : Refactor does not work correctly
+  def get_environment # rubocop:disable Naming/AccessorMethodName : Refactor does not work correctly
     environment = (resource[:connect_settings] || {}).dup
     envlist = resource[:environment]
     return environment unless envlist

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @summary This function returns the postgresql password hash from the clear text username / password
 Puppet::Functions.create_function(:'postgresql::postgresql_password') do
   # @param username

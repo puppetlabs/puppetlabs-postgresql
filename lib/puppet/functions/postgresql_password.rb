@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @summary DEPRECATED.  Use the namespaced function [`postgresql::postgresql_password`](#postgresqlpostgresql_password) instead.
 Puppet::Functions.create_function(:postgresql_password) do
   dispatch :deprecation_gen do
