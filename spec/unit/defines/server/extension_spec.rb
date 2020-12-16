@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::server::extension', type: :define do # rubocop:disable RSpec/MultipleDescribes

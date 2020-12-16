@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:postgresql_replication_slot).provide(:ruby) do
   desc 'For confinement'
   commands psql: 'psql'

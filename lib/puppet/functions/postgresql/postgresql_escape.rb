@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest/md5'
 
 # @summary This function escapes a string using [Dollar Quoting](https://www.postgresql.org/docs/12/sql-syntax-lexical.html#SQL-SYNTAX-DOLLAR-QUOTING) using a randomly generated tag if required.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @summary DEPRECATED.  Use the namespaced function [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape) instead.
 Puppet::Functions.create_function(:postgresql_escape) do
   dispatch :deprecation_gen do
