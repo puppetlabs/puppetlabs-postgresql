@@ -42,6 +42,7 @@ def install_dependencies
   MANIFEST
   LitmusHelper.instance.apply_manifest(iproute2) if os[:family] == 'ubuntu' && os[:release].start_with?('18.04')
 
+  LitmusHelper.instance.run_shell('yum update -y', expect_failures: true) if %r{redhat|oracle}.match?(os[:family])
   netstat = <<-MANIFEST
   # needed for netstat, for serverspec checks
   if $::osfamily == 'SLES' or $::osfamily == 'SUSE' {

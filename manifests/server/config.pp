@@ -140,8 +140,8 @@ class postgresql::server::config {
 
     ensure_packages([$package_name])
 
-    exec { "/usr/sbin/semanage port -a -t postgresql_port_t -p tcp ${port}":
-      unless  => "/usr/sbin/semanage port -l | grep -qw ${port}",
+    exec { "/usr/sbin/semanage fcontext port -a -t postgresql_port_t -p tcp ${port}":
+      unless  => "/usr/sbin/semanage fcontext port -l | grep -qw ${port}",
       before  => Postgresql::Server::Config_entry['port'],
       require => Package[$package_name],
     }
