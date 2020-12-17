@@ -25,6 +25,6 @@ Puppet::Functions.create_function(:'postgresql::postgresql_escape') do
   end
 
   def tag_needed?(input_string)
-    input_string =~ %r{\$\$} || input_string.end_with?('$') # rubocop:disable Performance/StringInclude
+    input_string.include?('$$') || input_string.end_with?('$')
   end
 end
