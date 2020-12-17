@@ -19,11 +19,39 @@ RSpec.configure do |c|
   end
 end
 
+def export_locales(locale)
+  LitmusHelper.instance.run_shell('echo export PATH="/opt/puppetlabs/bin:$PATH" > ~/.bashrc')
+  LitmusHelper.instance.run_shell('echo export LC_ALL="C" > /etc/profile.d/my-custom.lang.sh')
+  LitmusHelper.instance.run_shell("echo \"## #{locale} ##\" >> /etc/profile.d/my-custom.lang.sh")
+  LitmusHelper.instance.run_shell("echo export LANG=#{locale} >> /etc/profile.d/my-custom.lang.sh")
+  LitmusHelper.instance.run_shell("echo export LANGUAGE=#{locale} >> /etc/profile.d/my-custom.lang.sh")
+  LitmusHelper.instance.run_shell('echo export LC_COLLATE=C >> /etc/profile.d/my-custom.lang.sh')
+  LitmusHelper.instance.run_shell("echo export LC_CTYPE=#{locale} >> /etc/profile.d/my-custom.lang.sh")
+  LitmusHelper.instance.run_shell('source /etc/profile.d/my-custom.lang.sh')
+  LitmusHelper.instance.run_shell('echo export LC_ALL="C" >> ~/.bashrc')
+  LitmusHelper.instance.run_shell('source ~/.bashrc')
+end
+
+def pre_run
+  LitmusHelper.instance.apply_manifest("class { 'postgresql::server': postgres_password => 'postgres' }", catch_failures: true)
+end
+
 def install_dependencies
   iproute2 = <<-MANIFEST
     package { 'iproute2': ensure => installed }
   MANIFEST
   LitmusHelper.instance.apply_manifest(iproute2) if os[:family] == 'ubuntu' && os[:release].start_with?('18.04')
+
+  netstat = <<-MANIFEST
+  # needed for netstat, for serverspec checks
+  if $::osfamily == 'SLES' or $::osfamily == 'SUSE' {
+    package { 'net-tools-deprecated':
+      ensure   => 'latest',
+    }
+  }
+  MANIFEST
+
+  LitmusHelper.instance.apply_manifest(netstat)
 
   return unless os[:family] == 'redhat' && os[:release].start_with?('6', '7', '8')
 
