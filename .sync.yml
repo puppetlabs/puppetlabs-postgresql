@@ -1,6 +1,11 @@
 ---
 ".gitlab-ci.yml":
   delete: true
+".rubocop.yml":
+  default_configs:
+    inherit_from: ".rubocop_todo.yml"
+    require:
+    - rubocop-rspec
 ".travis.yml":
   global_env:
     - HONEYCOMB_WRITEKEY="7f3c63a70eecc61d635917de46bea4e6",HONEYCOMB_DATASET="litmus tests"
@@ -48,3 +53,7 @@ Rakefile:
 spec/spec_helper.rb:
   mock_with: ":rspec"
   coverage_report: true
+.github/workflows/nightly.yml:
+  unmanaged: false
+.github/workflows/pr_test.yml:
+  unmanaged: false

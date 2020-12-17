@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server' do
+describe 'postgresql::server', skip: 'IAC-1286' do
   let(:pp) do
     <<-MANIFEST
       class { 'postgresql::globals':
@@ -12,6 +12,7 @@ describe 'postgresql::server' do
   end
 
   it 'with defaults' do
+    export_locales('en_NG.UTF8')
     idempotent_apply(pp)
     expect(port(5432)).to be_listening
     expect(psql('--command="\l" postgres', 'postgres').stdout).to match(%r{List of databases})

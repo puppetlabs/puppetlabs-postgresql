@@ -12,6 +12,7 @@ describe 'postgresql task' do
     MANIFEST
 
     it 'sets up a postgres db' do
+      export_locales('en_US.UTF-8 ')
       apply_manifest(pp, catch_failures: true)
     end
 
