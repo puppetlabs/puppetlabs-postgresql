@@ -149,7 +149,7 @@ class postgresql::server::initdb {
     # The package will take care of this for us the first time, but if we
     # ever need to init a new db we need to copy these files explicitly
     if $facts['os']['name'] == 'Debian' or $facts['os']['name'] == 'Ubuntu' {
-      if $facts['os']['release']['full'] =~ /^6/ or $facts['os']['release']['full'] =~ /^7/ or $facts['os']['release']['full'] =~ /^10\.04/ or $facts['os']['release']['full'] =~ /^12\.04/ {
+      if $facts['os']['release']['major'] in ['6', '7', '10.04', '12.04'] {
         file { 'server.crt':
           ensure  => file,
           path    => "${datadir}/server.crt",

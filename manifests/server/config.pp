@@ -186,7 +186,7 @@ class postgresql::server::config {
 
   # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
   # in /etc/sysconfig/pgsql/postgresql. Create a blank file so we can manage it with augeas later.
-  if ($facts['os']['family'] == 'RedHat') and ($facts['os']['release']['full'] !~ /^7|^8/) and ($facts['os']['name'] != 'Fedora') {
+  if ($facts['os']['family'] == 'RedHat') and ($facts['os']['release']['major'] !~ /^(7|8)$/) and ($facts['os']['name'] != 'Fedora') {
     file { '/etc/sysconfig/pgsql/postgresql':
       ensure  => file,
       replace => false,

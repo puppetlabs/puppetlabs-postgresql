@@ -10,7 +10,7 @@ describe 'postgresql::server::postgis', type: :class do
       os: {
         family: 'Debian',
         name: 'Debian',
-        release: { 'full' => '8.0' },
+        release: { 'full' => '8.0', 'major' => '8' },
       },
       kernel: 'Linux',
       id: 'root',
