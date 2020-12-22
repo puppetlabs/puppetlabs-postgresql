@@ -90,7 +90,7 @@ class postgresql::params inherits postgresql::globals {
 
         # RHEL 5 uses SysV init, RHEL 6 uses upstart.  RHEL 7 and 8 both use systemd.
         'RedHat', 'CentOS', 'Scientific', 'OracleLinux': {
-          if $facts['os']['release']['full'] =~ /^[78].*/ {
+          if $facts['os']['release']['major'] in ['7', '8'] {
             $service_reload = "systemctl reload ${service_name}"
             $service_status = "systemctl status ${service_name}"
           } else {
@@ -113,7 +113,7 @@ class postgresql::params inherits postgresql::globals {
 
       if $postgresql::globals::postgis_package_name {
         $postgis_package_name = $postgresql::globals::postgis_package_name
-      } elsif $facts['os']['release']['full'] =~ /^5\./ {
+      } elsif $facts['os']['release']['major'] == '5' {
         $postgis_package_name = 'postgis'
       } elsif $postgis_version and versioncmp($postgis_version, '2') < 0 {
         $postgis_package_name = "postgis${package_version}"
@@ -175,7 +175,7 @@ class postgresql::params inherits postgresql::globals {
 
       $client_package_name    = pick($client_package_name, "postgresql-client-${version}")
       $server_package_name    = pick($server_package_name, "postgresql-${version}")
-      if $facts['os']['name'] == 'Debian' and $facts['os']['release']['full'] =~ /^10/ and $postgresql::globals::manage_package_repo != true {
+      if $facts['os']['name'] == 'Debian' and $facts['os']['release']['major'] == '10' and $postgresql::globals::manage_package_repo != true {
         $contrib_package_name = pick($contrib_package_name, 'postgresql-contrib')
       } else {
         $contrib_package_name = pick($contrib_package_name, "postgresql-contrib-${version}")
@@ -189,8 +189,8 @@ class postgresql::params inherits postgresql::globals {
       }
       $devel_package_name     = pick($devel_package_name, 'libpq-dev')
       $java_package_name = $facts['os']['name'] ? {
-        'Debian' => $facts['os']['release']['full'] ? {
-          /^6/    => pick($java_package_name, 'libpg-java'),
+        'Debian' => $facts['os']['release']['major'] ? {
+          '6'     => pick($java_package_name, 'libpg-java'),
           default => pick($java_package_name, 'libpostgresql-jdbc-java'),
         },
         default  => pick($java_package_name, 'libpostgresql-jdbc-java'),
@@ -203,10 +203,10 @@ class postgresql::params inherits postgresql::globals {
       $bindir                 = pick($bindir, "/usr/lib/postgresql/${version}/bin")
       $datadir                = pick($datadir, "/var/lib/postgresql/${version}/main")
       $confdir                = pick($confdir, "/etc/postgresql/${version}/main")
-      if $facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['full'], '8.0') >= 0 {
+      if $facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['major'], '8') >= 0 {
         # Jessie uses systemd
         $service_status = pick($service_status, "/usr/sbin/service ${service_name}@*-main status")
-      } elsif $facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['full'], '15.04') >= 0 {
+      } elsif $facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['major'], '15.04') >= 0 {
         # Ubuntu releases since vivid use systemd
         $service_status = pick($service_status, "/usr/sbin/service ${service_name} status")
       } else {

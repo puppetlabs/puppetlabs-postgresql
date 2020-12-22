@@ -44,7 +44,7 @@ describe 'postgresql::globals', type: :class do
         os: {
           family: 'RedHat',
           name: 'RedHat',
-          release: { 'full' => '7.1' },
+          release: { 'full' => '7.1', 'major' => '7' },
         },
         osfamily: 'RedHat',
       }

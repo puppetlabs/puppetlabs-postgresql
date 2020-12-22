@@ -43,7 +43,7 @@ describe 'postgresql::server::config_entry', type: :define do
           os: {
             family: 'RedHat',
             name: 'RedHat',
-            release: { 'full' => '6.4' },
+            release: { 'full' => '6.4', 'major' => '6' },
             selinux: { 'enabled' => true },
           },
           kernel: 'Linux',
@@ -115,7 +115,7 @@ describe 'postgresql::server::config_entry', type: :define do
         os: {
           family: 'RedHat',
           name: 'RedHat',
-          release: { 'full' => '7.0' },
+          release: { 'full' => '7.0', 'major' => '7' },
           selinux: { 'enabled' => true },
         },
         kernel: 'Linux',

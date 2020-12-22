@@ -6,7 +6,7 @@ describe 'postgresql::server::plpython', type: :class do
       os: {
         family: 'RedHat',
         name: 'CentOS',
-        release: { 'full' => '6.8' },
+        release: { 'full' => '6.8', 'major' => '6' },
         selinux: { 'enabled' => true },
       },
       kernel: 'Linux',

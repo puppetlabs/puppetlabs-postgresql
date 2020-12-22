@@ -97,7 +97,7 @@ define postgresql::server::config_entry (
   # a systemd override for the port or update the sysconfig file, but this
   # is managed for us in postgresql::server::config.
   if $facts['os']['name'] == 'Debian' or $facts['os']['name'] == 'Ubuntu' {
-    if $name == 'port' and ( $facts['os']['release']['full'] =~ /^6/ or $facts['os']['release']['full'] =~ /^10\.04/ ) {
+    if $name == 'port' and $facts['os']['release']['major'] in ['6', '10.04'] {
       exec { "postgresql_stop_${name}":
         command => "service ${postgresql::server::service_name} stop",
         onlyif  => "service ${postgresql::server::service_name} status",
@@ -117,7 +117,7 @@ define postgresql::server::config_entry (
     }
   }
   if $facts['os']['family'] == 'RedHat' {
-    if ! ($facts['os']['release']['full'] =~ /^7|^8/ or $facts['os']['name'] == 'Fedora') {
+    if ! ($facts['os']['release']['major'] in ['7', '8'] or $facts['os']['name'] == 'Fedora') {
       if $name == 'port' {
         # We need to force postgresql to stop before updating the port
         # because puppet becomes confused and is unable to manage the
