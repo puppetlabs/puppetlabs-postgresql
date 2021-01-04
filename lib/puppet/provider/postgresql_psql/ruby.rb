@@ -18,7 +18,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
     command.push('-p', resource[:port]) if resource[:port]
     command.push('-t', '-X', '-c', '"' + sql.gsub('"', '\"') + '"')
 
-    environment = get_environment
+    environment = fetch_environment
 
     if resource[:cwd]
       Dir.chdir resource[:cwd] do
@@ -31,7 +31,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
 
   private
 
-  def get_environment
+  def fetch_environment
     environment = (resource[:connect_settings] || {}).dup
     envlist = resource[:environment]
     return environment unless envlist
