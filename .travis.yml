@@ -75,7 +75,7 @@ branches:
 notifications:
   email: false
   slack:
-    secure: sulU0RHAFNMVQyQnqcyRHLRjL7Zl1Ao7ywuObL/qTsCiIweRsFiHX0BdTrurxobhjgdHQizx9G2IakkvhE120AOlLbCV9Nw45tvyuzdV4HhdPSKtwdWWKXgU4IvP2tSblZ4hCOEG4CuEKPvFtoY8UEW2ODmvvwFlQz+GOYOBYMw=
+    #secure: sulU0RHAFNMVQyQnqcyRHLRjL7Zl1Ao7ywuObL/qTsCiIweRsFiHX0BdTrurxobhjgdHQizx9G2IakkvhE120AOlLbCV9Nw45tvyuzdV4HhdPSKtwdWWKXgU4IvP2tSblZ4hCOEG4CuEKPvFtoY8UEW2ODmvvwFlQz+GOYOBYMw=
 deploy:
   provider: puppetforge
   username: puppet

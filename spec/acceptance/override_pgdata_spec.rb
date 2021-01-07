@@ -5,7 +5,7 @@ require 'spec_helper_acceptance'
 # These tests ensure that postgres can change itself to an alternative pgdata
 # location properly.
 
-describe 'postgresql::server', skip: 'IAC-1286' do
+describe 'postgresql::server' do
   before(:each) do
     if os[:family] == 'sles'
       skip "These test's currently do not work on SLES/Suse modules"
@@ -27,7 +27,7 @@ describe 'postgresql::server', skip: 'IAC-1286' do
     it { is_expected.to be_directory }
   end
 
-  it 'can connect with psql' do
+  it 'can connect with psql for datadir' do
     psql('--command="\l" postgres', 'postgres') do |r|
       expect(r.stdout).to match(%r{List of databases})
     end

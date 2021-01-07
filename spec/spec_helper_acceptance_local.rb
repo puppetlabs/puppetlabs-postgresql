@@ -15,6 +15,7 @@ end
 
 RSpec.configure do |c|
   c.before :suite do
+    LitmusHelper.instance.run_shell('set LC_ALL=en.UTF-8')
     install_dependencies
   end
 end

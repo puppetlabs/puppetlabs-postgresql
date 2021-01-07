@@ -2,7 +2,7 @@
 
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::recovery', skip: 'IAC-1286' do
+describe 'postgresql::server::recovery' do
   describe 'should manage recovery' do
     before(:all) do
       pre_run
@@ -49,8 +49,6 @@ describe 'postgresql::server::recovery', skip: 'IAC-1286' do
           recovery_conf_path => '/tmp/recovery.conf',
           manage_recovery_conf => true,
         }
-
-        class { 'postgresql::server': }
       EOS
 
       idempotent_apply(pp)
