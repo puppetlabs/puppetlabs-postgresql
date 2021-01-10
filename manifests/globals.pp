@@ -204,10 +204,7 @@ class postgresql::globals (
       },
       default => undef,
     },
-    'Archlinux' => $facts['os']['name'] ? {
-      /Archlinux/ => '9.2',
-      default => '9.2',
-    },
+    'Archlinux' => '9.2',
     'Gentoo' => '9.5',
     'FreeBSD' => '93',
     'OpenBSD' => $facts['os']['release']['full'] ? {
