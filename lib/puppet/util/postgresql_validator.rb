@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet::Util
   # postgresql_validator.rb
   class PostgresqlValidator
@@ -41,7 +43,7 @@ module Puppet::Util
         Puppet.debug "PostgresqlValidator.attempt_connection: #{build_validate_cmd}"
         result = execute_command
         if result && !result.empty?
-          Puppet.debug "PostgresqlValidator.attempt_connection: Connection to #{@resource[:db_name] || parse_connect_settings.select { |elem| elem.match %r{PGDATABASE} }} successful!" # rubocop:disable Performance/StringInclude
+          Puppet.debug "PostgresqlValidator.attempt_connection: Connection to #{@resource[:db_name] || parse_connect_settings.select { |elem| elem.include?('PGDATABASE') }} successful!"
           return true
         else
           Puppet.warning "PostgresqlValidator.attempt_connection: Sleeping for #{sleep_length} seconds"

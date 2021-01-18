@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:postgresql_conn_validator) do
   @doc = <<-EOS
           @summary Verify if a connection can be successfully established

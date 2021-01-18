@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:postgresql_psql) do # rubocop:disable RSpec/MultipleDescribes

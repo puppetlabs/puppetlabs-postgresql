@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:postgresql_replication_slot) do
   @doc = <<-EOS
 @summary Manages Postgresql replication slots.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @summary This internal function translates the ipv(4|6)acls format into a resource suitable for create_resources.
 # @api private
 Puppet::Functions.create_function(:'postgresql::postgresql_acls_to_resources_hash') do

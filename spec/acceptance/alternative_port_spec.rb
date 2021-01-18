@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 # These tests ensure that postgres can change itself to an alternative port
