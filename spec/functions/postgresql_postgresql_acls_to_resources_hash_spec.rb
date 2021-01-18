@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::postgresql_acls_to_resources_hash' do

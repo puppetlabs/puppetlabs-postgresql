@@ -1,4 +1,6 @@
 #! /usr/bin/env ruby # rubocop:disable Lint/ScriptPermission
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:postgresql_conf) do

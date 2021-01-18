@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:postgresql_psql) do
   newparam(:name) do
     desc 'An arbitrary tag for your own reference; the name of the message.'

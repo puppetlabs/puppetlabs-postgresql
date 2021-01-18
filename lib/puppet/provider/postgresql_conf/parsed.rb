@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/provider/parsedfile'
 
 Puppet::Type.type(:postgresql_conf).provide(

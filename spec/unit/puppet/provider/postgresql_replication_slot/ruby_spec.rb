@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 type = Puppet::Type.type(:postgresql_replication_slot)

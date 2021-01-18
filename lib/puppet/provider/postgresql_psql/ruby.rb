@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   desc 'Postgres psql provider'
   def run_unless_sql_command(sql)
     # for the 'unless' queries, we wrap the user's query in a 'SELECT COUNT',
     # which makes it easier to parse and process the output.
-    run_sql_command('SELECT COUNT(*) FROM (' << sql << ') count')
+    run_sql_command('SELECT COUNT(*) FROM (' + sql + ') count')
   end
 
   def run_sql_command(sql)
@@ -16,7 +18,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
     command.push('-p', resource[:port]) if resource[:port]
     command.push('-t', '-X', '-c', '"' + sql.gsub('"', '\"') + '"')
 
-    environment = get_environment
+    environment = fetch_environment
 
     if resource[:cwd]
       Dir.chdir resource[:cwd] do
@@ -29,7 +31,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
 
   private
 
-  def get_environment # rubocop:disable Style/AccessorMethodName : Refactor does not work correctly
+  def fetch_environment
     environment = (resource[:connect_settings] || {}).dup
     envlist = resource[:environment]
     return environment unless envlist

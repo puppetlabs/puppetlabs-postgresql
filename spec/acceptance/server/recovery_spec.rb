@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'postgresql::server::recovery', skip: 'IAC-1286' do
