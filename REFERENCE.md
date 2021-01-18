@@ -80,7 +80,7 @@
 
 ## Classes
 
-### `postgresql::client`
+### <a name="postgresqlclient"></a>`postgresql::client`
 
 Installs PostgreSQL client software. Set the following parameters if you have a custom version you would like to install.
 
@@ -88,9 +88,14 @@ Installs PostgreSQL client software. Set the following parameters if you have a 
 
 #### Parameters
 
-The following parameters are available in the `postgresql::client` class.
+The following parameters are available in the `postgresql::client` class:
 
-##### `file_ensure`
+* [`file_ensure`](#file_ensure)
+* [`validcon_script_path`](#validcon_script_path)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+
+##### <a name="file_ensure"></a>`file_ensure`
 
 Data type: `Enum['file', 'absent']`
 
@@ -98,7 +103,7 @@ Ensure the connection validation script is present
 
 Default value: `'file'`
 
-##### `validcon_script_path`
+##### <a name="validcon_script_path"></a>`validcon_script_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -106,7 +111,7 @@ Optional. Absolute path for the postgresql connection validation script.
 
 Default value: `$postgresql::params::validcon_script_path`
 
-##### `package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String[1]`
 
@@ -114,7 +119,7 @@ Sets the name of the PostgreSQL client package.
 
 Default value: `$postgresql::params::client_package_name`
 
-##### `package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `String[1]`
 
@@ -122,7 +127,7 @@ Ensure the client package is installed
 
 Default value: `'present'`
 
-### `postgresql::globals`
+### <a name="postgresqlglobals"></a>`postgresql::globals`
 
 Class for setting cross-class global overrides.
 
@@ -131,9 +136,63 @@ This class should be used only if you are using a non-standard OS, or if you are
 
 #### Parameters
 
-The following parameters are available in the `postgresql::globals` class.
+The following parameters are available in the `postgresql::globals` class:
 
-##### `client_package_name`
+* [`client_package_name`](#client_package_name)
+* [`server_package_name`](#server_package_name)
+* [`contrib_package_name`](#contrib_package_name)
+* [`devel_package_name`](#devel_package_name)
+* [`java_package_name`](#java_package_name)
+* [`docs_package_name`](#docs_package_name)
+* [`perl_package_name`](#perl_package_name)
+* [`plperl_package_name`](#plperl_package_name)
+* [`plpython_package_name`](#plpython_package_name)
+* [`python_package_name`](#python_package_name)
+* [`postgis_package_name`](#postgis_package_name)
+* [`service_name`](#service_name)
+* [`service_provider`](#service_provider)
+* [`service_status`](#service_status)
+* [`default_database`](#default_database)
+* [`validcon_script_path`](#validcon_script_path)
+* [`initdb_path`](#initdb_path)
+* [`createdb_path`](#createdb_path)
+* [`psql_path`](#psql_path)
+* [`pg_hba_conf_path`](#pg_hba_conf_path)
+* [`pg_ident_conf_path`](#pg_ident_conf_path)
+* [`postgresql_conf_path`](#postgresql_conf_path)
+* [`postgresql_conf_mode`](#postgresql_conf_mode)
+* [`recovery_conf_path`](#recovery_conf_path)
+* [`default_connect_settings`](#default_connect_settings)
+* [`pg_hba_conf_defaults`](#pg_hba_conf_defaults)
+* [`datadir`](#datadir)
+* [`confdir`](#confdir)
+* [`bindir`](#bindir)
+* [`xlogdir`](#xlogdir)
+* [`logdir`](#logdir)
+* [`log_line_prefix`](#log_line_prefix)
+* [`user`](#user)
+* [`group`](#group)
+* [`version`](#version)
+* [`postgis_version`](#postgis_version)
+* [`repo_proxy`](#repo_proxy)
+* [`repo_baseurl`](#repo_baseurl)
+* [`needs_initdb`](#needs_initdb)
+* [`encoding`](#encoding)
+* [`locale`](#locale)
+* [`data_checksums`](#data_checksums)
+* [`timezone`](#timezone)
+* [`manage_pg_hba_conf`](#manage_pg_hba_conf)
+* [`manage_pg_ident_conf`](#manage_pg_ident_conf)
+* [`manage_recovery_conf`](#manage_recovery_conf)
+* [`manage_postgresql_conf_perms`](#manage_postgresql_conf_perms)
+* [`manage_datadir`](#manage_datadir)
+* [`manage_logdir`](#manage_logdir)
+* [`manage_xlogdir`](#manage_xlogdir)
+* [`manage_package_repo`](#manage_package_repo)
+* [`module_workdir`](#module_workdir)
+* [`manage_selinux`](#manage_selinux)
+
+##### <a name="client_package_name"></a>`client_package_name`
 
 Data type: `Any`
 
@@ -141,7 +200,7 @@ Overrides the default PostgreSQL client package name.
 
 Default value: ``undef``
 
-##### `server_package_name`
+##### <a name="server_package_name"></a>`server_package_name`
 
 Data type: `Any`
 
@@ -149,7 +208,7 @@ Overrides the default PostgreSQL server package name.
 
 Default value: ``undef``
 
-##### `contrib_package_name`
+##### <a name="contrib_package_name"></a>`contrib_package_name`
 
 Data type: `Any`
 
@@ -157,7 +216,7 @@ Overrides the default PostgreSQL contrib package name.
 
 Default value: ``undef``
 
-##### `devel_package_name`
+##### <a name="devel_package_name"></a>`devel_package_name`
 
 Data type: `Any`
 
@@ -165,7 +224,7 @@ Overrides the default PostgreSQL devel package name.
 
 Default value: ``undef``
 
-##### `java_package_name`
+##### <a name="java_package_name"></a>`java_package_name`
 
 Data type: `Any`
 
@@ -173,7 +232,7 @@ Overrides the default PostgreSQL java package name.
 
 Default value: ``undef``
 
-##### `docs_package_name`
+##### <a name="docs_package_name"></a>`docs_package_name`
 
 Data type: `Any`
 
@@ -181,7 +240,7 @@ Overrides the default PostgreSQL docs package name.
 
 Default value: ``undef``
 
-##### `perl_package_name`
+##### <a name="perl_package_name"></a>`perl_package_name`
 
 Data type: `Any`
 
@@ -189,7 +248,7 @@ Overrides the default PostgreSQL Perl package name.
 
 Default value: ``undef``
 
-##### `plperl_package_name`
+##### <a name="plperl_package_name"></a>`plperl_package_name`
 
 Data type: `Any`
 
@@ -197,7 +256,7 @@ Overrides the default PostgreSQL PL/Perl package name.
 
 Default value: ``undef``
 
-##### `plpython_package_name`
+##### <a name="plpython_package_name"></a>`plpython_package_name`
 
 Data type: `Any`
 
@@ -205,7 +264,7 @@ Overrides the default PostgreSQL PL/Python package name.
 
 Default value: ``undef``
 
-##### `python_package_name`
+##### <a name="python_package_name"></a>`python_package_name`
 
 Data type: `Any`
 
@@ -213,7 +272,7 @@ Overrides the default PostgreSQL Python package name.
 
 Default value: ``undef``
 
-##### `postgis_package_name`
+##### <a name="postgis_package_name"></a>`postgis_package_name`
 
 Data type: `Any`
 
@@ -221,7 +280,7 @@ Overrides the default PostgreSQL PostGIS package name.
 
 Default value: ``undef``
 
-##### `service_name`
+##### <a name="service_name"></a>`service_name`
 
 Data type: `Any`
 
@@ -229,7 +288,7 @@ Overrides the default PostgreSQL service name.
 
 Default value: ``undef``
 
-##### `service_provider`
+##### <a name="service_provider"></a>`service_provider`
 
 Data type: `Any`
 
@@ -237,7 +296,7 @@ Overrides the default PostgreSQL service provider.
 
 Default value: ``undef``
 
-##### `service_status`
+##### <a name="service_status"></a>`service_status`
 
 Data type: `Any`
 
@@ -245,7 +304,7 @@ Overrides the default status check command for your PostgreSQL service.
 
 Default value: ``undef``
 
-##### `default_database`
+##### <a name="default_database"></a>`default_database`
 
 Data type: `Any`
 
@@ -253,7 +312,7 @@ Specifies the name of the default database to connect with.
 
 Default value: ``undef``
 
-##### `validcon_script_path`
+##### <a name="validcon_script_path"></a>`validcon_script_path`
 
 Data type: `Any`
 
@@ -261,7 +320,7 @@ Scipt path for the connection validation check.
 
 Default value: ``undef``
 
-##### `initdb_path`
+##### <a name="initdb_path"></a>`initdb_path`
 
 Data type: `Any`
 
@@ -269,7 +328,7 @@ Path to the initdb command.
 
 Default value: ``undef``
 
-##### `createdb_path`
+##### <a name="createdb_path"></a>`createdb_path`
 
 Data type: `Any`
 
@@ -277,7 +336,7 @@ Deprecated. Path to the createdb command.
 
 Default value: ``undef``
 
-##### `psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Any`
 
@@ -285,7 +344,7 @@ Sets the path to the psql command.
 
 Default value: ``undef``
 
-##### `pg_hba_conf_path`
+##### <a name="pg_hba_conf_path"></a>`pg_hba_conf_path`
 
 Data type: `Any`
 
@@ -293,7 +352,7 @@ Specifies the path to your pg_hba.conf file.
 
 Default value: ``undef``
 
-##### `pg_ident_conf_path`
+##### <a name="pg_ident_conf_path"></a>`pg_ident_conf_path`
 
 Data type: `Any`
 
@@ -301,7 +360,7 @@ Specifies the path to your pg_ident.conf file.
 
 Default value: ``undef``
 
-##### `postgresql_conf_path`
+##### <a name="postgresql_conf_path"></a>`postgresql_conf_path`
 
 Data type: `Any`
 
@@ -309,7 +368,15 @@ Sets the path to your postgresql.conf file.
 
 Default value: ``undef``
 
-##### `recovery_conf_path`
+##### <a name="postgresql_conf_mode"></a>`postgresql_conf_mode`
+
+Data type: `Optional[Stdlib::Filemode]`
+
+Sets the mode of your postgresql.conf file. Only relevant if manage_postgresql_conf_perms is true.
+
+Default value: ``undef``
+
+##### <a name="recovery_conf_path"></a>`recovery_conf_path`
 
 Data type: `Any`
 
@@ -317,7 +384,7 @@ Path to your recovery.conf file.
 
 Default value: ``undef``
 
-##### `default_connect_settings`
+##### <a name="default_connect_settings"></a>`default_connect_settings`
 
 Data type: `Any`
 
@@ -325,7 +392,7 @@ Default connection settings.
 
 Default value: `{}`
 
-##### `pg_hba_conf_defaults`
+##### <a name="pg_hba_conf_defaults"></a>`pg_hba_conf_defaults`
 
 Data type: `Any`
 
@@ -333,7 +400,7 @@ Disables the defaults supplied with the module for pg_hba.conf if set to false.
 
 Default value: ``undef``
 
-##### `datadir`
+##### <a name="datadir"></a>`datadir`
 
 Data type: `Any`
 
@@ -345,7 +412,7 @@ Warning! If datadir is changed from the default, Puppet does not manage purging 
 
 Default value: ``undef``
 
-##### `confdir`
+##### <a name="confdir"></a>`confdir`
 
 Data type: `Any`
 
@@ -353,7 +420,7 @@ Overrides the default PostgreSQL configuration directory for the target platform
 
 Default value: ``undef``
 
-##### `bindir`
+##### <a name="bindir"></a>`bindir`
 
 Data type: `Any`
 
@@ -361,7 +428,7 @@ Overrides the default PostgreSQL binaries directory for the target platform.
 
 Default value: ``undef``
 
-##### `xlogdir`
+##### <a name="xlogdir"></a>`xlogdir`
 
 Data type: `Any`
 
@@ -369,7 +436,7 @@ Overrides the default PostgreSQL xlog directory.
 
 Default value: ``undef``
 
-##### `logdir`
+##### <a name="logdir"></a>`logdir`
 
 Data type: `Any`
 
@@ -377,7 +444,7 @@ Overrides the default PostgreSQL log directory.
 
 Default value: ``undef``
 
-##### `log_line_prefix`
+##### <a name="log_line_prefix"></a>`log_line_prefix`
 
 Data type: `Any`
 
@@ -385,7 +452,7 @@ Overrides the default PostgreSQL log prefix.
 
 Default value: ``undef``
 
-##### `user`
+##### <a name="user"></a>`user`
 
 Data type: `Any`
 
@@ -393,7 +460,7 @@ Overrides the default PostgreSQL super user and owner of PostgreSQL related file
 
 Default value: ``undef``
 
-##### `group`
+##### <a name="group"></a>`group`
 
 Data type: `Any`
 
@@ -401,7 +468,7 @@ Overrides the default postgres user group to be used for related files in the fi
 
 Default value: ``undef``
 
-##### `version`
+##### <a name="version"></a>`version`
 
 Data type: `Any`
 
@@ -409,7 +476,7 @@ The version of PostgreSQL to install and manage.
 
 Default value: ``undef``
 
-##### `postgis_version`
+##### <a name="postgis_version"></a>`postgis_version`
 
 Data type: `Any`
 
@@ -417,7 +484,7 @@ Defines the version of PostGIS to install, if you install PostGIS.
 
 Default value: ``undef``
 
-##### `repo_proxy`
+##### <a name="repo_proxy"></a>`repo_proxy`
 
 Data type: `Any`
 
@@ -425,7 +492,7 @@ Sets the proxy option for the official PostgreSQL yum-repositories only.
 
 Default value: ``undef``
 
-##### `repo_baseurl`
+##### <a name="repo_baseurl"></a>`repo_baseurl`
 
 Data type: `Any`
 
@@ -433,7 +500,7 @@ Sets the baseurl for the PostgreSQL repository. Useful if you host your own mirr
 
 Default value: ``undef``
 
-##### `needs_initdb`
+##### <a name="needs_initdb"></a>`needs_initdb`
 
 Data type: `Any`
 
@@ -441,7 +508,7 @@ Explicitly calls the initdb operation after the server package is installed and 
 
 Default value: ``undef``
 
-##### `encoding`
+##### <a name="encoding"></a>`encoding`
 
 Data type: `Any`
 
@@ -450,7 +517,7 @@ On certain operating systems, this is also used during the template1 initializat
 
 Default value: ``undef``
 
-##### `locale`
+##### <a name="locale"></a>`locale`
 
 Data type: `Any`
 
@@ -460,7 +527,7 @@ On Debian, you'll need to ensure that the 'locales-all' package is installed for
 
 Default value: ``undef``
 
-##### `data_checksums`
+##### <a name="data_checksums"></a>`data_checksums`
 
 Data type: `Any`
 
@@ -469,7 +536,7 @@ Warning: This option is used during initialization by initdb, and cannot be chan
 
 Default value: ``undef``
 
-##### `timezone`
+##### <a name="timezone"></a>`timezone`
 
 Data type: `Any`
 
@@ -477,7 +544,7 @@ Sets the default timezone of the postgresql server. The postgresql built-in defa
 
 Default value: ``undef``
 
-##### `manage_pg_hba_conf`
+##### <a name="manage_pg_hba_conf"></a>`manage_pg_hba_conf`
 
 Data type: `Any`
 
@@ -485,7 +552,7 @@ Allow Puppet to manage the pg_hba.conf file.
 
 Default value: ``undef``
 
-##### `manage_pg_ident_conf`
+##### <a name="manage_pg_ident_conf"></a>`manage_pg_ident_conf`
 
 Data type: `Any`
 
@@ -493,7 +560,7 @@ Allow Puppet to manage the pg_ident.conf file.
 
 Default value: ``undef``
 
-##### `manage_recovery_conf`
+##### <a name="manage_recovery_conf"></a>`manage_recovery_conf`
 
 Data type: `Any`
 
@@ -501,7 +568,17 @@ Allow Puppet to manage the recovery.conf file.
 
 Default value: ``undef``
 
-##### `manage_datadir`
+##### <a name="manage_postgresql_conf_perms"></a>`manage_postgresql_conf_perms`
+
+Data type: `Any`
+
+Whether to manage the postgresql conf file permissions. This means owner,
+group and mode. Contents are not managed but should be managed through
+postgresql::server::config_entry.
+
+Default value: ``undef``
+
+##### <a name="manage_datadir"></a>`manage_datadir`
 
 Data type: `Any`
 
@@ -509,7 +586,7 @@ Set to false if you have file{ $datadir: } already defined
 
 Default value: ``undef``
 
-##### `manage_logdir`
+##### <a name="manage_logdir"></a>`manage_logdir`
 
 Data type: `Any`
 
@@ -517,7 +594,7 @@ Set to false if you have file{ $logdir: } already defined
 
 Default value: ``undef``
 
-##### `manage_xlogdir`
+##### <a name="manage_xlogdir"></a>`manage_xlogdir`
 
 Data type: `Any`
 
@@ -525,7 +602,7 @@ Set to false if you have file{ $xlogdir: } already defined
 
 Default value: ``undef``
 
-##### `manage_package_repo`
+##### <a name="manage_package_repo"></a>`manage_package_repo`
 
 Data type: `Any`
 
@@ -533,7 +610,7 @@ Sets up official PostgreSQL repositories on your host if set to true.
 
 Default value: ``undef``
 
-##### `module_workdir`
+##### <a name="module_workdir"></a>`module_workdir`
 
 Data type: `Any`
 
@@ -541,7 +618,7 @@ Specifies working directory under which the psql command should be executed. May
 
 Default value: ``undef``
 
-##### `manage_selinux`
+##### <a name="manage_selinux"></a>`manage_selinux`
 
 Data type: `Any`
 
@@ -549,15 +626,19 @@ Data type: `Any`
 
 Default value: ``undef``
 
-### `postgresql::lib::devel`
+### <a name="postgresqllibdevel"></a>`postgresql::lib::devel`
 
 This class installs postgresql development libraries.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::lib::devel` class.
+The following parameters are available in the `postgresql::lib::devel` class:
 
-##### `package_name`
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+* [`link_pg_config`](#link_pg_config)
+
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -565,7 +646,7 @@ Override devel package name
 
 Default value: `$postgresql::params::devel_package_name`
 
-##### `package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `String[1]`
 
@@ -573,7 +654,7 @@ Ensure the development libraries are installed
 
 Default value: `'present'`
 
-##### `link_pg_config`
+##### <a name="link_pg_config"></a>`link_pg_config`
 
 Data type: `Boolean`
 
@@ -581,7 +662,7 @@ If the bin directory used by the PostgreSQL page is not /usr/bin or /usr/local/b
 
 Default value: `$postgresql::params::link_pg_config`
 
-### `postgresql::lib::docs`
+### <a name="postgresqllibdocs"></a>`postgresql::lib::docs`
 
 Installs PostgreSQL bindings for Postgres-Docs. Set the following parameters if you have a custom version you would like to install.
 
@@ -589,9 +670,12 @@ Installs PostgreSQL bindings for Postgres-Docs. Set the following parameters if 
 
 #### Parameters
 
-The following parameters are available in the `postgresql::lib::docs` class.
+The following parameters are available in the `postgresql::lib::docs` class:
 
-##### `package_name`
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -599,7 +683,7 @@ Specifies the name of the PostgreSQL docs package.
 
 Default value: `$postgresql::params::docs_package_name`
 
-##### `package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `String[1]`
 
@@ -607,7 +691,7 @@ Whether the PostgreSQL docs package resource should be present.
 
 Default value: `'present'`
 
-### `postgresql::lib::java`
+### <a name="postgresqllibjava"></a>`postgresql::lib::java`
 
 This class installs the postgresql jdbc connector.
 
@@ -615,9 +699,12 @@ This class installs the postgresql jdbc connector.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::lib::java` class.
+The following parameters are available in the `postgresql::lib::java` class:
 
-##### `package_name`
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -625,7 +712,7 @@ Specifies the name of the PostgreSQL java package.
 
 Default value: `$postgresql::params::java_package_name`
 
-##### `package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `String[1]`
 
@@ -633,15 +720,18 @@ Specifies whether the package is present.
 
 Default value: `'present'`
 
-### `postgresql::lib::perl`
+### <a name="postgresqllibperl"></a>`postgresql::lib::perl`
 
 This class installs the perl libs for postgresql.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::lib::perl` class.
+The following parameters are available in the `postgresql::lib::perl` class:
 
-##### `package_name`
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -649,7 +739,7 @@ Specifies the name of the PostgreSQL perl package to install.
 
 Default value: `$postgresql::params::perl_package_name`
 
-##### `package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `String[1]`
 
@@ -657,15 +747,18 @@ Ensure the perl libs for postgresql are installed.
 
 Default value: `'present'`
 
-### `postgresql::lib::python`
+### <a name="postgresqllibpython"></a>`postgresql::lib::python`
 
 This class installs the python libs for postgresql.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::lib::python` class.
+The following parameters are available in the `postgresql::lib::python` class:
 
-##### `package_name`
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String[1]`
 
@@ -673,7 +766,7 @@ The name of the PostgreSQL Python package.
 
 Default value: `$postgresql::params::python_package_name`
 
-##### `package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `String[1]`
 
@@ -681,15 +774,72 @@ Ensure the python libs for postgresql are installed.
 
 Default value: `'present'`
 
-### `postgresql::server`
+### <a name="postgresqlserver"></a>`postgresql::server`
 
 This installs a PostgreSQL server
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server` class.
+The following parameters are available in the `postgresql::server` class:
 
-##### `postgres_password`
+* [`postgres_password`](#postgres_password)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+* [`plperl_package_name`](#plperl_package_name)
+* [`plpython_package_name`](#plpython_package_name)
+* [`service_ensure`](#service_ensure)
+* [`service_enable`](#service_enable)
+* [`service_manage`](#service_manage)
+* [`service_name`](#service_name)
+* [`service_restart_on_change`](#service_restart_on_change)
+* [`service_provider`](#service_provider)
+* [`service_reload`](#service_reload)
+* [`service_status`](#service_status)
+* [`default_database`](#default_database)
+* [`default_connect_settings`](#default_connect_settings)
+* [`listen_addresses`](#listen_addresses)
+* [`port`](#port)
+* [`ip_mask_deny_postgres_user`](#ip_mask_deny_postgres_user)
+* [`ip_mask_allow_all_users`](#ip_mask_allow_all_users)
+* [`ipv4acls`](#ipv4acls)
+* [`ipv6acls`](#ipv6acls)
+* [`initdb_path`](#initdb_path)
+* [`createdb_path`](#createdb_path)
+* [`psql_path`](#psql_path)
+* [`pg_hba_conf_path`](#pg_hba_conf_path)
+* [`pg_ident_conf_path`](#pg_ident_conf_path)
+* [`postgresql_conf_path`](#postgresql_conf_path)
+* [`postgresql_conf_mode`](#postgresql_conf_mode)
+* [`recovery_conf_path`](#recovery_conf_path)
+* [`datadir`](#datadir)
+* [`xlogdir`](#xlogdir)
+* [`logdir`](#logdir)
+* [`log_line_prefix`](#log_line_prefix)
+* [`pg_hba_conf_defaults`](#pg_hba_conf_defaults)
+* [`user`](#user)
+* [`group`](#group)
+* [`needs_initdb`](#needs_initdb)
+* [`encoding`](#encoding)
+* [`locale`](#locale)
+* [`data_checksums`](#data_checksums)
+* [`timezone`](#timezone)
+* [`manage_pg_hba_conf`](#manage_pg_hba_conf)
+* [`manage_pg_ident_conf`](#manage_pg_ident_conf)
+* [`manage_recovery_conf`](#manage_recovery_conf)
+* [`manage_postgresql_conf_perms`](#manage_postgresql_conf_perms)
+* [`module_workdir`](#module_workdir)
+* [`manage_datadir`](#manage_datadir)
+* [`manage_logdir`](#manage_logdir)
+* [`manage_xlogdir`](#manage_xlogdir)
+* [`roles`](#roles)
+* [`config_entries`](#config_entries)
+* [`pg_hba_rules`](#pg_hba_rules)
+* [`version`](#version)
+* [`extra_systemd_config`](#extra_systemd_config)
+* [`manage_selinux`](#manage_selinux)
+* [`password_encryption`](#password_encryption)
+
+##### <a name="postgres_password"></a>`postgres_password`
 
 Data type: `Any`
 
@@ -697,7 +847,7 @@ Sets the password for the postgres user to your specified value. By default, thi
 
 Default value: ``undef``
 
-##### `package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `Any`
 
@@ -705,7 +855,7 @@ Specifies the name of the package to use for installing the server software.
 
 Default value: `$postgresql::params::server_package_name`
 
-##### `package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Any`
 
@@ -713,7 +863,7 @@ Passes a value through to the package resource when creating the server instance
 
 Default value: `$postgresql::params::package_ensure`
 
-##### `plperl_package_name`
+##### <a name="plperl_package_name"></a>`plperl_package_name`
 
 Data type: `Any`
 
@@ -721,7 +871,7 @@ Sets the default package name for the PL/Perl extension.
 
 Default value: `$postgresql::params::plperl_package_name`
 
-##### `plpython_package_name`
+##### <a name="plpython_package_name"></a>`plpython_package_name`
 
 Data type: `Any`
 
@@ -729,7 +879,7 @@ Sets the default package name for the PL/Python extension.
 
 Default value: `$postgresql::params::plpython_package_name`
 
-##### `service_ensure`
+##### <a name="service_ensure"></a>`service_ensure`
 
 Data type: `Any`
 
@@ -737,7 +887,7 @@ Ensure service is installed
 
 Default value: `$postgresql::params::service_ensure`
 
-##### `service_enable`
+##### <a name="service_enable"></a>`service_enable`
 
 Data type: `Any`
 
@@ -745,7 +895,7 @@ Enable the PostgreSQL service
 
 Default value: `$postgresql::params::service_enable`
 
-##### `service_manage`
+##### <a name="service_manage"></a>`service_manage`
 
 Data type: `Any`
 
@@ -753,7 +903,7 @@ Defines whether or not Puppet should manage the service.
 
 Default value: `$postgresql::params::service_manage`
 
-##### `service_name`
+##### <a name="service_name"></a>`service_name`
 
 Data type: `Any`
 
@@ -761,7 +911,7 @@ Overrides the default PostgreSQL service name.
 
 Default value: `$postgresql::params::service_name`
 
-##### `service_restart_on_change`
+##### <a name="service_restart_on_change"></a>`service_restart_on_change`
 
 Data type: `Any`
 
@@ -769,7 +919,7 @@ Overrides the default behavior to restart your PostgreSQL service when a config 
 
 Default value: `$postgresql::params::service_restart_on_change`
 
-##### `service_provider`
+##### <a name="service_provider"></a>`service_provider`
 
 Data type: `Any`
 
@@ -777,7 +927,7 @@ Overrides the default PostgreSQL service provider.
 
 Default value: `$postgresql::params::service_provider`
 
-##### `service_reload`
+##### <a name="service_reload"></a>`service_reload`
 
 Data type: `Any`
 
@@ -785,7 +935,7 @@ Overrides the default reload command for your PostgreSQL service.
 
 Default value: `$postgresql::params::service_reload`
 
-##### `service_status`
+##### <a name="service_status"></a>`service_status`
 
 Data type: `Any`
 
@@ -793,7 +943,7 @@ Overrides the default status check command for your PostgreSQL service.
 
 Default value: `$postgresql::params::service_status`
 
-##### `default_database`
+##### <a name="default_database"></a>`default_database`
 
 Data type: `Any`
 
@@ -801,7 +951,7 @@ Specifies the name of the default database to connect with. On most systems this
 
 Default value: `$postgresql::params::default_database`
 
-##### `default_connect_settings`
+##### <a name="default_connect_settings"></a>`default_connect_settings`
 
 Data type: `Any`
 
@@ -809,7 +959,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::globals::default_connect_settings`
 
-##### `listen_addresses`
+##### <a name="listen_addresses"></a>`listen_addresses`
 
 Data type: `Any`
 
@@ -817,7 +967,7 @@ Address list on which the PostgreSQL service will listen
 
 Default value: `$postgresql::params::listen_addresses`
 
-##### `port`
+##### <a name="port"></a>`port`
 
 Data type: `Any`
 
@@ -826,7 +976,7 @@ Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
 
 Default value: `$postgresql::params::port`
 
-##### `ip_mask_deny_postgres_user`
+##### <a name="ip_mask_deny_postgres_user"></a>`ip_mask_deny_postgres_user`
 
 Data type: `Any`
 
@@ -835,7 +985,7 @@ Default value: '0.0.0.0/0', which denies any remote connection.
 
 Default value: `$postgresql::params::ip_mask_deny_postgres_user`
 
-##### `ip_mask_allow_all_users`
+##### <a name="ip_mask_allow_all_users"></a>`ip_mask_allow_all_users`
 
 Data type: `Any`
 
@@ -845,7 +995,7 @@ Default value: '127.0.0.1/32'.
 
 Default value: `$postgresql::params::ip_mask_allow_all_users`
 
-##### `ipv4acls`
+##### <a name="ipv4acls"></a>`ipv4acls`
 
 Data type: `Array[String[1]]`
 
@@ -853,7 +1003,7 @@ Lists strings for access control for connection method, users, databases, IPv4 a
 
 Default value: `$postgresql::params::ipv4acls`
 
-##### `ipv6acls`
+##### <a name="ipv6acls"></a>`ipv6acls`
 
 Data type: `Array[String[1]]`
 
@@ -861,7 +1011,7 @@ Lists strings for access control for connection method, users, databases, IPv6 a
 
 Default value: `$postgresql::params::ipv6acls`
 
-##### `initdb_path`
+##### <a name="initdb_path"></a>`initdb_path`
 
 Data type: `Any`
 
@@ -869,7 +1019,7 @@ Specifies the path to the initdb command.
 
 Default value: `$postgresql::params::initdb_path`
 
-##### `createdb_path`
+##### <a name="createdb_path"></a>`createdb_path`
 
 Data type: `Any`
 
@@ -877,7 +1027,7 @@ Deprecated. Specifies the path to the createdb command.
 
 Default value: `$postgresql::params::createdb_path`
 
-##### `psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Any`
 
@@ -885,7 +1035,7 @@ Specifies the path to the psql command.
 
 Default value: `$postgresql::params::psql_path`
 
-##### `pg_hba_conf_path`
+##### <a name="pg_hba_conf_path"></a>`pg_hba_conf_path`
 
 Data type: `Any`
 
@@ -893,7 +1043,7 @@ Specifies the path to your pg_hba.conf file.
 
 Default value: `$postgresql::params::pg_hba_conf_path`
 
-##### `pg_ident_conf_path`
+##### <a name="pg_ident_conf_path"></a>`pg_ident_conf_path`
 
 Data type: `Any`
 
@@ -901,7 +1051,7 @@ Specifies the path to your pg_ident.conf file.
 
 Default value: `$postgresql::params::pg_ident_conf_path`
 
-##### `postgresql_conf_path`
+##### <a name="postgresql_conf_path"></a>`postgresql_conf_path`
 
 Data type: `Any`
 
@@ -909,7 +1059,15 @@ Specifies the path to your postgresql.conf file.
 
 Default value: `$postgresql::params::postgresql_conf_path`
 
-##### `recovery_conf_path`
+##### <a name="postgresql_conf_mode"></a>`postgresql_conf_mode`
+
+Data type: `Optional[Stdlib::Filemode]`
+
+Sets the mode of your postgresql.conf file. Only relevant if manage_postgresql_conf_perms is true.
+
+Default value: `$postgresql::params::postgresql_conf_mode`
+
+##### <a name="recovery_conf_path"></a>`recovery_conf_path`
 
 Data type: `Any`
 
@@ -917,7 +1075,7 @@ Specifies the path to your recovery.conf file.
 
 Default value: `$postgresql::params::recovery_conf_path`
 
-##### `datadir`
+##### <a name="datadir"></a>`datadir`
 
 Data type: `Any`
 
@@ -925,7 +1083,7 @@ PostgreSQL data directory
 
 Default value: `$postgresql::params::datadir`
 
-##### `xlogdir`
+##### <a name="xlogdir"></a>`xlogdir`
 
 Data type: `Any`
 
@@ -933,7 +1091,7 @@ PostgreSQL xlog directory
 
 Default value: `$postgresql::params::xlogdir`
 
-##### `logdir`
+##### <a name="logdir"></a>`logdir`
 
 Data type: `Any`
 
@@ -941,7 +1099,7 @@ PostgreSQL log directory
 
 Default value: `$postgresql::params::logdir`
 
-##### `log_line_prefix`
+##### <a name="log_line_prefix"></a>`log_line_prefix`
 
 Data type: `Any`
 
@@ -949,7 +1107,7 @@ PostgreSQL log line prefix
 
 Default value: `$postgresql::params::log_line_prefix`
 
-##### `pg_hba_conf_defaults`
+##### <a name="pg_hba_conf_defaults"></a>`pg_hba_conf_defaults`
 
 Data type: `Any`
 
@@ -957,7 +1115,7 @@ If false, disables the defaults supplied with the module for pg_hba.conf. This i
 
 Default value: `$postgresql::params::pg_hba_conf_defaults`
 
-##### `user`
+##### <a name="user"></a>`user`
 
 Data type: `Any`
 
@@ -965,7 +1123,7 @@ Overrides the default PostgreSQL super user and owner of PostgreSQL related file
 
 Default value: `$postgresql::params::user`
 
-##### `group`
+##### <a name="group"></a>`group`
 
 Data type: `Any`
 
@@ -973,7 +1131,7 @@ Overrides the default postgres user group to be used for related files in the fi
 
 Default value: `$postgresql::params::group`
 
-##### `needs_initdb`
+##### <a name="needs_initdb"></a>`needs_initdb`
 
 Data type: `Any`
 
@@ -981,7 +1139,7 @@ Explicitly calls the initdb operation after server package is installed, and bef
 
 Default value: `$postgresql::params::needs_initdb`
 
-##### `encoding`
+##### <a name="encoding"></a>`encoding`
 
 Data type: `Any`
 
@@ -989,7 +1147,7 @@ Sets the default encoding for all databases created with this module. On certain
 
 Default value: `$postgresql::params::encoding`
 
-##### `locale`
+##### <a name="locale"></a>`locale`
 
 Data type: `Any`
 
@@ -997,7 +1155,7 @@ Sets the default database locale for all databases created with this module. On 
 
 Default value: `$postgresql::params::locale`
 
-##### `data_checksums`
+##### <a name="data_checksums"></a>`data_checksums`
 
 Data type: `Any`
 
@@ -1006,7 +1164,7 @@ Warning: This option is used during initialization by initdb, and cannot be chan
 
 Default value: `$postgresql::params::data_checksums`
 
-##### `timezone`
+##### <a name="timezone"></a>`timezone`
 
 Data type: `Any`
 
@@ -1014,7 +1172,7 @@ Set timezone for the PostgreSQL instance
 
 Default value: `$postgresql::params::timezone`
 
-##### `manage_pg_hba_conf`
+##### <a name="manage_pg_hba_conf"></a>`manage_pg_hba_conf`
 
 Data type: `Any`
 
@@ -1022,7 +1180,7 @@ Boolean. Whether to manage the pg_hba.conf.
 
 Default value: `$postgresql::params::manage_pg_hba_conf`
 
-##### `manage_pg_ident_conf`
+##### <a name="manage_pg_ident_conf"></a>`manage_pg_ident_conf`
 
 Data type: `Any`
 
@@ -1030,7 +1188,7 @@ Boolean. Overwrites the pg_ident.conf file.
 
 Default value: `$postgresql::params::manage_pg_ident_conf`
 
-##### `manage_recovery_conf`
+##### <a name="manage_recovery_conf"></a>`manage_recovery_conf`
 
 Data type: `Any`
 
@@ -1038,7 +1196,17 @@ Boolean. Specifies whether or not manage the recovery.conf.
 
 Default value: `$postgresql::params::manage_recovery_conf`
 
-##### `module_workdir`
+##### <a name="manage_postgresql_conf_perms"></a>`manage_postgresql_conf_perms`
+
+Data type: `Boolean`
+
+Whether to manage the postgresql conf file permissions. This means owner,
+group and mode. Contents are not managed but should be managed through
+postgresql::server::config_entry.
+
+Default value: `$postgresql::params::manage_postgresql_conf_perms`
+
+##### <a name="module_workdir"></a>`module_workdir`
 
 Data type: `Any`
 
@@ -1046,7 +1214,7 @@ Working directory for the PostgreSQL module
 
 Default value: `$postgresql::params::module_workdir`
 
-##### `manage_datadir`
+##### <a name="manage_datadir"></a>`manage_datadir`
 
 Data type: `Any`
 
@@ -1054,7 +1222,7 @@ Set to false if you have file{ $datadir: } already defined
 
 Default value: `$postgresql::params::manage_datadir`
 
-##### `manage_logdir`
+##### <a name="manage_logdir"></a>`manage_logdir`
 
 Data type: `Any`
 
@@ -1062,7 +1230,7 @@ Set to false if you have file{ $logdir: } already defined
 
 Default value: `$postgresql::params::manage_logdir`
 
-##### `manage_xlogdir`
+##### <a name="manage_xlogdir"></a>`manage_xlogdir`
 
 Data type: `Any`
 
@@ -1070,7 +1238,7 @@ Set to false if you have file{ $xlogdir: } already defined
 
 Default value: `$postgresql::params::manage_xlogdir`
 
-##### `roles`
+##### <a name="roles"></a>`roles`
 
 Data type: `Hash[String, Hash]`
 
@@ -1078,7 +1246,7 @@ Specifies a hash from which to generate postgresql::server::role resources.
 
 Default value: `{}`
 
-##### `config_entries`
+##### <a name="config_entries"></a>`config_entries`
 
 Data type: `Hash[String, Any]`
 
@@ -1086,7 +1254,7 @@ Specifies a hash from which to generate postgresql::server::config_entry resourc
 
 Default value: `{}`
 
-##### `pg_hba_rules`
+##### <a name="pg_hba_rules"></a>`pg_hba_rules`
 
 Data type: `Hash[String, Hash]`
 
@@ -1094,7 +1262,7 @@ Specifies a hash from which to generate postgresql::server::pg_hba_rule resource
 
 Default value: `{}`
 
-##### `version`
+##### <a name="version"></a>`version`
 
 Data type: `Any`
 
@@ -1102,7 +1270,7 @@ Deprecated. Use postgresql::globals instead. Sets PostgreSQL version
 
 Default value: ``undef``
 
-##### `extra_systemd_config`
+##### <a name="extra_systemd_config"></a>`extra_systemd_config`
 
 Data type: `Any`
 
@@ -1110,7 +1278,7 @@ Adds extra config to systemd config file, can for instance be used to add extra 
 
 Default value: `$postgresql::params::extra_systemd_config`
 
-##### `manage_selinux`
+##### <a name="manage_selinux"></a>`manage_selinux`
 
 Data type: `Boolean`
 
@@ -1118,7 +1286,7 @@ Data type: `Boolean`
 
 Default value: `$postgresql::params::manage_selinux`
 
-##### `password_encryption`
+##### <a name="password_encryption"></a>`password_encryption`
 
 Data type: `Any`
 
@@ -1126,15 +1294,18 @@ Data type: `Any`
 
 Default value: `$postgresql::params::password_encryption`
 
-### `postgresql::server::contrib`
+### <a name="postgresqlservercontrib"></a>`postgresql::server::contrib`
 
 Install the contrib postgresql packaging.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::contrib` class.
+The following parameters are available in the `postgresql::server::contrib` class:
 
-##### `package_name`
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -1142,7 +1313,7 @@ The name of the PostgreSQL contrib package.
 
 Default value: `$postgresql::params::contrib_package_name`
 
-##### `package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `String[1]`
 
@@ -1150,15 +1321,18 @@ Ensure the contrib package is installed.
 
 Default value: `'present'`
 
-### `postgresql::server::plperl`
+### <a name="postgresqlserverplperl"></a>`postgresql::server::plperl`
 
 This class installs the PL/Perl procedural language for postgresql.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::plperl` class.
+The following parameters are available in the `postgresql::server::plperl` class:
 
-##### `package_ensure`
+* [`package_ensure`](#package_ensure)
+* [`package_name`](#package_name)
+
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Any`
 
@@ -1166,7 +1340,7 @@ The ensure parameter passed on to PostgreSQL PL/Perl package resource.
 
 Default value: `'present'`
 
-##### `package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `Any`
 
@@ -1174,15 +1348,18 @@ The name of the PostgreSQL PL/Perl package.
 
 Default value: `$postgresql::server::plperl_package_name`
 
-### `postgresql::server::plpython`
+### <a name="postgresqlserverplpython"></a>`postgresql::server::plpython`
 
 This class installs the PL/Python procedural language for postgresql.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::plpython` class.
+The following parameters are available in the `postgresql::server::plpython` class:
 
-##### `package_ensure`
+* [`package_ensure`](#package_ensure)
+* [`package_name`](#package_name)
+
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Any`
 
@@ -1190,7 +1367,7 @@ Specifies whether the package is present.
 
 Default value: `'present'`
 
-##### `package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `Any`
 
@@ -1198,15 +1375,18 @@ Specifies the name of the postgresql PL/Python package.
 
 Default value: `$postgresql::server::plpython_package_name`
 
-### `postgresql::server::postgis`
+### <a name="postgresqlserverpostgis"></a>`postgresql::server::postgis`
 
 Install the postgis postgresql packaging.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::postgis` class.
+The following parameters are available in the `postgresql::server::postgis` class:
 
-##### `package_name`
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -1214,7 +1394,7 @@ Sets the package name.
 
 Default value: `$postgresql::params::postgis_package_name`
 
-##### `package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `String[1]`
 
@@ -1224,15 +1404,19 @@ Default value: `'present'`
 
 ## Defined types
 
-### `postgresql::server::config_entry`
+### <a name="postgresqlserverconfig_entry"></a>`postgresql::server::config_entry`
 
 Manage a postgresql.conf entry.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::config_entry` defined type.
+The following parameters are available in the `postgresql::server::config_entry` defined type:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`value`](#value)
+* [`path`](#path)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -1240,7 +1424,7 @@ Removes an entry if set to 'absent'.
 
 Default value: `'present'`
 
-##### `value`
+##### <a name="value"></a>`value`
 
 Data type: `Any`
 
@@ -1248,7 +1432,7 @@ Defines the value for the setting.
 
 Default value: ``undef``
 
-##### `path`
+##### <a name="path"></a>`path`
 
 Data type: `Any`
 
@@ -1256,15 +1440,25 @@ Path for postgresql.conf
 
 Default value: ``false``
 
-### `postgresql::server::database`
+### <a name="postgresqlserverdatabase"></a>`postgresql::server::database`
 
 Define for creating a database.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::database` defined type.
+The following parameters are available in the `postgresql::server::database` defined type:
 
-##### `comment`
+* [`comment`](#comment)
+* [`dbname`](#dbname)
+* [`owner`](#owner)
+* [`tablespace`](#tablespace)
+* [`template`](#template)
+* [`encoding`](#encoding)
+* [`locale`](#locale)
+* [`istemplate`](#istemplate)
+* [`connect_settings`](#connect_settings)
+
+##### <a name="comment"></a>`comment`
 
 Data type: `Any`
 
@@ -1272,7 +1466,7 @@ Sets a comment on the database.
 
 Default value: ``undef``
 
-##### `dbname`
+##### <a name="dbname"></a>`dbname`
 
 Data type: `Any`
 
@@ -1280,7 +1474,7 @@ Sets the name of the database.
 
 Default value: `$title`
 
-##### `owner`
+##### <a name="owner"></a>`owner`
 
 Data type: `Any`
 
@@ -1288,7 +1482,7 @@ Sets name of the database owner.
 
 Default value: ``undef``
 
-##### `tablespace`
+##### <a name="tablespace"></a>`tablespace`
 
 Data type: `Any`
 
@@ -1296,7 +1490,7 @@ Sets tablespace for where to create this database.
 
 Default value: ``undef``
 
-##### `template`
+##### <a name="template"></a>`template`
 
 Data type: `Any`
 
@@ -1304,7 +1498,7 @@ Specifies the name of the template database from which to build this database. D
 
 Default value: `'template0'`
 
-##### `encoding`
+##### <a name="encoding"></a>`encoding`
 
 Data type: `Any`
 
@@ -1312,7 +1506,7 @@ Overrides the character set during creation of the database.
 
 Default value: `$postgresql::server::encoding`
 
-##### `locale`
+##### <a name="locale"></a>`locale`
 
 Data type: `Any`
 
@@ -1320,7 +1514,7 @@ Overrides the locale during creation of the database.
 
 Default value: `$postgresql::server::locale`
 
-##### `istemplate`
+##### <a name="istemplate"></a>`istemplate`
 
 Data type: `Any`
 
@@ -1328,7 +1522,7 @@ Defines the database as a template if set to true.
 
 Default value: ``false``
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Any`
 
@@ -1336,33 +1530,41 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-### `postgresql::server::database_grant`
+### <a name="postgresqlserverdatabase_grant"></a>`postgresql::server::database_grant`
 
 Manage a database grant.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::database_grant` defined type.
+The following parameters are available in the `postgresql::server::database_grant` defined type:
 
-##### `privilege`
+* [`privilege`](#privilege)
+* [`db`](#db)
+* [`role`](#role)
+* [`ensure`](#ensure)
+* [`psql_db`](#psql_db)
+* [`psql_user`](#psql_user)
+* [`connect_settings`](#connect_settings)
+
+##### <a name="privilege"></a>`privilege`
 
 Data type: `Any`
 
 Specifies comma-separated list of privileges to grant. Valid options: 'ALL', 'CREATE', 'CONNECT', 'TEMPORARY', 'TEMP'.
 
-##### `db`
+##### <a name="db"></a>`db`
 
 Data type: `Any`
 
 Specifies the database to which you are granting access.
 
-##### `role`
+##### <a name="role"></a>`role`
 
 Data type: `Any`
 
 Specifies the role or user whom you are granting access to.
 
-##### `ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Any`
 
@@ -1370,7 +1572,7 @@ Specifies whether to grant or revoke the privilege. Revoke or 'absent' works onl
 
 Default value: ``undef``
 
-##### `psql_db`
+##### <a name="psql_db"></a>`psql_db`
 
 Data type: `Any`
 
@@ -1378,7 +1580,7 @@ Defines the database to execute the grant against. This should not ordinarily be
 
 Default value: ``undef``
 
-##### `psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `Any`
 
@@ -1386,7 +1588,7 @@ Specifies the OS user for running psql. Default value: The default user for the 
 
 Default value: ``undef``
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Any`
 
@@ -1394,27 +1596,39 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: ``undef``
 
-### `postgresql::server::db`
+### <a name="postgresqlserverdb"></a>`postgresql::server::db`
 
 Define for conveniently creating a role, database and assigning the correctpermissions.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::db` defined type.
+The following parameters are available in the `postgresql::server::db` defined type:
 
-##### `user`
+* [`user`](#user)
+* [`password`](#password)
+* [`comment`](#comment)
+* [`dbname`](#dbname)
+* [`encoding`](#encoding)
+* [`locale`](#locale)
+* [`grant`](#grant)
+* [`tablespace`](#tablespace)
+* [`template`](#template)
+* [`istemplate`](#istemplate)
+* [`owner`](#owner)
+
+##### <a name="user"></a>`user`
 
 Data type: `Any`
 
 User to create and assign access to the database upon creation. Mandatory.
 
-##### `password`
+##### <a name="password"></a>`password`
 
 Data type: `Any`
 
 Required Sets the password for the created user.
 
-##### `comment`
+##### <a name="comment"></a>`comment`
 
 Data type: `Any`
 
@@ -1422,7 +1636,7 @@ Defines a comment to be stored about the database using the PostgreSQL COMMENT c
 
 Default value: ``undef``
 
-##### `dbname`
+##### <a name="dbname"></a>`dbname`
 
 Data type: `Any`
 
@@ -1430,7 +1644,7 @@ Sets the name of the database to be created.
 
 Default value: `$title`
 
-##### `encoding`
+##### <a name="encoding"></a>`encoding`
 
 Data type: `Any`
 
@@ -1438,7 +1652,7 @@ Overrides the character set during creation of the database.
 
 Default value: `$postgresql::server::encoding`
 
-##### `locale`
+##### <a name="locale"></a>`locale`
 
 Data type: `Any`
 
@@ -1446,7 +1660,7 @@ Overrides the locale during creation of the database.
 
 Default value: `$postgresql::server::locale`
 
-##### `grant`
+##### <a name="grant"></a>`grant`
 
 Data type: `Any`
 
@@ -1454,7 +1668,7 @@ Specifies the permissions to grant during creation. Default value: 'ALL'.
 
 Default value: `'ALL'`
 
-##### `tablespace`
+##### <a name="tablespace"></a>`tablespace`
 
 Data type: `Any`
 
@@ -1462,7 +1676,7 @@ Defines the name of the tablespace to allocate the created database to.
 
 Default value: ``undef``
 
-##### `template`
+##### <a name="template"></a>`template`
 
 Data type: `Any`
 
@@ -1470,7 +1684,7 @@ Specifies the name of the template database from which to build this database. D
 
 Default value: `'template0'`
 
-##### `istemplate`
+##### <a name="istemplate"></a>`istemplate`
 
 Data type: `Any`
 
@@ -1478,7 +1692,7 @@ Specifies that the database is a template, if set to true.
 
 Default value: ``false``
 
-##### `owner`
+##### <a name="owner"></a>`owner`
 
 Data type: `Any`
 
@@ -1486,21 +1700,32 @@ Sets a user as the owner of the database.
 
 Default value: ``undef``
 
-### `postgresql::server::extension`
+### <a name="postgresqlserverextension"></a>`postgresql::server::extension`
 
 Activate an extension on a postgresql database.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::extension` defined type.
+The following parameters are available in the `postgresql::server::extension` defined type:
 
-##### `database`
+* [`database`](#database)
+* [`extension`](#extension)
+* [`schema`](#schema)
+* [`version`](#version)
+* [`ensure`](#ensure)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+* [`port`](#port)
+* [`connect_settings`](#connect_settings)
+* [`database_resource_name`](#database_resource_name)
+
+##### <a name="database"></a>`database`
 
 Data type: `Any`
 
 Specifies the database on which to activate the extension.
 
-##### `extension`
+##### <a name="extension"></a>`extension`
 
 Data type: `Any`
 
@@ -1508,7 +1733,7 @@ Specifies the extension to activate. If left blank, uses the name of the resourc
 
 Default value: `$name`
 
-##### `schema`
+##### <a name="schema"></a>`schema`
 
 Data type: `Optional[String[1]]`
 
@@ -1516,7 +1741,7 @@ Specifies the schema on which to activate the extension.
 
 Default value: ``undef``
 
-##### `version`
+##### <a name="version"></a>`version`
 
 Data type: `Optional[String[1]]`
 
@@ -1529,7 +1754,7 @@ version may be omitted, in which case no ALTER EXTENSION... SQL is applied, and 
 
 Default value: ``undef``
 
-##### `ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `String[1]`
 
@@ -1537,7 +1762,7 @@ Specifies whether to activate or deactivate the extension. Valid options: 'prese
 
 Default value: `'present'`
 
-##### `package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `Any`
 
@@ -1545,7 +1770,7 @@ Specifies a package to install prior to activating the extension.
 
 Default value: ``undef``
 
-##### `package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Any`
 
@@ -1553,7 +1778,7 @@ Overrides default package deletion behavior. By default, the package specified w
 
 Default value: ``undef``
 
-##### `port`
+##### <a name="port"></a>`port`
 
 Data type: `Optional[Integer]`
 
@@ -1561,7 +1786,7 @@ Port to use when connecting.
 
 Default value: ``undef``
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Any`
 
@@ -1569,7 +1794,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `postgresql::default('default_connect_settings')`
 
-##### `database_resource_name`
+##### <a name="database_resource_name"></a>`database_resource_name`
 
 Data type: `Any`
 
@@ -1577,27 +1802,42 @@ Specifies the resource name of the DB being managed. Defaults to the parameter $
 
 Default value: `$database`
 
-### `postgresql::server::grant`
+### <a name="postgresqlservergrant"></a>`postgresql::server::grant`
 
 Define for granting permissions to roles.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::grant` defined type.
+The following parameters are available in the `postgresql::server::grant` defined type:
 
-##### `role`
+* [`role`](#role)
+* [`db`](#db)
+* [`privilege`](#privilege)
+* [`object_type`](#object_type)
+* [`object_name`](#object_name)
+* [`psql_db`](#psql_db)
+* [`psql_user`](#psql_user)
+* [`port`](#port)
+* [`onlyif_exists`](#onlyif_exists)
+* [`connect_settings`](#connect_settings)
+* [`ensure`](#ensure)
+* [`group`](#group)
+* [`psql_path`](#psql_path)
+* [`object_arguments`](#object_arguments)
+
+##### <a name="role"></a>`role`
 
 Data type: `String`
 
 Specifies the role or user whom you are granting access to.
 
-##### `db`
+##### <a name="db"></a>`db`
 
 Data type: `String`
 
 Specifies the database to which you are granting access.
 
-##### `privilege`
+##### <a name="privilege"></a>`privilege`
 
 Data type: `String`
 
@@ -1605,7 +1845,7 @@ Specifies the privilege to grant. Valid options: 'ALL', 'ALL PRIVILEGES' or 'obj
 
 Default value: `''`
 
-##### `object_type`
+##### <a name="object_type"></a>`object_type`
 
 Data type: `Pattern[#/(?i:^COLUMN$)/,
     /(?i:^ALL SEQUENCES IN SCHEMA$)/,
@@ -1627,7 +1867,7 @@ Specifies the type of object to which you are granting privileges. Valid options
 
 Default value: `'database'`
 
-##### `object_name`
+##### <a name="object_name"></a>`object_name`
 
 Data type: `Optional[Variant[
             Array[String,2,2],
@@ -1638,7 +1878,7 @@ Specifies name of object_type to which to grant access, can be either a string o
 
 Default value: ``undef``
 
-##### `psql_db`
+##### <a name="psql_db"></a>`psql_db`
 
 Data type: `String`
 
@@ -1646,7 +1886,7 @@ Specifies the database to execute the grant against. This should not ordinarily 
 
 Default value: `$postgresql::server::default_database`
 
-##### `psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `String`
 
@@ -1654,7 +1894,7 @@ Sets the OS user to run psql.
 
 Default value: `$postgresql::server::user`
 
-##### `port`
+##### <a name="port"></a>`port`
 
 Data type: `Integer`
 
@@ -1662,7 +1902,7 @@ Port to use when connecting.
 
 Default value: `$postgresql::server::port`
 
-##### `onlyif_exists`
+##### <a name="onlyif_exists"></a>`onlyif_exists`
 
 Data type: `Boolean`
 
@@ -1670,7 +1910,7 @@ Create grant only if doesn't exist
 
 Default value: ``false``
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -1678,7 +1918,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-##### `ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present',
         'absent'
@@ -1688,7 +1928,7 @@ Specifies whether to grant or revoke the privilege. Default is to grant the priv
 
 Default value: `'present'`
 
-##### `group`
+##### <a name="group"></a>`group`
 
 Data type: `String`
 
@@ -1696,7 +1936,7 @@ Sets the OS group to run psql
 
 Default value: `$postgresql::server::group`
 
-##### `psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `String`
 
@@ -1704,7 +1944,7 @@ Sets the path to psql command
 
 Default value: `$postgresql::server::psql_path`
 
-##### `object_arguments`
+##### <a name="object_arguments"></a>`object_arguments`
 
 Data type: `Array[String[1],0]`
 
@@ -1712,21 +1952,29 @@ Data type: `Array[String[1],0]`
 
 Default value: `[]`
 
-### `postgresql::server::grant_role`
+### <a name="postgresqlservergrant_role"></a>`postgresql::server::grant_role`
 
 Define for granting membership to a role.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::grant_role` defined type.
+The following parameters are available in the `postgresql::server::grant_role` defined type:
 
-##### `group`
+* [`group`](#group)
+* [`role`](#role)
+* [`ensure`](#ensure)
+* [`psql_db`](#psql_db)
+* [`psql_user`](#psql_user)
+* [`port`](#port)
+* [`connect_settings`](#connect_settings)
+
+##### <a name="group"></a>`group`
 
 Data type: `String[1]`
 
 Specifies the group role to which you are assigning a role.
 
-##### `role`
+##### <a name="role"></a>`role`
 
 Data type: `String[1]`
 
@@ -1734,7 +1982,7 @@ Specifies the role you want to assign to a group. If left blank, uses the name o
 
 Default value: `$name`
 
-##### `ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -1742,7 +1990,7 @@ Specifies whether to grant or revoke the membership. Valid options: 'present' or
 
 Default value: `'present'`
 
-##### `psql_db`
+##### <a name="psql_db"></a>`psql_db`
 
 Data type: `Any`
 
@@ -1750,7 +1998,7 @@ Specifies the database to execute the grant against. This should not ordinarily 
 
 Default value: `$postgresql::server::default_database`
 
-##### `psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `Any`
 
@@ -1758,7 +2006,7 @@ Sets the OS user to run psql.
 
 Default value: `$postgresql::server::user`
 
-##### `port`
+##### <a name="port"></a>`port`
 
 Data type: `Any`
 
@@ -1766,7 +2014,7 @@ Port to use when connecting.
 
 Default value: `$postgresql::server::port`
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Any`
 
@@ -1774,40 +2022,51 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-### `postgresql::server::pg_hba_rule`
+### <a name="postgresqlserverpg_hba_rule"></a>`postgresql::server::pg_hba_rule`
 
 This resource manages an individual rule that applies to the file defined in target.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::pg_hba_rule` defined type.
+The following parameters are available in the `postgresql::server::pg_hba_rule` defined type:
 
-##### `type`
+* [`type`](#type)
+* [`database`](#database)
+* [`user`](#user)
+* [`auth_method`](#auth_method)
+* [`address`](#address)
+* [`description`](#description)
+* [`auth_option`](#auth_option)
+* [`order`](#order)
+* [`target`](#target)
+* [`postgresql_version`](#postgresql_version)
+
+##### <a name="type"></a>`type`
 
 Data type: `Enum['local', 'host', 'hostssl', 'hostnossl', 'hostgssenc']`
 
 Sets the type of rule.
 Enum['local','host','hostssl','hostnossl','hostgssenc'].
 
-##### `database`
+##### <a name="database"></a>`database`
 
 Data type: `String`
 
 Sets a comma-separated list of databases that this rule matches.
 
-##### `user`
+##### <a name="user"></a>`user`
 
 Data type: `String`
 
 Sets a comma-separated list of users that this rule matches.
 
-##### `auth_method`
+##### <a name="auth_method"></a>`auth_method`
 
 Data type: `String`
 
 Provides the method that is used for authentication for the connection that this rule matches. Described further in the PostgreSQL pg_hba.conf documentation.
 
-##### `address`
+##### <a name="address"></a>`address`
 
 Data type: `Optional[String]`
 
@@ -1815,7 +2074,7 @@ Sets a CIDR based address for this rule matching when the type is not 'local'.
 
 Default value: ``undef``
 
-##### `description`
+##### <a name="description"></a>`description`
 
 Data type: `String`
 
@@ -1823,7 +2082,7 @@ Defines a longer description for this rule, if required. This description is pla
 
 Default value: `'none'`
 
-##### `auth_option`
+##### <a name="auth_option"></a>`auth_option`
 
 Data type: `Optional[String]`
 
@@ -1831,7 +2090,7 @@ For certain auth_method settings there are extra options that can be passed. Con
 
 Default value: ``undef``
 
-##### `order`
+##### <a name="order"></a>`order`
 
 Data type: `Variant[String, Integer]`
 
@@ -1839,7 +2098,7 @@ Sets an order for placing the rule in pg_hba.conf. This can be either a string o
 
 Default value: `150`
 
-##### `target`
+##### <a name="target"></a>`target`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -1847,7 +2106,7 @@ Provides the target for the rule, and is generally an internal only property. Us
 
 Default value: `$postgresql::server::pg_hba_conf_path`
 
-##### `postgresql_version`
+##### <a name="postgresql_version"></a>`postgresql_version`
 
 Data type: `String`
 
@@ -1855,33 +2114,40 @@ Manages pg_hba.conf without managing the entire PostgreSQL instance.
 
 Default value: `$postgresql::server::_version`
 
-### `postgresql::server::pg_ident_rule`
+### <a name="postgresqlserverpg_ident_rule"></a>`postgresql::server::pg_ident_rule`
 
 This resource manages an individual rule that applies to the file defined in target.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::pg_ident_rule` defined type.
+The following parameters are available in the `postgresql::server::pg_ident_rule` defined type:
 
-##### `map_name`
+* [`map_name`](#map_name)
+* [`system_username`](#system_username)
+* [`database_username`](#database_username)
+* [`description`](#description)
+* [`order`](#order)
+* [`target`](#target)
+
+##### <a name="map_name"></a>`map_name`
 
 Data type: `Any`
 
 Sets the name of the user map that is used to refer to this mapping in pg_hba.conf.
 
-##### `system_username`
+##### <a name="system_username"></a>`system_username`
 
 Data type: `Any`
 
 Specifies the operating system user name (the user name used to connect to the database).
 
-##### `database_username`
+##### <a name="database_username"></a>`database_username`
 
 Data type: `Any`
 
 Specifies the user name of the database user. The system_username is mapped to this user name.
 
-##### `description`
+##### <a name="description"></a>`description`
 
 Data type: `Any`
 
@@ -1889,7 +2155,7 @@ Sets a longer description for this rule if required. This description is placed 
 
 Default value: `'none'`
 
-##### `order`
+##### <a name="order"></a>`order`
 
 Data type: `Any`
 
@@ -1897,7 +2163,7 @@ Defines an order for placing the mapping in pg_ident.conf. Default value: 150.
 
 Default value: `'150'`
 
-##### `target`
+##### <a name="target"></a>`target`
 
 Data type: `Any`
 
@@ -1905,7 +2171,7 @@ Provides the target for the rule and is generally an internal only property. Use
 
 Default value: `$postgresql::server::pg_ident_conf_path`
 
-### `postgresql::server::reassign_owned_by`
+### <a name="postgresqlserverreassign_owned_by"></a>`postgresql::server::reassign_owned_by`
 
 Define for reassigning the ownership of objects within a database.
 
@@ -1913,27 +2179,34 @@ Define for reassigning the ownership of objects within a database.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::reassign_owned_by` defined type.
+The following parameters are available in the `postgresql::server::reassign_owned_by` defined type:
 
-##### `old_role`
+* [`old_role`](#old_role)
+* [`new_role`](#new_role)
+* [`db`](#db)
+* [`psql_user`](#psql_user)
+* [`port`](#port)
+* [`connect_settings`](#connect_settings)
+
+##### <a name="old_role"></a>`old_role`
 
 Data type: `String`
 
 Specifies the role or user who is the current owner of the objects in the specified db
 
-##### `new_role`
+##### <a name="new_role"></a>`new_role`
 
 Data type: `String`
 
 Specifies the role or user who will be the new owner of these objects
 
-##### `db`
+##### <a name="db"></a>`db`
 
 Data type: `String`
 
 Specifies the database to which the 'REASSIGN OWNED' will be applied
 
-##### `psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `String`
 
@@ -1941,7 +2214,7 @@ Specifies the OS user for running psql.
 
 Default value: `$postgresql::server::user`
 
-##### `port`
+##### <a name="port"></a>`port`
 
 Data type: `Integer`
 
@@ -1949,7 +2222,7 @@ Port to use when connecting.
 
 Default value: `$postgresql::server::port`
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -1957,7 +2230,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-### `postgresql::server::recovery`
+### <a name="postgresqlserverrecovery"></a>`postgresql::server::recovery`
 
 This resource manages the parameters that applies to the recovery.conf template.
 
@@ -1968,9 +2241,26 @@ Only the specified parameters are recognized in the template. The recovery.conf 
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::recovery` defined type.
+The following parameters are available in the `postgresql::server::recovery` defined type:
 
-##### `restore_command`
+* [`restore_command`](#restore_command)
+* [`archive_cleanup_command`](#archive_cleanup_command)
+* [`recovery_end_command`](#recovery_end_command)
+* [`recovery_target_name`](#recovery_target_name)
+* [`recovery_target_time`](#recovery_target_time)
+* [`recovery_target_xid`](#recovery_target_xid)
+* [`recovery_target_inclusive`](#recovery_target_inclusive)
+* [`recovery_target`](#recovery_target)
+* [`recovery_target_timeline`](#recovery_target_timeline)
+* [`pause_at_recovery_target`](#pause_at_recovery_target)
+* [`standby_mode`](#standby_mode)
+* [`primary_conninfo`](#primary_conninfo)
+* [`primary_slot_name`](#primary_slot_name)
+* [`trigger_file`](#trigger_file)
+* [`recovery_min_apply_delay`](#recovery_min_apply_delay)
+* [`target`](#target)
+
+##### <a name="restore_command"></a>`restore_command`
 
 Data type: `Any`
 
@@ -1978,7 +2268,7 @@ The shell command to execute to retrieve an archived segment of the WAL file ser
 
 Default value: ``undef``
 
-##### `archive_cleanup_command`
+##### <a name="archive_cleanup_command"></a>`archive_cleanup_command`
 
 Data type: `Any`
 
@@ -1986,7 +2276,7 @@ This optional parameter specifies a shell command that will be executed at every
 
 Default value: ``undef``
 
-##### `recovery_end_command`
+##### <a name="recovery_end_command"></a>`recovery_end_command`
 
 Data type: `Any`
 
@@ -1994,7 +2284,7 @@ This parameter specifies a shell command that will be executed once only at the 
 
 Default value: ``undef``
 
-##### `recovery_target_name`
+##### <a name="recovery_target_name"></a>`recovery_target_name`
 
 Data type: `Any`
 
@@ -2002,7 +2292,7 @@ This parameter specifies the named restore point (created with pg_create_restore
 
 Default value: ``undef``
 
-##### `recovery_target_time`
+##### <a name="recovery_target_time"></a>`recovery_target_time`
 
 Data type: `Any`
 
@@ -2010,7 +2300,7 @@ This parameter specifies the time stamp up to which recovery will proceed.
 
 Default value: ``undef``
 
-##### `recovery_target_xid`
+##### <a name="recovery_target_xid"></a>`recovery_target_xid`
 
 Data type: `Any`
 
@@ -2018,7 +2308,7 @@ This parameter specifies the transaction ID up to which recovery will proceed.
 
 Default value: ``undef``
 
-##### `recovery_target_inclusive`
+##### <a name="recovery_target_inclusive"></a>`recovery_target_inclusive`
 
 Data type: `Any`
 
@@ -2026,7 +2316,7 @@ Specifies whether to stop just after the specified recovery target (true), or ju
 
 Default value: ``undef``
 
-##### `recovery_target`
+##### <a name="recovery_target"></a>`recovery_target`
 
 Data type: `Any`
 
@@ -2034,7 +2324,7 @@ This parameter specifies that recovery should end as soon as a consistent state 
 
 Default value: ``undef``
 
-##### `recovery_target_timeline`
+##### <a name="recovery_target_timeline"></a>`recovery_target_timeline`
 
 Data type: `Any`
 
@@ -2042,7 +2332,7 @@ Specifies recovering into a particular timeline.
 
 Default value: ``undef``
 
-##### `pause_at_recovery_target`
+##### <a name="pause_at_recovery_target"></a>`pause_at_recovery_target`
 
 Data type: `Any`
 
@@ -2050,7 +2340,7 @@ Specifies whether recovery should pause when the recovery target is reached.
 
 Default value: ``undef``
 
-##### `standby_mode`
+##### <a name="standby_mode"></a>`standby_mode`
 
 Data type: `Any`
 
@@ -2058,7 +2348,7 @@ Specifies whether to start the PostgreSQL server as a standby.
 
 Default value: ``undef``
 
-##### `primary_conninfo`
+##### <a name="primary_conninfo"></a>`primary_conninfo`
 
 Data type: `Any`
 
@@ -2066,7 +2356,7 @@ Specifies a connection string to be used for the standby server to connect with 
 
 Default value: ``undef``
 
-##### `primary_slot_name`
+##### <a name="primary_slot_name"></a>`primary_slot_name`
 
 Data type: `Any`
 
@@ -2074,7 +2364,7 @@ Optionally specifies an existing replication slot to be used when connecting to 
 
 Default value: ``undef``
 
-##### `trigger_file`
+##### <a name="trigger_file"></a>`trigger_file`
 
 Data type: `Any`
 
@@ -2082,7 +2372,7 @@ Specifies a trigger file whose presence ends recovery in the standby.
 
 Default value: ``undef``
 
-##### `recovery_min_apply_delay`
+##### <a name="recovery_min_apply_delay"></a>`recovery_min_apply_delay`
 
 Data type: `Any`
 
@@ -2090,7 +2380,7 @@ This parameter allows you to delay recovery by a fixed period of time, measured 
 
 Default value: ``undef``
 
-##### `target`
+##### <a name="target"></a>`target`
 
 Data type: `Any`
 
@@ -2098,15 +2388,34 @@ Provides the target for the rule, and is generally an internal only property. Us
 
 Default value: `$postgresql::server::recovery_conf_path`
 
-### `postgresql::server::role`
+### <a name="postgresqlserverrole"></a>`postgresql::server::role`
 
 Define for creating a database role.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::role` defined type.
+The following parameters are available in the `postgresql::server::role` defined type:
 
-##### `update_password`
+* [`update_password`](#update_password)
+* [`password_hash`](#password_hash)
+* [`createdb`](#createdb)
+* [`createrole`](#createrole)
+* [`db`](#db)
+* [`port`](#port)
+* [`login`](#login)
+* [`inherit`](#inherit)
+* [`superuser`](#superuser)
+* [`replication`](#replication)
+* [`connection_limit`](#connection_limit)
+* [`username`](#username)
+* [`connect_settings`](#connect_settings)
+* [`ensure`](#ensure)
+* [`psql_user`](#psql_user)
+* [`psql_group`](#psql_group)
+* [`psql_path`](#psql_path)
+* [`module_workdir`](#module_workdir)
+
+##### <a name="update_password"></a>`update_password`
 
 Data type: `Any`
 
@@ -2114,7 +2423,7 @@ If set to true, updates the password on changes. Set this to false to not modify
 
 Default value: ``true``
 
-##### `password_hash`
+##### <a name="password_hash"></a>`password_hash`
 
 Data type: `Any`
 
@@ -2122,7 +2431,7 @@ Sets the hash to use during password creation.
 
 Default value: ``false``
 
-##### `createdb`
+##### <a name="createdb"></a>`createdb`
 
 Data type: `Any`
 
@@ -2130,7 +2439,7 @@ Specifies whether to grant the ability to create new databases with this role.
 
 Default value: ``false``
 
-##### `createrole`
+##### <a name="createrole"></a>`createrole`
 
 Data type: `Any`
 
@@ -2138,7 +2447,7 @@ Specifies whether to grant the ability to create new roles with this role.
 
 Default value: ``false``
 
-##### `db`
+##### <a name="db"></a>`db`
 
 Data type: `Any`
 
@@ -2146,7 +2455,7 @@ Database used to connect to.
 
 Default value: `$postgresql::server::default_database`
 
-##### `port`
+##### <a name="port"></a>`port`
 
 Data type: `Any`
 
@@ -2154,7 +2463,7 @@ Port to use when connecting.
 
 Default value: ``undef``
 
-##### `login`
+##### <a name="login"></a>`login`
 
 Data type: `Any`
 
@@ -2162,7 +2471,7 @@ Specifies whether to grant login capability for the new role.
 
 Default value: ``true``
 
-##### `inherit`
+##### <a name="inherit"></a>`inherit`
 
 Data type: `Any`
 
@@ -2170,7 +2479,7 @@ Specifies whether to grant inherit capability for the new role.
 
 Default value: ``true``
 
-##### `superuser`
+##### <a name="superuser"></a>`superuser`
 
 Data type: `Any`
 
@@ -2178,7 +2487,7 @@ Specifies whether to grant super user capability for the new role.
 
 Default value: ``false``
 
-##### `replication`
+##### <a name="replication"></a>`replication`
 
 Data type: `Any`
 
@@ -2186,7 +2495,7 @@ Provides provides replication capabilities for this role if set to true.
 
 Default value: ``false``
 
-##### `connection_limit`
+##### <a name="connection_limit"></a>`connection_limit`
 
 Data type: `Any`
 
@@ -2194,7 +2503,7 @@ Specifies how many concurrent connections the role can make. Default value: '-1'
 
 Default value: `'-1'`
 
-##### `username`
+##### <a name="username"></a>`username`
 
 Data type: `Any`
 
@@ -2202,7 +2511,7 @@ Defines the username of the role to create.
 
 Default value: `$title`
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Any`
 
@@ -2210,7 +2519,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-##### `ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -2218,7 +2527,7 @@ Specify whether to create or drop the role. Specifying 'present' creates the rol
 
 Default value: `'present'`
 
-##### `psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `Any`
 
@@ -2226,7 +2535,7 @@ Sets the OS user to run psql
 
 Default value: `$postgresql::server::user`
 
-##### `psql_group`
+##### <a name="psql_group"></a>`psql_group`
 
 Data type: `Any`
 
@@ -2234,7 +2543,7 @@ Sets the OS group to run psql
 
 Default value: `$postgresql::server::group`
 
-##### `psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Any`
 
@@ -2242,7 +2551,7 @@ Sets path to psql command
 
 Default value: `$postgresql::server::psql_path`
 
-##### `module_workdir`
+##### <a name="module_workdir"></a>`module_workdir`
 
 Data type: `Any`
 
@@ -2250,7 +2559,7 @@ Specifies working directory under which the psql command should be executed. May
 
 Default value: `$postgresql::server::module_workdir`
 
-### `postgresql::server::schema`
+### <a name="postgresqlserverschema"></a>`postgresql::server::schema`
 
 Create a new schema.
 
@@ -2268,9 +2577,14 @@ postgresql::server::schema {'private':
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::schema` defined type.
+The following parameters are available in the `postgresql::server::schema` defined type:
 
-##### `db`
+* [`db`](#db)
+* [`owner`](#owner)
+* [`schema`](#schema)
+* [`connect_settings`](#connect_settings)
+
+##### <a name="db"></a>`db`
 
 Data type: `Any`
 
@@ -2278,7 +2592,7 @@ Required. Sets the name of the database in which to create this schema.
 
 Default value: `$postgresql::server::default_database`
 
-##### `owner`
+##### <a name="owner"></a>`owner`
 
 Data type: `Any`
 
@@ -2286,7 +2600,7 @@ Sets the default owner of the schema.
 
 Default value: ``undef``
 
-##### `schema`
+##### <a name="schema"></a>`schema`
 
 Data type: `Any`
 
@@ -2294,7 +2608,7 @@ Sets the name of the schema.
 
 Default value: `$title`
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Any`
 
@@ -2302,39 +2616,50 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-### `postgresql::server::table_grant`
+### <a name="postgresqlservertable_grant"></a>`postgresql::server::table_grant`
 
 This resource wraps the grant resource to manage table grants specifically.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::table_grant` defined type.
+The following parameters are available in the `postgresql::server::table_grant` defined type:
 
-##### `privilege`
+* [`privilege`](#privilege)
+* [`table`](#table)
+* [`db`](#db)
+* [`role`](#role)
+* [`ensure`](#ensure)
+* [`port`](#port)
+* [`psql_db`](#psql_db)
+* [`psql_user`](#psql_user)
+* [`connect_settings`](#connect_settings)
+* [`onlyif_exists`](#onlyif_exists)
+
+##### <a name="privilege"></a>`privilege`
 
 Data type: `Any`
 
 Specifies comma-separated list of privileges to grant. Valid options: 'ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER'.
 
-##### `table`
+##### <a name="table"></a>`table`
 
 Data type: `Any`
 
 Specifies the table to which you are granting access.
 
-##### `db`
+##### <a name="db"></a>`db`
 
 Data type: `Any`
 
 Specifies which database the table is in.
 
-##### `role`
+##### <a name="role"></a>`role`
 
 Data type: `Any`
 
 Specifies the role or user to whom you are granting access.
 
-##### `ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Any`
 
@@ -2342,7 +2667,7 @@ Specifies whether to grant or revoke the privilege. Default is to grant the priv
 
 Default value: ``undef``
 
-##### `port`
+##### <a name="port"></a>`port`
 
 Data type: `Any`
 
@@ -2350,7 +2675,7 @@ Port to use when connecting.
 
 Default value: ``undef``
 
-##### `psql_db`
+##### <a name="psql_db"></a>`psql_db`
 
 Data type: `Any`
 
@@ -2358,7 +2683,7 @@ Specifies the database to execute the grant against. This should not ordinarily 
 
 Default value: ``undef``
 
-##### `psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `Any`
 
@@ -2366,7 +2691,7 @@ Specifies the OS user for running psql.
 
 Default value: ``undef``
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Any`
 
@@ -2374,7 +2699,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: ``undef``
 
-##### `onlyif_exists`
+##### <a name="onlyif_exists"></a>`onlyif_exists`
 
 Data type: `Any`
 
@@ -2382,21 +2707,27 @@ Create grant only if it doesn't exist.
 
 Default value: ``false``
 
-### `postgresql::server::tablespace`
+### <a name="postgresqlservertablespace"></a>`postgresql::server::tablespace`
 
 This module creates tablespace.
 
 #### Parameters
 
-The following parameters are available in the `postgresql::server::tablespace` defined type.
+The following parameters are available in the `postgresql::server::tablespace` defined type:
 
-##### `location`
+* [`location`](#location)
+* [`manage_location`](#manage_location)
+* [`owner`](#owner)
+* [`spcname`](#spcname)
+* [`connect_settings`](#connect_settings)
+
+##### <a name="location"></a>`location`
 
 Data type: `Any`
 
 Specifies the path to locate this tablespace.
 
-##### `manage_location`
+##### <a name="manage_location"></a>`manage_location`
 
 Data type: `Any`
 
@@ -2404,7 +2735,7 @@ Set to false if you have file{ $location: } already defined
 
 Default value: ``true``
 
-##### `owner`
+##### <a name="owner"></a>`owner`
 
 Data type: `Any`
 
@@ -2412,7 +2743,7 @@ Specifies the default owner of the tablespace.
 
 Default value: ``undef``
 
-##### `spcname`
+##### <a name="spcname"></a>`spcname`
 
 Data type: `Any`
 
@@ -2420,7 +2751,7 @@ Specifies the name of the tablespace.
 
 Default value: `$title`
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Any`
 
@@ -2428,7 +2759,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-### `postgresql::validate_db_connection`
+### <a name="postgresqlvalidate_db_connection"></a>`postgresql::validate_db_connection`
 
 This validated if the postgres connection can be established
 between the node on which this resource is run and a specified postgres
@@ -2436,9 +2767,20 @@ instance (host/port/user/password/database name).
 
 #### Parameters
 
-The following parameters are available in the `postgresql::validate_db_connection` defined type.
+The following parameters are available in the `postgresql::validate_db_connection` defined type:
 
-##### `database_host`
+* [`database_host`](#database_host)
+* [`database_name`](#database_name)
+* [`database_password`](#database_password)
+* [`database_username`](#database_username)
+* [`database_port`](#database_port)
+* [`connect_settings`](#connect_settings)
+* [`run_as`](#run_as)
+* [`sleep`](#sleep)
+* [`tries`](#tries)
+* [`create_db_first`](#create_db_first)
+
+##### <a name="database_host"></a>`database_host`
 
 Data type: `Any`
 
@@ -2446,7 +2788,7 @@ Database host address
 
 Default value: ``undef``
 
-##### `database_name`
+##### <a name="database_name"></a>`database_name`
 
 Data type: `Any`
 
@@ -2454,7 +2796,7 @@ Specifies the name of the database you wish to test.
 
 Default value: ``undef``
 
-##### `database_password`
+##### <a name="database_password"></a>`database_password`
 
 Data type: `Any`
 
@@ -2462,7 +2804,7 @@ Specifies the password to connect with.
 
 Default value: ``undef``
 
-##### `database_username`
+##### <a name="database_username"></a>`database_username`
 
 Data type: `Any`
 
@@ -2470,7 +2812,7 @@ Specifies the username to connect with.
 
 Default value: ``undef``
 
-##### `database_port`
+##### <a name="database_port"></a>`database_port`
 
 Data type: `Any`
 
@@ -2478,7 +2820,7 @@ Defines the port to use when connecting.
 
 Default value: ``undef``
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Any`
 
@@ -2486,7 +2828,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: ``undef``
 
-##### `run_as`
+##### <a name="run_as"></a>`run_as`
 
 Data type: `Any`
 
@@ -2494,7 +2836,7 @@ Specifies the user to run the psql command as.
 
 Default value: ``undef``
 
-##### `sleep`
+##### <a name="sleep"></a>`sleep`
 
 Data type: `Any`
 
@@ -2502,7 +2844,7 @@ Sets the number of seconds to sleep for before trying again after a failure.
 
 Default value: `2`
 
-##### `tries`
+##### <a name="tries"></a>`tries`
 
 Data type: `Any`
 
@@ -2510,7 +2852,7 @@ Sets the number of attempts after failure before giving up and failing the resou
 
 Default value: `10`
 
-##### `create_db_first`
+##### <a name="create_db_first"></a>`create_db_first`
 
 Data type: `Any`
 
@@ -2520,7 +2862,7 @@ Default value: ``true``
 
 ## Resource types
 
-### `postgresql_conf`
+### <a name="postgresql_conf"></a>`postgresql_conf`
 
 This type allows puppet to manage postgresql.conf parameters.
 
@@ -2548,7 +2890,10 @@ The value to set for this parameter.
 
 The following parameters are available in the `postgresql_conf` type.
 
-##### `name`
+* [`name`](#name)
+* [`provider`](#provider)
+
+##### <a name="name"></a>`name`
 
 Valid values: `%r{^[\w\.]+$}`
 
@@ -2556,12 +2901,12 @@ namevar
 
 The postgresql parameter name to manage.
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `postgresql_conf` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-### `postgresql_conn_validator`
+### <a name="postgresql_conn_validator"></a>`postgresql_conn_validator`
 
 Verify that a connection can be successfully established between a node
 and the PostgreSQL server.  Its primary use is as a precondition to
@@ -2585,68 +2930,82 @@ Default value: `present`
 
 The following parameters are available in the `postgresql_conn_validator` type.
 
-##### `command`
+* [`command`](#command)
+* [`connect_settings`](#connect_settings)
+* [`db_name`](#db_name)
+* [`db_password`](#db_password)
+* [`db_username`](#db_username)
+* [`host`](#host)
+* [`name`](#name)
+* [`port`](#port)
+* [`provider`](#provider)
+* [`psql_path`](#psql_path)
+* [`run_as`](#run_as)
+* [`sleep`](#sleep)
+* [`tries`](#tries)
+
+##### <a name="command"></a>`command`
 
 Command to run against target database.
 
 Default value: `SELECT 1`
 
-##### `connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Hash of environment variables for connection to a db.
 
-##### `db_name`
+##### <a name="db_name"></a>`db_name`
 
 The name of the database you are trying to validate a connection with.
 
-##### `db_password`
+##### <a name="db_password"></a>`db_password`
 
 The password required to access the target PostgreSQL database.
 
-##### `db_username`
+##### <a name="db_username"></a>`db_username`
 
 A user that has access to the target PostgreSQL database.
 
-##### `host`
+##### <a name="host"></a>`host`
 
 The DNS name or IP address of the server where PostgreSQL should be running.
 
-##### `name`
+##### <a name="name"></a>`name`
 
 namevar
 
 An arbitrary name used as the identity of the resource.
 
-##### `port`
+##### <a name="port"></a>`port`
 
 The port that the PostgreSQL server should be listening on.
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `postgresql_conn_validator` resource. You will seldom need to specify this ---
 Puppet will usually discover the appropriate provider for your platform.
 
-##### `psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Path to the psql command.
 
-##### `run_as`
+##### <a name="run_as"></a>`run_as`
 
 System user that will run the psql command.
 
-##### `sleep`
+##### <a name="sleep"></a>`sleep`
 
 The length of sleep time between connection tries.
 
 Default value: `2`
 
-##### `tries`
+##### <a name="tries"></a>`tries`
 
 The number of tries to validate the connection to the target PostgreSQL database.
 
 Default value: `10`
 
-### `postgresql_psql`
+### <a name="postgresql_psql"></a>`postgresql_psql`
 
 An arbitrary tag for your own reference; the name of the message.
 
@@ -2662,67 +3021,82 @@ The SQL command to execute via psql.
 
 The following parameters are available in the `postgresql_psql` type.
 
-##### `connect_settings`
+* [`connect_settings`](#connect_settings)
+* [`cwd`](#cwd)
+* [`db`](#db)
+* [`environment`](#environment)
+* [`name`](#name)
+* [`onlyif`](#onlyif)
+* [`port`](#port)
+* [`provider`](#provider)
+* [`psql_group`](#psql_group)
+* [`psql_path`](#psql_path)
+* [`psql_user`](#psql_user)
+* [`refreshonly`](#refreshonly)
+* [`search_path`](#search_path)
+* [`unless`](#unless)
+
+##### <a name="connect_settings"></a>`connect_settings`
 
 Connection settings that will be used when connecting to postgres
 
-##### `cwd`
+##### <a name="cwd"></a>`cwd`
 
 The working directory under which the psql command should be executed.
 
 Default value: `/tmp`
 
-##### `db`
+##### <a name="db"></a>`db`
 
 The name of the database to execute the SQL command against, this overrides any PGDATABASE value in connect_settings
 
-##### `environment`
+##### <a name="environment"></a>`environment`
 
 Any additional environment variables you want to set for a
 SQL command. Multiple environment variables should be
 specified as an array.
 
-##### `name`
+##### <a name="name"></a>`name`
 
 namevar
 
 An arbitrary tag for your own reference; the name of the message.
 
-##### `onlyif`
+##### <a name="onlyif"></a>`onlyif`
 
 An optional SQL command to execute prior to the main :command;
 this is generally intended to be used for idempotency, to check
 for the existence of an object in the database to determine whether
 or not the main SQL command needs to be executed at all.
 
-##### `port`
+##### <a name="port"></a>`port`
 
 The port of the database server to execute the SQL command against, this overrides any PGPORT value in connect_settings.
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `postgresql_psql` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### `psql_group`
+##### <a name="psql_group"></a>`psql_group`
 
 The system user group account under which the psql command should be executed.
 
 Default value: `postgres`
 
-##### `psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 The path to psql executable.
 
 Default value: `psql`
 
-##### `psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 The system user account under which the psql command should be executed.
 
 Default value: `postgres`
 
-##### `refreshonly`
+##### <a name="refreshonly"></a>`refreshonly`
 
 Valid values: ``true``, ``false``
 
@@ -2730,18 +3104,18 @@ If 'true', then the SQL will only be executed via a notify/subscribe event.
 
 Default value: ``false``
 
-##### `search_path`
+##### <a name="search_path"></a>`search_path`
 
 The schema search path to use when executing the SQL command
 
-##### `unless`
+##### <a name="unless"></a>`unless`
 
 An optional SQL command to execute prior to the main :command;
 this is generally intended to be used for idempotency, to check
 for the existence of an object in the database to determine whether
 or not the main SQL command needs to be executed at all.'
 
-### `postgresql_replication_slot`
+### <a name="postgresql_replication_slot"></a>`postgresql_replication_slot`
 
 This type allows to create and destroy replication slots
 to register warm standby replication on a Postgresql
@@ -2763,7 +3137,10 @@ Default value: `present`
 
 The following parameters are available in the `postgresql_replication_slot` type.
 
-##### `name`
+* [`name`](#name)
+* [`provider`](#provider)
+
+##### <a name="name"></a>`name`
 
 Valid values: `%r{^[a-z0-9_]+$}`
 
@@ -2771,14 +3148,14 @@ namevar
 
 The name of the slot to create. Must be a valid replication slot name.
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `postgresql_replication_slot` resource. You will seldom need to specify this ---
 Puppet will usually discover the appropriate provider for your platform.
 
 ## Functions
 
-### `postgresql::default`
+### <a name="postgresqldefault"></a>`postgresql::default`
 
 Type: Puppet Language
 
@@ -2812,7 +3189,7 @@ Data type: `String`
 
 
 
-### `postgresql::postgresql_escape`
+### <a name="postgresqlpostgresql_escape"></a>`postgresql::postgresql_escape`
 
 Type: Ruby 4.x API
 
@@ -2830,7 +3207,7 @@ Data type: `String[1]`
 
 The unescaped string you want to escape using `dollar quoting`
 
-### `postgresql::postgresql_password`
+### <a name="postgresqlpostgresql_password"></a>`postgresql::postgresql_password`
 
 Type: Ruby 4.x API
 
@@ -2854,7 +3231,7 @@ Data type: `Variant[String[1],Integer]`
 
 The clear text `password`
 
-### `postgresql_escape`
+### <a name="postgresql_escape"></a>`postgresql_escape`
 
 Type: Ruby 4.x API
 
@@ -2872,7 +3249,7 @@ Data type: `Any`
 
 
 
-### `postgresql_password`
+### <a name="postgresql_password"></a>`postgresql_password`
 
 Type: Ruby 4.x API
 
@@ -2892,7 +3269,7 @@ Data type: `Any`
 
 ## Tasks
 
-### `sql`
+### <a name="sql"></a>`sql`
 
 Allows you to execute arbitary SQL
 
