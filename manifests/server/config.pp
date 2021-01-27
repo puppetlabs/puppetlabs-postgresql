@@ -229,6 +229,7 @@ class postgresql::server::config {
         command     => 'systemctl daemon-reload',
         refreshonly => true,
         path        => '/bin:/usr/bin:/usr/local/bin',
+        before      => Class['postgresql::server::service'],
       }
       $systemd_notify = [Exec['restart-systemd'], Class['postgresql::server::service']]
     }
