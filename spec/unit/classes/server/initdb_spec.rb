@@ -13,7 +13,7 @@ describe 'postgresql::server::initdb', type: :class do
         os: {
           family: 'RedHat',
           name: 'CentOS',
-          release: { 'full' => '6.0' },
+          release: { 'full' => '6.0', 'major' => '6' },
           selinux: { 'enabled' => true },
         },
         kernel: 'Linux',
@@ -53,7 +53,7 @@ describe 'postgresql::server::initdb', type: :class do
         os: {
           family: 'RedHat',
           name: 'Amazon',
-          release: { 'full' => '1.0' },
+          release: { 'full' => '1.0', 'major' => '1' },
           selinux: { 'enabled' => true },
         },
         kernel: 'Linux',
@@ -85,7 +85,7 @@ describe 'postgresql::server::initdb', type: :class do
         os: {
           family: 'RedHat',
           name: 'CentOS',
-          release: { 'full' => '6.0' },
+          release: { 'full' => '6.0', 'major' => '6' },
           selinux: { 'enabled' => true },
         },
         kernel: 'Linux',
@@ -116,7 +116,7 @@ describe 'postgresql::server::initdb', type: :class do
         os: {
           family: 'RedHat',
           name: 'CentOS',
-          release: { 'full' => '6.0' },
+          release: { 'full' => '6.0', 'major' => '6' },
           selinux: { 'enabled' => true },
         },
         kernel: 'Linux',
@@ -146,7 +146,7 @@ describe 'postgresql::server::initdb', type: :class do
         os: {
           family: 'RedHat',
           name: 'CentOS',
-          release: { 'full' => '6.0' },
+          release: { 'full' => '6.0', 'major' => '6' },
           selinux: { 'enabled' => true },
         },
         kernel: 'Linux',

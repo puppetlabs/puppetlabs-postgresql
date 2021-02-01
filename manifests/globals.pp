@@ -159,7 +159,7 @@ class postgresql::globals (
   # class.
   $default_version = $facts['os']['family'] ? {
     /^(RedHat|Linux)/ => $facts['os']['name'] ? {
-      'Fedora' => $facts['os']['release']['full'] ? {
+      'Fedora' => $facts['os']['release']['major'] ? {
         /^(32|33)$/    => '12',
         /^(31)$/       => '11.6',
         /^(30)$/       => '11.2',
@@ -174,24 +174,24 @@ class postgresql::globals (
         default        => undef,
       },
       'Amazon' => '9.2',
-      default => $facts['os']['release']['full'] ? {
-        /^8\./ => '10',
-        /^7\./ => '9.2',
-        /^6\./ => '8.4',
-        /^5\./ => '8.1',
+      default => $facts['os']['release']['major'] ? {
+        '8'     => '10',
+        '7'     => '9.2',
+        '6'     => '8.4',
+        '5'     => '8.1',
         default => undef,
       },
     },
     'Debian' => $facts['os']['name'] ? {
-      'Debian' => $facts['os']['release']['full'] ? {
-        /^(squeeze|6\.)/ => '8.4',
-        /^(wheezy|7\.)/  => '9.1',
-        /^(jessie|8\.)/  => '9.4',
-        /^(stretch|9\.)/ => '9.6',
-        /^(buster|10\.)/ => '11',
+      'Debian' => $facts['os']['release']['major'] ? {
+        '6'     => '8.4',
+        '7'     => '9.1',
+        '8'     => '9.4',
+        '9'     => '9.6',
+        '10'    => '11',
         default => undef,
       },
-      'Ubuntu' => $facts['os']['release']['full'] ? {
+      'Ubuntu' => $facts['os']['release']['major'] ? {
         /^(10.04|10.10|11.04)$/ => '8.4',
         /^(11.10|12.04|12.10|13.04|13.10)$/ => '9.1',
         /^(14.04)$/ => '9.3',
@@ -204,10 +204,7 @@ class postgresql::globals (
       },
       default => undef,
     },
-    'Archlinux' => $facts['os']['name'] ? {
-      /Archlinux/ => '9.2',
-      default => '9.2',
-    },
+    'Archlinux' => '9.2',
     'Gentoo' => '9.5',
     'FreeBSD' => '12',
     'OpenBSD' => $facts['os']['release']['full'] ? {

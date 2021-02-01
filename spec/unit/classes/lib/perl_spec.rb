@@ -9,7 +9,7 @@ describe 'postgresql::lib::perl', type: :class do
         os: {
           family: 'RedHat',
           name: 'RedHat',
-          release: { 'full' => '6.4' },
+          release: { 'full' => '6.4', 'major' => '6' },
         },
       }
     end
@@ -28,7 +28,7 @@ describe 'postgresql::lib::perl', type: :class do
         os: {
           family: 'Debian',
           name: 'Debian',
-          release: { 'full' => '8.0' },
+          release: { 'full' => '8.0', 'major' => '8' },
         },
       }
     end
