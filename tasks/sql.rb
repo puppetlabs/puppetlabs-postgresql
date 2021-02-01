@@ -6,7 +6,8 @@ require 'open3'
 require 'puppet'
 
 def get(sql, database, user, port, password, host)
-  env_hash = { 'PGPASSWORD' => password } unless password.nil?
+  env_hash = {}
+  env_hash['PGPASSWORD'] = password unless password.nil?
   cmd_string = "psql -c \"#{sql}\""
   cmd_string += " --dbname=#{database}" unless database.nil?
   cmd_string += " --username=#{user}" unless user.nil?
