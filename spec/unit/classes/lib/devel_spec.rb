@@ -8,7 +8,7 @@ describe 'postgresql::lib::devel', type: :class do
       os: {
         family: 'Debian',
         name: 'Debian',
-        release: { 'full' => '8.0' },
+        release: { 'full' => '8.0', 'major' => '8' },
       },
     }
   end
@@ -39,7 +39,7 @@ describe 'postgresql::lib::devel', type: :class do
         os: {
           family: 'RedHat',
           name: 'CentOS',
-          release: { 'full' => '6.3' },
+          release: { 'full' => '6.3', 'major' => '6' },
         },
       }
     end
@@ -53,7 +53,7 @@ describe 'postgresql::lib::devel', type: :class do
         os: {
           family: 'RedHat',
           name: 'RedHat',
-          release: { 'full' => '6.3' },
+          release: { 'full' => '6.3', 'major' => '6' },
         },
       }
     end

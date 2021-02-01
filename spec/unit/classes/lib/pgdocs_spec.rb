@@ -9,7 +9,7 @@ describe 'postgresql::lib::docs', type: :class do
         os: {
           family: 'RedHat',
           name: 'RedHat',
-          release: { 'full' => '6.4' },
+          release: { 'full' => '6.4', 'major' => '6' },
         },
       }
     end
