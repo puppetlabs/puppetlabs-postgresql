@@ -217,8 +217,9 @@ class postgresql::server::config {
   # Gentoo also supports drop-in files.
   if $facts['os']['family'] in ['RedHat', 'Gentoo'] and $facts['service_provider'] == 'systemd' {
     # While Puppet 6.1 and newer can do a daemon-reload if needed, systemd
-    # doesn't appear to report that correctly. This is probably because its
-    # unit file is actually removed.
+    # doesn't appear to report that correctly in all cases.
+    # One such case seems to be when an overriding unit file is removed from /etc
+    # and the original one from /lib *should* be used again.
     #
     # This can be removed when Puppet < 6.1 support is dropped *and* the file
     # old-systemd-override is removed.
