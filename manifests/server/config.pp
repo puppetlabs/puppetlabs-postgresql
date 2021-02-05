@@ -224,17 +224,17 @@ class postgresql::server::config {
       # - $datadir
       # - @extra_systemd_config
 
-    if (versioncmp($facts['puppetversion'], '6.1.0') < 0) {
-      exec { 'restart-systemd':
-        command     => 'systemctl daemon-reload',
-        refreshonly => true,
-        path        => '/bin:/usr/bin:/usr/local/bin',
-        before      => Class['postgresql::server::service'],
-      }
-      $systemd_notify = [Exec['restart-systemd'], Class['postgresql::server::service']]
-    }
-    else {
-      $systemd_notify = Class['postgresql::server::service']
+    # While Puppet 6.1 and newer can do a daemon-reload if needed, systemd
+    # doesn't appear to report that correctly. This is probably because its
+    # unit file is actually removed.
+    #
+    # This can be removed when Puppet < 6.1 support is dropped *and* the file
+    # old-systemd-override is removed.
+    exec { 'restart-systemd':
+      command     => 'systemctl daemon-reload',
+      refreshonly => true,
+      path        => '/bin:/usr/bin:/usr/local/bin',
+      before      => Class['postgresql::server::service'],
     }
 
     file {
@@ -242,7 +242,7 @@ class postgresql::server::config {
           ensure => file,
           owner  => root,
           group  => root,
-          notify => $systemd_notify,
+          notify => [Exec['restart-systemd'], Class['postgresql::server::service']],
           before => Class['postgresql::server::reload'],
 
       ;
