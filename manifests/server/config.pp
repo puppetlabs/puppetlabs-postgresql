@@ -216,14 +216,6 @@ class postgresql::server::config {
   # RHEL 7 and 8 both support drop-in files for systemd units.  The old include directive is deprecated and may be removed in future systemd releases.
   # Gentoo also supports drop-in files.
   if $facts['os']['family'] in ['RedHat', 'Gentoo'] and $facts['service_provider'] == 'systemd' {
-      # Template uses:
-      # - $facts['os']['name']
-      # - $facts['os']['release']['major']
-      # - $service_name
-      # - $port
-      # - $datadir
-      # - @extra_systemd_config
-
     # While Puppet 6.1 and newer can do a daemon-reload if needed, systemd
     # doesn't appear to report that correctly. This is probably because its
     # unit file is actually removed.
@@ -244,7 +236,6 @@ class postgresql::server::config {
           group  => root,
           notify => [Exec['restart-systemd'], Class['postgresql::server::service']],
           before => Class['postgresql::server::reload'],
-
       ;
 
       'systemd-conf-dir':
@@ -252,6 +243,13 @@ class postgresql::server::config {
           path   => "/etc/systemd/system/${service_name}.service.d",
       ;
 
+      # Template uses:
+      # - $facts['os']['name']
+      # - $facts['os']['release']['major']
+      # - $service_name
+      # - $port
+      # - $datadir
+      # - $extra_systemd_config
       'systemd-override':
           path    => "/etc/systemd/system/${service_name}.service.d/${service_name}.conf",
           content => template('postgresql/systemd-override.erb'),
