@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.10.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.10.0) (2021-02-05)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.9.0...v6.10.0)
+
+### Added
+
+- Set default PostgreSQL version for FreeBSD [\#1227](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1227) ([olevole](https://github.com/olevole))
+- Clean up globals logic to support CentOS 8 stream [\#1225](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1225) ([ekohl](https://github.com/ekohl))
+
+### Fixed
+
+- Also perform systemd daemon-reload on Puppet 6.1+ [\#1233](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1233) ([ekohl](https://github.com/ekohl))
+- \(bug\) fix systemd daemon-reload order when updating service files [\#1230](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1230) ([sheenaajay](https://github.com/sheenaajay))
+- Fix postgresql::sql task when password is not set [\#1226](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1226) ([smortex](https://github.com/smortex))
+
 ## [v6.9.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.9.0) (2021-01-18)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.8.0...v6.9.0)
