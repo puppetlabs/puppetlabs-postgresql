@@ -1,0 +1,99 @@
+name: "Auto release"
+
+on:
+  schedule:
+    - cron: '0 3 * * 6'
+  workflow_dispatch:
+
+env:
+  HONEYCOMB_WRITEKEY: 7f3c63a70eecc61d635917de46bea4e6 
+  HONEYCOMB_DATASET: litmus tests
+  CHANGELOG_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  auto_release:
+    name: "Automatic release prep"
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: "Honeycomb: Start recording"
+      uses: puppetlabs/kvrhdn-gha-buildevents@pdk-templates-v1
+      with:
+        apikey: ${{ env.HONEYCOMB_WRITEKEY }}
+        dataset: ${{ env.HONEYCOMB_DATASET }}
+        job-status: ${{ job.status }}
+
+    - name: "Honeycomb: start first step"
+      run: |
+        echo STEP_ID="auto-release" >> $GITHUB_ENV
+        echo STEP_START=$(date +%s) >> $GITHUB_ENV
+
+    - name: "Checkout Source"
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+
+    - name: Append PDK to Gemfile
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      run: |
+        echo "gem 'pdk'" >> Gemfile
+
+    - name: Activate Ruby 2.7
+      uses: ruby/setup-ruby@v1
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      with:
+        ruby-version: "2.7"
+        bundler-cache: true
+
+    - name: Print bundle environment
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      run: |
+        echo ::group::bundler environment
+        buildevents cmd $TRACE_ID $STEP_ID 'bundle env' -- bundle env
+        echo ::endgroup::
+
+    - name: "Honeycomb: Record Bundler Setup time"
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      run: |
+        buildevents step $TRACE_ID $STEP_ID $STEP_START 'Bundler Setup'
+        echo STEP_ID="auto_release_setup" >> $GITHUB_ENV
+        echo STEP_START=$(date +%s) >> $GITHUB_ENV
+
+    - name: "PDK Release prep"
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      run: |
+        buildevents cmd $TRACE_ID $STEP_ID 'pdk release prep' -- bundle exec pdk release prep --force 
+
+    - name: "Commit changes"
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Auto-Release prep"
+
+    - name: "Get Version"
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      id: gv
+      run: |
+        echo "::set-output name=ver::$(cat metadata.json | jq .version)"
+
+    - name: Create Pull Request
+      id: cpr
+      uses: puppetlabs/peter-evans-create-pull-request@v3
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "Release prep v${{ steps.gv.outputs.ver }}"
+        branch: "release-prep"
+        delete-branch: true
+        title: "Release prep v${{ steps.gv.outputs.ver }}"
+        labels: "maintenance"
+
+    - name: PR outputs
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      run: |
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
