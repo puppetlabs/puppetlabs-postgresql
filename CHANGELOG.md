@@ -216,14 +216,11 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
 
 - pdksync - \(MODULES-6805\) metadata.json shows support for puppet 6 [\#1026](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1026) ([tphoney](https://github.com/tphoney))
+- pdksync - \(MODULES-7705\) - Bumping stdlib dependency from \< 5.0.0 to \< 6.0.0 [\#1018](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1018) ([pmcmaw](https://github.com/pmcmaw))
 
 ## [5.9.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.9.0) (2018-09-06)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.8.0...5.9.0)
-
-### Added
-
-- pdksync - \(MODULES-7705\) - Bumping stdlib dependency from \< 5.0.0 to \< 6.0.0 [\#1018](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1018) ([pmcmaw](https://github.com/pmcmaw))
 
 ## [5.8.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.8.0) (2018-08-06)
 
