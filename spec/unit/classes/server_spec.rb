@@ -35,6 +35,47 @@ describe 'postgresql::server', type: :class do
     end
   end
 
+  describe 'with manage_dnf_module true' do
+    let(:facts) do
+      {
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { 'full' => '8.3', 'major' => '8' },
+          selinux: {
+            enabled: true,
+          }
+        },
+        osfamily: 'RedHat',
+      }
+    end
+
+    let(:pre_condition) do
+      <<-PUPPET
+      class { 'postgresql::globals':
+        manage_dnf_module => true,
+      }
+      PUPPET
+    end
+
+    it { is_expected.to contain_package('postgresql dnf module').with_ensure('10').that_comes_before('Package[postgresql-server]') }
+    it { is_expected.to contain_package('postgresql-server').with_name('postgresql-server') }
+
+    describe 'with version set' do
+      let(:pre_condition) do
+        <<-PUPPET
+        class { 'postgresql::globals':
+          manage_dnf_module => true,
+          version           => '12',
+        }
+        PUPPET
+      end
+
+      it { is_expected.to contain_package('postgresql dnf module').with_ensure('12').that_comes_before('Package[postgresql-server]') }
+      it { is_expected.to contain_package('postgresql-server').with_name('postgresql-server') }
+    end
+  end
+
   describe 'service_ensure => running' do
     let(:params) do
       {
