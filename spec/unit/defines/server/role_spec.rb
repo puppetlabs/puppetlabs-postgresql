@@ -33,16 +33,16 @@ describe 'postgresql::server::role', type: :define do
   it { is_expected.to contain_postgresql__server__role('test') }
   it 'has create role for "test" user with password as ****' do
     is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-      .with('command'     => "CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1",
-            'environment' => 'NEWPGPASSWD=new-pa$s',
+      .with('command'     => 'Sensitive [value redacted]',
+            'sensitive'   => 'true',
             'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
             'port'        => '5432')
   end
   it 'has alter role for "test" user with password as ****' do
     is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
-      .with('command'     => "ALTER ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD'",
-            'environment' => 'NEWPGPASSWD=new-pa$s',
-            'unless'      => "SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
+      .with('command'     => 'Sensitive [value redacted]',
+            'sensitive'   => 'true',
+            'unless'      => 'Sensitive [value redacted]',
             'port'        => '5432')
   end
 
@@ -64,8 +64,8 @@ describe 'postgresql::server::role', type: :define do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'has create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-        .with_command("CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1")
-        .with_environment('NEWPGPASSWD=new-pa$s')
+        .with_command('Sensitive [value redacted]')
+        .with_sensitive('true')
         .with_unless("SELECT 1 FROM pg_roles WHERE rolname = 'test'")
         .with_port(5432)
         .with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass')
@@ -73,8 +73,8 @@ describe 'postgresql::server::role', type: :define do
     end
     it 'has alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
-        .with('command' => "ALTER ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD'", 'environment' => 'NEWPGPASSWD=new-pa$s',
-              'unless'  => "SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'", 'port' => '5432',
+        .with('command' => 'Sensitive [value redacted]', 'sensitive' => 'true',
+              'unless'  => 'Sensitive [value redacted]', 'port' => '5432',
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
                                       'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
     end
@@ -99,15 +99,15 @@ describe 'postgresql::server::role', type: :define do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'has create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-        .with('command'     => "CREATE ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1",
-              'environment' => 'NEWPGPASSWD=new-pa$s', 'unless' => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
-              'connect_settings' => { 'PGHOST'     => 'postgres-db-server', 'DBVERSION' => '9.1',
-                                      'PGPORT'     => '1234', 'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
+        .with('command'   => 'Sensitive [value redacted]',
+              'sensitive' => 'true', 'unless' => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
+              'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
+                                      'PGPORT' => '1234', 'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
     end
     it 'has alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
-        .with('command' => "ALTER ROLE \"test\" ENCRYPTED PASSWORD '$NEWPGPASSWD'", 'environment' => 'NEWPGPASSWD=new-pa$s',
-              'unless'  => "SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
+        .with('command' => 'Sensitive [value redacted]', 'sensitive' => 'true',
+              'unless'  => 'Sensitive [value redacted]',
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
                                       'PGPORT' => '1234', 'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
     end
