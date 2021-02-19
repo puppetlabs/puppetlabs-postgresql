@@ -82,7 +82,7 @@ define postgresql::server::role (
     }
 
     postgresql_psql { "CREATE ROLE ${username} ENCRYPTED PASSWORD ****":
-      command     => "CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}",
+      command     => Sensitive("CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}"),
       unless      => "SELECT 1 FROM pg_roles WHERE rolname = '${username}'",
       require     => undef,
       sensitive   => true,
@@ -132,8 +132,8 @@ define postgresql::server::role (
         $pwd_hash_sql = "md5${pwd_md5}"
       }
       postgresql_psql { "ALTER ROLE ${username} ENCRYPTED PASSWORD ****":
-        command     => "ALTER ROLE \"${username}\" ${password_sql}",
-        unless      => "SELECT 1 FROM pg_shadow WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'",
+        command     => Sensitive("ALTER ROLE \"${username}\" ${password_sql}"),
+        unless      => Sensitive("SELECT 1 FROM pg_shadow WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'"),
         sensitive   => true,
       }
     }
