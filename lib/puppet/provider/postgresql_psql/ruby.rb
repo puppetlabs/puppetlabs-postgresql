@@ -62,7 +62,8 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
                                                       failonfail: false,
                                                       combine: true,
                                                       override_locale: true,
-                                                      custom_environment: environment)
+                                                      custom_environment: environment,
+                                                      sensitive: resource[:sensitive] == :true)
     [output, $CHILD_STATUS.dup]
   end
 end

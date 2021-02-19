@@ -3,8 +3,8 @@
 # @param update_password If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.
 # @param password_hash Sets the hash to use during password creation.
 # @param createdb Specifies whether to grant the ability to create new databases with this role.
-# @param createrole Specifies whether to grant the ability to create new roles with this role. 
-# @param db Database used to connect to. 
+# @param createrole Specifies whether to grant the ability to create new roles with this role.
+# @param db Database used to connect to.
 # @param port Port to use when connecting.
 # @param login Specifies whether to grant login capability for the new role.
 # @param inherit Specifies whether to grant inherit capability for the new role.
@@ -76,18 +76,16 @@ define postgresql::server::role (
     $superuser_sql   = $superuser   ? { true => 'SUPERUSER',   default => 'NOSUPERUSER' }
     $replication_sql = $replication ? { true => 'REPLICATION', default => '' }
     if ($password_hash != false) {
-      $environment  = "NEWPGPASSWD=${password_hash}"
-      $password_sql = "ENCRYPTED PASSWORD '\$NEWPGPASSWD'"
+      $password_sql = "ENCRYPTED PASSWORD '${password_hash}'"
     } else {
       $password_sql = ''
-      $environment  = []
     }
 
     postgresql_psql { "CREATE ROLE ${username} ENCRYPTED PASSWORD ****":
       command     => "CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}",
       unless      => "SELECT 1 FROM pg_roles WHERE rolname = '${username}'",
-      environment => $environment,
       require     => undef,
+      sensitive   => true,
     }
 
     postgresql_psql { "ALTER ROLE \"${username}\" ${superuser_sql}":
@@ -136,7 +134,7 @@ define postgresql::server::role (
       postgresql_psql { "ALTER ROLE ${username} ENCRYPTED PASSWORD ****":
         command     => "ALTER ROLE \"${username}\" ${password_sql}",
         unless      => "SELECT 1 FROM pg_shadow WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'",
-        environment => $environment,
+        sensitive   => true,
       }
     }
   } else {
