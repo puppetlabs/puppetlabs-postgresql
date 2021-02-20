@@ -22,7 +22,6 @@ All notable changes to this project will be documented in this file. The format 
 ### Fixed
 
 - \(bug\) fix systemd daemon-reload order when updating service files [\#1230](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1230) ([sheenaajay](https://github.com/sheenaajay))
-- Fix postgresql::sql task when password is not set [\#1226](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1226) ([smortex](https://github.com/smortex))
 
 ## [v6.9.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.9.0) (2021-01-18)
 
@@ -35,6 +34,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Fixed
 
+- Fix postgresql::sql task when password is not set [\#1226](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1226) ([smortex](https://github.com/smortex))
 - \(maint\) updated defaults for rhel7 policycoreutils [\#1212](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1212) ([sheenaajay](https://github.com/sheenaajay))
 - \(IAC-1189\) - Fix for SLES 15 SP 1 and later [\#1209](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1209) ([david22swan](https://github.com/david22swan))
 - Change - Use systemd drop-in directory for unit overrides [\#1201](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1201) ([blackknight36](https://github.com/blackknight36))
@@ -88,7 +88,6 @@ All notable changes to this project will be documented in this file. The format 
 - Finish conversion of `postgresql\_password` function [\#1161](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1161) ([alexjfisher](https://github.com/alexjfisher))
 - Allow usage of grant and role when not managing postgresql::server [\#1159](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1159) ([tuxmea](https://github.com/tuxmea))
 - Add version configs for SLES 12 SP 3 to 5 [\#1158](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1158) ([XnS](https://github.com/XnS))
-- Add extra parameter "extra\_systemd\_config"  [\#1156](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1156) ([veninga](https://github.com/veninga))
 
 ### Fixed
 
@@ -100,6 +99,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Added
 
+- Add extra parameter "extra\_systemd\_config"  [\#1156](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1156) ([veninga](https://github.com/veninga))
 - Add Fedora 31 compatibility [\#1141](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1141) ([blackknight36](https://github.com/blackknight36))
 - feat: enable different database resource name in extension [\#1136](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1136) ([jfroche](https://github.com/jfroche))
 - pdksync - \(FM-8581\) - Debian 10 added to travis and provision file refactored [\#1130](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1130) ([david22swan](https://github.com/david22swan))
@@ -171,6 +171,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Support current version of puppetlabs/apt. [\#1073](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1073) ([pillarsdotnet](https://github.com/pillarsdotnet))
 - change username/group/datadir defaults for FreeBSD [\#1063](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1063) ([olevole](https://github.com/olevole))
+- \(MODULES-8553\) Fix dependency on apt by explicitly using 'puppetlabs-postgresql' as tag [\#1052](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1052) ([HelenCampbell](https://github.com/HelenCampbell))
 
 ## [5.12.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.12.1) (2019-02-14)
 
@@ -191,7 +192,6 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Fixed
 
-- \(MODULES-8553\) Fix dependency on apt by explicitly using 'puppetlabs-postgresql' as tag [\#1052](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1052) ([HelenCampbell](https://github.com/HelenCampbell))
 - \(MODULES-8352\) Don't use empty encoding string on initdb [\#1043](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1043) ([binford2k](https://github.com/binford2k))
 - pdksync - \(FM-7655\) Fix rubygems-update for ruby \< 2.3 [\#1042](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1042) ([tphoney](https://github.com/tphoney))
 
