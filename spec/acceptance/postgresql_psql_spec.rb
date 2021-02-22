@@ -134,39 +134,25 @@ describe 'postgresql_psql' do
     apply_manifest(pp_nine, expect_changes: true)
   end
 
-  context 'with secure password passing by environment' do
-    it 'runs SQL that contanins password passed by environment' do
-      select = "select \\'$PASS_TO_EMBED\\'"
-      pp = <<-MANIFEST.unindent
+  context 'when setting sensitive => true' do
+    it 'runs queries without leaking to the log' do
+      select = "select \\'pa$swD\\'"
+      pp = <<~MANIFEST
         class { 'postgresql::server': } ->
-        postgresql_psql { 'password embedded by environment: #{select}':
+        postgresql_psql { 'password protected by sensitive: #{select}':
           db          => 'postgres',
           psql_user   => 'postgres',
+          sensitive   => true,
           command     => '#{select}',
-          environment => [
-            'PASS_TO_EMBED=pa$swD',
-          ],
         }
       MANIFEST
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, expect_changes: false)
-    end
-    it 'runs SQL that contanins password passed by environment in check' do
-      select = "select 1 where \\'$PASS_TO_EMBED\\'=\\'passwD\\'"
-      pp = <<-MANIFEST.unindent
-        class { 'postgresql::server': } ->
-        postgresql_psql { 'password embedded by environment in check: #{select}':
-          db          => 'postgres',
-          psql_user   => 'postgres',
-          command     => 'invalid sql query',
-          unless      => '#{select}',
-          environment => [
-            'PASS_TO_EMBED=passwD',
-          ],
-        }
-      MANIFEST
+      result = apply_manifest(pp, catch_failures: true, debug: true)
+      expect(result.stdout).not_to contain('pa$swD')
+      expect(result.stderr).not_to contain('pa$swD')
 
-      idempotent_apply(pp)
+      result = apply_manifest(pp, expect_changes: false, debug: true)
+      expect(result.stdout).not_to contain('pa$swD')
+      expect(result.stderr).not_to contain('pa$swD')
     end
   end
 end

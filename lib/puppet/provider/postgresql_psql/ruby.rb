@@ -16,7 +16,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
     command = [resource[:psql_path]]
     command.push('-d', resource[:db]) if resource[:db]
     command.push('-p', resource[:port]) if resource[:port]
-    command.push('-t', '-X', '-c', '"' + sql.gsub('"', '\"') + '"')
+    command.push('-t', '-X', '-c', sql)
 
     environment = fetch_environment
 
@@ -57,13 +57,13 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   end
 
   def run_command(command, user, group, environment)
-    command = command.join ' '
     output = Puppet::Util::Execution.execute(command, uid: user,
                                                       gid: group,
                                                       failonfail: false,
                                                       combine: true,
                                                       override_locale: true,
-                                                      custom_environment: environment)
+                                                      custom_environment: environment,
+                                                      sensitive: resource[:sensitive] == :true)
     [output, $CHILD_STATUS.dup]
   end
 end
