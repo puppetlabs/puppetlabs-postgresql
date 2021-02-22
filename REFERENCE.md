@@ -3034,6 +3034,7 @@ The following parameters are available in the `postgresql_psql` type.
 * [`psql_user`](#psql_user)
 * [`refreshonly`](#refreshonly)
 * [`search_path`](#search_path)
+* [`sensitive`](#sensitive)
 * [`unless`](#unless)
 
 ##### <a name="connect_settings"></a>`connect_settings`
@@ -3107,6 +3108,15 @@ Default value: ``false``
 ##### <a name="search_path"></a>`search_path`
 
 The schema search path to use when executing the SQL command
+
+##### <a name="sensitive"></a>`sensitive`
+
+Valid values: ``true``, ``false``
+
+If 'true', then the executed command will not be echoed into the log. Use this to protect sensitive information passing
+through.
+
+Default value: ``false``
 
 ##### <a name="unless"></a>`unless`
 
