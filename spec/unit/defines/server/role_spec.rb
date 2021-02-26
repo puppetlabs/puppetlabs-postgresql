@@ -42,7 +42,7 @@ describe 'postgresql::server::role', type: :define do
     is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
       .with('command'     => 'Sensitive [value redacted]',
             'sensitive'   => 'true',
-            'unless'      => 'Sensitive [value redacted]',
+            'unless'      => "SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
             'port'        => '5432')
   end
 
@@ -74,7 +74,8 @@ describe 'postgresql::server::role', type: :define do
     it 'has alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
         .with('command' => 'Sensitive [value redacted]', 'sensitive' => 'true',
-              'unless'  => 'Sensitive [value redacted]', 'port' => '5432',
+              'unless'  => "SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
+              'port'    => '5432',
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
                                       'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
     end
@@ -107,7 +108,7 @@ describe 'postgresql::server::role', type: :define do
     it 'has alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
         .with('command' => 'Sensitive [value redacted]', 'sensitive' => 'true',
-              'unless'  => 'Sensitive [value redacted]',
+              'unless'  => "SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa'",
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
                                       'PGPORT' => '1234', 'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
     end
