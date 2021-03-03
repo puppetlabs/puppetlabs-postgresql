@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v7.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.0.0) (2021-03-03)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.10.2...v7.0.0)
+
+### Changed
+
+- pdksync - \(MAINT\) Remove SLES 11 support [\#1247](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1247) ([sanfrancrisko](https://github.com/sanfrancrisko))
+- pdksync - \(MAINT\) Remove RHEL 5 family support [\#1246](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1246) ([sanfrancrisko](https://github.com/sanfrancrisko))
+- pdksync - Remove Puppet 5 from testing and bump minimal version to 6.0.0 [\#1238](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1238) ([carabasdaniel](https://github.com/carabasdaniel))
+
 ## [v6.10.2](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.10.2) (2021-02-22)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.10.1...v6.10.2)
