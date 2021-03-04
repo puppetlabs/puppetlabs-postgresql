@@ -43,6 +43,18 @@ describe 'postgresql::client', type: :class do
     end
   end
 
+  describe 'with manage_dnf_module true' do
+    let(:pre_condition) do
+      <<-PUPPET
+      class { 'postgresql::globals':
+        manage_dnf_module => true,
+      }
+      PUPPET
+    end
+
+    it { is_expected.to contain_package('postgresql dnf module').that_comes_before('Package[postgresql-client]') }
+  end
+
   describe 'with client package name explicitly set undef' do
     let :params do
       {

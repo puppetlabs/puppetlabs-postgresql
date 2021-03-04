@@ -86,6 +86,10 @@
 # @param manage_xlogdir Set to false if you have file{ $xlogdir: } already defined
 #
 # @param manage_package_repo Sets up official PostgreSQL repositories on your host if set to true.
+# @param manage_dnf_module
+#   Manage the DNF module. This only makes sense on distributions that use DNF
+#   package manager, such as EL8 or Fedora. It also requires Puppet 5.5.20+ or
+#   Puppet 6.15.0+ since they ship the dnfmodule provider.
 # @param module_workdir Specifies working directory under which the psql command should be executed. May need to specify if '/tmp' is on volume mounted with noexec option.
 #
 #
@@ -153,6 +157,7 @@ class postgresql::globals (
   $manage_selinux                                  = undef,
 
   $manage_package_repo                             = undef,
+  Boolean $manage_dnf_module                       = false,
   $module_workdir                                  = undef,
 ) {
   # We are determining this here, because it is needed by the package repo
@@ -263,6 +268,12 @@ class postgresql::globals (
       version => $globals_version,
       proxy   => $repo_proxy,
       baseurl => $repo_baseurl,
+    }
+  }
+
+  if $manage_dnf_module {
+    class { 'postgresql::dnfmodule':
+      ensure => $globals_version,
     }
   }
 }
