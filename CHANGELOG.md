@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v7.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.0.0) (2021-03-04)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.10.2...v7.0.0)
+
+### Changed
+
+- pdksync - \(MAINT\) Remove SLES 11 support [\#1247](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1247) ([sanfrancrisko](https://github.com/sanfrancrisko))
+- pdksync - \(MAINT\) Remove RHEL 5 family support [\#1246](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1246) ([sanfrancrisko](https://github.com/sanfrancrisko))
+- pdksync - Remove Puppet 5 from testing and bump minimal version to 6.0.0 [\#1238](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1238) ([carabasdaniel](https://github.com/carabasdaniel))
+
+### Added
+
+- Add DNF module management [\#1239](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1239) ([ekohl](https://github.com/ekohl))
+
 ## [v6.10.2](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.10.2) (2021-02-22)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.10.1...v6.10.2)
@@ -40,6 +54,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - pdksync - \(feat\) -  Add support for puppet 7 [\#1215](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1215) ([daianamezdrea](https://github.com/daianamezdrea))
 - Manage postgresql\_conf\_path file permissions [\#1199](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1199) ([ekohl](https://github.com/ekohl))
+- pdksync - \(IAC-973\) - Update travis/appveyor to run on new default branch `main` [\#1182](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1182) ([david22swan](https://github.com/david22swan))
 
 ### Fixed
 
@@ -63,10 +78,6 @@ All notable changes to this project will be documented in this file. The format 
 ## [v6.7.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.7.0) (2020-08-28)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.6.0...v6.7.0)
-
-### Added
-
-- pdksync - \(IAC-973\) - Update travis/appveyor to run on new default branch `main` [\#1182](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1182) ([david22swan](https://github.com/david22swan))
 
 ### Fixed
 
