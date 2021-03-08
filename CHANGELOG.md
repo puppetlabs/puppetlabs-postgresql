@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v7.0.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.0.1) (2021-03-08)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.0.0...v7.0.1)
+
+### Fixed
+
+- Ensure port is a string in psql command [\#1253](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1253) ([ekohl](https://github.com/ekohl))
+
 ## [v7.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.0.0) (2021-03-04)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.10.2...v7.0.0)
