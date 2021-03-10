@@ -145,4 +145,15 @@ Puppet::Type.newtype(:postgresql_psql) do
   def refresh
     property(:command).sync if should_run_sql(true)
   end
+
+  private
+
+  def set_sensitive_parameters(sensitive_parameters)
+    # Respect sensitive commands
+    if sensitive_parameters.include?(:unless)
+      sensitive_parameters.delete(:unless)
+      parameter(:unless).sensitive = true
+    end
+    super(sensitive_parameters)
+  end
 end
