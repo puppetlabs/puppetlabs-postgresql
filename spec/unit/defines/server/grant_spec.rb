@@ -240,7 +240,7 @@ describe 'postgresql::server::grant', type: :define do
     it { is_expected.to contain_postgresql__server__role('test') }
     it do
       is_expected.to contain_postgresql_psql('grant:test')
-        .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* "PUBLIC"}m)
+        .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* PUBLIC}m)
         .with_unless(%r{SELECT 1 WHERE has_table_privilege\('public',\s*'myschema.mytable', 'INSERT'\)}m)
     end
   end
