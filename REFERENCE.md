@@ -177,6 +177,7 @@ The following parameters are available in the `postgresql::globals` class:
 * [`postgis_version`](#postgis_version)
 * [`repo_proxy`](#repo_proxy)
 * [`repo_baseurl`](#repo_baseurl)
+* [`yum_repo_commonurl`](#yum_repo_commonurl)
 * [`needs_initdb`](#needs_initdb)
 * [`encoding`](#encoding)
 * [`locale`](#locale)
@@ -499,6 +500,14 @@ Default value: ``undef``
 Data type: `Any`
 
 Sets the baseurl for the PostgreSQL repository. Useful if you host your own mirror of the repository.
+
+Default value: ``undef``
+
+##### <a name="yum_repo_commonurl"></a>`yum_repo_commonurl`
+
+Data type: `Any`
+
+Sets the url for the PostgreSQL common Yum repository. Useful if you host your own mirror of the YUM repository.
 
 Default value: ``undef``
 
