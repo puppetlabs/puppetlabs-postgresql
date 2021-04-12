@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v7.1.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.1.0) (2021-04-12)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.0.3...v7.1.0)
+
+### Added
+
+- Add new common repo which contains add-ons [\#1190](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1190) ([jorhett](https://github.com/jorhett))
+
+## [v7.0.3](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.0.3) (2021-04-12)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.0.2...v7.0.3)
+
 ## [v7.0.2](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.0.2) (2021-03-15)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.0.1...v7.0.2)
