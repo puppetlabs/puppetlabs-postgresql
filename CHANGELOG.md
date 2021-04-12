@@ -70,7 +70,6 @@ All notable changes to this project will be documented in this file. The format 
 
 - pdksync - \(feat\) -  Add support for puppet 7 [\#1215](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1215) ([daianamezdrea](https://github.com/daianamezdrea))
 - Manage postgresql\_conf\_path file permissions [\#1199](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1199) ([ekohl](https://github.com/ekohl))
-- pdksync - \(IAC-973\) - Update travis/appveyor to run on new default branch `main` [\#1182](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1182) ([david22swan](https://github.com/david22swan))
 
 ### Fixed
 
@@ -95,6 +94,10 @@ All notable changes to this project will be documented in this file. The format 
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.6.0...v6.7.0)
 
+### Added
+
+- pdksync - \(IAC-973\) - Update travis/appveyor to run on new default branch `main` [\#1182](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1182) ([david22swan](https://github.com/david22swan))
+
 ### Fixed
 
 - Invert psql/package dependency logic [\#1179](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1179) ([raphink](https://github.com/raphink))
@@ -118,9 +121,9 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
 
 - service\_ensure =\> true is now an allowed value \(aliased to running\)  [\#1167](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1167) ([binford2k](https://github.com/binford2k))
-- Finish conversion of `postgresql\_acls\_to\_resources\_hash` function [\#1163](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1163) ([alexjfisher](https://github.com/alexjfisher))
-- Finish conversion of `postgresql\_escape` function [\#1162](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1162) ([alexjfisher](https://github.com/alexjfisher))
-- Finish conversion of `postgresql\_password` function [\#1161](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1161) ([alexjfisher](https://github.com/alexjfisher))
+- Finish conversion of `postgresql_acls_to_resources_hash` function [\#1163](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1163) ([alexjfisher](https://github.com/alexjfisher))
+- Finish conversion of `postgresql_escape` function [\#1162](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1162) ([alexjfisher](https://github.com/alexjfisher))
+- Finish conversion of `postgresql_password` function [\#1161](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1161) ([alexjfisher](https://github.com/alexjfisher))
 - Allow usage of grant and role when not managing postgresql::server [\#1159](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1159) ([tuxmea](https://github.com/tuxmea))
 - Add version configs for SLES 12 SP 3 to 5 [\#1158](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1158) ([XnS](https://github.com/XnS))
 - Add extra parameter "extra\_systemd\_config"  [\#1156](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1156) ([veninga](https://github.com/veninga))
@@ -307,7 +310,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Added
 
-- Parameters `roles`, `config\_entires`, and `pg\_hba\_rules` to `postgresql::server` for hiera [\#950](https://github.com/puppetlabs/puppetlabs-postgresql/pull/950) ([ekohl](https://github.com/ekohl))
+- Parameters `roles`, `config_entires`, and `pg_hba_rules` to `postgresql::server` for hiera [\#950](https://github.com/puppetlabs/puppetlabs-postgresql/pull/950) ([ekohl](https://github.com/ekohl))
 
 ## [5.4.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.4.0) (2018-03-22)
 
@@ -316,11 +319,11 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
 
 - \(MODULES-6330\) PDK convert 1.4.1 [\#961](https://github.com/puppetlabs/puppetlabs-postgresql/pull/961) ([pmcmaw](https://github.com/pmcmaw))
-- Parameter `ensure` on `postgresql::server::grant` and `postgresql::server::database\_grant` [\#891](https://github.com/puppetlabs/puppetlabs-postgresql/pull/891) ([georgehansper](https://github.com/georgehansper))
+- Parameter `ensure` on `postgresql::server::grant` and `postgresql::server::database_grant` [\#891](https://github.com/puppetlabs/puppetlabs-postgresql/pull/891) ([georgehansper](https://github.com/georgehansper))
 
 ### Fixed
 
-- Documentation error, `reassign\_owned\_by` uses `\*\_role` not `\*\_owner`. [\#958](https://github.com/puppetlabs/puppetlabs-postgresql/pull/958) ([computermouth](https://github.com/computermouth))
+- Documentation error, `reassign_owned_by` uses `*_role` not `*_owner`. [\#958](https://github.com/puppetlabs/puppetlabs-postgresql/pull/958) ([computermouth](https://github.com/computermouth))
 
 ## 5.3.0
 ### Summary
