@@ -131,6 +131,19 @@ This applies to objects within the nominated database, 'test_db' only.
 
 For Postgresql >= 9.3, the ownership of the database is also updated.
 
+### Manage default permissions (PostgreSQL >= 9.6)
+
+To change default permissions for newly created objects using ALTER DEFAULT PRIVILEGES:
+
+```puppet
+postgresql::server::default_privileges { 'marmot access to new tables on test_db':
+  db          => 'test_db',
+  role        => 'marmot',
+  privilege   => 'ALL',
+  object_type => 'TABLES',
+}
+```
+
 ### Override defaults
 
 The `postgresql::globals` class allows you to configure the main settings for this module globally, so that other classes and defined resources can use them. By itself, it does nothing.
