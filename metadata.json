@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-postgresql",
-  "version": "7.1.0",
+  "version": "7.2.0",
   "author": "puppetlabs",
   "summary": "Offers support for basic management of PostgreSQL databases.",
   "license": "Apache-2.0",
