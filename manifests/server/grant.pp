@@ -52,15 +52,21 @@ define postgresql::server::grant (
   case $ensure {
     default: {
       # default is 'present'
-      $sql_command = 'GRANT %s ON %s "%s%s" TO "%s"'
-      $sql_command_unquoted = 'GRANT %s ON %s %s%s TO "%s"'
+      $sql_command = 'GRANT %s ON %s "%s%s" TO %s'
+      $sql_command_unquoted = 'GRANT %s ON %s %s%s TO %s'
       $unless_is = true
     }
     'absent': {
-      $sql_command = 'REVOKE %s ON %s "%s%s" FROM "%s"'
-      $sql_command_unquoted = 'REVOKE %s ON %s %s%s FROM "%s"'
+      $sql_command = 'REVOKE %s ON %s "%s%s" FROM %s'
+      $sql_command_unquoted = 'REVOKE %s ON %s %s%s FROM %s'
       $unless_is = false
     }
+  }
+
+  # Quote the role if not PUBLIC
+  $_query_role = $role ? {
+    'PUBLIC' => 'PUBLIC',
+    default => "\"${role}\""
   }
 
   if ! $object_name {
@@ -453,8 +459,8 @@ define postgresql::server::grant (
   }
 
   $grant_cmd = $_enquote_object ? {
-    false   => sprintf($sql_command_unquoted, $_privilege, $_object_type, $_togrant_object, $arguments, $role),
-    default => sprintf($sql_command, $_privilege, $_object_type, $_togrant_object, $arguments, $role),
+    false   => sprintf($sql_command_unquoted, $_privilege, $_object_type, $_togrant_object, $arguments, $_query_role),
+    default => sprintf($sql_command, $_privilege, $_object_type, $_togrant_object, $arguments, $_query_role),
   }
 
   postgresql_psql { "grant:${name}":
