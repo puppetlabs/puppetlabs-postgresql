@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v7.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.2.0) (2021-05-22)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.1.0...v7.2.0)
+
+### Added
+
+- \(MODULES-11069\) add default version for fedora 34 [\#1272](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1272) ([lweller](https://github.com/lweller))
+- MODULES-11047 - Allow managing rights for PUBLIC role [\#1266](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1266) ([mtancoigne](https://github.com/mtancoigne))
+
 ## [v7.1.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.1.0) (2021-04-12)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.0.3...v7.1.0)
