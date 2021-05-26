@@ -69,7 +69,7 @@ describe 'postgresql::server::role', type: :define do
         .with_unless("SELECT 1 FROM pg_roles WHERE rolname = 'test'")
         .with_port(5432)
         .with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass')
-        .that_requires('Class[postgresql::server::service]')
+        .that_requires('Service[postgresqld]')
     end
     it 'has alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
@@ -142,7 +142,7 @@ describe 'postgresql::server::role', type: :define do
     end
 
     it 'has drop role for "test" user if ensure absent' do
-      is_expected.to contain_postgresql_psql('DROP ROLE "test"').that_requires('Class[postgresql::server::service]')
+      is_expected.to contain_postgresql_psql('DROP ROLE "test"').that_requires('Service[postgresqld]')
     end
   end
 
