@@ -1,6 +1,9 @@
 ---
 ".gitlab-ci.yml":
   delete: true
+.puppet-lint.rc:
+  extra_disabled_lint_checks:
+    - 140chars-check
 appveyor.yml:
   delete: true
 

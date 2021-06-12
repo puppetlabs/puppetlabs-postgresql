@@ -20,30 +20,56 @@ describe 'postgresql::server::role', type: :define do
     'test'
   end
 
-  let :params do
-    {
-      password_hash: 'new-pa$s',
-    }
-  end
-
   let :pre_condition do
     "class {'postgresql::server':}"
   end
 
-  it { is_expected.to contain_postgresql__server__role('test') }
-  it 'has create role for "test" user with password as ****' do
-    is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-      .with('command'     => 'Sensitive [value redacted]',
-            'sensitive'   => 'true',
-            'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
-            'port'        => '5432')
+  context 'with Password Datatype String' do
+    let :params do
+      {
+        password_hash: 'new-pa$s',
+      }
+    end
+
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it 'has create role for "test" user with password as ****' do
+      is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
+        .with('command'     => 'Sensitive [value redacted]',
+              'sensitive'   => 'true',
+              'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
+              'port'        => '5432')
+    end
+    it 'has alter role for "test" user with password as ****' do
+      is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
+        .with('command'     => 'Sensitive [value redacted]',
+              'sensitive'   => 'true',
+              'unless'      => 'Sensitive [value redacted]',
+              'port'        => '5432')
+    end
   end
-  it 'has alter role for "test" user with password as ****' do
-    is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
-      .with('command'     => 'Sensitive [value redacted]',
-            'sensitive'   => 'true',
-            'unless'      => 'Sensitive [value redacted]',
-            'port'        => '5432')
+
+  context 'with Password Datatype Sensitive[String]' do
+    let :params do
+      {
+        password_hash: sensitive('new-pa$s'),
+      }
+    end
+
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it 'has create role for "test" user with password as ****' do
+      is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
+        .with('command'     => 'Sensitive [value redacted]',
+              'sensitive'   => 'true',
+              'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
+              'port'        => '5432')
+    end
+    it 'has alter role for "test" user with password as ****' do
+      is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
+        .with('command'     => 'Sensitive [value redacted]',
+              'sensitive'   => 'true',
+              'unless'      => 'Sensitive [value redacted]',
+              'port'        => '5432')
+    end
   end
 
   context 'with specific db connection settings - default port' do
