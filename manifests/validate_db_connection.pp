@@ -1,5 +1,5 @@
 # @summary This type validates that a successful postgres connection.
-# 
+#
 # @note
 # This validated if the postgres connection can be established
 # between the node on which this resource is run and a specified postgres
@@ -20,7 +20,7 @@
 define postgresql::validate_db_connection (
   $database_host     = undef,
   $database_name     = undef,
-  $database_password = undef,
+  Optional[Variant[String, Sensitive[String]]] $database_password = undef,
   $database_username = undef,
   $database_port     = undef,
   $connect_settings  = undef,
@@ -33,6 +33,12 @@ define postgresql::validate_db_connection (
   include postgresql::params
 
   warning('postgresql::validate_db_connection is deprecated, please use postgresql_conn_validator.')
+
+  $database_password_unsensitive = if $database_password =~ Sensitive[String] {
+    $database_password.unwrap
+  } else {
+    $database_password
+  }
 
   $psql_path = $postgresql::params::psql_path
   $module_workdir = $postgresql::params::module_workdir
@@ -55,9 +61,9 @@ define postgresql::validate_db_connection (
     undef   => "--dbname ${postgresql::params::default_database} ",
     default => "--dbname ${database_name} ",
   }
-  $pass_env = $database_password ? {
+  $pass_env = $database_password_unsensitive ? {
     undef   => undef,
-    default => "PGPASSWORD=${database_password}",
+    default => "PGPASSWORD=${database_password_unsensitive}",
   }
   $cmd = join([$cmd_init, $cmd_host, $cmd_user, $cmd_port, $cmd_dbname], ' ')
   $validate_cmd = "${validcon_script_path} ${sleep} ${tries} '${cmd}'"
@@ -66,8 +72,8 @@ define postgresql::validate_db_connection (
   # time it takes to run each psql command.
   $timeout = (($sleep + 2) * $tries)
 
-  # Combine $database_password and $connect_settings into an array of environment
-  # variables, ensure $database_password is last, allowing it to override a password
+  # Combine $database_password_unsensitive and $connect_settings into an array of environment
+  # variables, ensure $database_password_unsensitive is last, allowing it to override a password
   # from the $connect_settings hash
   if $connect_settings != undef {
     if $pass_env != undef {
