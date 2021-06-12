@@ -1,6 +1,11 @@
 # @api private
 class postgresql::server::passwd {
-  $postgres_password = $postgresql::server::postgres_password
+  $postgres_password = if $postgresql::server::postgres_password =~ Sensitive {
+    $postgresql::server::postgres_password.unwrap
+  } else {
+    $postgresql::server::postgres_password
+  }
+
   $user              = $postgresql::server::user
   $group             = $postgresql::server::group
   $psql_path         = $postgresql::server::psql_path
