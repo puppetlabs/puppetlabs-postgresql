@@ -24,7 +24,7 @@ describe 'postgresql::server::database', type: :define do
   end
 
   it { is_expected.to contain_postgresql__server__database('test') }
-  it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"') }
+  it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').that_requires('Service[postgresqld]') }
 
   context "with comment set to 'test comment'" do
     let(:params) { { comment: 'test comment' } }
