@@ -261,7 +261,7 @@ describe 'postgresql::server::default_privileges', type: :define do
       it { is_expected.to contain_postgresql__server__role('test') }
       it do
         is_expected.to contain_postgresql_psql('default_privileges:test') \
-          .that_requires(['Class[postgresql::server::service]', 'Postgresql::Server::Role[test]'])
+          .that_requires(['Service[postgresqld]', 'Postgresql::Server::Role[test]'])
       end
     end
   end
