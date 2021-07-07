@@ -127,6 +127,8 @@ define postgresql::server::role (
     if $password_hash and $update_password {
       if($password_hash =~ /^md5.+/) {
         $pwd_hash_sql = $password_hash
+      } elsif($password_hash =~ /^SCRAM\-SHA\-256\$/) {
+        $pwd_hash_sql = $password_hash
       } else {
         $pwd_md5 = md5("${password_hash}${username}")
         $pwd_hash_sql = "md5${pwd_md5}"
