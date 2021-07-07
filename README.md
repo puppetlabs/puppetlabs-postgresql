@@ -85,6 +85,21 @@ postgresql::server::db { 'mydatabasename':
 }
 ```
 
+Or with hiera, include `postgresql::server` then configure your yaml configuration:
+
+```puppet
+include postgresql::server
+```
+
+```yaml
+postgresql::server::dbs:
+  "mydatabasename":
+    user: "mydatabaseuser"
+    password: "mypassword"
+```
+
+Note: `password` can be plaintext. It will be hashed.
+
 ### Manage users, roles, and permissions
 
 To manage users, roles, and permissions:
@@ -112,6 +127,33 @@ postgresql::server::table_grant { 'my_table of test2':
 ```
 
 This example grants **all** privileges on the test1 database and on the `my_table` table of the test2 database to the specified user or group. After the values are added into the PuppetDB config file, this database would be ready for use.
+
+You can configure it with hiera as well, including postgresql::server in puppet first:
+
+```puppet
+include postgresql::server
+```
+
+```yaml
+postgresql::server::roles:
+  "marmot":
+    password_hash: "mypasswd"
+
+postgresql::server::database_grants:
+  "test1":
+    privilege: "ALL"
+    db: "test1"
+    role: "marmot"
+
+postgresql::server::table_grants:
+  "my_table of test2":
+    privilege: "ALL"
+    table: "my_table"
+    db: "test2"
+    role: "marmot"
+```
+
+Note: `password_hash` can be plaintext. It will be hashed.
 
 ### Manage ownership of DB objects
 

@@ -74,6 +74,9 @@
 # @param manage_logdir Set to false if you have file{ $logdir: } already defined
 # @param manage_xlogdir Set to false if you have file{ $xlogdir: } already defined
 #
+# @param dbs Specifies a hash from which to generate postgresql::server::db resources.
+# @param database_grants Specifies a hash from which to generate postgresql::server::database_grant resources.
+# @param table_grants Specifies a hash from which to generate postgresql::server::table_grant resources.
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
@@ -148,9 +151,12 @@ class postgresql::server (
   $password_encryption                             = $postgresql::params::password_encryption,
   $extra_systemd_config                            = $postgresql::params::extra_systemd_config,
 
-  Hash[String, Hash] $roles         = {},
-  Hash[String, Any] $config_entries = {},
-  Hash[String, Hash] $pg_hba_rules  = {},
+  Hash[String, Hash] $dbs             = {},
+  Hash[String, Hash] $roles           = {},
+  Hash[String, Hash] $database_grants = {},
+  Hash[String, Hash] $table_grants    = {},
+  Hash[String, Any] $config_entries   = {},
+  Hash[String, Hash] $pg_hba_rules    = {},
 
   #Deprecated
   $version                    = undef,
@@ -182,6 +188,24 @@ class postgresql::server (
   -> Class['postgresql::server::config']
   -> Class['postgresql::server::service']
   -> Class['postgresql::server::passwd']
+
+  $dbs.each |$db_name, $db| {
+    postgresql::server::db { $db_name:
+      * => $db,
+    }
+  }
+
+  $database_grants.each |$database_grant_name, $database_grant| {
+    postgresql::server::database_grant { $database_grant_name:
+      * => $database_grant,
+    }
+  }
+
+  $table_grants.each |$table_grant_name, $table_grant| {
+    postgresql::server::table_grant { $table_grant_name:
+      * => $table_grant,
+    }
+  }
 
   $roles.each |$rolename, $role| {
     postgresql::server::role { $rolename:
