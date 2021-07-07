@@ -1,5 +1,5 @@
 # @summary Define for conveniently creating a role, database and assigning the correctpermissions.
-# 
+#
 # @param user User to create and assign access to the database upon creation. Mandatory.
 # @param password Required Sets the password for the created user.
 # @param comment Defines a comment to be stored about the database using the PostgreSQL COMMENT command.
@@ -13,7 +13,7 @@
 # @param owner Sets a user as the owner of the database.
 define postgresql::server::db (
   $user,
-  $password,
+  Variant[String, Sensitive[String]] $password,
   $comment    = undef,
   $dbname     = $title,
   $encoding   = $postgresql::server::encoding,

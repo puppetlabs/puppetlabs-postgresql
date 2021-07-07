@@ -20,7 +20,7 @@
 # @param module_workdir Specifies working directory under which the psql command should be executed. May need to specify if '/tmp' is on volume mounted with noexec option.
 define postgresql::server::role (
   $update_password = true,
-  $password_hash    = false,
+  Variant[Boolean, String, Sensitive[String]] $password_hash  = false,
   $createdb         = false,
   $createrole       = false,
   $db               = $postgresql::server::default_database,
@@ -38,6 +38,11 @@ define postgresql::server::role (
   $module_workdir   = $postgresql::server::module_workdir,
   Enum['present', 'absent'] $ensure = 'present',
 ) {
+  $password_hash_unsensitive = if $password_hash =~ Sensitive[String] {
+    $password_hash.unwrap
+  } else {
+    $password_hash
+  }
   #
   # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
   #
@@ -75,17 +80,17 @@ define postgresql::server::role (
     $createdb_sql    = $createdb    ? { true => 'CREATEDB',    default => 'NOCREATEDB' }
     $superuser_sql   = $superuser   ? { true => 'SUPERUSER',   default => 'NOSUPERUSER' }
     $replication_sql = $replication ? { true => 'REPLICATION', default => '' }
-    if ($password_hash != false) {
-      $password_sql = "ENCRYPTED PASSWORD '${password_hash}'"
+    if ($password_hash_unsensitive != false) {
+      $password_sql = "ENCRYPTED PASSWORD '${password_hash_unsensitive}'"
     } else {
       $password_sql = ''
     }
 
     postgresql_psql { "CREATE ROLE ${username} ENCRYPTED PASSWORD ****":
-      command     => Sensitive("CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}"),
-      unless      => "SELECT 1 FROM pg_roles WHERE rolname = '${username}'",
-      require     => undef,
-      sensitive   => true,
+      command   => Sensitive("CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}"),
+      unless    => "SELECT 1 FROM pg_roles WHERE rolname = '${username}'",
+      require   => undef,
+      sensitive => true,
     }
 
     postgresql_psql { "ALTER ROLE \"${username}\" ${superuser_sql}":
@@ -124,17 +129,17 @@ define postgresql::server::role (
       unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolconnlimit = ${connection_limit}",
     }
 
-    if $password_hash and $update_password {
-      if($password_hash =~ /^md5.+/) {
-        $pwd_hash_sql = $password_hash
+    if $password_hash_unsensitive and $update_password {
+      if($password_hash_unsensitive =~ /^md5.+/) {
+        $pwd_hash_sql = $password_hash_unsensitive
       } else {
-        $pwd_md5 = md5("${password_hash}${username}")
+        $pwd_md5 = md5("${password_hash_unsensitive}${username}")
         $pwd_hash_sql = "md5${pwd_md5}"
       }
       postgresql_psql { "ALTER ROLE ${username} ENCRYPTED PASSWORD ****":
-        command     => Sensitive("ALTER ROLE \"${username}\" ${password_sql}"),
-        unless      => Sensitive("SELECT 1 FROM pg_shadow WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'"),
-        sensitive   => true,
+        command   => Sensitive("ALTER ROLE \"${username}\" ${password_sql}"),
+        unless    => Sensitive("SELECT 1 FROM pg_shadow WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'"),
+        sensitive => true,
       }
     }
   } else {

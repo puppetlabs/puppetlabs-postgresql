@@ -862,7 +862,7 @@ The following parameters are available in the `postgresql::server` class:
 
 ##### <a name="postgres_password"></a>`postgres_password`
 
-Data type: `Any`
+Data type: `Variant[String, Sensitive[String]]`
 
 Sets the password for the postgres user to your specified value. By default, this setting uses the superuser account in the Postgres database, with a user called postgres and no password.
 
@@ -1645,7 +1645,7 @@ User to create and assign access to the database upon creation. Mandatory.
 
 ##### <a name="password"></a>`password`
 
-Data type: `Any`
+Data type: `Variant[String, Sensitive[String]]`
 
 Required Sets the password for the created user.
 
@@ -2446,7 +2446,7 @@ Default value: ``true``
 
 ##### <a name="password_hash"></a>`password_hash`
 
-Data type: `Any`
+Data type: `Variant[String, Sensitive[String]]`
 
 Sets the hash to use during password creation.
 
@@ -2588,7 +2588,7 @@ Create a new schema.
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 postgresql::server::schema {'private':
@@ -2819,7 +2819,7 @@ Default value: ``undef``
 
 ##### <a name="database_password"></a>`database_password`
 
-Data type: `Any`
+Data type: `Variant[String, Sensitive[String]]`
 
 Specifies the password to connect with.
 
@@ -2980,6 +2980,8 @@ Hash of environment variables for connection to a db.
 The name of the database you are trying to validate a connection with.
 
 ##### <a name="db_password"></a>`db_password`
+
+Data type: `Variant[String, Sensitive[String]]`
 
 The password required to access the target PostgreSQL database.
 
@@ -3194,7 +3196,7 @@ This function pull default values from the `params` class  or `globals` class if
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 postgresql::default('variable')
@@ -3208,7 +3210,7 @@ Returns: `Any`
 
 ##### Examples
 
-###### 
+######
 
 ```puppet
 postgresql::default('variable')
@@ -3244,7 +3246,7 @@ Type: Ruby 4.x API
 
 This function returns the postgresql password hash from the clear text username / password
 
-#### `postgresql::postgresql_password(Variant[String[1],Integer] $username, Variant[String[1],Integer] $password)`
+#### `postgresql::postgresql_password(Variant[String[1],Integer] $username, Variant[String[1], Sensitive[String[1]], Integer] $password)`
 
 The postgresql::postgresql_password function.
 
@@ -3261,6 +3263,12 @@ The clear text `username`
 Data type: `Variant[String[1],Integer]`
 
 The clear text `password`
+
+##### `sensitive`
+
+Data type: `Boolean`
+
+If the Postgresql-Passwordhash should be of Datatype Sensitive[String]
 
 ### <a name="postgresql_escape"></a>`postgresql_escape`
 
