@@ -2,7 +2,23 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v7.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.2.0) (2021-05-22)
+## [v7.3.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.3.0) (2021-08-02)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.2.0...v7.3.0)
+
+### Added
+
+- MODULES-11049 - Implement default privileges changes [\#1267](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1267) ([mtancoigne](https://github.com/mtancoigne))
+
+### Fixed
+
+- \(MODULES-8700\) Autorequire the service in postgresql\_psql [\#1276](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1276) ([ekohl](https://github.com/ekohl))
+
+### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+
+- Do not add version component to repo definition [\#1282](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1282) ([weastur](https://github.com/weastur))
+
+## [v7.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.2.0) (2021-05-24)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.1.0...v7.2.0)
 
