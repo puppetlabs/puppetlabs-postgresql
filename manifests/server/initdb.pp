@@ -146,30 +146,6 @@ class postgresql::server::initdb {
       require   => File[$require_before_initdb],
       cwd       => $module_workdir,
     }
-    # The package will take care of this for us the first time, but if we
-    # ever need to init a new db we need to copy these files explicitly
-    if $facts['os']['name'] == 'Debian' or $facts['os']['name'] == 'Ubuntu' {
-      if $facts['os']['release']['major'] in ['6', '7', '10.04', '12.04'] {
-        file { 'server.crt':
-          ensure  => file,
-          path    => "${datadir}/server.crt",
-          source  => 'file:///etc/ssl/certs/ssl-cert-snakeoil.pem',
-          owner   => $postgresql::server::user,
-          group   => $postgresql::server::group,
-          mode    => '0644',
-          require => Exec['postgresql_initdb'],
-        }
-        file { 'server.key':
-          ensure  => file,
-          path    => "${datadir}/server.key",
-          source  => 'file:///etc/ssl/private/ssl-cert-snakeoil.key',
-          owner   => $postgresql::server::user,
-          group   => $postgresql::server::group,
-          mode    => '0600',
-          require => Exec['postgresql_initdb'],
-        }
-      }
-    }
   } elsif $encoding != undef {
     # [workaround]
     # by default pg_createcluster encoding derived from locale
