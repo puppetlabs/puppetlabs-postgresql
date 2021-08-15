@@ -44,10 +44,6 @@ def param(type, title, param)
   param_value(catalogue, type, title, param)
 end
 
-def postgresql_version
-  '9.6'
-end
-
 shared_examples 'postgresql_password function' do
   it { is_expected.not_to eq(nil) }
 
