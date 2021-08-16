@@ -32,7 +32,7 @@ describe 'postgresql::server::config', type: :class do
     end
 
     it 'has SELinux port defined' do
-      is_expected.to contain_package('policycoreutils-python') .with(ensure: 'present')
+      is_expected.to contain_package('policycoreutils-python').with(ensure: 'installed')
 
       is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
@@ -141,7 +141,7 @@ describe 'postgresql::server::config', type: :class do
     end
 
     it 'has SELinux port defined' do
-      is_expected.to contain_package('policycoreutils-python-utils') .with(ensure: 'present')
+      is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'installed')
 
       is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
@@ -214,7 +214,7 @@ describe 'postgresql::server::config', type: :class do
     end
 
     it 'has SELinux port defined' do
-      is_expected.to contain_package('policycoreutils-python-utils') .with(ensure: 'present')
+      is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'installed')
 
       is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
@@ -282,7 +282,7 @@ describe 'postgresql::server::config', type: :class do
     end
 
     it 'has SELinux port defined' do
-      is_expected.to contain_package('policycoreutils') .with(ensure: 'present')
+      is_expected.to contain_package('policycoreutils').with(ensure: 'installed')
 
       is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')

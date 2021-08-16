@@ -54,7 +54,7 @@ describe 'postgresql::server::extension', type: :define do # rubocop:disable RSp
 
     it {
       is_expected.to contain_package('postgis')
-        .with(ensure: 'present', name: 'postgis').that_comes_before('Postgresql_psql[template_postgis: CREATE EXTENSION "postgis"]')
+        .with(ensure: 'installed', name: 'postgis').that_comes_before('Postgresql_psql[template_postgis: CREATE EXTENSION "postgis"]')
     }
   end
 
@@ -86,7 +86,7 @@ describe 'postgresql::server::extension', type: :define do # rubocop:disable RSp
 
       it {
         is_expected.to contain_package('postgis')
-          .with(ensure: 'present', name: 'postgis').that_requires('Postgresql_psql[template_postgis: DROP EXTENSION "postgis"]')
+          .with(ensure: 'installed', name: 'postgis').that_requires('Postgresql_psql[template_postgis: DROP EXTENSION "postgis"]')
       }
     end
   end
