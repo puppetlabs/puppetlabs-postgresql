@@ -197,6 +197,7 @@ class postgresql::globals (
         '8'     => '9.4',
         '9'     => '9.6',
         '10'    => '11',
+        '11'    => '13',
         default => undef,
       },
       'Ubuntu' => $facts['os']['release']['major'] ? {
