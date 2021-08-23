@@ -97,16 +97,7 @@ define postgresql::server::config_entry (
   # a systemd override for the port or update the sysconfig file, but this
   # is managed for us in postgresql::server::config.
   if $facts['os']['name'] == 'Debian' or $facts['os']['name'] == 'Ubuntu' {
-    if $name == 'port' and $facts['os']['release']['major'] in ['6', '10.04'] {
-      exec { "postgresql_stop_${name}":
-        command => "service ${postgresql::server::service_name} stop",
-        onlyif  => "service ${postgresql::server::service_name} status",
-        unless  => "grep 'port = ${value}' ${postgresql::server::postgresql_conf_path}",
-        path    => '/usr/sbin:/sbin:/bin:/usr/bin:/usr/local/bin',
-        before  => Postgresql_conf[$name],
-      }
-    }
-    elsif $name == 'data_directory' {
+    if $name == 'data_directory' {
       exec { "postgresql_stop_${name}":
         command => "service ${postgresql::server::service_name} stop",
         onlyif  => "service ${postgresql::server::service_name} status",
