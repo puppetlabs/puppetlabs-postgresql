@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v7.4.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.4.0) (2021-08-24)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.3.0...v7.4.0)
+
+### Added
+
+- pdksync - \(IAC-1709\) - Add Support for Debian 11 [\#1288](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1288) ([david22swan](https://github.com/david22swan))
+
+### Fixed
+
+- drop code for Debian 6/7 and Ubuntu 10.04/12.04 [\#1290](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1290) ([evgeni](https://github.com/evgeni))
+
 ## [v7.3.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.3.0) (2021-08-03)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.2.0...v7.3.0)
