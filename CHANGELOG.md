@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v7.4.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.4.1) (2021-08-25)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.4.0...v7.4.1)
+
+### Fixed
+
+- \(maint\) Allow stdlib 8.0.0 [\#1293](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1293) ([smortex](https://github.com/smortex))
+
 ## [v7.4.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.4.0) (2021-08-24)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.3.0...v7.4.0)
