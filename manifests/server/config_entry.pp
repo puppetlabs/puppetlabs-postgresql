@@ -1,4 +1,9 @@
-# Manage a postgresql.conf entry. See README.md for more details.
+# @summary Manage a postgresql.conf entry.
+#
+# @param ensure Removes an entry if set to 'absent'.
+# @param value Defines the value for the setting.
+# @param path Path for postgresql.conf 
+#
 define postgresql::server::config_entry (
   $ensure = 'present',
   $value  = undef,
@@ -112,7 +117,7 @@ define postgresql::server::config_entry (
     }
   }
   if $::osfamily == 'RedHat' {
-    if ! ($::operatingsystemrelease =~ /^7/ or $::operatingsystem == 'Fedora') {
+    if ! ($::operatingsystemrelease =~ /^7|^8/ or $::operatingsystem == 'Fedora') {
       if $name == 'port' {
         # We need to force postgresql to stop before updating the port
         # because puppet becomes confused and is unable to manage the

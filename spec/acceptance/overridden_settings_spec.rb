@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 # These tests are designed to ensure that the module, when ran overrides,
 # sets up everything correctly and allows us to connect to Postgres.
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   pp = <<-MANIFEST
     class { 'postgresql::server':
       roles          => {
@@ -31,8 +31,7 @@ describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfa
   MANIFEST
 
   it 'with additional hiera entries' do
-    apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_changes: true)
+    idempotent_apply(default, pp)
   end
 
   describe port(5432) do

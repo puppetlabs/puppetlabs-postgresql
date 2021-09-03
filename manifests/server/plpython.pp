@@ -1,5 +1,9 @@
-# This class installs the PL/Python procedural language for postgresql. See
-# README.md for more details.
+# @summary This class installs the PL/Python procedural language for postgresql.
+#
+# @param package_ensure 
+#   Specifies whether the package is present.
+# @param package_name
+#   Specifies the name of the postgresql PL/Python package.
 class postgresql::server::plpython(
   $package_ensure = 'present',
   $package_name   = $postgresql::server::plpython_package_name,
@@ -7,7 +11,7 @@ class postgresql::server::plpython(
   package { 'postgresql-plpython':
     ensure => $package_ensure,
     name   => $package_name,
-    tag    => 'postgresql',
+    tag    => 'puppetlabs-postgresql',
   }
 
   anchor { 'postgresql::server::plpython::start': }

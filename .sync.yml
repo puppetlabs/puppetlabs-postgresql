@@ -1,4 +1,11 @@
 ---
+.gitignore:
+  required:
+    - ---.project
+
+.gitlab-ci.yml:
+  unmanaged: true
+
 .travis.yml:
   docker_sets:
     - set: docker/centos-7
@@ -8,6 +15,9 @@
   secure: ""
   branches:
     - release
+
+appveyor.yml:
+  delete: true
 
 Gemfile:
   required:
@@ -29,8 +39,6 @@ Gemfile:
 Rakefile:
   changelog_user: puppetlabs
 
-appveyor.yml:
-  delete: true
-
-.gitlab-ci.yml:
-  unmanaged: true
+spec/spec_helper.rb:
+  mock_with: ':rspec'
+  coverage_report: true

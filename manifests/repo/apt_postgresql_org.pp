@@ -1,4 +1,4 @@
-# PRIVATE CLASS: do not use directly
+# @api private
 class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
   include ::apt
 
@@ -27,6 +27,6 @@ class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
     },
   }
 
-  Apt::Source['apt.postgresql.org']->Package<|tag == 'postgresql'|>
-  Class['Apt::Update'] -> Package<|tag == 'postgresql'|>
+  Apt::Source['apt.postgresql.org']->Package<|tag == 'puppetlabs-postgresql'|>
+  Class['Apt::Update'] -> Package<|tag == 'puppetlabs-postgresql'|>
 }

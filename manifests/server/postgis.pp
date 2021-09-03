@@ -1,4 +1,7 @@
-# Install the postgis postgresql packaging. See README.md for more details.
+# @summary Install the postgis postgresql packaging.
+#
+# @param package_name Sets the package name.
+# @param package_ensure Specifies if the package is present or not.
 class postgresql::server::postgis (
   String $package_name      = $postgresql::params::postgis_package_name,
   String[1] $package_ensure = 'present'
@@ -7,7 +10,7 @@ class postgresql::server::postgis (
   package { 'postgresql-postgis':
     ensure => $package_ensure,
     name   => $package_name,
-    tag    => 'postgresql',
+    tag    => 'puppetlabs-postgresql',
   }
 
   anchor { 'postgresql::server::postgis::start': }

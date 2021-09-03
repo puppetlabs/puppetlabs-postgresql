@@ -1,4 +1,4 @@
-# PRIVATE CLASS: do not use directly
+# @api private
 class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
   $version_parts   = split($postgresql::repo::version, '[.]')
   $package_version = "${version_parts[0]}${version_parts[1]}"
@@ -32,5 +32,5 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     proxy    => $postgresql::repo::proxy,
   }
 
-  Yumrepo['yum.postgresql.org'] -> Package<|tag == 'postgresql'|>
+  Yumrepo['yum.postgresql.org'] -> Package<|tag == 'puppetlabs-postgresql'|>
 }

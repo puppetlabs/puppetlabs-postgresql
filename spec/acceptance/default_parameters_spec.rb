@@ -2,14 +2,13 @@ require 'spec_helper_acceptance'
 
 # These tests are designed to ensure that the module, when ran with defaults,
 # sets up everything correctly and allows us to connect to Postgres.
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
+describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
   it 'with defaults' do
     pp = <<-MANIFEST
       class { 'postgresql::server': }
     MANIFEST
 
-    apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_changes: true)
+    idempotent_apply(default, pp)
   end
 
   describe port(5432) do

@@ -1,5 +1,5 @@
 Puppet::Type.type(:postgresql_replication_slot).provide(:ruby) do
-  # For confinement
+  desc 'For confinement'
   commands psql: 'psql'
 
   def self.instances
@@ -44,16 +44,12 @@ Puppet::Type.type(:postgresql_replication_slot).provide(:ruby) do
   end
 
   def self.run_command(command, user, group)
-    if Puppet::PUPPETVERSION.to_f < 3.4
-      Puppet::Util::SUIDManager.run_and_capture(command, user, group)
-    else
-      output = Puppet::Util::Execution.execute(command, uid: user,
-                                                        gid: group,
-                                                        failonfail: false,
-                                                        combine: true,
-                                                        override_locale: true,
-                                                        custom_environment: {})
-      [output, $CHILD_STATUS.dup]
-    end
+    output = Puppet::Util::Execution.execute(command, uid: user,
+                                                      gid: group,
+                                                      failonfail: false,
+                                                      combine: true,
+                                                      override_locale: true,
+                                                      custom_environment: {})
+    [output, $CHILD_STATUS.dup]
   end
 end

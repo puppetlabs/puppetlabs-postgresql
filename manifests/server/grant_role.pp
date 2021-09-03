@@ -1,4 +1,12 @@
-# Define for granting membership to a role. See README.md for more information
+# @summary Define for granting membership to a role.
+#
+# @param group Specifies the group role to which you are assigning a role.
+# @param role Specifies the role you want to assign to a group. If left blank, uses the name of the resource.
+# @param ensure Specifies whether to grant or revoke the membership. Valid options: 'present' or 'absent'.
+# @param psql_db Specifies the database to execute the grant against. This should not ordinarily be changed from the default
+# @param psql_user Sets the OS user to run psql.
+# @param port Port to use when connecting.
+# @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 define postgresql::server::grant_role (
   String[1] $group,
   String[1] $role                   = $name,

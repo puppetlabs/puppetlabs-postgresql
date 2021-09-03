@@ -5,7 +5,7 @@ module Puppet::Parser::Functions
     suitable for create_resources. It is not intended to be used outside of the
     postgresql internal classes/defined resources.
 
-    This function accepts an array of strings that are pg_hba.conf rules. It
+    @return This function accepts an array of strings that are pg_hba.conf rules. It
     will return a hash that can be fed into create_resources to create multiple
     individual pg_hba_rule resources.
 

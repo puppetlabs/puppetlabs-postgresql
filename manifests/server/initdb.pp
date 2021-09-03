@@ -1,4 +1,4 @@
-# PRIVATE CLASS: do not call directly
+# @api private
 class postgresql::server::initdb {
   $needs_initdb   = $postgresql::server::needs_initdb
   $initdb_path    = $postgresql::server::initdb_path
@@ -69,7 +69,7 @@ class postgresql::server::initdb {
     # We optionally add the locale switch if specified. Older versions of the
     # initdb command don't accept this switch. So if the user didn't pass the
     # parameter, lets not pass the switch at all.
-    $ic_base = "${initdb_path} --encoding '${encoding}' --pgdata '${datadir}'"
+    $ic_base = "${initdb_path} --pgdata '${datadir}'"
     $ic_xlog = $xlogdir ? {
       undef   => $ic_base,
       default => "${ic_base} -X '${xlogdir}'"
@@ -83,9 +83,15 @@ class postgresql::server::initdb {
       $require_before_initdb = [$datadir]
     }
 
-    $ic_locale = $locale ? {
+    # PostgreSQL 11 no longer allows empty encoding
+    $ic_encoding = $encoding ? {
       undef   => $ic_xlog,
-      default => "${ic_xlog} --locale '${locale}'"
+      default => "${ic_xlog} --encoding '${encoding}'"
+    }
+
+    $ic_locale = $locale ? {
+      undef   => $ic_encoding,
+      default => "${ic_encoding} --locale '${locale}'"
     }
 
     $initdb_command = $data_checksums ? {

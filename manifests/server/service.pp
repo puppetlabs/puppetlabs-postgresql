@@ -1,4 +1,4 @@
-# PRIVATE CLASS: do not call directly
+# @api private
 class postgresql::server::service {
   $service_ensure   = $postgresql::server::service_ensure
   $service_enable   = $postgresql::server::service_enable

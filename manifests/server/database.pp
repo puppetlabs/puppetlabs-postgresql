@@ -1,4 +1,14 @@
-# Define for creating a database. See README.md for more details.
+# @summary Define for creating a database.
+#
+# @param comment Sets a comment on the database.
+# @param dbname Sets the name of the database.
+# @param owner Sets name of the database owner.
+# @param tablespace Sets tablespace for where to create this database.
+# @param template Specifies the name of the template database from which to build this database. Default value: 'template0'.
+# @param encoding Overrides the character set during creation of the database.
+# @param locale Overrides the locale during creation of the database.
+# @param istemplate Defines the database as a template if set to true.
+# @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 define postgresql::server::database(
   $comment          = undef,
   $dbname           = $title,
