@@ -133,6 +133,117 @@ describe 'postgresql::server::default_privileges', type: :define do
 
       it { is_expected.to compile.and_raise_error(%r{Illegal value for \$privilege parameter}) }
     end
+
+    context 'schemas on postgres < 10.0' do
+      let(:facts) do
+        {
+          os: {
+            family: 'Debian',
+            name: 'Debian',
+            release: { 'full' => '9.0', 'major' => '9' },
+          },
+          kernel: 'Linux',
+          id: 'root',
+          path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        }
+      end
+
+      let :params do
+        {
+          db: 'test',
+          role: 'test',
+          privilege: 'all',
+          object_type: 'schemas',
+          schema: '',
+        }
+      end
+
+      let :pre_condition do
+        "class {'postgresql::server':}"
+      end
+
+      it { is_expected.to compile.and_raise_error(%r{Default_privileges on schemas is only supported on PostgreSQL >= 10.0}m) }
+    end
+
+    context 'schemas on postgres >= 10.0' do
+      let :facts do
+        {
+          os: {
+            family: 'Debian',
+            name: 'Debian',
+            release: { 'full' => '10.0', 'major' => '10' },
+          },
+          kernel: 'Linux',
+          id: 'root',
+          path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        }
+      end
+
+      let :params do
+        {
+          db: 'test',
+          role: 'test',
+          privilege: 'all',
+          object_type: 'schemas',
+          schema: '',
+        }
+      end
+
+      let :pre_condition do
+        <<-MANIFEST
+          class { 'postgresql::globals':
+            version => '10.0',
+          }
+          class { 'postgresql::server': }
+        MANIFEST
+      end
+
+      it { is_expected.to compile.with_all_deps }
+      it { is_expected.to contain_postgresql__server__default_privileges('test') }
+      it do
+        # rubocop:disable Layout/LineLength
+        is_expected.to contain_postgresql_psql('default_privileges:test')
+          .with_command('ALTER DEFAULT PRIVILEGES GRANT ALL ON SCHEMAS TO "test"')
+          .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=UC' = ANY (defaclacl) AND nspname IS NULL and defaclobjtype = 'n')")
+        # rubocop:enable Layout/LineLength
+      end
+    end
+
+    context 'nested schemas are invalid' do
+      let :facts do
+        {
+          os: {
+            family: 'Debian',
+            name: 'Debian',
+            release: { 'full' => '10.0', 'major' => '10' },
+          },
+          kernel: 'Linux',
+          id: 'root',
+          path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        }
+      end
+
+      let :params do
+        {
+          db: 'test',
+          role: 'test',
+          privilege: 'all',
+          object_type: 'schemas',
+          schema: 'public',
+        }
+      end
+
+      let :pre_condition do
+        <<-MANIFEST
+          class { 'postgresql::globals':
+            version => '10.0',
+          }
+          class { 'postgresql::server': }
+        MANIFEST
+      end
+
+      it { is_expected.to compile.and_raise_error(%r{Cannot alter default schema permissions within a schema}) }
+    end
   end
 
   context 'with specific db connection settings - default port' do
