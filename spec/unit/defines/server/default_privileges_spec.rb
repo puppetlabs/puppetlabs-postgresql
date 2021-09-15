@@ -253,6 +253,36 @@ describe 'postgresql::server::default_privileges', type: :define do
     end
   end
 
+  context 'with a target role' do
+    let :params do
+      {
+        target_role: 'target',
+        db: 'test',
+        role: 'test',
+        privilege: 'all',
+        object_type: 'tables',
+      }
+    end
+
+    let :pre_condition do
+      <<-EOS
+      class {'postgresql::server':}
+      postgresql::server::role { 'target': }
+      EOS
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__default_privileges('test') }
+    it { is_expected.to contain_postgresql__server__role('target') }
+    it do
+      # rubocop:disable Layout/LineLength
+      is_expected.to contain_postgresql_psql('default_privileges:test')
+        .with_command('ALTER DEFAULT PRIVILEGES FOR ROLE target IN SCHEMA public GRANT ALL ON TABLES TO "test"')
+        .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=arwdDxt/target' = ANY (defaclacl) AND nspname = 'public' and defaclobjtype = 'r')")
+      # rubocop:enable Layout/LineLength
+    end
+  end
+
   context 'standalone not managing server' do
     let :params do
       {
