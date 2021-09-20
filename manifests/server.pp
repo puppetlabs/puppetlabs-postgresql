@@ -83,7 +83,7 @@
 # @param extra_systemd_config Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
 #
 class postgresql::server (
-  $postgres_password                               = undef,
+  Optional[Variant[String[1], Sensitive[String[1]], Integer]] $postgres_password = undef,
 
   $package_name                                    = $postgresql::params::server_package_name,
   $package_ensure                                  = $postgresql::params::package_ensure,
