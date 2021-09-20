@@ -5,11 +5,11 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
   $gpg_key_path    = "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}"
 
   file { $gpg_key_path:
-    source => 'puppet:///modules/postgresql/RPM-GPG-KEY-PGDG',
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
-    before => Yumrepo['yum.postgresql.org'],
+    content => file('postgresql/RPM-GPG-KEY-PGDG'),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    before  => Yumrepo['yum.postgresql.org'],
   }
 
   if($facts['os']['name'] == 'Fedora') {
