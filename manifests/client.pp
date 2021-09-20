@@ -26,10 +26,10 @@ class postgresql::client (
   }
 
   file { $validcon_script_path:
-    ensure => $file_ensure,
-    source => 'puppet:///modules/postgresql/validate_postgresql_connection.sh',
-    owner  => 0,
-    group  => 0,
-    mode   => '0755',
+    ensure  => $file_ensure,
+    content => file('postgresql/validate_postgresql_connection.sh'),
+    owner   => 0,
+    group   => 0,
+    mode    => '0755',
   }
 }
