@@ -144,7 +144,7 @@ define postgresql::server::default_privileges (
     psql_group       => $group,
     psql_path        => $psql_path,
     unless           => $unless_cmd,
-    environment      => "PGOPTIONS=--client-min-messages=error"
+    environment      => 'PGOPTIONS=--client-min-messages=error'
   }
 
   if($role != undef and defined(Postgresql::Server::Role[$role])) {
