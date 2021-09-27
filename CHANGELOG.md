@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v7.5.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.5.0) (2021-09-27)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.4.1...v7.5.0)
+
+### Added
+
+- Use Puppet-Datatype Sensitive for Passwords [\#1279](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1279) ([cocker-cc](https://github.com/cocker-cc))
+
+### Fixed
+
+- Inline file contents in the catalog [\#1299](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1299) ([ekohl](https://github.com/ekohl))
+- Fix changing default encoding [\#1296](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1296) ([smortex](https://github.com/smortex))
+
 ## [v7.4.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.4.1) (2021-08-25)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.4.0...v7.4.1)
