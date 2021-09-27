@@ -106,48 +106,45 @@ define postgresql::server::config_entry (
         before  => Postgresql_conf[$name],
       }
     }
-  }
-  if $facts['os']['family'] == 'RedHat' {
-    if ! ($facts['os']['release']['major'] in ['7', '8'] or $facts['os']['name'] == 'Fedora') {
-      if $name == 'port' {
-        # We need to force postgresql to stop before updating the port
-        # because puppet becomes confused and is unable to manage the
-        # service appropriately.
-        exec { "postgresql_stop_${name}":
-          command => "service ${postgresql::server::service_name} stop",
-          onlyif  => "service ${postgresql::server::service_name} status",
-          unless  => "grep 'PGPORT=${value}' /etc/sysconfig/pgsql/postgresql",
-          path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
-          require => File['/etc/sysconfig/pgsql/postgresql'],
-        }
-        -> augeas { 'override PGPORT in /etc/sysconfig/pgsql/postgresql':
-          lens    => 'Shellvars.lns',
-          incl    => '/etc/sysconfig/pgsql/postgresql',
-          context => '/files/etc/sysconfig/pgsql/postgresql',
-          changes => "set PGPORT ${value}",
-          require => File['/etc/sysconfig/pgsql/postgresql'],
-          notify  => Class['postgresql::server::service'],
-          before  => Class['postgresql::server::reload'],
-        }
-      } elsif $name == 'data_directory' {
-        # We need to force postgresql to stop before updating the data directory
-        # otherwise init script breaks
-        exec { "postgresql_${name}":
-          command => "service ${postgresql::server::service_name} stop",
-          onlyif  => "service ${postgresql::server::service_name} status",
-          unless  => "grep 'PGDATA=${value}' /etc/sysconfig/pgsql/postgresql",
-          path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
-          require => File['/etc/sysconfig/pgsql/postgresql'],
-        }
-        -> augeas { 'override PGDATA in /etc/sysconfig/pgsql/postgresql':
-          lens    => 'Shellvars.lns',
-          incl    => '/etc/sysconfig/pgsql/postgresql',
-          context => '/files/etc/sysconfig/pgsql/postgresql',
-          changes => "set PGDATA ${value}",
-          require => File['/etc/sysconfig/pgsql/postgresql'],
-          notify  => Class['postgresql::server::service'],
-          before  => Class['postgresql::server::reload'],
-        }
+  } elsif $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') < 0 {
+    if $name == 'port' {
+      # We need to force postgresql to stop before updating the port
+      # because puppet becomes confused and is unable to manage the
+      # service appropriately.
+      exec { "postgresql_stop_${name}":
+        command => "service ${postgresql::server::service_name} stop",
+        onlyif  => "service ${postgresql::server::service_name} status",
+        unless  => "grep 'PGPORT=${value}' /etc/sysconfig/pgsql/postgresql",
+        path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
+        require => File['/etc/sysconfig/pgsql/postgresql'],
+      }
+      -> augeas { 'override PGPORT in /etc/sysconfig/pgsql/postgresql':
+        lens    => 'Shellvars.lns',
+        incl    => '/etc/sysconfig/pgsql/postgresql',
+        context => '/files/etc/sysconfig/pgsql/postgresql',
+        changes => "set PGPORT ${value}",
+        require => File['/etc/sysconfig/pgsql/postgresql'],
+        notify  => Class['postgresql::server::service'],
+        before  => Class['postgresql::server::reload'],
+      }
+    } elsif $name == 'data_directory' {
+      # We need to force postgresql to stop before updating the data directory
+      # otherwise init script breaks
+      exec { "postgresql_${name}":
+        command => "service ${postgresql::server::service_name} stop",
+        onlyif  => "service ${postgresql::server::service_name} status",
+        unless  => "grep 'PGDATA=${value}' /etc/sysconfig/pgsql/postgresql",
+        path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
+        require => File['/etc/sysconfig/pgsql/postgresql'],
+      }
+      -> augeas { 'override PGDATA in /etc/sysconfig/pgsql/postgresql':
+        lens    => 'Shellvars.lns',
+        incl    => '/etc/sysconfig/pgsql/postgresql',
+        context => '/files/etc/sysconfig/pgsql/postgresql',
+        changes => "set PGDATA ${value}",
+        require => File['/etc/sysconfig/pgsql/postgresql'],
+        notify  => Class['postgresql::server::service'],
+        before  => Class['postgresql::server::reload'],
       }
     }
   }
