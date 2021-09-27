@@ -37,6 +37,7 @@ release_checks_6:
   - redhat-6-x86_64
   - redhat-7-x86_64
   - redhat-8-x86_64
+  - redhat-9-x86_64
   - centos-6-x86_64
   - centos-7-x86_64
   - centos-8-x86_64
@@ -58,6 +59,7 @@ release_checks_7:
   images:
   - redhat-7-x86_64
   - redhat-8-x86_64
+  - redhat-9-x86_64
   - centos-7-x86_64
   - centos-8-x86_64
   - oracle-7-x86_64
