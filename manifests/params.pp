@@ -184,6 +184,8 @@ class postgresql::params inherits postgresql::globals {
       if $facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['major'], '8') >= 0 {
         # Jessie uses systemd
         $service_status = pick($service_status, "/usr/sbin/service ${service_name}@*-main status")
+      } elsif $facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['major'], '18.04') >= 0 {
+        $service_status = pick($service_status, "/usr/sbin/service ${service_name}@*-main status")
       } elsif $facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['major'], '15.04') >= 0 {
         # Ubuntu releases since vivid use systemd
         $service_status = pick($service_status, "/usr/sbin/service ${service_name} status")
