@@ -158,28 +158,12 @@ class postgresql::params inherits postgresql::globals {
       $user               = pick($user, 'postgres')
       $group              = pick($group, 'postgres')
 
-      if $postgresql::globals::manage_package_repo == true {
-        $needs_initdb = pick($needs_initdb, true)
-        $service_name = pick($service_name, 'postgresql')
-      } else {
-        $needs_initdb = pick($needs_initdb, false)
-        $service_name = $facts['os']['name'] ? {
-          'Debian' => pick($service_name, 'postgresql'),
-          'Ubuntu' => $::lsbmajdistrelease ? {
-            /^10/ => pick($service_name, "postgresql-${version}"),
-            default => pick($service_name, 'postgresql'),
-          },
-          default => undef
-        }
-      }
+      $needs_initdb = pick($needs_initdb, $postgresql::globals::manage_package_repo == true)
+      $service_name = pick($service_name, 'postgresql')
 
       $client_package_name    = pick($client_package_name, "postgresql-client-${version}")
       $server_package_name    = pick($server_package_name, "postgresql-${version}")
-      if $facts['os']['name'] == 'Debian' and $facts['os']['release']['major'] == '10' and $postgresql::globals::manage_package_repo != true {
-        $contrib_package_name = pick($contrib_package_name, 'postgresql-contrib')
-      } else {
-        $contrib_package_name = pick($contrib_package_name, "postgresql-contrib-${version}")
-      }
+      $contrib_package_name = pick($contrib_package_name, "postgresql-contrib-${version}")
       if $postgis_version and versioncmp($postgis_version, '2') < 0 {
         $postgis_package_name = pick($postgis_package_name, "postgresql-${version}-postgis")
       } elsif $postgis_version and versioncmp($postgis_version, '3') >= 0 {
@@ -188,13 +172,7 @@ class postgresql::params inherits postgresql::globals {
         $postgis_package_name = pick($postgis_package_name, "postgresql-${version}-postgis-${postgis_version}")
       }
       $devel_package_name     = pick($devel_package_name, 'libpq-dev')
-      $java_package_name = $facts['os']['name'] ? {
-        'Debian' => $facts['os']['release']['major'] ? {
-          '6'     => pick($java_package_name, 'libpg-java'),
-          default => pick($java_package_name, 'libpostgresql-jdbc-java'),
-        },
-        default  => pick($java_package_name, 'libpostgresql-jdbc-java'),
-      }
+      $java_package_name      = pick($java_package_name, 'libpostgresql-jdbc-java')
       $perl_package_name      = pick($perl_package_name, 'libdbd-pg-perl')
       $plperl_package_name    = pick($plperl_package_name, "postgresql-plperl-${version}")
       $plpython_package_name  = pick($plpython_package_name, "postgresql-plpython-${version}")
