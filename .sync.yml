@@ -19,8 +19,32 @@ spec/spec_helper.rb:
   coverage_report: true
 .github/workflows/nightly.yml:
   unmanaged: false
+  exclude_platforms:
+    - Scientific-6
+    - Scientific-7
+    - Debian-9
+    - Debian-10
+    - Debian-11
+    - SLES-12
+    - SLES-15
+    - Ubuntu-14.04
+    - Ubuntu-16.04
+    - Ubuntu-18.04
+    - Ubuntu-20.04
 .github/workflows/pr_test.yml:
   unmanaged: false
+  exclude_platforms:
+    - Scientific-6
+    - Scientific-7
+    - Debian-9
+    - Debian-10
+    - Debian-11
+    - SLES-12
+    - SLES-15
+    - Ubuntu-14.04
+    - Ubuntu-16.04
+    - Ubuntu-18.04
+    - Ubuntu-20.04
 .gitpod.Dockerfile:
   unmanaged: false
 .gitpod.yml:
