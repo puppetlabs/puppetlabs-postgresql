@@ -15,6 +15,10 @@ end
 
 RSpec.configure do |c|
   c.before :suite do
+    # Install iproute on AlmaLinux
+    # Package is used to check if ports are listening
+    LitmusHelper.instance.run_shell('sudo dnf install iproute -y') if %r{redhat}.match?(os[:family]) && os[:release].to_f >= 8
+
     install_dependencies
   end
 end
