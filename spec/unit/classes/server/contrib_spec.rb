@@ -10,9 +10,12 @@ describe 'postgresql::server::contrib', type: :class do
   let :facts do
     {
       os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: { 'full' => '8.0', 'major' => '8' },
+        family: 'RedHat',
+        name: 'RedHat',
+        release: { 'major' => '8' },
+        selinux: {
+          enabled: false,
+        },
       },
       kernel: 'Linux',
       id: 'root',
@@ -41,20 +44,4 @@ describe 'postgresql::server::contrib', type: :class do
     end
   end
 
-  describe 'on Gentoo' do
-    let :facts do
-      {
-        os: {
-          family: 'Gentoo',
-          name: 'Gentoo',
-        },
-      }
-    end
-
-    it 'fails to compile' do
-      expect {
-        is_expected.to compile
-      }.to raise_error(%r{is not supported})
-    end
-  end
 end
