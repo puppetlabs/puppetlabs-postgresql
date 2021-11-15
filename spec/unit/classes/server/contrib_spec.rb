@@ -43,5 +43,4 @@ describe 'postgresql::server::contrib', type: :class do
       is_expected.to contain_package('postgresql-contrib').with(tag: 'puppetlabs-postgresql')
     end
   end
-
 end
