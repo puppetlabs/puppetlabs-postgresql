@@ -8,28 +8,7 @@ describe 'postgresql::server::config' do
   end
 
   describe 'on RedHat 7' do
-    let(:facts) do
-      {
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: true,
-        os: {
-          'architecture' => 'x86_64',
-          'family'       => 'RedHat',
-          'hardware'     => 'x86_64',
-          'name'         => 'CentOS',
-          'release'      => {
-            'full'  => '7.9.2009',
-            'major' => '7',
-            'minor' => '9',
-          },
-          selinux: { 'enabled' => true },
-        },
-        operatingsystemrelease: '7.9.2009',
-        service_provider: 'systemd',
-      }
-    end
+    include_examples 'RedHat 7'
 
     it 'has SELinux port defined' do
       is_expected.to contain_package('policycoreutils-python').with(ensure: 'installed')
@@ -58,29 +37,7 @@ describe 'postgresql::server::config' do
     end
 
     context 'RHEL 7 host with Puppet 5' do
-      let(:facts) do
-        {
-          kernel: 'Linux',
-          id: 'root',
-          path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          selinux: true,
-          os: {
-            'architecture' => 'x86_64',
-            'family'       => 'RedHat',
-            'hardware'     => 'x86_64',
-            'name'         => 'CentOS',
-            'release'      => {
-              'full'  => '7.9.2009',
-              'major' => '7',
-              'minor' => '9',
-            },
-            selinux: { 'enabled' => true },
-          },
-          operatingsystemrelease: '7.9.2009',
-          puppetversion: '5.0.1',
-          service_provider: 'systemd',
-        }
-      end
+      include_examples 'RedHat 7'
 
       it 'has systemctl restart command' do
         is_expected.to contain_exec('restart-systemd').with(
@@ -116,29 +73,7 @@ describe 'postgresql::server::config' do
   end
 
   describe 'on Redhat 8' do
-    let(:facts) do
-      {
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: true,
-        os: {
-          'architecture' => 'x86_64',
-          'family'       => 'RedHat',
-          'hardware'     => 'x86_64',
-          'name'         => 'RedHat',
-          'release'      => {
-            'full'  => '8.2.2004',
-            'major' => '8',
-            'minor' => '2',
-          },
-          selinux: { 'enabled' => true },
-        },
-        operatingsystem: 'RedHat',
-        operatingsystemrelease: '8.2.2004',
-        service_provider: 'systemd',
-      }
-    end
+    include_examples 'RedHat 8'
 
     it 'has SELinux port defined' do
       is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'installed')
@@ -189,29 +124,7 @@ describe 'postgresql::server::config' do
   end
 
   describe 'on Fedora 33' do
-    let(:facts) do
-      {
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: true,
-        os: {
-          'architecture' => 'x86_64',
-          'family'       => 'RedHat',
-          'hardware'     => 'x86_64',
-          'name'         => 'Fedora',
-          'release'      => {
-            'full'  => '33',
-            'major' => '33',
-            'minor' => '33',
-          },
-          selinux: { 'enabled' => true },
-        },
-        operatingsystem: 'Fedora',
-        operatingsystemrelease: '33',
-        service_provider: 'systemd',
-      }
-    end
+    include_examples 'Fedora 33'
 
     it 'has SELinux port defined' do
       is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'installed')
@@ -263,23 +176,7 @@ describe 'postgresql::server::config' do
   end
 
   describe 'on Amazon' do
-    let :facts do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'Amazon',
-          release: {
-            'full'  => '1.0',
-            'major' => '1',
-          },
-          selinux: { 'enabled' => true },
-        },
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: true,
-      }
-    end
+    include_examples 'Amazon 1'
 
     it 'has SELinux port defined' do
       is_expected.to contain_package('policycoreutils').with(ensure: 'installed')
@@ -292,6 +189,7 @@ describe 'postgresql::server::config' do
   end
 
   describe 'with managed pg_hba_conf and ipv4acls' do
+    include_examples 'RedHat 7'
     let(:pre_condition) do
       <<-EOS
         class { 'postgresql::globals':
@@ -306,25 +204,6 @@ describe 'postgresql::server::config' do
         }
       EOS
     end
-    let(:facts) do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'CentOS',
-          release: {
-            'full'  => '7.9.2009',
-            'major' => '7',
-            'minor' => '9',
-          },
-          selinux: { 'enabled' => true },
-        },
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: true,
-        service_provider: 'systemd',
-      }
-    end
 
     it 'has hba rule default' do
       is_expected.to contain_postgresql__server__pg_hba_rule('local access as postgres user')
@@ -335,6 +214,8 @@ describe 'postgresql::server::config' do
   end
 
   describe 'on Gentoo' do
+    include_examples 'Gentoo'
+
     let(:pre_condition) do
       <<-EOS
         class { 'postgresql::globals':
@@ -342,25 +223,6 @@ describe 'postgresql::server::config' do
         }->
         class { 'postgresql::server': }
       EOS
-    end
-
-    let(:facts) do
-      {
-        os: {
-          family: 'Gentoo',
-          name: 'Gentoo',
-          release: {
-            'full'  => 'unused',
-            'major' => 'unused',
-          },
-          selinux: { 'enabled' => true },
-        },
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: false,
-        service_provider: 'systemd',
-      }
     end
 
     it 'does not have SELinux port defined' do

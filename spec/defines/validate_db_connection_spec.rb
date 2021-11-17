@@ -3,15 +3,7 @@
 require 'spec_helper'
 
 describe 'postgresql::validate_db_connection' do
-  let :facts do
-    {
-      os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: { 'full' => '8.0', 'major' => '8' },
-      },
-    }
-  end
+  include_examples 'Debian 11'
 
   let :title do
     'test'

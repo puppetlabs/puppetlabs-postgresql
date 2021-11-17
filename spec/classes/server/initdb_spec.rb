@@ -8,20 +8,7 @@ describe 'postgresql::server::initdb' do
   end
 
   describe 'on RedHat' do
-    let :facts do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'CentOS',
-          release: { 'full' => '6.0', 'major' => '6' },
-          selinux: { 'enabled' => true },
-        },
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: true,
-      }
-    end
+    include_examples 'RedHat 8'
 
     it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory') }
 
@@ -48,20 +35,7 @@ describe 'postgresql::server::initdb' do
   end
 
   describe 'on Amazon' do
-    let :facts do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'Amazon',
-          release: { 'full' => '1.0', 'major' => '1' },
-          selinux: { 'enabled' => true },
-        },
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: true,
-      }
-    end
+    include_examples 'Amazon 1'
 
     it { is_expected.to contain_file('/var/lib/pgsql92/data').with_ensure('directory') }
 
@@ -80,20 +54,7 @@ describe 'postgresql::server::initdb' do
   end
 
   describe 'exec with module_workdir => /var/tmp' do
-    let :facts do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'CentOS',
-          release: { 'full' => '6.0', 'major' => '6' },
-          selinux: { 'enabled' => true },
-        },
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: true,
-      }
-    end
+    include_examples 'RedHat 8'
     let(:pre_condition) do
       <<-EOS
         class { 'postgresql::globals':
@@ -111,20 +72,7 @@ describe 'postgresql::server::initdb' do
   end
 
   describe 'exec with module_workdir => undef' do
-    let :facts do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'CentOS',
-          release: { 'full' => '6.0', 'major' => '6' },
-          selinux: { 'enabled' => true },
-        },
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: true,
-      }
-    end
+    include_examples 'RedHat 8'
     let(:pre_condition) do
       <<-EOS
         class { 'postgresql::globals':
@@ -141,21 +89,7 @@ describe 'postgresql::server::initdb' do
   end
 
   describe 'postgresql_psql with module_workdir => /var/tmp' do
-    let :facts do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'CentOS',
-          release: { 'full' => '6.0', 'major' => '6' },
-          selinux: { 'enabled' => true },
-        },
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: true,
-      }
-    end
-
+    include_examples 'RedHat 8'
     let(:pre_condition) do
       <<-EOS
         class { 'postgresql::globals':

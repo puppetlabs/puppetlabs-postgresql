@@ -3,30 +3,12 @@
 require 'spec_helper'
 
 describe 'postgresql::server' do
-  let :facts do
-    {
-      os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: {
-          full: '8.0',
-          major: '8',
-        },
-        distro: { 'codename' => 'jessie' },
-      },
-      osfamily: 'Debian',
-      lsbdistid: 'Debian',
-      lsbdistcodename: 'jessie',
-      kernel: 'Linux',
-      id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    }
-  end
+  include_examples 'Debian 11'
 
   describe 'with no parameters' do
     it { is_expected.to contain_class('postgresql::params') }
     it { is_expected.to contain_class('postgresql::server') }
-    it { is_expected.to contain_file('/var/lib/postgresql/9.4/main') }
+    it { is_expected.to contain_file('/var/lib/postgresql/13/main') }
     it {
       is_expected.to contain_exec('postgresql_reload').with('command' => 'service postgresql reload')
     }
@@ -36,19 +18,7 @@ describe 'postgresql::server' do
   end
 
   describe 'with manage_dnf_module true' do
-    let(:facts) do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'RedHat',
-          release: { 'full' => '8.3', 'major' => '8' },
-          selinux: {
-            enabled: true,
-          }
-        },
-        osfamily: 'RedHat',
-      }
-    end
+    include_examples 'RedHat 8'
 
     let(:pre_condition) do
       <<-PUPPET

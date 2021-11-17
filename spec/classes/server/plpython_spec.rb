@@ -3,20 +3,7 @@
 require 'spec_helper'
 
 describe 'postgresql::server::plpython' do
-  let :facts do
-    {
-      os: {
-        family: 'RedHat',
-        name: 'CentOS',
-        release: { 'full' => '6.8', 'major' => '6' },
-        selinux: { 'enabled' => true },
-      },
-      kernel: 'Linux',
-      id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-      selinux: true,
-    }
-  end
+  include_examples 'RedHat 8'
 
   let :pre_condition do
     "class { 'postgresql::server': }"

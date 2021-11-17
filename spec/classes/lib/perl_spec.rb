@@ -3,16 +3,8 @@
 require 'spec_helper'
 
 describe 'postgresql::lib::perl' do
-  describe 'on a redhat based os' do
-    let :facts do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'RedHat',
-          release: { 'full' => '6.4', 'major' => '6' },
-        },
-      }
-    end
+  describe 'on redhat 8' do
+    include_examples 'RedHat 8'
 
     it {
       is_expected.to contain_package('perl-DBD-Pg').with(
@@ -22,16 +14,8 @@ describe 'postgresql::lib::perl' do
     }
   end
 
-  describe 'on a debian based os' do
-    let :facts do
-      {
-        os: {
-          family: 'Debian',
-          name: 'Debian',
-          release: { 'full' => '8.0', 'major' => '8' },
-        },
-      }
-    end
+  describe 'on debian 11' do
+    include_examples 'Debian 11'
 
     it {
       is_expected.to contain_package('perl-DBD-Pg').with(

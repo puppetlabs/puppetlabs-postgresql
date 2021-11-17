@@ -3,18 +3,7 @@
 require 'spec_helper'
 
 describe 'postgresql::server::reassign_owned_by' do
-  let :facts do
-    {
-      os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: { 'full' => '8.0', 'major' => '8' },
-      },
-      kernel: 'Linux',
-      id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    }
-  end
+  include_examples 'Debian 11'
 
   let :title do
     'test'

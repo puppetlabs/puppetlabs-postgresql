@@ -3,23 +3,8 @@
 require 'spec_helper'
 
 describe 'postgresql::globals' do
-  context 'on a debian 8' do
-    let(:facts) do
-      {
-        os: {
-          family: 'Debian',
-          name: 'Debian',
-          release: {
-            full: '8.0',
-            major: '8',
-          },
-          distro: { 'codename' => 'jessie' },
-        },
-        osfamily: 'Debian',
-        lsbdistid: 'Debian',
-        lsbdistcodename: 'jessie',
-      }
-    end
+  context 'on a debian 11' do
+    include_examples 'Debian 11'
 
     describe 'with no parameters' do
       it 'works' do
@@ -40,17 +25,8 @@ describe 'postgresql::globals' do
     end
   end
 
-  context 'on redhat family systems' do
-    let(:facts) do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'RedHat',
-          release: { 'full' => '7.1', 'major' => '7' },
-        },
-        osfamily: 'RedHat',
-      }
-    end
+  context 'on redhat 7' do
+    include_examples 'RedHat 7'
 
     describe 'with no parameters' do
       it 'works' do

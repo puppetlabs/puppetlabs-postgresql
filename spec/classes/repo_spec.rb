@@ -3,22 +3,7 @@
 require 'spec_helper'
 
 describe 'postgresql::repo' do
-  let :facts do
-    {
-      os: {
-        name: 'Debian',
-        family: 'Debian',
-        release: {
-          full: '8.0',
-          major: '8',
-        },
-        distro: { 'codename' => 'jessie' },
-      },
-      osfamily: 'Debian',
-      lsbdistid: 'Debian',
-      lsbdistcodename: 'jessie',
-    }
-  end
+  include_examples 'Debian 11'
 
   describe 'with no parameters' do
     it 'instantiates apt_postgresql_org class' do

@@ -3,18 +3,7 @@
 require 'spec_helper'
 
 describe 'postgresql::server::plperl' do
-  let :facts do
-    {
-      os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: { 'full' => '8.0', 'major' => '8' },
-      },
-      kernel: 'Linux',
-      id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    }
-  end
+  include_examples 'Debian 11'
 
   let :pre_condition do
     "class { 'postgresql::server': }"

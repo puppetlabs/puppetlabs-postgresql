@@ -3,36 +3,14 @@
 require 'spec_helper'
 
 describe 'postgresql::server::default_privileges' do
-  let :facts do
-    {
-      os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: { 'full' => '9.0', 'major' => '9' },
-      },
-      kernel: 'Linux',
-      id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    }
-  end
+  include_examples 'Debian 11'
 
   let :title do
     'test'
   end
 
   context 'with unsupported PostgreSQL version' do
-    let(:facts) do
-      {
-        os: {
-          family: 'Debian',
-          name: 'Debian',
-          release: { 'full' => '8.0', 'major' => '8' },
-        },
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-      }
-    end
+    include_examples 'RedHat 7'
 
     let :params do
       {
@@ -135,18 +113,7 @@ describe 'postgresql::server::default_privileges' do
     end
 
     context 'schemas on postgres < 10.0' do
-      let(:facts) do
-        {
-          os: {
-            family: 'Debian',
-            name: 'Debian',
-            release: { 'full' => '9.0', 'major' => '9' },
-          },
-          kernel: 'Linux',
-          id: 'root',
-          path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        }
-      end
+      include_examples 'Debian 9'
 
       let :params do
         {
@@ -166,18 +133,7 @@ describe 'postgresql::server::default_privileges' do
     end
 
     context 'schemas on postgres >= 10.0' do
-      let :facts do
-        {
-          os: {
-            family: 'Debian',
-            name: 'Debian',
-            release: { 'full' => '10.0', 'major' => '10' },
-          },
-          kernel: 'Linux',
-          id: 'root',
-          path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        }
-      end
+      include_examples 'Debian 11'
 
       let :params do
         {
@@ -210,18 +166,7 @@ describe 'postgresql::server::default_privileges' do
     end
 
     context 'nested schemas are invalid' do
-      let :facts do
-        {
-          os: {
-            family: 'Debian',
-            name: 'Debian',
-            release: { 'full' => '10.0', 'major' => '10' },
-          },
-          kernel: 'Linux',
-          id: 'root',
-          path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        }
-      end
+      include_examples 'Debian 11'
 
       let :params do
         {
