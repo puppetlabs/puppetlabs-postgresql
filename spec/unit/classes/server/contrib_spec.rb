@@ -43,4 +43,37 @@ describe 'postgresql::server::contrib', type: :class do
       is_expected.to contain_package('postgresql-contrib').with(tag: 'puppetlabs-postgresql')
     end
   end
+
+  describe 'on Gentoo' do
+    let :facts do
+      {
+        os: {
+          family: 'Gentoo',
+          name: 'Gentoo',
+        },
+      }
+    end
+
+    it 'postgresql-contrib should not be installed' do
+      is_expected.to compile
+      is_expected.not_to contain_package('postgresql-contrib')
+    end
+  end
+
+  describe 'on Debian' do
+    let :facts do
+      {
+        os: {
+          family: 'Debian',
+          name: 'Debian',
+          release: { 'full' => '8.0', 'major' => '8' },
+        },
+      }
+    end
+
+    it 'postgresql-contrib should not be installed' do
+      is_expected.to compile
+      is_expected.not_to contain_package('postgresql-contrib')
+    end
+  end
 end
