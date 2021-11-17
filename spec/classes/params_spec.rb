@@ -3,15 +3,11 @@
 require 'spec_helper'
 
 describe 'postgresql::params' do
-  let :facts do
-    {
-      os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: { 'full' => '8.0', 'major' => '8' },
-      },
-    }
-  end
+  on_supported_os.each do |os, os_facts|
+    context "on #{os}" do
+      let(:facts) { os_facts }
 
-  it { is_expected.to contain_class('postgresql::params') }
+      it { is_expected.to contain_class('postgresql::params') }
+    end
+  end
 end

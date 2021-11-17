@@ -3,24 +3,10 @@
 require 'spec_helper'
 
 describe 'postgresql::server::contrib' do
+  include_examples 'RedHat 8'
+
   let :pre_condition do
     "class { 'postgresql::server': }"
-  end
-
-  let :facts do
-    {
-      os: {
-        family: 'RedHat',
-        name: 'RedHat',
-        release: { 'major' => '8' },
-        selinux: {
-          enabled: false,
-        },
-      },
-      kernel: 'Linux',
-      id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    }
   end
 
   describe 'with parameters' do
@@ -45,31 +31,15 @@ describe 'postgresql::server::contrib' do
   end
 
   describe 'on Gentoo' do
-    let :facts do
-      {
-        os: {
-          family: 'Gentoo',
-          name: 'Gentoo',
-        },
-      }
-    end
+    include_examples 'Gentoo'
 
-    it 'postgresql-contrib should not be installed' do
-      is_expected.to compile
-      is_expected.not_to contain_package('postgresql-contrib')
+    it 'fails to compile' do
+      is_expected.to compile.and_raise_error(%r{is not supported})
     end
   end
 
-  describe 'on Debian' do
-    let :facts do
-      {
-        os: {
-          family: 'Debian',
-          name: 'Debian',
-          release: { 'full' => '8.0', 'major' => '8' },
-        },
-      }
-    end
+  describe 'on Debian 11' do
+    include_examples 'Debian 11'
 
     it 'postgresql-contrib should not be installed' do
       is_expected.to compile

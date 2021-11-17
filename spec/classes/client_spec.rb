@@ -3,15 +3,7 @@
 require 'spec_helper'
 
 describe 'postgresql::client' do
-  let :facts do
-    {
-      os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: { 'full' => '8.0', 'major' => '8' },
-      },
-    }
-  end
+  include_examples 'Debian 11'
 
   describe 'with parameters' do
     let :params do

@@ -4,15 +4,7 @@ require 'spec_helper'
 
 describe 'postgresql::lib::docs' do
   describe 'on a redhat based os' do
-    let :facts do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'RedHat',
-          release: { 'full' => '6.4', 'major' => '6' },
-        },
-      }
-    end
+    include_examples 'RedHat 8'
 
     it {
       is_expected.to contain_package('postgresql-docs').with(

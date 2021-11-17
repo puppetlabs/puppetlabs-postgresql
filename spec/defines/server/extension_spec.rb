@@ -3,26 +3,14 @@
 require 'spec_helper'
 
 describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDescribes
+  include_examples 'Debian 11'
+
   let :pre_condition do
     "class { 'postgresql::server': }
      postgresql::server::database { 'template_postgis':
        template   => 'template1',
      }"
   end
-
-  let :facts do
-    {
-      os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: { 'full' => '8.0', 'major' => '8' },
-      },
-      kernel: 'Linux',
-      id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    }
-  end
-
   let(:title) { 'postgis' }
   let(:params) do
     {
@@ -120,26 +108,14 @@ describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDesc
 end
 
 describe 'postgresql::server::extension' do
+  include_examples 'Debian 10'
+
   let :pre_condition do
     "class { 'postgresql::server': }
      postgresql::server::database { 'template_postgis2':
        template   => 'template1',
      }"
   end
-
-  let :facts do
-    {
-      os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: { 'full' => '10.0', 'major' => '10' },
-      },
-      kernel: 'Linux',
-      id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    }
-  end
-
   let(:title) { 'postgis_db2' }
   let(:params) do
     {
@@ -161,18 +137,7 @@ describe 'postgresql::server::extension' do
 end
 
 describe 'postgresql::server::extension' do
-  let :facts do
-    {
-      os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: { 'full' => '10.0', 'major' => '10' },
-      },
-      kernel: 'Linux',
-      id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    }
-  end
+  include_examples 'Debian 10'
 
   let(:title) { 'pg_repack' }
   let(:params) do

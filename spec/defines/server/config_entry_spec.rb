@@ -3,24 +3,7 @@
 require 'spec_helper'
 
 describe 'postgresql::server::config_entry' do
-  let :facts do
-    {
-      os: {
-        family: 'RedHat',
-        name: 'RedHat',
-        release: {
-          'full'  => '6.4',
-          'major' => '6',
-          'minor' => '4',
-        },
-        selinux: { 'enabled' => true },
-      },
-      kernel: 'Linux',
-      id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-      selinux: true,
-    }
-  end
+  include_examples 'Debian 11'
 
   let(:title) { 'config_entry' }
 
@@ -39,22 +22,10 @@ describe 'postgresql::server::config_entry' do
   end
 
   context 'ports' do
+    let(:params) { { ensure: 'present', name: 'port_spec', value: '5432' } }
+
     context 'redhat 6' do
-      let :facts do
-        {
-          os: {
-            family: 'RedHat',
-            name: 'RedHat',
-            release: { 'full' => '6.4', 'major' => '6' },
-            selinux: { 'enabled' => true },
-          },
-          kernel: 'Linux',
-          id: 'root',
-          path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          selinux: true,
-        }
-      end
-      let(:params) { { ensure: 'present', name: 'port_spec', value: '5432' } }
+      include_examples 'RedHat 6'
 
       it 'stops postgresql and changes the port #exec' do
         is_expected.to contain_exec('postgresql_stop_port')
@@ -64,26 +35,7 @@ describe 'postgresql::server::config_entry' do
       end
     end
     context 'redhat 7' do
-      let :facts do
-        {
-          os: {
-            family: 'RedHat',
-            name: 'RedHat',
-            release: {
-              'full'  => '7.9.2009',
-              'major' => '7',
-              'minor' => '9',
-            },
-            selinux: { 'enabled' => true },
-          },
-          kernel: 'Linux',
-          id: 'root',
-          path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          selinux: true,
-          service_provider: 'systemd',
-        }
-      end
-      let(:params) { { ensure: 'present', name: 'port_spec', value: '5432' } }
+      include_examples 'RedHat 7'
 
       it 'stops postgresql and changes the port #file' do
         is_expected.to contain_file('systemd-override')
@@ -92,6 +44,7 @@ describe 'postgresql::server::config_entry' do
   end
 
   context 'data_directory' do
+    include_examples 'RedHat 6'
     let(:params) { { ensure: 'present', name: 'data_directory_spec', value: '/var/pgsql' } }
 
     it 'stops postgresql and changes the data directory #exec' do
@@ -112,20 +65,6 @@ describe 'postgresql::server::config_entry' do
   end
 
   context 'unix_socket_directories' do
-    let :facts do
-      {
-        os: {
-          family: 'RedHat',
-          name: 'RedHat',
-          release: { 'full' => '7.0', 'major' => '7' },
-          selinux: { 'enabled' => true },
-        },
-        kernel: 'Linux',
-        id: 'root',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        selinux: true,
-      }
-    end
     let(:params) { { ensure: 'present', name: 'unix_socket_directories', value: '/var/pgsql, /opt/postgresql, /root/' } }
 
     it 'restarts the server and change unix_socket_directories to the provided list' do
