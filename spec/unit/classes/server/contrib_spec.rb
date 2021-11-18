@@ -10,9 +10,12 @@ describe 'postgresql::server::contrib', type: :class do
   let :facts do
     {
       os: {
-        family: 'Debian',
-        name: 'Debian',
-        release: { 'full' => '8.0', 'major' => '8' },
+        family: 'RedHat',
+        name: 'RedHat',
+        release: { 'major' => '8' },
+        selinux: {
+          enabled: false,
+        },
       },
       kernel: 'Linux',
       id: 'root',
@@ -51,10 +54,26 @@ describe 'postgresql::server::contrib', type: :class do
       }
     end
 
-    it 'fails to compile' do
-      expect {
-        is_expected.to compile
-      }.to raise_error(%r{is not supported})
+    it 'postgresql-contrib should not be installed' do
+      is_expected.to compile
+      is_expected.not_to contain_package('postgresql-contrib')
+    end
+  end
+
+  describe 'on Debian' do
+    let :facts do
+      {
+        os: {
+          family: 'Debian',
+          name: 'Debian',
+          release: { 'full' => '8.0', 'major' => '8' },
+        },
+      }
+    end
+
+    it 'postgresql-contrib should not be installed' do
+      is_expected.to compile
+      is_expected.not_to contain_package('postgresql-contrib')
     end
   end
 end
