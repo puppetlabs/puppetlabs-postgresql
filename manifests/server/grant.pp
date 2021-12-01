@@ -425,10 +425,14 @@ define postgresql::server::grant (
   # }
   case $_object_name {
     Array:   {
-      # pg_* views does not contain schema name as part of the object name
-      $_togrant_object = $_object_name
+      $_togrant_object = $_enquote_object ? {
+        false   => join($_object_name, '.'),
+        default => join($_object_name, '"."'),
+      }
       # Never put double quotes into has_*_privilege function
       $_granted_object = join($_object_name, '.')
+      # pg_* views does not contain schema name as part of the object name
+      $_togrant_object_only = $_object_name[1]
     }
     default: {
       $_granted_object = $_object_name
@@ -449,10 +453,10 @@ define postgresql::server::grant (
   }
 
   $_onlyif = $onlyif_function ? {
-    'table_exists'    => "SELECT true FROM pg_tables WHERE tablename = '${_togrant_object}'",
-    'language_exists' => "SELECT true from pg_language WHERE lanname = '${_togrant_object}'",
+    'table_exists'    => "SELECT true FROM pg_tables WHERE tablename = '${_togrant_object_only}'",
+    'language_exists' => "SELECT true from pg_language WHERE lanname = '${_togrant_object_only}}'",
     'role_exists'     => "SELECT 1 FROM pg_roles WHERE rolname = '${role}' or '${role}' = 'PUBLIC'",
-    'function_exists' => "SELECT true FROM pg_proc WHERE (oid::regprocedure)::text = '${_togrant_object}${arguments}'",
+    'function_exists' => "SELECT true FROM pg_proc WHERE (oid::regprocedure)::text = '${_togrant_object_only}}${arguments}'",
     default           => undef,
   }
 
