@@ -425,10 +425,8 @@ define postgresql::server::grant (
   # }
   case $_object_name {
     Array:   {
-      $_togrant_object = $_enquote_object ? {
-        false   => join($_object_name, '.'),
-        default => join($_object_name, '"."'),
-      }
+      # pg_* views does not contain schema name as part of the object name
+      $_togrant_object = $_object_name
       # Never put double quotes into has_*_privilege function
       $_granted_object = join($_object_name, '.')
     }
