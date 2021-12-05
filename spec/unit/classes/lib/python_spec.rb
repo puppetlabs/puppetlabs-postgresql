@@ -22,6 +22,25 @@ describe 'postgresql::lib::python', type: :class do
     }
   end
 
+  describe 'on a redhat based os with python 3' do
+    let :facts do
+      {
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { 'full' => '8.2', 'major' => '8' },
+        },
+      }
+    end
+
+    it {
+      is_expected.to contain_package('python-psycopg2').with(
+        name: 'python3-psycopg2',
+        ensure: 'present',
+      )
+    }
+  end
+
   describe 'on a debian based os' do
     let :facts do
       {
