@@ -109,7 +109,11 @@ class postgresql::params inherits postgresql::globals {
       $psql_path           = pick($psql_path, "${bindir}/psql")
 
       $perl_package_name   = pick($perl_package_name, 'perl-DBD-Pg')
-      $python_package_name = pick($python_package_name, 'python-psycopg2')
+      if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '8') >= 0 {
+        $python_package_name = pick($python_package_name, 'python3-psycopg2')
+      } else {
+        $python_package_name = pick($python_package_name, 'python-psycopg2')
+      }
 
       if $postgresql::globals::postgis_package_name {
         $postgis_package_name = $postgresql::globals::postgis_package_name
