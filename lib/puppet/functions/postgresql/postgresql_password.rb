@@ -26,7 +26,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
     return_type 'Variant[String, Sensitive[String]]'
   end
 
-  def default_impl(username, password, hash, sensitive = false, salt = nil)
+  def default_impl(username, password, hash = 'md5', sensitive = false, salt = nil)
     password = password.unwrap if password.respond_to?(:unwrap)
     pass = if hash == 'md5'
              'md5' + Digest::MD5.hexdigest(password.to_s + username.to_s)
