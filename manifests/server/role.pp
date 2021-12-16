@@ -140,8 +140,8 @@ define postgresql::server::role (
         $pwd_hash_sql = postgresql::postgresql_password(
           $username,
           $password_hash,
-          $hash,
           $password_hash =~ Sensitive[String],
+          $hash,
           $salt,
         )
       }
