@@ -23,7 +23,8 @@ define postgresql::server::default_privileges (
     /(?i:^ROUTINES$)/,
     /(?i:^SEQUENCES$)/,
     /(?i:^TABLES$)/,
-    /(?i:^TYPES$)/
+    /(?i:^TYPES$)/,
+    /(?i:^SCHEMAS$)/
   ] $object_type,
   String $schema                   = 'public',
   String $psql_db                  = $postgresql::server::default_database,
@@ -139,6 +140,21 @@ define postgresql::server::default_privileges (
         default: { fail('Illegal value for $privilege parameter') }
       }
       $_check_type = 'T'
+    }
+    'SCHEMAS': {
+      if (versioncmp($version, '10') == -1) {
+        fail 'Default_privileges on schemas is only supported on PostgreSQL >= 10.0'
+      }
+      if $schema != '' {
+        fail('Cannot alter default schema permissions within a schema')
+      }
+      case $_privilege {
+        /^ALL$/: { $_check_privilege = 'UC' }
+        /^USAGE$/: { $_check_privilege = 'U' }
+        /^CREATE$/: { $_check_privilege = 'C' }
+        default: { fail('Illegal value for $privilege parameter') }
+      }
+      $_check_type = 'n'
     }
     default: {
       fail("Missing privilege validation for object type ${_object_type}")
