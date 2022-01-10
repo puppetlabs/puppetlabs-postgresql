@@ -1,0 +1,103 @@
+<%- if $facts['kernel'] == 'Linux' { -%>
+#!/bin/bash
+<%- } else { -%>
+#!/bin/sh
+<%- } -%>
+# This file is managed by Puppet. DO NOT EDIT.
+#
+# A wrapper for pg_dump
+
+# Backup config
+ROTATE=<%= $rotate %>
+BASEDIR="<%= $dir %>"
+DIR="${BASEDIR}/$(date +%F_%H-%M-%S)"
+
+# Pattern %FILENAME% will be replace or removed, depending
+# on the pg_dump parameters.
+TEMPLATE="${DIR}/%FILENAME%"
+
+# Use a filename suffix to better distinguish different file types.
+SUFFIX=".pgdump"
+
+# Ensure backup directory exist.
+mkdir -p $DIR
+
+<%- if $facts['kernel'] == 'Linux' { -%>
+set -o pipefail
+<%- } -%>
+
+<% if $pre_script { -%>
+  <%- flatten($pre_script).each |$_script| { %>
+<%= $_script %>
+  <%- } -%>
+<% } -%>
+
+cleanup()
+{
+  <%- if $facts['kernel'] == 'SunOS' { -%>
+    gfind "${BASEDIR}/" -mindepth 1 -maxdepth 1 -mtime +${ROTATE} -print0 | gxargs -0 -r rm -rf
+  <%- } else { -%>
+    find "${BASEDIR}/" -mindepth 1 -maxdepth 1 -mtime +${ROTATE} -print0 | xargs -0 -r rm -rf
+  <%- } -%>
+}
+
+<% if $delete_before_dump { -%>
+# Remove outdated backups unconditionally before making new backups.
+cleanup
+<% } -%>
+
+_pg_args=''
+
+<%- if $format == 'directory' { -%>
+# The 'directory' format expects a target directory instead of a file.
+TEMPLATE=$DIR
+<%- } -%>
+
+<%- if $db_user { -%>
+_pg_args="${_pg_args} --username=<%= $db_user %>"
+<%- } -%>
+
+<%- if $optional_args { -%>
+  <%- $optional_args.each |$_arg| { -%>
+_pg_args="${_pg_args} <%= $_arg %>"
+  <%- } -%>
+<%- } -%>
+
+<%- if $databases and $databases =~ Array and !empty($databases) { -%>
+_pg_args="${_pg_args} --format=<%= $format %>"
+
+<%# Compression is only supported by pg_dump, but not by pg_dumpall. -%>
+<%- if !$compress { -%>
+_pg_args="${_pg_args} --compress=0"
+<%# The tar archive format does not support compression. -%>
+<%- } elsif $format != 'tar' { -%>
+_pg_args="${_pg_args} --compress=9"
+SUFFIX="${SUFFIX}.gz"
+<%- } -%>
+
+# Dump only selected databases
+  <%- $databases.each |$_db| { -%>
+FILE=`echo $TEMPLATE | sed "s/%FILENAME%/<%= $_db %>$SUFFIX/;"`
+pg_dump $_pg_args --file=${FILE} $@ <%= $_db %>
+  <%- } -%>
+<%- } else { -%>
+# Dump the whole instance
+FILE=`echo $TEMPLATE | sed "s/%FILENAME%/all$SUFFIX/;"`
+pg_dumpall $_pg_args --file=${FILE} $@
+<%- } -%>
+
+<% unless $delete_before_dump { -%>
+# Remove outdated backups only if the new backup was successful.
+if [ $? -eq 0 ] ; then
+    cleanup
+    <%- if $success_file_path { -%>
+    touch <%= $success_file_path %>
+    <%- } -%>
+fi
+<% } -%>
+
+<% if $post_script { -%>
+  <%- flatten($post_script).each |$_script| { %>
+<%= $_script %>
+  <%- } -%>
+<% } -%>
