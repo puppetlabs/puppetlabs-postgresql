@@ -1330,7 +1330,7 @@ The following parameters are available in the `postgresql::server::contrib` clas
 
 ##### <a name="package_name"></a>`package_name`
 
-Data type: `String`
+Data type: `Optional[String[1]]`
 
 The name of the PostgreSQL contrib package.
 
@@ -1731,6 +1731,7 @@ Manage a database defaults privileges. Only works with PostgreSQL version 9.6 an
 
 The following parameters are available in the `postgresql::server::default_privileges` defined type:
 
+* [`target_role`](#target_role)
 * [`ensure`](#ensure)
 * [`role`](#role)
 * [`db`](#db)
@@ -1744,6 +1745,14 @@ The following parameters are available in the `postgresql::server::default_privi
 * [`connect_settings`](#connect_settings)
 * [`psql_path`](#psql_path)
 * [`group`](#group)
+
+##### <a name="target_role"></a>`target_role`
+
+Data type: `Optional[String]`
+
+Target role whose created objects will receive the default privileges. Defaults to the current user.
+
+Default value: ``undef``
 
 ##### <a name="ensure"></a>`ensure`
 
@@ -1774,7 +1783,8 @@ Data type: `Pattern[
     /(?i:^ROUTINES$)/,
     /(?i:^SEQUENCES$)/,
     /(?i:^TABLES$)/,
-    /(?i:^TYPES$)/
+    /(?i:^TYPES$)/,
+    /(?i:^SCHEMAS$)/
   ]`
 
 Specify target object type: 'FUNCTIONS', 'ROUTINES', 'SEQUENCES', 'TABLES', 'TYPES'.
@@ -1789,7 +1799,7 @@ Specifies comma-separated list of privileges to grant. Valid options: depends on
 
 Data type: `String`
 
-Target schema. Defaults to 'public'.
+Target schema. Defaults to 'public'. Can be set to '' to apply to all schemas.
 
 Default value: `'public'`
 
