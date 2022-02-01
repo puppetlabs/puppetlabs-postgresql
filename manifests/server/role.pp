@@ -18,6 +18,8 @@
 # @param psql_group Sets the OS group to run psql
 # @param psql_path Sets path to psql command
 # @param module_workdir Specifies working directory under which the psql command should be executed. May need to specify if '/tmp' is on volume mounted with noexec option.
+# @param hash Specify the hash method for pg password
+# @param salt Specify the salt use for the scram-sha-256 encoding password (default username)
 define postgresql::server::role (
   $update_password = true,
   Variant[Boolean, String, Sensitive[String]] $password_hash  = false,
@@ -37,6 +39,8 @@ define postgresql::server::role (
   $psql_path        = $postgresql::server::psql_path,
   $module_workdir   = $postgresql::server::module_workdir,
   Enum['present', 'absent'] $ensure = 'present',
+  Enum['md5', 'scram-sha-256'] $hash = 'md5',
+  Optional[Variant[String[1], Integer]] $salt = undef,
 ) {
   $password_hash_unsensitive = if $password_hash =~ Sensitive[String] {
     $password_hash.unwrap
@@ -130,14 +134,19 @@ define postgresql::server::role (
     }
 
     if $password_hash_unsensitive and $update_password {
-      if($password_hash_unsensitive =~ /^md5.+/) {
+      if($password_hash_unsensitive =~ /^(md5|SCRAM-SHA-256).+/) {
         $pwd_hash_sql = $password_hash_unsensitive
       } else {
-        $pwd_md5 = md5("${password_hash_unsensitive}${username}")
-        $pwd_hash_sql = "md5${pwd_md5}"
+        $pwd_hash_sql = postgresql::postgresql_password(
+          $username,
+          $password_hash,
+          $password_hash =~ Sensitive[String],
+          $hash,
+          $salt,
+        )
       }
       postgresql_psql { "ALTER ROLE ${username} ENCRYPTED PASSWORD ****":
-        command   => Sensitive("ALTER ROLE \"${username}\" ${password_sql}"),
+        command   => Sensitive("ALTER ROLE \"${username}\" ENCRYPTED PASSWORD '${pwd_hash_sql}'"),
         unless    => Sensitive("SELECT 1 FROM pg_shadow WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'"),
         sensitive => true,
       }
