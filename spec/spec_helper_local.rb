@@ -58,12 +58,12 @@ shared_examples 'postgresql_password function' do
     )
   }
   it {
-    is_expected.to run.with_params('foo', 'bar', nil, 'scram-sha-256').and_return(
+    is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256').and_return(
       'SCRAM-SHA-256$4096:YmFy$y1VOaTvvs4V3OECvMzre9FtgCZClGuBLVE6sNPsTKbs=:HwFqmSKbihSyHMqkhufOy++cWCFIoTRSg8y6YgeALzE='
     )
   }
   it {
-    is_expected.to run.with_params('foo', 'bar', nil, 'scram-sha-256', 'salt').and_return(
+    is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256', 'salt').and_return(
       'SCRAM-SHA-256$4096:c2FsdA==$zOt2zFfUQMbpQf3/vRnYB33QDK/L7APOBHniLy39j/4=:DcW5Jp8Do7wYhVp1f9aT0cyhUfzIAozGcvzXZj+M3YI='
     )
   }
