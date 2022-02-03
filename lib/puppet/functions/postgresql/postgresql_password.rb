@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'openssl'
 require 'base64'
 
@@ -46,7 +47,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
       '4096',
       Base64.strict_encode64(salt),
       Base64.strict_encode64(client_key(digest)),
-      Base64.strict_encode64(server_key(digest))
+      Base64.strict_encode64(server_key(digest)),
     ]
   end
 
@@ -56,7 +57,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
       salt: salt,
       iterations: 4096,
       length: 32,
-      hash: OpenSSL::Digest::SHA256.new
+      hash: OpenSSL::Digest::SHA256.new,
     )
   end
 

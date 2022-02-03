@@ -49,22 +49,22 @@ shared_examples 'postgresql_password function' do
 
   it {
     is_expected.to run.with_params('foo', 'bar').and_return(
-      'md596948aad3fcae80c08a35c9b5958cd89'
+      'md596948aad3fcae80c08a35c9b5958cd89',
     )
   }
   it {
     is_expected.to run.with_params('foo', 1234).and_return(
-      'md539a0e1b308278a8de5e007cd1f795920'
+      'md539a0e1b308278a8de5e007cd1f795920',
     )
   }
   it {
     is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256').and_return(
-      'SCRAM-SHA-256$4096:YmFy$y1VOaTvvs4V3OECvMzre9FtgCZClGuBLVE6sNPsTKbs=:HwFqmSKbihSyHMqkhufOy++cWCFIoTRSg8y6YgeALzE='
+      'SCRAM-SHA-256$4096:YmFy$y1VOaTvvs4V3OECvMzre9FtgCZClGuBLVE6sNPsTKbs=:HwFqmSKbihSyHMqkhufOy++cWCFIoTRSg8y6YgeALzE=',
     )
   }
   it {
     is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256', 'salt').and_return(
-      'SCRAM-SHA-256$4096:c2FsdA==$zOt2zFfUQMbpQf3/vRnYB33QDK/L7APOBHniLy39j/4=:DcW5Jp8Do7wYhVp1f9aT0cyhUfzIAozGcvzXZj+M3YI='
+      'SCRAM-SHA-256$4096:c2FsdA==$zOt2zFfUQMbpQf3/vRnYB33QDK/L7APOBHniLy39j/4=:DcW5Jp8Do7wYhVp1f9aT0cyhUfzIAozGcvzXZj+M3YI=',
     )
   }
   it 'raises an error if there is only 1 argument' do
