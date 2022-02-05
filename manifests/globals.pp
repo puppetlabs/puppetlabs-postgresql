@@ -183,6 +183,7 @@ class postgresql::globals (
       },
       'Amazon' => '9.2',
       default => $facts['os']['release']['major'] ? {
+        '9'     => '13',
         '8'     => '10',
         '7'     => '9.2',
         '6'     => '8.4',
@@ -255,6 +256,7 @@ class postgresql::globals (
     '10'    => '2.4',
     '11'    => '3.0',
     '12'    => '3.0',
+    '13'    => '3.0',
     default => undef,
   }
   $globals_postgis_version = $postgis_version ? {
