@@ -14,7 +14,6 @@
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param psql_path Specifies the path to the psql command.
 define postgresql::server::default_privileges (
-  Optional[String] $target_role    = undef,
   String $role,
   String $db,
   String $privilege,
@@ -36,6 +35,7 @@ define postgresql::server::default_privileges (
   ] $ensure                        = 'present',
   String $group                    = $postgresql::server::group,
   String $psql_path                = $postgresql::server::psql_path,
+  Optional[String] $target_role    = undef,
 ) {
 
   # If possible use the version of the remote database, otherwise
@@ -74,16 +74,16 @@ define postgresql::server::default_privileges (
   }
 
   if $target_role != undef {
-    $_target_role = " FOR ROLE $target_role"
-    $_check_target_role = "/$target_role"
+    $_target_role = " FOR ROLE ${target_role}"
+    $_check_target_role = "/${target_role}"
   } else {
     $_target_role = ''
     $_check_target_role = ''
   }
 
   if $schema != '' {
-    $_schema = " IN SCHEMA $schema"
-    $_check_schema = " AND nspname = '$schema'"
+    $_schema = " IN SCHEMA ${schema}"
+    $_check_schema = " AND nspname = '${schema}'"
   } else {
     $_schema = ''
     $_check_schema = ' AND nspname IS NULL'

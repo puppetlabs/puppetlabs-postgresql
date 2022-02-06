@@ -49,22 +49,22 @@ shared_examples 'postgresql_password function' do
 
   it {
     is_expected.to run.with_params('foo', 'bar').and_return(
-      'md596948aad3fcae80c08a35c9b5958cd89'
+      'md596948aad3fcae80c08a35c9b5958cd89',
     )
   }
   it {
     is_expected.to run.with_params('foo', 1234).and_return(
-      'md539a0e1b308278a8de5e007cd1f795920'
+      'md539a0e1b308278a8de5e007cd1f795920',
     )
   }
   it {
-    is_expected.to run.with_params('foo', 'bar', nil, 'scram-sha-256').and_return(
-      'SCRAM-SHA-256$4096:YmFy$y1VOaTvvs4V3OECvMzre9FtgCZClGuBLVE6sNPsTKbs=:HwFqmSKbihSyHMqkhufOy++cWCFIoTRSg8y6YgeALzE='
+    is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256').and_return(
+      'SCRAM-SHA-256$4096:YmFy$y1VOaTvvs4V3OECvMzre9FtgCZClGuBLVE6sNPsTKbs=:HwFqmSKbihSyHMqkhufOy++cWCFIoTRSg8y6YgeALzE=',
     )
   }
   it {
-    is_expected.to run.with_params('foo', 'bar', nil, 'scram-sha-256', 'salt').and_return(
-      'SCRAM-SHA-256$4096:c2FsdA==$zOt2zFfUQMbpQf3/vRnYB33QDK/L7APOBHniLy39j/4=:DcW5Jp8Do7wYhVp1f9aT0cyhUfzIAozGcvzXZj+M3YI='
+    is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256', 'salt').and_return(
+      'SCRAM-SHA-256$4096:c2FsdA==$zOt2zFfUQMbpQf3/vRnYB33QDK/L7APOBHniLy39j/4=:DcW5Jp8Do7wYhVp1f9aT0cyhUfzIAozGcvzXZj+M3YI=',
     )
   }
   it 'raises an error if there is only 1 argument' do
@@ -89,5 +89,101 @@ shared_examples 'postgresql_escape function' do
   it 'raises an error if there is more than 1 argument' do
     is_expected.to run.with_params(['foo'], ['foo'])
                       .and_raise_error(StandardError)
+  end
+end
+
+shared_context 'Debian 9' do
+  let(:facts) { on_supported_os['debian-9-x86_64'].merge(service_provider: 'systemd') }
+end
+
+shared_context 'Debian 10' do
+  let(:facts) { on_supported_os['debian-10-x86_64'].merge(service_provider: 'systemd') }
+end
+
+shared_context 'Debian 11' do
+  let(:facts) { on_supported_os['debian-11-x86_64'].merge(service_provider: 'systemd') }
+end
+
+shared_context 'Ubuntu 18.04' do
+  let(:facts) { on_supported_os['ubuntu-18.04-x86_64'].merge(service_provider: 'systemd') }
+end
+
+shared_context 'RedHat 6' do
+  let(:facts) { on_supported_os['redhat-6-x86_64'].merge(service_provider: 'redhat') }
+end
+
+shared_context 'RedHat 7' do
+  let(:facts) { on_supported_os['redhat-7-x86_64'].merge(service_provider: 'systemd') }
+end
+
+shared_context 'RedHat 8' do
+  let(:facts) { on_supported_os['redhat-8-x86_64'].merge(service_provider: 'systemd') }
+end
+
+shared_context 'Fedora 33' do
+  let(:facts) do
+    {
+      kernel: 'Linux',
+      id: 'root',
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      selinux: true,
+      os: {
+        'architecture' => 'x86_64',
+        'family'       => 'RedHat',
+        'hardware'     => 'x86_64',
+        'name'         => 'Fedora',
+        'release'      => {
+          'full'  => '33',
+          'major' => '33',
+          'minor' => '33',
+        },
+        selinux: { 'enabled' => true },
+      },
+      operatingsystem: 'Fedora',
+      operatingsystemrelease: '33',
+      service_provider: 'systemd',
+    }
+  end
+end
+
+shared_context 'Amazon 1' do
+  let :facts do
+    {
+      os: {
+        family: 'RedHat',
+        name: 'Amazon',
+        release: {
+          'full'  => '1.0',
+          'major' => '1',
+        },
+        selinux: { 'enabled' => true },
+      },
+      kernel: 'Linux',
+      id: 'root',
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      selinux: true,
+      service_provider: 'redhat',
+    }
+  end
+end
+
+shared_context 'Gentoo' do
+  let :facts do
+    {
+      os: {
+        family: 'Gentoo',
+        name: 'Gentoo',
+        release: {
+          'full'  => 'unused',
+          'major' => 'unused',
+        },
+        selinux: { 'enabled' => false },
+      },
+      kernel: 'Linux',
+      id: 'root',
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      selinux: false,
+      service_provider: 'openrc',
+    }
   end
 end

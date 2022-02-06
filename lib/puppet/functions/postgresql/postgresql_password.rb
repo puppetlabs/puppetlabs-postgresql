@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'openssl'
 require 'base64'
 
@@ -42,12 +43,12 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
 
   def pg_sha256(password, salt)
     digest = digest_key(password, salt)
-    'SCRAM-SHA-256$%s:%s$%s:%s' % [
-      '4096',
-      Base64.strict_encode64(salt),
-      Base64.strict_encode64(client_key(digest)),
-      Base64.strict_encode64(server_key(digest))
-    ]
+    'SCRAM-SHA-256$%{iterations}:%{salt}$%{client_key}:%{server_key}' % {
+      iterations: '4096',
+      salt: Base64.strict_encode64(salt),
+      client_key: Base64.strict_encode64(client_key(digest)),
+      server_key: Base64.strict_encode64(server_key(digest)),
+    }
   end
 
   def digest_key(password, salt)
@@ -56,7 +57,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
       salt: salt,
       iterations: 4096,
       length: 32,
-      hash: OpenSSL::Digest::SHA256.new
+      hash: OpenSSL::Digest::SHA256.new,
     )
   end
 
