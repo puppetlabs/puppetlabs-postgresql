@@ -33,8 +33,9 @@ describe 'postgresql::server::contrib' do
   describe 'on Gentoo' do
     include_examples 'Gentoo'
 
-    it 'fails to compile' do
-      is_expected.to compile.and_raise_error(%r{is not supported})
+    it 'postgresql-contrib should not be installed' do
+      is_expected.to compile
+      is_expected.not_to contain_package('postgresql-contrib')
     end
   end
 
