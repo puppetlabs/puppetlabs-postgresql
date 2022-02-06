@@ -216,34 +216,37 @@ describe 'postgresql::server::config' do
   describe 'on Gentoo' do
     include_examples 'Gentoo'
 
-    let(:pre_condition) do
-      <<-EOS
-        class { 'postgresql::globals':
-          version => '9.5',
-        }->
-        class { 'postgresql::server': }
-      EOS
-    end
+    describe 'with systemd' do
+      let(:facts) { super().merge(service_provider: 'systemd') }
+      let(:pre_condition) do
+        <<-EOS
+          class { 'postgresql::globals':
+            version => '9.5',
+          }->
+          class { 'postgresql::server': }
+        EOS
+      end
 
-    it 'does not have SELinux port defined' do
-      is_expected.not_to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
-    end
+      it 'does not have SELinux port defined' do
+        is_expected.not_to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
+      end
 
-    it 'removes the old systemd-override file' do
-      is_expected.to contain_file('old-systemd-override')
-        .with(ensure: 'absent', path: '/etc/systemd/system/postgresql-9.5.service')
-    end
+      it 'removes the old systemd-override file' do
+        is_expected.to contain_file('old-systemd-override')
+          .with(ensure: 'absent', path: '/etc/systemd/system/postgresql-9.5.service')
+      end
 
-    it 'has the correct systemd-override drop file' do
-      is_expected.to contain_file('systemd-override').with(
-        ensure: 'file', path: '/etc/systemd/system/postgresql-9.5.service.d/postgresql-9.5.conf',
-        owner: 'root', group: 'root'
-      )
-    end
+      it 'has the correct systemd-override drop file' do
+        is_expected.to contain_file('systemd-override').with(
+          ensure: 'file', path: '/etc/systemd/system/postgresql-9.5.service.d/postgresql-9.5.conf',
+          owner: 'root', group: 'root'
+        )
+      end
 
-    it 'has the correct systemd-override file #regex' do
-      is_expected.to contain_file('systemd-override') \
-        .with_content(%r{(?!^.include)})
+      it 'has the correct systemd-override file #regex' do
+        is_expected.to contain_file('systemd-override') \
+          .with_content(%r{(?!^.include)})
+      end
     end
   end
 end
