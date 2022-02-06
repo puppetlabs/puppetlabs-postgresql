@@ -59,12 +59,12 @@ shared_examples 'postgresql_password function' do
   }
   it {
     is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256').and_return(
-      'SCRAM-SHA-256$4096:YmFy$y1VOaTvvs4V3OECvMzre9FtgCZClGuBLVE6sNPsTKbs=:HwFqmSKbihSyHMqkhufOy++cWCFIoTRSg8y6YgeALzE=',
+      'SCRAM-SHA-256$4096:Zm9v$ea66ynZ8cS9Ty4ZkEYicwC72StsKLSwjcXIXKMgepTk=:dJYmOU6BMCaWkQOB3lrXH9OAF3lW2n3NJ26NO7Srq7U=',
     )
   }
   it {
     is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256', 'salt').and_return(
-      'SCRAM-SHA-256$4096:c2FsdA==$zOt2zFfUQMbpQf3/vRnYB33QDK/L7APOBHniLy39j/4=:DcW5Jp8Do7wYhVp1f9aT0cyhUfzIAozGcvzXZj+M3YI=',
+      'SCRAM-SHA-256$4096:c2FsdA==$hl63wu9L6vKIjd/UGPfpRl/hIQRBnlkoCiJ9KgxzbX0=:3Q39uiwDZ51m3iPpV8rSgISgRiYqkbnpc+wScL2lSAU=',
     )
   }
   it 'raises an error if there is only 1 argument' do
