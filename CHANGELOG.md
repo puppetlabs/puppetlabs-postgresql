@@ -2,7 +2,34 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v7.5.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.5.0) (2021-09-27)
+## [v8.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v8.0.0) (2022-03-02)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.5.0...v8.0.0)
+
+### Changed
+
+- Support setting default\_privileges on all schemas [\#1298](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1298) ([fish-face](https://github.com/fish-face))
+
+### Added
+
+- add default version for Fedora 35 [\#1317](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1317) ([jflorian](https://github.com/jflorian))
+- add scram-sha-256 support [\#1313](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1313) ([fe80](https://github.com/fe80))
+- add support for Ubuntu Hirsute and Impish [\#1312](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1312) ([nicholascioli](https://github.com/nicholascioli))
+- Allow systemd to mask postgresql service file [\#1310](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1310) ([kim-sondrup](https://github.com/kim-sondrup))
+- Make ::contrib a noop on OSes without a contrib package [\#1309](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1309) ([carlosduelo](https://github.com/carlosduelo))
+- pdksync - \(IAC-1753\) - Add Support for AlmaLinux 8 [\#1308](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1308) ([david22swan](https://github.com/david22swan))
+- MODULES-11201: add service\_name for Ubuntu 18.04 and later [\#1306](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1306) ([moritz-makandra](https://github.com/moritz-makandra))
+- pdksync - \(IAC-1751\) - Add Support for Rocky 8 [\#1305](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1305) ([david22swan](https://github.com/david22swan))
+- Default privileges support schemas [\#1300](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1300) ([fish-face](https://github.com/fish-face))
+- Support target\_role in default\_privileges [\#1297](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1297) ([fish-face](https://github.com/fish-face))
+
+### Fixed
+
+- pdksync - \(IAC-1787\) Remove Support for CentOS 6 [\#1324](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1324) ([david22swan](https://github.com/david22swan))
+- Fix python package name in RHEL/CentOS 8 [\#1316](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1316) ([kajinamit](https://github.com/kajinamit))
+- Drop further code for Debian 6 and Ubuntu 10 [\#1307](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1307) ([ekohl](https://github.com/ekohl))
+
+## [v7.5.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.5.0) (2021-09-28)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.4.1...v7.5.0)
 
