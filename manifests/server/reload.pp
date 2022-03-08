@@ -1,6 +1,5 @@
 # @api private
 class postgresql::server::reload {
-  $service_name   = $postgresql::server::service_name
   $service_status = $postgresql::server::service_status
   $service_reload = $postgresql::server::service_reload
 
