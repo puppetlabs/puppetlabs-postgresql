@@ -321,8 +321,9 @@ postgresql_conn_validator { 'validate my postgres connection':
   db_username       => 'mydbuser',
   db_password       => 'mydbpassword',
   db_name           => 'mydbname',
-}->
-exec { 'rake db:migrate':
+  psql_path         => '/usr/bin/psql',
+}
+-> exec { 'rake db:migrate':
   cwd => '/opt/myrubyapp',
 }
 ```
