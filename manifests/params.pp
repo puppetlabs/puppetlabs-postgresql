@@ -177,7 +177,12 @@ class postgresql::params inherits postgresql::globals {
       $perl_package_name      = pick($perl_package_name, 'libdbd-pg-perl')
       $plperl_package_name    = pick($plperl_package_name, "postgresql-plperl-${version}")
       $plpython_package_name  = pick($plpython_package_name, "postgresql-plpython-${version}")
-      $python_package_name    = pick($python_package_name, 'python-psycopg2')
+      if $facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['major'], '11') >= 0 {
+        # Bullseye uses python3
+        $python_package_name    = pick($python_package_name, 'python3-psycopg2')
+      } else {
+        $python_package_name    = pick($python_package_name, 'python-psycopg2')
+      }
 
       $bindir                 = pick($bindir, "/usr/lib/postgresql/${version}/bin")
       $datadir                = pick($datadir, "/var/lib/postgresql/${version}/main")
