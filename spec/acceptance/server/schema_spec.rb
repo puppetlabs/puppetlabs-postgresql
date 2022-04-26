@@ -56,16 +56,14 @@ describe 'postgresql::server::schema:' do
   end
 
   it 'creates a schema for a user' do
-    begin
-      idempotent_apply(pp)
+    idempotent_apply(pp)
 
-      ## Check that the user can create a table in the database
-      psql('--command="create table psql_schema_tester.foo (foo int)" schema_test', 'psql_schema_tester') do |r|
-        expect(r.stdout).to match(%r{CREATE TABLE})
-        expect(r.stderr).to eq('')
-      end
-    ensure
-      psql('--command="drop table psql_schema_tester.foo" schema_test', 'psql_schema_tester')
+    ## Check that the user can create a table in the database
+    psql('--command="create table psql_schema_tester.foo (foo int)" schema_test', 'psql_schema_tester') do |r|
+      expect(r.stdout).to match(%r{CREATE TABLE})
+      expect(r.stderr).to eq('')
     end
+  ensure
+    psql('--command="drop table psql_schema_tester.foo" schema_test', 'psql_schema_tester')
   end
 end
