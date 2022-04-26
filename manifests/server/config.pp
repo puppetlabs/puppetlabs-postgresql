@@ -52,49 +52,43 @@ class postgresql::server::config {
 
       postgresql::server::pg_hba_rule {
         'local access as postgres user':
-            type        => 'local',
-            user        => $user,
-            auth_method => 'ident',
-            auth_option => $local_auth_option,
-            order       => 1,
-        ;
+          type        => 'local',
+          user        => $user,
+          auth_method => 'ident',
+          auth_option => $local_auth_option,
+          order       => 1;
 
         'local access to database with same name':
-            type        => 'local',
-            auth_method => 'ident',
-            auth_option => $local_auth_option,
-            order       => 2,
-        ;
+          type        => 'local',
+          auth_method => 'ident',
+          auth_option => $local_auth_option,
+          order       => 2;
 
         'allow localhost TCP access to postgresql user':
-            type        => 'host',
-            user        => $user,
-            address     => '127.0.0.1/32',
-            auth_method => 'md5',
-            order       => 3,
-        ;
+          type        => 'host',
+          user        => $user,
+          address     => '127.0.0.1/32',
+          auth_method => 'md5',
+          order       => 3;
 
         'deny access to postgresql user':
-            type        => 'host',
-            user        => $user,
-            address     => $ip_mask_deny_postgres_user,
-            auth_method => 'reject',
-            order       => 4,
-        ;
+          type        => 'host',
+          user        => $user,
+          address     => $ip_mask_deny_postgres_user,
+          auth_method => 'reject',
+          order       => 4;
 
         'allow access to all users':
-            type        => 'host',
-            address     => $ip_mask_allow_all_users,
-            auth_method => 'md5',
-            order       => 100,
-        ;
+          type        => 'host',
+          address     => $ip_mask_allow_all_users,
+          auth_method => 'md5',
+          order       => 100;
 
         'allow access to ipv6 localhost':
-            type        => 'host',
-            address     => '::1/128',
-            auth_method => 'md5',
-            order       => 101,
-        ;
+          type        => 'host',
+          address     => '::1/128',
+          auth_method => 'md5',
+          order       => 101;
       }
     }
 
@@ -233,17 +227,15 @@ class postgresql::server::config {
 
     file {
       default:
-          ensure => file,
-          owner  => root,
-          group  => root,
-          notify => [Exec['restart-systemd'], Class['postgresql::server::service']],
-          before => Class['postgresql::server::reload'],
-      ;
+        ensure => file,
+        owner  => root,
+        group  => root,
+        notify => [Exec['restart-systemd'], Class['postgresql::server::service']],
+        before => Class['postgresql::server::reload'];
 
       'systemd-conf-dir':
-          ensure => directory,
-          path   => "/etc/systemd/system/${service_name}.service.d",
-      ;
+        ensure => directory,
+        path   => "/etc/systemd/system/${service_name}.service.d";
 
       # Template uses:
       # - $facts['os']['name']
@@ -253,10 +245,9 @@ class postgresql::server::config {
       # - $datadir
       # - $extra_systemd_config
       'systemd-override':
-          path    => "/etc/systemd/system/${service_name}.service.d/${service_name}.conf",
-          content => template('postgresql/systemd-override.erb'),
-          require => File['systemd-conf-dir'],
-      ;
+        path    => "/etc/systemd/system/${service_name}.service.d/${service_name}.conf",
+        content => template('postgresql/systemd-override.erb'),
+        require => File['systemd-conf-dir'];
     }
 
     if $service_enable != 'mask' {

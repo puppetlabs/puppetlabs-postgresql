@@ -27,6 +27,6 @@ class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
     },
   }
 
-  Apt::Source['apt.postgresql.org']->Package<|tag == 'puppetlabs-postgresql'|>
+  Apt::Source['apt.postgresql.org'] -> Package<|tag == 'puppetlabs-postgresql'|>
   Class['Apt::Update'] -> Package<|tag == 'puppetlabs-postgresql'|>
 }
