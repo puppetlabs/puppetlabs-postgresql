@@ -25,19 +25,16 @@ define postgresql::server::default_privileges (
     /(?i:^TYPES$)/,
     /(?i:^SCHEMAS$)/
   ] $object_type,
-  String $schema                   = 'public',
-  String $psql_db                  = $postgresql::server::default_database,
-  String $psql_user                = $postgresql::server::user,
-  Integer $port                    = $postgresql::server::port,
-  Hash $connect_settings           = $postgresql::server::default_connect_settings,
-  Enum['present',
-    'absent'
-  ] $ensure                        = 'present',
-  String $group                    = $postgresql::server::group,
-  String $psql_path                = $postgresql::server::psql_path,
-  Optional[String] $target_role    = undef,
+  String $schema                      = 'public',
+  String $psql_db                     = $postgresql::server::default_database,
+  String $psql_user                   = $postgresql::server::user,
+  Integer $port                       = $postgresql::server::port,
+  Hash $connect_settings              = $postgresql::server::default_connect_settings,
+  Enum['present', 'absent'] $ensure   = 'present',
+  String $group                       = $postgresql::server::group,
+  String $psql_path                   = $postgresql::server::psql_path,
+  Optional[String] $target_role       = undef,
 ) {
-
   # If possible use the version of the remote database, otherwise
   # fallback to our local DB version
   if $connect_settings != undef and has_key( $connect_settings, 'DBVERSION') {
@@ -113,9 +110,9 @@ define postgresql::server::default_privileges (
     'SEQUENCES': {
       case $_privilege {
         /^(ALL)$/: { $_check_privilege = 'rwU' }
-        /^SELECT$/: { $_check_privilege = 'r'}
-        /^UPDATE$/: { $_check_privilege = 'w'}
-        /^USAGE$/: { $_check_privilege = 'U'}
+        /^SELECT$/: { $_check_privilege = 'r' }
+        /^UPDATE$/: { $_check_privilege = 'w' }
+        /^USAGE$/: { $_check_privilege = 'U' }
         default: { fail('Illegal value for $privilege parameter') }
       }
       $_check_type = 'S'
@@ -136,7 +133,7 @@ define postgresql::server::default_privileges (
     }
     'TYPES': {
       case $_privilege {
-        /^(ALL|USAGE)$/: { $_check_privilege = 'U'}
+        /^(ALL|USAGE)$/: { $_check_privilege = 'U' }
         default: { fail('Illegal value for $privilege parameter') }
       }
       $_check_type = 'T'
@@ -178,14 +175,14 @@ define postgresql::server::default_privileges (
     psql_group       => $group,
     psql_path        => $psql_path,
     unless           => $unless_cmd,
-    environment      => 'PGOPTIONS=--client-min-messages=error'
+    environment      => 'PGOPTIONS=--client-min-messages=error',
   }
 
   if($role != undef and defined(Postgresql::Server::Role[$role])) {
-    Postgresql::Server::Role[$role]->Postgresql_psql["default_privileges:${name}"]
+    Postgresql::Server::Role[$role] -> Postgresql_psql["default_privileges:${name}"]
   }
 
   if($db != undef and defined(Postgresql::Server::Database[$db])) {
-    Postgresql::Server::Database[$db]->Postgresql_psql["default_privileges:${name}"]
+    Postgresql::Server::Database[$db] -> Postgresql_psql["default_privileges:${name}"]
   }
 }

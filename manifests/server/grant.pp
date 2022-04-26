@@ -16,7 +16,7 @@
 define postgresql::server::grant (
   String $role,
   String $db,
-  String $privilege      = '',
+  String $privilege                     = '',
   Pattern[#/(?i:^COLUMN$)/,
     /(?i:^ALL SEQUENCES IN SCHEMA$)/,
     /(?i:^ALL TABLES IN SCHEMA$)/,
@@ -31,23 +31,17 @@ define postgresql::server::grant (
     /(?i:^SCHEMA$)/,
     /(?i:^SEQUENCE$)/
     #/(?i:^VIEW$)/
-  ] $object_type                   = 'database',
-  Optional[Variant[
-            Array[String,2,2],
-            String[1]]
-  ] $object_name                   = undef,
-  Array[String[1],0]
-    $object_arguments              = [],
-  String $psql_db                  = $postgresql::server::default_database,
-  String $psql_user                = $postgresql::server::user,
-  Integer $port                    = $postgresql::server::port,
-  Boolean $onlyif_exists           = false,
-  Hash $connect_settings           = $postgresql::server::default_connect_settings,
-  Enum['present',
-        'absent'
-  ] $ensure                        = 'present',
-  String $group                    = $postgresql::server::group,
-  String $psql_path                = $postgresql::server::psql_path,
+  ] $object_type                        = 'database',
+  Optional[Variant[Array[String,2,2],String[1]]] $object_name = undef,
+  Array[String[1],0] $object_arguments  = [],
+  String $psql_db                       = $postgresql::server::default_database,
+  String $psql_user                     = $postgresql::server::user,
+  Integer $port                         = $postgresql::server::port,
+  Boolean $onlyif_exists                = false,
+  Hash $connect_settings                = $postgresql::server::default_connect_settings,
+  Enum['present', 'absent'] $ensure     = 'present',
+  String $group                         = $postgresql::server::group,
+  String $psql_path                     = $postgresql::server::psql_path,
 ) {
   case $ensure {
     default: {
@@ -476,10 +470,10 @@ define postgresql::server::grant (
   }
 
   if($role != undef and defined(Postgresql::Server::Role[$role])) {
-    Postgresql::Server::Role[$role]->Postgresql_psql["grant:${name}"]
+    Postgresql::Server::Role[$role] -> Postgresql_psql["grant:${name}"]
   }
 
   if($db != undef and defined(Postgresql::Server::Database[$db])) {
-    Postgresql::Server::Database[$db]->Postgresql_psql["grant:${name}"]
+    Postgresql::Server::Database[$db] -> Postgresql_psql["grant:${name}"]
   }
 }
