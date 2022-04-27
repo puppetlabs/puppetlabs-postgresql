@@ -120,7 +120,7 @@ define postgresql::server::database (
     }
 
     if defined(Postgresql::Server::Role[$owner]) {
-      Postgresql::Server::Role[$owner]->Postgresql_psql["ALTER DATABASE \"${dbname}\" OWNER TO \"${owner}\""]
+      Postgresql::Server::Role[$owner] -> Postgresql_psql["ALTER DATABASE \"${dbname}\" OWNER TO \"${owner}\""]
     }
   }
 
@@ -132,7 +132,7 @@ define postgresql::server::database (
 
     if defined(Postgresql::Server::Tablespace[$tablespace]) {
       # The tablespace must be there, before we create the database.
-      Postgresql::Server::Tablespace[$tablespace]->Postgresql_psql["CREATE DATABASE \"${dbname}\""]
+      Postgresql::Server::Tablespace[$tablespace] -> Postgresql_psql["CREATE DATABASE \"${dbname}\""]
     }
   }
 }

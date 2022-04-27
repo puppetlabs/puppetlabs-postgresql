@@ -51,7 +51,7 @@ define postgresql::server::db (
     } -> Postgresql_conn_validator<| db_name == $dbname |>
   }
 
-  if($tablespace != undef and defined(Postgresql::Server::Tablespace[$tablespace])) {
-    Postgresql::Server::Tablespace[$tablespace]->Postgresql::Server::Database[$name]
+  if ($tablespace != undef and defined(Postgresql::Server::Tablespace[$tablespace])) {
+    Postgresql::Server::Tablespace[$tablespace] -> Postgresql::Server::Database[$name]
   }
 }
