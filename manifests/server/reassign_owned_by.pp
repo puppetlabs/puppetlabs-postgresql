@@ -55,13 +55,13 @@ define postgresql::server::reassign_owned_by (
   }
 
   if($old_role != undef and defined(Postgresql::Server::Role[$old_role])) {
-    Postgresql::Server::Role[$old_role]->Postgresql_psql["reassign_owned_by:${db}:${sql_command}"]
+    Postgresql::Server::Role[$old_role] -> Postgresql_psql["reassign_owned_by:${db}:${sql_command}"]
   }
   if($new_role != undef and defined(Postgresql::Server::Role[$new_role])) {
-    Postgresql::Server::Role[$new_role]->Postgresql_psql["reassign_owned_by:${db}:${sql_command}"]
+    Postgresql::Server::Role[$new_role] -> Postgresql_psql["reassign_owned_by:${db}:${sql_command}"]
   }
 
   if($db != undef and defined(Postgresql::Server::Database[$db])) {
-    Postgresql::Server::Database[$db]->Postgresql_psql["reassign_owned_by:${db}:${sql_command}"]
+    Postgresql::Server::Database[$db] -> Postgresql_psql["reassign_owned_by:${db}:${sql_command}"]
   }
 }
