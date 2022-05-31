@@ -88,9 +88,9 @@ class postgresql::params inherits postgresql::globals {
           $service_status = "service ${service_name} status"
         }
 
-        # RHEL 5 uses SysV init, RHEL 6 uses upstart.  RHEL 7 and 8 both use systemd.
+        # RHEL 5 uses SysV init, RHEL 6 uses upstart, RHEL 7+ uses systemd.
         'RedHat', 'CentOS', 'Scientific', 'OracleLinux': {
-          if $facts['os']['release']['major'] in ['7', '8'] {
+          if versioncmp($facts['os']['release']['major'], '7') >= 0 {
             $service_reload = "systemctl reload ${service_name}"
             $service_status = "systemctl status ${service_name}"
           } else {
