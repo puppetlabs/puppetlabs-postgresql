@@ -92,32 +92,62 @@ shared_examples 'postgresql_escape function' do
   end
 end
 
+# This duplicates spec_helper but we need it for add_custom_fact
+include RspecPuppetFacts
+# Rough conversion of grepping in the puppet source:
+# grep defaultfor lib/puppet/provider/service/*.rb
+# See https://github.com/voxpupuli/voxpupuli-test/blob/master/lib/voxpupuli/test/facts.rb
+add_custom_fact :service_provider, ->(_os, facts) do
+  case facts[:osfamily].downcase
+  when 'archlinux'
+    'systemd'
+  when 'darwin'
+    'launchd'
+  when 'debian'
+    'systemd'
+  when 'freebsd'
+    'freebsd'
+  when 'gentoo'
+    'openrc'
+  when 'openbsd'
+    'openbsd'
+  when 'redhat'
+    facts[:operatingsystemrelease].to_i >= 7 ? 'systemd' : 'redhat'
+  when 'suse'
+    facts[:operatingsystemmajrelease].to_i >= 12 ? 'systemd' : 'redhat'
+  when 'windows'
+    'windows'
+  else
+    'init'
+  end
+end
+
 shared_context 'Debian 9' do
-  let(:facts) { on_supported_os['debian-9-x86_64'].merge(service_provider: 'systemd') }
+  let(:facts) { on_supported_os['debian-9-x86_64'] }
 end
 
 shared_context 'Debian 10' do
-  let(:facts) { on_supported_os['debian-10-x86_64'].merge(service_provider: 'systemd') }
+  let(:facts) { on_supported_os['debian-10-x86_64'] }
 end
 
 shared_context 'Debian 11' do
-  let(:facts) { on_supported_os['debian-11-x86_64'].merge(service_provider: 'systemd') }
+  let(:facts) { on_supported_os['debian-11-x86_64'] }
 end
 
 shared_context 'Ubuntu 18.04' do
-  let(:facts) { on_supported_os['ubuntu-18.04-x86_64'].merge(service_provider: 'systemd') }
+  let(:facts) { on_supported_os['ubuntu-18.04-x86_64'] }
 end
 
 shared_context 'RedHat 6' do
-  let(:facts) { on_supported_os['redhat-6-x86_64'].merge(service_provider: 'redhat') }
+  let(:facts) { on_supported_os['redhat-6-x86_64'] }
 end
 
 shared_context 'RedHat 7' do
-  let(:facts) { on_supported_os['redhat-7-x86_64'].merge(service_provider: 'systemd') }
+  let(:facts) { on_supported_os['redhat-7-x86_64'] }
 end
 
 shared_context 'RedHat 8' do
-  let(:facts) { on_supported_os['redhat-8-x86_64'].merge(service_provider: 'systemd') }
+  let(:facts) { on_supported_os['redhat-8-x86_64'] }
 end
 
 shared_context 'Fedora 33' do
