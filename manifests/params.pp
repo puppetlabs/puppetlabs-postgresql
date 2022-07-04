@@ -166,18 +166,13 @@ class postgresql::params inherits postgresql::globals {
       $bindir                 = pick($bindir, "/usr/lib/postgresql/${version}/bin")
       $datadir                = pick($datadir, "/var/lib/postgresql/${version}/main")
       $confdir                = pick($confdir, "/etc/postgresql/${version}/main")
-      if $facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['major'], '8') >= 0 {
-        # Jessie uses systemd
-        $service_status = pick($service_status, "/usr/sbin/service ${service_name}@*-main status")
-      } elsif $facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['major'], '18.04') >= 0 {
-        $service_status = pick($service_status, "/usr/sbin/service ${service_name}@*-main status")
-      } elsif $facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['major'], '15.04') >= 0 {
-        # Ubuntu releases since vivid use systemd
-        $service_status = pick($service_status, "/usr/sbin/service ${service_name} status")
+      if pick($service_provider, $facts['service_provider']) == 'systemd' {
+        $service_reload = "systemctl reload ${service_name}"
+        $service_status = pick($service_status, "systemctl status ${service_name}")
       } else {
-        $service_status = pick($service_status, "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'")
+        $service_reload = "service ${service_name} reload"
+        $service_status = pick($service_status, "service ${service_name} status")
       }
-      $service_reload         = "service ${service_name} reload"
       $psql_path              = pick($psql_path, '/usr/bin/psql')
       $postgresql_conf_mode   = pick($postgresql_conf_mode, '0644')
     }
