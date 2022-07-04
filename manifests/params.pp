@@ -84,10 +84,10 @@ class postgresql::params inherits postgresql::globals {
 
       if pick($service_provider, $facts['service_provider']) == 'systemd' {
         $service_reload = "systemctl reload ${service_name}"
-        $service_status = "systemctl status ${service_name}"
+        $service_status = pick($service_status, "systemctl status ${service_name}")
       } else {
         $service_reload = "service ${service_name} reload"
-        $service_status = "service ${service_name} status"
+        $service_status = pick($service_status, "service ${service_name} status")
       }
 
       $psql_path           = pick($psql_path, "${bindir}/psql")
