@@ -10,7 +10,7 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server') }
     it { is_expected.to contain_file('/var/lib/postgresql/13/main') }
     it {
-      is_expected.to contain_exec('postgresql_reload').with('command' => 'service postgresql reload')
+      is_expected.to contain_exec('postgresql_reload').with('command' => 'systemctl reload postgresql')
     }
     it 'validates connection' do
       is_expected.to contain_postgresql_conn_validator('validate_service_is_running')
