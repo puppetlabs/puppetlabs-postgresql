@@ -84,14 +84,31 @@ define postgresql::server::role (
     $createdb_sql    = $createdb    ? { true => 'CREATEDB',    default => 'NOCREATEDB' }
     $superuser_sql   = $superuser   ? { true => 'SUPERUSER',   default => 'NOSUPERUSER' }
     $replication_sql = $replication ? { true => 'REPLICATION', default => '' }
-    if ($password_hash_unsensitive != false) {
-      $password_sql = "ENCRYPTED PASSWORD '${password_hash_unsensitive}'"
+
+    if $password_hash_unsensitive =~ Deferred {
+      $password_sql = Deferred('postgresql::prepend_sql_password', [$password_hash_unsensitive])
+    } elsif ($password_hash_unsensitive != false) {
+      $password_sql = postgresql::prepend_sql_password($password_hash_unsensitive)
     } else {
       $password_sql = ''
     }
 
+    if $password_sql =~ Deferred {
+      $create_role_command = Deferred('sprintf', ["CREATE ROLE \"%s\" %s %s %s %s %s %s CONNECTION LIMIT %s",
+                                                  $username,
+                                                  $password_sql,
+                                                  $login_sql,
+                                                  $createrole_sql,
+                                                  $createdb_sql,
+                                                  $superuser_sql,
+                                                  $replication_sql,
+                                                  $connection_limit])
+    } else {
+      $create_role_command = "CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}"
+    }
+
     postgresql_psql { "CREATE ROLE ${username} ENCRYPTED PASSWORD ****":
-      command   => Sensitive("CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}"),
+      command   => Sensitive($create_role_command),
       unless    => "SELECT 1 FROM pg_roles WHERE rolname = '${username}'",
       require   => undef,
       sensitive => true,
@@ -134,9 +151,14 @@ define postgresql::server::role (
     }
 
     if $password_hash_unsensitive and $update_password {
-      if($password_hash_unsensitive =~ /^(md5|SCRAM-SHA-256).+/) {
-        $pwd_hash_sql = $password_hash_unsensitive
-      } else {
+      if $password_hash_unsensitive =~ Deferred {
+        $pwd_hash_sql = Deferred('postgresql::postgresql_password',[$username,
+                                                                    $password_hash,
+                                                                    false,
+                                                                    $hash,
+                                                                    $salt])
+      }
+      else {
         $pwd_hash_sql = postgresql::postgresql_password(
           $username,
           $password_hash,
@@ -145,9 +167,18 @@ define postgresql::server::role (
           $salt,
         )
       }
+      if $pwd_hash_sql =~ Deferred {
+        $pw_command = Deferred('sprintf', ["ALTER ROLE \"%s\" ENCRYPTED PASSWORD '%s'", $username, $pwd_hash_sql])
+        $unless_pw_command = Deferred('sprintf', ["SELECT 1 FROM pg_shadow WHERE usename = '%s' AND passwd = '%s'",
+                                                  $username,
+                                                  $pwd_hash_sql])
+      } else {
+        $pw_command = "ALTER ROLE \"${username}\" ENCRYPTED PASSWORD '${pwd_hash_sql}'"
+        $unless_pw_command = "SELECT 1 FROM pg_shadow WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'"
+      }
       postgresql_psql { "ALTER ROLE ${username} ENCRYPTED PASSWORD ****":
-        command   => Sensitive("ALTER ROLE \"${username}\" ENCRYPTED PASSWORD '${pwd_hash_sql}'"),
-        unless    => Sensitive("SELECT 1 FROM pg_shadow WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'"),
+        command   => Sensitive($pw_command),
+        unless    => Sensitive($unless_pw_command),
         sensitive => true,
       }
     }
