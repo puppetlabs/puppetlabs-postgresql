@@ -2,7 +2,28 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v8.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v8.0.0) (2022-03-02)
+## [v8.1.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v8.1.0) (2022-07-21)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v8.0.0...v8.1.0)
+
+### Added
+
+- Fix service status detection on Debian-based OSes [\#1349](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1349) ([arjenz](https://github.com/arjenz))
+- \(FM-8971\) allow deferred function for role pwd [\#1347](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1347) ([tvpartytonight](https://github.com/tvpartytonight))
+- Set version for Fedora 36 [\#1345](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1345) ([lweller](https://github.com/lweller))
+- Add Red Hat Enterprise Linux 9 support [\#1303](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1303) ([ekohl](https://github.com/ekohl))
+
+### Fixed
+
+- \(GH-1352\) - Updating postgresql service version on SLES  [\#1353](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1353) ([pmcmaw](https://github.com/pmcmaw))
+- Respect $service\_status on Red Hat-based distros [\#1351](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1351) ([ekohl](https://github.com/ekohl))
+- Add version for Ubuntu 22.04 [\#1350](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1350) ([arjenz](https://github.com/arjenz))
+- README.md: correct postgresql\_conn\_validator example [\#1332](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1332) ([bastelfreak](https://github.com/bastelfreak))
+- pdksync - \(GH-iac-334\) Remove Support for Ubuntu 14.04/16.04 [\#1331](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1331) ([david22swan](https://github.com/david22swan))
+- Remove unused variable in reload.pp [\#1327](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1327) ([ekohl](https://github.com/ekohl))
+- Use systemctl reload on EL 7 and higher [\#1326](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1326) ([ekohl](https://github.com/ekohl))
+
+## [v8.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v8.0.0) (2022-03-03)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.5.0...v8.0.0)
 
