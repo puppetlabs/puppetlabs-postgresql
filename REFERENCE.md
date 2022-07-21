@@ -70,6 +70,7 @@
 * [`postgresql::default`](#postgresqldefault): This function pull default values from the `params` class  or `globals` class if the value is not present in `params`.
 * [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape): This function escapes a string using [Dollar Quoting](https://www.postgresql.org/docs/12/sql-syntax-lexical.html#SQL-SYNTAX-DOLLAR-QUOTING) using a randomly generated tag if required.
 * [`postgresql::postgresql_password`](#postgresqlpostgresql_password): This function returns the postgresql password hash from the clear text username / password
+* [`postgresql::prepend_sql_password`](#postgresqlprepend_sql_password): This function exists for usage of a role password that is a deferred function
 * [`postgresql_escape`](#postgresql_escape): DEPRECATED.  Use the namespaced function [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape) instead.
 * [`postgresql_password`](#postgresql_password): DEPRECATED.  Use the namespaced function [`postgresql::postgresql_password`](#postgresqlpostgresql_password) instead.
 
@@ -1756,9 +1757,7 @@ Default value: ``undef``
 
 ##### <a name="ensure"></a>`ensure`
 
-Data type: `Enum['present',
-    'absent'
-  ]`
+Data type: `Enum['present', 'absent']`
 
 Specifies whether to grant or revoke the privilege.
 
@@ -2026,10 +2025,7 @@ Default value: `'database'`
 
 ##### <a name="object_name"></a>`object_name`
 
-Data type: `Optional[Variant[
-            Array[String,2,2],
-            String[1]]
-  ]`
+Data type: `Optional[Variant[Array[String,2,2],String[1]]]`
 
 Specifies name of object_type to which to grant access, can be either a string or a two element array. String: 'object_name' Array: ['schema_name', 'object_name']
 
@@ -2077,9 +2073,7 @@ Default value: `$postgresql::server::default_connect_settings`
 
 ##### <a name="ensure"></a>`ensure`
 
-Data type: `Enum['present',
-        'absent'
-  ]`
+Data type: `Enum['present', 'absent']`
 
 Specifies whether to grant or revoke the privilege. Default is to grant the privilege. Valid values: 'present', 'absent'.
 
@@ -3433,6 +3427,24 @@ Set type for password hash
 Data type: `Optional[Optional[Variant[String[1], Integer]]]`
 
 Use a specific salt value for scram-sha-256, default is username
+
+### <a name="postgresqlprepend_sql_password"></a>`postgresql::prepend_sql_password`
+
+Type: Ruby 4.x API
+
+This function exists for usage of a role password that is a deferred function
+
+#### `postgresql::prepend_sql_password(String $password)`
+
+The postgresql::prepend_sql_password function.
+
+Returns: `String`
+
+##### `password`
+
+Data type: `String`
+
+The clear text `password`
 
 ### <a name="postgresql_escape"></a>`postgresql_escape`
 
