@@ -5,6 +5,7 @@ fixtures:
       repo: "https://github.com/puppetlabs/puppetlabs-augeas_core.git"
       puppet_version: ">= 6.0.0"
     concat: "https://github.com/puppetlabs/puppetlabs-concat.git"
+    cron_core: "https://github.com/puppetlabs/puppetlabs-cron_core.git"
     facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
     firewall: "https://github.com/puppetlabs/puppetlabs-firewall.git"
     provision: "https://github.com/puppetlabs/provision.git"

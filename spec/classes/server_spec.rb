@@ -256,4 +256,62 @@ describe 'postgresql::server' do
         .with_address('192.0.2.100')
     end
   end
+
+  describe 'backup_enable => false' do
+    let(:params) { { backup_enable: false } }
+
+    it { is_expected.to contain_class('postgresql::server') }
+    it { is_expected.not_to contain_class('postgresql::backup::pg_dump') }
+    it { is_expected.not_to contain_file('/root/.pgpass') }
+    it { is_expected.not_to contain_file('/usr/local/sbin/pg_dump.sh') }
+    it { is_expected.not_to contain_cron('pg_dump backup job') }
+  end
+
+  describe 'backup_enable => true' do
+    let(:params) do
+      {
+        backup_enable: true,
+        backup_provider: 'pg_dump',
+        backup_options: {
+          db_user: 'backupuser',
+          db_password: 'backuppass',
+          dir: '/tmp/backuptest',
+          manage_user: true,
+        },
+      }
+    end
+
+    it { is_expected.to contain_class('postgresql::server') }
+    it { is_expected.to contain_class('postgresql::backup::pg_dump') }
+    it {
+      is_expected.to contain_postgresql__server__role('backupuser')
+        .with_superuser(true)
+    }
+    it {
+      is_expected.to contain_postgresql__server__pg_hba_rule('local access as backup user')
+        .with_type('local')
+        .with_database('all')
+        .with_user('backupuser')
+        .with_auth_method('md5')
+    }
+    it {
+      is_expected.to contain_file('/root/.pgpass')
+        .with_content(%r{.*:backupuser:.*})
+    }
+    it {
+      is_expected.to contain_file('/usr/local/sbin/pg_dump.sh')
+        .with_content(%r{.*pg_dumpall \$_pg_args --file=\$\{FILE\} \$@.*})
+    }
+    it {
+      is_expected.to contain_cron('pg_dump backup job')
+        .with(
+          ensure: 'present',
+          command: '/usr/local/sbin/pg_dump.sh',
+          user: 'root',
+          hour: '23',
+          minute: '5',
+          weekday: '*',
+        )
+    }
+  end
 end
