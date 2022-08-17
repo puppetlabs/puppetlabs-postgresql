@@ -31,6 +31,9 @@ class postgresql::params inherits postgresql::globals {
   $manage_logdir                = true
   $manage_xlogdir               = true
 
+  $backup_enable = false
+  $backup_provider = 'pg_dump'
+
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $facts['os']['family'] {
     'RedHat', 'Linux': {
