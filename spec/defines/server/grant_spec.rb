@@ -384,4 +384,30 @@ describe 'postgresql::server::grant' do
       it { is_expected.to compile.and_raise_error(%r{parameter 'object_name' variant 0 expects size to be 2, got 3}) }
     end
   end
+
+  context 'with specific schema name only if object exists' do
+    let :params do
+      {
+        db: 'test',
+        role: 'test',
+        privilege: 'all',
+        object_name: ['myschema', 'mytable'],
+        object_type: 'table',
+        onlyif_exists: true,
+      }
+    end
+  
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+  
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it do
+      is_expected.to contain_postgresql_psql('grant:test')
+        .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* "test"}m)
+        .with_unless(%r{SELECT 1 WHERE has_table_privilege\('test',\s*'myschema.mytable', 'INSERT'\)}m)
+        .with_onlyif(%r{SELECT true FROM pg_tables WHERE tablename = 'mytable'}m)
+    end
+  end
 end
