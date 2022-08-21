@@ -167,6 +167,67 @@ describe 'postgresql::server::default_privileges:' do
     MANIFEST
   end
 
+  let(:schema_check_command) do
+    "SELECT * FROM pg_default_acl WHERE '#{user}=UC' = ANY (defaclacl) AND defaclnamespace = 0 and defaclobjtype = 'n';"
+  end
+
+  let(:pp_schema) do
+    <<-MANIFEST.unindent
+      $db = #{db}
+      $user = #{user}
+      $group = #{group}
+      $password = #{password}
+
+      class { 'postgresql::server': }
+
+      postgresql::server::role { $user:
+        password_hash => postgresql::postgresql_password($user, $password),
+      }
+
+      postgresql::server::database { $db:
+        require => Postgresql::Server::Role[$user],
+      }
+
+      # Set default privileges on tables
+      postgresql::server::default_privileges { "alter default privileges grant all on tables to ${user}":
+        db          => $db,
+        role        => $user,
+        privilege   => 'ALL',
+        object_type => 'SCHEMAS',
+        schema      => '',
+        require     => Postgresql::Server::Database[$db],
+      }
+    MANIFEST
+  end
+  let(:pp_schema_revoke) do
+    <<-MANIFEST
+      $db = #{db}
+      $user = #{user}
+      $group = #{group}
+      $password = #{password}
+
+      class { 'postgresql::server': }
+
+      postgresql::server::role { $user:
+        password_hash => postgresql::postgresql_password($user, $password),
+      }
+      postgresql::server::database { $db:
+        require => Postgresql::Server::Role[$user],
+      }
+
+      # Removes default privileges on tables
+      postgresql::server::default_privileges { "alter default privileges revoke all on tables for ${user}":
+        db          => $db,
+        role        => $user,
+        privilege   => 'ALL',
+        object_type => 'SCHEMAS',
+        schema      => '',
+        ensure      => 'absent',
+        require     => Postgresql::Server::Database[$db],
+      }
+    MANIFEST
+  end
+
   let(:all_schemas_check_command) do
     "SELECT * FROM pg_default_acl a WHERE '#{user}=arwdDxt' = ANY (defaclacl) AND defaclnamespace = 0 and defaclobjtype = 'r';"
   end
@@ -269,6 +330,29 @@ describe 'postgresql::server::default_privileges:' do
 
       psql("--command=\"SET client_min_messages = 'error'; #{target_check_command}\" --db=#{db}", user) do |r|
         expect(r.stdout).to match(%r{^\(0 rows\)$})
+        expect(r.stderr).to eq('')
+      end
+    end
+  end
+
+  it 'grants default privileges to an user on schemas' do
+    if Gem::Version.new(postgresql_version) >= Gem::Version.new('10.0')
+      idempotent_apply(pp_schema)
+
+      psql("--command=\"SET client_min_messages = 'error';#{schema_check_command}\" --db=#{db}") do |r|
+        expect(r.stdout).to match(%r{\(1 row\)})
+        expect(r.stderr).to eq('')
+      end
+    end
+  end
+
+  it 'revokes default privileges for an user on schemas' do
+    if Gem::Version.new(postgresql_version) >= Gem::Version.new('10.0')
+      apply_manifest(pp_schema, catch_failures: true)
+      apply_manifest(pp_schema_revoke, expect_changes: true)
+
+      psql("--command=\"SET client_min_messages = 'error';#{schema_check_command}\" --db=#{db}") do |r|
+        expect(r.stdout).to match(%r{\(0 rows\)})
         expect(r.stderr).to eq('')
       end
     end

@@ -10,7 +10,7 @@ require 'puppet-strings/tasks' if Bundler.rubygems.find_name('puppet-strings').a
 
 def changelog_user
   return unless Rake.application.top_level_tasks.include? "changelog"
-  returnVal = "puppetlabs" || JSON.load(File.read('metadata.json'))['author']
+  returnVal = nil || JSON.load(File.read('metadata.json'))['author']
   raise "unable to find the changelog_user in .sync.yml, or the author in metadata.json" if returnVal.nil?
   puts "GitHubChangelogGenerator user:#{returnVal}"
   returnVal
@@ -42,6 +42,10 @@ def changelog_future_release
 end
 
 PuppetLint.configuration.send('disable_relative')
+PuppetLint.configuration.send('disable_parameter_types')
+PuppetLint.configuration.send('disable_parameter_documentation')
+PuppetLint.configuration.send('disable_anchor_resource')
+PuppetLint.configuration.send('disable_params_empty_string_assignment')
 
 
 if Bundler.rubygems.find_name('github_changelog_generator').any?
@@ -49,7 +53,6 @@ if Bundler.rubygems.find_name('github_changelog_generator').any?
     raise "Set CHANGELOG_GITHUB_TOKEN environment variable eg 'export CHANGELOG_GITHUB_TOKEN=valid_token_here'" if Rake.application.top_level_tasks.include? "changelog" and ENV['CHANGELOG_GITHUB_TOKEN'].nil?
     config.user = "#{changelog_user}"
     config.project = "#{changelog_project}"
-    config.max_issues = 500
     config.future_release = "#{changelog_future_release}"
     config.exclude_labels = ['maintenance']
     config.header = "# Change log\n\nAll notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org)."

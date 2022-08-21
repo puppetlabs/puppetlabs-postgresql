@@ -31,6 +31,9 @@ class postgresql::params inherits postgresql::globals {
   $manage_logdir                = true
   $manage_xlogdir               = true
 
+  $backup_enable = false
+  $backup_provider = 'pg_dump'
+
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $facts['os']['family'] {
     'RedHat', 'Linux': {
@@ -82,34 +85,22 @@ class postgresql::params inherits postgresql::globals {
         $postgresql_conf_mode   = pick($postgresql_conf_mode, '0600')
       }
 
-      case $facts['os']['name'] {
-        'Amazon': {
-          $service_reload = "service ${service_name} reload"
-          $service_status = "service ${service_name} status"
-        }
-
-        # RHEL 5 uses SysV init, RHEL 6 uses upstart.  RHEL 7 and 8 both use systemd.
-        'RedHat', 'CentOS', 'Scientific', 'OracleLinux': {
-          if $facts['os']['release']['major'] in ['7', '8'] {
-            $service_reload = "systemctl reload ${service_name}"
-            $service_status = "systemctl status ${service_name}"
-          } else {
-            $service_reload = "service ${service_name} reload"
-            $service_status = "service ${service_name} status"
-          }
-        }
-
-        # Default will catch Fedora which uses systemd
-        default: {
-          $service_reload = "systemctl reload ${service_name}"
-          $service_status = "systemctl status ${service_name}"
-        }
+      if pick($service_provider, $facts['service_provider']) == 'systemd' {
+        $service_reload = "systemctl reload ${service_name}"
+        $service_status = pick($service_status, "systemctl status ${service_name}")
+      } else {
+        $service_reload = "service ${service_name} reload"
+        $service_status = pick($service_status, "service ${service_name} status")
       }
 
       $psql_path           = pick($psql_path, "${bindir}/psql")
 
       $perl_package_name   = pick($perl_package_name, 'perl-DBD-Pg')
-      $python_package_name = pick($python_package_name, 'python-psycopg2')
+      if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '8') >= 0 {
+        $python_package_name = pick($python_package_name, 'python3-psycopg2')
+      } else {
+        $python_package_name = pick($python_package_name, 'python-psycopg2')
+      }
 
       if $postgresql::globals::postgis_package_name {
         $postgis_package_name = $postgresql::globals::postgis_package_name
@@ -178,18 +169,13 @@ class postgresql::params inherits postgresql::globals {
       $bindir                 = pick($bindir, "/usr/lib/postgresql/${version}/bin")
       $datadir                = pick($datadir, "/var/lib/postgresql/${version}/main")
       $confdir                = pick($confdir, "/etc/postgresql/${version}/main")
-      if $facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['major'], '8') >= 0 {
-        # Jessie uses systemd
-        $service_status = pick($service_status, "/usr/sbin/service ${service_name}@*-main status")
-      } elsif $facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['major'], '18.04') >= 0 {
-        $service_status = pick($service_status, "/usr/sbin/service ${service_name}@*-main status")
-      } elsif $facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['major'], '15.04') >= 0 {
-        # Ubuntu releases since vivid use systemd
-        $service_status = pick($service_status, "/usr/sbin/service ${service_name} status")
+      if pick($service_provider, $facts['service_provider']) == 'systemd' {
+        $service_reload = "systemctl reload ${service_name}"
+        $service_status = pick($service_status, "systemctl status ${service_name}")
       } else {
-        $service_status = pick($service_status, "/etc/init.d/${service_name} status | /bin/egrep -q 'Running clusters: .+|online'")
+        $service_reload = "service ${service_name} reload"
+        $service_status = pick($service_status, "service ${service_name} status")
       }
-      $service_reload         = "service ${service_name} reload"
       $psql_path              = pick($psql_path, '/usr/bin/psql')
       $postgresql_conf_mode   = pick($postgresql_conf_mode, '0644')
     }

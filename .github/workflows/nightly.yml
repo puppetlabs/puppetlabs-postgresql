@@ -11,6 +11,7 @@ env:
 
 jobs:
   setup_matrix:
+    if: ${{ github.repository_owner == 'puppetlabs' }}
     name: "Setup Test Matrix"
     runs-on: ubuntu-20.04
     outputs:
@@ -58,7 +59,7 @@ jobs:
       if: ${{ github.repository_owner == 'puppetlabs' }}
       run: |
         if [ '${{ github.repository_owner }}' == 'puppetlabs' ]; then
-          buildevents cmd $TRACE_ID $STEP_ID matrix_from_metadata -- bundle exec matrix_from_metadata_v2 --exclude-platforms '["Scientific-6", "Scientific-7", "Debian-9", "Debian-10", "Debian-11", "SLES-12", "SLES-15", "Ubuntu-14.04", "Ubuntu-16.04", "Ubuntu-18.04", "Ubuntu-20.04"]'
+          buildevents cmd $TRACE_ID $STEP_ID matrix_from_metadata -- bundle exec matrix_from_metadata_v2 --exclude-platforms '["Scientific-6", "Scientific-7", "Debian-9", "Debian-10", "Debian-11", "SLES-12", "SLES-15", "Ubuntu-14.04", "Ubuntu-16.04", "Ubuntu-18.04", "Ubuntu-20.04", "Ubuntu-22.04"]'
         else
           echo  "::set-output name=matrix::{}"
         fi
@@ -186,7 +187,7 @@ jobs:
         buildevents step $TRACE_ID $STEP_ID $STEP_START 'Remove test environment'
 
   slack-workflow-status:
-    if: always()
+    if: ${{ github.repository_owner == 'puppetlabs' }}
     name: Post Workflow Status To Slack
     needs:
       - Acceptance
@@ -199,5 +200,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK }}
           # Optional Input
-          channel: '#team-ia-bots'
+          channel: '#team-cat-bots'
           name: 'GABot'

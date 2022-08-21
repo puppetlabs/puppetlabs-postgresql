@@ -70,7 +70,7 @@ define postgresql::server::tablespace (
     }
 
     if defined(Postgresql::Server::Role[$owner]) {
-      Postgresql::Server::Role[$owner]->Postgresql_psql["ALTER TABLESPACE \"${spcname}\" OWNER TO \"${owner}\""]
+      Postgresql::Server::Role[$owner] -> Postgresql_psql["ALTER TABLESPACE \"${spcname}\" OWNER TO \"${owner}\""]
     }
   }
 }

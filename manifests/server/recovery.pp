@@ -61,7 +61,7 @@ define postgresql::server::recovery (
     }
 
     # Create the recovery.conf content
-    concat::fragment { 'recovery.conf':
+    concat::fragment { "${name}-recovery.conf":
       target  => $target,
       content => template('postgresql/recovery.conf.erb'),
     }

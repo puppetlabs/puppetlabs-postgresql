@@ -15,6 +15,7 @@
     * [Create an access rule for pg_hba.conf](#create-an-access-rule-for-pg_hbaconf)
     * [Create user name maps for pg_ident.conf](#create-user-name-maps-for-pg_identconf)
     * [Validate connectivity](#validate-connectivity)
+    * [Backups](#backups)
 4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
@@ -321,11 +322,32 @@ postgresql_conn_validator { 'validate my postgres connection':
   db_username       => 'mydbuser',
   db_password       => 'mydbpassword',
   db_name           => 'mydbname',
-}->
-exec { 'rake db:migrate':
+  psql_path         => '/usr/bin/psql',
+}
+-> exec { 'rake db:migrate':
   cwd => '/opt/myrubyapp',
 }
 ```
+
+### Backups
+
+This example demonstrates how to configure PostgreSQL backups with "pg_dump". This sets up a daily cron job to perform a full backup. Each backup will create a new directory. A cleanup job will automatically remove backups that are older than 15 days.
+
+```
+class { 'postgresql::server':
+  backup_enable   => true,
+  backup_provider => 'pg_dump',
+  backup_options  => {
+    db_user     => 'backupuser',
+    db_password => 'secret',
+    manage_user => true,
+    rotate      => 15,
+  },
+  ...
+}
+```
+
+It is possible to set parameter `$ensure` to `absent` in order to remove the backup job, user/role, backup script and password file. However, the actual backup files and directories will remain untouched.
 
 ## Reference
 

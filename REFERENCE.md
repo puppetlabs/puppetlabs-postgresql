@@ -70,6 +70,7 @@
 * [`postgresql::default`](#postgresqldefault): This function pull default values from the `params` class  or `globals` class if the value is not present in `params`.
 * [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape): This function escapes a string using [Dollar Quoting](https://www.postgresql.org/docs/12/sql-syntax-lexical.html#SQL-SYNTAX-DOLLAR-QUOTING) using a randomly generated tag if required.
 * [`postgresql::postgresql_password`](#postgresqlpostgresql_password): This function returns the postgresql password hash from the clear text username / password
+* [`postgresql::prepend_sql_password`](#postgresqlprepend_sql_password): This function exists for usage of a role password that is a deferred function
 * [`postgresql_escape`](#postgresql_escape): DEPRECATED.  Use the namespaced function [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape) instead.
 * [`postgresql_password`](#postgresql_password): DEPRECATED.  Use the namespaced function [`postgresql::postgresql_password`](#postgresqlpostgresql_password) instead.
 
@@ -1330,7 +1331,7 @@ The following parameters are available in the `postgresql::server::contrib` clas
 
 ##### <a name="package_name"></a>`package_name`
 
-Data type: `String`
+Data type: `Optional[String[1]]`
 
 The name of the PostgreSQL contrib package.
 
@@ -1731,6 +1732,7 @@ Manage a database defaults privileges. Only works with PostgreSQL version 9.6 an
 
 The following parameters are available in the `postgresql::server::default_privileges` defined type:
 
+* [`target_role`](#target_role)
 * [`ensure`](#ensure)
 * [`role`](#role)
 * [`db`](#db)
@@ -1745,11 +1747,17 @@ The following parameters are available in the `postgresql::server::default_privi
 * [`psql_path`](#psql_path)
 * [`group`](#group)
 
+##### <a name="target_role"></a>`target_role`
+
+Data type: `Optional[String]`
+
+Target role whose created objects will receive the default privileges. Defaults to the current user.
+
+Default value: ``undef``
+
 ##### <a name="ensure"></a>`ensure`
 
-Data type: `Enum['present',
-    'absent'
-  ]`
+Data type: `Enum['present', 'absent']`
 
 Specifies whether to grant or revoke the privilege.
 
@@ -1774,7 +1782,8 @@ Data type: `Pattern[
     /(?i:^ROUTINES$)/,
     /(?i:^SEQUENCES$)/,
     /(?i:^TABLES$)/,
-    /(?i:^TYPES$)/
+    /(?i:^TYPES$)/,
+    /(?i:^SCHEMAS$)/
   ]`
 
 Specify target object type: 'FUNCTIONS', 'ROUTINES', 'SEQUENCES', 'TABLES', 'TYPES'.
@@ -1789,7 +1798,7 @@ Specifies comma-separated list of privileges to grant. Valid options: depends on
 
 Data type: `String`
 
-Target schema. Defaults to 'public'.
+Target schema. Defaults to 'public'. Can be set to '' to apply to all schemas.
 
 Default value: `'public'`
 
@@ -2016,10 +2025,7 @@ Default value: `'database'`
 
 ##### <a name="object_name"></a>`object_name`
 
-Data type: `Optional[Variant[
-            Array[String,2,2],
-            String[1]]
-  ]`
+Data type: `Optional[Variant[Array[String,2,2],String[1]]]`
 
 Specifies name of object_type to which to grant access, can be either a string or a two element array. String: 'object_name' Array: ['schema_name', 'object_name']
 
@@ -2067,9 +2073,7 @@ Default value: `$postgresql::server::default_connect_settings`
 
 ##### <a name="ensure"></a>`ensure`
 
-Data type: `Enum['present',
-        'absent'
-  ]`
+Data type: `Enum['present', 'absent']`
 
 Specifies whether to grant or revoke the privilege. Default is to grant the privilege. Valid values: 'present', 'absent'.
 
@@ -2561,6 +2565,8 @@ The following parameters are available in the `postgresql::server::role` defined
 * [`psql_group`](#psql_group)
 * [`psql_path`](#psql_path)
 * [`module_workdir`](#module_workdir)
+* [`hash`](#hash)
+* [`salt`](#salt)
 
 ##### <a name="update_password"></a>`update_password`
 
@@ -2705,6 +2711,22 @@ Data type: `Any`
 Specifies working directory under which the psql command should be executed. May need to specify if '/tmp' is on volume mounted with noexec option.
 
 Default value: `$postgresql::server::module_workdir`
+
+##### <a name="hash"></a>`hash`
+
+Data type: `Enum['md5', 'scram-sha-256']`
+
+Specify the hash method for pg password
+
+Default value: `'md5'`
+
+##### <a name="salt"></a>`salt`
+
+Data type: `Optional[Variant[String[1], Integer]]`
+
+Specify the salt use for the scram-sha-256 encoding password (default username)
+
+Default value: ``undef``
 
 ### <a name="postgresqlserverschema"></a>`postgresql::server::schema`
 
@@ -3370,7 +3392,7 @@ Type: Ruby 4.x API
 
 This function returns the postgresql password hash from the clear text username / password
 
-#### `postgresql::postgresql_password(Variant[String[1], Integer] $username, Variant[String[1], Sensitive[String[1]], Integer] $password, Optional[Boolean] $sensitive)`
+#### `postgresql::postgresql_password(Variant[String[1], Integer] $username, Variant[String[1], Sensitive[String[1]], Integer] $password, Optional[Boolean] $sensitive, Optional[Optional[Enum['md5', 'scram-sha-256']]] $hash, Optional[Optional[Variant[String[1], Integer]]] $salt)`
 
 The postgresql::postgresql_password function.
 
@@ -3393,6 +3415,36 @@ The clear text `password`
 Data type: `Optional[Boolean]`
 
 If the Postgresql-Passwordhash should be of Datatype Sensitive[String]
+
+##### `hash`
+
+Data type: `Optional[Optional[Enum['md5', 'scram-sha-256']]]`
+
+Set type for password hash
+
+##### `salt`
+
+Data type: `Optional[Optional[Variant[String[1], Integer]]]`
+
+Use a specific salt value for scram-sha-256, default is username
+
+### <a name="postgresqlprepend_sql_password"></a>`postgresql::prepend_sql_password`
+
+Type: Ruby 4.x API
+
+This function exists for usage of a role password that is a deferred function
+
+#### `postgresql::prepend_sql_password(String $password)`
+
+The postgresql::prepend_sql_password function.
+
+Returns: `String`
+
+##### `password`
+
+Data type: `String`
+
+The clear text `password`
 
 ### <a name="postgresql_escape"></a>`postgresql_escape`
 
