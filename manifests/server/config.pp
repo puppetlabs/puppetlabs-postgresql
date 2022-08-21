@@ -22,6 +22,7 @@ class postgresql::server::config {
   $datadir                      = $postgresql::server::datadir
   $logdir                       = $postgresql::server::logdir
   $service_name                 = $postgresql::server::service_name
+  $service_enable               = $postgresql::server::service_enable
   $log_line_prefix              = $postgresql::server::log_line_prefix
   $timezone                     = $postgresql::server::timezone
   $password_encryption          = $postgresql::server::password_encryption
@@ -51,49 +52,43 @@ class postgresql::server::config {
 
       postgresql::server::pg_hba_rule {
         'local access as postgres user':
-            type        => 'local',
-            user        => $user,
-            auth_method => 'ident',
-            auth_option => $local_auth_option,
-            order       => 1,
-        ;
+          type        => 'local',
+          user        => $user,
+          auth_method => 'ident',
+          auth_option => $local_auth_option,
+          order       => 1;
 
         'local access to database with same name':
-            type        => 'local',
-            auth_method => 'ident',
-            auth_option => $local_auth_option,
-            order       => 2,
-        ;
+          type        => 'local',
+          auth_method => 'ident',
+          auth_option => $local_auth_option,
+          order       => 2;
 
         'allow localhost TCP access to postgresql user':
-            type        => 'host',
-            user        => $user,
-            address     => '127.0.0.1/32',
-            auth_method => 'md5',
-            order       => 3,
-        ;
+          type        => 'host',
+          user        => $user,
+          address     => '127.0.0.1/32',
+          auth_method => 'md5',
+          order       => 3;
 
         'deny access to postgresql user':
-            type        => 'host',
-            user        => $user,
-            address     => $ip_mask_deny_postgres_user,
-            auth_method => 'reject',
-            order       => 4,
-        ;
+          type        => 'host',
+          user        => $user,
+          address     => $ip_mask_deny_postgres_user,
+          auth_method => 'reject',
+          order       => 4;
 
         'allow access to all users':
-            type        => 'host',
-            address     => $ip_mask_allow_all_users,
-            auth_method => 'md5',
-            order       => 100,
-        ;
+          type        => 'host',
+          address     => $ip_mask_allow_all_users,
+          auth_method => 'md5',
+          order       => 100;
 
         'allow access to ipv6 localhost':
-            type        => 'host',
-            address     => '::1/128',
-            auth_method => 'md5',
-            order       => 101,
-        ;
+          type        => 'host',
+          address     => '::1/128',
+          auth_method => 'md5',
+          order       => 101;
       }
     }
 
@@ -186,7 +181,7 @@ class postgresql::server::config {
 
   # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
   # in /etc/sysconfig/pgsql/postgresql. Create a blank file so we can manage it with augeas later.
-  if ($facts['os']['family'] == 'RedHat') and ($facts['os']['release']['major'] !~ /^(7|8)$/) and ($facts['os']['name'] != 'Fedora') {
+  if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') < 0 {
     file { '/etc/sysconfig/pgsql/postgresql':
       ensure  => file,
       replace => false,
@@ -232,17 +227,15 @@ class postgresql::server::config {
 
     file {
       default:
-          ensure => file,
-          owner  => root,
-          group  => root,
-          notify => [Exec['restart-systemd'], Class['postgresql::server::service']],
-          before => Class['postgresql::server::reload'],
-      ;
+        ensure => file,
+        owner  => root,
+        group  => root,
+        notify => [Exec['restart-systemd'], Class['postgresql::server::service']],
+        before => Class['postgresql::server::reload'];
 
       'systemd-conf-dir':
-          ensure => directory,
-          path   => "/etc/systemd/system/${service_name}.service.d",
-      ;
+        ensure => directory,
+        path   => "/etc/systemd/system/${service_name}.service.d";
 
       # Template uses:
       # - $facts['os']['name']
@@ -252,16 +245,19 @@ class postgresql::server::config {
       # - $datadir
       # - $extra_systemd_config
       'systemd-override':
-          path    => "/etc/systemd/system/${service_name}.service.d/${service_name}.conf",
-          content => template('postgresql/systemd-override.erb'),
-          require => File['systemd-conf-dir'],
-      ;
+        path    => "/etc/systemd/system/${service_name}.service.d/${service_name}.conf",
+        content => template('postgresql/systemd-override.erb'),
+        require => File['systemd-conf-dir'];
+    }
 
+    if $service_enable != 'mask' {
       # Remove old unit file to avoid conflicts
-      'old-systemd-override':
-          ensure => absent,
-          path   => "/etc/systemd/system/${service_name}.service",
-      ;
+      file { 'old-systemd-override':
+        ensure => absent,
+        path   => "/etc/systemd/system/${service_name}.service",
+        notify => [Exec['restart-systemd'], Class['postgresql::server::service']],
+        before => Class['postgresql::server::reload'],
+      }
     }
   }
 }

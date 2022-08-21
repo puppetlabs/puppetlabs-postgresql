@@ -77,6 +77,10 @@
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
+
+# @param backup_enable Whether a backup job should be enabled.
+# @param backup_options A hash of options that should be passed through to the backup provider.
+# @param backup_provider Specifies the backup provider to use.
 #
 # @param version Deprecated. Use postgresql::globals instead. Sets PostgreSQL version
 #
@@ -152,6 +156,10 @@ class postgresql::server (
   Hash[String, Any] $config_entries = {},
   Hash[String, Hash] $pg_hba_rules  = {},
 
+  Boolean $backup_enable = $postgresql::params::backup_enable,
+  Hash $backup_options = {},
+  Enum['pg_dump'] $backup_provider = $postgresql::params::backup_provider,
+
   #Deprecated
   $version                    = undef,
 ) inherits postgresql::params {
@@ -199,6 +207,19 @@ class postgresql::server (
   $pg_hba_rules.each |$rule_name, $rule| {
     postgresql::server::pg_hba_rule { $rule_name:
       * => $rule,
+    }
+  }
+
+  if $backup_enable {
+    case $backup_provider {
+      'pg_dump': {
+        class { 'postgresql::backup::pg_dump':
+          * => $backup_options,
+        }
+      }
+      default: {
+        fail("Unsupported backup provider '${backup_provider}'.")
+      }
     }
   }
 }

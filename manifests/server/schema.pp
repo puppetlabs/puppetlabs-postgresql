@@ -57,7 +57,7 @@ define postgresql::server::schema (
     }
 
     if defined(Postgresql::Server::Role[$owner]) {
-      Postgresql::Server::Role[$owner]->Postgresql_psql["${db}: ALTER SCHEMA \"${schema}\" OWNER TO \"${owner}\""]
+      Postgresql::Server::Role[$owner] -> Postgresql_psql["${db}: ALTER SCHEMA \"${schema}\" OWNER TO \"${owner}\""]
     }
   }
 }

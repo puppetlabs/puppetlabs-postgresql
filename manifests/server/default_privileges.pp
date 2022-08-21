@@ -14,7 +14,6 @@
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param psql_path Specifies the path to the psql command.
 define postgresql::server::default_privileges (
-  Optional[String] $target_role    = undef,
   String $role,
   String $db,
   String $privilege,
@@ -23,20 +22,19 @@ define postgresql::server::default_privileges (
     /(?i:^ROUTINES$)/,
     /(?i:^SEQUENCES$)/,
     /(?i:^TABLES$)/,
-    /(?i:^TYPES$)/
+    /(?i:^TYPES$)/,
+    /(?i:^SCHEMAS$)/
   ] $object_type,
-  String $schema                   = 'public',
-  String $psql_db                  = $postgresql::server::default_database,
-  String $psql_user                = $postgresql::server::user,
-  Integer $port                    = $postgresql::server::port,
-  Hash $connect_settings           = $postgresql::server::default_connect_settings,
-  Enum['present',
-    'absent'
-  ] $ensure                        = 'present',
-  String $group                    = $postgresql::server::group,
-  String $psql_path                = $postgresql::server::psql_path,
+  String $schema                      = 'public',
+  String $psql_db                     = $postgresql::server::default_database,
+  String $psql_user                   = $postgresql::server::user,
+  Integer $port                       = $postgresql::server::port,
+  Hash $connect_settings              = $postgresql::server::default_connect_settings,
+  Enum['present', 'absent'] $ensure   = 'present',
+  String $group                       = $postgresql::server::group,
+  String $psql_path                   = $postgresql::server::psql_path,
+  Optional[String] $target_role       = undef,
 ) {
-
   # If possible use the version of the remote database, otherwise
   # fallback to our local DB version
   if $connect_settings != undef and has_key( $connect_settings, 'DBVERSION') {
@@ -73,16 +71,16 @@ define postgresql::server::default_privileges (
   }
 
   if $target_role != undef {
-    $_target_role = " FOR ROLE $target_role"
-    $_check_target_role = "/$target_role"
+    $_target_role = " FOR ROLE ${target_role}"
+    $_check_target_role = "/${target_role}"
   } else {
     $_target_role = ''
     $_check_target_role = ''
   }
 
   if $schema != '' {
-    $_schema = " IN SCHEMA $schema"
-    $_check_schema = " AND nspname = '$schema'"
+    $_schema = " IN SCHEMA ${schema}"
+    $_check_schema = " AND nspname = '${schema}'"
   } else {
     $_schema = ''
     $_check_schema = ' AND nspname IS NULL'
@@ -112,9 +110,9 @@ define postgresql::server::default_privileges (
     'SEQUENCES': {
       case $_privilege {
         /^(ALL)$/: { $_check_privilege = 'rwU' }
-        /^SELECT$/: { $_check_privilege = 'r'}
-        /^UPDATE$/: { $_check_privilege = 'w'}
-        /^USAGE$/: { $_check_privilege = 'U'}
+        /^SELECT$/: { $_check_privilege = 'r' }
+        /^UPDATE$/: { $_check_privilege = 'w' }
+        /^USAGE$/: { $_check_privilege = 'U' }
         default: { fail('Illegal value for $privilege parameter') }
       }
       $_check_type = 'S'
@@ -135,10 +133,25 @@ define postgresql::server::default_privileges (
     }
     'TYPES': {
       case $_privilege {
-        /^(ALL|USAGE)$/: { $_check_privilege = 'U'}
+        /^(ALL|USAGE)$/: { $_check_privilege = 'U' }
         default: { fail('Illegal value for $privilege parameter') }
       }
       $_check_type = 'T'
+    }
+    'SCHEMAS': {
+      if (versioncmp($version, '10') == -1) {
+        fail 'Default_privileges on schemas is only supported on PostgreSQL >= 10.0'
+      }
+      if $schema != '' {
+        fail('Cannot alter default schema permissions within a schema')
+      }
+      case $_privilege {
+        /^ALL$/: { $_check_privilege = 'UC' }
+        /^USAGE$/: { $_check_privilege = 'U' }
+        /^CREATE$/: { $_check_privilege = 'C' }
+        default: { fail('Illegal value for $privilege parameter') }
+      }
+      $_check_type = 'n'
     }
     default: {
       fail("Missing privilege validation for object type ${_object_type}")
@@ -162,14 +175,14 @@ define postgresql::server::default_privileges (
     psql_group       => $group,
     psql_path        => $psql_path,
     unless           => $unless_cmd,
-    environment      => 'PGOPTIONS=--client-min-messages=error'
+    environment      => 'PGOPTIONS=--client-min-messages=error',
   }
 
   if($role != undef and defined(Postgresql::Server::Role[$role])) {
-    Postgresql::Server::Role[$role]->Postgresql_psql["default_privileges:${name}"]
+    Postgresql::Server::Role[$role] -> Postgresql_psql["default_privileges:${name}"]
   }
 
   if($db != undef and defined(Postgresql::Server::Database[$db])) {
-    Postgresql::Server::Database[$db]->Postgresql_psql["default_privileges:${name}"]
+    Postgresql::Server::Database[$db] -> Postgresql_psql["default_privileges:${name}"]
   }
 }
