@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v8.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v8.2.0) (2022-08-22)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v8.1.0...v8.2.0)
+
+### Added
+
+- pdksync - \(GH-cat-11\) Certify Support for Ubuntu 22.04 [\#1355](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1355) ([david22swan](https://github.com/david22swan))
+
+### Fixed
+
+- Ensure multiple postgresql::server::recovery resources can be defined [\#1348](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1348) ([Deroin](https://github.com/Deroin))
+
+### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+
+- \(MODULES-11251\) Add support for backup provider "pg\_dump" [\#1319](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1319) ([fraenki](https://github.com/fraenki))
+
 ## [v8.1.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v8.1.0) (2022-07-21)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v8.0.0...v8.1.0)
