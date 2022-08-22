@@ -396,11 +396,11 @@ describe 'postgresql::server::grant' do
         onlyif_exists: true,
       }
     end
-  
+
     let :pre_condition do
       "class {'postgresql::server':}"
     end
-  
+
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
     it do
