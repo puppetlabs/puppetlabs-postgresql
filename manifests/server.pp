@@ -77,7 +77,7 @@
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
-
+#
 # @param backup_enable Whether a backup job should be enabled.
 # @param backup_options A hash of options that should be passed through to the backup provider.
 # @param backup_provider Specifies the backup provider to use.
