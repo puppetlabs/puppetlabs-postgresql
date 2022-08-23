@@ -23,6 +23,7 @@
 
 #### Private Classes
 
+* `postgresql::backup::pg_dump`: "Provider" for pg_dump backup
 * `postgresql::dnfmodule`: Manage the DNF module
 * `postgresql::params`
 * `postgresql::repo`
@@ -858,6 +859,9 @@ The following parameters are available in the `postgresql::server` class:
 * [`roles`](#roles)
 * [`config_entries`](#config_entries)
 * [`pg_hba_rules`](#pg_hba_rules)
+* [`backup_enable`](#backup_enable)
+* [`backup_options`](#backup_options)
+* [`backup_provider`](#backup_provider)
 * [`version`](#version)
 * [`extra_systemd_config`](#extra_systemd_config)
 * [`manage_selinux`](#manage_selinux)
@@ -1286,6 +1290,30 @@ Specifies a hash from which to generate postgresql::server::pg_hba_rule resource
 
 Default value: `{}`
 
+##### <a name="backup_enable"></a>`backup_enable`
+
+Data type: `Boolean`
+
+Whether a backup job should be enabled.
+
+Default value: `$postgresql::params::backup_enable`
+
+##### <a name="backup_options"></a>`backup_options`
+
+Data type: `Hash`
+
+A hash of options that should be passed through to the backup provider.
+
+Default value: `{}`
+
+##### <a name="backup_provider"></a>`backup_provider`
+
+Data type: `Enum['pg_dump']`
+
+Specifies the backup provider to use.
+
+Default value: `$postgresql::params::backup_provider`
+
 ##### <a name="version"></a>`version`
 
 Data type: `Any`
@@ -1644,13 +1672,15 @@ The following parameters are available in the `postgresql::server::db` defined t
 
 Data type: `Any`
 
-User to create and assign access to the database upon creation. Mandatory.
+User to assign access to the database upon creation (will be created if not defined elsewhere). Mandatory.
 
 ##### <a name="password"></a>`password`
 
-Data type: `Variant[String, Sensitive[String]]`
+Data type: `Optional[Variant[String, Sensitive[String]]]`
 
-Required Sets the password for the created user.
+Sets the password for the created user (if a user is created).
+
+Default value: ``undef``
 
 ##### <a name="comment"></a>`comment`
 
