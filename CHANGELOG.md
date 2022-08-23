@@ -2,7 +2,17 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v8.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v8.2.0) (2022-08-22)
+## [v8.2.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v8.2.1) (2022-08-23)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v8.2.0...v8.2.1)
+
+### Fixed
+
+- Fix puppet-strings documentation [\#1363](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1363) ([ekohl](https://github.com/ekohl))
+- \(GH-1360\) Reverting REFERENCE.md changes [\#1361](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1361) ([pmcmaw](https://github.com/pmcmaw))
+- Only require password when used [\#1356](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1356) ([arjenz](https://github.com/arjenz))
+
+## [v8.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v8.2.0) (2022-08-23)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v8.1.0...v8.2.0)
 
