@@ -66,7 +66,7 @@ define postgresql::validate_db_connection (
     default => "PGPASSWORD=${database_password_unsensitive}",
   }
   $cmd = join([$cmd_init, $cmd_host, $cmd_user, $cmd_port, $cmd_dbname], ' ')
-  $validate_cmd = "${validcon_script_path} ${sleep} ${tries} '${cmd}'"
+  $validate_cmd = [$validcon_script_path, $sleep, $tries, join("'", $cmd, "'")]
 
   # This is more of a safety valve, we add a little extra to compensate for the
   # time it takes to run each psql command.
@@ -86,9 +86,10 @@ define postgresql::validate_db_connection (
   }
 
   $exec_name = "validate postgres connection for ${database_username}@${database_host}:${database_port}/${database_name}"
+  $exec_command = ['echo', "'Unable to connect to defined database using:", shell_escape(join([$cmd, "' && false"], ''))]
 
   exec { $exec_name:
-    command     => "echo 'Unable to connect to defined database using: ${cmd}' && false",
+    command     => $exec_command,
     unless      => $validate_cmd,
     cwd         => $module_workdir,
     environment => $env,
