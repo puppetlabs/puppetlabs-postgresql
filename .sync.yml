@@ -31,6 +31,7 @@ spec/spec_helper.rb:
     - Ubuntu-16.04
     - Ubuntu-18.04
     - Ubuntu-20.04
+    - Ubuntu-22.04
 .github/workflows/pr_test.yml:
   unmanaged: false
   exclude_platforms:
@@ -45,6 +46,7 @@ spec/spec_helper.rb:
     - Ubuntu-16.04
     - Ubuntu-18.04
     - Ubuntu-20.04
+    - Ubuntu-22.04
 .gitpod.Dockerfile:
   unmanaged: false
 .gitpod.yml:
