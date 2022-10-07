@@ -247,7 +247,6 @@ describe 'postgresql::server::pg_hba_rule' do
       it do
         is_expected.to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+\.domain\.tld\s+md5})
       end
-
     end
     context 'pg_hba_rule with illegal address' do
       let :pre_condition do
@@ -268,7 +267,6 @@ describe 'postgresql::server::pg_hba_rule' do
       end
 
       it { is_expected.to compile.and_raise_error(%r{parameter 'address' expects a value of type Undef, Stdlib::IP::Address::V4::CIDR}) }
-
     end
   end
 end
