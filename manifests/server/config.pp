@@ -142,8 +142,11 @@ class postgresql::server::config {
 
     ensure_packages([$package_name])
 
+    $exec_command = ['/usr/sbin/semanage', 'port', '-a', '-t', 'postgresql_port_t', '-p', 'tcp', $port]
+    $exec_unless = "/usr/sbin/semanage port -l | grep -qw ${port}"
     exec { "/usr/sbin/semanage port -a -t postgresql_port_t -p tcp ${port}":
-      unless  => "/usr/sbin/semanage port -l | grep -qw ${port}",
+      command => $exec_command,
+      unless  => $exec_unless,
       before  => Postgresql::Server::Config_entry['port'],
       require => Package[$package_name],
     }
@@ -218,8 +221,9 @@ class postgresql::server::config {
     #
     # This can be removed when Puppet < 6.1 support is dropped *and* the file
     # old-systemd-override is removed.
+    $systemd_command = ['systemctl', 'daemon-reload']
     exec { 'restart-systemd':
-      command     => 'systemctl daemon-reload',
+      command     => $systemd_command,
       refreshonly => true,
       path        => '/bin:/usr/bin:/usr/local/bin',
       before      => Class['postgresql::server::service'],
