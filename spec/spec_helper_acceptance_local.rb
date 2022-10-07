@@ -15,10 +15,6 @@ end
 
 RSpec.configure do |c|
   c.before :suite do
-    # Install iproute on AlmaLinux
-    # Package is used to check if ports are listening
-    LitmusHelper.instance.run_shell('sudo dnf install iproute -y') if %r{redhat}.match?(os[:family]) && os[:release].to_f >= 8
-
     install_dependencies
   end
 end
@@ -41,32 +37,31 @@ def pre_run
 end
 
 def install_dependencies
-  iproute2 = <<-MANIFEST
-    package { 'iproute2': ensure => installed }
-  MANIFEST
-  LitmusHelper.instance.apply_manifest(iproute2) if os[:family] == 'ubuntu' && os[:release].start_with?('18.04')
-
-  netstat = <<-MANIFEST
-  # needed for netstat, for serverspec checks
-  if $::osfamily == 'SLES' or $::osfamily == 'SUSE' {
-    package { 'net-tools-deprecated':
-      ensure   => 'latest',
+  LitmusHelper.instance.apply_manifest <<~MANIFEST
+    if $facts['os']['name'] == 'Ubuntu' and $facts['os']['release']['major'] == '18.04' {
+      package { 'iproute2':
+        ensure => installed,
+      }
     }
-  }
+
+    # needed for netstat, for serverspec checks
+    if $facts['os']['family'] in ['SLES', 'SUSE'] {
+      package { 'net-tools-deprecated':
+        ensure   => 'latest',
+      }
+    }
+
+    if $facts['os']['family'] == 'RedHat' {
+      if versioncmp($facts['os']['release']['major'], '8') >= 0 {
+        $package = ['iproute', 'policycoreutils-python-utils']
+      } else {
+        $package = 'policycoreutils-python'
+      }
+      package { $package:
+        ensure => installed,
+      }
+    }
   MANIFEST
-
-  LitmusHelper.instance.apply_manifest(netstat)
-
-  return unless os[:family] == 'redhat' && os[:release].start_with?('6', '7', '8')
-
-  policycoreutils_pkg = 'policycoreutils-python' if os[:release].start_with?('6', '7')
-  policycoreutils_pkg = 'policycoreutils-python-utils' if os[:release].start_with?('8')
-
-  selinux = <<-MANIFEST
-    package { '#{policycoreutils_pkg}': ensure => installed }
-  MANIFEST
-
-  LitmusHelper.instance.apply_manifest(selinux)
 end
 
 def postgresql_version
