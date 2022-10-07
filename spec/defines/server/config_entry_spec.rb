@@ -24,34 +24,12 @@ describe 'postgresql::server::config_entry' do
   context 'ports' do
     let(:params) { { ensure: 'present', name: 'port_spec', value: '5432' } }
 
-    context 'redhat 6' do
-      include_examples 'RedHat 6'
-
-      it 'stops postgresql and changes the port #exec' do
-        is_expected.to contain_exec('postgresql_stop_port')
-      end
-      it 'stops postgresql and changes the port #augeas' do
-        is_expected.to contain_augeas('override PGPORT in /etc/sysconfig/pgsql/postgresql')
-      end
-    end
     context 'redhat 7' do
       include_examples 'RedHat 7'
 
       it 'stops postgresql and changes the port #file' do
         is_expected.to contain_file('systemd-override')
       end
-    end
-  end
-
-  context 'data_directory' do
-    include_examples 'RedHat 6'
-    let(:params) { { ensure: 'present', name: 'data_directory_spec', value: '/var/pgsql' } }
-
-    it 'stops postgresql and changes the data directory #exec' do
-      is_expected.to contain_exec('postgresql_data_directory')
-    end
-    it 'stops postgresql and changes the data directory #augeas' do
-      is_expected.to contain_augeas('override PGDATA in /etc/sysconfig/pgsql/postgresql')
     end
   end
 
