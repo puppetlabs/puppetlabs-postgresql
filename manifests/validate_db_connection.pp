@@ -44,29 +44,29 @@ define postgresql::validate_db_connection (
   $module_workdir = $postgresql::params::module_workdir
   $validcon_script_path = $postgresql::client::validcon_script_path
 
-  $cmd_init = "${psql_path} --tuples-only --quiet "
+  $cmd_init = "${psql_path} --tuples-only --quiet"
   $cmd_host = $database_host ? {
     undef   => '',
-    default => "-h ${database_host} ",
+    default => "-h ${database_host}",
   }
   $cmd_user = $database_username ? {
     undef   => '',
-    default => "-U ${database_username} ",
+    default => "-U ${database_username}",
   }
   $cmd_port = $database_port ? {
     undef   => '',
-    default => "-p ${database_port} ",
+    default => "-p ${database_port}",
   }
   $cmd_dbname = $database_name ? {
-    undef   => "--dbname ${postgresql::params::default_database} ",
-    default => "--dbname ${database_name} ",
+    undef   => "--dbname ${postgresql::params::default_database}",
+    default => "--dbname ${database_name}",
   }
   $pass_env = $database_password_unsensitive ? {
     undef   => undef,
     default => "PGPASSWORD=${database_password_unsensitive}",
   }
   $cmd = join([$cmd_init, $cmd_host, $cmd_user, $cmd_port, $cmd_dbname], ' ')
-  $validate_cmd = "${validcon_script_path} ${sleep} ${tries} '${cmd}'"
+  $validate_cmd = [$validcon_script_path, $sleep, $tries, $cmd]
 
   # This is more of a safety valve, we add a little extra to compensate for the
   # time it takes to run each psql command.
@@ -86,9 +86,10 @@ define postgresql::validate_db_connection (
   }
 
   $exec_name = "validate postgres connection for ${database_username}@${database_host}:${database_port}/${database_name}"
+  $exec_command = "echo 'Unable to connect to defined database using: ${shell_escape($cmd)}' && false"
 
   exec { $exec_name:
-    command     => "echo 'Unable to connect to defined database using: ${cmd}' && false",
+    command     => $exec_command,
     unless      => $validate_cmd,
     cwd         => $module_workdir,
     environment => $env,
