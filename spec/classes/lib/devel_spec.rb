@@ -26,13 +26,13 @@ describe 'postgresql::lib::devel' do
   end
 
   describe 'should not link pg_config on RedHat with default version' do
-    include_examples 'RedHat 6'
+    include_examples 'RedHat 8'
 
     it { is_expected.not_to contain_file('/usr/bin/pg_config') }
   end
 
   describe 'link pg_config on RedHat with non-default version' do
-    include_examples 'RedHat 6'
+    include_examples 'RedHat 8'
     let :pre_condition do
       "class { '::postgresql::globals': version => '9.3' }"
     end
