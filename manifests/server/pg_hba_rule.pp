@@ -21,7 +21,7 @@ define postgresql::server::pg_hba_rule (
       Stdlib::IP::Address::V4::CIDR,
       Stdlib::IP::Address::V6::CIDR,
       Stdlib::Fqdn,
-      Enum['samehost', 'samenet'],
+      Enum['all', 'samehost', 'samenet'],
       # RegExp for a DNS domain - also starting with a single dot
       Pattern[/^\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]$/],
     ]
