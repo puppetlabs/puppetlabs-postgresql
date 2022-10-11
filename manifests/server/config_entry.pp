@@ -98,10 +98,13 @@ define postgresql::server::config_entry (
   # is managed for us in postgresql::server::config.
   if $facts['os']['name'] == 'Debian' or $facts['os']['name'] == 'Ubuntu' {
     if $name == 'data_directory' {
+      $stop_command = ['service', $postgresql::server::service_name, 'stop']
+      $stop_onlyif = ['service', $postgresql::server::service_name, 'status']
+      $stop_unless = [['grep', "data_directory = '${value}'", $postgresql::server::postgresql_conf_path]]
       exec { "postgresql_stop_${name}":
-        command => "service ${postgresql::server::service_name} stop",
-        onlyif  => "service ${postgresql::server::service_name} status",
-        unless  => "grep \"data_directory = '${value}'\" ${postgresql::server::postgresql_conf_path}",
+        command => $stop_command,
+        onlyif  => $stop_onlyif,
+        unless  => $stop_unless,
         path    => '/usr/sbin:/sbin:/bin:/usr/bin:/usr/local/bin',
         before  => Postgresql_conf[$name],
       }
@@ -111,10 +114,13 @@ define postgresql::server::config_entry (
       # We need to force postgresql to stop before updating the port
       # because puppet becomes confused and is unable to manage the
       # service appropriately.
+      $stop_command = ['service', $postgresql::server::service_name, 'stop']
+      $stop_onlyif = ['service', $postgresql::server::service_name, 'status']
+      $stop_unless = "grep 'PGPORT=${shell_escape($value)}' /etc/sysconfig/pgsql/postgresql"
       exec { "postgresql_stop_${name}":
-        command => "service ${postgresql::server::service_name} stop",
-        onlyif  => "service ${postgresql::server::service_name} status",
-        unless  => "grep 'PGPORT=${value}' /etc/sysconfig/pgsql/postgresql",
+        command => $stop_command,
+        onlyif  => $stop_onlyif,
+        unless  => $stop_unless,
         path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
         require => File['/etc/sysconfig/pgsql/postgresql'],
       }
@@ -130,10 +136,13 @@ define postgresql::server::config_entry (
     } elsif $name == 'data_directory' {
       # We need to force postgresql to stop before updating the data directory
       # otherwise init script breaks
+      $stop_command = ['service', $postgresql::server::service_name, 'stop']
+      $stop_onlyif = ['service', $postgresql::server::service_name, 'status']
+      $stop_unless = [['grep', "PGDATA=${value}", '/etc/sysconfig/pgsql/postgresql']]
       exec { "postgresql_${name}":
-        command => "service ${postgresql::server::service_name} stop",
-        onlyif  => "service ${postgresql::server::service_name} status",
-        unless  => "grep 'PGDATA=${value}' /etc/sysconfig/pgsql/postgresql",
+        command => $stop_command,
+        onlyif  => $stop_onlyif,
+        unless  => $stop_unless,
         path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
         require => File['/etc/sysconfig/pgsql/postgresql'],
       }
