@@ -23,7 +23,7 @@ define postgresql::server::default_privileges (
     /(?i:^SEQUENCES$)/,
     /(?i:^TABLES$)/,
     /(?i:^TYPES$)/,
-    /(?i:^SCHEMAS$)/
+    /(?i:^SCHEMAS$)/ # lint:ignore:trailing_comma
   ] $object_type,
   String $schema                      = 'public',
   String $psql_db                     = $postgresql::server::default_database,

@@ -41,10 +41,10 @@
 #   Weekdays on which the backup job should run. Defaults to `*`. This parameter is passed directly to the cron resource.
 #
 class postgresql::backup::pg_dump (
+  String[1] $dir,
   Boolean $compress = true,
   Array $databases = [],
   Boolean $delete_before_dump = false,
-  String[1] $dir,
   String[1] $dir_group = '0',
   String[1] $dir_mode = '0700',
   String[1] $dir_owner = 'root',
@@ -112,18 +112,19 @@ class postgresql::backup::pg_dump (
     owner   => 'root',
     group   => '0', # Use GID for compat with Linux and BSD.
     content => epp($template, {
-      compress           => $compress,
-      databases          => $databases,
-      db_user            => $db_user,
-      delete_before_dump => $delete_before_dump,
-      dir                => $dir,
-      format             => $format,
-      optional_args      => $optional_args,
-      post_script        => $post_script,
-      pre_script         => $pre_script,
-      rotate             => $rotate,
-      success_file_path  => $success_file_path,
-    }),
+        compress           => $compress,
+        databases          => $databases,
+        db_user            => $db_user,
+        delete_before_dump => $delete_before_dump,
+        dir                => $dir,
+        format             => $format,
+        optional_args      => $optional_args,
+        post_script        => $post_script,
+        pre_script         => $pre_script,
+        rotate             => $rotate,
+        success_file_path  => $success_file_path,
+      }
+    ),
   }
 
   # Create password file for pg_dump
@@ -132,10 +133,11 @@ class postgresql::backup::pg_dump (
     mode      => '0600',
     owner     => 'root',
     group     => '0', # Use GID for compat with Linux and BSD.
-    content   => inline_epp('*:*:*:<%= $db_user %>:<%= $db_password %>',{
-      db_password => $db_password,
-      db_user     => $db_user,
-    }),
+    content   => inline_epp ( '*:*:*:<%= $db_user %>:<%= $db_password %>', {
+        db_password => $db_password,
+        db_user     => $db_user,
+      }
+    ),
     show_diff => false,
   }
 
