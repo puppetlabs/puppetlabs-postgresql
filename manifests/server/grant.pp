@@ -29,7 +29,7 @@ define postgresql::server::grant (
     /(?i:^TABLE$)/,
     #/(?i:^TABLESPACE$)/,
     /(?i:^SCHEMA$)/,
-    /(?i:^SEQUENCE$)/,
+    /(?i:^SEQUENCE$)/ # lint:ignore:trailing_comma
     #/(?i:^VIEW$)/
   ] $object_type                        = 'database',
   Optional[Variant[Array[String,2,2],String[1]]] $object_name = undef,
