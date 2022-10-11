@@ -16,16 +16,7 @@ define postgresql::server::pg_hba_rule (
   String $database,
   String $user,
   String $auth_method,
-  Optional[
-    Variant[
-      Stdlib::IP::Address::V4::CIDR,
-      Stdlib::IP::Address::V6::CIDR,
-      Stdlib::Fqdn,
-      Enum['all', 'samehost', 'samenet'],
-      # RegExp for a DNS domain - also starting with a single dot
-      Pattern[/^\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]$/],
-    ]
-  ] $address                      = undef,
+  Optional[Postgresql::Pg_hba_rule_address] $address = undef,
   String $description             = 'none',
   Optional[String] $auth_option   = undef,
   Variant[String, Integer] $order = 150,
