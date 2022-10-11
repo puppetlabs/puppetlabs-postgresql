@@ -30,7 +30,10 @@ describe 'postgresql::validate_db_connection' do
     it { is_expected.to contain_postgresql__validate_db_connection('test') }
 
     it 'has proper path for validate command' do
-      is_expected.to contain_exec('validate postgres connection for test@test:5432/test').with(unless: %r{^/usr/local/bin/validate_postgresql_connection.sh\s+\d+})
+      is_expected.to contain_exec('validate postgres connection for test@test:5432/test').with(unless: ['/usr/local/bin/validate_postgresql_connection.sh',
+                                                                                                        4,
+                                                                                                        30,
+                                                                                                        '/usr/bin/psql --tuples-only --quiet -h test -U test -p 5432 --dbname test'])
     end
   end
 
@@ -55,7 +58,10 @@ describe 'postgresql::validate_db_connection' do
     end
 
     it 'has proper path for validate command and correct cwd' do
-      is_expected.to contain_exec('validate postgres connection for test@test:5432/test').with(unless: %r{^/opt/something/validate.sh\s+\d+},
+      is_expected.to contain_exec('validate postgres connection for test@test:5432/test').with(unless: ['/opt/something/validate.sh',
+                                                                                                        2,
+                                                                                                        10,
+                                                                                                        '/usr/bin/psql --tuples-only --quiet -h test -U test -p 5432 --dbname test'],
                                                                                                cwd: '/var/tmp')
     end
   end
