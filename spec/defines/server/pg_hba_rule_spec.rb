@@ -266,7 +266,7 @@ describe 'postgresql::server::pg_hba_rule' do
         }
       end
 
-      it { is_expected.to compile.and_raise_error(%r{parameter 'address' expects a value of type Undef, Stdlib::IP::Address::V4::CIDR}) }
+      it { is_expected.to compile.and_raise_error(%r{parameter 'address' expects a Postgresql::Pg_hba_rule_address}) }
     end
   end
 end
