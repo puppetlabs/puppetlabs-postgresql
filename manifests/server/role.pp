@@ -154,7 +154,7 @@ define postgresql::server::role (
 
     if $password_hash_unsensitive and $update_password {
       if $password_hash_unsensitive =~ Deferred {
-        $pwd_hash_sql = Deferred('postgresql::postgresql_password',[$username,
+        $pwd_hash_sql = Deferred( 'postgresql::postgresql_password',[$username,
             $password_hash,
             false,
             $hash,
