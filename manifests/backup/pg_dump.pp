@@ -133,7 +133,7 @@ class postgresql::backup::pg_dump (
     mode      => '0600',
     owner     => 'root',
     group     => '0', # Use GID for compat with Linux and BSD.
-    content   => inline_epp ( '*:*:*:<%= $db_user %>:<%= $db_password %>',{
+    content   => inline_epp ( '*:*:*:<%= $db_user %>:<%= $db_password %>', {
         db_password => $db_password,
         db_user     => $db_user,
       }
