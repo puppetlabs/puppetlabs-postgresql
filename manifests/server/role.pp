@@ -95,14 +95,16 @@ define postgresql::server::role (
 
     if $password_sql =~ Deferred {
       $create_role_command = Deferred('sprintf', ["CREATE ROLE \"%s\" %s %s %s %s %s %s CONNECTION LIMIT %s",
-                                                  $username,
-                                                  $password_sql,
-                                                  $login_sql,
-                                                  $createrole_sql,
-                                                  $createdb_sql,
-                                                  $superuser_sql,
-                                                  $replication_sql,
-                                                  $connection_limit])
+          $username,
+          $password_sql,
+          $login_sql,
+          $createrole_sql,
+          $createdb_sql,
+          $superuser_sql,
+          $replication_sql,
+          $connection_limit,
+        ]
+      )
     } else {
       $create_role_command = "CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}"
     }
@@ -153,10 +155,12 @@ define postgresql::server::role (
     if $password_hash_unsensitive and $update_password {
       if $password_hash_unsensitive =~ Deferred {
         $pwd_hash_sql = Deferred('postgresql::postgresql_password',[$username,
-                                                                    $password_hash,
-                                                                    false,
-                                                                    $hash,
-                                                                    $salt])
+            $password_hash,
+            false,
+            $hash,
+            $salt,
+          ]
+        )
       }
       else {
         $pwd_hash_sql = postgresql::postgresql_password(
@@ -170,8 +174,10 @@ define postgresql::server::role (
       if $pwd_hash_sql =~ Deferred {
         $pw_command = Deferred('sprintf', ["ALTER ROLE \"%s\" ENCRYPTED PASSWORD '%s'", $username, $pwd_hash_sql])
         $unless_pw_command = Deferred('sprintf', ["SELECT 1 FROM pg_shadow WHERE usename = '%s' AND passwd = '%s'",
-                                                  $username,
-                                                  $pwd_hash_sql])
+            $username,
+            $pwd_hash_sql,
+          ]
+        )
       } else {
         $pw_command = "ALTER ROLE \"${username}\" ENCRYPTED PASSWORD '${pwd_hash_sql}'"
         $unless_pw_command = "SELECT 1 FROM pg_shadow WHERE usename = '${username}' AND passwd = '${pwd_hash_sql}'"
