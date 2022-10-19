@@ -152,9 +152,9 @@ class postgresql::server (
   $password_encryption                             = $postgresql::params::password_encryption,
   $extra_systemd_config                            = $postgresql::params::extra_systemd_config,
 
-  Hash[String, Hash] $roles         = {},
-  Hash[String, Any] $config_entries = {},
-  Hash[String, Hash] $pg_hba_rules  = {},
+  Hash[String, Hash] $roles              = {},
+  Hash[String, Any] $config_entries      = {},
+  Postgresql::Pg_hba_rules $pg_hba_rules = {},
 
   Boolean $backup_enable = $postgresql::params::backup_enable,
   Hash $backup_options = {},
@@ -204,7 +204,7 @@ class postgresql::server (
     }
   }
 
-  $pg_hba_rules.each |$rule_name, $rule| {
+  $pg_hba_rules.each |String[1] $rule_name, Postgresql::Pg_hba_rule $rule| {
     postgresql::server::pg_hba_rule { $rule_name:
       * => $rule,
     }
