@@ -41,7 +41,7 @@ describe 'postgresql::server::config' do
 
       it 'has systemctl restart command' do
         is_expected.to contain_exec('restart-systemd').with(
-          command: 'systemctl daemon-reload',
+          command: ['systemctl', 'daemon-reload'],
           refreshonly: true,
           path: '/bin:/usr/bin:/usr/local/bin',
         )

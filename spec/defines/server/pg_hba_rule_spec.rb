@@ -225,5 +225,48 @@ describe 'postgresql::server::pg_hba_rule' do
         is_expected.to contain_concat__fragment('pg_hba_rule_test').with(order: '1234')
       end
     end
+
+    context 'pg_hba_rule with dot domain' do
+      let :pre_condition do
+        <<-MANIFEST
+          class { 'postgresql::server': }
+        MANIFEST
+      end
+
+      let :params do
+        {
+          type: 'host',
+          database: 'all',
+          user: 'all',
+          address: '.domain.tld',
+          auth_method: 'md5',
+          target: target,
+        }
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+\.domain\.tld\s+md5})
+      end
+    end
+    context 'pg_hba_rule with illegal address' do
+      let :pre_condition do
+        <<-MANIFEST
+          class { 'postgresql::server': }
+        MANIFEST
+      end
+
+      let :params do
+        {
+          type: 'host',
+          database: 'all',
+          user: 'all',
+          address: '/45',
+          auth_method: 'md5',
+          target: target,
+        }
+      end
+
+      it { is_expected.to compile.and_raise_error(%r{parameter 'address' expects a Postgresql::Pg_hba_rule_address}) }
+    end
   end
 end
