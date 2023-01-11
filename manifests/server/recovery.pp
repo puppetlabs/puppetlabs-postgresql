@@ -52,8 +52,8 @@ define postgresql::server::recovery (
     }
 
     concat { $target:
-      owner  => $postgresql::server::config::user,
-      group  => $postgresql::server::config::group,
+      owner  => $postgresql::server::user,
+      group  => $postgresql::server::group,
       force  => true, # do not crash if there is no recovery conf file
       mode   => '0640',
       warn   => true,
