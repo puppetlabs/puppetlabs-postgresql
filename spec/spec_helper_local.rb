@@ -122,10 +122,6 @@ add_custom_fact :service_provider, ->(_os, facts) do
   end
 end
 
-shared_context 'Debian 9' do
-  let(:facts) { on_supported_os['debian-9-x86_64'] }
-end
-
 shared_context 'Debian 10' do
   let(:facts) { on_supported_os['debian-10-x86_64'] }
 end
