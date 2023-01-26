@@ -112,8 +112,8 @@ describe 'postgresql::server::default_privileges' do
       it { is_expected.to compile.and_raise_error(%r{Illegal value for \$privilege parameter}) }
     end
 
-    context 'schemas on postgres < 10.0' do
-      include_examples 'Debian 9'
+    context 'schemas on postgres < 9.6' do
+      include_examples 'RedHat 7'
 
       let :params do
         {
@@ -129,7 +129,7 @@ describe 'postgresql::server::default_privileges' do
         "class {'postgresql::server':}"
       end
 
-      it { is_expected.to compile.and_raise_error(%r{Default_privileges on schemas is only supported on PostgreSQL >= 10.0}m) }
+      it { is_expected.to compile.and_raise_error(%r{Default_privileges is only useable with PostgreSQL >= 9.6}m) }
     end
 
     context 'schemas on postgres >= 10.0' do
