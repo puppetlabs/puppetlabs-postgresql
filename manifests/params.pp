@@ -121,8 +121,8 @@ class postgresql::params inherits postgresql::globals {
 
       # Archlinux doesn't have a client-package but has a libs package which
       # pulls in postgresql server
-      $client_package_name    = pick($client_package_name, 'postgresql')
-      $server_package_name    = pick($server_package_name, 'postgresql-libs')
+      $client_package_name    = pick($client_package_name, 'postgresql-libs')
+      $server_package_name    = pick($server_package_name, 'postgresql')
       $java_package_name      = pick($java_package_name, 'postgresql-jdbc')
       # Archlinux doesn't have develop packages
       $devel_package_name     = pick($devel_package_name, 'postgresql-devel')
