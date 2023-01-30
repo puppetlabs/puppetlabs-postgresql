@@ -1,6 +1,6 @@
 # @api private
 class postgresql::server::config {
-  postgresql::server::instance_config { 'main':
+  postgresql::server::instance::config { 'main':
     ip_mask_deny_postgres_user   => $postgresql::server::ip_mask_deny_postgres_user,
     ip_mask_allow_all_users      => $postgresql::server::ip_mask_allow_all_users,
     listen_addresses             => $postgresql::server::listen_addresses,

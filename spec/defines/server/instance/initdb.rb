@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'postgresql::server::instance_late_initdb' do
+describe 'postgresql::server::instance::initdb' do
   let(:title) { 'main' }
 
   on_supported_os.each do |os, os_facts|
@@ -12,7 +12,7 @@ describe 'postgresql::server::instance_late_initdb' do
       end
 
       let :pre_condition do
-        "class {'postgresql::initdb':}"
+        "class {'postgresql::server':}"
       end
 
       context 'with defaults from initdb class' do

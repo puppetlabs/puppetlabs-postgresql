@@ -4,7 +4,7 @@
 class postgresql::server::late_initdb {
   assert_private()
 
-  postgresql::server::instance_late_initdb { 'main':
+  postgresql::server::instance::late_initdb { 'main':
     encoding       => $postgresql::server::encoding,
     user           => $postgresql::server::user,
     group          => $postgresql::server::group,

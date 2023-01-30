@@ -1,6 +1,6 @@
 # @api private
 class postgresql::server::service {
-  postgresql::server::instance_service { 'main':
+  postgresql::server::instance::service { 'main':
     service_ensure   => $postgresql::server::service_ensure,
     service_enable   => $postgresql::server::service_enable,
     service_manage   => $postgresql::server::service_manage,
