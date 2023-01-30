@@ -1,6 +1,6 @@
 # @api private
 class postgresql::server::initdb {
-  postgresql::server::instance_initdb { 'main':
+  postgresql::server::instance::initdb { 'main':
     needs_initdb   => $postgresql::server::needs_initdb,
     initdb_path    => $postgresql::server::initdb_path,
     datadir        => $postgresql::server::datadir,

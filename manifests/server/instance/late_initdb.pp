@@ -7,7 +7,7 @@
 # @param port Specifies the port for the PostgreSQL server to listen on. Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems, changing the port causes the server to come to a full stop before being able to make the change.
 # @param module_workdir Working directory for the PostgreSQL module
 # lint:endignore:140chars
-define postgresql::server::instance_late_initdb (
+define postgresql::server::instance::late_initdb (
   $encoding       = $postgresql::server::encoding,
   $user           = $postgresql::server::user,
   $group          = $postgresql::server::group,

@@ -18,7 +18,7 @@
 # @param group Overrides the default postgres user group to be used for related files in the file system.
 # @param module_workdir Working directory for the PostgreSQL module
 # lint:endignore:140chars
-define postgresql::server::instance_initdb (
+define postgresql::server::instance::initdb (
   Boolean $needs_initdb             = $postgresql::server::needs_initdb,
   $initdb_path                      = $postgresql::server::initdb_path,
   $datadir                          = $postgresql::server::datadir,

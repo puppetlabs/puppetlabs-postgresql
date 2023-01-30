@@ -1,6 +1,6 @@
 # @api private
 class postgresql::server::passwd {
-  postgresql::server::instance_passwd { 'main':
+  postgresql::server::instance::passwd { 'main':
     user              => $postgresql::server::user,
     group             => $postgresql::server::group,
     psql_path         => $postgresql::server::psql_path,
