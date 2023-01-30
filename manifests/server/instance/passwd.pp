@@ -9,12 +9,12 @@
 # @param postgres_password Sets the password for the postgres user to your specified value. By default, this setting uses the superuser account in the Postgres database, with a user called postgres and no password.
 # lint:endignore:140chars
 define postgresql::server::instance::passwd (
-  $user                                           = $postgresql::server::user,
-  $group                                          = $postgresql::server::group,
-  $psql_path                                      = $postgresql::server::psql_path,
-  $port                                           = $postgresql::server::port,
-  $database                                       = $postgresql::server::default_database,
-  $module_workdir                                 = $postgresql::server::module_workdir,
+  $user              = $postgresql::server::user,
+  $group             = $postgresql::server::group,
+  $psql_path         = $postgresql::server::psql_path,
+  $port              = $postgresql::server::port,
+  $database          = $postgresql::server::default_database,
+  $module_workdir    = $postgresql::server::module_workdir,
   $postgres_password = $postgresql::server::postgres_password,
 
 ) {
