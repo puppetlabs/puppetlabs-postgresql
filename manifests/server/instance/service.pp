@@ -12,7 +12,7 @@
 # @param psql_path Specifies the path to the psql command.
 # @param default_connect_settings Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as postgresql::server::role.
 # lint:endignore:140chars
-define postgresql::server::instance_service (
+define postgresql::server::instance::service (
   $service_ensure   = $postgresql::server::service_ensure,
   $service_enable   = $postgresql::server::service_enable,
   $service_manage   = $postgresql::server::service_manage,

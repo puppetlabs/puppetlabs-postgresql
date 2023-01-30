@@ -33,7 +33,7 @@
 # @param timezone Set timezone for the PostgreSQL instance
 # @param extra_systemd_config Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
 # lint:endignore:140chars
-define postgresql::server::instance_config (
+define postgresql::server::instance::config (
   $ip_mask_deny_postgres_user                      = $postgresql::server::ip_mask_deny_postgres_user,
   $ip_mask_allow_all_users                         = $postgresql::server::ip_mask_allow_all_users,
   $listen_addresses                                = $postgresql::server::listen_addresses,

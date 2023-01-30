@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'postgresql::server::instance_initdb' do
+describe 'postgresql::server::instance::config' do
   let(:title) { 'main' }
 
   on_supported_os.each do |os, os_facts|
@@ -15,7 +15,7 @@ describe 'postgresql::server::instance_initdb' do
         "class {'postgresql::server':}"
       end
 
-      context 'with defaults from initdb class' do
+      context 'with defaults from config_class' do
         it { is_expected.to compile.with_all_deps }
       end
     end
