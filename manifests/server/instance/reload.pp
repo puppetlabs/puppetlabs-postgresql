@@ -1,6 +1,6 @@
 # @param service_reload Overrides the default reload command for your PostgreSQL service.
 # @param service_status Overrides the default status check command for your PostgreSQL service.
-define postgresql::server::instance_reload (
+define postgresql::server::instance::reload (
   $service_status = $postgresql::server::service_status,
   $service_reload = $postgresql::server::service_reload,
 ) {
