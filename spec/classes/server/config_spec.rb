@@ -19,29 +19,22 @@ describe 'postgresql::server::config' do
         .that_requires('Package[policycoreutils-python]')
     end
 
-    it 'removes the old systemd-override file' do
-      is_expected.to contain_file('old-systemd-override')
-        .with(ensure: 'absent', path: '/etc/systemd/system/postgresql.service')
-    end
-
     it 'has the correct systemd-override drop file' do
-      is_expected.to contain_file('systemd-override').with(
-        ensure: 'file', path: '/etc/systemd/system/postgresql.service.d/postgresql.conf',
-        owner: 'root', group: 'root'
-      ) .that_requires('File[systemd-conf-dir]')
+      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
+        ensure: 'file', owner: 'root', group: 'root',
+      ) .that_requires('File[/etc/systemd/system/postgresql.service.d]')
     end
 
     it 'has the correct systemd-override file #regex' do
-      is_expected.to contain_file('systemd-override') \
-        .with_content(%r{(?!^.include)})
+      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf')
     end
 
     context 'RHEL 7 host with Puppet 5' do
       include_examples 'RedHat 7'
 
       it 'has systemctl restart command' do
-        is_expected.to contain_exec('restart-systemd').with(
-          command: ['systemctl', 'daemon-reload'],
+        is_expected.to contain_exec('systemd-postgresql.service-systemctl-daemon-reload').with(
+          command: 'systemctl daemon-reload',
           refreshonly: true,
           path: '/bin:/usr/bin:/usr/local/bin',
         )
@@ -53,21 +46,20 @@ describe 'postgresql::server::config' do
         <<-EOS
           class { 'postgresql::globals':
             manage_package_repo => true,
-            version => '9.4',
+            version => '10',
           }->
           class { 'postgresql::server': }
         EOS
       end
 
       it 'has the correct systemd-override file' do
-        is_expected.to contain_file('systemd-override').with(
-          ensure: 'file', path: '/etc/systemd/system/postgresql-9.4.service.d/postgresql-9.4.conf',
-          owner: 'root', group: 'root'
+        is_expected.to contain_file('/etc/systemd/system/postgresql-10.service.d/postgresql-10.conf').with(
+          ensure: 'file', owner: 'root', group: 'root',
         )
       end
 
       it 'has the correct systemd-override file #regex' do
-        is_expected.to contain_file('systemd-override') .without_content(%r{\.include})
+        is_expected.to contain_file('/etc/systemd/system/postgresql-10.service.d/postgresql-10.conf') .without_content(%r{\.include})
       end
     end
   end
@@ -84,20 +76,14 @@ describe 'postgresql::server::config' do
         .that_requires('Package[policycoreutils-python-utils]')
     end
 
-    it 'removes the old systemd-override file' do
-      is_expected.to contain_file('old-systemd-override')
-        .with(ensure: 'absent', path: '/etc/systemd/system/postgresql.service')
-    end
-
     it 'has the correct systemd-override drop file' do
-      is_expected.to contain_file('systemd-override').with(
-        ensure: 'file', path: '/etc/systemd/system/postgresql.service.d/postgresql.conf',
-        owner: 'root', group: 'root'
-      ) .that_requires('File[systemd-conf-dir]')
+      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
+        ensure: 'file', owner: 'root', group: 'root',
+      ) .that_requires('File[/etc/systemd/system/postgresql.service.d]')
     end
 
     it 'has the correct systemd-override file #regex' do
-      is_expected.to contain_file('systemd-override') .without_content(%r{\.include})
+      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').without_content(%r{\.include})
     end
 
     describe 'with manage_package_repo => true and a version' do
@@ -105,20 +91,19 @@ describe 'postgresql::server::config' do
         <<-EOS
           class { 'postgresql::globals':
             manage_package_repo => true,
-            version => '9.4',
+            version => '14',
           }->
           class { 'postgresql::server': }
         EOS
       end
 
       it 'has the correct systemd-override file' do
-        is_expected.to contain_file('systemd-override').with(
-          ensure: 'file', path: '/etc/systemd/system/postgresql-9.4.service.d/postgresql-9.4.conf',
-          owner: 'root', group: 'root'
+        is_expected.to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf').with(
+          ensure: 'file', owner: 'root', group: 'root',
         )
       end
       it 'has the correct systemd-override file #regex' do
-        is_expected.to contain_file('systemd-override') .without_content(%r{\.include})
+        is_expected.to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf') .without_content(%r{\.include})
       end
     end
   end
@@ -135,20 +120,14 @@ describe 'postgresql::server::config' do
         .that_requires('Package[policycoreutils-python-utils]')
     end
 
-    it 'removes the old systemd-override file' do
-      is_expected.to contain_file('old-systemd-override')
-        .with(ensure: 'absent', path: '/etc/systemd/system/postgresql.service')
-    end
-
     it 'has the correct systemd-override drop file' do
-      is_expected.to contain_file('systemd-override').with(
-        ensure: 'file', path: '/etc/systemd/system/postgresql.service.d/postgresql.conf',
-        owner: 'root', group: 'root'
-      ) .that_requires('File[systemd-conf-dir]')
+      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
+        ensure: 'file', owner: 'root', group: 'root',
+      ) .that_requires('File[/etc/systemd/system/postgresql.service.d]')
     end
 
     it 'has the correct systemd-override file #regex' do
-      is_expected.to contain_file('systemd-override') .without_content(%r{\.include})
+      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').without_content(%r{\.include})
     end
 
     describe 'with manage_package_repo => true and a version' do
@@ -163,14 +142,13 @@ describe 'postgresql::server::config' do
       end
 
       it 'has the correct systemd-override file' do
-        is_expected.to contain_file('systemd-override').with(
-          ensure: 'file', path: '/etc/systemd/system/postgresql-13.service.d/postgresql-13.conf',
-          owner: 'root', group: 'root'
+        is_expected.to contain_file('/etc/systemd/system/postgresql-13.service.d/postgresql-13.conf').with(
+          ensure: 'file', owner: 'root', group: 'root',
         )
       end
 
       it 'has the correct systemd-override file #regex' do
-        is_expected.to contain_file('systemd-override') .without_content(%r{\.include})
+        is_expected.to contain_file('/etc/systemd/system/postgresql-13.service.d/postgresql-13.conf') .without_content(%r{\.include})
       end
     end
   end
@@ -193,7 +171,7 @@ describe 'postgresql::server::config' do
     let(:pre_condition) do
       <<-EOS
         class { 'postgresql::globals':
-          version => '9.5',
+          version => '14',
         }->
         class { 'postgresql::server':
           manage_pg_hba_conf => true,
@@ -221,7 +199,7 @@ describe 'postgresql::server::config' do
       let(:pre_condition) do
         <<-EOS
           class { 'postgresql::globals':
-            version => '9.5',
+            version => '14',
           }->
           class { 'postgresql::server': }
         EOS
@@ -231,21 +209,10 @@ describe 'postgresql::server::config' do
         is_expected.not_to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
       end
 
-      it 'removes the old systemd-override file' do
-        is_expected.to contain_file('old-systemd-override')
-          .with(ensure: 'absent', path: '/etc/systemd/system/postgresql-9.5.service')
-      end
-
       it 'has the correct systemd-override drop file' do
-        is_expected.to contain_file('systemd-override').with(
-          ensure: 'file', path: '/etc/systemd/system/postgresql-9.5.service.d/postgresql-9.5.conf',
-          owner: 'root', group: 'root'
+        is_expected.to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf').with(
+          ensure: 'file', owner: 'root', group: 'root',
         )
-      end
-
-      it 'has the correct systemd-override file #regex' do
-        is_expected.to contain_file('systemd-override') \
-          .with_content(%r{(?!^.include)})
       end
     end
   end
