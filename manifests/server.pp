@@ -15,6 +15,7 @@
 # @param service_provider Overrides the default PostgreSQL service provider.
 # @param service_reload Overrides the default reload command for your PostgreSQL service.
 # @param service_status Overrides the default status check command for your PostgreSQL service.
+# @param systemd_drop_in_ensure sets the Systemd drop-in file to present or absent
 # @param default_database Specifies the name of the default database to connect with. On most systems this is 'postgres'.
 # @param default_connect_settings Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as postgresql::server::role.
 #
@@ -103,6 +104,7 @@ class postgresql::server (
   $service_provider                                = $postgresql::params::service_provider,
   $service_reload                                  = $postgresql::params::service_reload,
   $service_status                                  = $postgresql::params::service_status,
+  Enum[present, absent] $systemd_drop_in_ensure    = $postgresql::params::systemd_drop_in_ensure,
   $default_database                                = $postgresql::params::default_database,
   $default_connect_settings                        = $postgresql::globals::default_connect_settings,
   $listen_addresses                                = $postgresql::params::listen_addresses,
