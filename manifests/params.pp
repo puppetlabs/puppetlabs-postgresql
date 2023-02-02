@@ -26,7 +26,7 @@ class postgresql::params inherits postgresql::globals {
   $package_ensure               = 'present'
   $module_workdir               = pick($module_workdir,'/tmp')
   $password_encryption          = undef
-  $extra_systemd_config         = ''
+  $extra_systemd_config         = undef
   $manage_datadir               = true
   $manage_logdir                = true
   $manage_xlogdir               = true

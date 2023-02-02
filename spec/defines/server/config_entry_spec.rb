@@ -28,7 +28,7 @@ describe 'postgresql::server::config_entry' do
       include_examples 'RedHat 7'
 
       it 'stops postgresql and changes the port #file' do
-        is_expected.to contain_file('systemd-override')
+        is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf')
       end
     end
   end
