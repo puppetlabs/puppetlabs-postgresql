@@ -17,7 +17,7 @@
 # @param pg_hba_conf_defaults If false, disables the defaults supplied with the module for pg_hba.conf. This is useful if you disagree with the defaults and wish to override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform basic psql operations for example.
 # @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 # @param group Overrides the default postgres user group to be used for related files in the file system.
-# @param version, Sets PostgreSQL version
+# @param version Sets PostgreSQL version
 # @param manage_pg_hba_conf Boolean. Whether to manage the pg_hba.conf.
 # @param manage_pg_ident_conf Boolean. Overwrites the pg_ident.conf file.
 # @param manage_recovery_conf Boolean. Specifies whether or not manage the recovery.conf.
@@ -31,36 +31,37 @@
 # @param service_enable Enable the PostgreSQL service
 # @param log_line_prefix PostgreSQL log line prefix
 # @param timezone Set timezone for the PostgreSQL instance
+# @param password_encryption Specify the type of encryption set for the password.
 # @param extra_systemd_config Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
 # lint:endignore:140chars
 define postgresql::server::instance::config (
-  String[1]                   $ip_mask_deny_postgres_user   = $postgresql::server::ip_mask_deny_postgres_user,
-  String[1]                   $ip_mask_allow_all_users      = $postgresql::server::ip_mask_allow_all_users,
-  Optional[String[1]]         $listen_addresses             = $postgresql::server::listen_addresses,
-  Variant[String[1], Integer] $port                         = $postgresql::server::port,
-  Array[String[1]]            $ipv4acls                     = $postgresql::server::ipv4acls,
-  Array[String[1]]            $ipv6acls                     = $postgresql::server::ipv6acls,
-  String[1]                   $pg_hba_conf_path             = $postgresql::server::pg_hba_conf_path,
-  String[1]                   $pg_ident_conf_path           = $postgresql::server::pg_ident_conf_path,
-  String[1]                   $postgresql_conf_path         = $postgresql::server::postgresql_conf_path,
-  Optional[Stdlib::Filemode]  $postgresql_conf_mode         = $postgresql::server::postgresql_conf_mode,
-  String[1]                   $recovery_conf_path           = $postgresql::server::recovery_conf_path,
-  Boolean                     $pg_hba_conf_defaults         = $postgresql::server::pg_hba_conf_defaults,
-  String[1]                   $user                         = $postgresql::server::user,
-  String[1]                   $group                        = $postgresql::server::group,
-  Optional[String[1]]         $version                      = $postgresql::server::_version,
-  Boolean                     $manage_pg_hba_conf           = $postgresql::server::manage_pg_hba_conf,
-  Boolean                     $manage_pg_ident_conf         = $postgresql::server::manage_pg_ident_conf,
-  Boolean                     $manage_recovery_conf         = $postgresql::server::manage_recovery_conf,
-  Boolean                     $manage_postgresql_conf_perms = $postgresql::server::manage_postgresql_conf_perms,
-  String[1]                   $datadir                      = $postgresql::server::datadir,
-  Optional[String[1]]         $logdir                       = $postgresql::server::logdir,
-  String[1]                   $service_name                 = $postgresql::server::service_name,
-  Boolean                     $service_enable               = $postgresql::server::service_enable,
-  Optional[String[1]]         $log_line_prefix              = $postgresql::server::log_line_prefix,
-  Optional[String[1]]         $timezone                     = $postgresql::server::timezone,
-  Optional[String]            $password_encryption          = $postgresql::server::password_encryption,
-  String                      $extra_systemd_config         = $postgresql::server::extra_systemd_config,
+  String[1]                                 $ip_mask_deny_postgres_user   = $postgresql::server::ip_mask_deny_postgres_user,
+  String[1]                                 $ip_mask_allow_all_users      = $postgresql::server::ip_mask_allow_all_users,
+  Optional[String[1]]                       $listen_addresses             = $postgresql::server::listen_addresses,
+  Variant[String[1], Stdlib::Port, Integer] $port                         = $postgresql::server::port,
+  Array[String[1]]                          $ipv4acls                     = $postgresql::server::ipv4acls,
+  Array[String[1]]                          $ipv6acls                     = $postgresql::server::ipv6acls,
+  Variant[String[1], Stdlib::Absolutepath]  $pg_hba_conf_path             = $postgresql::server::pg_hba_conf_path,
+  Variant[String[1], Stdlib::Absolutepath]  $pg_ident_conf_path           = $postgresql::server::pg_ident_conf_path,
+  Variant[String[1], Stdlib::Absolutepath]  $postgresql_conf_path         = $postgresql::server::postgresql_conf_path,
+  Optional[Stdlib::Filemode]                $postgresql_conf_mode         = $postgresql::server::postgresql_conf_mode,
+  Variant[String[1], Stdlib::Absolutepath]  $recovery_conf_path           = $postgresql::server::recovery_conf_path,
+  Boolean                                   $pg_hba_conf_defaults         = $postgresql::server::pg_hba_conf_defaults,
+  String[1]                                 $user                         = $postgresql::server::user,
+  String[1]                                 $group                        = $postgresql::server::group,
+  Optional[String[1]]                       $version                      = $postgresql::server::_version,
+  Boolean                                   $manage_pg_hba_conf           = $postgresql::server::manage_pg_hba_conf,
+  Boolean                                   $manage_pg_ident_conf         = $postgresql::server::manage_pg_ident_conf,
+  Boolean                                   $manage_recovery_conf         = $postgresql::server::manage_recovery_conf,
+  Boolean                                   $manage_postgresql_conf_perms = $postgresql::server::manage_postgresql_conf_perms,
+  String[1]                                 $datadir                      = $postgresql::server::datadir,
+  Optional[String[1]]                       $logdir                       = $postgresql::server::logdir,
+  String[1]                                 $service_name                 = $postgresql::server::service_name,
+  Boolean                                   $service_enable               = $postgresql::server::service_enable,
+  Optional[String[1]]                       $log_line_prefix              = $postgresql::server::log_line_prefix,
+  Optional[String[1]]                       $timezone                     = $postgresql::server::timezone,
+  Optional[String]                          $password_encryption          = $postgresql::server::password_encryption,
+  Optional[String]                          $extra_systemd_config         = $postgresql::server::extra_systemd_config,
 ) {
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file

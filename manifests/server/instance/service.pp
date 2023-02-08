@@ -10,7 +10,7 @@
 #   Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
 # @param default_database Specifies the name of the default database to connect with. On most systems this is 'postgres'.
 # @param psql_path Specifies the path to the psql command.
-# @param default_connect_settings Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as postgresql::server::role.
+# @param connect_settings Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as postgresql::server::role.
 # lint:endignore:140chars
 define postgresql::server::instance::service (
   Variant[Enum['running', 'stopped'], Boolean] $service_ensure   = $postgresql::server::service_ensure,
@@ -20,9 +20,9 @@ define postgresql::server::instance::service (
   Optional[String[1]]                          $service_provider = $postgresql::server::service_provider,
   String[1]                                    $service_status   = $postgresql::server::service_status,
   String[1]                                    $user             = $postgresql::server::user,
-  Variant[String[1], Integer]                  $port             = $postgresql::server::port,
+  Variant[String[1], Stdlib::Port, Integer]    $port             = $postgresql::server::port,
   String[1]                                    $default_database = $postgresql::server::default_database,
-  String[1]                                    $psql_path        = $postgresql::server::psql_path,
+  Variant[String[1], Stdlib::Absolutepath]     $psql_path        = $postgresql::server::psql_path,
   Hash                                         $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   anchor { 'postgresql::server::service::begin': }

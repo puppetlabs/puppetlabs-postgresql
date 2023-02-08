@@ -10,8 +10,8 @@
 # 
 #
 class postgresql::lib::docs (
-  String $package_name      = $postgresql::params::docs_package_name,
-  Enum['present', 'absent', 'latest'] $package_ensure = 'present',
+  String $package_name = $postgresql::params::docs_package_name,
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $package_ensure = 'present',
 ) inherits postgresql::params {
   package { 'postgresql-docs':
     ensure => $package_ensure,

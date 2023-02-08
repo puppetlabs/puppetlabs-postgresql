@@ -8,13 +8,13 @@
 # @param port Port to use when connecting.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 define postgresql::server::grant_role (
-  String[1]                   $group,
-  String[1]                   $role             = $name,
-  Enum['present', 'absent']   $ensure           = 'present',
-  String[1]                   $psql_db          = $postgresql::server::default_database,
-  String[1]                   $psql_user        = $postgresql::server::user,
-  Variant[String[1], Integer] $port             = $postgresql::server::port,
-  Hash                        $connect_settings = $postgresql::server::default_connect_settings,
+  String[1]                                 $group,
+  String[1]                                 $role             = $name,
+  Enum['present', 'absent']                 $ensure           = 'present',
+  String[1]                                 $psql_db          = $postgresql::server::default_database,
+  String[1]                                 $psql_user        = $postgresql::server::user,
+  Variant[String[1], Stdlib::Port, Integer] $port             = $postgresql::server::port,
+  Hash                                      $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   case $ensure {
     'present': {
