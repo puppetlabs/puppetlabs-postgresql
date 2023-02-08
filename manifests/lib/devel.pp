@@ -9,9 +9,9 @@
 #
 #
 class postgresql::lib::devel (
-  String $package_name      = $postgresql::params::devel_package_name,
-  Enum['present', 'absent', 'latest'] $package_ensure = 'present',
-  Boolean $link_pg_config   = $postgresql::params::link_pg_config
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $package_ensure = 'present',
+  String $package_name    = $postgresql::params::devel_package_name,
+  Boolean $link_pg_config = $postgresql::params::link_pg_config,
 ) inherits postgresql::params {
   if $facts['os']['family'] == 'Gentoo' {
     fail('osfamily Gentoo does not have a separate "devel" package, postgresql::lib::devel is not supported')

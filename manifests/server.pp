@@ -68,11 +68,13 @@
 #   Whether to manage the postgresql conf file permissions. This means owner,
 #   group and mode. Contents are not managed but should be managed through
 #   postgresql::server::config_entry.
+# @param manage_selinux Specifies whether or not manage the conf file for selinux.
 # @param module_workdir Working directory for the PostgreSQL module
 #
 # @param manage_datadir Set to false if you have file{ $datadir: } already defined
 # @param manage_logdir Set to false if you have file{ $logdir: } already defined
 # @param manage_xlogdir Set to false if you have file{ $xlogdir: } already defined
+# @param password_encryption Specify the type of encryption set for the password.
 #
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
@@ -89,76 +91,76 @@
 class postgresql::server (
   Optional[Variant[String[1], Sensitive[String[1]], Integer]] $postgres_password = undef,
 
-  String[1]                                    $package_name                 = $postgresql::params::server_package_name,
-  Enum['present', 'absent', 'latest']          $package_ensure               = $postgresql::params::package_ensure,
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $package_ensure = $postgresql::params::package_ensure,
+  String[1]                                          $package_name                 = $postgresql::params::server_package_name,
 
-  Optional[String[1]]                          $plperl_package_name          = $postgresql::params::plperl_package_name,
-  Optional[String[1]]                          $plpython_package_name        = $postgresql::params::plpython_package_name,
+  Optional[String[1]]                                $plperl_package_name          = $postgresql::params::plperl_package_name,
+  Optional[String[1]]                                $plpython_package_name        = $postgresql::params::plpython_package_name,
 
-  Variant[Enum['running', 'stopped'], Boolean] $service_ensure               = $postgresql::params::service_ensure,
-  Boolean                                      $service_enable               = $postgresql::params::service_enable,
-  Boolean                                      $service_manage               = $postgresql::params::service_manage,
-  String[1]                                    $service_name                 = $postgresql::params::service_name,
-  Boolean                                      $service_restart_on_change    = $postgresql::params::service_restart_on_change,
-  Optional[String[1]]                          $service_provider             = $postgresql::params::service_provider,
-  String[1]                                    $service_reload               = $postgresql::params::service_reload,
-  String[1]                                    $service_status               = $postgresql::params::service_status,
-  String[1]                                    $default_database             = $postgresql::params::default_database,
-  Hash                                         $default_connect_settings     = $postgresql::globals::default_connect_settings,
-  Optional[String[1]]                          $listen_addresses             = $postgresql::params::listen_addresses,
-  Variant[String[1], Integer]                  $port                         = $postgresql::params::port,
-  String[1]                                    $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
-  String[1]                                    $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
-  Array[String[1]]                             $ipv4acls                     = $postgresql::params::ipv4acls,
-  Array[String[1]]                             $ipv6acls                     = $postgresql::params::ipv6acls,
+  Variant[Enum['running', 'stopped'], Boolean]       $service_ensure               = $postgresql::params::service_ensure,
+  Boolean                                            $service_enable               = $postgresql::params::service_enable,
+  Boolean                                            $service_manage               = $postgresql::params::service_manage,
+  String[1]                                          $service_name                 = $postgresql::params::service_name,
+  Boolean                                            $service_restart_on_change    = $postgresql::params::service_restart_on_change,
+  Optional[String[1]]                                $service_provider             = $postgresql::params::service_provider,
+  String[1]                                          $service_reload               = $postgresql::params::service_reload,
+  Optional[String[1]]                                $service_status               = $postgresql::params::service_status,
+  String[1]                                          $default_database             = $postgresql::params::default_database,
+  Hash                                               $default_connect_settings     = $postgresql::globals::default_connect_settings,
+  Optional[String[1]]                                $listen_addresses             = $postgresql::params::listen_addresses,
+  Variant[String[1], Stdlib::Port, Integer]          $port                         = $postgresql::params::port,
+  String[1]                                          $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
+  String[1]                                          $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
+  Array[String[1]]                                   $ipv4acls                     = $postgresql::params::ipv4acls,
+  Array[String[1]]                                   $ipv6acls                     = $postgresql::params::ipv6acls,
 
-  String[1]                                    $initdb_path                  = $postgresql::params::initdb_path,
-  Optional[String[1]]                          $createdb_path                = $postgresql::params::createdb_path,
-  String[1]                                    $psql_path                    = $postgresql::params::psql_path,
-  String[1]                                    $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
-  String[1]                                    $pg_ident_conf_path           = $postgresql::params::pg_ident_conf_path,
-  String[1]                                    $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
-  Optional[Stdlib::Filemode]                   $postgresql_conf_mode         = $postgresql::params::postgresql_conf_mode,
-  String[1]                                    $recovery_conf_path           = $postgresql::params::recovery_conf_path,
+  Variant[String[1], Stdlib::Absolutepath]           $initdb_path                  = $postgresql::params::initdb_path,
+  Optional[Variant[String[1], Stdlib::Absolutepath]] $createdb_path                = $postgresql::params::createdb_path,
+  Variant[String[1], Stdlib::Absolutepath]           $psql_path                    = $postgresql::params::psql_path,
+  Variant[String[1], Stdlib::Absolutepath]           $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
+  Variant[String[1], Stdlib::Absolutepath]           $pg_ident_conf_path           = $postgresql::params::pg_ident_conf_path,
+  Variant[String[1], Stdlib::Absolutepath]           $postgresql_conf_path         = $postgresql::params::postgresql_conf_path,
+  Optional[Stdlib::Filemode]                         $postgresql_conf_mode         = $postgresql::params::postgresql_conf_mode,
+  Variant[String[1], Stdlib::Absolutepath]           $recovery_conf_path           = $postgresql::params::recovery_conf_path,
 
-  String[1]                                    $datadir                      = $postgresql::params::datadir,
-  Optional[String[1]]                          $xlogdir                      = $postgresql::params::xlogdir,
-  Optional[String[1]]                          $logdir                       = $postgresql::params::logdir,
+  String[1]                                          $datadir                      = $postgresql::params::datadir,
+  Optional[String[1]]                                $xlogdir                      = $postgresql::params::xlogdir,
+  Optional[String[1]]                                $logdir                       = $postgresql::params::logdir,
 
-  Optional[String[1]]                          $log_line_prefix              = $postgresql::params::log_line_prefix,
+  Optional[String[1]]                                $log_line_prefix              = $postgresql::params::log_line_prefix,
 
-  Boolean                                      $pg_hba_conf_defaults         = $postgresql::params::pg_hba_conf_defaults,
+  Boolean                                            $pg_hba_conf_defaults         = $postgresql::params::pg_hba_conf_defaults,
 
-  String[1]                                    $user                         = $postgresql::params::user,
-  String[1]                                    $group                        = $postgresql::params::group,
+  String[1]                                          $user                         = $postgresql::params::user,
+  String[1]                                          $group                        = $postgresql::params::group,
 
-  Boolean                                      $needs_initdb                 = $postgresql::params::needs_initdb,
+  Boolean                                            $needs_initdb                 = $postgresql::params::needs_initdb,
 
-  Optional[String[1]]                          $encoding                     = $postgresql::params::encoding,
-  Optional[String[1]]                          $locale                       = $postgresql::params::locale,
-  Optional[String[1]]                          $data_checksums               = $postgresql::params::data_checksums,
-  Optional[String[1]]                          $timezone                     = $postgresql::params::timezone,
+  Optional[String[1]]                                $encoding                     = $postgresql::params::encoding,
+  Optional[String[1]]                                $locale                       = $postgresql::params::locale,
+  Optional[String[1]]                                $data_checksums               = $postgresql::params::data_checksums,
+  Optional[String[1]]                                $timezone                     = $postgresql::params::timezone,
 
-  Boolean                                      $manage_pg_hba_conf           = $postgresql::params::manage_pg_hba_conf,
-  Boolean                                      $manage_pg_ident_conf         = $postgresql::params::manage_pg_ident_conf,
-  Boolean                                      $manage_recovery_conf         = $postgresql::params::manage_recovery_conf,
-  Boolean                                      $manage_postgresql_conf_perms = $postgresql::params::manage_postgresql_conf_perms,
-  Boolean                                      $manage_selinux               = $postgresql::params::manage_selinux,
-  String[1]                                    $module_workdir               = $postgresql::params::module_workdir,
+  Boolean                                            $manage_pg_hba_conf           = $postgresql::params::manage_pg_hba_conf,
+  Boolean                                            $manage_pg_ident_conf         = $postgresql::params::manage_pg_ident_conf,
+  Boolean                                            $manage_recovery_conf         = $postgresql::params::manage_recovery_conf,
+  Boolean                                            $manage_postgresql_conf_perms = $postgresql::params::manage_postgresql_conf_perms,
+  Boolean                                            $manage_selinux               = $postgresql::params::manage_selinux,
+  String[1]                                          $module_workdir               = $postgresql::params::module_workdir,
 
-  Boolean                                      $manage_datadir               = $postgresql::params::manage_datadir,
-  Boolean                                      $manage_logdir                = $postgresql::params::manage_logdir,
-  Boolean                                      $manage_xlogdir               = $postgresql::params::manage_xlogdir,
-  Optional[String]                             $password_encryption          = $postgresql::params::password_encryption,
-  String                                       $extra_systemd_config         = $postgresql::params::extra_systemd_config,
+  Boolean                                            $manage_datadir               = $postgresql::params::manage_datadir,
+  Boolean                                            $manage_logdir                = $postgresql::params::manage_logdir,
+  Boolean                                            $manage_xlogdir               = $postgresql::params::manage_xlogdir,
+  Optional[String]                                   $password_encryption          = $postgresql::params::password_encryption,
+  Optional[String]                                   $extra_systemd_config         = $postgresql::params::extra_systemd_config,
 
-  Hash[String, Hash]                           $roles                        = {},
-  Hash[String, Any]                            $config_entries               = {},
-  Postgresql::Pg_hba_rules                     $pg_hba_rules                 = {},
+  Hash[String, Hash]                                 $roles                        = {},
+  Hash[String, Any]                                  $config_entries               = {},
+  Postgresql::Pg_hba_rules                           $pg_hba_rules                 = {},
 
-  Boolean                                      $backup_enable                = $postgresql::params::backup_enable,
-  Hash                                         $backup_options               = {},
-  Enum['pg_dump']                              $backup_provider              = $postgresql::params::backup_provider,
+  Boolean                                            $backup_enable                = $postgresql::params::backup_enable,
+  Hash                                               $backup_options               = {},
+  Enum['pg_dump']                                    $backup_provider              = $postgresql::params::backup_provider,
 
   #Deprecated
   Optional[String[1]] $version = undef,
