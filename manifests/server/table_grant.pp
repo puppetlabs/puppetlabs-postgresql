@@ -11,16 +11,16 @@
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param onlyif_exists Create grant only if it doesn't exist.
 define postgresql::server::table_grant (
-  $privilege,
-  $table,
-  $db,
-  $role,
-  $ensure           = undef,
-  $port             = undef,
-  $psql_db          = undef,
-  $psql_user        = undef,
-  $connect_settings = undef,
-  $onlyif_exists    = false,
+  Enum['ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER'] $privilege,
+  String[1]                             $table,
+  String[1]                             $db,
+  String[1]                             $role,
+  Optional[String[1]]                   $ensure           = undef,
+  Optional[Variant[String[1], Integer]] $port             = undef,
+  Optional[String[1]]                   $psql_db          = undef,
+  Optional[String[1]]                   $psql_user        = undef,
+  Optional[Hash]                        $connect_settings = undef,
+  Boolean                               $onlyif_exists    = false,
 ) {
   postgresql::server::grant { "table:${name}":
     ensure           => $ensure,

@@ -4,7 +4,7 @@
 # @param package_ensure Specifies if the package is present or not.
 class postgresql::server::postgis (
   String $package_name      = $postgresql::params::postgis_package_name,
-  String[1] $package_ensure = 'present'
+  Enum['present', 'absent', 'latest'] $package_ensure = 'present'
 ) inherits postgresql::params {
   package { 'postgresql-postgis':
     ensure => $package_ensure,

@@ -13,17 +13,17 @@
 # @param default_connect_settings Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as postgresql::server::role.
 # lint:endignore:140chars
 define postgresql::server::instance::service (
-  $service_ensure   = $postgresql::server::service_ensure,
-  $service_enable   = $postgresql::server::service_enable,
-  $service_manage   = $postgresql::server::service_manage,
-  $service_name     = $postgresql::server::service_name,
-  $service_provider = $postgresql::server::service_provider,
-  $service_status   = $postgresql::server::service_status,
-  $user             = $postgresql::server::user,
-  $port             = $postgresql::server::port,
-  $default_database = $postgresql::server::default_database,
-  $psql_path        = $postgresql::server::psql_path,
-  $connect_settings = $postgresql::server::default_connect_settings,
+  Variant[Enum['running', 'stopped'], Boolean] $service_ensure   = $postgresql::server::service_ensure,
+  Boolean                                      $service_enable   = $postgresql::server::service_enable,
+  Boolean                                      $service_manage   = $postgresql::server::service_manage,
+  String[1]                                    $service_name     = $postgresql::server::service_name,
+  Optional[String[1]]                          $service_provider = $postgresql::server::service_provider,
+  String[1]                                    $service_status   = $postgresql::server::service_status,
+  String[1]                                    $user             = $postgresql::server::user,
+  Variant[String[1], Integer]                  $port             = $postgresql::server::port,
+  String[1]                                    $default_database = $postgresql::server::default_database,
+  String[1]                                    $psql_path        = $postgresql::server::psql_path,
+  Hash                                         $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   anchor { 'postgresql::server::service::begin': }
 

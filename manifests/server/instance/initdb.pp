@@ -19,20 +19,20 @@
 # @param module_workdir Working directory for the PostgreSQL module
 # lint:endignore:140chars
 define postgresql::server::instance::initdb (
-  Boolean $needs_initdb             = $postgresql::server::needs_initdb,
-  $initdb_path                      = $postgresql::server::initdb_path,
-  $datadir                          = $postgresql::server::datadir,
-  $xlogdir                          = $postgresql::server::xlogdir,
-  $logdir                           = $postgresql::server::logdir,
-  Boolean $manage_datadir           = $postgresql::server::manage_datadir,
-  Boolean $manage_logdir            = $postgresql::server::manage_logdir,
-  Boolean $manage_xlogdir           = $postgresql::server::manage_xlogdir,
-  $encoding                         = $postgresql::server::encoding,
-  $locale                           = $postgresql::server::locale,
-  Optional[Boolean] $data_checksums = $postgresql::server::data_checksums,
-  $group                            = $postgresql::server::group,
-  $user                             = $postgresql::server::user,
-  $module_workdir                   = $postgresql::server::module_workdir,
+  Boolean             $needs_initdb   = $postgresql::server::needs_initdb,
+  String[1]           $initdb_path    = $postgresql::server::initdb_path,
+  String[1]           $datadir        = $postgresql::server::datadir,
+  Optional[String[1]] $xlogdir        = $postgresql::server::xlogdir,
+  Optional[String[1]] $logdir         = $postgresql::server::logdir,
+  Boolean             $manage_datadir = $postgresql::server::manage_datadir,
+  Boolean             $manage_logdir  = $postgresql::server::manage_logdir,
+  Boolean             $manage_xlogdir = $postgresql::server::manage_xlogdir,
+  Optional[String[1]] $encoding       = $postgresql::server::encoding,
+  Optional[String[1]] $locale         = $postgresql::server::locale,
+  Optional[Boolean]   $data_checksums = $postgresql::server::data_checksums,
+  String[1]           $group          = $postgresql::server::group,
+  String[1]           $user           = $postgresql::server::user,
+  String[1]           $module_workdir = $postgresql::server::module_workdir,
 ) {
   if $facts['os']['family'] == 'RedHat' and $facts['os']['selinux']['enabled'] == true {
     $seltype = 'postgresql_db_t'
