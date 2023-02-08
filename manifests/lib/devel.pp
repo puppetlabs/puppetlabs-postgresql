@@ -10,7 +10,7 @@
 #
 class postgresql::lib::devel (
   String $package_name      = $postgresql::params::devel_package_name,
-  String[1] $package_ensure = 'present',
+  Enum['present', 'absent', 'latest'] $package_ensure = 'present',
   Boolean $link_pg_config   = $postgresql::params::link_pg_config
 ) inherits postgresql::params {
   if $facts['os']['family'] == 'Gentoo' {

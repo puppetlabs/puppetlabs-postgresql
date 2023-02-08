@@ -13,10 +13,10 @@
 #       db => 'template1',
 #   }
 define postgresql::server::schema (
-  $db               = $postgresql::server::default_database,
-  $owner            = undef,
-  $schema           = $title,
-  $connect_settings = $postgresql::server::default_connect_settings,
+  String[1]           $db               = $postgresql::server::default_database,
+  Optional[String[1]] $owner            = undef,
+  String[1]           $schema           = $title,
+  Hash                $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   $user           = $postgresql::server::user
   $group          = $postgresql::server::group

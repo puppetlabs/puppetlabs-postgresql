@@ -8,12 +8,12 @@
 # @param module_workdir Working directory for the PostgreSQL module
 # lint:endignore:140chars
 define postgresql::server::instance::late_initdb (
-  $encoding       = $postgresql::server::encoding,
-  $user           = $postgresql::server::user,
-  $group          = $postgresql::server::group,
-  $psql_path      = $postgresql::server::psql_path,
-  $port           = $postgresql::server::port,
-  $module_workdir = $postgresql::server::module_workdir,
+  Optional[String[1]]         $encoding       = $postgresql::server::encoding,
+  String[1]                   $user           = $postgresql::server::user,
+  String[1]                   $group          = $postgresql::server::group,
+  String[1]                   $psql_path      = $postgresql::server::psql_path,
+  Variant[String[1], Integer] $port           = $postgresql::server::port,
+  String[1]                   $module_workdir = $postgresql::server::module_workdir,
 ) {
   # Set the defaults for the postgresql_psql resource
   Postgresql_psql {

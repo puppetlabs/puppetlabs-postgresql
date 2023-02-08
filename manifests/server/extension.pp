@@ -17,16 +17,16 @@
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param database_resource_name Specifies the resource name of the DB being managed. Defaults to the parameter $database, if left blank.
 define postgresql::server::extension (
-  $database,
-  $extension                   = $name,
-  Optional[String[1]] $schema  = undef,
-  Optional[String[1]] $version = undef,
-  String[1] $ensure            = 'present',
-  $package_name                = undef,
-  $package_ensure              = undef,
-  Optional[Integer] $port      = undef,
-  $connect_settings            = postgresql::default('default_connect_settings'),
-  $database_resource_name      = $database,
+  String[1]                           $database,
+  String[1]                           $extension              = $name,
+  Optional[String[1]]                 $schema                 = undef,
+  Optional[String[1]]                 $version                = undef,
+  Enum['present', 'absent']           $ensure                 = 'present',
+  Optional[String[1]]                 $package_name           = undef,
+  Optional[Enum['present', 'absent']] $package_ensure         = undef,
+  Optional[Integer]                   $port                   = undef,
+  Hash                                $connect_settings       = postgresql::default('default_connect_settings'),
+  String[1]                           $database_resource_name = $database,
 ) {
   $user             = postgresql::default('user')
   $group            = postgresql::default('group')

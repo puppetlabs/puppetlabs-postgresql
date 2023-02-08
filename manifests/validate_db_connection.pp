@@ -18,16 +18,16 @@
 # @param create_db_first Creates the database when obtaining a successful connection.
 #
 define postgresql::validate_db_connection (
-  $database_host     = undef,
-  $database_name     = undef,
+  Optional[String[1]]                          $database_host     = undef,
+  Optional[String[1]]                          $database_name     = undef,
   Optional[Variant[String, Sensitive[String]]] $database_password = undef,
-  $database_username = undef,
-  $database_port     = undef,
-  $connect_settings  = undef,
-  $run_as            = undef,
-  $sleep             = 2,
-  $tries             = 10,
-  $create_db_first   = true
+  Optional[String[1]]                          $database_username = undef,
+  Optional[Variant[String[1], Integer]]        $database_port     = undef,
+  Optional[Hash]                               $connect_settings  = undef,
+  Optional[String[1]]                          $run_as            = undef,
+  Integer                                      $sleep             = 2,
+  Integer                                      $tries             = 10,
+  Boolean                                      $create_db_first   = true
 ) {
   include postgresql::client
   include postgresql::params
