@@ -1,0 +1,15 @@
+<%- |
+  Variant[String[1], Stdlib::Port] $port,
+  Stdlib::Absolutepath             $datadir,
+  Optional[String[1]]              $extra_systemd_config,
+| -%>
+[Service]
+Environment=PGPORT=<%= $port %>
+<%- if $facts['os']['family'] == 'Gentoo' { -%>
+Environment=DATA_DIR=<%= $datadir %>
+<%- } else { -%>
+Environment=PGDATA=<%= $datadir %>
+<%- } -%>
+<% if $extra_systemd_config { -%>
+<%= $extra_systemd_config %>
+<% } -%>

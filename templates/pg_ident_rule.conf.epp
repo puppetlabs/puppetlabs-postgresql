@@ -1,0 +1,12 @@
+<%- |
+  String[1] $name,
+  String[1] $description,
+  String[1] $order,
+  String[1] $map_name,
+  String[1] $system_username,
+  String[1] $database_username,
+| -%>
+# Rule Name: <%= $name %>
+# Description: <%= $description %>
+# Order: <%= $order %>
+<%= $map_name %>	<%= $system_username %>	<%= $database_username %>

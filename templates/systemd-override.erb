@@ -1,8 +1,0 @@
-[Service]
-Environment=PGPORT=<%= @port %>
-<%- if @os['family'] == 'Gentoo' -%>
-Environment=DATA_DIR=<%= @datadir %>
-<%- else -%>
-Environment=PGDATA=<%= @datadir %>
-<%- end -%>
-<%= @extra_systemd_config %>
