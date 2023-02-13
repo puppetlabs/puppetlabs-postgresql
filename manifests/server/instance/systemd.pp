@@ -19,7 +19,12 @@ define postgresql::server::instance::systemd (
     unit    => "${service_name}.service",
     owner   => 'root',
     group   => 'root',
-    content => template('postgresql/systemd-override.erb'),
+    content => epp('postgresql/systemd-override.conf.epp', {
+        port                 => $port,
+        datadir              => $datadir,
+        extra_systemd_config => $extra_systemd_config,
+      }
+    ),
     notify  => Class['postgresql::server::service'],
     before  => Class['postgresql::server::reload'],
   }

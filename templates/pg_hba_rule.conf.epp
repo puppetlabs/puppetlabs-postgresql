@@ -1,0 +1,15 @@
+<%- |
+  String[1]                                 $name,
+  String[1]                                 $description,
+  Variant[String, Integer]                  $order,
+  Postgresql::Pg_hba_rule_type              $type,
+  String[1]                                 $database,
+  String[1]                                 $user,
+  Optional[Postgresql::Pg_hba_rule_address] $address,
+  String[1]                                 $auth_method,
+  Optional[String]                          $auth_option,
+| -%>
+# Rule Name: <%= $name %>
+# Description: <%= $description %>
+# Order: <%= $order %>
+<%= $type %>	<%= $database %>	<%= $user %>	<%= $address %>	<%= $auth_method %>	<%= $auth_option %>

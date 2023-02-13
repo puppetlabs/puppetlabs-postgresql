@@ -1,3 +1,4 @@
+# lint:ignore:140chars
 # @summary This resource manages the parameters that applies to the recovery.conf template.
 #
 # @note
@@ -22,6 +23,7 @@
 # @param trigger_file Specifies a trigger file whose presence ends recovery in the standby.
 # @param recovery_min_apply_delay This parameter allows you to delay recovery by a fixed period of time, measured in milliseconds if no unit is specified.
 # @param target Provides the target for the rule, and is generally an internal only property. Use with caution.
+# lint:endignore:140chars
 define postgresql::server::recovery (
   $restore_command                = undef,
   $archive_cleanup_command        = undef,
@@ -41,14 +43,14 @@ define postgresql::server::recovery (
   $target                         = $postgresql::server::recovery_conf_path
 ) {
   if $postgresql::server::manage_recovery_conf == false {
-    fail('postgresql::server::manage_recovery_conf has been disabled, so this resource is now unused and redundant, either enable that option or remove this resource from your manifests')
+    fail('postgresql::server::manage_recovery_conf has been disabled, so this resource is now unused and redundant, either enable that option or remove this resource from your manifests') # lint:ignore:140chars
   } else {
     if($restore_command == undef and $archive_cleanup_command == undef and $recovery_end_command == undef
       and $recovery_target_name == undef and $recovery_target_time == undef and $recovery_target_xid == undef
       and $recovery_target_inclusive == undef and $recovery_target == undef and $recovery_target_timeline == undef
       and $pause_at_recovery_target == undef and $standby_mode == undef and $primary_conninfo == undef
     and $primary_slot_name == undef and $trigger_file == undef and $recovery_min_apply_delay == undef) {
-      fail('postgresql::server::recovery use this resource but do not pass a parameter will avoid creating the recovery.conf, because it makes no sense.')
+      fail('postgresql::server::recovery use this resource but do not pass a parameter will avoid creating the recovery.conf, because it makes no sense.') # lint:ignore:140chars
     }
 
     concat { $target:
@@ -63,7 +65,24 @@ define postgresql::server::recovery (
     # Create the recovery.conf content
     concat::fragment { "${name}-recovery.conf":
       target  => $target,
-      content => template('postgresql/recovery.conf.erb'),
+      content => epp('postgresql/recovery.conf.epp', {
+          restore_command           => $restore_command,
+          archive_cleanup_command   => $archive_cleanup_command,
+          recovery_end_command      => $recovery_end_command,
+          recovery_target_name      => $recovery_target_name,
+          recovery_target_time      => $recovery_target_time,
+          recovery_target_xid       => $recovery_target_xid,
+          recovery_target_inclusive => $recovery_target_inclusive,
+          recovery_target           => $recovery_target,
+          recovery_target_timeline  => $recovery_target_timeline,
+          pause_at_recovery_target  => $pause_at_recovery_target,
+          standby_mode              => $standby_mode,
+          primary_conninfo          => $primary_conninfo,
+          primary_slot_name         => $primary_slot_name,
+          trigger_file              => $trigger_file,
+          recovery_min_apply_delay  => $recovery_min_apply_delay,
+        }
+      ),
     }
   }
 }

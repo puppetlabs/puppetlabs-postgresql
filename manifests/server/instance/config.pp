@@ -29,7 +29,6 @@
 # @param logdir PostgreSQL log directory
 # @param service_name Overrides the default PostgreSQL service name.
 # @param service_enable Enable the PostgreSQL service
-# @param systemd_drop_in_ensure sets the Systemd drop-in file to present or absent
 # @param log_line_prefix PostgreSQL log line prefix
 # @param timezone Set timezone for the PostgreSQL instance
 # @param extra_systemd_config Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
@@ -58,7 +57,6 @@ define postgresql::server::instance::config (
   $logdir                                          = $postgresql::server::logdir,
   $service_name                                    = $postgresql::server::service_name,
   $service_enable                                  = $postgresql::server::service_enable,
-  Enum[present, absent] $systemd_drop_in_ensure    = $postgresql::server::systemd_drop_in_ensure,
   $log_line_prefix                                 = $postgresql::server::log_line_prefix,
   $timezone                                        = $postgresql::server::timezone,
   $password_encryption                             = $postgresql::server::password_encryption,
