@@ -187,17 +187,17 @@ describe 'postgresql::server' do
       <<-EOS
       class { 'postgresql::globals':
         manage_package_repo => true,
-        version             => '99.5',
+        version             => '14',
         before              => Class['postgresql::server'],
       }
       EOS
     end
 
     it 'contains the correct package version' do
-      is_expected.to contain_class('postgresql::repo').with_version('99.5')
-      is_expected.to contain_file('/var/lib/postgresql/99.5/main') # FIXME: be more precise
-      is_expected.to contain_concat('/etc/postgresql/99.5/main/pg_hba.conf') # FIXME: be more precise
-      is_expected.to contain_concat('/etc/postgresql/99.5/main/pg_ident.conf') # FIXME: be more precise
+      is_expected.to contain_class('postgresql::repo').with_version('14')
+      is_expected.to contain_file('/var/lib/postgresql/14/main') # FIXME: be more precise
+      is_expected.to contain_concat('/etc/postgresql/14/main/pg_hba.conf') # FIXME: be more precise
+      is_expected.to contain_concat('/etc/postgresql/14/main/pg_ident.conf') # FIXME: be more precise
     end
   end
 
