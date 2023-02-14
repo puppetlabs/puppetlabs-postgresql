@@ -245,58 +245,14 @@ define postgresql::server::instance::config (
     }
   }
   # lint:ignore:140chars
-  # RHEL 7 and 8 both support drop-in files for systemd units.  The old include directive is deprecated and may be removed in future systemd releases.
-  # Gentoo also supports drop-in files.
+  # RHEL 7 and 8 both support drop-in files for systemd units. Gentoo also supports drop-in files.
+  # Edit 02/2023 RHEL basedc Systems and Gentoo need Variables set for $PGPORT, $DATA_DIR or $PGDATA, thats what the drop-in file is for.
   # lint:endignore:140chars
   if $facts['os']['family'] in ['RedHat', 'Gentoo'] and $facts['service_provider'] == 'systemd' {
-    # While Puppet 6.1 and newer can do a daemon-reload if needed, systemd
-    # doesn't appear to report that correctly in all cases.
-    # One such case seems to be when an overriding unit file is removed from /etc
-    # and the original one from /lib *should* be used again.
-    #
-    # This can be removed when Puppet < 6.1 support is dropped *and* the file
-    # old-systemd-override is removed.
-    $systemd_command = ['systemctl', 'daemon-reload']
-    exec { 'restart-systemd':
-      command     => $systemd_command,
-      refreshonly => true,
-      path        => '/bin:/usr/bin:/usr/local/bin',
-      before      => Class['postgresql::server::service'],
-    }
-
-    file {
-      default:
-        ensure => file,
-        owner  => root,
-        group  => root,
-        notify => [Exec['restart-systemd'], Class['postgresql::server::service']],
-        before => Class['postgresql::server::reload'];
-
-      'systemd-conf-dir':
-        ensure => directory,
-        path   => "/etc/systemd/system/${service_name}.service.d";
-
-      # Template uses:
-      # - $facts['os']['name']
-      # - $facts['os']['release']['major']
-      # - $service_name
-      # - $port
-      # - $datadir
-      # - $extra_systemd_config
-      'systemd-override':
-        path    => "/etc/systemd/system/${service_name}.service.d/${service_name}.conf",
-        content => template('postgresql/systemd-override.erb'),
-        require => File['systemd-conf-dir'];
-    }
-
-    if $service_enable != 'mask' {
-      # Remove old unit file to avoid conflicts
-      file { 'old-systemd-override':
-        ensure => absent,
-        path   => "/etc/systemd/system/${service_name}.service",
-        notify => [Exec['restart-systemd'], Class['postgresql::server::service']],
-        before => Class['postgresql::server::reload'],
-      }
+    postgresql::server::instance::systemd { $service_name:
+      port                 => $port,
+      datadir              => $datadir,
+      extra_systemd_config => $extra_systemd_config,
     }
   }
 }

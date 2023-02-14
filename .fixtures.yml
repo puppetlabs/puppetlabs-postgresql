@@ -10,3 +10,4 @@ fixtures:
     puppet_agent: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
     yumrepo_core: "https://github.com/puppetlabs/puppetlabs-yumrepo_core.git"
+    systemd: "https://github.com/voxpupuli/puppet-systemd.git"
