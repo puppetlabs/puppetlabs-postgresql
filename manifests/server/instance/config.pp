@@ -216,25 +216,6 @@ define postgresql::server::instance::config (
     }
   }
 
-  # RedHat-based systems hardcode some PG* variables in the init script, and need to be overriden
-  # in /etc/sysconfig/pgsql/postgresql. Create a blank file so we can manage it with augeas later.
-  if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') < 0 {
-    file { '/etc/sysconfig/pgsql/postgresql':
-      ensure  => file,
-      replace => false,
-    }
-
-    # The init script from the packages of the postgresql.org repository
-    # sources an alternate sysconfig file.
-    # I. e. /etc/sysconfig/pgsql/postgresql-9.3 for PostgreSQL 9.3
-    # Link to the sysconfig file set by this puppet module
-    file { "/etc/sysconfig/pgsql/postgresql-${version}":
-      ensure  => link,
-      target  => '/etc/sysconfig/pgsql/postgresql',
-      require => File['/etc/sysconfig/pgsql/postgresql'],
-    }
-  }
-
   if ($manage_pg_ident_conf == true) {
     concat { $pg_ident_conf_path:
       owner  => $user,
