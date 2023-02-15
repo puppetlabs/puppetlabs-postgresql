@@ -15,7 +15,7 @@ end
 
 RSpec.configure do |c|
   c.before :suite do
-    install_dependencies
+    LitmusHelper.instance.apply_manifest(File.read(File.join(__dir__, 'setup_acceptance_node.pp')))
   end
 end
 
@@ -34,40 +34,6 @@ end
 
 def pre_run
   LitmusHelper.instance.apply_manifest("class { 'postgresql::server': postgres_password => 'postgres' }", catch_failures: true)
-end
-
-def install_dependencies
-  LitmusHelper.instance.apply_manifest <<~MANIFEST
-    if $facts['os']['name'] == 'Ubuntu' and $facts['os']['release']['major'] == '18.04' {
-      package { 'iproute2':
-        ensure => installed,
-      }
-    }
-
-    # needed for netstat, for serverspec checks
-    if $facts['os']['family'] in ['SLES', 'SUSE'] {
-      exec { 'Enable legacy repos':
-        path    => '/bin:/usr/bin/:/sbin:/usr/sbin',
-        command => 'SUSEConnect --product sle-module-legacy/15.5/x86_64',
-        unless  => 'SUSEConnect --status-text | grep sle-module-legacy/15.5/x86_64',
-      }
-
-      package { 'net-tools-deprecated':
-        ensure   => 'latest',
-      }
-    }
-
-    if $facts['os']['family'] == 'RedHat' {
-      if versioncmp($facts['os']['release']['major'], '8') >= 0 {
-        $package = ['iproute', 'policycoreutils-python-utils']
-      } else {
-        $package = 'policycoreutils-python'
-      }
-      package { $package:
-        ensure => installed,
-      }
-    }
-  MANIFEST
 end
 
 def postgresql_version
