@@ -1,3 +1,4 @@
+# lint:ignore:140chars
 # @summary This resource manages an individual rule that applies to the file defined in target.
 #
 # @param type Sets the type of rule.
@@ -10,13 +11,14 @@
 # @param order Sets an order for placing the rule in pg_hba.conf. This can be either a string or an integer. If it is an integer, it will be converted to a string by zero-padding it to three digits. E.g. 42 will be zero-padded to the string '042'. The pg_hba_rule fragments are sorted using the alpha sorting order. Default value: 150.
 # @param target Provides the target for the rule, and is generally an internal only property. Use with caution.
 # @param postgresql_version Manages pg_hba.conf without managing the entire PostgreSQL instance.
+# lint:endignore:140chars
 define postgresql::server::pg_hba_rule (
   Postgresql::Pg_hba_rule_type $type,
-  String $database,
-  String $user,
-  String $auth_method,
+  String[1] $database,
+  String[1] $user,
+  String[1] $auth_method,
   Optional[Postgresql::Pg_hba_rule_address] $address = undef,
-  String $description             = 'none',
+  String[1] $description          = 'none',
   Optional[String] $auth_option   = undef,
   Variant[String, Integer] $order = 150,
 
@@ -34,7 +36,7 @@ define postgresql::server::pg_hba_rule (
   }
 
   if $manage_pg_hba_conf == false {
-    fail('postgresql::server::manage_pg_hba_conf has been disabled, so this resource is now unused and redundant, either enable that option or remove this resource from your manifests')
+    fail('postgresql::server::manage_pg_hba_conf has been disabled, so this resource is now unused and redundant, either enable that option or remove this resource from your manifests') # lint:ignore:140chars
   } else {
     if($type =~ /^host/ and $address == undef) {
       fail('You must specify an address property when type is host based')
@@ -48,7 +50,7 @@ define postgresql::server::pg_hba_rule (
     }
 
     $allowed_auth_methods = $postgresql_version ? {
-      '10'  => ['trust', 'reject', 'scram-sha-256', 'md5', 'password', 'gss', 'sspi', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam', 'bsd'],
+      '10'  => ['trust', 'reject', 'scram-sha-256', 'md5', 'password', 'gss', 'sspi', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam', 'bsd'], # lint:ignore:140chars
       '9.6' => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam', 'bsd'],
       '9.5' => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],
       '9.4' => ['trust', 'reject', 'md5', 'password', 'gss', 'sspi', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam'],
@@ -60,7 +62,7 @@ define postgresql::server::pg_hba_rule (
       '8.3' => ['trust', 'reject', 'md5', 'crypt', 'password', 'gss', 'sspi', 'krb5', 'ident', 'ldap', 'pam'],
       '8.2' => ['trust', 'reject', 'md5', 'crypt', 'password', 'krb5', 'ident', 'ldap', 'pam'],
       '8.1' => ['trust', 'reject', 'md5', 'crypt', 'password', 'krb5', 'ident', 'pam'],
-      default => ['trust', 'reject', 'scram-sha-256', 'md5', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam', 'crypt', 'bsd']
+      default => ['trust', 'reject', 'scram-sha-256', 'md5', 'password', 'gss', 'sspi', 'krb5', 'ident', 'peer', 'ldap', 'radius', 'cert', 'pam', 'crypt', 'bsd'] # lint:ignore:140chars
     }
 
     assert_type(Enum[$allowed_auth_methods], $auth_method)
@@ -69,7 +71,18 @@ define postgresql::server::pg_hba_rule (
     $fragname = "pg_hba_rule_${name}"
     concat::fragment { $fragname:
       target  => $target,
-      content => template('postgresql/pg_hba_rule.conf'),
+      content => epp('postgresql/pg_hba_rule.conf.epp', {
+          name        => $name,
+          description => $description,
+          order       => $order,
+          type        => $type,
+          database    => $database,
+          user        => $user,
+          address     => $address,
+          auth_method => $auth_method,
+          auth_option => $auth_option,
+        }
+      ),
       order   => $_order,
     }
   }
