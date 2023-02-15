@@ -7,7 +7,7 @@ describe 'postgresql::server::schema:' do
     '8.1' if os[:family] == 'redhat' && os[:release].start_with?('5')
   end
   let(:pp) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       $db = 'schema_test'
       $user = 'psql_schema_tester'
       $password = 'psql_schema_pw'

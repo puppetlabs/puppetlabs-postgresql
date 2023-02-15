@@ -14,7 +14,7 @@ describe 'postgresql::server::default_privileges:' do
   end
 
   let(:pp_one) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       $db = #{db}
       $user = #{user}
       $group = #{group}
@@ -76,7 +76,7 @@ describe 'postgresql::server::default_privileges:' do
   end
 
   let(:pp_target_role) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       $db = #{db}
       $user = #{user}
       $group = #{group}
@@ -121,7 +121,7 @@ describe 'postgresql::server::default_privileges:' do
   end
 
   let(:pp_target_role_revoke) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       $db = #{db}
       $user = #{user}
       $group = #{group}
@@ -172,7 +172,7 @@ describe 'postgresql::server::default_privileges:' do
   end
 
   let(:pp_schema) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       $db = #{db}
       $user = #{user}
       $group = #{group}
@@ -233,7 +233,7 @@ describe 'postgresql::server::default_privileges:' do
   end
 
   let(:pp_unset_schema) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       $db = #{db}
       $user = #{user}
       $group = #{group}

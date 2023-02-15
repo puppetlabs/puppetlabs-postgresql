@@ -73,7 +73,7 @@ describe 'postgresql_psql' do
       idempotent_apply(pp_five)
     end
 
-    pp_six = <<-MANIFEST.unindent
+    pp_six = <<~MANIFEST
       class { 'postgresql::server': } ->
       notify { 'trigger': } ~>
       postgresql_psql { 'foobar':
@@ -89,7 +89,7 @@ describe 'postgresql_psql' do
       apply_manifest(pp_six, expect_changes: true)
     end
 
-    pp_seven = <<-MANIFEST.unindent
+    pp_seven = <<~MANIFEST
       class { 'postgresql::server': } ->
       notify { 'trigger': } ~>
       postgresql_psql { 'foobar':

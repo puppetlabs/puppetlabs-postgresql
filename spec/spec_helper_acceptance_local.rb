@@ -7,12 +7,6 @@ class LitmusHelper
   include PuppetLitmus
 end
 
-class String
-  def unindent
-    gsub(%r{^#{scan(%r{^\s*}).min_by(&:length)}}, '')
-  end
-end
-
 RSpec.configure do |c|
   c.before :suite do
     LitmusHelper.instance.apply_manifest(File.read(File.join(__dir__, 'setup_acceptance_node.pp')))

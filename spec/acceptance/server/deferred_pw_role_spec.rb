@@ -7,7 +7,7 @@ describe 'postgresql::server::role:' do
   let(:password) { 'test_password' }
 
   let(:pp_one) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       $user = #{user}
       $password = #{password}
 

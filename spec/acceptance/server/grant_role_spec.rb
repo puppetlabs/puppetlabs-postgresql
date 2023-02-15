@@ -11,7 +11,7 @@ describe 'postgresql::server::grant_role:' do
     '8.1' if os[:family] == 'redhat' && os[:release].start_with?('5')
   end
   let(:pp_one) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       $db = #{db}
       $user = #{user}
       $group = #{group}

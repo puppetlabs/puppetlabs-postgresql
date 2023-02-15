@@ -10,7 +10,7 @@ describe 'postgresql::server::reassign_owned_by:' do
   let(:superuser) { 'postgres' }
 
   let(:pp_setup) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       $db = #{db}
       $old_owner = #{old_owner}
       $new_owner = #{new_owner}
@@ -54,7 +54,7 @@ describe 'postgresql::server::reassign_owned_by:' do
   end
 
   let(:pp_db_old_owner) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       postgresql::server::database { $db:
         owner   => $old_owner,
         require => Postgresql::Server::Role[$old_owner],
@@ -63,7 +63,7 @@ describe 'postgresql::server::reassign_owned_by:' do
   end
 
   let(:pp_db_no_owner) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       postgresql::server::database { $db:
       }
     MANIFEST
@@ -76,7 +76,7 @@ describe 'postgresql::server::reassign_owned_by:' do
       let(:new_owner) { 'psql_reassign_new_owner' }
 
       let(:pp_setup_objects) do
-        <<-MANIFEST.unindent
+        <<~MANIFEST
           postgresql_psql { 'create test table':
             command   => 'CREATE TABLE test_tbl (col1 integer)',
             db        => '#{db}',
@@ -94,7 +94,7 @@ describe 'postgresql::server::reassign_owned_by:' do
         MANIFEST
       end
       let(:pp_reassign_owned_by) do
-        <<-MANIFEST.unindent
+        <<~MANIFEST
           postgresql::server::reassign_owned_by { 'test reassign to new_owner':
             db          => '#{db}',
             old_role    => '#{old_owner}',
