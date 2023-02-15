@@ -1,0 +1,64 @@
+<%- |
+  Optional[String]    $restore_command,
+  Optional[String[1]] $archive_cleanup_command,
+  Optional[String[1]] $recovery_end_command,
+  Optional[String[1]] $recovery_target_name,
+  Optional[String[1]] $recovery_target_time,
+  Optional[String[1]] $recovery_target_xid,
+  Optional[Boolean]   $recovery_target_inclusive,
+  Optional[String[1]] $recovery_target,
+  Optional[String[1]] $recovery_target_timeline,
+  Optional[Boolean]   $pause_at_recovery_target,
+  Optional[String[1]] $standby_mode,
+  Optional[String[1]] $primary_conninfo,
+  Optional[String[1]] $primary_slot_name,
+  Optional[String[1]] $trigger_file,
+  Optional[Integer]   $recovery_min_apply_delay,
+| -%>
+<% if $restore_command { -%>
+restore_command = '<%= $restore_command %>'
+<% } -%>
+<% if $archive_cleanup_command { -%>
+archive_cleanup_command = '<%= $archive_cleanup_command %>'
+<% } -%>
+<% if $recovery_end_command { -%>
+recovery_end_command = '<%= $recovery_end_command %>'
+<% } -%>
+
+<% if $recovery_target_name { -%>
+recovery_target_name = '<%= $recovery_target_name %>'
+<% } -%>
+<% if $recovery_target_time { -%>
+recovery_target_time = '<%= $recovery_target_time %>'
+<% } -%>
+<% if $recovery_target_xid { -%>
+recovery_target_xid = '<%= $recovery_target_xid %>'
+<% } -%>
+<% if $recovery_target_inclusive { -%>
+recovery_target_inclusive = <%= $recovery_target_inclusive %>
+<% } -%>
+<% if $recovery_target { -%>
+recovery_target = '<%= $recovery_target %>'
+<% } -%>
+<% if $recovery_target_timeline { -%>
+recovery_target_timeline = '<%= $recovery_target_timeline %>'
+<% } -%>
+<% if $pause_at_recovery_target { -%>
+pause_at_recovery_target = <%= $pause_at_recovery_target %>
+<% } -%>
+
+<% if $standby_mode { -%>
+standby_mode = <%= $standby_mode %>
+<% } -%>
+<% if $primary_conninfo { -%>
+primary_conninfo = '<%= $primary_conninfo  %>'
+<% } -%>
+<% if $primary_slot_name { -%>
+primary_slot_name = '<%= $primary_slot_name %>'
+<% } -%>
+<% if $trigger_file { -%>
+trigger_file = '<%= $trigger_file %>'
+<% } -%>
+<% if $recovery_min_apply_delay { -%>
+recovery_min_apply_delay = <%= $recovery_min_apply_delay %>
+<% } -%>

@@ -1,3 +1,16 @@
+<%- |
+  Boolean                                  $compress,
+  Array                                    $databases,
+  Optional[String[1]]                      $db_user,
+  Boolean                                  $delete_before_dump,
+  String[1]                                $dir,
+  Enum['plain','custom','directory','tar'] $format,
+  Array                                    $optional_args,
+  Optional[String[1]]                      $post_script,
+  Optional[String[1]]                      $pre_script,
+  Integer[0]                               $rotate,
+  Stdlib::Absolutepath                     $success_file_path,
+| -%>
 <%- if $facts['kernel'] == 'Linux' { -%>
 #!/bin/bash
 <%- } else { -%>
