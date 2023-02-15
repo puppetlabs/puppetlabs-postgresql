@@ -2,7 +2,7 @@
 #
 # @param ensure Removes an entry if set to 'absent'.
 # @param value Defines the value for the setting.
-# @param path Path for postgresql.conf 
+# @param path Path for postgresql.conf
 #
 define postgresql::server::config_entry (
   Enum['present', 'absent'] $ensure = 'present',
@@ -70,10 +70,6 @@ define postgresql::server::config_entry (
     'max_pred_locks_per_transaction'      => undef,
   }
 
-  Exec {
-    logoutput => 'on_failure',
-  }
-
   if ! ($name in $requires_restart_until and (
       ! $requires_restart_until[$name] or
       versioncmp($postgresql::server::_version, $requires_restart_until[$name]) < 0
@@ -88,73 +84,6 @@ define postgresql::server::config_entry (
   } else {
     Postgresql_conf {
       before => Class['postgresql::server::service'],
-    }
-  }
-
-  # We have to handle ports and the data directory in a weird and
-  # special way.  On early Debian and Ubuntu and RHEL we have to ensure
-  # we stop the service completely. On RHEL 7 we either have to create
-  # a systemd override for the port or update the sysconfig file, but this
-  # is managed for us in postgresql::server::config.
-  if $facts['os']['name'] == 'Debian' or $facts['os']['name'] == 'Ubuntu' {
-    if $name == 'data_directory' {
-      $stop_command = ['service', $postgresql::server::service_name, 'stop']
-      $stop_onlyif = ['service', $postgresql::server::service_name, 'status']
-      $stop_unless = [['grep', "data_directory = '${value}'", $postgresql::server::postgresql_conf_path]]
-      exec { "postgresql_stop_${name}":
-        command => $stop_command,
-        onlyif  => $stop_onlyif,
-        unless  => $stop_unless,
-        path    => '/usr/sbin:/sbin:/bin:/usr/bin:/usr/local/bin',
-        before  => Postgresql_conf[$name],
-      }
-    }
-  } elsif $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') < 0 {
-    if $name == 'port' {
-      # We need to force postgresql to stop before updating the port
-      # because puppet becomes confused and is unable to manage the
-      # service appropriately.
-      $stop_command = ['service', $postgresql::server::service_name, 'stop']
-      $stop_onlyif = ['service', $postgresql::server::service_name, 'status']
-      $stop_unless = "grep 'PGPORT=${shell_escape($value)}' /etc/sysconfig/pgsql/postgresql"
-      exec { "postgresql_stop_${name}":
-        command => $stop_command,
-        onlyif  => $stop_onlyif,
-        unless  => $stop_unless,
-        path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
-        require => File['/etc/sysconfig/pgsql/postgresql'],
-      }
-      -> augeas { 'override PGPORT in /etc/sysconfig/pgsql/postgresql':
-        lens    => 'Shellvars.lns',
-        incl    => '/etc/sysconfig/pgsql/postgresql',
-        context => '/files/etc/sysconfig/pgsql/postgresql',
-        changes => "set PGPORT ${value}",
-        require => File['/etc/sysconfig/pgsql/postgresql'],
-        notify  => Class['postgresql::server::service'],
-        before  => Class['postgresql::server::reload'],
-      }
-    } elsif $name == 'data_directory' {
-      # We need to force postgresql to stop before updating the data directory
-      # otherwise init script breaks
-      $stop_command = ['service', $postgresql::server::service_name, 'stop']
-      $stop_onlyif = ['service', $postgresql::server::service_name, 'status']
-      $stop_unless = [['grep', "PGDATA=${value}", '/etc/sysconfig/pgsql/postgresql']]
-      exec { "postgresql_${name}":
-        command => $stop_command,
-        onlyif  => $stop_onlyif,
-        unless  => $stop_unless,
-        path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
-        require => File['/etc/sysconfig/pgsql/postgresql'],
-      }
-      -> augeas { 'override PGDATA in /etc/sysconfig/pgsql/postgresql':
-        lens    => 'Shellvars.lns',
-        incl    => '/etc/sysconfig/pgsql/postgresql',
-        context => '/files/etc/sysconfig/pgsql/postgresql',
-        changes => "set PGDATA ${value}",
-        require => File['/etc/sysconfig/pgsql/postgresql'],
-        notify  => Class['postgresql::server::service'],
-        before  => Class['postgresql::server::reload'],
-      }
     }
   }
 
