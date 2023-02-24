@@ -8,13 +8,13 @@
 # @param psql_user Specifies the OS user for running psql. Default value: The default user for the module, usually 'postgres'.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 define postgresql::server::database_grant (
-  $privilege,
-  $db,
-  $role,
-  $ensure           = undef,
-  $psql_db          = undef,
-  $psql_user        = undef,
-  $connect_settings = undef,
+  Enum['ALL', 'CREATE', 'CONNECT', 'TEMPORARY', 'TEMP', 'all', 'create', 'connect', 'temporary', 'temp'] $privilege,
+  String[1]                           $db,
+  String[1]                           $role,
+  Optional[Enum['present', 'absent']] $ensure           = undef,
+  Optional[String[1]]                 $psql_db          = undef,
+  Optional[String[1]]                 $psql_user        = undef,
+  Optional[Hash]                      $connect_settings = undef,
 ) {
   postgresql::server::grant { "database:${name}":
     ensure           => $ensure,

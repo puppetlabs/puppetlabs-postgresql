@@ -11,15 +11,15 @@
 # @param order Defines an order for placing the mapping in pg_ident.conf. Default value: 150.
 # @param target Provides the target for the rule and is generally an internal only property. Use with caution.
 define postgresql::server::pg_ident_rule (
-  $map_name,
-  $system_username,
-  $database_username,
-  $description = 'none',
-  $order       = '150',
+  String[1] $map_name,
+  String[1] $system_username,
+  String[1] $database_username,
+  String[1] $description = 'none',
+  String[1] $order       = '150',
 
   # Needed for testing primarily, support for multiple files is not really
   # working.
-  $target      = $postgresql::server::pg_ident_conf_path
+  Variant[String[1], Stdlib::Absolutepath] $target = $postgresql::server::pg_ident_conf_path
 ) {
   if $postgresql::server::manage_pg_ident_conf == false {
     fail('postgresql::server::manage_pg_ident_conf has been disabled, so this resource is now unused and redundant, either enable that option or remove this resource from your manifests') # lint:ignore:140chars

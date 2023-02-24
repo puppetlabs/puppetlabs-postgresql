@@ -12,17 +12,17 @@
 # @param istemplate Specifies that the database is a template, if set to true.
 # @param owner Sets a user as the owner of the database.
 define postgresql::server::db (
-  $user,
-  Optional[Variant[String, Sensitive[String]]] $password = undef,
-  $comment    = undef,
-  $dbname     = $title,
-  $encoding   = $postgresql::server::encoding,
-  $locale     = $postgresql::server::locale,
-  $grant      = 'ALL',
-  $tablespace = undef,
-  $template   = 'template0',
-  $istemplate = false,
-  $owner      = undef
+  String[1]                                    $user,
+  Optional[Variant[String, Sensitive[String]]] $password   = undef,
+  Optional[String[1]]                          $comment    = undef,
+  String[1]                                    $dbname     = $title,
+  Optional[String[1]]                          $encoding   = $postgresql::server::encoding,
+  Optional[String[1]]                          $locale     = $postgresql::server::locale,
+  Variant[String[1], Array[String[1]]]         $grant      = 'ALL',
+  Optional[String[1]]                          $tablespace = undef,
+  String[1]                                    $template   = 'template0',
+  Boolean                                      $istemplate = false,
+  Optional[String[1]]                          $owner      = undef
 ) {
   if ! defined(Postgresql::Server::Database[$dbname]) {
     postgresql::server::database { $dbname:

@@ -6,7 +6,7 @@
 #
 # @api private
 class postgresql::dnfmodule (
-  String[1] $ensure = 'installed',
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $ensure = 'installed',
   String[1] $module = 'postgresql',
 ) {
   package { 'postgresql dnf module':

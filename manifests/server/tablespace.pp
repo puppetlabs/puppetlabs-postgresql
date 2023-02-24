@@ -6,11 +6,11 @@
 # @param spcname Specifies the name of the tablespace.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 define postgresql::server::tablespace (
-  $location,
-  $manage_location = true,
-  $owner   = undef,
-  $spcname = $title,
-  $connect_settings = $postgresql::server::default_connect_settings,
+  String[1]           $location,
+  Boolean             $manage_location = true,
+  Optional[String[1]] $owner   = undef,
+  String[1]           $spcname = $title,
+  Hash                $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   $user           = $postgresql::server::user
   $group          = $postgresql::server::group
