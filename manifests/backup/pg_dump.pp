@@ -27,9 +27,9 @@
 #   Manage creation of the backup user.
 # @param optional_args
 #   Specifies an array of optional arguments which should be passed through to the backup tool. These options are not validated, unsupported options may break the backup.
-# @param postscript
+# @param post_script
 #   One or more scripts that are executed when the backup is finished. This could be used to sync the backup to a central store.
-# @param prescript
+# @param pre_script
 #   One or more scripts that are executed before the backup begins.
 # @param rotate
 #   Backup rotation interval in 24 hour periods.
@@ -41,30 +41,30 @@
 #   Weekdays on which the backup job should run. Defaults to `*`. This parameter is passed directly to the cron resource.
 #
 class postgresql::backup::pg_dump (
-  String[1] $dir,
-  Boolean $compress = true,
-  Array $databases = [],
-  Boolean $delete_before_dump = false,
-  String[1] $dir_group = '0',
-  String[1] $dir_mode = '0700',
-  String[1] $dir_owner = 'root',
-  Enum['present','absent'] $ensure = 'present',
-  Enum['plain','custom','directory','tar'] $format = 'plain',
-  Boolean $install_cron = true,
-  Boolean $manage_user = false,
-  Array $optional_args = [],
-  Stdlib::Absolutepath $pgpass_path = '/root/.pgpass',
-  Integer $rotate = 30,
-  Stdlib::Absolutepath $script_path = '/usr/local/sbin/pg_dump.sh',
-  Stdlib::Absolutepath $success_file_path = '/tmp/pgbackup_success',
-  String[1] $template = 'postgresql/pg_dump.sh.epp',
-  Array $time = ['23', '5'],
-  String[1] $weekday = '*',
-  Optional[Variant[String, Sensitive[String]]] $db_password = undef,
-  Optional[String[1]] $db_user = undef,
-  Optional[String[1]] $package_name = undef,
-  Optional[String[1]] $post_script = undef,
-  Optional[String[1]] $pre_script = undef,
+  String[1]                                    $dir,
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $ensure = 'present',
+  Boolean                                      $compress           = true,
+  Array                                        $databases          = [],
+  Boolean                                      $delete_before_dump = false,
+  String[1]                                    $dir_group          = '0',
+  String[1]                                    $dir_mode           = '0700',
+  String[1]                                    $dir_owner          = 'root',
+  Enum['plain','custom','directory','tar']     $format             = 'plain',
+  Boolean                                      $install_cron       = true,
+  Boolean                                      $manage_user        = false,
+  Array                                        $optional_args      = [],
+  Stdlib::Absolutepath                         $pgpass_path        = '/root/.pgpass',
+  Integer                                      $rotate             = 30,
+  Stdlib::Absolutepath                         $script_path        = '/usr/local/sbin/pg_dump.sh',
+  Stdlib::Absolutepath                         $success_file_path  = '/tmp/pgbackup_success',
+  String[1]                                    $template           = 'postgresql/pg_dump.sh.epp',
+  Array                                        $time               = ['23', '5'],
+  String[1]                                    $weekday            = '*',
+  Optional[Variant[String, Sensitive[String]]] $db_password        = undef,
+  Optional[String[1]]                          $db_user            = undef,
+  Optional[String[1]]                          $package_name       = undef,
+  Optional[String[1]]                          $post_script        = undef,
+  Optional[String[1]]                          $pre_script         = undef,
 ) {
   # Install required packages
   if $package_name {

@@ -12,7 +12,7 @@
 # @param psql_path Specifies the OS user for running psql. Default value: The default user for the module, usually 'postgres'.
 # @param port Specifies the port to access the server. Default value: The default user for the module, usually '5432'.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
-# @param psql_path Specifies the path to the psql command.
+# @param group Specifies the user group to which the privileges will be granted.
 define postgresql::server::default_privileges (
   String $role,
   String $db,
@@ -25,15 +25,15 @@ define postgresql::server::default_privileges (
     /(?i:^TYPES$)/,
     /(?i:^SCHEMAS$)/ # lint:ignore:trailing_comma
   ] $object_type,
-  String $schema                      = 'public',
-  String $psql_db                     = $postgresql::server::default_database,
-  String $psql_user                   = $postgresql::server::user,
-  Integer $port                       = $postgresql::server::port,
-  Hash $connect_settings              = $postgresql::server::default_connect_settings,
-  Enum['present', 'absent'] $ensure   = 'present',
-  String $group                       = $postgresql::server::group,
-  String $psql_path                   = $postgresql::server::psql_path,
-  Optional[String] $target_role       = undef,
+  String                                    $schema            = 'public',
+  String                                    $psql_db           = $postgresql::server::default_database,
+  String                                    $psql_user         = $postgresql::server::user,
+  Variant[String[1], Stdlib::Port, Integer] $port              = $postgresql::server::port,
+  Hash                                      $connect_settings  = $postgresql::server::default_connect_settings,
+  Enum['present', 'absent']                 $ensure            = 'present',
+  String                                    $group             = $postgresql::server::group,
+  Variant[String[1], Stdlib::Absolutepath]  $psql_path         = $postgresql::server::psql_path,
+  Optional[String]                          $target_role       = undef,
 ) {
   # If possible use the version of the remote database, otherwise
   # fallback to our local DB version

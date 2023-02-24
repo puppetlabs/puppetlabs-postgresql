@@ -5,8 +5,8 @@
 # @param package_name
 #   Specifies the name of the postgresql PL/Python package.
 class postgresql::server::plpython (
-  $package_ensure = 'present',
-  $package_name   = $postgresql::server::plpython_package_name,
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $package_ensure = 'present',
+  Optional[String[1]] $package_name = $postgresql::server::plpython_package_name,
 ) {
   package { 'postgresql-plpython':
     ensure => $package_ensure,

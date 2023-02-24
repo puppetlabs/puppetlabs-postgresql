@@ -5,6 +5,7 @@
 # @param privilege Specifies the privilege to grant. Valid options: 'ALL', 'ALL PRIVILEGES' or 'object_type' dependent string.
 # @param object_type Specifies the type of object to which you are granting privileges. Valid options: 'DATABASE', 'SCHEMA', 'SEQUENCE', 'ALL SEQUENCES IN SCHEMA', 'TABLE' or 'ALL TABLES IN SCHEMA'.
 # @param object_name Specifies name of object_type to which to grant access, can be either a string or a two element array. String: 'object_name' Array: ['schema_name', 'object_name']
+# @param object_arguments Specifies any arguments to be passed alongisde the access grant.
 # @param psql_db Specifies the database to execute the grant against. This should not ordinarily be changed from the default
 # @param psql_user Sets the OS user to run psql.
 # @param port Port to use when connecting.
@@ -31,17 +32,17 @@ define postgresql::server::grant (
     /(?i:^SCHEMA$)/,
     /(?i:^SEQUENCE$)/ # lint:ignore:trailing_comma
     #/(?i:^VIEW$)/
-  ] $object_type                        = 'database',
-  Optional[Variant[Array[String,2,2],String[1]]] $object_name = undef,
-  Array[String[1],0] $object_arguments  = [],
-  String $psql_db                       = $postgresql::server::default_database,
-  String $psql_user                     = $postgresql::server::user,
-  Integer $port                         = $postgresql::server::port,
-  Boolean $onlyif_exists                = false,
-  Hash $connect_settings                = $postgresql::server::default_connect_settings,
-  Enum['present', 'absent'] $ensure     = 'present',
-  String $group                         = $postgresql::server::group,
-  String $psql_path                     = $postgresql::server::psql_path,
+  ] $object_type                         = 'database',
+  Optional[Variant[Array[String,2,2],String[1]]] $object_name       = undef,
+  Array[String[1],0]                             $object_arguments  = [],
+  String                                         $psql_db           = $postgresql::server::default_database,
+  String                                         $psql_user         = $postgresql::server::user,
+  Variant[String[1], Stdlib::Port, Integer]      $port              = $postgresql::server::port,
+  Boolean                                        $onlyif_exists     = false,
+  Hash                                           $connect_settings  = $postgresql::server::default_connect_settings,
+  Enum['present', 'absent']                      $ensure            = 'present',
+  String                                         $group             = $postgresql::server::group,
+  Variant[String[1], Stdlib::Absolutepath]       $psql_path         = $postgresql::server::psql_path,
 ) {
   case $ensure {
     default: {

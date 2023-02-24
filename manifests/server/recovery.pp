@@ -25,22 +25,22 @@
 # @param target Provides the target for the rule, and is generally an internal only property. Use with caution.
 # lint:endignore:140chars
 define postgresql::server::recovery (
-  $restore_command                = undef,
-  $archive_cleanup_command        = undef,
-  $recovery_end_command           = undef,
-  $recovery_target_name           = undef,
-  $recovery_target_time           = undef,
-  $recovery_target_xid            = undef,
-  $recovery_target_inclusive      = undef,
-  $recovery_target                = undef,
-  $recovery_target_timeline       = undef,
-  $pause_at_recovery_target       = undef,
-  $standby_mode                   = undef,
-  $primary_conninfo               = undef,
-  $primary_slot_name              = undef,
-  $trigger_file                   = undef,
-  $recovery_min_apply_delay       = undef,
-  $target                         = $postgresql::server::recovery_conf_path
+  Optional[String]    $restore_command           = undef,
+  Optional[String[1]] $archive_cleanup_command   = undef,
+  Optional[String[1]] $recovery_end_command      = undef,
+  Optional[String[1]] $recovery_target_name      = undef,
+  Optional[String[1]] $recovery_target_time      = undef,
+  Optional[String[1]] $recovery_target_xid       = undef,
+  Optional[Boolean]   $recovery_target_inclusive = undef,
+  Optional[String[1]] $recovery_target           = undef,
+  Optional[String[1]] $recovery_target_timeline  = undef,
+  Optional[Boolean]   $pause_at_recovery_target  = undef,
+  Optional[String[1]] $standby_mode              = undef,
+  Optional[String[1]] $primary_conninfo          = undef,
+  Optional[String[1]] $primary_slot_name         = undef,
+  Optional[String[1]] $trigger_file              = undef,
+  Optional[Integer]   $recovery_min_apply_delay  = undef,
+  Variant[String[1], Stdlib::Absolutepath] $target = $postgresql::server::recovery_conf_path
 ) {
   if $postgresql::server::manage_recovery_conf == false {
     fail('postgresql::server::manage_recovery_conf has been disabled, so this resource is now unused and redundant, either enable that option or remove this resource from your manifests') # lint:ignore:140chars

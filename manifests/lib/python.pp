@@ -6,8 +6,8 @@
 #  Ensure the python libs for postgresql are installed.
 #
 class postgresql::lib::python (
-  String[1] $package_name   = $postgresql::params::python_package_name,
-  String[1] $package_ensure = 'present'
+  String[1] $package_name = $postgresql::params::python_package_name,
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $package_ensure = 'present',
 ) inherits postgresql::params {
   package { 'python-psycopg2':
     ensure => $package_ensure,

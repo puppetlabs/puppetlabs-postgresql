@@ -6,7 +6,7 @@
 #   Ensure the contrib package is installed.
 class postgresql::server::contrib (
   Optional[String[1]] $package_name = $postgresql::params::contrib_package_name,
-  String[1] $package_ensure         = 'present'
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $package_ensure = 'present',
 ) inherits postgresql::params {
   if $package_name {
     package { 'postgresql-contrib':

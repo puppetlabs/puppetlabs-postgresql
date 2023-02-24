@@ -1,9 +1,9 @@
 # @api private
 class postgresql::repo (
-  $version = undef,
-  $proxy = undef,
-  $baseurl = undef,
-  $commonurl = undef,
+  Optional[String[1]] $version = undef,
+  Optional[String[1]] $proxy = undef,
+  Optional[String[1]] $baseurl = undef,
+  Optional[String[1]] $commonurl = undef,
 ) {
   case $facts['os']['family'] {
     'RedHat', 'Linux': {

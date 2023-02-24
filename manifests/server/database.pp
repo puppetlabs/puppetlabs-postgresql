@@ -10,15 +10,15 @@
 # @param istemplate Defines the database as a template if set to true.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 define postgresql::server::database (
-  $comment          = undef,
-  $dbname           = $title,
-  $owner            = undef,
-  $tablespace       = undef,
-  $template         = 'template0',
-  $encoding         = $postgresql::server::encoding,
-  $locale           = $postgresql::server::locale,
-  $istemplate       = false,
-  $connect_settings = $postgresql::server::default_connect_settings,
+  Optional[String[1]] $comment          = undef,
+  String[1]           $dbname           = $title,
+  Optional[String[1]] $owner            = undef,
+  Optional[String[1]] $tablespace       = undef,
+  String[1]           $template         = 'template0',
+  Optional[String[1]] $encoding         = $postgresql::server::encoding,
+  Optional[String[1]] $locale           = $postgresql::server::locale,
+  Boolean             $istemplate       = false,
+  Hash                $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   $createdb_path = $postgresql::server::createdb_path
   $user          = $postgresql::server::user
