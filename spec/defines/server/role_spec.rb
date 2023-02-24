@@ -58,11 +58,9 @@ describe 'postgresql::server::role' do
 
     it 'has alter role for "test" user with password as ****' do
       expect(subject).to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
-        .with('command' => sensitive(%(ALTER ROLE "test" ENCRYPTED PASSWORD 'Sensitive [value redacted]')),
-              # FIXME: This is obviously wrong                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        .with('command' => sensitive(%(ALTER ROLE "test" ENCRYPTED PASSWORD 'md5b6f7fcbbabb4befde4588a26c1cfd2fa')),
               'sensitive' => 'true',
-              'unless' => sensitive(%(SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'Sensitive [value redacted]')),
-              # FIXME: This is obviously wrong                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+              'unless' => sensitive(%(SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa')),
               'port' => '5432')
     end
   end
