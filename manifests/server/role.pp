@@ -1,6 +1,7 @@
 # @summary Define for creating a database role.
 #
-# @param update_password If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.
+# @param update_password
+#   If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.
 # @param password_hash Sets the hash to use during password creation.
 # @param createdb Specifies whether to grant the ability to create new databases with this role.
 # @param createrole Specifies whether to grant the ability to create new roles with this role.
@@ -17,7 +18,9 @@
 # @param psql_user Sets the OS user to run psql
 # @param psql_group Sets the OS group to run psql
 # @param psql_path Sets path to psql command
-# @param module_workdir Specifies working directory under which the psql command should be executed. May need to specify if '/tmp' is on volume mounted with noexec option.
+# @param module_workdir
+#   Specifies working directory under which the psql command should be executed.
+#   May need to specify if '/tmp' is on volume mounted with noexec option.
 # @param hash Specify the hash method for pg password
 # @param salt Specify the salt use for the scram-sha-256 encoding password (default username)
 define postgresql::server::role (

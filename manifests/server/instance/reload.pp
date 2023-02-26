@@ -1,3 +1,5 @@
+# @summary Overrides the default reload or status command for your PostgreSQL service
+#
 # @param service_reload Overrides the default reload command for your PostgreSQL service.
 # @param service_status Overrides the default status check command for your PostgreSQL service.
 define postgresql::server::instance::reload (

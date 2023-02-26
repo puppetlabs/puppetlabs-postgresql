@@ -1,11 +1,18 @@
-# lint:ignore:140chars
+# @summary Manages the config for a postgresql::server instance
+#
 # @param ip_mask_deny_postgres_user Specifies the IP mask from which remote connections should be denied for the postgres superuser.
 #   Default value: '0.0.0.0/0', which denies any remote connection.
-# @param ip_mask_allow_all_users Overrides PostgreSQL defaults for remote connections. By default, PostgreSQL does not allow database user accounts to connect via TCP from remote machines. If you'd like to allow this, you can override this setting.
-#   Set to '0.0.0.0/0' to allow database users to connect from any remote machine, or '192.168.0.0/1' to allow connections from any machine on your local '192.168' subnet.
+# @param ip_mask_allow_all_users
+#   Overrides PostgreSQL defaults for remote connections. By default, PostgreSQL does not allow database user accounts to connect via TCP
+#   from remote machines. If you'd like to allow this, you can override this setting.
+#   Set to '0.0.0.0/0' to allow database users to connect from any remote machine, or '192.168.0.0/1' to allow connections from any machine
+#   on your local '192.168' subnet.
 #   Default value: '127.0.0.1/32'.
 # @param listen_addresses Address list on which the PostgreSQL service will listen
-# @param port Specifies the port for the PostgreSQL server to listen on. Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems, changing the port causes the server to come to a full stop before being able to make the change.
+# @param port
+#   Specifies the port for the PostgreSQL server to listen on.
+#   Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems,
+#   changing the port causes the server to come to a full stop before being able to make the change.
 #   Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
 # @param ipv4acls Lists strings for access control for connection method, users, databases, IPv4 addresses.
 # @param ipv6acls Lists strings for access control for connection method, users, databases, IPv6 addresses.
@@ -14,7 +21,10 @@
 # @param postgresql_conf_path Specifies the path to your postgresql.conf file.
 # @param postgresql_conf_mode Sets the mode of your postgresql.conf file. Only relevant if manage_postgresql_conf_perms is true.
 # @param recovery_conf_path Specifies the path to your recovery.conf file.
-# @param pg_hba_conf_defaults If false, disables the defaults supplied with the module for pg_hba.conf. This is useful if you disagree with the defaults and wish to override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform basic psql operations for example.
+# @param pg_hba_conf_defaults
+#   If false, disables the defaults supplied with the module for pg_hba.conf. This is useful if you disagree with the defaults and wish to
+#   override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform
+#   basic psql operations for example.
 # @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 # @param group Overrides the default postgres user group to be used for related files in the file system.
 # @param version Sets PostgreSQL version
@@ -32,8 +42,8 @@
 # @param log_line_prefix PostgreSQL log line prefix
 # @param timezone Set timezone for the PostgreSQL instance
 # @param password_encryption Specify the type of encryption set for the password.
-# @param extra_systemd_config Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
-# lint:endignore:140chars
+# @param extra_systemd_config
+#   Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
 define postgresql::server::instance::config (
   String[1]                                      $ip_mask_deny_postgres_user   = $postgresql::server::ip_mask_deny_postgres_user,
   String[1]                                      $ip_mask_allow_all_users      = $postgresql::server::ip_mask_allow_all_users,
