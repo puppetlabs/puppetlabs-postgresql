@@ -1,16 +1,20 @@
-# lint:ignore:140chars
+# @summary Manages initdb feature for a postgresql::server instance
+#
 # @param auth_host auth method used by default for host authorization
 # @param auth_local  auth method used by default for local authorization
 # @param data_checksums Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
 # @param datadir PostgreSQL data directory
-# @param encoding Sets the default encoding for all databases created with this module.
-#   On certain operating systems this is also used during the template1 initialization, so it becomes a default outside of the module as well.
+# @param encoding
+#   Sets the default encoding for all databases created with this module.
+#   On certain operating systems this is also used during the template1 initialization,
+#   so it becomes a default outside of the module as well.
 # @param group Overrides the default postgres user group to be used for related files in the file system.
 # @param initdb_path Specifies the path to the initdb command.
 # @param lc_messages locale used for logging and system messages
 # @param locale Sets the default database locale for all databases created with this module.
 #   On certain operating systems this is used during the template1 initialization as well, so it becomes a default outside of the module.
-#   Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
+#   Warning: This option is used during initialization by initdb, and cannot be changed later.
+#   If set, checksums are calculated for all objects, in all databases.
 # @param logdir PostgreSQL log directory
 # @param manage_datadir Set to false if you have file{ $datadir: } already defined
 # @param manage_logdir Set to false if you have file{ $logdir: } already defined
@@ -21,7 +25,6 @@
 # @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 # @param username username of user running the postgres instance
 # @param xlogdir PostgreSQL xlog/WAL directory
-# lint:endignore:140chars
 define postgresql::server::instance::initdb (
   Optional[String[1]]                      $auth_host      = $postgresql::server::auth_host,
   Optional[String[1]]                      $auth_local     = $postgresql::server::auth_local,

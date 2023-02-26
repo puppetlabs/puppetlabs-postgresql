@@ -26,7 +26,8 @@
 # @param manage_user
 #   Manage creation of the backup user.
 # @param optional_args
-#   Specifies an array of optional arguments which should be passed through to the backup tool. These options are not validated, unsupported options may break the backup.
+#   Specifies an array of optional arguments which should be passed through to the backup tool. These options are not validated,
+#   unsupported options may break the backup.
 # @param post_script
 #   One or more scripts that are executed when the backup is finished. This could be used to sync the backup to a central store.
 # @param pre_script
@@ -39,7 +40,6 @@
 #   An array of two elements to set the backup time. Allows `['23', '5']` (i.e., 23:05) or `['3', '45']` (i.e., 03:45) for HH:MM times.
 # @param weekday
 #   Weekdays on which the backup job should run. Defaults to `*`. This parameter is passed directly to the cron resource.
-#
 class postgresql::backup::pg_dump (
   String[1]                                    $dir,
   Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $ensure = 'present',
