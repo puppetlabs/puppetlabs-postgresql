@@ -60,7 +60,7 @@ define postgresql::server::instance::config (
   Boolean                                        $service_enable               = $postgresql::server::service_enable,
   Optional[String[1]]                            $log_line_prefix              = $postgresql::server::log_line_prefix,
   Optional[String[1]]                            $timezone                     = $postgresql::server::timezone,
-  Optional[String]                               $password_encryption          = $postgresql::server::password_encryption,
+  Optional[Postgresql::Pg_password_encryption]   $password_encryption          = $postgresql::server::password_encryption,
   Optional[String]                               $extra_systemd_config         = $postgresql::server::extra_systemd_config,
 ) {
   if ($manage_pg_hba_conf == true) {

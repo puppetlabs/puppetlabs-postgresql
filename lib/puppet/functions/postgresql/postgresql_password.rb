@@ -22,19 +22,25 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
     required_param 'Variant[String[1], Integer]', :username
     required_param 'Variant[String[1], Sensitive[String[1]], Integer]', :password
     optional_param 'Boolean', :sensitive
-    optional_param "Optional[Enum['md5', 'scram-sha-256']]", :hash
+    optional_param 'Optional[Postgresql::Pg_password_encryption]', :hash
     optional_param 'Optional[Variant[String[1], Integer]]', :salt
     return_type 'Variant[String, Sensitive[String]]'
   end
 
   def default_impl(username, password, sensitive = false, hash = 'md5', salt = nil)
-    return password if password.is_a?(String) && password.match?(%r{^(md5|SCRAM-SHA-256).+})
-
     password = password.unwrap if password.respond_to?(:unwrap)
-    pass = if hash == 'md5'
+    if password.is_a?(String) && password.match?(%r{^(md5[0-9a-f]{32}$|SCRAM-SHA-256\$)})
+      return Puppet::Pops::Types::PSensitiveType::Sensitive.new(password) if sensitive
+
+      return password
+    end
+    pass = case hash
+           when 'md5', nil # ensure default value when definded with nil
              "md5#{Digest::MD5.hexdigest(password.to_s + username.to_s)}"
-           else
+           when 'scram-sha-256'
              pg_sha256(password, (salt || username))
+           else
+             raise(Puppet::ParseError, "postgresql::postgresql_password(): got unkown hash type '#{hash}'")
            end
     if sensitive
       Puppet::Pops::Types::PSensitiveType::Sensitive.new(pass)

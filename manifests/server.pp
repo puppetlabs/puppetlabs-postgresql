@@ -95,7 +95,7 @@
 class postgresql::server (
   Optional[Variant[String[1], Sensitive[String[1]], Integer]] $postgres_password = undef,
 
-  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $package_ensure = $postgresql::params::package_ensure,
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $package_ensure = $postgresql::params::package_ensure, # lint:ignore:140chars
   String[1]                                          $package_name                 = $postgresql::params::server_package_name,
 
   Optional[String[1]]                                $plperl_package_name          = $postgresql::params::plperl_package_name,
@@ -159,7 +159,7 @@ class postgresql::server (
   Boolean                                            $manage_datadir               = $postgresql::params::manage_datadir,
   Boolean                                            $manage_logdir                = $postgresql::params::manage_logdir,
   Boolean                                            $manage_xlogdir               = $postgresql::params::manage_xlogdir,
-  Optional[String]                                   $password_encryption          = $postgresql::params::password_encryption,
+  Optional[Postgresql::Pg_password_encryption]       $password_encryption          = $postgresql::params::password_encryption,
   Optional[String]                                   $extra_systemd_config         = $postgresql::params::extra_systemd_config,
 
   Hash[String, Hash]                                 $roles                        = {},

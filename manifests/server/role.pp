@@ -21,26 +21,26 @@
 # @param hash Specify the hash method for pg password
 # @param salt Specify the salt use for the scram-sha-256 encoding password (default username)
 define postgresql::server::role (
-  Boolean                                               $update_password  = true,
-  Variant[Boolean, String, Sensitive[String]]           $password_hash    = false,
-  Boolean                                               $createdb         = false,
-  Boolean                                               $createrole       = false,
-  String[1]                                             $db               = $postgresql::server::default_database,
-  Optional[Variant[String[1], Stdlib::Port, Integer]]  $port             = undef,
-  Boolean                                               $login            = true,
-  Boolean                                               $inherit          = true,
-  Boolean                                               $superuser        = false,
-  Boolean                                               $replication      = false,
-  String[1]                                             $connection_limit = '-1',
-  String[1]                                             $username         = $title,
-  Hash                                                  $connect_settings = $postgresql::server::default_connect_settings,
-  String[1]                                             $psql_user        = $postgresql::server::user,
-  String[1]                                             $psql_group       = $postgresql::server::group,
-  Variant[String[1], Stdlib::Absolutepath]              $psql_path        = $postgresql::server::psql_path,
-  String[1]                                             $module_workdir   = $postgresql::server::module_workdir,
-  Enum['present', 'absent']                             $ensure           = 'present',
-  Enum['md5', 'scram-sha-256']                          $hash             = 'md5',
-  Optional[Variant[String[1], Integer]]                 $salt             = undef,
+  Boolean                                             $update_password  = true,
+  Variant[Boolean, String, Sensitive[String]]         $password_hash    = false,
+  Boolean                                             $createdb         = false,
+  Boolean                                             $createrole       = false,
+  String[1]                                           $db               = $postgresql::server::default_database,
+  Optional[Variant[String[1], Stdlib::Port, Integer]] $port             = undef,
+  Boolean                                             $login            = true,
+  Boolean                                             $inherit          = true,
+  Boolean                                             $superuser        = false,
+  Boolean                                             $replication      = false,
+  String[1]                                           $connection_limit = '-1',
+  String[1]                                           $username         = $title,
+  Hash                                                $connect_settings = $postgresql::server::default_connect_settings,
+  String[1]                                           $psql_user        = $postgresql::server::user,
+  String[1]                                           $psql_group       = $postgresql::server::group,
+  Variant[String[1], Stdlib::Absolutepath]            $psql_path        = $postgresql::server::psql_path,
+  String[1]                                           $module_workdir   = $postgresql::server::module_workdir,
+  Enum['present', 'absent']                           $ensure           = 'present',
+  Optional[Enum['md5', 'scram-sha-256']]              $hash             = undef,
+  Optional[Variant[String[1], Integer]]               $salt             = undef,
 ) {
   $password_hash_unsensitive = if $password_hash =~ Sensitive[String] {
     $password_hash.unwrap
@@ -106,7 +106,7 @@ define postgresql::server::role (
         ]
       )
     } else {
-      $create_role_command = "CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}"
+      $create_role_command = "CREATE ROLE \"${username}\" ${password_sql} ${login_sql} ${createrole_sql} ${createdb_sql} ${superuser_sql} ${replication_sql} CONNECTION LIMIT ${connection_limit}" # lint:ignore:140chars
     }
 
     postgresql_psql { "CREATE ROLE ${username} ENCRYPTED PASSWORD ****":
@@ -152,22 +152,29 @@ define postgresql::server::role (
       unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolconnlimit = ${connection_limit}",
     }
 
+    $_hash = if $hash {
+      $hash
+    } elsif $connect_settings != undef and 'DBVERSION' in $connect_settings {
+      if (versioncmp($version, '14') >= 0) { 'scram-sha-256' } else { undef }
+    } else {
+      $postgresql::server::password_encryption
+    }
     if $password_hash_unsensitive and $update_password {
       if $password_hash_unsensitive =~ Deferred {
-        $pwd_hash_sql = Deferred ( 'postgresql::postgresql_password', [$username,
-            $password_hash,
+        $pwd_hash_sql = Deferred ( 'postgresql::postgresql_password', [
+            $username,
+            $password_hash_unsensitive,
             false,
-            $hash,
+            $_hash,
             $salt,
           ]
         )
-      }
-      else {
+      } else {
         $pwd_hash_sql = postgresql::postgresql_password(
           $username,
-          $password_hash,
+          $password_hash_unsensitive,
           false,
-          $hash,
+          $_hash,
           $salt,
         )
       }
