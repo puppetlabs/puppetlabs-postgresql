@@ -60,14 +60,62 @@ shared_examples 'postgresql_password function' do
   }
 
   it {
+    expect(subject).to run.with_params('foo', 'bar', true).and_return(
+      sensitive(%(md596948aad3fcae80c08a35c9b5958cd89)),
+    )
+  }
+
+  it {
     expect(subject).to run.with_params('foo', 'bar', false, 'scram-sha-256').and_return(
       'SCRAM-SHA-256$4096:Zm9v$ea66ynZ8cS9Ty4ZkEYicwC72StsKLSwjcXIXKMgepTk=:dJYmOU6BMCaWkQOB3lrXH9OAF3lW2n3NJ26NO7Srq7U=',
     )
   }
 
   it {
+    expect(subject).to run.with_params('foo', 'bar', true, 'scram-sha-256').and_return(
+      sensitive(%(SCRAM-SHA-256$4096:Zm9v$ea66ynZ8cS9Ty4ZkEYicwC72StsKLSwjcXIXKMgepTk=:dJYmOU6BMCaWkQOB3lrXH9OAF3lW2n3NJ26NO7Srq7U=)),
+    )
+  }
+
+  it {
     expect(subject).to run.with_params('foo', 'bar', false, 'scram-sha-256', 'salt').and_return(
       'SCRAM-SHA-256$4096:c2FsdA==$hl63wu9L6vKIjd/UGPfpRl/hIQRBnlkoCiJ9KgxzbX0=:3Q39uiwDZ51m3iPpV8rSgISgRiYqkbnpc+wScL2lSAU=',
+    )
+  }
+
+  it {
+    expect(subject).to run.with_params('foo', 'bar', true, 'scram-sha-256', 'salt').and_return(
+      sensitive(%(SCRAM-SHA-256$4096:c2FsdA==$hl63wu9L6vKIjd/UGPfpRl/hIQRBnlkoCiJ9KgxzbX0=:3Q39uiwDZ51m3iPpV8rSgISgRiYqkbnpc+wScL2lSAU=)),
+    )
+  }
+
+  it {
+    expect(subject).to run.with_params('foo', 'bar', false, nil, 'salt').and_return(
+      'md596948aad3fcae80c08a35c9b5958cd89',
+    )
+  }
+
+  it {
+    expect(subject).to run.with_params('foo', 'bar', true, nil, 'salt').and_return(
+      sensitive(%(md596948aad3fcae80c08a35c9b5958cd89)),
+    )
+  }
+
+  it {
+    expect(subject).to run.with_params('foo', 'md596948aad3fcae80c08a35c9b5958cd89', false).and_return(
+      'md596948aad3fcae80c08a35c9b5958cd89',
+    )
+  }
+
+  it {
+    expect(subject).to run.with_params('foo', sensitive(%(SCRAM-SHA-256$4096:c2FsdA==$hl63wu9L6vKIjd/UGPfpRl/hIQRBnlkoCiJ9KgxzbX0=:3Q39uiwDZ51m3iPpV8rSgISgRiYqkbnpc+wScL2lSAU=)), true).and_return(
+      sensitive(%(SCRAM-SHA-256$4096:c2FsdA==$hl63wu9L6vKIjd/UGPfpRl/hIQRBnlkoCiJ9KgxzbX0=:3Q39uiwDZ51m3iPpV8rSgISgRiYqkbnpc+wScL2lSAU=)),
+    )
+  }
+
+  it {
+    expect(subject).to run.with_params('foo', sensitive('md596948aad3fcae80c08a35c9b5958cd89'), false).and_return(
+      'md596948aad3fcae80c08a35c9b5958cd89',
     )
   }
 

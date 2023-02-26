@@ -25,7 +25,7 @@ class postgresql::params inherits postgresql::globals {
   $manage_selinux               = pick($manage_selinux, false)
   $package_ensure               = 'present'
   $module_workdir               = pick($module_workdir,'/tmp')
-  $password_encryption          = undef
+  $password_encryption          = if versioncmp($version, '14') >= 0 { 'scram-sha-256' } else { undef }
   $extra_systemd_config         = undef
   $manage_datadir               = true
   $manage_logdir                = true
@@ -298,7 +298,7 @@ class postgresql::params inherits postgresql::globals {
       # Since we can't determine defaults on our own, we rely on users setting
       # parameters with the postgresql::globals class. Here we are checking
       # that the mandatory minimum is set for the module to operate.
-      $err_prefix = "Module ${module_name} does not provide defaults for osfamily: ${facts['os']['family']} operatingsystem: ${facts['os']['name']}; please specify a value for ${module_name}::globals::"
+      $err_prefix = "Module ${module_name} does not provide defaults for osfamily: ${facts['os']['family']} operatingsystem: ${facts['os']['name']}; please specify a value for ${module_name}::globals::" # lint:ignore:140chars
       if ($needs_initdb == undef) { fail("${err_prefix}needs_initdb") }
       if ($service_name == undef) { fail("${err_prefix}service_name") }
       if ($client_package_name == undef) { fail("${err_prefix}client_package_name") }

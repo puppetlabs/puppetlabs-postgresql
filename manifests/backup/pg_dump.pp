@@ -83,7 +83,7 @@ class postgresql::backup::pg_dump (
     # Create user with superuser privileges
     postgresql::server::role { $db_user:
       ensure        => $ensure,
-      password_hash => postgresql::postgresql_password($db_user, $db_password),
+      password_hash => postgresql::postgresql_password($db_user, $db_password, true, pick($postgresql::server::password_encryption, 'md5')),
       superuser     => true,
     }
 
@@ -92,7 +92,7 @@ class postgresql::backup::pg_dump (
       type        => 'local',
       database    => 'all',
       user        => $db_user,
-      auth_method => 'md5',
+      auth_method => pick($postgresql::server::password_encryption, 'md5'),
       order       => 1,
     }
   }
