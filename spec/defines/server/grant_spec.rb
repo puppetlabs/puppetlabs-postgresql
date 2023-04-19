@@ -13,7 +13,7 @@ describe 'postgresql::server::grant' do
     let :params do
       {
         db: 'test',
-        role: 'test',
+        role: 'test'
       }
     end
 
@@ -31,7 +31,7 @@ describe 'postgresql::server::grant' do
         db: 'test',
         role: 'test',
         privilege: 'usage',
-        object_type: 'sequence',
+        object_type: 'sequence'
       }
     end
 
@@ -55,7 +55,7 @@ describe 'postgresql::server::grant' do
         db: 'test',
         role: 'test',
         privilege: 'usage',
-        object_type: 'SeQuEnCe',
+        object_type: 'SeQuEnCe'
       }
     end
 
@@ -80,7 +80,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'usage',
         object_type: 'all sequences in schema',
-        object_name: 'public',
+        object_name: 'public'
       }
     end
 
@@ -104,7 +104,7 @@ describe 'postgresql::server::grant' do
         db: 'test',
         role: 'test',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
-                            'DBVERSION' => '9.1' },
+                            'DBVERSION' => '9.1' }
       }
     end
 
@@ -124,7 +124,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
-                            'PGPORT' => '1234' },
+                            'PGPORT' => '1234' }
       }
     end
 
@@ -145,7 +145,7 @@ describe 'postgresql::server::grant' do
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
                             'PGPORT' => '1234' },
-        port: 5678,
+        port: 5678
       }
     end
 
@@ -165,7 +165,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'all',
         object_name: ['myschema', 'mytable'],
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -190,7 +190,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'all',
         object_name: ['myschema', 'mytable'],
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -218,7 +218,7 @@ describe 'postgresql::server::grant' do
         role: 'PUBLIC',
         privilege: 'all',
         object_name: ['myschema', 'mytable'],
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -248,7 +248,7 @@ describe 'postgresql::server::grant' do
         privilege: 'execute',
         object_name: 'test',
         object_arguments: ['text', 'boolean'],
-        object_type: 'function',
+        object_type: 'function'
       }
     end
 
@@ -274,7 +274,7 @@ describe 'postgresql::server::grant' do
         privilege: 'execute',
         object_name: ['myschema', 'test'],
         object_arguments: ['text', 'boolean'],
-        object_type: 'function',
+        object_type: 'function'
       }
     end
 
@@ -306,7 +306,7 @@ describe 'postgresql::server::grant' do
         psql_user: 'postgres',
         psql_db: 'db',
         port: 1542,
-        connect_settings: {},
+        connect_settings: {}
       }
     end
 
@@ -320,7 +320,7 @@ describe 'postgresql::server::grant' do
         db: 'test',
         role: 'test',
         privilege: 'usage',
-        object_type: 'invalid',
+        object_type: 'invalid'
       }
     end
 
@@ -338,7 +338,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'all',
         object_name: 1,
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -356,7 +356,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'all',
         object_name: ['oops'],
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -378,7 +378,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'all',
         object_name: ['myschema', 'mytable', 'oops'],
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -401,7 +401,7 @@ describe 'postgresql::server::grant' do
         privilege: 'all',
         object_name: ['myschema', 'mytable'],
         object_type: 'table',
-        onlyif_exists: true,
+        onlyif_exists: true
       }
     end
 

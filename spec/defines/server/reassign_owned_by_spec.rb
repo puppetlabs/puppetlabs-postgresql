@@ -13,7 +13,7 @@ describe 'postgresql::server::reassign_owned_by' do
     {
       db: 'test',
       old_role: 'test_old_role',
-      new_role: 'test_new_role',
+      new_role: 'test_new_role'
     }
   end
 

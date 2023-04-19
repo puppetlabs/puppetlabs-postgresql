@@ -167,10 +167,3 @@ Style/OptionalBooleanParameter:
   Exclude:
     - 'lib/puppet/functions/postgresql/postgresql_password.rb'
     - 'lib/puppet/type/postgresql_psql.rb'
-
-# Offense count: 137
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyleForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, no_comma
-Style/TrailingCommaInHashLiteral:
-  Enabled: false

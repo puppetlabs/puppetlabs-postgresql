@@ -17,7 +17,7 @@ module Puppet::Util
         port: '--port',
         db_username: '--username',
         db_name: '--dbname',
-        command: '--command',
+        command: '--command'
       }
 
       args.each do |k, v|

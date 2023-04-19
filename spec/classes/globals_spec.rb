@@ -15,7 +15,7 @@ describe 'postgresql::globals' do
     describe 'manage_package_repo => true' do
       let(:params) do
         {
-          manage_package_repo: true,
+          manage_package_repo: true
         }
       end
 
@@ -38,7 +38,7 @@ describe 'postgresql::globals' do
       let(:params) do
         {
           manage_package_repo: true,
-          repo_proxy: 'http://proxy-server:8080',
+          repo_proxy: 'http://proxy-server:8080'
         }
       end
 
@@ -63,7 +63,7 @@ describe 'postgresql::globals' do
         {
           manage_package_repo: true,
           repo_baseurl: 'http://mirror.localrepo.com/pgdg-postgresql',
-          yum_repo_commonurl: 'http://mirror.localrepo.com/pgdg-common',
+          yum_repo_commonurl: 'http://mirror.localrepo.com/pgdg-common'
         }
       end
 

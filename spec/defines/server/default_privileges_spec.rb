@@ -17,7 +17,7 @@ describe 'postgresql::server::default_privileges' do
         db: 'test',
         role: 'test',
         privilege: 'all',
-        object_type: 'tables',
+        object_type: 'tables'
       }
     end
 
@@ -34,7 +34,7 @@ describe 'postgresql::server::default_privileges' do
         db: 'test',
         role: 'test',
         privilege: 'aLl',
-        object_type: 'TaBlEs',
+        object_type: 'TaBlEs'
       }
     end
 
@@ -58,7 +58,7 @@ describe 'postgresql::server::default_privileges' do
           db: 'test',
           role: 'test',
           privilege: 'all',
-          object_type: 'wrong_type',
+          object_type: 'wrong_type'
         }
       end
 
@@ -77,7 +77,7 @@ describe 'postgresql::server::default_privileges' do
           db: 'test',
           role: 'test',
           privilege: 'all',
-          object_type: 'tables',
+          object_type: 'tables'
         }
       end
 
@@ -103,7 +103,7 @@ describe 'postgresql::server::default_privileges' do
           db: 'test',
           role: 'test',
           privilege: 'wrong_privilege',
-          object_type: 'tables',
+          object_type: 'tables'
         }
       end
 
@@ -123,7 +123,7 @@ describe 'postgresql::server::default_privileges' do
           role: 'test',
           privilege: 'all',
           object_type: 'schemas',
-          schema: '',
+          schema: ''
         }
       end
 
@@ -143,7 +143,7 @@ describe 'postgresql::server::default_privileges' do
           role: 'test',
           privilege: 'all',
           object_type: 'schemas',
-          schema: '',
+          schema: ''
         }
       end
 
@@ -177,7 +177,7 @@ describe 'postgresql::server::default_privileges' do
           role: 'test',
           privilege: 'all',
           object_type: 'schemas',
-          schema: 'public',
+          schema: 'public'
         }
       end
 
@@ -202,7 +202,7 @@ describe 'postgresql::server::default_privileges' do
         privilege: 'all',
         object_type: 'tables',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
-                            'DBVERSION' => '9.6' },
+                            'DBVERSION' => '9.6' }
       }
     end
 
@@ -224,7 +224,7 @@ describe 'postgresql::server::default_privileges' do
         object_type: 'tables',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.6',
-                            'PGPORT' => '1234' },
+                            'PGPORT' => '1234' }
       }
     end
 
@@ -247,7 +247,7 @@ describe 'postgresql::server::default_privileges' do
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.6',
                             'PGPORT' => '1234' },
-        port: 5678,
+        port: 5678
       }
     end
 
@@ -320,7 +320,7 @@ describe 'postgresql::server::default_privileges' do
         db: 'test',
         role: 'test',
         privilege: 'all',
-        object_type: 'tables',
+        object_type: 'tables'
       }
     end
 
@@ -348,7 +348,7 @@ describe 'postgresql::server::default_privileges' do
         db: 'test',
         role: 'test',
         privilege: 'all',
-        object_type: 'tables',
+        object_type: 'tables'
       }
     end
 
@@ -384,7 +384,7 @@ describe 'postgresql::server::default_privileges' do
         psql_user: 'postgres',
         psql_db: 'db',
         port: 1542,
-        connect_settings: { 'DBVERSION' => '9.6' },
+        connect_settings: { 'DBVERSION' => '9.6' }
       }
     end
 

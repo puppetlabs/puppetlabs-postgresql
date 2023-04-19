@@ -52,7 +52,7 @@ describe 'postgresql::server' do
     let(:params) do
       {
         service_ensure: 'running',
-        postgres_password: 'new-p@s$word-to-set',
+        postgres_password: 'new-p@s$word-to-set'
       }
     end
 
@@ -76,7 +76,7 @@ describe 'postgresql::server' do
     let(:params) do
       {
         service_ensure: true,
-        postgres_password: 'new-p@s$word-to-set',
+        postgres_password: 'new-p@s$word-to-set'
       }
     end
 
@@ -171,7 +171,7 @@ describe 'postgresql::server' do
   describe 'package_ensure => absent' do
     let(:params) do
       {
-        package_ensure: 'absent',
+        package_ensure: 'absent'
       }
     end
 
@@ -187,7 +187,7 @@ describe 'postgresql::server' do
   describe 'needs_initdb => true' do
     let(:params) do
       {
-        needs_initdb: true,
+        needs_initdb: true
       }
     end
 
@@ -219,8 +219,8 @@ describe 'postgresql::server' do
     let(:params) do
       {
         roles: {
-          username: { createdb: true },
-        },
+          username: { createdb: true }
+        }
       }
     end
 
@@ -234,8 +234,8 @@ describe 'postgresql::server' do
         config_entries: {
           fsync: 'off',
           checkpoint_segments: '20',
-          remove_me: :undef,
-        },
+          remove_me: :undef
+        }
       }
     end
 
@@ -254,9 +254,9 @@ describe 'postgresql::server' do
             database: 'mydb',
             user: 'myuser',
             auth_method: 'md5',
-            address: '192.0.2.100',
-          },
-        },
+            address: '192.0.2.100'
+          }
+        }
       }
     end
 
@@ -291,8 +291,8 @@ describe 'postgresql::server' do
           db_user: 'backupuser',
           db_password: 'backuppass',
           dir: '/tmp/backuptest',
-          manage_user: true,
-        },
+          manage_user: true
+        }
       }
     end
 

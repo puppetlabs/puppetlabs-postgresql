@@ -18,7 +18,7 @@ describe 'postgresql::lib::devel' do
   describe 'disable link_pg_config' do
     let(:params) do
       {
-        link_pg_config: false,
+        link_pg_config: false
       }
     end
 
@@ -48,7 +48,7 @@ describe 'postgresql::lib::devel' do
     include_examples 'Gentoo'
     let :params do
       {
-        link_pg_config: false,
+        link_pg_config: false
       }
     end
 

@@ -163,13 +163,13 @@ shared_context 'Fedora 33' do
         'release' => {
           'full' => '33',
           'major' => '33',
-          'minor' => '33',
+          'minor' => '33'
         },
-        selinux: { 'enabled' => true },
+        selinux: { 'enabled' => true }
       },
       operatingsystem: 'Fedora',
       operatingsystemrelease: '33',
-      service_provider: 'systemd',
+      service_provider: 'systemd'
     }
   end
 end
@@ -182,15 +182,15 @@ shared_context 'Amazon 1' do
         name: 'Amazon',
         release: {
           'full' => '1.0',
-          'major' => '1',
+          'major' => '1'
         },
-        selinux: { 'enabled' => true },
+        selinux: { 'enabled' => true }
       },
       kernel: 'Linux',
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       selinux: true,
-      service_provider: 'redhat',
+      service_provider: 'redhat'
     }
   end
 end
@@ -203,15 +203,15 @@ shared_context 'Gentoo' do
         name: 'Gentoo',
         release: {
           'full' => 'unused',
-          'major' => 'unused',
+          'major' => 'unused'
         },
-        selinux: { 'enabled' => false },
+        selinux: { 'enabled' => false }
       },
       kernel: 'Linux',
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       selinux: false,
-      service_provider: 'openrc',
+      service_provider: 'openrc'
     }
   end
 end

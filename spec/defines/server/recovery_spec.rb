@@ -24,7 +24,7 @@ describe 'postgresql::server::recovery' do
     let(:params) do
       {
         restore_command: 'restore_command',
-        recovery_target_timeline: 'recovery_target_timeline',
+        recovery_target_timeline: 'recovery_target_timeline'
       }
     end
 
@@ -45,7 +45,7 @@ describe 'postgresql::server::recovery' do
     end
     let(:params) do
       {
-        restore_command: '',
+        restore_command: ''
       }
     end
 
@@ -97,7 +97,7 @@ describe 'postgresql::server::recovery' do
         primary_conninfo: 'primary_conninfo',
         primary_slot_name: 'primary_slot_name',
         trigger_file: 'trigger_file',
-        recovery_min_apply_delay: 0,
+        recovery_min_apply_delay: 0
       }
     end
 

@@ -14,8 +14,8 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'database' => 'all',
           'user' => 'postgres',
           'auth_method' => 'ident',
-          'order' => '100',
-        },
+          'order' => '100'
+        }
       }
       expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
@@ -28,8 +28,8 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'database' => 'all',
           'user' => 'root',
           'auth_method' => 'ident',
-          'order' => '100',
-        },
+          'order' => '100'
+        }
       }
       expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
@@ -42,8 +42,8 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'database' => 'all',
           'user' => 'all',
           'auth_method' => 'ident',
-          'order' => '100',
-        },
+          'order' => '100'
+        }
       }
       expect(subject).to run.with_params(input_array, 'test', 100).and_return(result)
     end
@@ -57,8 +57,8 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'user' => 'all',
           'address' => '127.0.0.1/32',
           'auth_method' => 'md5',
-          'order' => '100',
-        },
+          'order' => '100'
+        }
       }
       expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
@@ -72,8 +72,8 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'user' => 'all',
           'address' => '0.0.0.0/0',
           'auth_method' => 'md5',
-          'order' => '100',
-        },
+          'order' => '100'
+        }
       }
       expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
@@ -87,8 +87,8 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'user' => 'all',
           'address' => '::1/128',
           'auth_method' => 'md5',
-          'order' => '100',
-        },
+          'order' => '100'
+        }
       }
       expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
@@ -102,8 +102,8 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'user' => 'all',
           'address' => '1.1.1.1 255.255.255.0',
           'auth_method' => 'md5',
-          'order' => '100',
-        },
+          'order' => '100'
+        }
       }
 
       expect(subject).to run.with_params([input], 'test', 100).and_return(result)
@@ -119,8 +119,8 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'address' => '1.1.1.1 255.255.255.0',
           'auth_method' => 'ldap',
           'auth_option' => 'ldapserver=ldap.example.net ldapprefix="cn=" ldapsuffix=", dc=example, dc=net"',
-          'order' => '100',
-        },
+          'order' => '100'
+        }
       }
 
       expect(subject).to run.with_params([input], 'test', 100).and_return(result)

@@ -25,7 +25,7 @@ describe 'postgresql::server::pg_ident_rule' do
       {
         map_name: 'thatsmymap',
         system_username: 'systemuser',
-        database_username: 'dbuser',
+        database_username: 'dbuser'
       }
     end
 
@@ -47,7 +47,7 @@ describe 'postgresql::server::pg_ident_rule' do
       {
         map_name: 'thatsmymap',
         system_username: 'systemuser',
-        database_username: 'dbuser',
+        database_username: 'dbuser'
       }
     end
 

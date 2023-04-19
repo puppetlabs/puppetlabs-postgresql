@@ -11,7 +11,7 @@ describe 'postgresql::server::tablespace' do
 
   let :params do
     {
-      location: '/srv/data/foo',
+      location: '/srv/data/foo'
     }
   end
 
@@ -27,7 +27,7 @@ describe 'postgresql::server::tablespace' do
     let :params do
       {
         location: '/srv/data/foo',
-        owner: 'test_owner',
+        owner: 'test_owner'
       }
     end
 
@@ -38,7 +38,7 @@ describe 'postgresql::server::tablespace' do
     let :params do
       {
         location: '/srv/data/foo',
-        manage_location: false,
+        manage_location: false
       }
     end
 

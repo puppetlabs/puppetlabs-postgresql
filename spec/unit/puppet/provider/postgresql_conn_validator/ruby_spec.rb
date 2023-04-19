@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Puppet::Type.type(:postgresql_conn_validator).provider(:ruby) do
   let(:resource) do
     Puppet::Type.type(:postgresql_conn_validator).new({
-      name: 'testname',
+      name: 'testname'
     }.merge(attributes))
   end
   let(:provider) { resource.provider }
@@ -15,7 +15,7 @@ describe Puppet::Type.type(:postgresql_conn_validator).provider(:ruby) do
       host: 'db.test.com',
       port: 4444,
       db_username: 'testuser',
-      db_password: 'testpass',
+      db_password: 'testpass'
     }
   end
   let(:connect_settings) do
@@ -23,8 +23,8 @@ describe Puppet::Type.type(:postgresql_conn_validator).provider(:ruby) do
       connect_settings: {
         PGPASSWORD: 'testpass',
         PGHOST: 'db.test.com',
-        PGPORT: '1234',
-      },
+        PGPORT: '1234'
+      }
     }
   end
 
