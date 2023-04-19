@@ -22,7 +22,7 @@ describe 'postgresql::server::config' do
     it 'has the correct systemd-override drop file' do
       is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
         ensure: 'file', owner: 'root', group: 'root',
-      ) .that_requires('File[/etc/systemd/system/postgresql.service.d]')
+      ).that_requires('File[/etc/systemd/system/postgresql.service.d]')
     end
 
     it 'has the correct systemd-override file #regex' do
@@ -59,7 +59,7 @@ describe 'postgresql::server::config' do
       end
 
       it 'has the correct systemd-override file #regex' do
-        is_expected.to contain_file('/etc/systemd/system/postgresql-10.service.d/postgresql-10.conf') .without_content(%r{\.include})
+        is_expected.to contain_file('/etc/systemd/system/postgresql-10.service.d/postgresql-10.conf').without_content(%r{\.include})
       end
     end
   end
@@ -79,7 +79,7 @@ describe 'postgresql::server::config' do
     it 'has the correct systemd-override drop file' do
       is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
         ensure: 'file', owner: 'root', group: 'root',
-      ) .that_requires('File[/etc/systemd/system/postgresql.service.d]')
+      ).that_requires('File[/etc/systemd/system/postgresql.service.d]')
     end
 
     it 'has the correct systemd-override file #regex' do
@@ -103,7 +103,7 @@ describe 'postgresql::server::config' do
         )
       end
       it 'has the correct systemd-override file #regex' do
-        is_expected.to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf') .without_content(%r{\.include})
+        is_expected.to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf').without_content(%r{\.include})
       end
     end
   end
@@ -123,7 +123,7 @@ describe 'postgresql::server::config' do
     it 'has the correct systemd-override drop file' do
       is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
         ensure: 'file', owner: 'root', group: 'root',
-      ) .that_requires('File[/etc/systemd/system/postgresql.service.d]')
+      ).that_requires('File[/etc/systemd/system/postgresql.service.d]')
     end
 
     it 'has the correct systemd-override file #regex' do
@@ -148,7 +148,7 @@ describe 'postgresql::server::config' do
       end
 
       it 'has the correct systemd-override file #regex' do
-        is_expected.to contain_file('/etc/systemd/system/postgresql-13.service.d/postgresql-13.conf') .without_content(%r{\.include})
+        is_expected.to contain_file('/etc/systemd/system/postgresql-13.service.d/postgresql-13.conf').without_content(%r{\.include})
       end
     end
   end
