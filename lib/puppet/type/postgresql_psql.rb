@@ -61,6 +61,7 @@ Puppet::Type.newtype(:postgresql_psql) do
       status = output.exitcode if status.nil?
 
       raise("Error evaluating 'onlyif' clause, returned #{status}: '#{output}'") unless status.zero?
+
       result_count = output.strip.to_i
       debug("Found #{result_count} row(s) executing 'onlyif' clause")
       result_count.positive?
@@ -140,6 +141,7 @@ Puppet::Type.newtype(:postgresql_psql) do
     return false if !onlyif_param.nil? && !onlyif_param.value.nil? && !onlyif_param.matches(onlyif_param.value)
     return false if !unless_param.nil? && !unless_param.value.nil? && unless_param.matches(unless_param.value)
     return false if !refreshing && @parameters[:refreshonly].value == :true
+
     true
   end
 
