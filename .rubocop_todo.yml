@@ -160,20 +160,6 @@ Style/ClassAndModuleChildren:
   Exclude:
     - 'lib/puppet/util/postgresql_validator.rb'
 
-# # Offense count: 1
-# # This cop supports unsafe autocorrection (--autocorrect-all).
-# Style/CommentedKeyword:
-#   Exclude:
-#     - 'spec/acceptance/server/reassign_owned_by_spec.rb'
-
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: always, always_true, never
-Style/FrozenStringLiteralComment:
-  Exclude:
-    - 'lib/puppet/functions/postgresql/prepend_sql_password.rb'
-
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/GlobalStdStream:
