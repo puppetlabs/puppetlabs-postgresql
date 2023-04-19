@@ -92,7 +92,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
       expect(provider).to receive(:run_command).with(['psql',
                                                       '-t', '-X', '-c',
                                                       'SELECT something'],
-                                                     'postgres', 'postgres', 'PGHOST' => '127.0.0.1')
+                                                     'postgres', 'postgres', { 'PGHOST' => '127.0.0.1' })
 
       provider.run_sql_command('SELECT something')
     end
