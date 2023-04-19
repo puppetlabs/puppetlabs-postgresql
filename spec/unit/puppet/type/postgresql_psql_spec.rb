@@ -36,7 +36,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
       refreshonly: :true,
       search_path: ['schema1', 'schema2'],
       connect_settings: { 'PGHOST' => 'postgres-db-server',
-                          'DBVERSION' => '9.1' },
+                          'DBVERSION' => '9.1' }
     }.each do |attr, value|
       context attr do
         describe [attr]

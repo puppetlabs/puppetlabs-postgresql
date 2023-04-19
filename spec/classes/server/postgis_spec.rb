@@ -12,7 +12,7 @@ describe 'postgresql::server::postgis' do
     let(:params) do
       {
         package_name: 'mypackage',
-        package_ensure: 'absent',
+        package_ensure: 'absent'
       }
     end
 

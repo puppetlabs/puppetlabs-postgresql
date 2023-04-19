@@ -15,7 +15,7 @@ describe 'Postgresql::Pg_hba_rules' do
           auth_method: 'md5',
           target: '/foo.conf',
           postgresql_version: '14',
-          order: 1,
+          order: 1
         },
         foo2: {
           description: 'pc',

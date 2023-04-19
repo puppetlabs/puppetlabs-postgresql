@@ -29,7 +29,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
           psql_user: 'spec_user',
           psql_group: 'spec_group',
           cwd: '/spec',
-          db: 'spec_db',
+          db: 'spec_db'
         }
       end
 
@@ -46,7 +46,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
     describe 'with search_path string' do
       let(:attributes) do
         {
-          search_path: 'schema1',
+          search_path: 'schema1'
         }
       end
 
@@ -62,7 +62,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
     describe 'with search_path array' do
       let(:attributes) do
         {
-          search_path: ['schema1', 'schema2'],
+          search_path: ['schema1', 'schema2']
         }
       end
 

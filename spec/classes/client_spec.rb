@@ -11,7 +11,7 @@ describe 'postgresql::client' do
         validcon_script_path: '/opt/bin/my-validate-con.sh',
         package_ensure: 'absent',
         package_name: 'mypackage',
-        file_ensure: 'file',
+        file_ensure: 'file'
       }
     end
 
@@ -50,7 +50,7 @@ describe 'postgresql::client' do
   describe 'with client package name explicitly set undef' do
     let :params do
       {
-        package_name: 'UNSET',
+        package_name: 'UNSET'
       }
     end
 

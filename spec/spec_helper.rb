@@ -13,7 +13,7 @@ include RspecPuppetFacts # rubocop:disable Style/MixinUsage
 
 default_facts = {
   puppetversion: Puppet.version,
-  facterversion: Facter.version,
+  facterversion: Facter.version
 }
 
 default_fact_files = [

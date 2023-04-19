@@ -23,7 +23,7 @@ describe 'postgresql::validate_db_connection' do
         database_port: 5432,
         run_as: 'postgresq',
         sleep: 4,
-        tries: 30,
+        tries: 30
       }
     end
 
@@ -44,7 +44,7 @@ describe 'postgresql::validate_db_connection' do
         database_name: 'test',
         database_password: 'test',
         database_username: 'test',
-        database_port: 5432,
+        database_port: 5432
       }
     end
 

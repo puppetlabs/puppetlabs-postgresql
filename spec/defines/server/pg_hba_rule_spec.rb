@@ -25,7 +25,7 @@ describe 'postgresql::server::pg_hba_rule' do
         user: 'all',
         address: '1.1.1.1/24',
         auth_method: 'md5',
-        target: target,
+        target: target
       }
     end
 
@@ -47,7 +47,7 @@ describe 'postgresql::server::pg_hba_rule' do
         database: 'all',
         user: 'all',
         auth_method: 'ident',
-        target: target,
+        target: target
       }
     end
 
@@ -71,7 +71,7 @@ describe 'postgresql::server::pg_hba_rule' do
         address: '0.0.0.0/0',
         auth_method: 'ldap',
         auth_option: 'foo=bar',
-        target: target,
+        target: target
       }
     end
 
@@ -98,7 +98,7 @@ describe 'postgresql::server::pg_hba_rule' do
           user: 'all',
           address: '0.0.0.0/0',
           auth_method: 'peer',
-          target: target,
+          target: target
         }
       end
 
@@ -126,7 +126,7 @@ describe 'postgresql::server::pg_hba_rule' do
           user: 'all',
           address: '0.0.0.0/0',
           auth_method: 'scram-sha-256',
-          target: target,
+          target: target
         }
       end
 
@@ -151,7 +151,7 @@ describe 'postgresql::server::pg_hba_rule' do
           type: 'local',
           database: 'all',
           user: 'all',
-          auth_method: 'ident',
+          auth_method: 'ident'
         }
       end
 
@@ -173,7 +173,7 @@ describe 'postgresql::server::pg_hba_rule' do
           database: 'all',
           user: 'all',
           auth_method: 'ident',
-          order: '12',
+          order: '12'
         }
       end
 
@@ -195,7 +195,7 @@ describe 'postgresql::server::pg_hba_rule' do
           database: 'all',
           user: 'all',
           auth_method: 'ident',
-          order: 12,
+          order: 12
         }
       end
 
@@ -217,7 +217,7 @@ describe 'postgresql::server::pg_hba_rule' do
           database: 'all',
           user: 'all',
           auth_method: 'ident',
-          order: 1234,
+          order: 1234
         }
       end
 
@@ -240,7 +240,7 @@ describe 'postgresql::server::pg_hba_rule' do
           user: 'all',
           address: '.domain.tld',
           auth_method: 'md5',
-          target: target,
+          target: target
         }
       end
 
@@ -263,7 +263,7 @@ describe 'postgresql::server::pg_hba_rule' do
           user: 'all',
           address: '/45',
           auth_method: 'md5',
-          target: target,
+          target: target
         }
       end
 

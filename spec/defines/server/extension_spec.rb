@@ -14,7 +14,7 @@ describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDesc
   let(:title) { 'postgis' }
   let(:params) do
     {
-      database: 'template_postgis',
+      database: 'template_postgis'
     }
   end
 
@@ -120,7 +120,7 @@ describe 'postgresql::server::extension' do
   let(:params) do
     {
       database: 'template_postgis2',
-      extension: 'postgis',
+      extension: 'postgis'
     }
   end
 
@@ -143,7 +143,7 @@ describe 'postgresql::server::extension' do
   let(:params) do
     {
       database: 'postgres',
-      extension: 'pg_repack',
+      extension: 'pg_repack'
     }
   end
 
@@ -162,7 +162,7 @@ describe 'postgresql::server::extension' do
     let :params do
       {
         database: 'postgres',
-        extension: 'pg_repack',
+        extension: 'pg_repack'
       }
     end
 
@@ -179,7 +179,7 @@ describe 'postgresql::server::extension' do
       {
         database: 'postgres',
         extension: 'pg_repack',
-        port: 1234,
+        port: 1234
       }
     end
 
@@ -198,7 +198,7 @@ describe 'postgresql::server::extension' do
         extension: 'pg_repack',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
-                            'PGPORT' => '1234' },
+                            'PGPORT' => '1234' }
       }
     end
 
@@ -223,7 +223,7 @@ describe 'postgresql::server::extension' do
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
                             'PGPORT' => '1234' },
-        port: 5678,
+        port: 5678
       }
     end
 

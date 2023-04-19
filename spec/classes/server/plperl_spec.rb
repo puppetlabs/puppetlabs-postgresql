@@ -22,7 +22,7 @@ describe 'postgresql::server::plperl' do
     let :params do
       {
         package_ensure: 'absent',
-        package_name: 'mypackage',
+        package_name: 'mypackage'
       }
     end
 

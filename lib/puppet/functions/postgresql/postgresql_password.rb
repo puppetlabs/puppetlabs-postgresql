@@ -49,7 +49,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
       iterations: '4096',
       salt: Base64.strict_encode64(salt),
       client_key: Base64.strict_encode64(client_key(digest)),
-      server_key: Base64.strict_encode64(server_key(digest)),
+      server_key: Base64.strict_encode64(server_key(digest))
     }
   end
 

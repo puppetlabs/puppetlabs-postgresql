@@ -16,7 +16,7 @@ describe 'postgresql::server::role' do
   context 'with Password Datatype String' do
     let :params do
       {
-        password_hash: 'new-pa$s',
+        password_hash: 'new-pa$s'
       }
     end
 
@@ -42,7 +42,7 @@ describe 'postgresql::server::role' do
   context 'with Password Datatype Sensitive[String]' do
     let :params do
       {
-        password_hash: sensitive('new-pa$s'),
+        password_hash: sensitive('new-pa$s')
       }
     end
 
@@ -72,7 +72,7 @@ describe 'postgresql::server::role' do
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
                             'PGUSER' => 'login-user',
-                            'PGPASSWORD' => 'login-pass' },
+                            'PGPASSWORD' => 'login-pass' }
       }
     end
 
@@ -109,7 +109,7 @@ describe 'postgresql::server::role' do
                             'DBVERSION' => '9.1',
                             'PGPORT' => '1234',
                             'PGUSER' => 'login-user',
-                            'PGPASSWORD' => 'login-pass' },
+                            'PGPASSWORD' => 'login-pass' }
       }
     end
 
@@ -140,7 +140,7 @@ describe 'postgresql::server::role' do
     let :params do
       {
         password_hash: 'new-pa$s',
-        update_password: false,
+        update_password: false
       }
     end
 
@@ -156,7 +156,7 @@ describe 'postgresql::server::role' do
   context 'with ensure set to absent' do
     let :params do
       {
-        ensure: 'absent',
+        ensure: 'absent'
       }
     end
 
@@ -187,7 +187,7 @@ describe 'postgresql::server::role' do
         psql_group: 'postgresql',
         psql_path: '/usr/bin',
         module_workdir: '/tmp',
-        db: 'db',
+        db: 'db'
       }
     end
 

@@ -14,7 +14,7 @@ describe 'postgresql::server::grant_role' do
   let(:params) do
     {
       group: 'my_group',
-      role: 'my_role',
+      role: 'my_role'
     }
   end
 
