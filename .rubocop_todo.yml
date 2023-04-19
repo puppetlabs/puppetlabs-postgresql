@@ -72,20 +72,6 @@ RSpec/DescribeClass:
   Enabled: false
 
 
-# Offense count: 29
-# This cop supports safe autocorrection (--autocorrect).
-RSpec/EmptyLineAfterExampleGroup:
-  Exclude:
-    - 'spec/acceptance/server/grant_spec.rb'
-    - 'spec/defines/server/pg_hba_rule_spec.rb'
-    - 'spec/defines/server/pg_ident_rule_spec.rb'
-    - 'spec/defines/server/recovery_spec.rb'
-    - 'spec/type_aliases/pg_hba_rule_spec.rb'
-    - 'spec/type_aliases/pg_hba_rules_spec.rb'
-    - 'spec/unit/puppet/provider/postgresql_psql/ruby_spec.rb'
-    - 'spec/unit/puppet/type/postgresql_conn_validator.rb'
-    - 'spec/unit/puppet/type/postgresql_psql_spec.rb'
-
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowConsecutiveOneLiners.

@@ -54,21 +54,25 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
 
       it { is_expected.to eq('psql') }
     end
+
     context 'default value: [:psql_user]' do
       subject { super()[:psql_user] }
 
       it { is_expected.to eq('postgres') }
     end
+
     context 'default value: [:psql_group]' do
       subject { super()[:psql_group] }
 
       it { is_expected.to eq('postgres') }
     end
+
     context 'default value: [:cwd]' do
       subject { super()[:cwd] }
 
       it { is_expected.to eq('/tmp') }
     end
+
     context 'default value: #refreshonly?' do
       subject { super().refreshonly? }
 
@@ -135,6 +139,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
         context 'not refreshing'
         it { expect(subject.should_run_sql).to be_falsey }
       end
+
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
           { refreshonly: refreshonly }
@@ -154,6 +159,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
         context 'not refreshing'
         it { expect(subject.should_run_sql).to be_truthy }
       end
+
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
           { refreshonly: refreshonly }
@@ -177,6 +183,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
         context 'not refreshing'
         it { expect(subject.should_run_sql).to be_falsey }
       end
+
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
           { refreshonly: refreshonly, unless: 'SELECT something' }
@@ -196,6 +203,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
         context 'not refreshing'
         it { expect(subject.should_run_sql).to be_falsey }
       end
+
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
           { refreshonly: refreshonly, unless: 'SELECT something' }
@@ -219,6 +227,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
         context 'not refreshing'
         it { expect(subject.should_run_sql).to be_falsey }
       end
+
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
           { refreshonly: refreshonly, unless: 'SELECT something' }
@@ -238,6 +247,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
         context 'not refreshing'
         it { expect(subject.should_run_sql).to be_truthy }
       end
+
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
           { refreshonly: refreshonly, unless: 'SELECT something' }

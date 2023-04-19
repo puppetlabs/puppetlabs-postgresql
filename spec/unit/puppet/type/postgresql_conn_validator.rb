@@ -34,11 +34,13 @@ describe Puppet::Type.type(:postgresql_conn_validator) do
         end
       end
     end
+
     describe 'connect_settings' do
       it 'accepts a hash' do
         expect { described_class.new(name: 'test', connect_settings: { 'PGPASSWORD' => 'test1' }) }.not_to raise_error
       end
     end
+
     describe 'port' do
       it 'does not accept a word' do
         expect { described_class.new(name: 'test', port: 'test') }.to raise_error Puppet::Error

@@ -21,6 +21,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
         provider.run_sql_command('SELECT \'something\' as "Custom column"')
       end
     end
+
     describe 'with psql_path and db' do
       let(:attributes) do
         {
@@ -41,6 +42,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
         provider.run_sql_command('SELECT \'something\' as "Custom column"')
       end
     end
+
     describe 'with search_path string' do
       let(:attributes) do
         {
@@ -56,6 +58,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
         provider.run_sql_command('SELECT \'something\' as "Custom column"')
       end
     end
+
     describe 'with search_path array' do
       let(:attributes) do
         {
@@ -73,6 +76,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
       end
     end
   end
+
   describe 'with port string' do
     let(:attributes) { { port: '5555' } }
 
@@ -85,6 +89,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
       provider.run_sql_command('SELECT something')
     end
   end
+
   describe 'with connect_settings' do
     let(:attributes) { { connect_settings: { 'PGHOST' => '127.0.0.1' } } }
 

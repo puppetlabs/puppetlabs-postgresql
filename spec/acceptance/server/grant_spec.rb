@@ -201,6 +201,7 @@ describe 'postgresql::server::grant:' do
       end
     end
   end
+
   ### FUNCTION grants
   context 'sequence' do
     let(:pp) do
@@ -268,6 +269,7 @@ describe 'postgresql::server::grant:' do
       end
     end
   end
+
   ### TABLE grants
   context 'table' do
     describe 'GRANT ... ON TABLE' do
@@ -472,6 +474,7 @@ describe 'postgresql::server::grant:' do
       end
     end
   end
+
   context 'database' do
     describe 'REVOKE ... ON DATABASE...' do
       it 'do not fail on revoke connect from non-existant user' do
