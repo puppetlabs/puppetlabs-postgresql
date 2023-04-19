@@ -43,7 +43,7 @@ describe 'postgresql::server::grant' do
     it { is_expected.to contain_postgresql__server__grant('test') }
 
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT USAGE ON SEQUENCE "test" TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)}m)
     end
@@ -67,7 +67,7 @@ describe 'postgresql::server::grant' do
     it { is_expected.to contain_postgresql__server__grant('test') }
 
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT USAGE ON SEQUENCE "test" TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)}m)
     end
@@ -92,7 +92,7 @@ describe 'postgresql::server::grant' do
     it { is_expected.to contain_postgresql__server__grant('test') }
 
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE NOT EXISTS \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\)}m) # rubocop:disable Layout/LineLength
     end
@@ -177,7 +177,7 @@ describe 'postgresql::server::grant' do
     it { is_expected.to contain_postgresql__server__grant('test') }
 
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_table_privilege\('test',\s*'myschema.mytable', 'INSERT'\)}m)
     end
@@ -206,7 +206,7 @@ describe 'postgresql::server::grant' do
     it { is_expected.to contain_postgresql__server__role('test') }
 
     it do
-      is_expected.to contain_postgresql_psql('grant:test') \
+      expect(subject).to contain_postgresql_psql('grant:test') \
         .that_requires(['Service[postgresqld]', 'Postgresql::Server::Role[test]'])
     end
   end
@@ -234,7 +234,7 @@ describe 'postgresql::server::grant' do
     it { is_expected.to contain_postgresql__server__role('test') }
 
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* PUBLIC}m)
         .with_unless(%r{SELECT 1 WHERE has_table_privilege\('public',\s*'myschema.mytable', 'INSERT'\)}m)
     end
@@ -260,7 +260,7 @@ describe 'postgresql::server::grant' do
     it { is_expected.to contain_postgresql__server__grant('test') }
 
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT EXECUTE ON FUNCTION test\(text,boolean\) TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_function_privilege\('test',\s* 'test\(text,boolean\)', 'EXECUTE'\)}m)
     end
@@ -286,7 +286,7 @@ describe 'postgresql::server::grant' do
     it { is_expected.to contain_postgresql__server__grant('test') }
 
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT EXECUTE ON FUNCTION myschema.test\(text,boolean\) TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_function_privilege\('test',\s* 'myschema.test\(text,boolean\)', 'EXECUTE'\)}m)
     end
@@ -413,7 +413,7 @@ describe 'postgresql::server::grant' do
     it { is_expected.to contain_postgresql__server__grant('test') }
 
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_table_privilege\('test',\s*'myschema.mytable', 'INSERT'\)}m)
         .with_onlyif(%r{SELECT true FROM pg_tables WHERE tablename = 'mytable'}m)

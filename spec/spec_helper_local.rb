@@ -48,31 +48,31 @@ shared_examples 'postgresql_password function' do
   it { is_expected.not_to be_nil }
 
   it {
-    is_expected.to run.with_params('foo', 'bar').and_return(
+    expect(subject).to run.with_params('foo', 'bar').and_return(
       'md596948aad3fcae80c08a35c9b5958cd89',
     )
   }
 
   it {
-    is_expected.to run.with_params('foo', 1234).and_return(
+    expect(subject).to run.with_params('foo', 1234).and_return(
       'md539a0e1b308278a8de5e007cd1f795920',
     )
   }
 
   it {
-    is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256').and_return(
+    expect(subject).to run.with_params('foo', 'bar', false, 'scram-sha-256').and_return(
       'SCRAM-SHA-256$4096:Zm9v$ea66ynZ8cS9Ty4ZkEYicwC72StsKLSwjcXIXKMgepTk=:dJYmOU6BMCaWkQOB3lrXH9OAF3lW2n3NJ26NO7Srq7U=',
     )
   }
 
   it {
-    is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256', 'salt').and_return(
+    expect(subject).to run.with_params('foo', 'bar', false, 'scram-sha-256', 'salt').and_return(
       'SCRAM-SHA-256$4096:c2FsdA==$hl63wu9L6vKIjd/UGPfpRl/hIQRBnlkoCiJ9KgxzbX0=:3Q39uiwDZ51m3iPpV8rSgISgRiYqkbnpc+wScL2lSAU=',
     )
   }
 
   it 'raises an error if there is only 1 argument' do
-    is_expected.to run.with_params('foo').and_raise_error(StandardError)
+    expect(subject).to run.with_params('foo').and_raise_error(StandardError)
   end
 end
 
@@ -80,23 +80,23 @@ shared_examples 'postgresql_escape function' do
   it { is_expected.not_to be_nil }
 
   it {
-    is_expected.to run.with_params('foo')
-                      .and_return('$$foo$$')
+    expect(subject).to run.with_params('foo')
+                          .and_return('$$foo$$')
   }
 
   it {
-    is_expected.to run.with_params('fo$$o')
-                      .and_return('$ed$fo$$o$ed$')
+    expect(subject).to run.with_params('fo$$o')
+                          .and_return('$ed$fo$$o$ed$')
   }
 
   it {
-    is_expected.to run.with_params('foo$')
-                      .and_return('$a$foo$$a$')
+    expect(subject).to run.with_params('foo$')
+                          .and_return('$a$foo$$a$')
   }
 
   it 'raises an error if there is more than 1 argument' do
-    is_expected.to run.with_params(['foo'], ['foo'])
-                      .and_raise_error(StandardError)
+    expect(subject).to run.with_params(['foo'], ['foo'])
+                          .and_raise_error(StandardError)
   end
 end
 

@@ -65,7 +65,7 @@ describe 'postgresql::server::initdb' do
     end
 
     it 'contains exec with specified working directory' do
-      is_expected.to contain_exec('postgresql_initdb').with(
+      expect(subject).to contain_exec('postgresql_initdb').with(
         cwd: '/var/tmp',
       )
     end
@@ -82,7 +82,7 @@ describe 'postgresql::server::initdb' do
     end
 
     it 'contains exec with default working directory' do
-      is_expected.to contain_exec('postgresql_initdb').with(
+      expect(subject).to contain_exec('postgresql_initdb').with(
         cwd: '/tmp',
       )
     end
@@ -102,7 +102,7 @@ describe 'postgresql::server::initdb' do
     end
 
     it 'contains postgresql_psql with specified working directory' do
-      is_expected.to contain_postgresql_psql('Set template1 encoding to test').with(cwd: '/var/tmp')
+      expect(subject).to contain_postgresql_psql('Set template1 encoding to test').with(cwd: '/var/tmp')
     end
   end
 end

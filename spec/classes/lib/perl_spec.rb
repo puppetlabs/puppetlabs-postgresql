@@ -7,7 +7,7 @@ describe 'postgresql::lib::perl' do
     include_examples 'RedHat 8'
 
     it {
-      is_expected.to contain_package('perl-DBD-Pg').with(
+      expect(subject).to contain_package('perl-DBD-Pg').with(
         name: 'perl-DBD-Pg',
         ensure: 'present',
       )
@@ -18,7 +18,7 @@ describe 'postgresql::lib::perl' do
     include_examples 'Debian 11'
 
     it {
-      is_expected.to contain_package('perl-DBD-Pg').with(
+      expect(subject).to contain_package('perl-DBD-Pg').with(
         name: 'libdbd-pg-perl',
         ensure: 'present',
       )

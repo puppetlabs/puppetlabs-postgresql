@@ -96,11 +96,8 @@ RSpec/FilePath:
     - 'spec/defines/server/instance/service.rb'
     - 'spec/unit/puppet/type/postgresql_conn_validator.rb'
 
-# Offense count: 183
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: single_line_only, single_statement_only, disallow, require_implicit
-RSpec/ImplicitSubject:
+
+RSpec/NamedSubject:
   Enabled: false
 
 # Offense count: 2

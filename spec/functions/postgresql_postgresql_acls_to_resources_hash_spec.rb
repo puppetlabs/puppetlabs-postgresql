@@ -17,7 +17,7 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'order' => '100',
         },
       }
-      is_expected.to run.with_params([input], 'test', 100).and_return(result)
+      expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -31,7 +31,7 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'order' => '100',
         },
       }
-      is_expected.to run.with_params([input], 'test', 100).and_return(result)
+      expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -45,7 +45,7 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'order' => '100',
         },
       }
-      is_expected.to run.with_params(input_array, 'test', 100).and_return(result)
+      expect(subject).to run.with_params(input_array, 'test', 100).and_return(result)
     end
 
     it do
@@ -60,7 +60,7 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'order' => '100',
         },
       }
-      is_expected.to run.with_params([input], 'test', 100).and_return(result)
+      expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -75,7 +75,7 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'order' => '100',
         },
       }
-      is_expected.to run.with_params([input], 'test', 100).and_return(result)
+      expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -90,7 +90,7 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
           'order' => '100',
         },
       }
-      is_expected.to run.with_params([input], 'test', 100).and_return(result)
+      expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -106,7 +106,7 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
         },
       }
 
-      is_expected.to run.with_params([input], 'test', 100).and_return(result)
+      expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
 
     it do
@@ -123,29 +123,29 @@ describe 'postgresql::postgresql_acls_to_resources_hash' do
         },
       }
 
-      is_expected.to run.with_params([input], 'test', 100).and_return(result)
+      expect(subject).to run.with_params([input], 'test', 100).and_return(result)
     end
   end
 
   context 'error catching tests' do
     it do
-      is_expected.to run.with_params(['test'], 'test').and_raise_error(%r{expects 3 arguments, got 2})
+      expect(subject).to run.with_params(['test'], 'test').and_raise_error(%r{expects 3 arguments, got 2})
     end
 
     it do
-      is_expected.to run.with_params('test', 'test', 100).and_raise_error(%r{parameter 'acls' expects an Array value, got String})
+      expect(subject).to run.with_params('test', 'test', 100).and_raise_error(%r{parameter 'acls' expects an Array value, got String})
     end
 
     it do
-      is_expected.to run.with_params(['test'], 100, 'test').and_raise_error(%r{parameter 'id' expects a String value, got Integer})
+      expect(subject).to run.with_params(['test'], 100, 'test').and_raise_error(%r{parameter 'id' expects a String value, got Integer})
     end
 
     it do
-      is_expected.to run.with_params(['test'], 'test', 1).and_raise_error(%r{does not have enough parts})
+      expect(subject).to run.with_params(['test'], 'test', 1).and_raise_error(%r{does not have enough parts})
     end
   end
 
   it 'returns an empty hash when input is empty array' do
-    is_expected.to run.with_params([], 'test', 100).and_return({})
+    expect(subject).to run.with_params([], 'test', 100).and_return({})
   end
 end

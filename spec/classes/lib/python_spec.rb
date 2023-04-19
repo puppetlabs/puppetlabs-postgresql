@@ -7,7 +7,7 @@ describe 'postgresql::lib::python' do
     include_examples 'RedHat 7'
 
     it {
-      is_expected.to contain_package('python-psycopg2').with(
+      expect(subject).to contain_package('python-psycopg2').with(
         name: 'python-psycopg2',
         ensure: 'present',
       )
@@ -18,7 +18,7 @@ describe 'postgresql::lib::python' do
     include_examples 'RedHat 8'
 
     it {
-      is_expected.to contain_package('python-psycopg2').with(
+      expect(subject).to contain_package('python-psycopg2').with(
         name: 'python3-psycopg2',
         ensure: 'present',
       )
@@ -29,7 +29,7 @@ describe 'postgresql::lib::python' do
     include_examples 'Debian 11'
 
     it {
-      is_expected.to contain_package('python-psycopg2').with(
+      expect(subject).to contain_package('python-psycopg2').with(
         name: 'python-psycopg2',
         ensure: 'present',
       )

@@ -7,7 +7,7 @@ describe 'postgresql::lib::java' do
     include_examples 'Debian 11'
 
     it {
-      is_expected.to contain_package('postgresql-jdbc').with(
+      expect(subject).to contain_package('postgresql-jdbc').with(
         name: 'libpostgresql-jdbc-java',
         ensure: 'present',
         tag: 'puppetlabs-postgresql',
@@ -19,7 +19,7 @@ describe 'postgresql::lib::java' do
     include_examples 'RedHat 8'
 
     it {
-      is_expected.to contain_package('postgresql-jdbc').with(
+      expect(subject).to contain_package('postgresql-jdbc').with(
         name: 'postgresql-jdbc',
         ensure: 'present',
         tag: 'puppetlabs-postgresql',
@@ -32,7 +32,7 @@ describe 'postgresql::lib::java' do
       end
 
       it {
-        is_expected.to contain_package('postgresql-jdbc').with(
+        expect(subject).to contain_package('postgresql-jdbc').with(
           name: 'somepackage',
           ensure: 'latest',
           tag: 'puppetlabs-postgresql',

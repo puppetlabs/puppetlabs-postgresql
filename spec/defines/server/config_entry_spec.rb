@@ -28,7 +28,7 @@ describe 'postgresql::server::config_entry' do
       include_examples 'RedHat 7'
 
       it 'stops postgresql and changes the port #file' do
-        is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf')
+        expect(subject).to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf')
       end
     end
   end
@@ -37,8 +37,8 @@ describe 'postgresql::server::config_entry' do
     let(:params) { { ensure: 'present', name: 'check_function_bodies', value: 'off' } }
 
     it 'with no quotes' do
-      is_expected.to contain_postgresql_conf('check_function_bodies').with(name: 'check_function_bodies',
-                                                                           value: 'off')
+      expect(subject).to contain_postgresql_conf('check_function_bodies').with(name: 'check_function_bodies',
+                                                                               value: 'off')
     end
   end
 
@@ -46,7 +46,7 @@ describe 'postgresql::server::config_entry' do
     let(:params) { { ensure: 'present', name: 'unix_socket_directories', value: '/var/pgsql, /opt/postgresql, /root/' } }
 
     it 'restarts the server and change unix_socket_directories to the provided list' do
-      is_expected.to contain_postgresql_conf('unix_socket_directories')
+      expect(subject).to contain_postgresql_conf('unix_socket_directories')
         .with(name: 'unix_socket_directories',
               value: '/var/pgsql, /opt/postgresql, /root/')
         .that_notifies('Class[postgresql::server::service]')

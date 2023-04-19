@@ -11,22 +11,22 @@ describe 'postgresql::server::config' do
     include_examples 'RedHat 7'
 
     it 'has SELinux port defined' do
-      is_expected.to contain_package('policycoreutils-python').with(ensure: 'installed')
+      expect(subject).to contain_package('policycoreutils-python').with(ensure: 'installed')
 
-      is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
+      expect(subject).to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
         .that_comes_before('Postgresql::Server::Config_entry[port]')
         .that_requires('Package[policycoreutils-python]')
     end
 
     it 'has the correct systemd-override drop file' do
-      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
+      expect(subject).to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
         ensure: 'file', owner: 'root', group: 'root',
       ).that_requires('File[/etc/systemd/system/postgresql.service.d]')
     end
 
     it 'has the correct systemd-override file #regex' do
-      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf')
+      expect(subject).to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf')
     end
 
     describe 'with manage_package_repo => true and a version' do
@@ -41,13 +41,13 @@ describe 'postgresql::server::config' do
       end
 
       it 'has the correct systemd-override file' do
-        is_expected.to contain_file('/etc/systemd/system/postgresql-10.service.d/postgresql-10.conf').with(
+        expect(subject).to contain_file('/etc/systemd/system/postgresql-10.service.d/postgresql-10.conf').with(
           ensure: 'file', owner: 'root', group: 'root',
         )
       end
 
       it 'has the correct systemd-override file #regex' do
-        is_expected.to contain_file('/etc/systemd/system/postgresql-10.service.d/postgresql-10.conf').without_content(%r{\.include})
+        expect(subject).to contain_file('/etc/systemd/system/postgresql-10.service.d/postgresql-10.conf').without_content(%r{\.include})
       end
     end
   end
@@ -56,22 +56,22 @@ describe 'postgresql::server::config' do
     include_examples 'RedHat 8'
 
     it 'has SELinux port defined' do
-      is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'installed')
+      expect(subject).to contain_package('policycoreutils-python-utils').with(ensure: 'installed')
 
-      is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
+      expect(subject).to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
         .that_comes_before('Postgresql::Server::Config_entry[port]')
         .that_requires('Package[policycoreutils-python-utils]')
     end
 
     it 'has the correct systemd-override drop file' do
-      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
+      expect(subject).to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
         ensure: 'file', owner: 'root', group: 'root',
       ).that_requires('File[/etc/systemd/system/postgresql.service.d]')
     end
 
     it 'has the correct systemd-override file #regex' do
-      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').without_content(%r{\.include})
+      expect(subject).to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').without_content(%r{\.include})
     end
 
     describe 'with manage_package_repo => true and a version' do
@@ -86,13 +86,13 @@ describe 'postgresql::server::config' do
       end
 
       it 'has the correct systemd-override file' do
-        is_expected.to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf').with(
+        expect(subject).to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf').with(
           ensure: 'file', owner: 'root', group: 'root',
         )
       end
 
       it 'has the correct systemd-override file #regex' do
-        is_expected.to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf').without_content(%r{\.include})
+        expect(subject).to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf').without_content(%r{\.include})
       end
     end
   end
@@ -101,22 +101,22 @@ describe 'postgresql::server::config' do
     include_examples 'Fedora 33'
 
     it 'has SELinux port defined' do
-      is_expected.to contain_package('policycoreutils-python-utils').with(ensure: 'installed')
+      expect(subject).to contain_package('policycoreutils-python-utils').with(ensure: 'installed')
 
-      is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
+      expect(subject).to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
         .that_comes_before('Postgresql::Server::Config_entry[port]')
         .that_requires('Package[policycoreutils-python-utils]')
     end
 
     it 'has the correct systemd-override drop file' do
-      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
+      expect(subject).to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
         ensure: 'file', owner: 'root', group: 'root',
       ).that_requires('File[/etc/systemd/system/postgresql.service.d]')
     end
 
     it 'has the correct systemd-override file #regex' do
-      is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').without_content(%r{\.include})
+      expect(subject).to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').without_content(%r{\.include})
     end
 
     describe 'with manage_package_repo => true and a version' do
@@ -131,13 +131,13 @@ describe 'postgresql::server::config' do
       end
 
       it 'has the correct systemd-override file' do
-        is_expected.to contain_file('/etc/systemd/system/postgresql-13.service.d/postgresql-13.conf').with(
+        expect(subject).to contain_file('/etc/systemd/system/postgresql-13.service.d/postgresql-13.conf').with(
           ensure: 'file', owner: 'root', group: 'root',
         )
       end
 
       it 'has the correct systemd-override file #regex' do
-        is_expected.to contain_file('/etc/systemd/system/postgresql-13.service.d/postgresql-13.conf').without_content(%r{\.include})
+        expect(subject).to contain_file('/etc/systemd/system/postgresql-13.service.d/postgresql-13.conf').without_content(%r{\.include})
       end
     end
   end
@@ -146,9 +146,9 @@ describe 'postgresql::server::config' do
     include_examples 'Amazon 1'
 
     it 'has SELinux port defined' do
-      is_expected.to contain_package('policycoreutils').with(ensure: 'installed')
+      expect(subject).to contain_package('policycoreutils').with(ensure: 'installed')
 
-      is_expected.to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
+      expect(subject).to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
         .that_comes_before('Postgresql::Server::Config_entry[port]')
         .that_requires('Package[policycoreutils]')
@@ -173,11 +173,11 @@ describe 'postgresql::server::config' do
     end
 
     it 'has hba rule default' do
-      is_expected.to contain_postgresql__server__pg_hba_rule('local access as postgres user')
+      expect(subject).to contain_postgresql__server__pg_hba_rule('local access as postgres user')
     end
 
     it 'has hba rule ipv4acls' do
-      is_expected.to contain_postgresql__server__pg_hba_rule('postgresql class generated rule ipv4acls 0')
+      expect(subject).to contain_postgresql__server__pg_hba_rule('postgresql class generated rule ipv4acls 0')
     end
   end
 
@@ -196,11 +196,11 @@ describe 'postgresql::server::config' do
       end
 
       it 'does not have SELinux port defined' do
-        is_expected.not_to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
+        expect(subject).not_to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
       end
 
       it 'has the correct systemd-override drop file' do
-        is_expected.to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf').with(
+        expect(subject).to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf').with(
           ensure: 'file', owner: 'root', group: 'root',
         )
       end
