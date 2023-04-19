@@ -46,7 +46,7 @@ describe 'postgresql::server::default_privileges' do
     it { is_expected.to contain_postgresql__server__default_privileges('test') }
 
     it do
-      is_expected.to contain_postgresql_psql('default_privileges:test')
+      expect(subject).to contain_postgresql_psql('default_privileges:test')
         .with_command('ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO "test"')
     end
   end
@@ -90,7 +90,7 @@ describe 'postgresql::server::default_privileges' do
 
       it do
         # rubocop:disable Layout/LineLength
-        is_expected.to contain_postgresql_psql('default_privileges:test')
+        expect(subject).to contain_postgresql_psql('default_privileges:test')
           .with_command('ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO "test"')
           .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=arwdDxt' = ANY (defaclacl) AND nspname = 'public' and defaclobjtype = 'r')")
         # rubocop:enable Layout/LineLength
@@ -161,7 +161,7 @@ describe 'postgresql::server::default_privileges' do
 
       it do
         # rubocop:disable Layout/LineLength
-        is_expected.to contain_postgresql_psql('default_privileges:test')
+        expect(subject).to contain_postgresql_psql('default_privileges:test')
           .with_command('ALTER DEFAULT PRIVILEGES GRANT ALL ON SCHEMAS TO "test"')
           .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=UC' = ANY (defaclacl) AND nspname IS NULL and defaclobjtype = 'n')")
         # rubocop:enable Layout/LineLength
@@ -280,7 +280,7 @@ describe 'postgresql::server::default_privileges' do
 
     it do
       # rubocop:disable Layout/LineLength
-      is_expected.to contain_postgresql_psql('default_privileges:test')
+      expect(subject).to contain_postgresql_psql('default_privileges:test')
         .with_command('ALTER DEFAULT PRIVILEGES IN SCHEMA my_schema GRANT ALL ON TABLES TO "test"')
         .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=arwdDxt' = ANY (defaclacl) AND nspname = 'my_schema' and defaclobjtype = 'r')")
       # rubocop:enable Layout/LineLength
@@ -307,7 +307,7 @@ describe 'postgresql::server::default_privileges' do
 
     it do
       # rubocop:disable Layout/LineLength
-      is_expected.to contain_postgresql_psql('default_privileges:test')
+      expect(subject).to contain_postgresql_psql('default_privileges:test')
         .with_command('ALTER DEFAULT PRIVILEGES GRANT ALL ON TABLES TO "test"')
         .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=arwdDxt' = ANY (defaclacl) AND nspname IS NULL and defaclobjtype = 'r')")
       # rubocop:enable Layout/LineLength
@@ -336,7 +336,7 @@ describe 'postgresql::server::default_privileges' do
     it { is_expected.to contain_postgresql__server__role('test') }
 
     it do
-      is_expected.to contain_postgresql_psql('default_privileges:test') \
+      expect(subject).to contain_postgresql_psql('default_privileges:test') \
         .that_requires(['Service[postgresqld]', 'Postgresql::Server::Role[test]'])
     end
   end
@@ -365,7 +365,7 @@ describe 'postgresql::server::default_privileges' do
 
     it do
       # rubocop:disable Layout/LineLength
-      is_expected.to contain_postgresql_psql('default_privileges:test')
+      expect(subject).to contain_postgresql_psql('default_privileges:test')
         .with_command('ALTER DEFAULT PRIVILEGES FOR ROLE target IN SCHEMA public GRANT ALL ON TABLES TO "test"')
         .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=arwdDxt/target' = ANY (defaclacl) AND nspname = 'public' and defaclobjtype = 'r')")
       # rubocop:enable Layout/LineLength

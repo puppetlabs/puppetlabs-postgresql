@@ -8,7 +8,7 @@ describe 'postgresql::globals' do
 
     describe 'with no parameters' do
       it 'executes successfully' do
-        is_expected.to contain_class('postgresql::globals')
+        expect(subject).to contain_class('postgresql::globals')
       end
     end
 
@@ -20,7 +20,7 @@ describe 'postgresql::globals' do
       end
 
       it 'pulls in class postgresql::repo' do
-        is_expected.to contain_class('postgresql::repo')
+        expect(subject).to contain_class('postgresql::repo')
       end
     end
   end
@@ -30,7 +30,7 @@ describe 'postgresql::globals' do
 
     describe 'with no parameters' do
       it 'executes successfully' do
-        is_expected.to contain_class('postgresql::globals')
+        expect(subject).to contain_class('postgresql::globals')
       end
     end
 
@@ -43,15 +43,15 @@ describe 'postgresql::globals' do
       end
 
       it 'pulls in class postgresql::repo' do
-        is_expected.to contain_class('postgresql::repo')
+        expect(subject).to contain_class('postgresql::repo')
       end
 
       it do
-        is_expected.to contain_yumrepo('yum.postgresql.org').with(
+        expect(subject).to contain_yumrepo('yum.postgresql.org').with(
           'enabled' => '1',
           'proxy' => 'http://proxy-server:8080',
         )
-        is_expected.to contain_yumrepo('pgdg-common').with(
+        expect(subject).to contain_yumrepo('pgdg-common').with(
           'enabled' => '1',
           'proxy' => 'http://proxy-server:8080',
         )
@@ -68,15 +68,15 @@ describe 'postgresql::globals' do
       end
 
       it 'pulls in class postgresql::repo' do
-        is_expected.to contain_class('postgresql::repo')
+        expect(subject).to contain_class('postgresql::repo')
       end
 
       it do
-        is_expected.to contain_yumrepo('yum.postgresql.org').with(
+        expect(subject).to contain_yumrepo('yum.postgresql.org').with(
           'enabled' => '1',
           'baseurl' => 'http://mirror.localrepo.com/pgdg-postgresql',
         )
-        is_expected.to contain_yumrepo('pgdg-common').with(
+        expect(subject).to contain_yumrepo('pgdg-common').with(
           'enabled' => '1',
           'baseurl' => 'http://mirror.localrepo.com/pgdg-common',
         )

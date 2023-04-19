@@ -9,7 +9,7 @@ describe 'postgresql::lib::devel' do
 
   describe 'link pg_config to /usr/bin' do
     it {
-      is_expected.not_to contain_file('/usr/bin/pg_config') \
+      expect(subject).not_to contain_file('/usr/bin/pg_config') \
         .with_ensure('link') \
         .with_target('/usr/lib/postgresql/13/bin/pg_config')
     }
@@ -38,7 +38,7 @@ describe 'postgresql::lib::devel' do
     end
 
     it {
-      is_expected.to contain_file('/usr/bin/pg_config') \
+      expect(subject).to contain_file('/usr/bin/pg_config') \
         .with_ensure('link') \
         .with_target('/usr/pgsql-9.3/bin/pg_config')
     }
@@ -53,7 +53,7 @@ describe 'postgresql::lib::devel' do
     end
 
     it 'fails to compile' do
-      is_expected.to compile.and_raise_error(%r{is not supported})
+      expect(subject).to compile.and_raise_error(%r{is not supported})
     end
   end
 end

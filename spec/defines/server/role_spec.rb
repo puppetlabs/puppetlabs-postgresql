@@ -23,7 +23,7 @@ describe 'postgresql::server::role' do
     it { is_expected.to contain_postgresql__server__role('test') }
 
     it 'has create role for "test" user with password as ****' do
-      is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
+      expect(subject).to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
         .with('command' => 'Sensitive [value redacted]',
               'sensitive' => 'true',
               'unless' => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
@@ -31,7 +31,7 @@ describe 'postgresql::server::role' do
     end
 
     it 'has alter role for "test" user with password as ****' do
-      is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
+      expect(subject).to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
         .with('command' => 'Sensitive [value redacted]',
               'sensitive' => 'true',
               'unless' => 'Sensitive [value redacted]',
@@ -49,7 +49,7 @@ describe 'postgresql::server::role' do
     it { is_expected.to contain_postgresql__server__role('test') }
 
     it 'has create role for "test" user with password as ****' do
-      is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
+      expect(subject).to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
         .with('command' => 'Sensitive [value redacted]',
               'sensitive' => 'true',
               'unless' => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
@@ -57,7 +57,7 @@ describe 'postgresql::server::role' do
     end
 
     it 'has alter role for "test" user with password as ****' do
-      is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
+      expect(subject).to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
         .with('command' => 'Sensitive [value redacted]',
               'sensitive' => 'true',
               'unless' => 'Sensitive [value redacted]',
@@ -83,7 +83,7 @@ describe 'postgresql::server::role' do
     it { is_expected.to contain_postgresql__server__role('test') }
 
     it 'has create role for "test" user with password as ****' do
-      is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
+      expect(subject).to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
         .with_command('Sensitive [value redacted]')
         .with_sensitive('true')
         .with_unless("SELECT 1 FROM pg_roles WHERE rolname = 'test'")
@@ -93,7 +93,7 @@ describe 'postgresql::server::role' do
     end
 
     it 'has alter role for "test" user with password as ****' do
-      is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
+      expect(subject).to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
         .with('command' => 'Sensitive [value redacted]', 'sensitive' => 'true',
               'unless' => 'Sensitive [value redacted]', 'port' => '5432',
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
@@ -120,7 +120,7 @@ describe 'postgresql::server::role' do
     it { is_expected.to contain_postgresql__server__role('test') }
 
     it 'has create role for "test" user with password as ****' do
-      is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
+      expect(subject).to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
         .with('command' => 'Sensitive [value redacted]',
               'sensitive' => 'true', 'unless' => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
@@ -128,7 +128,7 @@ describe 'postgresql::server::role' do
     end
 
     it 'has alter role for "test" user with password as ****' do
-      is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
+      expect(subject).to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
         .with('command' => 'Sensitive [value redacted]', 'sensitive' => 'true',
               'unless' => 'Sensitive [value redacted]',
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
@@ -149,7 +149,7 @@ describe 'postgresql::server::role' do
     end
 
     it 'does not have alter role for "test" user with password as **** if update_password is false' do
-      is_expected.not_to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
+      expect(subject).not_to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
     end
   end
 
@@ -165,7 +165,7 @@ describe 'postgresql::server::role' do
     end
 
     it 'has drop role for "test" user if ensure absent' do
-      is_expected.to contain_postgresql_psql('DROP ROLE "test"').that_requires('Service[postgresqld]')
+      expect(subject).to contain_postgresql_psql('DROP ROLE "test"').that_requires('Service[postgresqld]')
     end
   end
 

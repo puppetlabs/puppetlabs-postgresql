@@ -30,7 +30,7 @@ describe 'postgresql::server::pg_ident_rule' do
     end
 
     it do
-      is_expected.to contain_concat__fragment('pg_ident_rule_test').with(content: %r{thatsmymap\s+systemuser\s+dbuser})
+      expect(subject).to contain_concat__fragment('pg_ident_rule_test').with(content: %r{thatsmymap\s+systemuser\s+dbuser})
     end
   end
 

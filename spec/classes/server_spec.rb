@@ -11,11 +11,11 @@ describe 'postgresql::server' do
     it { is_expected.to contain_file('/var/lib/postgresql/13/main') }
 
     it {
-      is_expected.to contain_exec('postgresql_reload').with('command' => 'systemctl reload postgresql')
+      expect(subject).to contain_exec('postgresql_reload').with('command' => 'systemctl reload postgresql')
     }
 
     it 'validates connection' do
-      is_expected.to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
     end
   end
 
@@ -61,14 +61,14 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server::passwd') }
 
     it 'validates connection' do
-      is_expected.to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
     end
 
     it 'sets postgres password' do
-      is_expected.to contain_exec('set_postgres_postgrespw').with('command' => '/usr/bin/psql -c "ALTER ROLE \"postgres\" PASSWORD ${NEWPASSWD_ESCAPED}"',
-                                                                  'user' => 'postgres',
-                                                                  'environment' => ['PGPASSWORD=new-p@s$word-to-set', 'PGPORT=5432', 'NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$'],
-                                                                  'unless' => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null")
+      expect(subject).to contain_exec('set_postgres_postgrespw').with('command' => '/usr/bin/psql -c "ALTER ROLE \"postgres\" PASSWORD ${NEWPASSWD_ESCAPED}"',
+                                                                      'user' => 'postgres',
+                                                                      'environment' => ['PGPASSWORD=new-p@s$word-to-set', 'PGPORT=5432', 'NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$'],
+                                                                      'unless' => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null")
     end
   end
 
@@ -85,14 +85,14 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server::passwd') }
 
     it 'validates connection' do
-      is_expected.to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
     end
 
     it 'sets postgres password' do
-      is_expected.to contain_exec('set_postgres_postgrespw').with('command' => ['/usr/bin/psql -c "ALTER ROLE \"postgres\" PASSWORD ${NEWPASSWD_ESCAPED}"'],
-                                                                  'user' => 'postgres',
-                                                                  'environment' => ['PGPASSWORD=new-p@s$word-to-set', 'PGPORT=5432', 'NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$'],
-                                                                  'unless' => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null")
+      expect(subject).to contain_exec('set_postgres_postgrespw').with('command' => ['/usr/bin/psql -c "ALTER ROLE \"postgres\" PASSWORD ${NEWPASSWD_ESCAPED}"'],
+                                                                      'user' => 'postgres',
+                                                                      'environment' => ['PGPASSWORD=new-p@s$word-to-set', 'PGPORT=5432', 'NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$'],
+                                                                      'unless' => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null")
     end
   end
 
@@ -103,7 +103,7 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server') }
 
     it 'shouldnt validate connection' do
-      is_expected.not_to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).not_to contain_postgresql_conn_validator('validate_service_is_running')
     end
   end
 
@@ -114,11 +114,11 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server') }
 
     it {
-      is_expected.not_to contain_Postgresql_conf('data_directory').that_notifies('Class[postgresql::server::service]')
+      expect(subject).not_to contain_Postgresql_conf('data_directory').that_notifies('Class[postgresql::server::service]')
     }
 
     it 'validates connection' do
-      is_expected.to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
     end
   end
 
@@ -129,11 +129,11 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server') }
 
     it {
-      is_expected.to contain_Postgresql_conf('data_directory').that_notifies('Class[postgresql::server::service]')
+      expect(subject).to contain_Postgresql_conf('data_directory').that_notifies('Class[postgresql::server::service]')
     }
 
     it 'validates connection' do
-      is_expected.to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
     end
   end
 
@@ -144,11 +144,11 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server') }
 
     it {
-      is_expected.to contain_exec('postgresql_reload').with('command' => '/bin/true')
+      expect(subject).to contain_exec('postgresql_reload').with('command' => '/bin/true')
     }
 
     it 'validates connection' do
-      is_expected.to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
     end
   end
 
@@ -164,7 +164,7 @@ describe 'postgresql::server' do
     it { is_expected.not_to contain_service('postgresqld') }
 
     it 'shouldnt validate connection' do
-      is_expected.not_to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).not_to contain_postgresql_conn_validator('validate_service_is_running')
     end
   end
 
@@ -176,11 +176,11 @@ describe 'postgresql::server' do
     end
 
     it 'removes the package' do
-      is_expected.to contain_package('postgresql-server').with(ensure: 'purged')
+      expect(subject).to contain_package('postgresql-server').with(ensure: 'purged')
     end
 
     it 'stills enable the service' do
-      is_expected.to contain_service('postgresqld').with(ensure: 'running')
+      expect(subject).to contain_service('postgresqld').with(ensure: 'running')
     end
   end
 
@@ -192,7 +192,7 @@ describe 'postgresql::server' do
     end
 
     it 'contains proper initdb exec' do
-      is_expected.to contain_exec('postgresql_initdb')
+      expect(subject).to contain_exec('postgresql_initdb')
     end
   end
 
@@ -208,10 +208,10 @@ describe 'postgresql::server' do
     end
 
     it 'contains the correct package version' do
-      is_expected.to contain_class('postgresql::repo').with_version('14')
-      is_expected.to contain_file('/var/lib/postgresql/14/main') # FIXME: be more precise
-      is_expected.to contain_concat('/etc/postgresql/14/main/pg_hba.conf') # FIXME: be more precise
-      is_expected.to contain_concat('/etc/postgresql/14/main/pg_ident.conf') # FIXME: be more precise
+      expect(subject).to contain_class('postgresql::repo').with_version('14')
+      expect(subject).to contain_file('/var/lib/postgresql/14/main') # FIXME: be more precise
+      expect(subject).to contain_concat('/etc/postgresql/14/main/pg_hba.conf') # FIXME: be more precise
+      expect(subject).to contain_concat('/etc/postgresql/14/main/pg_ident.conf') # FIXME: be more precise
     end
   end
 
@@ -263,7 +263,7 @@ describe 'postgresql::server' do
     it { is_expected.to compile.with_all_deps }
 
     it do
-      is_expected.to contain_postgresql__server__pg_hba_rule('from_remote_host')
+      expect(subject).to contain_postgresql__server__pg_hba_rule('from_remote_host')
         .with_type('host')
         .with_database('mydb')
         .with_user('myuser')
@@ -300,12 +300,12 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::backup::pg_dump') }
 
     it {
-      is_expected.to contain_postgresql__server__role('backupuser')
+      expect(subject).to contain_postgresql__server__role('backupuser')
         .with_superuser(true)
     }
 
     it {
-      is_expected.to contain_postgresql__server__pg_hba_rule('local access as backup user')
+      expect(subject).to contain_postgresql__server__pg_hba_rule('local access as backup user')
         .with_type('local')
         .with_database('all')
         .with_user('backupuser')
@@ -313,17 +313,17 @@ describe 'postgresql::server' do
     }
 
     it {
-      is_expected.to contain_file('/root/.pgpass')
+      expect(subject).to contain_file('/root/.pgpass')
         .with_content(%r{.*:backupuser:.*})
     }
 
     it {
-      is_expected.to contain_file('/usr/local/sbin/pg_dump.sh')
+      expect(subject).to contain_file('/usr/local/sbin/pg_dump.sh')
         .with_content(%r{.*pg_dumpall \$_pg_args --file=\$\{FILE\} \$@.*})
     }
 
     it {
-      is_expected.to contain_cron('pg_dump backup job')
+      expect(subject).to contain_cron('pg_dump backup job')
         .with(
           ensure: 'present',
           command: '/usr/local/sbin/pg_dump.sh',

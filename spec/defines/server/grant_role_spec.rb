@@ -20,7 +20,7 @@ describe 'postgresql::server::grant_role' do
 
   context 'with mandatory arguments only' do
     it {
-      is_expected.to contain_postgresql_psql("grant_role:#{title}")
+      expect(subject).to contain_postgresql_psql("grant_role:#{title}")
         .with(command: "GRANT \"#{params[:group]}\" TO \"#{params[:role]}\"",
               unless: "SELECT 1 WHERE EXISTS (SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = '#{params[:group]}' AND r_role.rolname = '#{params[:role]}') = true") # rubocop:disable Layout/LineLength
         .that_requires('Class[postgresql::server]')
@@ -35,7 +35,7 @@ describe 'postgresql::server::grant_role' do
     end
 
     it {
-      is_expected.to contain_postgresql_psql("grant_role:#{title}")
+      expect(subject).to contain_postgresql_psql("grant_role:#{title}")
         .with(command: "GRANT \"#{params[:group]}\" TO \"#{params[:role]}\"",
               unless: "SELECT 1 WHERE EXISTS (SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = '#{params[:group]}' AND r_role.rolname = '#{params[:role]}') = true", # rubocop:disable Layout/LineLength
               db: params[:psql_db], psql_user: params[:psql_user],
@@ -49,7 +49,7 @@ describe 'postgresql::server::grant_role' do
     end
 
     it {
-      is_expected.to contain_postgresql_psql("grant_role:#{title}")
+      expect(subject).to contain_postgresql_psql("grant_role:#{title}")
         .with(command: "REVOKE \"#{params[:group]}\" FROM \"#{params[:role]}\"",
               unless: "SELECT 1 WHERE EXISTS (SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = '#{params[:group]}' AND r_role.rolname = '#{params[:role]}') != true") # rubocop:disable Layout/LineLength
         .that_requires('Class[postgresql::server]')
@@ -63,11 +63,11 @@ postgresql::server::role { '#{params[:role]}': }"
     end
 
     it {
-      is_expected.to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:role]}]")
+      expect(subject).to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:role]}]")
     }
 
     it {
-      is_expected.not_to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:group]}]")
+      expect(subject).not_to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:group]}]")
     }
   end
 
@@ -78,11 +78,11 @@ postgresql::server::role { '#{params[:group]}': }"
     end
 
     it {
-      is_expected.to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:group]}]")
+      expect(subject).to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:group]}]")
     }
 
     it {
-      is_expected.not_to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:role]}]")
+      expect(subject).not_to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:role]}]")
     }
   end
 
@@ -92,11 +92,11 @@ postgresql::server::role { '#{params[:group]}': }"
     end
 
     it {
-      is_expected.to contain_postgresql_psql("grant_role:#{title}").with_connect_settings('PGHOST' => 'postgres-db-server')
+      expect(subject).to contain_postgresql_psql("grant_role:#{title}").with_connect_settings('PGHOST' => 'postgres-db-server')
     }
 
     it {
-      is_expected.not_to contain_postgresql_psql("grant_role:#{title}").that_requires('Class[postgresql::server]')
+      expect(subject).not_to contain_postgresql_psql("grant_role:#{title}").that_requires('Class[postgresql::server]')
     }
   end
 end

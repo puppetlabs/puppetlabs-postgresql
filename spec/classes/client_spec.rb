@@ -16,22 +16,22 @@ describe 'postgresql::client' do
     end
 
     it 'modifies package' do
-      is_expected.to contain_package('postgresql-client').with(ensure: 'absent',
-                                                               name: 'mypackage',
-                                                               tag: 'puppetlabs-postgresql')
+      expect(subject).to contain_package('postgresql-client').with(ensure: 'absent',
+                                                                   name: 'mypackage',
+                                                                   tag: 'puppetlabs-postgresql')
     end
 
     it 'has specified validate connexion' do
-      is_expected.to contain_file('/opt/bin/my-validate-con.sh').with(ensure: 'file',
-                                                                      owner: 0,
-                                                                      group: 0,
-                                                                      mode: '0755')
+      expect(subject).to contain_file('/opt/bin/my-validate-con.sh').with(ensure: 'file',
+                                                                          owner: 0,
+                                                                          group: 0,
+                                                                          mode: '0755')
     end
   end
 
   describe 'with no parameters' do
     it 'creates package with postgresql tag' do
-      is_expected.to contain_package('postgresql-client').with(tag: 'puppetlabs-postgresql')
+      expect(subject).to contain_package('postgresql-client').with(tag: 'puppetlabs-postgresql')
     end
   end
 
@@ -55,7 +55,7 @@ describe 'postgresql::client' do
     end
 
     it 'does not manage postgresql-client package' do
-      is_expected.not_to contain_package('postgresql-client')
+      expect(subject).not_to contain_package('postgresql-client')
     end
   end
 end
