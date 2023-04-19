@@ -7,7 +7,7 @@ describe 'postgresql::globals' do
     include_examples 'Debian 11'
 
     describe 'with no parameters' do
-      it 'works' do
+      it 'executes successfully' do
         is_expected.to contain_class('postgresql::globals')
       end
     end
@@ -29,7 +29,7 @@ describe 'postgresql::globals' do
     include_examples 'RedHat 7'
 
     describe 'with no parameters' do
-      it 'works' do
+      it 'executes successfully' do
         is_expected.to contain_class('postgresql::globals')
       end
     end
