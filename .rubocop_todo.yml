@@ -160,12 +160,6 @@ Style/ClassAndModuleChildren:
   Exclude:
     - 'lib/puppet/util/postgresql_validator.rb'
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/GlobalStdStream:
-  Exclude:
-    - 'tasks/sql.rb'
-
 # Offense count: 9
 # This cop supports safe autocorrection (--autocorrect).
 Style/IfUnlessModifier:
