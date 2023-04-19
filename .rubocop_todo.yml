@@ -59,18 +59,6 @@ Naming/HeredocDelimiterNaming:
     - 'spec/defines/server/default_privileges_spec.rb'
     - 'spec/defines/server/grant_spec.rb'
 
-# Offense count: 3
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# RSpec/BeEq:
-#   Exclude:
-#     - 'spec/functions/postgresql_postgresql_acls_to_resources_hash_spec.rb'
-#     - 'spec/spec_helper_local.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-RSpec/ContextMethod:
-  Exclude:
-    - 'spec/unit/puppet/provider/postgresql_psql/ruby_spec.rb'
 
 # Offense count: 104
 # Configuration parameters: Prefixes, AllowedPatterns.
