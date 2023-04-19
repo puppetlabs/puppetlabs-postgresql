@@ -1,9 +1,3 @@
-# Offense count: 6
-# This cop supports safe autocorrection (--autocorrect).
-Layout/SpaceAroundMethodCallOperator:
-  Exclude:
-    - 'spec/classes/server/config_spec.rb'
-
 # Offense count: 15
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Lint/BooleanSymbol:
