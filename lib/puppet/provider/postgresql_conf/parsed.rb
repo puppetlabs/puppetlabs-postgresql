@@ -16,7 +16,7 @@ Puppet::Type.type(:postgresql_conf).provide(
   record_line :parsed,
               fields: ['name', 'value', 'comment'],
               optional: ['comment'],
-              match: %r{^\s*([\w\.]+)\s*=?\s*(.*?)(?:\s*#\s*(.*))?\s*$},
+              match: %r{^\s*([\w.]+)\s*=?\s*(.*?)(?:\s*#\s*(.*))?\s*$},
               to_line: proc { |h|
                 # simple string and numeric values don't need to be enclosed in quotes
                 val = if h[:value].is_a?(Numeric)
