@@ -23,7 +23,7 @@ describe 'postgresql::server::db' do
     idempotent_apply(pp)
 
     # Verify that the postgres password works
-    run_shell("echo 'localhost:*:*:postgres:\'space password\'' > /root/.pgpass")
+    run_shell("echo 'localhost:*:*:postgres:'space password'' > /root/.pgpass")
     run_shell('chmod 600 /root/.pgpass')
     run_shell("psql -U postgres -h localhost --command='\\l'")
 
