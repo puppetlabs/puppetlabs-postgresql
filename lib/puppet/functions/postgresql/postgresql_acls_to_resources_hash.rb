@@ -27,7 +27,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_acls_to_resources_has
 
       unless parts.length >= 4
         raise(Puppet::ParseError, "postgresql::postgresql_acls_to_resources_hash(): acl line #{index} does not " \
-          'have enough parts')
+                                  'have enough parts')
       end
 
       resource = {
