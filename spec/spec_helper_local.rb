@@ -45,7 +45,7 @@ def param(type, title, param)
 end
 
 shared_examples 'postgresql_password function' do
-  it { is_expected.not_to eq(nil) }
+  it { is_expected.not_to be_nil }
 
   it {
     is_expected.to run.with_params('foo', 'bar').and_return(
@@ -73,7 +73,7 @@ shared_examples 'postgresql_password function' do
 end
 
 shared_examples 'postgresql_escape function' do
-  it { is_expected.not_to eq(nil) }
+  it { is_expected.not_to be_nil }
   it {
     is_expected.to run.with_params('foo')
                       .and_return('$$foo$$')
