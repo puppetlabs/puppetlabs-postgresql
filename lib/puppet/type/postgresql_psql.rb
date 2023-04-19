@@ -110,9 +110,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
     validate do |values|
       Array(values).each do |value|
-        unless %r{\w+=}.match?(value)
-          raise ArgumentError, "Invalid environment setting '#{value}'"
-        end
+        raise ArgumentError, "Invalid environment setting '#{value}'" unless %r{\w+=}.match?(value)
       end
     end
   end

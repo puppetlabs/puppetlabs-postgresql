@@ -79,9 +79,7 @@ describe 'postgresql::server::grant:' do
       end
 
       it 'is expected to run idempotently' do
-        if Gem::Version.new(postgresql_version) >= Gem::Version.new('8.4.0')
-          idempotent_apply(pp)
-        end
+        idempotent_apply(pp) if Gem::Version.new(postgresql_version) >= Gem::Version.new('8.4.0')
       end
 
       it 'is expected to GRANT USAGE ON LANGUAGE plpgsql to ROLE' do
