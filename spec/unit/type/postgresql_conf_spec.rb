@@ -14,9 +14,11 @@ describe Puppet::Type.type(:postgresql_conf) do
     it 'has :name as its namevar' do
       expect(described_class.key_attributes).to eq([:name])
     end
+
     it 'does not invalid names' do
       expect { described_class.new(name: 'foo bar') }.to raise_error(Puppet::Error, %r{Invalid value})
     end
+
     it 'allows dots in names' do
       expect { described_class.new(name: 'foo.bar') }.not_to raise_error
     end
@@ -41,9 +43,11 @@ describe Puppet::Type.type(:postgresql_conf) do
       it 'supports present as a value for ensure' do
         expect { described_class.new(name: 'foo', ensure: :present) }.not_to raise_error
       end
+
       it 'supports absent as a value for ensure' do
         expect { described_class.new(name: 'foo', ensure: :absent) }.not_to raise_error
       end
+
       it 'does not support other values' do
         expect { described_class.new(name: 'foo', ensure: :foo) }.to raise_error(Puppet::Error, %r{Invalid value})
       end

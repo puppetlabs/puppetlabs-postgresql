@@ -11,6 +11,7 @@ describe 'postgresql::server::plpython' do
 
   describe 'on RedHat with no parameters' do
     it { is_expected.to contain_class('postgresql::server::plpython') }
+
     it 'creates package' do
       is_expected.to contain_package('postgresql-plpython').with(ensure: 'present',
                                                                  tag: 'puppetlabs-postgresql')
@@ -26,6 +27,7 @@ describe 'postgresql::server::plpython' do
     end
 
     it { is_expected.to contain_class('postgresql::server::plpython') }
+
     it 'creates package with correct params' do
       is_expected.to contain_package('postgresql-plpython').with(ensure: 'absent',
                                                                  name: 'mypackage',

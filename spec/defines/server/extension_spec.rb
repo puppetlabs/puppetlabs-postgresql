@@ -207,6 +207,7 @@ describe 'postgresql::server::extension' do
     end
 
     it { is_expected.to compile.with_all_deps }
+
     it {
       is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
         .with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234')
@@ -231,6 +232,7 @@ describe 'postgresql::server::extension' do
     end
 
     it { is_expected.to compile.with_all_deps }
+
     it {
       is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
         .with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234')

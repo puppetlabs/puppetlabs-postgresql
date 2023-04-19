@@ -90,6 +90,7 @@ describe 'postgresql::server::config' do
           ensure: 'file', owner: 'root', group: 'root',
         )
       end
+
       it 'has the correct systemd-override file #regex' do
         is_expected.to contain_file('/etc/systemd/system/postgresql-14.service.d/postgresql-14.conf').without_content(%r{\.include})
       end
@@ -174,6 +175,7 @@ describe 'postgresql::server::config' do
     it 'has hba rule default' do
       is_expected.to contain_postgresql__server__pg_hba_rule('local access as postgres user')
     end
+
     it 'has hba rule ipv4acls' do
       is_expected.to contain_postgresql__server__pg_hba_rule('postgresql class generated rule ipv4acls 0')
     end

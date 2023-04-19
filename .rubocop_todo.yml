@@ -71,17 +71,6 @@ RSpec/ContextWording:
 RSpec/DescribeClass:
   Enabled: false
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-RSpec/EmptyHook:
-  Exclude:
-    - 'spec/unit/provider/postgresql_conf/parsed_spec.rb'
-
-# Offense count: 74
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowConsecutiveOneLiners.
-RSpec/EmptyLineAfterExample:
-  Enabled: false
 
 # Offense count: 29
 # This cop supports safe autocorrection (--autocorrect).
