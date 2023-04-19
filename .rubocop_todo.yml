@@ -1,20 +1,3 @@
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowMultipleStyles, EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle.
-# SupportedHashRocketStyles: key, separator, table
-# SupportedColonStyles: key, separator, table
-# SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
-Layout/HashAlignment:
-  Exclude:
-    - 'lib/puppet/functions/postgresql/postgresql_acls_to_resources_hash.rb'
-    - 'spec/classes/globals_spec.rb'
-    - 'spec/classes/server_spec.rb'
-    - 'spec/defines/server/database_spec.rb'
-    - 'spec/defines/server/default_privileges_spec.rb'
-    - 'spec/defines/server/grant_spec.rb'
-    - 'spec/defines/server/role_spec.rb'
-    - 'spec/functions/postgresql_postgresql_acls_to_resources_hash_spec.rb'
-    - 'spec/spec_helper_local.rb'
-
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
 Layout/HeredocIndentation:

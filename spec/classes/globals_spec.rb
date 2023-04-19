@@ -49,11 +49,11 @@ describe 'postgresql::globals' do
       it do
         is_expected.to contain_yumrepo('yum.postgresql.org').with(
           'enabled' => '1',
-          'proxy'   => 'http://proxy-server:8080',
+          'proxy' => 'http://proxy-server:8080',
         )
         is_expected.to contain_yumrepo('pgdg-common').with(
           'enabled' => '1',
-          'proxy'   => 'http://proxy-server:8080',
+          'proxy' => 'http://proxy-server:8080',
         )
       end
     end

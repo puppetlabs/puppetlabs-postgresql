@@ -221,7 +221,7 @@ describe 'postgresql::server::default_privileges' do
         object_type: 'tables',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.6',
-                            'PGPORT'    => '1234' },
+                            'PGPORT' => '1234' },
       }
     end
 

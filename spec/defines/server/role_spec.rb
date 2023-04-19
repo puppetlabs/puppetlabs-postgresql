@@ -23,17 +23,17 @@ describe 'postgresql::server::role' do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'has create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-        .with('command'     => 'Sensitive [value redacted]',
-              'sensitive'   => 'true',
-              'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
-              'port'        => '5432')
+        .with('command' => 'Sensitive [value redacted]',
+              'sensitive' => 'true',
+              'unless' => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
+              'port' => '5432')
     end
     it 'has alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
-        .with('command'     => 'Sensitive [value redacted]',
-              'sensitive'   => 'true',
-              'unless'      => 'Sensitive [value redacted]',
-              'port'        => '5432')
+        .with('command' => 'Sensitive [value redacted]',
+              'sensitive' => 'true',
+              'unless' => 'Sensitive [value redacted]',
+              'port' => '5432')
     end
   end
 
@@ -47,17 +47,17 @@ describe 'postgresql::server::role' do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'has create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-        .with('command'     => 'Sensitive [value redacted]',
-              'sensitive'   => 'true',
-              'unless'      => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
-              'port'        => '5432')
+        .with('command' => 'Sensitive [value redacted]',
+              'sensitive' => 'true',
+              'unless' => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
+              'port' => '5432')
     end
     it 'has alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
-        .with('command'     => 'Sensitive [value redacted]',
-              'sensitive'   => 'true',
-              'unless'      => 'Sensitive [value redacted]',
-              'port'        => '5432')
+        .with('command' => 'Sensitive [value redacted]',
+              'sensitive' => 'true',
+              'unless' => 'Sensitive [value redacted]',
+              'port' => '5432')
     end
   end
 
@@ -65,9 +65,9 @@ describe 'postgresql::server::role' do
     let :params do
       {
         password_hash: 'new-pa$s',
-        connect_settings: { 'PGHOST'     => 'postgres-db-server',
-                            'DBVERSION'  => '9.1',
-                            'PGUSER'     => 'login-user',
+        connect_settings: { 'PGHOST' => 'postgres-db-server',
+                            'DBVERSION' => '9.1',
+                            'PGUSER' => 'login-user',
                             'PGPASSWORD' => 'login-pass' },
       }
     end
@@ -89,7 +89,7 @@ describe 'postgresql::server::role' do
     it 'has alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
         .with('command' => 'Sensitive [value redacted]', 'sensitive' => 'true',
-              'unless'  => 'Sensitive [value redacted]', 'port' => '5432',
+              'unless' => 'Sensitive [value redacted]', 'port' => '5432',
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
                                       'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
     end
@@ -100,9 +100,9 @@ describe 'postgresql::server::role' do
       {
         password_hash: 'new-pa$s',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
-                            'DBVERSION'  => '9.1',
-                            'PGPORT'     => '1234',
-                            'PGUSER'     => 'login-user',
+                            'DBVERSION' => '9.1',
+                            'PGPORT' => '1234',
+                            'PGUSER' => 'login-user',
                             'PGPASSWORD' => 'login-pass' },
       }
     end
@@ -114,7 +114,7 @@ describe 'postgresql::server::role' do
     it { is_expected.to contain_postgresql__server__role('test') }
     it 'has create role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-        .with('command'   => 'Sensitive [value redacted]',
+        .with('command' => 'Sensitive [value redacted]',
               'sensitive' => 'true', 'unless' => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
                                       'PGPORT' => '1234', 'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
@@ -122,7 +122,7 @@ describe 'postgresql::server::role' do
     it 'has alter role for "test" user with password as ****' do
       is_expected.to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
         .with('command' => 'Sensitive [value redacted]', 'sensitive' => 'true',
-              'unless'  => 'Sensitive [value redacted]',
+              'unless' => 'Sensitive [value redacted]',
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
                                       'PGPORT' => '1234', 'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
     end
@@ -171,9 +171,9 @@ describe 'postgresql::server::role' do
       {
         password_hash: 'new-pa$s',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
-                            'DBVERSION'  => '9.1',
-                            'PGPORT'     => '1234',
-                            'PGUSER'     => 'login-user',
+                            'DBVERSION' => '9.1',
+                            'PGPORT' => '1234',
+                            'PGUSER' => 'login-user',
                             'PGPASSWORD' => 'login-pass' },
         psql_user: 'postgresql',
         psql_group: 'postgresql',
