@@ -29,18 +29,6 @@ describe 'postgresql::server::config' do
       is_expected.to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf')
     end
 
-    context 'RHEL 7 host with Puppet 5' do
-      include_examples 'RedHat 7'
-
-      it 'has systemctl restart command' do
-        is_expected.to contain_exec('systemd-postgresql.service-systemctl-daemon-reload').with(
-          command: 'systemctl daemon-reload',
-          refreshonly: true,
-          path: '/bin:/usr/bin:/usr/local/bin',
-        )
-      end
-    end
-
     describe 'with manage_package_repo => true and a version' do
       let(:pre_condition) do
         <<-EOS
