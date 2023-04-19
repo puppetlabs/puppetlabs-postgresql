@@ -30,7 +30,7 @@ describe 'postgresql::server::pg_hba_rule' do
     end
 
     it do
-      expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+1\.1\.1\.1\/24\s+md5})
+      expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+1\.1\.1\.1/24\s+md5})
     end
   end
 
@@ -76,7 +76,7 @@ describe 'postgresql::server::pg_hba_rule' do
     end
 
     it do
-      expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+0\.0\.0\.0\/0\s+ldap\s+foo=bar})
+      expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+0\.0\.0\.0/0\s+ldap\s+foo=bar})
     end
   end
 
@@ -104,7 +104,7 @@ describe 'postgresql::server::pg_hba_rule' do
 
       it do
         expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(
-          content: %r{local\s+all\s+all\s+0\.0\.0\.0\/0\s+peer},
+          content: %r{local\s+all\s+all\s+0\.0\.0\.0/0\s+peer},
         )
       end
     end
@@ -132,7 +132,7 @@ describe 'postgresql::server::pg_hba_rule' do
 
       it do
         expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(
-          content: %r{local\s+all\s+all\s+0\.0\.0\.0\/0\s+scram-sha-256},
+          content: %r{local\s+all\s+all\s+0\.0\.0\.0/0\s+scram-sha-256},
         )
       end
     end
