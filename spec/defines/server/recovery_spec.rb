@@ -30,7 +30,7 @@ describe 'postgresql::server::recovery' do
 
     it do
       expect(subject).to contain_concat__fragment('test-recovery.conf')
-        .with(content: %r{restore_command = 'restore_command'[\n]+recovery_target_timeline = 'recovery_target_timeline'})
+        .with(content: %r{restore_command = 'restore_command'\n+recovery_target_timeline = 'recovery_target_timeline'})
     end
   end
 
@@ -103,7 +103,7 @@ describe 'postgresql::server::recovery' do
 
     it do
       expect(subject).to contain_concat__fragment('test-recovery.conf')
-        .with(content: %r{restore_command = 'restore_command'[\n]+archive_cleanup_command = 'archive_cleanup_command'[\n]+recovery_end_command = 'recovery_end_command'[\n]+recovery_target_name = 'recovery_target_name'[\n]+recovery_target_time = 'recovery_target_time'[\n]+recovery_target_xid = 'recovery_target_xid'[\n]+recovery_target_inclusive = true[\n]+recovery_target = 'recovery_target'[\n]+recovery_target_timeline = 'recovery_target_timeline'[\n]+pause_at_recovery_target = true[\n]+standby_mode = on[\n]+primary_conninfo = 'primary_conninfo'[\n]+primary_slot_name = 'primary_slot_name'[\n]+trigger_file = 'trigger_file'[\n]+recovery_min_apply_delay = 0[\n]+}) # rubocop:disable Layout/LineLength
+        .with(content: %r{restore_command = 'restore_command'\n+archive_cleanup_command = 'archive_cleanup_command'\n+recovery_end_command = 'recovery_end_command'\n+recovery_target_name = 'recovery_target_name'\n+recovery_target_time = 'recovery_target_time'\n+recovery_target_xid = 'recovery_target_xid'\n+recovery_target_inclusive = true\n+recovery_target = 'recovery_target'\n+recovery_target_timeline = 'recovery_target_timeline'\n+pause_at_recovery_target = true\n+standby_mode = on\n+primary_conninfo = 'primary_conninfo'\n+primary_slot_name = 'primary_slot_name'\n+trigger_file = 'trigger_file'\n+recovery_min_apply_delay = 0\n+}) # rubocop:disable Layout/LineLength
     end
   end
 end
