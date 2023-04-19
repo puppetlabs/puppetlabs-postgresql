@@ -1,11 +1,5 @@
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
-Layout/HeredocIndentation:
-  Exclude:
-    - 'lib/puppet/type/postgresql_replication_slot.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle, IndentationWidth.
 # SupportedStyles: aligned, indented
 Layout/LineEndStringConcatenationIndentation:
