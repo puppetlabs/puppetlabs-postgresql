@@ -248,6 +248,7 @@ describe 'postgresql::server::pg_hba_rule' do
         is_expected.to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+\.domain\.tld\s+md5})
       end
     end
+
     context 'pg_hba_rule with illegal address' do
       let :pre_condition do
         <<-MANIFEST

@@ -33,6 +33,7 @@ describe 'postgresql::server::recovery' do
         .with(content: %r{restore_command = 'restore_command'[\n]+recovery_target_timeline = 'recovery_target_timeline'})
     end
   end
+
   context 'not managing recovery' do
     let(:pre_condition) do
       <<-MANIFEST
@@ -53,6 +54,7 @@ describe 'postgresql::server::recovery' do
                                           %r{postgresql::server::manage_recovery_conf has been disabled})
     end
   end
+
   context 'not managing recovery, missing param' do
     let(:pre_condition) do
       <<-MANIFEST
