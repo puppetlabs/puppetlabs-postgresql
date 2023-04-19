@@ -1,11 +1,3 @@
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: aligned, indented
-Layout/LineEndStringConcatenationIndentation:
-  Exclude:
-    - 'lib/puppet/functions/postgresql/postgresql_acls_to_resources_hash.rb'
-
 # Offense count: 6
 # This cop supports safe autocorrection (--autocorrect).
 Layout/SpaceAroundMethodCallOperator:
