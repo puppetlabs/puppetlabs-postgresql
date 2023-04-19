@@ -31,6 +31,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
     if password.is_a?(String) && password.match?(%r{^(md5|SCRAM-SHA-256).+})
       return password
     end
+
     password = password.unwrap if password.respond_to?(:unwrap)
     pass = if hash == 'md5'
              'md5' + Digest::MD5.hexdigest(password.to_s + username.to_s)

@@ -15,6 +15,7 @@ def get(sql, database, user, port, password, host)
   cmd_string << "--host=#{host}" unless host.nil?
   stdout, stderr, status = Open3.capture3(env_hash, *cmd_string)
   raise Puppet::Error, stderr if status != 0
+
   { status: stdout.strip }
 end
 
