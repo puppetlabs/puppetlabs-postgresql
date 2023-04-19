@@ -44,11 +44,6 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 11
 
-# Offense count: 1
-# Naming/AccessorMethodName:
-#   Exclude:
-#     - 'lib/puppet/type/postgresql_psql.rb'
-
 # Offense count: 24
 # Configuration parameters: ForbiddenDelimiters.
 # ForbiddenDelimiters: (?i-mx:(^|\s)(EO[A-Z]{1}|END)(\s|$))
@@ -66,10 +61,10 @@ Naming/HeredocDelimiterNaming:
 
 # Offense count: 3
 # This cop supports unsafe autocorrection (--autocorrect-all).
-RSpec/BeEq:
-  Exclude:
-    - 'spec/functions/postgresql_postgresql_acls_to_resources_hash_spec.rb'
-    - 'spec/spec_helper_local.rb'
+# RSpec/BeEq:
+#   Exclude:
+#     - 'spec/functions/postgresql_postgresql_acls_to_resources_hash_spec.rb'
+#     - 'spec/spec_helper_local.rb'
 
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).

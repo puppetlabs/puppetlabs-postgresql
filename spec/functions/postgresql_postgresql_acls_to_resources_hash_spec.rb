@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe 'postgresql::postgresql_acls_to_resources_hash' do
-  it { is_expected.not_to eq(nil) }
+  it { is_expected.not_to be_nil }
   context 'individual transform tests' do
     it do
       input = 'local   all             postgres                                ident'
