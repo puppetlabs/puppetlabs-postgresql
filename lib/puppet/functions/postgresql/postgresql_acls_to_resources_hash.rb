@@ -40,7 +40,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_acls_to_resources_has
         resource['auth_method'] = parts[3]
         resource['auth_option'] = parts.last(parts.length - 4).join(' ') if parts.length > 4
       elsif %r{^\d}.match?(parts[4])
-        resource['address'] = parts[3] + ' ' + parts[4]
+        resource['address'] = "#{parts[3]} #{parts[4]}"
         resource['auth_method'] = parts[5]
 
         resource['auth_option'] = parts.last(parts.length - 6).join(' ') if parts.length > 6
