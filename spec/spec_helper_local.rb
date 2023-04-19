@@ -101,7 +101,7 @@ shared_examples 'postgresql_escape function' do
 end
 
 # This duplicates spec_helper but we need it for add_custom_fact
-include RspecPuppetFacts
+include RspecPuppetFacts # rubocop:disable Style/MixinUsage
 # Rough conversion of grepping in the puppet source:
 # grep defaultfor lib/puppet/provider/service/*.rb
 # See https://github.com/voxpupuli/voxpupuli-test/blob/master/lib/voxpupuli/test/facts.rb

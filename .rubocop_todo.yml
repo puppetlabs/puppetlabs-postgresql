@@ -160,13 +160,6 @@ Style/ClassAndModuleChildren:
   Exclude:
     - 'lib/puppet/util/postgresql_validator.rb'
 
-
-# Offense count: 2
-Style/MixinUsage:
-  Exclude:
-    - 'spec/spec_helper.rb'
-    - 'spec/spec_helper_local.rb'
-
 # Offense count: 5
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle, AllowedMethods, AllowedPatterns.
