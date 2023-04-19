@@ -9,7 +9,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
   end
   let(:provider) { resource.provider }
 
-  context('#run_sql_command') do
+  describe('#run_sql_command') do
     describe 'with default attributes' do
       let(:attributes) { { db: 'spec_db' } }
 
@@ -98,7 +98,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
     end
   end
 
-  context('#run_unless_sql_command') do
+  describe('#run_unless_sql_command') do
     let(:attributes) { {} }
 
     it 'calls #run_sql_command with SQL' do
