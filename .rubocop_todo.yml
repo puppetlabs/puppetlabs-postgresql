@@ -168,14 +168,6 @@ Style/OptionalBooleanParameter:
     - 'lib/puppet/functions/postgresql/postgresql_password.rb'
     - 'lib/puppet/type/postgresql_psql.rb'
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: AllowMethodsWithArguments, AllowedMethods, AllowedPatterns, AllowComments.
-# AllowedMethods: define_method
-Style/SymbolProc:
-  Exclude:
-    - 'spec/spec_helper_acceptance_local.rb'
-
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle, AllowSafeAssignment.
