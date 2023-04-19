@@ -160,15 +160,6 @@ Style/ClassAndModuleChildren:
   Exclude:
     - 'lib/puppet/util/postgresql_validator.rb'
 
-# Offense count: 5
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle, AllowedMethods, AllowedPatterns.
-# SupportedStyles: predicate, comparison
-Style/NumericPredicate:
-  Exclude:
-    - 'spec/**/*'
-    - 'lib/puppet/type/postgresql_psql.rb'
-
 # Offense count: 2
 # Configuration parameters: AllowedMethods.
 # AllowedMethods: respond_to_missing?
@@ -176,12 +167,6 @@ Style/OptionalBooleanParameter:
   Exclude:
     - 'lib/puppet/functions/postgresql/postgresql_password.rb'
     - 'lib/puppet/type/postgresql_psql.rb'
-
-# Offense count: 16
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantRegexpCharacterClass:
-  Exclude:
-    - 'spec/defines/server/recovery_spec.rb'
 
 # Offense count: 7
 # This cop supports safe autocorrection (--autocorrect).
