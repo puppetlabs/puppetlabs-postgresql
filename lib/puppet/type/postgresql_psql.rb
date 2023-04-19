@@ -150,7 +150,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
   private
 
-  def set_sensitive_parameters(sensitive_parameters)
+  def sensitive_parameters=(sensitive_parameters)
     # Respect sensitive commands
     if sensitive_parameters.include?(:unless)
       sensitive_parameters.delete(:unless)
