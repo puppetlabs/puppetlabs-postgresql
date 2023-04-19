@@ -13,12 +13,6 @@ Lint/ConstantDefinitionInBlock:
   Exclude:
     - 'spec/unit/puppet/provider/postgresql_replication_slot/ruby_spec.rb'
 
-# Offense count: 1
-# Configuration parameters: AllowComments, AllowEmptyLambdas.
-Lint/EmptyBlock:
-  Exclude:
-    - 'spec/unit/provider/postgresql_conf/parsed_spec.rb'
-
 # Offense count: 2
 # Configuration parameters: MaximumRangeSize.
 Lint/MissingCopEnableDirective:
