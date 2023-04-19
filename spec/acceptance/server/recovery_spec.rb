@@ -7,6 +7,7 @@ describe 'postgresql::server::recovery', skip: 'IAC-1286' do
     before(:all) do
       pre_run
     end
+
     after(:all) do
       pp = <<-MANIFEST.unindent
         file { '/tmp/recovery.conf':
