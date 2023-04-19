@@ -80,7 +80,6 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
     end
   end
 
-  # rubocop:disable RSpec/NamedSubject
   # rubocop:disable RSpec/SubjectStub
   describe '#command' do
     let(:attributes) { { command: 'SELECT stuff' } }

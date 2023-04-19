@@ -126,7 +126,7 @@ describe 'postgresql::server::reassign_owned_by:' do
             end
           end
         end
-      end # it should reassign all objects
+      end
     end
   end
   #####################
