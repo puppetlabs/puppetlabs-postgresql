@@ -39,7 +39,6 @@ Puppet::Type.newtype(:postgresql_psql) do
     def matches(value)
       output, status = provider.run_unless_sql_command(value)
       fail("Error evaluating 'unless' clause, returned #{status}: '#{output}'") unless status.zero? # rubocop:disable Style/SignalException
-      # rubocop:enable Style/NumericPredicate
 
       result_count = output.strip.to_i
       debug("Found #{result_count} row(s) executing 'unless' clause")
