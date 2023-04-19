@@ -61,19 +61,19 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
       salt: salt,
       iterations: 4096,
       length: 32,
-      hash: OpenSSL::Digest::SHA256.new,
+      hash: OpenSSL::Digest.new('SHA256'),
     )
   end
 
   def client_key(digest_key)
-    hmac = OpenSSL::HMAC.new(digest_key, OpenSSL::Digest::SHA256.new)
+    hmac = OpenSSL::HMAC.new(digest_key, OpenSSL::Digest.new('SHA256'))
     hmac << 'Client Key'
     hmac.digest
     OpenSSL::Digest.new('SHA256').digest hmac.digest
   end
 
   def server_key(digest_key)
-    hmac = OpenSSL::HMAC.new(digest_key, OpenSSL::Digest::SHA256.new)
+    hmac = OpenSSL::HMAC.new(digest_key, OpenSSL::Digest.new('SHA256'))
     hmac << 'Server Key'
     hmac.digest
   end

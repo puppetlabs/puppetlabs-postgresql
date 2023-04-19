@@ -13,12 +13,6 @@ Lint/ConstantDefinitionInBlock:
   Exclude:
     - 'spec/unit/puppet/provider/postgresql_replication_slot/ruby_spec.rb'
 
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Lint/DeprecatedOpenSSLConstant:
-  Exclude:
-    - 'lib/puppet/functions/postgresql/postgresql_password.rb'
-
 # Offense count: 1
 # Configuration parameters: IgnoreLiteralBranches, IgnoreConstantBranches.
 Lint/DuplicateBranch:
