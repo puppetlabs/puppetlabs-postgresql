@@ -168,13 +168,6 @@ Style/OptionalBooleanParameter:
     - 'lib/puppet/functions/postgresql/postgresql_password.rb'
     - 'lib/puppet/type/postgresql_psql.rb'
 
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantStringEscape:
-  Exclude:
-    - 'spec/acceptance/db_spec.rb'
-
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.
