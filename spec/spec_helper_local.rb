@@ -99,12 +99,10 @@ include RspecPuppetFacts
 # See https://github.com/voxpupuli/voxpupuli-test/blob/master/lib/voxpupuli/test/facts.rb
 add_custom_fact :service_provider, ->(_os, facts) do
   case facts[:osfamily].downcase
-  when 'archlinux'
+  when 'archlinux', 'debian'
     'systemd'
   when 'darwin'
     'launchd'
-  when 'debian'
-    'systemd'
   when 'freebsd'
     'freebsd'
   when 'gentoo'
