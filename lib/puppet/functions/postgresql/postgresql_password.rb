@@ -32,7 +32,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
 
     password = password.unwrap if password.respond_to?(:unwrap)
     pass = if hash == 'md5'
-             'md5' + Digest::MD5.hexdigest(password.to_s + username.to_s)
+             "md5#{Digest::MD5.hexdigest(password.to_s + username.to_s)}"
            else
              pg_sha256(password, (salt || username))
            end

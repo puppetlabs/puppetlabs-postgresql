@@ -5,7 +5,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   def run_unless_sql_command(sql)
     # for the 'unless' queries, we wrap the user's query in a 'SELECT COUNT',
     # which makes it easier to parse and process the output.
-    run_sql_command('SELECT COUNT(*) FROM (' + sql + ') count')
+    run_sql_command("SELECT COUNT(*) FROM (#{sql}) count")
   end
 
   def run_sql_command(sql)
