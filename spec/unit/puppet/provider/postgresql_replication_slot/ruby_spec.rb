@@ -37,6 +37,7 @@ def |        | physical  |        |          | t      |      |              | 0/
         'postgres', 'postgres'
       ).and_return([sql_instances, nil])
     end
+
     let(:attributes) { {} }
     let(:instances) { provider.class.instances }
     let(:expected) { ['abc', 'def'] }
