@@ -23,7 +23,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
     def sync
       output, status = provider.run_sql_command(value)
-      raise("Error executing SQL; psql returned #{status}: '#{output}'") unless status.zero?
+      raise("Error executing SQL; psql returned #{status}: '#{output}'") unless status.to_i.zero?
     end
   end
 
@@ -38,7 +38,7 @@ Puppet::Type.newtype(:postgresql_psql) do
     # Return true if a matching row is found
     def matches(value)
       output, status = provider.run_unless_sql_command(value)
-      fail("Error evaluating 'unless' clause, returned #{status}: '#{output}'") unless status.zero? # rubocop:disable Style/SignalException
+      fail("Error evaluating 'unless' clause, returned #{status}: '#{output}'") unless status.to_i.zero? # rubocop:disable Style/SignalException
 
       result_count = output.strip.to_i
       debug("Found #{result_count} row(s) executing 'unless' clause")
@@ -59,7 +59,7 @@ Puppet::Type.newtype(:postgresql_psql) do
       output, status = provider.run_unless_sql_command(value)
       status = output.exitcode if status.nil?
 
-      raise("Error evaluating 'onlyif' clause, returned #{status}: '#{output}'") unless status.zero?
+      raise("Error evaluating 'onlyif' clause, returned #{status}: '#{output}'") unless status.to_i.zero?
 
       result_count = output.strip.to_i
       debug("Found #{result_count} row(s) executing 'onlyif' clause")
