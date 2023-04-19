@@ -31,7 +31,7 @@ describe 'postgresql::server' do
     postgresql::server::database { 'testusername':
       owner => 'testusername',
     }
-  MANIFEST
+    MANIFEST
   end
 
   it 'with additional hiera entries' do

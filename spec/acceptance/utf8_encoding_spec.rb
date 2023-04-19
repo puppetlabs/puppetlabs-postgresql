@@ -10,7 +10,7 @@ describe 'postgresql::server', skip: 'IAC-1286' do
         locale   => 'en_NG',
       } ->
       class { 'postgresql::server': }
-  MANIFEST
+    MANIFEST
   end
 
   it 'with defaults' do
