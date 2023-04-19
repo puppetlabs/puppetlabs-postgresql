@@ -19,7 +19,7 @@ def get(sql, database, user, port, password, host)
   { status: stdout.strip }
 end
 
-params = JSON.parse(STDIN.read)
+params = JSON.parse($stdin.read)
 database = params['database']
 host = params['host']
 password = params['password']
