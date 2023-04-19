@@ -31,10 +31,10 @@ Puppet::Functions.create_function(:'postgresql::postgresql_acls_to_resources_has
       end
 
       resource = {
-        'type'     => parts[0],
+        'type' => parts[0],
         'database' => parts[1],
-        'user'     => parts[2],
-        'order'    => '%03d' % (offset + index),
+        'user' => parts[2],
+        'order' => '%03d' % (offset + index),
       }
       if parts[0] == 'local'
         resource['auth_method'] = parts[3]

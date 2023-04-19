@@ -121,7 +121,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
-                            'PGPORT'    => '1234' },
+                            'PGPORT' => '1234' },
       }
     end
 

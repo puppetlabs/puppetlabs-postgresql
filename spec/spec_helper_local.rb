@@ -151,11 +151,11 @@ shared_context 'Fedora 33' do
       selinux: true,
       os: {
         'architecture' => 'x86_64',
-        'family'       => 'RedHat',
-        'hardware'     => 'x86_64',
-        'name'         => 'Fedora',
-        'release'      => {
-          'full'  => '33',
+        'family' => 'RedHat',
+        'hardware' => 'x86_64',
+        'name' => 'Fedora',
+        'release' => {
+          'full' => '33',
           'major' => '33',
           'minor' => '33',
         },
@@ -175,7 +175,7 @@ shared_context 'Amazon 1' do
         family: 'RedHat',
         name: 'Amazon',
         release: {
-          'full'  => '1.0',
+          'full' => '1.0',
           'major' => '1',
         },
         selinux: { 'enabled' => true },
@@ -196,7 +196,7 @@ shared_context 'Gentoo' do
         family: 'Gentoo',
         name: 'Gentoo',
         release: {
-          'full'  => 'unused',
+          'full' => 'unused',
           'major' => 'unused',
         },
         selinux: { 'enabled' => false },
