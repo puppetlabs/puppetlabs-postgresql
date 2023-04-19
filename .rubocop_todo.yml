@@ -160,19 +160,6 @@ Style/ClassAndModuleChildren:
   Exclude:
     - 'lib/puppet/util/postgresql_validator.rb'
 
-# Offense count: 9
-# This cop supports safe autocorrection (--autocorrect).
-Style/IfUnlessModifier:
-  Exclude:
-    - 'lib/puppet/functions/postgresql/postgresql_acls_to_resources_hash.rb'
-    - 'lib/puppet/functions/postgresql/postgresql_password.rb'
-    - 'lib/puppet/provider/postgresql_psql/ruby.rb'
-    - 'lib/puppet/provider/postgresql_replication_slot/ruby.rb'
-    - 'lib/puppet/type/postgresql_psql.rb'
-    - 'spec/acceptance/server/grant_role_spec.rb'
-    - 'spec/acceptance/server/grant_spec.rb'
-    - 'spec/acceptance/server/schema_spec.rb'
-    - 'spec/acceptance/z_alternative_pgdata_spec.rb'
 
 # Offense count: 2
 Style/MixinUsage:

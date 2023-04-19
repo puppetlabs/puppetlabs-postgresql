@@ -8,9 +8,7 @@ describe 'postgresql::server::grant_role:' do
   let(:group) { 'test_group' }
   let(:password) { 'psql_grant_role_pw' }
   let(:version) do
-    if os[:family] == 'redhat' && os[:release].start_with?('5')
-      '8.1'
-    end
+    '8.1' if os[:family] == 'redhat' && os[:release].start_with?('5')
   end
   let(:pp_one) do
     <<-MANIFEST.unindent

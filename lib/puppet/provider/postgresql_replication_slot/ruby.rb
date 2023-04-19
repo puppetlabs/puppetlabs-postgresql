@@ -15,9 +15,7 @@ Puppet::Type.type(:postgresql_replication_slot).provide(:ruby) do
   def self.prefetch(resources)
     instances.each do |i|
       slot = resources[i.name]
-      if slot
-        slot.provider = i
-      end
+      slot.provider = i if slot
     end
   end
 
