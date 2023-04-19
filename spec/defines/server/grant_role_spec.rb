@@ -65,6 +65,7 @@ postgresql::server::role { '#{params[:role]}': }"
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:role]}]")
     }
+
     it {
       is_expected.not_to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:group]}]")
     }
@@ -79,6 +80,7 @@ postgresql::server::role { '#{params[:group]}': }"
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:group]}]")
     }
+
     it {
       is_expected.not_to contain_postgresql_psql("grant_role:#{title}").that_requires("Postgresql::Server::Role[#{params[:role]}]")
     }
@@ -92,6 +94,7 @@ postgresql::server::role { '#{params[:group]}': }"
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}").with_connect_settings('PGHOST' => 'postgres-db-server')
     }
+
     it {
       is_expected.not_to contain_postgresql_psql("grant_role:#{title}").that_requires('Class[postgresql::server]')
     }

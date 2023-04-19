@@ -44,6 +44,7 @@ describe 'postgresql::server::default_privileges' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__default_privileges('test') }
+
     it do
       is_expected.to contain_postgresql_psql('default_privileges:test')
         .with_command('ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO "test"')
@@ -86,6 +87,7 @@ describe 'postgresql::server::default_privileges' do
 
       it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_postgresql__server__default_privileges('test') }
+
       it do
         # rubocop:disable Layout/LineLength
         is_expected.to contain_postgresql_psql('default_privileges:test')
@@ -156,6 +158,7 @@ describe 'postgresql::server::default_privileges' do
 
       it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_postgresql__server__default_privileges('test') }
+
       it do
         # rubocop:disable Layout/LineLength
         is_expected.to contain_postgresql_psql('default_privileges:test')
@@ -274,6 +277,7 @@ describe 'postgresql::server::default_privileges' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__default_privileges('test') }
+
     it do
       # rubocop:disable Layout/LineLength
       is_expected.to contain_postgresql_psql('default_privileges:test')
@@ -300,6 +304,7 @@ describe 'postgresql::server::default_privileges' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__default_privileges('test') }
+
     it do
       # rubocop:disable Layout/LineLength
       is_expected.to contain_postgresql_psql('default_privileges:test')
@@ -329,6 +334,7 @@ describe 'postgresql::server::default_privileges' do
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__default_privileges('test') }
     it { is_expected.to contain_postgresql__server__role('test') }
+
     it do
       is_expected.to contain_postgresql_psql('default_privileges:test') \
         .that_requires(['Service[postgresqld]', 'Postgresql::Server::Role[test]'])
@@ -356,6 +362,7 @@ describe 'postgresql::server::default_privileges' do
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__default_privileges('test') }
     it { is_expected.to contain_postgresql__server__role('target') }
+
     it do
       # rubocop:disable Layout/LineLength
       is_expected.to contain_postgresql_psql('default_privileges:test')

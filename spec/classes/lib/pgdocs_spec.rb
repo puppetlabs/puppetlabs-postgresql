@@ -13,6 +13,7 @@ describe 'postgresql::lib::docs' do
         tag: 'puppetlabs-postgresql',
       )
     }
+
     describe 'when parameters are supplied' do
       let :params do
         { package_ensure: 'latest', package_name: 'somepackage' }

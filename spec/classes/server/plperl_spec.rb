@@ -11,6 +11,7 @@ describe 'postgresql::server::plperl' do
 
   describe 'with no parameters' do
     it { is_expected.to contain_class('postgresql::server::plperl') }
+
     it 'creates package' do
       is_expected.to contain_package('postgresql-plperl').with(ensure: 'present',
                                                                tag: 'puppetlabs-postgresql')
@@ -26,6 +27,7 @@ describe 'postgresql::server::plperl' do
     end
 
     it { is_expected.to contain_class('postgresql::server::plperl') }
+
     it 'creates package with correct params' do
       is_expected.to contain_package('postgresql-plperl').with(ensure: 'absent',
                                                                name: 'mypackage',

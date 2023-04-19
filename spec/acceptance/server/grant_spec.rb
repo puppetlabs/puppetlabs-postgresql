@@ -255,6 +255,7 @@ describe 'postgresql::server::grant:' do
         end
       end
     end
+
     it 'grants execute on a function with argument to a user' do
       if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
         idempotent_apply(pp)
