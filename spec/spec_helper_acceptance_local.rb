@@ -16,7 +16,15 @@ end
 RSpec.configure do |c|
   c.before :suite do
     install_dependencies
+    turn_off_strict_error
   end
+end
+
+def turn_off_strict_error
+  # this is only temporary fix until we finish adding support for puppet 8
+  # strict=warning is defaulted on puppet versions below 8, whereas puppet 8 has strict=error by default
+  # error is caused by 'onlyif_exists' in spec/acceptance/server/grant_spec.rb L78 (works when removed, but not what we want to test)
+  LitmusHelper.instance.run_shell("echo 'strict=warning\nstrict_variables=false' >> /etc/puppetlabs/puppet/puppet.conf")
 end
 
 def export_locales(locale)
