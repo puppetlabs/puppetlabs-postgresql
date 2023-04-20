@@ -21,12 +21,6 @@ Lint/ConstantDefinitionInBlock:
   Exclude:
     - 'spec/unit/puppet/provider/postgresql_replication_slot/ruby_spec.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantCopEnableDirective:
-  Exclude:
-    - 'spec/unit/puppet/type/postgresql_psql_spec.rb'
-
 # Offense count: 6
 # Configuration parameters: AllowedMethods, AllowedPatterns, CountRepeatedAttributes.
 Metrics/AbcSize:
