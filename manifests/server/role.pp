@@ -160,7 +160,7 @@ define postgresql::server::role (
             $hash,
             $salt,
           ]
-        )
+        ).unwrap
       }
       else {
         $pwd_hash_sql = postgresql::postgresql_password(
@@ -169,7 +169,7 @@ define postgresql::server::role (
           false,
           $hash,
           $salt,
-        )
+        ).unwrap
       }
       if $pwd_hash_sql =~ Deferred {
         $pw_command = Deferred('sprintf', ["ALTER ROLE \"%s\" ENCRYPTED PASSWORD '%s'", $username, $pwd_hash_sql])
