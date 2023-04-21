@@ -9,7 +9,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
   end
   let(:provider) { resource.provider }
 
-  context('#run_sql_command') do
+  describe('#run_sql_command') do
     describe 'with default attributes' do
       let(:attributes) { { db: 'spec_db' } }
 
@@ -21,6 +21,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
         provider.run_sql_command('SELECT \'something\' as "Custom column"')
       end
     end
+
     describe 'with psql_path and db' do
       let(:attributes) do
         {
@@ -28,7 +29,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
           psql_user: 'spec_user',
           psql_group: 'spec_group',
           cwd: '/spec',
-          db: 'spec_db',
+          db: 'spec_db'
         }
       end
 
@@ -41,10 +42,11 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
         provider.run_sql_command('SELECT \'something\' as "Custom column"')
       end
     end
+
     describe 'with search_path string' do
       let(:attributes) do
         {
-          search_path: 'schema1',
+          search_path: 'schema1'
         }
       end
 
@@ -56,10 +58,11 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
         provider.run_sql_command('SELECT \'something\' as "Custom column"')
       end
     end
+
     describe 'with search_path array' do
       let(:attributes) do
         {
-          search_path: ['schema1', 'schema2'],
+          search_path: ['schema1', 'schema2']
         }
       end
 
@@ -73,6 +76,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
       end
     end
   end
+
   describe 'with port string' do
     let(:attributes) { { port: '5555' } }
 
@@ -85,6 +89,7 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
       provider.run_sql_command('SELECT something')
     end
   end
+
   describe 'with connect_settings' do
     let(:attributes) { { connect_settings: { 'PGHOST' => '127.0.0.1' } } }
 
@@ -92,13 +97,13 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
       expect(provider).to receive(:run_command).with(['psql',
                                                       '-t', '-X', '-c',
                                                       'SELECT something'],
-                                                     'postgres', 'postgres', 'PGHOST' => '127.0.0.1')
+                                                     'postgres', 'postgres', { 'PGHOST' => '127.0.0.1' })
 
       provider.run_sql_command('SELECT something')
     end
   end
 
-  context('#run_unless_sql_command') do
+  describe('#run_unless_sql_command') do
     let(:attributes) { {} }
 
     it 'calls #run_sql_command with SQL' do

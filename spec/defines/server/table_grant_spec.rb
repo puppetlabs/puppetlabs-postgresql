@@ -14,7 +14,7 @@ describe 'postgresql::server::table_grant' do
       privilege: 'ALL',
       db: 'test',
       role: 'test',
-      table: 'foo',
+      table: 'foo'
     }
   end
 

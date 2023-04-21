@@ -7,9 +7,7 @@ require 'spec_helper_acceptance'
 
 describe 'postgresql::server', skip: 'IAC-1286' do
   before(:each) do
-    if os[:family] == 'sles'
-      skip "These test's currently do not work on SLES/Suse modules"
-    end
+    skip "These test's currently do not work on SLES/Suse modules" if os[:family] == 'sles'
   end
 
   it 'on an alternative pgdata location' do

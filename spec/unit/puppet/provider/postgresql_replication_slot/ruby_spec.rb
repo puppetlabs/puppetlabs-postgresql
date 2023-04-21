@@ -37,6 +37,7 @@ def |        | physical  |        |          | t      |      |              | 0/
         'postgres', 'postgres'
       ).and_return([sql_instances, nil])
     end
+
     let(:attributes) { {} }
     let(:instances) { provider.class.instances }
     let(:expected) { ['abc', 'def'] }
@@ -44,6 +45,7 @@ def |        | physical  |        |          | t      |      |              | 0/
     it 'lists instances #size' do
       expect(instances.size).to eq 2
     end
+
     it 'lists instances #content' do
       expected.each_with_index do |expect, index|
         expect(instances[index].name).to eq expect

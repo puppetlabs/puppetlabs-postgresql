@@ -13,7 +13,7 @@ describe 'postgresql::server::database_grant' do
     {
       privilege: 'ALL',
       db: 'test',
-      role: 'test',
+      role: 'test'
     }
   end
 

@@ -15,9 +15,6 @@ describe provider_class do
     provider
   end
 
-  before(:each) do
-  end
-
   after :each do
     provider.initvars
   end

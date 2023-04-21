@@ -7,7 +7,7 @@ describe 'postgresql::repo' do
 
   describe 'with no parameters' do
     it 'instantiates apt_postgresql_org class' do
-      is_expected.to contain_class('postgresql::repo::apt_postgresql_org')
+      expect(subject).to contain_class('postgresql::repo::apt_postgresql_org')
     end
   end
 end

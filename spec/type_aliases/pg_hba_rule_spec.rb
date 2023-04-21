@@ -20,6 +20,7 @@ describe 'Postgresql::Pg_hba_rule' do
 
     it { is_expected.to allow_value(data) }
   end
+
   context 'invalid data' do
     let :data do
       {
@@ -36,6 +37,7 @@ describe 'Postgresql::Pg_hba_rule' do
 
     it { is_expected.not_to allow_value(data) }
   end
+
   context 'empty data' do
     let :data do
       {}

@@ -14,7 +14,7 @@ describe 'postgresql::server::db' do
       {
         user: 'test',
         password: 'test',
-        owner: 'tester',
+        owner: 'tester'
       }
     end
 
@@ -34,7 +34,7 @@ describe 'postgresql::server::db' do
         dbname: 'testtest',
         user: 'test',
         password: 'test',
-        owner: 'tester',
+        owner: 'tester'
       }
     end
 
