@@ -45,66 +45,72 @@ def param(type, title, param)
 end
 
 shared_examples 'postgresql_password function' do
-  it { is_expected.not_to eq(nil) }
+  it { is_expected.not_to be_nil }
 
   it {
-    is_expected.to run.with_params('foo', 'bar').and_return(
+    expect(subject).to run.with_params('foo', 'bar').and_return(
       'md596948aad3fcae80c08a35c9b5958cd89',
     )
   }
+
   it {
-    is_expected.to run.with_params('foo', 1234).and_return(
+    expect(subject).to run.with_params('foo', 1234).and_return(
       'md539a0e1b308278a8de5e007cd1f795920',
     )
   }
+
   it {
-    is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256').and_return(
+    expect(subject).to run.with_params('foo', 'bar', false, 'scram-sha-256').and_return(
       'SCRAM-SHA-256$4096:Zm9v$ea66ynZ8cS9Ty4ZkEYicwC72StsKLSwjcXIXKMgepTk=:dJYmOU6BMCaWkQOB3lrXH9OAF3lW2n3NJ26NO7Srq7U=',
     )
   }
+
   it {
-    is_expected.to run.with_params('foo', 'bar', false, 'scram-sha-256', 'salt').and_return(
+    expect(subject).to run.with_params('foo', 'bar', false, 'scram-sha-256', 'salt').and_return(
       'SCRAM-SHA-256$4096:c2FsdA==$hl63wu9L6vKIjd/UGPfpRl/hIQRBnlkoCiJ9KgxzbX0=:3Q39uiwDZ51m3iPpV8rSgISgRiYqkbnpc+wScL2lSAU=',
     )
   }
+
   it 'raises an error if there is only 1 argument' do
-    is_expected.to run.with_params('foo').and_raise_error(StandardError)
+    expect(subject).to run.with_params('foo').and_raise_error(StandardError)
   end
 end
 
 shared_examples 'postgresql_escape function' do
-  it { is_expected.not_to eq(nil) }
+  it { is_expected.not_to be_nil }
+
   it {
-    is_expected.to run.with_params('foo')
-                      .and_return('$$foo$$')
+    expect(subject).to run.with_params('foo')
+                          .and_return('$$foo$$')
   }
+
   it {
-    is_expected.to run.with_params('fo$$o')
-                      .and_return('$ed$fo$$o$ed$')
+    expect(subject).to run.with_params('fo$$o')
+                          .and_return('$ed$fo$$o$ed$')
   }
+
   it {
-    is_expected.to run.with_params('foo$')
-                      .and_return('$a$foo$$a$')
+    expect(subject).to run.with_params('foo$')
+                          .and_return('$a$foo$$a$')
   }
+
   it 'raises an error if there is more than 1 argument' do
-    is_expected.to run.with_params(['foo'], ['foo'])
-                      .and_raise_error(StandardError)
+    expect(subject).to run.with_params(['foo'], ['foo'])
+                          .and_raise_error(StandardError)
   end
 end
 
 # This duplicates spec_helper but we need it for add_custom_fact
-include RspecPuppetFacts
+include RspecPuppetFacts # rubocop:disable Style/MixinUsage
 # Rough conversion of grepping in the puppet source:
 # grep defaultfor lib/puppet/provider/service/*.rb
 # See https://github.com/voxpupuli/voxpupuli-test/blob/master/lib/voxpupuli/test/facts.rb
 add_custom_fact :service_provider, ->(_os, facts) do
   case facts[:osfamily].downcase
-  when 'archlinux'
+  when 'archlinux', 'debian'
     'systemd'
   when 'darwin'
     'launchd'
-  when 'debian'
-    'systemd'
   when 'freebsd'
     'freebsd'
   when 'gentoo'
@@ -112,9 +118,9 @@ add_custom_fact :service_provider, ->(_os, facts) do
   when 'openbsd'
     'openbsd'
   when 'redhat'
-    facts[:operatingsystemrelease].to_i >= 7 ? 'systemd' : 'redhat'
+    (facts[:operatingsystemrelease].to_i >= 7) ? 'systemd' : 'redhat'
   when 'suse'
-    facts[:operatingsystemmajrelease].to_i >= 12 ? 'systemd' : 'redhat'
+    (facts[:operatingsystemmajrelease].to_i >= 12) ? 'systemd' : 'redhat'
   when 'windows'
     'windows'
   else
@@ -151,19 +157,19 @@ shared_context 'Fedora 33' do
       selinux: true,
       os: {
         'architecture' => 'x86_64',
-        'family'       => 'RedHat',
-        'hardware'     => 'x86_64',
-        'name'         => 'Fedora',
-        'release'      => {
-          'full'  => '33',
+        'family' => 'RedHat',
+        'hardware' => 'x86_64',
+        'name' => 'Fedora',
+        'release' => {
+          'full' => '33',
           'major' => '33',
-          'minor' => '33',
+          'minor' => '33'
         },
-        selinux: { 'enabled' => true },
+        selinux: { 'enabled' => true }
       },
       operatingsystem: 'Fedora',
       operatingsystemrelease: '33',
-      service_provider: 'systemd',
+      service_provider: 'systemd'
     }
   end
 end
@@ -175,16 +181,16 @@ shared_context 'Amazon 1' do
         family: 'RedHat',
         name: 'Amazon',
         release: {
-          'full'  => '1.0',
-          'major' => '1',
+          'full' => '1.0',
+          'major' => '1'
         },
-        selinux: { 'enabled' => true },
+        selinux: { 'enabled' => true }
       },
       kernel: 'Linux',
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       selinux: true,
-      service_provider: 'redhat',
+      service_provider: 'redhat'
     }
   end
 end
@@ -196,16 +202,16 @@ shared_context 'Gentoo' do
         family: 'Gentoo',
         name: 'Gentoo',
         release: {
-          'full'  => 'unused',
-          'major' => 'unused',
+          'full' => 'unused',
+          'major' => 'unused'
         },
-        selinux: { 'enabled' => false },
+        selinux: { 'enabled' => false }
       },
       kernel: 'Linux',
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       selinux: false,
-      service_provider: 'openrc',
+      service_provider: 'openrc'
     }
   end
 end

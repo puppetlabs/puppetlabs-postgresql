@@ -7,20 +7,20 @@ describe 'postgresql::globals' do
     include_examples 'Debian 11'
 
     describe 'with no parameters' do
-      it 'works' do
-        is_expected.to contain_class('postgresql::globals')
+      it 'executes successfully' do
+        expect(subject).to contain_class('postgresql::globals')
       end
     end
 
     describe 'manage_package_repo => true' do
       let(:params) do
         {
-          manage_package_repo: true,
+          manage_package_repo: true
         }
       end
 
       it 'pulls in class postgresql::repo' do
-        is_expected.to contain_class('postgresql::repo')
+        expect(subject).to contain_class('postgresql::repo')
       end
     end
   end
@@ -29,8 +29,8 @@ describe 'postgresql::globals' do
     include_examples 'RedHat 7'
 
     describe 'with no parameters' do
-      it 'works' do
-        is_expected.to contain_class('postgresql::globals')
+      it 'executes successfully' do
+        expect(subject).to contain_class('postgresql::globals')
       end
     end
 
@@ -38,22 +38,22 @@ describe 'postgresql::globals' do
       let(:params) do
         {
           manage_package_repo: true,
-          repo_proxy: 'http://proxy-server:8080',
+          repo_proxy: 'http://proxy-server:8080'
         }
       end
 
       it 'pulls in class postgresql::repo' do
-        is_expected.to contain_class('postgresql::repo')
+        expect(subject).to contain_class('postgresql::repo')
       end
 
       it do
-        is_expected.to contain_yumrepo('yum.postgresql.org').with(
+        expect(subject).to contain_yumrepo('yum.postgresql.org').with(
           'enabled' => '1',
-          'proxy'   => 'http://proxy-server:8080',
+          'proxy' => 'http://proxy-server:8080',
         )
-        is_expected.to contain_yumrepo('pgdg-common').with(
+        expect(subject).to contain_yumrepo('pgdg-common').with(
           'enabled' => '1',
-          'proxy'   => 'http://proxy-server:8080',
+          'proxy' => 'http://proxy-server:8080',
         )
       end
     end
@@ -63,20 +63,20 @@ describe 'postgresql::globals' do
         {
           manage_package_repo: true,
           repo_baseurl: 'http://mirror.localrepo.com/pgdg-postgresql',
-          yum_repo_commonurl: 'http://mirror.localrepo.com/pgdg-common',
+          yum_repo_commonurl: 'http://mirror.localrepo.com/pgdg-common'
         }
       end
 
       it 'pulls in class postgresql::repo' do
-        is_expected.to contain_class('postgresql::repo')
+        expect(subject).to contain_class('postgresql::repo')
       end
 
       it do
-        is_expected.to contain_yumrepo('yum.postgresql.org').with(
+        expect(subject).to contain_yumrepo('yum.postgresql.org').with(
           'enabled' => '1',
           'baseurl' => 'http://mirror.localrepo.com/pgdg-postgresql',
         )
-        is_expected.to contain_yumrepo('pgdg-common').with(
+        expect(subject).to contain_yumrepo('pgdg-common').with(
           'enabled' => '1',
           'baseurl' => 'http://mirror.localrepo.com/pgdg-common',
         )

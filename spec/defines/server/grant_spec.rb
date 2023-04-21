@@ -13,7 +13,7 @@ describe 'postgresql::server::grant' do
     let :params do
       {
         db: 'test',
-        role: 'test',
+        role: 'test'
       }
     end
 
@@ -31,7 +31,7 @@ describe 'postgresql::server::grant' do
         db: 'test',
         role: 'test',
         privilege: 'usage',
-        object_type: 'sequence',
+        object_type: 'sequence'
       }
     end
 
@@ -41,8 +41,9 @@ describe 'postgresql::server::grant' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
+
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT USAGE ON SEQUENCE "test" TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)}m)
     end
@@ -54,7 +55,7 @@ describe 'postgresql::server::grant' do
         db: 'test',
         role: 'test',
         privilege: 'usage',
-        object_type: 'SeQuEnCe',
+        object_type: 'SeQuEnCe'
       }
     end
 
@@ -64,8 +65,9 @@ describe 'postgresql::server::grant' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
+
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT USAGE ON SEQUENCE "test" TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_sequence_privilege\('test',\s* 'test', 'USAGE'\)}m)
     end
@@ -78,7 +80,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'usage',
         object_type: 'all sequences in schema',
-        object_name: 'public',
+        object_name: 'public'
       }
     end
 
@@ -88,8 +90,9 @@ describe 'postgresql::server::grant' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
+
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE NOT EXISTS \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\)}m) # rubocop:disable Layout/LineLength
     end
@@ -101,7 +104,7 @@ describe 'postgresql::server::grant' do
         db: 'test',
         role: 'test',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
-                            'DBVERSION' => '9.1' },
+                            'DBVERSION' => '9.1' }
       }
     end
 
@@ -121,7 +124,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
-                            'PGPORT'    => '1234' },
+                            'PGPORT' => '1234' }
       }
     end
 
@@ -142,7 +145,7 @@ describe 'postgresql::server::grant' do
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
                             'PGPORT' => '1234' },
-        port: 5678,
+        port: 5678
       }
     end
 
@@ -162,7 +165,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'all',
         object_name: ['myschema', 'mytable'],
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -172,8 +175,9 @@ describe 'postgresql::server::grant' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
+
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_table_privilege\('test',\s*'myschema.mytable', 'INSERT'\)}m)
     end
@@ -186,7 +190,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'all',
         object_name: ['myschema', 'mytable'],
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -200,8 +204,9 @@ describe 'postgresql::server::grant' do
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql__server__role('test') }
+
     it do
-      is_expected.to contain_postgresql_psql('grant:test') \
+      expect(subject).to contain_postgresql_psql('grant:test') \
         .that_requires(['Service[postgresqld]', 'Postgresql::Server::Role[test]'])
     end
   end
@@ -213,7 +218,7 @@ describe 'postgresql::server::grant' do
         role: 'PUBLIC',
         privilege: 'all',
         object_name: ['myschema', 'mytable'],
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -227,8 +232,9 @@ describe 'postgresql::server::grant' do
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
     it { is_expected.to contain_postgresql__server__role('test') }
+
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* PUBLIC}m)
         .with_unless(%r{SELECT 1 WHERE has_table_privilege\('public',\s*'myschema.mytable', 'INSERT'\)}m)
     end
@@ -242,7 +248,7 @@ describe 'postgresql::server::grant' do
         privilege: 'execute',
         object_name: 'test',
         object_arguments: ['text', 'boolean'],
-        object_type: 'function',
+        object_type: 'function'
       }
     end
 
@@ -252,8 +258,9 @@ describe 'postgresql::server::grant' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
+
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT EXECUTE ON FUNCTION test\(text,boolean\) TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_function_privilege\('test',\s* 'test\(text,boolean\)', 'EXECUTE'\)}m)
     end
@@ -267,7 +274,7 @@ describe 'postgresql::server::grant' do
         privilege: 'execute',
         object_name: ['myschema', 'test'],
         object_arguments: ['text', 'boolean'],
-        object_type: 'function',
+        object_type: 'function'
       }
     end
 
@@ -277,8 +284,9 @@ describe 'postgresql::server::grant' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
+
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT EXECUTE ON FUNCTION myschema.test\(text,boolean\) TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_function_privilege\('test',\s* 'myschema.test\(text,boolean\)', 'EXECUTE'\)}m)
     end
@@ -298,7 +306,7 @@ describe 'postgresql::server::grant' do
         psql_user: 'postgres',
         psql_db: 'db',
         port: 1542,
-        connect_settings: {},
+        connect_settings: {}
       }
     end
 
@@ -312,7 +320,7 @@ describe 'postgresql::server::grant' do
         db: 'test',
         role: 'test',
         privilege: 'usage',
-        object_type: 'invalid',
+        object_type: 'invalid'
       }
     end
 
@@ -330,7 +338,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'all',
         object_name: 1,
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -348,7 +356,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'all',
         object_name: ['oops'],
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -370,7 +378,7 @@ describe 'postgresql::server::grant' do
         role: 'test',
         privilege: 'all',
         object_name: ['myschema', 'mytable', 'oops'],
-        object_type: 'table',
+        object_type: 'table'
       }
     end
 
@@ -393,7 +401,7 @@ describe 'postgresql::server::grant' do
         privilege: 'all',
         object_name: ['myschema', 'mytable'],
         object_type: 'table',
-        onlyif_exists: true,
+        onlyif_exists: true
       }
     end
 
@@ -403,8 +411,9 @@ describe 'postgresql::server::grant' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__grant('test') }
+
     it do
-      is_expected.to contain_postgresql_psql('grant:test')
+      expect(subject).to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* "test"}m)
         .with_unless(%r{SELECT 1 WHERE has_table_privilege\('test',\s*'myschema.mytable', 'INSERT'\)}m)
         .with_onlyif(%r{SELECT true FROM pg_tables WHERE tablename = 'mytable'}m)

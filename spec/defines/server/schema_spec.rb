@@ -12,7 +12,7 @@ describe 'postgresql::server::schema' do
   let :params do
     {
       owner: 'jane',
-      db: 'janedb',
+      db: 'janedb'
     }
   end
 
@@ -26,7 +26,7 @@ describe 'postgresql::server::schema' do
     let :params do
       {
         owner: 'nate',
-        db: 'natedb',
+        db: 'natedb'
       }
     end
 

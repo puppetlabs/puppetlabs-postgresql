@@ -25,12 +25,12 @@ describe 'postgresql::server::pg_hba_rule' do
         user: 'all',
         address: '1.1.1.1/24',
         auth_method: 'md5',
-        target: target,
+        target: target
       }
     end
 
     it do
-      is_expected.to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+1\.1\.1\.1\/24\s+md5})
+      expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+1\.1\.1\.1/24\s+md5})
     end
   end
 
@@ -47,12 +47,12 @@ describe 'postgresql::server::pg_hba_rule' do
         database: 'all',
         user: 'all',
         auth_method: 'ident',
-        target: target,
+        target: target
       }
     end
 
     it do
-      is_expected.to contain_concat__fragment('pg_hba_rule_test').with(content: %r{local\s+all\s+all\s+ident})
+      expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(content: %r{local\s+all\s+all\s+ident})
     end
   end
 
@@ -71,12 +71,12 @@ describe 'postgresql::server::pg_hba_rule' do
         address: '0.0.0.0/0',
         auth_method: 'ldap',
         auth_option: 'foo=bar',
-        target: target,
+        target: target
       }
     end
 
     it do
-      is_expected.to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+0\.0\.0\.0\/0\s+ldap\s+foo=bar})
+      expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+0\.0\.0\.0/0\s+ldap\s+foo=bar})
     end
   end
 
@@ -98,13 +98,13 @@ describe 'postgresql::server::pg_hba_rule' do
           user: 'all',
           address: '0.0.0.0/0',
           auth_method: 'peer',
-          target: target,
+          target: target
         }
       end
 
       it do
-        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(
-          content: %r{local\s+all\s+all\s+0\.0\.0\.0\/0\s+peer},
+        expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(
+          content: %r{local\s+all\s+all\s+0\.0\.0\.0/0\s+peer},
         )
       end
     end
@@ -126,13 +126,13 @@ describe 'postgresql::server::pg_hba_rule' do
           user: 'all',
           address: '0.0.0.0/0',
           auth_method: 'scram-sha-256',
-          target: target,
+          target: target
         }
       end
 
       it do
-        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(
-          content: %r{local\s+all\s+all\s+0\.0\.0\.0\/0\s+scram-sha-256},
+        expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(
+          content: %r{local\s+all\s+all\s+0\.0\.0\.0/0\s+scram-sha-256},
         )
       end
     end
@@ -151,12 +151,12 @@ describe 'postgresql::server::pg_hba_rule' do
           type: 'local',
           database: 'all',
           user: 'all',
-          auth_method: 'ident',
+          auth_method: 'ident'
         }
       end
 
       it do
-        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(order: '150')
+        expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(order: '150')
       end
     end
 
@@ -173,12 +173,12 @@ describe 'postgresql::server::pg_hba_rule' do
           database: 'all',
           user: 'all',
           auth_method: 'ident',
-          order: '12',
+          order: '12'
         }
       end
 
       it do
-        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(order: '12')
+        expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(order: '12')
       end
     end
 
@@ -195,12 +195,12 @@ describe 'postgresql::server::pg_hba_rule' do
           database: 'all',
           user: 'all',
           auth_method: 'ident',
-          order: 12,
+          order: 12
         }
       end
 
       it do
-        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(order: '012')
+        expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(order: '012')
       end
     end
 
@@ -217,12 +217,12 @@ describe 'postgresql::server::pg_hba_rule' do
           database: 'all',
           user: 'all',
           auth_method: 'ident',
-          order: 1234,
+          order: 1234
         }
       end
 
       it do
-        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(order: '1234')
+        expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(order: '1234')
       end
     end
 
@@ -240,14 +240,15 @@ describe 'postgresql::server::pg_hba_rule' do
           user: 'all',
           address: '.domain.tld',
           auth_method: 'md5',
-          target: target,
+          target: target
         }
       end
 
       it do
-        is_expected.to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+\.domain\.tld\s+md5})
+        expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(content: %r{host\s+all\s+all\s+\.domain\.tld\s+md5})
       end
     end
+
     context 'pg_hba_rule with illegal address' do
       let :pre_condition do
         <<-MANIFEST
@@ -262,7 +263,7 @@ describe 'postgresql::server::pg_hba_rule' do
           user: 'all',
           address: '/45',
           auth_method: 'md5',
-          target: target,
+          target: target
         }
       end
 

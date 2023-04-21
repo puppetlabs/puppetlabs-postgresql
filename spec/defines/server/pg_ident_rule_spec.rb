@@ -25,14 +25,15 @@ describe 'postgresql::server::pg_ident_rule' do
       {
         map_name: 'thatsmymap',
         system_username: 'systemuser',
-        database_username: 'dbuser',
+        database_username: 'dbuser'
       }
     end
 
     it do
-      is_expected.to contain_concat__fragment('pg_ident_rule_test').with(content: %r{thatsmymap\s+systemuser\s+dbuser})
+      expect(subject).to contain_concat__fragment('pg_ident_rule_test').with(content: %r{thatsmymap\s+systemuser\s+dbuser})
     end
   end
+
   context 'not managing pg_ident' do
     let :pre_condition do
       <<-MANIFEST
@@ -46,7 +47,7 @@ describe 'postgresql::server::pg_ident_rule' do
       {
         map_name: 'thatsmymap',
         system_username: 'systemuser',
-        database_username: 'dbuser',
+        database_username: 'dbuser'
       }
     end
 

@@ -14,13 +14,13 @@ describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDesc
   let(:title) { 'postgis' }
   let(:params) do
     {
-      database: 'template_postgis',
+      database: 'template_postgis'
     }
   end
 
   context 'with mandatory arguments only' do
     it {
-      is_expected.to contain_postgresql_psql('template_postgis: CREATE EXTENSION "postgis"')
+      expect(subject).to contain_postgresql_psql('template_postgis: CREATE EXTENSION "postgis"')
         .with(db: 'template_postgis', command: 'CREATE EXTENSION "postgis"').that_requires('Postgresql::Server::Database[template_postgis]')
     }
   end
@@ -31,7 +31,7 @@ describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDesc
     end
 
     it {
-      is_expected.to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" SET SCHEMA "pg_catalog"')
+      expect(subject).to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" SET SCHEMA "pg_catalog"')
     }
   end
 
@@ -41,7 +41,7 @@ describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDesc
     end
 
     it {
-      is_expected.to contain_package('postgis')
+      expect(subject).to contain_package('postgis')
         .with(ensure: 'installed', name: 'postgis').that_comes_before('Postgresql_psql[template_postgis: CREATE EXTENSION "postgis"]')
     }
   end
@@ -53,13 +53,13 @@ describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDesc
     end
 
     it {
-      is_expected.to contain_postgresql_psql('template_postgis: DROP EXTENSION "postgis"')
+      expect(subject).to contain_postgresql_psql('template_postgis: DROP EXTENSION "postgis"')
         .with(db: 'template_postgis', command: 'DROP EXTENSION "postgis"').that_requires('Postgresql::Server::Database[template_postgis]')
     }
 
     it {
-      is_expected.to contain_package('postgis').with(ensure: 'absent',
-                                                     name: 'postgis')
+      expect(subject).to contain_package('postgis').with(ensure: 'absent',
+                                                         name: 'postgis')
     }
 
     context 'when keeping package installed' do
@@ -68,12 +68,12 @@ describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDesc
       end
 
       it {
-        is_expected.to contain_postgresql_psql('template_postgis: DROP EXTENSION "postgis"')
+        expect(subject).to contain_postgresql_psql('template_postgis: DROP EXTENSION "postgis"')
           .with(db: 'template_postgis', command: 'DROP EXTENSION "postgis"').that_requires('Postgresql::Server::Database[template_postgis]')
       }
 
       it {
-        is_expected.to contain_package('postgis')
+        expect(subject).to contain_package('postgis')
           .with(ensure: 'installed', name: 'postgis').that_requires('Postgresql_psql[template_postgis: DROP EXTENSION "postgis"]')
       }
     end
@@ -87,7 +87,7 @@ describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDesc
     end
 
     it {
-      is_expected.to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" UPDATE TO \'99.99.99\'')
+      expect(subject).to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" UPDATE TO \'99.99.99\'')
         .with(db: 'template_postgis', unless: "SELECT 1 FROM pg_extension WHERE extname='postgis' AND extversion='99.99.99'").that_requires('Postgresql::Server::Database[template_postgis]')
     }
   end
@@ -100,7 +100,7 @@ describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDesc
     end
 
     it {
-      is_expected.to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" UPDATE')
+      expect(subject).to contain_postgresql_psql('template_postgis: ALTER EXTENSION "postgis" UPDATE')
         .with(db: 'template_postgis',
               unless: "SELECT 1 FROM pg_available_extensions WHERE name = 'postgis' AND default_version = installed_version").that_requires('Postgresql::Server::Database[template_postgis]')
     }
@@ -120,7 +120,7 @@ describe 'postgresql::server::extension' do
   let(:params) do
     {
       database: 'template_postgis2',
-      extension: 'postgis',
+      extension: 'postgis'
     }
   end
 
@@ -130,7 +130,7 @@ describe 'postgresql::server::extension' do
 
   context 'with mandatory arguments only' do
     it {
-      is_expected.to contain_postgresql_psql('template_postgis2: CREATE EXTENSION "postgis"')
+      expect(subject).to contain_postgresql_psql('template_postgis2: CREATE EXTENSION "postgis"')
         .with(db: 'template_postgis2', command: 'CREATE EXTENSION "postgis"').that_requires('Postgresql::Server::Database[template_postgis2]')
     }
   end
@@ -143,7 +143,7 @@ describe 'postgresql::server::extension' do
   let(:params) do
     {
       database: 'postgres',
-      extension: 'pg_repack',
+      extension: 'pg_repack'
     }
   end
 
@@ -153,7 +153,7 @@ describe 'postgresql::server::extension' do
     end
 
     it {
-      is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
+      expect(subject).to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
         .with(db: 'postgres', command: 'CREATE EXTENSION "pg_repack"')
     }
   end
@@ -162,7 +162,7 @@ describe 'postgresql::server::extension' do
     let :params do
       {
         database: 'postgres',
-        extension: 'pg_repack',
+        extension: 'pg_repack'
       }
     end
 
@@ -179,7 +179,7 @@ describe 'postgresql::server::extension' do
       {
         database: 'postgres',
         extension: 'pg_repack',
-        port: 1234,
+        port: 1234
       }
     end
 
@@ -198,7 +198,7 @@ describe 'postgresql::server::extension' do
         extension: 'pg_repack',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
-                            'PGPORT' => '1234' },
+                            'PGPORT' => '1234' }
       }
     end
 
@@ -207,8 +207,9 @@ describe 'postgresql::server::extension' do
     end
 
     it { is_expected.to compile.with_all_deps }
+
     it {
-      is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
+      expect(subject).to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
         .with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234')
         .with_port(nil)
     }
@@ -222,7 +223,7 @@ describe 'postgresql::server::extension' do
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
                             'PGPORT' => '1234' },
-        port: 5678,
+        port: 5678
       }
     end
 
@@ -231,8 +232,9 @@ describe 'postgresql::server::extension' do
     end
 
     it { is_expected.to compile.with_all_deps }
+
     it {
-      is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
+      expect(subject).to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
         .with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234')
         .with_port('5678')
     }

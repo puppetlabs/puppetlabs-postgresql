@@ -44,7 +44,7 @@ describe 'postgresql::server::database' do
     let(:params) do
       { connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
-                            'PGPORT'    => '1234' } }
+                            'PGPORT' => '1234' } }
     end
 
     it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234').with_port(nil) }

@@ -79,9 +79,7 @@ describe 'postgresql::server::grant:' do
       end
 
       it 'is expected to run idempotently' do
-        if Gem::Version.new(postgresql_version) >= Gem::Version.new('8.4.0')
-          idempotent_apply(pp)
-        end
+        idempotent_apply(pp) if Gem::Version.new(postgresql_version) >= Gem::Version.new('8.4.0')
       end
 
       it 'is expected to GRANT USAGE ON LANGUAGE plpgsql to ROLE' do
@@ -201,6 +199,7 @@ describe 'postgresql::server::grant:' do
       end
     end
   end
+
   ### FUNCTION grants
   context 'sequence' do
     let(:pp) do
@@ -255,6 +254,7 @@ describe 'postgresql::server::grant:' do
         end
       end
     end
+
     it 'grants execute on a function with argument to a user' do
       if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
         idempotent_apply(pp)
@@ -267,6 +267,7 @@ describe 'postgresql::server::grant:' do
       end
     end
   end
+
   ### TABLE grants
   context 'table' do
     describe 'GRANT ... ON TABLE' do
@@ -315,7 +316,7 @@ describe 'postgresql::server::grant:' do
               role      => $user,
               require     => [ Postgresql::Server::Role[$user] ],
             }
-          EOS
+        EOS
 
         pp_revoke = pp_setup + <<-EOS.unindent
 
@@ -337,7 +338,7 @@ describe 'postgresql::server::grant:' do
               role      => $user,
               require     => [ Postgresql::Server::Role[$user] ],
             }
-          EOS
+        EOS
 
         if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
           idempotent_apply(pp_create_table)
@@ -376,7 +377,7 @@ describe 'postgresql::server::grant:' do
               role        => $user,
               require     => [ Postgresql::Server::Role[$user] ],
             }
-          EOS
+        EOS
 
         pp_revoke = pp_setup + <<-EOS.unindent
 
@@ -389,7 +390,7 @@ describe 'postgresql::server::grant:' do
               role        => $user,
               require     => [ Postgresql::Server::Role[$user] ],
             }
-          EOS
+        EOS
 
         if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
           ## pp_create_table sets up the permissions that pp_grant 'fixes', so these to steps cannot be rolled into one
@@ -428,7 +429,7 @@ describe 'postgresql::server::grant:' do
               role        => $user,
               require     => [ Postgresql::Server::Role[$user] ],
             }
-          EOS
+        EOS
 
         pp_revoke = pp_setup + <<-EOS.unindent
 
@@ -441,7 +442,7 @@ describe 'postgresql::server::grant:' do
               role        => $user,
               require     => [ Postgresql::Server::Role[$user] ],
             }
-          EOS
+        EOS
 
         if Gem::Version.new(postgresql_version) >= Gem::Version.new('9.0')
           ## pp_create_table sets up the permissions that pp_grant 'fixes', so these to steps cannot be rolled into one
@@ -471,6 +472,7 @@ describe 'postgresql::server::grant:' do
       end
     end
   end
+
   context 'database' do
     describe 'REVOKE ... ON DATABASE...' do
       it 'do not fail on revoke connect from non-existant user' do
@@ -484,7 +486,7 @@ describe 'postgresql::server::grant:' do
                 db          => '#{db}',
                 role        => '#{user}_does_not_exist',
               }
-            EOS
+          EOS
           idempotent_apply(pp)
         end
       end

@@ -28,12 +28,11 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
   end
 
   def default_impl(username, password, sensitive = false, hash = 'md5', salt = nil)
-    if password.is_a?(String) && password.match?(%r{^(md5|SCRAM-SHA-256).+})
-      return password
-    end
+    return password if password.is_a?(String) && password.match?(%r{^(md5|SCRAM-SHA-256).+})
+
     password = password.unwrap if password.respond_to?(:unwrap)
     pass = if hash == 'md5'
-             'md5' + Digest::MD5.hexdigest(password.to_s + username.to_s)
+             "md5#{Digest::MD5.hexdigest(password.to_s + username.to_s)}"
            else
              pg_sha256(password, (salt || username))
            end
@@ -50,7 +49,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
       iterations: '4096',
       salt: Base64.strict_encode64(salt),
       client_key: Base64.strict_encode64(client_key(digest)),
-      server_key: Base64.strict_encode64(server_key(digest)),
+      server_key: Base64.strict_encode64(server_key(digest))
     }
   end
 
@@ -60,19 +59,19 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
       salt: salt,
       iterations: 4096,
       length: 32,
-      hash: OpenSSL::Digest::SHA256.new,
+      hash: OpenSSL::Digest.new('SHA256'),
     )
   end
 
   def client_key(digest_key)
-    hmac = OpenSSL::HMAC.new(digest_key, OpenSSL::Digest::SHA256.new)
+    hmac = OpenSSL::HMAC.new(digest_key, OpenSSL::Digest.new('SHA256'))
     hmac << 'Client Key'
     hmac.digest
     OpenSSL::Digest.new('SHA256').digest hmac.digest
   end
 
   def server_key(digest_key)
-    hmac = OpenSSL::HMAC.new(digest_key, OpenSSL::Digest::SHA256.new)
+    hmac = OpenSSL::HMAC.new(digest_key, OpenSSL::Digest.new('SHA256'))
     hmac << 'Server Key'
     hmac.digest
   end

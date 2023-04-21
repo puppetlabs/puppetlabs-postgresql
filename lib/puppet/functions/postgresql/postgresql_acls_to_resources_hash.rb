@@ -27,22 +27,20 @@ Puppet::Functions.create_function(:'postgresql::postgresql_acls_to_resources_has
 
       unless parts.length >= 4
         raise(Puppet::ParseError, "postgresql::postgresql_acls_to_resources_hash(): acl line #{index} does not " \
-          'have enough parts')
+                                  'have enough parts')
       end
 
       resource = {
-        'type'     => parts[0],
+        'type' => parts[0],
         'database' => parts[1],
-        'user'     => parts[2],
-        'order'    => '%03d' % (offset + index),
+        'user' => parts[2],
+        'order' => '%03d' % (offset + index)
       }
       if parts[0] == 'local'
         resource['auth_method'] = parts[3]
-        if parts.length > 4
-          resource['auth_option'] = parts.last(parts.length - 4).join(' ')
-        end
+        resource['auth_option'] = parts.last(parts.length - 4).join(' ') if parts.length > 4
       elsif %r{^\d}.match?(parts[4])
-        resource['address'] = parts[3] + ' ' + parts[4]
+        resource['address'] = "#{parts[3]} #{parts[4]}"
         resource['auth_method'] = parts[5]
 
         resource['auth_option'] = parts.last(parts.length - 6).join(' ') if parts.length > 6

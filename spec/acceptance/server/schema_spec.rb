@@ -4,9 +4,7 @@ require 'spec_helper_acceptance'
 
 describe 'postgresql::server::schema:' do
   let(:version) do
-    if os[:family] == 'redhat' && os[:release].start_with?('5')
-      '8.1'
-    end
+    '8.1' if os[:family] == 'redhat' && os[:release].start_with?('5')
   end
   let(:pp) do
     <<-MANIFEST.unindent

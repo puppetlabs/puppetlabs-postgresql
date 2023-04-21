@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 Puppet::Type.newtype(:postgresql_replication_slot) do
-  @doc = <<-EOS
-@summary Manages Postgresql replication slots.
+  @doc = <<~EOS
+    @summary Manages Postgresql replication slots.
 
-This type allows to create and destroy replication slots
-to register warm standby replication on a Postgresql
-primary server.
-EOS
+    This type allows to create and destroy replication slots
+    to register warm standby replication on a Postgresql
+    primary server.
+  EOS
 
   ensurable
 

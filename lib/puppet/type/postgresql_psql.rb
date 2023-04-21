@@ -23,7 +23,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
     def sync
       output, status = provider.run_sql_command(value)
-      raise("Error executing SQL; psql returned #{status}: '#{output}'") unless status == 0
+      raise("Error executing SQL; psql returned #{status}: '#{output}'") unless status.to_i.zero?
     end
   end
 
@@ -38,12 +38,11 @@ Puppet::Type.newtype(:postgresql_psql) do
     # Return true if a matching row is found
     def matches(value)
       output, status = provider.run_unless_sql_command(value)
-      fail("Error evaluating 'unless' clause, returned #{status}: '#{output}'") unless status == 0 # rubocop:disable Style/SignalException
-      # rubocop:enable Style/NumericPredicate
+      fail("Error evaluating 'unless' clause, returned #{status}: '#{output}'") unless status.to_i.zero? # rubocop:disable Style/SignalException
 
       result_count = output.strip.to_i
       debug("Found #{result_count} row(s) executing 'unless' clause")
-      result_count > 0
+      result_count.positive?
     end
   end
 
@@ -60,10 +59,11 @@ Puppet::Type.newtype(:postgresql_psql) do
       output, status = provider.run_unless_sql_command(value)
       status = output.exitcode if status.nil?
 
-      raise("Error evaluating 'onlyif' clause, returned #{status}: '#{output}'") unless status == 0
+      raise("Error evaluating 'onlyif' clause, returned #{status}: '#{output}'") unless status.to_i.zero?
+
       result_count = output.strip.to_i
       debug("Found #{result_count} row(s) executing 'onlyif' clause")
-      result_count > 0
+      result_count.positive?
     end
   end
 
@@ -110,9 +110,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
     validate do |values|
       Array(values).each do |value|
-        unless %r{\w+=}.match?(value)
-          raise ArgumentError, "Invalid environment setting '#{value}'"
-        end
+        raise ArgumentError, "Invalid environment setting '#{value}'" unless %r{\w+=}.match?(value)
       end
     end
   end
@@ -140,6 +138,7 @@ Puppet::Type.newtype(:postgresql_psql) do
     return false if !onlyif_param.nil? && !onlyif_param.value.nil? && !onlyif_param.matches(onlyif_param.value)
     return false if !unless_param.nil? && !unless_param.value.nil? && unless_param.matches(unless_param.value)
     return false if !refreshing && @parameters[:refreshonly].value == :true
+
     true
   end
 
@@ -149,7 +148,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
   private
 
-  def set_sensitive_parameters(sensitive_parameters)
+  def sensitive_parameters=(sensitive_parameters)
     # Respect sensitive commands
     if sensitive_parameters.include?(:unless)
       sensitive_parameters.delete(:unless)

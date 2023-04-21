@@ -9,7 +9,7 @@ Puppet::Type.newtype(:postgresql_conf) do
     desc 'The postgresql parameter name to manage.'
     isnamevar
 
-    newvalues(%r{^[\w\.]+$})
+    newvalues(%r{^[\w.]+$})
   end
 
   newproperty(:value) do
