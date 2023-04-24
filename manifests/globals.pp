@@ -150,7 +150,7 @@ class postgresql::globals (
 
   Optional[String[1]] $encoding                    = undef,
   Optional[String[1]] $locale                      = undef,
-  Optional[String[1]] $data_checksums              = undef,
+  Optional[Boolean] $data_checksums                = undef,
   Optional[String[1]] $timezone                    = undef,
 
   Optional[Boolean] $manage_pg_hba_conf            = undef,

@@ -56,7 +56,7 @@
 #
 # @param encoding Sets the default encoding for all databases created with this module. On certain operating systems this is also used during the template1 initialization, so it becomes a default outside of the module as well.
 # @param locale Sets the default database locale for all databases created with this module. On certain operating systems this is used during the template1 initialization as well, so it becomes a default outside of the module.
-# @param data_checksums Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+# @param data_checksums Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
 #   Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 #
 # @param timezone Set timezone for the PostgreSQL instance
@@ -138,7 +138,7 @@ class postgresql::server (
 
   Optional[String[1]]                                $encoding                     = $postgresql::params::encoding,
   Optional[String[1]]                                $locale                       = $postgresql::params::locale,
-  Optional[String[1]]                                $data_checksums               = $postgresql::params::data_checksums,
+  Optional[Boolean]                                  $data_checksums               = $postgresql::params::data_checksums,
   Optional[String[1]]                                $timezone                     = $postgresql::params::timezone,
 
   Boolean                                            $manage_pg_hba_conf           = $postgresql::params::manage_pg_hba_conf,

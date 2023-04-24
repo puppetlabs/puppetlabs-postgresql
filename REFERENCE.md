@@ -563,7 +563,7 @@ Default value: `undef`
 
 ##### <a name="-postgresql--globals--data_checksums"></a>`data_checksums`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Boolean]`
 
 Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
 Warning: This option is used during initialization by initdb, and cannot be changed later.
@@ -1204,9 +1204,9 @@ Default value: `$postgresql::params::locale`
 
 ##### <a name="-postgresql--server--data_checksums"></a>`data_checksums`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Boolean]`
 
-Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
 Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 
 Default value: `$postgresql::params::data_checksums`
