@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v9.0.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v9.0.1) (2023-04-24)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.0.0...v9.0.1)
+
+### Fixed
+
+- Fix wrong data type for `data\_checksums` parameter [\#1420](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1420) ([smortex](https://github.com/smortex))
+
 ## [v9.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v9.0.0) (2023-04-21)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v8.3.0...v9.0.0)
@@ -323,6 +331,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fix incorrectly quoted GRANT cmd on functions [\#1150](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1150) ([olifre](https://github.com/olifre))
 - Correct versioncmp logic in config.pp [\#1137](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1137) ([boydtom](https://github.com/boydtom))
 - Treat $version as an integer for comparison, defaults to string [\#1135](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1135) ([boydtom](https://github.com/boydtom))
+- Allow usage of PUBLIC role [\#1134](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1134) ([Vampouille](https://github.com/Vampouille))
 - fix missing systemd override config for EL8 \(CentOS and RHEL\) [\#1131](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1131) ([david-barbion](https://github.com/david-barbion))
 
 ## [v6.3.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.3.0) (2019-12-18)
@@ -352,7 +361,6 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Fixed
 
-- Allow usage of PUBLIC role [\#1134](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1134) ([Vampouille](https://github.com/Vampouille))
 - \(MODULES-9658\) - custom ports are not labeled correctly [\#1099](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1099) ([blackknight36](https://github.com/blackknight36))
 - Fix: When assigning a tablespace to a database, no equal sign is needed in the query [\#1098](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1098) ([biertie](https://github.com/biertie))
 - Grant all tables in schema fixup [\#1096](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1096) ([georgehansper](https://github.com/georgehansper))
@@ -392,7 +400,6 @@ All notable changes to this project will be documented in this file. The format 
 ### Fixed
 
 - \(FM-7811\) - Use postgresql 9.4 for SLES 11 sp4 [\#1057](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1057) ([david22swan](https://github.com/david22swan))
-- \(MODULES-8553\) Further cleanup for package tag issues [\#1055](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1055) ([HelenCampbell](https://github.com/HelenCampbell))
 
 ## [5.12.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.12.0) (2019-02-01)
 
@@ -404,6 +411,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Fixed
 
+- \(MODULES-8553\) Further cleanup for package tag issues [\#1055](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1055) ([HelenCampbell](https://github.com/HelenCampbell))
 - \(MODULES-8553\) Fix dependency on apt by explicitly using 'puppetlabs-postgresql' as tag [\#1052](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1052) ([HelenCampbell](https://github.com/HelenCampbell))
 - \(MODULES-8352\) Don't use empty encoding string on initdb [\#1043](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1043) ([binford2k](https://github.com/binford2k))
 - pdksync - \(FM-7655\) Fix rubygems-update for ruby \< 2.3 [\#1042](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1042) ([tphoney](https://github.com/tphoney))
