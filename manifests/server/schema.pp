@@ -27,7 +27,7 @@ define postgresql::server::schema (
   Postgresql::Server::Db <| dbname == $db |> -> Postgresql::Server::Schema[$name]
 
   # If the connection settings do not contain a port, then use the local server port
-  if $connect_settings != undef and has_key( $connect_settings, 'PGPORT') {
+  if $connect_settings != undef and 'PGPORT' in $connect_settings {
     $port = undef
   } else {
     $port = $postgresql::server::port
