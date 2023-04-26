@@ -75,7 +75,7 @@ define postgresql::server::grant (
   #
   if $port != undef {
     $port_override = $port
-  } elsif $connect_settings != undef and has_key( $connect_settings, 'PGPORT') {
+  } elsif $connect_settings != undef and 'PGPORT' in $connect_settings {
     $port_override = undef
   } else {
     $port_override = $postgresql::server::port

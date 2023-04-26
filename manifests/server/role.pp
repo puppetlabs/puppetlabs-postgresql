@@ -52,7 +52,7 @@ define postgresql::server::role (
   #
   if $port != undef {
     $port_override = $port
-  } elsif $connect_settings != undef and has_key( $connect_settings, 'PGPORT') {
+  } elsif $connect_settings != undef and 'PGPORT' in $connect_settings {
     $port_override = undef
   } else {
     $port_override = $postgresql::server::port
@@ -60,7 +60,7 @@ define postgresql::server::role (
 
   # If possible use the version of the remote database, otherwise
   # fallback to our local DB version
-  if $connect_settings != undef and has_key( $connect_settings, 'DBVERSION') {
+  if $connect_settings != undef and 'DBVERSION' in $connect_settings {
     $version = $connect_settings['DBVERSION']
   } else {
     $version = $postgresql::server::_version
