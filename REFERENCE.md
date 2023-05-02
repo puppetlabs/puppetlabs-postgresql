@@ -1008,7 +1008,7 @@ Default value: `$postgresql::globals::default_connect_settings`
 
 ##### <a name="-postgresql--server--listen_addresses"></a>`listen_addresses`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Variant[String[1], Array[String[1]]]]`
 
 Address list on which the PostgreSQL service will listen
 
@@ -1497,7 +1497,7 @@ Default value: `'present'`
 
 ##### <a name="-postgresql--server--config_entry--value"></a>`value`
 
-Data type: `Optional[Variant[String[1], Integer]]`
+Data type: `Optional[Variant[String[1], Numeric]]`
 
 Defines the value for the setting.
 
@@ -2281,7 +2281,7 @@ Default value: `$postgresql::server::ip_mask_allow_all_users`
 
 ##### <a name="-postgresql--server--instance--config--listen_addresses"></a>`listen_addresses`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Variant[String[1], Array[String[1]]]]`
 
 Address list on which the PostgreSQL service will listen
 
