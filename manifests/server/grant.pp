@@ -432,6 +432,9 @@ define postgresql::server::grant (
     default: {
       $_granted_object = $_object_name
       $_togrant_object = $_object_name
+      # if $_togrant_object_only not set, set it to a default value $_togrant_object
+      # allows an Array or String to be passed as $_object_name i.e. [$schema, $table] or $table
+      $_togrant_object_only = $_togrant_object
     }
   }
 
