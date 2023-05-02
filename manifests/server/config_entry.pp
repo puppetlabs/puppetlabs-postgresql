@@ -6,7 +6,7 @@
 #
 define postgresql::server::config_entry (
   Enum['present', 'absent']             $ensure = 'present',
-  Optional[Variant[String[1], Integer]] $value  = undef,
+  Optional[Variant[String[1], Numeric]] $value  = undef,
   Variant[Boolean, String[1]]           $path   = false
 ) {
   $postgresql_conf_path = $postgresql::server::postgresql_conf_path
