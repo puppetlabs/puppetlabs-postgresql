@@ -42,28 +42,28 @@ describe 'postgresql::server::config_entry' do
     end
   end
 
-  context 'passes values through appropriately' do
+  context 'passes a string value through appropriately' do
     let(:params) { { ensure: 'present', name: 'string_value', value: 'entry_test' } }
 
-    it 'as a String' do
+    it 'and adds string value to config' do
       expect(subject).to contain_postgresql_conf('string_value').with(name: 'string_value',
-                                                                              value: 'entry_test')
+                                                                      value: 'entry_test')
     end
   end
 
-  context 'passes values through appropriately' do
+  context 'passes an integer value through appropriately' do
     let(:params) { { ensure: 'present', name: 'integer_value', value: 40 } }
 
-    it 'as an Integer' do
+    it 'and adds integer value to config' do
       expect(subject).to contain_postgresql_conf('integer_value').with(name: 'integer_value',
-                                                                              value: 40)
+                                                                       value: 40)
     end
   end
 
-  context 'passes values through appropriately' do
+  context 'passes a float value through appropriately' do
     let(:params) { { ensure: 'present', name: 'floating_point_value', value: 4.0 } }
 
-    it 'a Float' do
+    it 'and adds float value to config' do
       expect(subject).to contain_postgresql_conf('floating_point_value').with(name: 'floating_point_value',
                                                                               value: 4.0)
     end
