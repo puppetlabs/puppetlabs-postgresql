@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v9.0.2](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v9.0.2) (2023-05-02)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.0.1...v9.0.2)
+
+### Fixed
+
+- \(CONT-950\) - Fix mismatched data types [\#1430](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1430) ([jordanbreen28](https://github.com/jordanbreen28))
+- \(CONT-904\) - Removal of tech debt [\#1429](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1429) ([jordanbreen28](https://github.com/jordanbreen28))
+- \(CONT-949\) - Bump stdlib dependency [\#1428](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1428) ([jordanbreen28](https://github.com/jordanbreen28))
+
 ## [v9.0.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v9.0.1) (2023-04-24)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.0.0...v9.0.1)
@@ -347,6 +357,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Fixed
 
 - Remove duplicate REFERENCE.md file with strange unicode character at end of filename [\#1108](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1108) ([nudgegoonies](https://github.com/nudgegoonies))
+- \(MODULES-9219\) - puppetlabs-postgresql : catalog compilation fails when the service command is not installed [\#1093](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1093) ([blackknight36](https://github.com/blackknight36))
 
 ## [v6.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.2.0) (2019-09-12)
 
@@ -364,7 +375,6 @@ All notable changes to this project will be documented in this file. The format 
 - \(MODULES-9658\) - custom ports are not labeled correctly [\#1099](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1099) ([blackknight36](https://github.com/blackknight36))
 - Fix: When assigning a tablespace to a database, no equal sign is needed in the query [\#1098](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1098) ([biertie](https://github.com/biertie))
 - Grant all tables in schema fixup [\#1096](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1096) ([georgehansper](https://github.com/georgehansper))
-- \(MODULES-9219\) - puppetlabs-postgresql : catalog compilation fails when the service command is not installed [\#1093](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1093) ([blackknight36](https://github.com/blackknight36))
 
 ## [v6.1.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.1.0) (2019-06-04)
 
@@ -400,6 +410,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Fixed
 
 - \(FM-7811\) - Use postgresql 9.4 for SLES 11 sp4 [\#1057](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1057) ([david22swan](https://github.com/david22swan))
+- \(MODULES-8553\) Further cleanup for package tag issues [\#1055](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1055) ([HelenCampbell](https://github.com/HelenCampbell))
 
 ## [5.12.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.12.0) (2019-02-01)
 
@@ -411,7 +422,6 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Fixed
 
-- \(MODULES-8553\) Further cleanup for package tag issues [\#1055](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1055) ([HelenCampbell](https://github.com/HelenCampbell))
 - \(MODULES-8553\) Fix dependency on apt by explicitly using 'puppetlabs-postgresql' as tag [\#1052](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1052) ([HelenCampbell](https://github.com/HelenCampbell))
 - \(MODULES-8352\) Don't use empty encoding string on initdb [\#1043](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1043) ([binford2k](https://github.com/binford2k))
 - pdksync - \(FM-7655\) Fix rubygems-update for ruby \< 2.3 [\#1042](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1042) ([tphoney](https://github.com/tphoney))
