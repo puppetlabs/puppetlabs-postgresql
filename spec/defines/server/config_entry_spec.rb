@@ -42,6 +42,33 @@ describe 'postgresql::server::config_entry' do
     end
   end
 
+  context 'passes values through appropriately' do
+    let(:params) { { ensure: 'present', name: 'string_value', value: 'entry_test' } }
+
+    it 'as a String' do
+      expect(subject).to contain_postgresql_conf('string_value').with(name: 'string_value',
+                                                                              value: 'entry_test')
+    end
+  end
+
+  context 'passes values through appropriately' do
+    let(:params) { { ensure: 'present', name: 'integer_value', value: 40 } }
+
+    it 'as an Integer' do
+      expect(subject).to contain_postgresql_conf('integer_value').with(name: 'integer_value',
+                                                                              value: 40)
+    end
+  end
+
+  context 'passes values through appropriately' do
+    let(:params) { { ensure: 'present', name: 'floating_point_value', value: 4.0 } }
+
+    it 'a Float' do
+      expect(subject).to contain_postgresql_conf('floating_point_value').with(name: 'floating_point_value',
+                                                                              value: 4.0)
+    end
+  end
+
   context 'unix_socket_directories' do
     let(:params) { { ensure: 'present', name: 'unix_socket_directories', value: '/var/pgsql, /opt/postgresql, /root/' } }
 
