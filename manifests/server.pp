@@ -107,7 +107,7 @@ class postgresql::server (
   Optional[String[1]]                                $service_status               = $postgresql::params::service_status,
   String[1]                                          $default_database             = $postgresql::params::default_database,
   Hash                                               $default_connect_settings     = $postgresql::globals::default_connect_settings,
-  Optional[String[1]]                                $listen_addresses             = $postgresql::params::listen_addresses,
+  Optional[Variant[String[1], Array[String[1]]]]     $listen_addresses             = $postgresql::params::listen_addresses,
   Variant[String[1], Stdlib::Port, Integer]          $port                         = $postgresql::params::port,
   String[1]                                          $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
   String[1]                                          $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,

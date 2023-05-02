@@ -136,9 +136,15 @@ describe provider_class do
       )
     end
 
-    it 'quotes addresses' do
+    it 'quotes single string address' do
       expect(provider.to_line(name: 'listen_addresses', value: '0.0.0.0', comment: nil, record_type: :parsed)).to eq(
         "listen_addresses = '0.0.0.0'",
+      )
+    end
+
+    it 'quotes an array of addresses' do
+      expect(provider.to_line(name: 'listen_addresses', value: ['0.0.0.0', '127.0.0.1'], comment: nil, record_type: :parsed)).to eq(
+        "listen_addresses = '0.0.0.0, 127.0.0.1'",
       )
     end
   end
