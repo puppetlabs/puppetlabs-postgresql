@@ -148,7 +148,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
   private
 
-  def sensitive_parameters=(sensitive_parameters)
+  def set_sensitive_parameters(sensitive_parameters) # rubocop:disable Style/AccessorMethodName
     # Respect sensitive commands
     if sensitive_parameters.include?(:unless)
       sensitive_parameters.delete(:unless)
