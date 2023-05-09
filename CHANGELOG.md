@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v9.0.3](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v9.0.3) (2023-05-09)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.0.2...v9.0.3)
+
+### Fixed
+
+- \(GH-1426\) - Update value to accept array [\#1434](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1434) ([jordanbreen28](https://github.com/jordanbreen28))
+- \(\#1432\) - Fix `Unable to mark 'unless' as sensitive` [\#1433](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1433) ([kBite](https://github.com/kBite))
+
 ## [v9.0.2](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v9.0.2) (2023-05-02)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.0.1...v9.0.2)
@@ -357,7 +366,6 @@ All notable changes to this project will be documented in this file. The format 
 ### Fixed
 
 - Remove duplicate REFERENCE.md file with strange unicode character at end of filename [\#1108](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1108) ([nudgegoonies](https://github.com/nudgegoonies))
-- \(MODULES-9219\) - puppetlabs-postgresql : catalog compilation fails when the service command is not installed [\#1093](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1093) ([blackknight36](https://github.com/blackknight36))
 
 ## [v6.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.2.0) (2019-09-12)
 
@@ -375,6 +383,7 @@ All notable changes to this project will be documented in this file. The format 
 - \(MODULES-9658\) - custom ports are not labeled correctly [\#1099](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1099) ([blackknight36](https://github.com/blackknight36))
 - Fix: When assigning a tablespace to a database, no equal sign is needed in the query [\#1098](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1098) ([biertie](https://github.com/biertie))
 - Grant all tables in schema fixup [\#1096](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1096) ([georgehansper](https://github.com/georgehansper))
+- \(MODULES-9219\) - puppetlabs-postgresql : catalog compilation fails when the service command is not installed [\#1093](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1093) ([blackknight36](https://github.com/blackknight36))
 
 ## [v6.1.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.1.0) (2019-06-04)
 
@@ -436,7 +445,6 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Fixed
 
-- Strip quotes from role names [\#1034](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1034) ([jstuart](https://github.com/jstuart))
 - Ignore .psqlrc so output is clean and doesn't break Puppet [\#1021](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1021) ([flaviogurgel](https://github.com/flaviogurgel))
 - Change initdb option '--xlogdir' to '-X' for PG10 compatibility [\#976](https://github.com/puppetlabs/puppetlabs-postgresql/pull/976) ([fcanovai](https://github.com/fcanovai))
 
@@ -455,6 +463,10 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
 
 - pdksync - \(MODULES-7705\) - Bumping stdlib dependency from \< 5.0.0 to \< 6.0.0 [\#1018](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1018) ([pmcmaw](https://github.com/pmcmaw))
+
+### Fixed
+
+- Strip quotes from role names [\#1034](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1034) ([jstuart](https://github.com/jstuart))
 
 ## [5.8.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/5.8.0) (2018-08-06)
 
