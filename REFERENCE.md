@@ -1497,7 +1497,7 @@ Default value: `'present'`
 
 ##### <a name="-postgresql--server--config_entry--value"></a>`value`
 
-Data type: `Optional[Variant[String[1], Numeric]]`
+Data type: `Optional[Variant[String[1], Numeric, Array[String[1]]]]`
 
 Defines the value for the setting.
 
