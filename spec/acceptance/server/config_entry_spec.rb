@@ -3,6 +3,10 @@
 require 'spec_helper_acceptance'
 
 describe 'postgresql::server::config_entry' do
+  before(:all) do
+    LitmusHelper.instance.run_shell("cd /tmp; su 'postgres' -c 'pg_ctl stop -D /var/lib/pgsql/data/ -m fast'", acceptable_exit_codes: [0, 1]) unless os[:family].match?(%r{debian|ubuntu})
+  end
+
   context 'unix_socket_directories' do
     let(:pp_test) do
       <<-MANIFEST
