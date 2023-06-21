@@ -8,6 +8,7 @@
     * [Getting started with postgresql](#getting-started-with-postgresql)
 3. [Usage - Configuration options and additional functionality](#usage)
     * [Configure a server](#configure-a-server)
+    * [Configure an instance](#configure-an-instance)
     * [Create a database](#create-a-database)
     * [Manage users, roles, and permissions](#manage-users-roles-and-permissions)
     * [Manage ownership of DB objects](#manage-ownership-of-db-objects)
@@ -72,6 +73,184 @@ If you get an error message from these commands, your permission settings restri
 
 For more details about server configuration parameters, consult the [PostgreSQL Runtime Configuration documentation](http://www.postgresql.org/docs/current/static/runtime-config.html).
 
+### Configure an instance
+
+This module supports managing multiple instances (the default instance is referred to as 'main' and managed via including the server.pp class)
+
+**NOTE:** This feature is currently tested on Centos 8 Streams/RHEL8 with DNF Modules enabled. Different Linux plattforms and/or the Postgresql.org
+packages distribute different Systemd service files or use  wrapper scripts with Systemd to start Postgres. Additional adjustmentments are needed to get this working on these plattforms.
+
+#### Working Plattforms
+
+* Centos 8 Streams
+* RHEL 8
+
+#### Background and example
+
+creating a new instance has the following advantages:
+* files are owned by the postgres user
+* instance is running under a different user, if the instance is hacked, the hacker has no access to the file system
+* the instance user can be an LDAP user, higher security because of central login monitoring, password policies, password rotation policies
+* main instance can be disabled
+
+
+Here is a profile which can be used to create instaces
+
+```puppet
+class profiles::postgres (
+  Hash $instances = {},
+  String $postgresql_version = '13',
+) {
+  class { 'postgresql::globals':
+    encoding            => 'UTF-8',
+    locale              => 'en_US.UTF-8',
+    manage_package_repo => false,
+    manage_dnf_module   => true,
+    needs_initdb        => true,
+    version             => $postgresql_version,
+  }
+  include postgresql::server
+
+  $instances.each |String $instance, Hash $instance_settings| {
+    postgresql::server_instance { $instance:
+      *               => $instance_settings,
+    }
+  }
+}
+```
+
+And here is data to create an instance called test1:
+
+```yaml
+# stop default main instance
+postgresql::server::service_ensure: "stopped"
+postgresql::server::service_enable: false
+
+#define an instance
+profiles::postgres::instances:
+  test1:
+    instance_user: "ins_test1"
+    instance_group: "ins_test1"
+    instance_directories:
+      "/opt/pgsql":
+        ensure: directory
+      "/opt/pgsql/backup":
+        ensure: directory
+      "/opt/pgsql/data":
+        ensure: directory
+      "/opt/pgsql/data/13":
+        ensure: directory
+      "/opt/pgsql/data/home":
+        ensure: directory
+      "/opt/pgsql/wal":
+        ensure: directory
+      "/opt/pgsql/log":
+        ensure: directory
+      "/opt/pgsql/log/13":
+        ensure: directory
+      "/opt/pgsql/log/13/test1":
+        ensure: directory
+    config_settings:
+      pg_hba_conf_path: "/opt/pgsql/data/13/test1/pg_hba.conf"
+      postgresql_conf_path: "/opt/pgsql/data/13/test1/postgresql.conf"
+      pg_ident_conf_path: "/opt/pgsql/data/13/test1/pg_ident.conf"
+      datadir: "/opt/pgsql/data/13/test1"
+      service_name: "postgresql@13-test1"
+      port: 5433
+      pg_hba_conf_defaults: false
+    service_settings:
+      service_name: "postgresql@13-test1"
+      service_status: "systemctl status postgresql@13-test1.service"
+      service_ensure: "running"
+      service_enable: true
+    initdb_settings:
+      auth_local: "peer"
+      auth_host: "md5"
+      needs_initdb: true
+      datadir: "/opt/pgsql/data/13/test1"
+      encoding: "UTF-8"
+      lc_messages: "en_US.UTF8"
+      locale: "en_US.UTF8"
+      data_checksums: false
+      group: "postgres"
+      user: "postgres"
+      username: "ins_test1"
+    config_entries:
+      authentication_timeout:
+        value: "1min"
+        comment: "a test"
+      log_statement_stats:
+        value: "off"
+      autovacuum_vacuum_scale_factor:
+        value: 0.3
+    databases:
+      testdb1:
+        encoding: "UTF8"
+        locale: "en_US.UTF8"
+        owner: "dba_test1"
+      testdb2:
+        encoding: "UTF8"
+        locale: "en_US.UTF8"
+        owner: "dba_test1"
+    roles:
+      "ins_test1":
+        superuser: true
+        login: true
+      "dba_test1":
+        createdb: true
+        login: true
+      "app_test1":
+        login: true
+      "rep_test1":
+        replication: true
+        login: true
+      "rou_test1":
+        login: true
+    pg_hba_rules:
+      "local all INSTANCE user":
+        type: "local"
+        database: "all"
+        user: "ins_test1"
+        auth_method: "peer"
+        order: 1
+      "local all DB user":
+        type: "local"
+        database: "all"
+        user: "dba_test1"
+        auth_method: "peer"
+        order: 2
+      "local all APP user":
+        type: "local"
+        database: "all"
+        user: "app_test1"
+        auth_method: "peer"
+        order: 3
+      "local all READONLY user":
+        type: "local"
+        database: "all"
+        user: "rou_test1"
+        auth_method: "peer"
+        order: 4
+      "remote all INSTANCE user PGADMIN server":
+        type: "host"
+        database: "all"
+        user: "ins_test1"
+        address: "192.168.22.131/32"
+        auth_method: "md5"
+        order: 5
+      "local replication INSTANCE user":
+        type: "local"
+        database: "replication"
+        user: "ins_test1"
+        auth_method: "peer"
+        order: 6
+      "local replication REPLICATION user":
+        type: "local"
+        database: "replication"
+        user: "rep_test1"
+        auth_method: "peer"
+        order: 7
+```
 ### Create a database
 
 You can set up a variety of PostgreSQL databases with the `postgresql::server::db` defined type. For instance, to set up a database for PuppetDB:
@@ -359,7 +538,7 @@ For information on the classes and types, see the [REFERENCE.md](https://github.
 
 ## Limitations
 
-Works with versions of PostgreSQL on supported OSes.  
+Works with versions of PostgreSQL on supported OSes.
 
 For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-postgresql/blob/main/metadata.json)
 

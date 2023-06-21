@@ -63,6 +63,7 @@
 * [`postgresql::server::schema`](#postgresql--server--schema): Create a new schema.
 * [`postgresql::server::table_grant`](#postgresql--server--table_grant): This resource wraps the grant resource to manage table grants specifically.
 * [`postgresql::server::tablespace`](#postgresql--server--tablespace): This module creates tablespace.
+* [`postgresql::server_instance`](#postgresql--server_instance): define to install and manage additional postgresql instances
 
 #### Private Defined types
 
@@ -4037,6 +4038,168 @@ Specifies working directory under which the psql command should be executed.
 May need to specify if '/tmp' is on volume mounted with noexec option.
 
 Default value: `$postgresql::server::module_workdir`
+
+### <a name="postgresql--server_instance"></a>`postgresql::server_instance`
+
+define to install and manage additional postgresql instances
+
+#### Parameters
+
+The following parameters are available in the `postgresql::server_instance` defined type:
+
+* [`instance_name`](#-postgresql--server_instance--instance_name)
+* [`instance_user`](#-postgresql--server_instance--instance_user)
+* [`instance_group`](#-postgresql--server_instance--instance_group)
+* [`instance_user_homedirectory`](#-postgresql--server_instance--instance_user_homedirectory)
+* [`manage_instance_user_and_group`](#-postgresql--server_instance--manage_instance_user_and_group)
+* [`instance_directories`](#-postgresql--server_instance--instance_directories)
+* [`initdb_settings`](#-postgresql--server_instance--initdb_settings)
+* [`config_settings`](#-postgresql--server_instance--config_settings)
+* [`service_settings`](#-postgresql--server_instance--service_settings)
+* [`passwd_settings`](#-postgresql--server_instance--passwd_settings)
+* [`roles`](#-postgresql--server_instance--roles)
+* [`config_entries`](#-postgresql--server_instance--config_entries)
+* [`pg_hba_rules`](#-postgresql--server_instance--pg_hba_rules)
+* [`databases`](#-postgresql--server_instance--databases)
+* [`databases_and_users`](#-postgresql--server_instance--databases_and_users)
+* [`database_grants`](#-postgresql--server_instance--database_grants)
+* [`table_grants`](#-postgresql--server_instance--table_grants)
+
+##### <a name="-postgresql--server_instance--instance_name"></a>`instance_name`
+
+Data type: `String[1]`
+
+The name of the instance.
+
+Default value: `$name`
+
+##### <a name="-postgresql--server_instance--instance_user"></a>`instance_user`
+
+Data type: `String[1]`
+
+The user to run the instance as.
+
+Default value: `$instance_name`
+
+##### <a name="-postgresql--server_instance--instance_group"></a>`instance_group`
+
+Data type: `String[1]`
+
+The group to run the instance as.
+
+Default value: `$instance_name`
+
+##### <a name="-postgresql--server_instance--instance_user_homedirectory"></a>`instance_user_homedirectory`
+
+Data type: `Stdlib::Absolutepath`
+
+The home directory of the instance user.
+
+Default value: `"/opt/pgsql/data/home/${instance_user}"`
+
+##### <a name="-postgresql--server_instance--manage_instance_user_and_group"></a>`manage_instance_user_and_group`
+
+Data type: `Boolean`
+
+Should Puppet manage the instance user and it's primary group?.
+
+Default value: `true`
+
+##### <a name="-postgresql--server_instance--instance_directories"></a>`instance_directories`
+
+Data type: `Hash`
+
+directories needed for the instance. Option to manage the directory properties for each directory.
+
+Default value: `{}`
+
+##### <a name="-postgresql--server_instance--initdb_settings"></a>`initdb_settings`
+
+Data type: `Hash`
+
+Specifies a hash witn parameters for postgresql::server::instance::initdb
+
+Default value: `{}`
+
+##### <a name="-postgresql--server_instance--config_settings"></a>`config_settings`
+
+Data type: `Hash`
+
+Specifies a hash with parameters for postgresql::server::instance::config
+
+Default value: `{}`
+
+##### <a name="-postgresql--server_instance--service_settings"></a>`service_settings`
+
+Data type: `Hash`
+
+Specifies a hash with parameters for postgresql::server:::instance::service
+
+Default value: `{}`
+
+##### <a name="-postgresql--server_instance--passwd_settings"></a>`passwd_settings`
+
+Data type: `Hash`
+
+Specifies a hash with parameters for postgresql::server::instance::passwd
+
+Default value: `{}`
+
+##### <a name="-postgresql--server_instance--roles"></a>`roles`
+
+Data type: `Hash`
+
+Specifies a hash from which to generate postgresql::server::role resources.
+
+Default value: `{}`
+
+##### <a name="-postgresql--server_instance--config_entries"></a>`config_entries`
+
+Data type: `Hash`
+
+Specifies a hash from which to generate postgresql::server::config_entry resources.
+
+Default value: `{}`
+
+##### <a name="-postgresql--server_instance--pg_hba_rules"></a>`pg_hba_rules`
+
+Data type: `Hash`
+
+Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
+
+Default value: `{}`
+
+##### <a name="-postgresql--server_instance--databases"></a>`databases`
+
+Data type: `Hash`
+
+Specifies a hash from which to generate postgresql::server::database resources.
+
+Default value: `{}`
+
+##### <a name="-postgresql--server_instance--databases_and_users"></a>`databases_and_users`
+
+Data type: `Hash`
+
+Specifies a hash from which to generate postgresql::server::db resources.
+
+Default value: `{}`
+
+##### <a name="-postgresql--server_instance--database_grants"></a>`database_grants`
+
+Data type: `Hash`
+
+Specifies a hash from which to generate postgresql::server::database_grant resources.
+
+Default value: `{}`
+
+##### <a name="-postgresql--server_instance--table_grants"></a>`table_grants`
+
+Data type: `Hash`
+
+Specifies a hash from which to generate postgresql::server::table_grant resources.
+
+Default value: `{}`
 
 ## Resource types
 
