@@ -87,6 +87,10 @@
 # @param version Deprecated. Use postgresql::globals instead. Sets PostgreSQL version
 #
 # @param extra_systemd_config Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
+# @param auth_host auth method used by default for host authorization
+# @param auth_local  auth method used by default for local authorization
+# @param lc_messages locale used for logging and system messages
+# @param username username of user running the postgres instance
 #
 class postgresql::server (
   Optional[Variant[String[1], Sensitive[String[1]], Integer]] $postgres_password = undef,
@@ -136,9 +140,13 @@ class postgresql::server (
 
   Boolean                                            $needs_initdb                 = $postgresql::params::needs_initdb,
 
+  Optional[String[1]]                                $auth_host                    = undef,
+  Optional[String[1]]                                $auth_local                   = undef,
   Optional[String[1]]                                $encoding                     = $postgresql::params::encoding,
   Optional[String[1]]                                $locale                       = $postgresql::params::locale,
+  Optional[String[1]]                                $lc_messages                  = undef,
   Optional[Boolean]                                  $data_checksums               = $postgresql::params::data_checksums,
+  Optional[String[1]]                                $username                     = undef,
   Optional[String[1]]                                $timezone                     = $postgresql::params::timezone,
 
   Boolean                                            $manage_pg_hba_conf           = $postgresql::params::manage_pg_hba_conf,
