@@ -1,46 +1,46 @@
 # lint:ignore:140chars
-# @param needs_initdb Explicitly calls the initdb operation after server package is installed
-#   and before the PostgreSQL service is started.
-# @param initdb_path Specifies the path to the initdb command.
+# @param auth_host auth method used by default for host authorization
+# @param auth_local  auth method used by default for local authorization
+# @param data_checksums Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
 # @param datadir PostgreSQL data directory
-# @param xlogdir PostgreSQL xlog directory
+# @param encoding Sets the default encoding for all databases created with this module.
+#   On certain operating systems this is also used during the template1 initialization, so it becomes a default outside of the module as well.
+# @param group Overrides the default postgres user group to be used for related files in the file system.
+# @param initdb_path Specifies the path to the initdb command.
+# @param lc_messages locale used for logging and system messages
+# @param locale Sets the default database locale for all databases created with this module.
+#   On certain operating systems this is used during the template1 initialization as well, so it becomes a default outside of the module.
+#   Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
 # @param logdir PostgreSQL log directory
 # @param manage_datadir Set to false if you have file{ $datadir: } already defined
 # @param manage_logdir Set to false if you have file{ $logdir: } already defined
 # @param manage_xlogdir Set to false if you have file{ $xlogdir: } already defined
-# @param encoding Sets the default encoding for all databases created with this module.
-#   On certain operating systems this is also used during the template1 initialization, so it becomes a default outside of the module as well.
-# @param locale Sets the default database locale for all databases created with this module.
-#   On certain operating systems this is used during the template1 initialization as well, so it becomes a default outside of the module.
-# @param data_checksums Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
-#   Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
-# @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
-# @param group Overrides the default postgres user group to be used for related files in the file system.
 # @param module_workdir Working directory for the PostgreSQL module
-# @param auth_host auth method used by default for host authorization
-# @param auth_local  auth method used by default for local authorization
-# @param lc_messages locale used for logging and system messages
+# @param needs_initdb Explicitly calls the initdb operation after server package is installed
+#   and before the PostgreSQL service is started.
+# @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 # @param username username of user running the postgres instance
+# @param xlogdir PostgreSQL xlog/WAL directory
 # lint:endignore:140chars
 define postgresql::server::instance::initdb (
   Optional[String[1]]                      $auth_host      = $postgresql::server::auth_host,
   Optional[String[1]]                      $auth_local     = $postgresql::server::auth_local,
-  Boolean                                  $needs_initdb   = $postgresql::server::needs_initdb,
-  Variant[String[1], Stdlib::Absolutepath] $initdb_path    = $postgresql::server::initdb_path,
+  Optional[Boolean]                        $data_checksums = $postgresql::server::data_checksums,
   String[1]                                $datadir        = $postgresql::server::datadir,
-  Optional[String[1]]                      $xlogdir        = $postgresql::server::xlogdir,
+  Optional[String[1]]                      $encoding       = $postgresql::server::encoding,
+  String[1]                                $group          = $postgresql::server::group,
+  Variant[String[1], Stdlib::Absolutepath] $initdb_path    = $postgresql::server::initdb_path,
+  Optional[String[1]]                      $lc_messages    = $postgresql::server::lc_messages,
+  Optional[String[1]]                      $locale         = $postgresql::server::locale,
   Optional[String[1]]                      $logdir         = $postgresql::server::logdir,
   Boolean                                  $manage_datadir = $postgresql::server::manage_datadir,
   Boolean                                  $manage_logdir  = $postgresql::server::manage_logdir,
   Boolean                                  $manage_xlogdir = $postgresql::server::manage_xlogdir,
-  Optional[String[1]]                      $encoding       = $postgresql::server::encoding,
-  Optional[String[1]]                      $lc_messages    = $postgresql::server::lc_messages,
-  Optional[String[1]]                      $locale         = $postgresql::server::locale,
-  Optional[Boolean]                        $data_checksums = $postgresql::server::data_checksums,
-  String[1]                                $group          = $postgresql::server::group,
+  String[1]                                $module_workdir = $postgresql::server::module_workdir,
+  Boolean                                  $needs_initdb   = $postgresql::server::needs_initdb,
   String[1]                                $user           = $postgresql::server::user,
   Optional[String[1]]                      $username       = $postgresql::server::username,
-  String[1]                                $module_workdir = $postgresql::server::module_workdir,
+  Optional[String[1]]                      $xlogdir        = $postgresql::server::xlogdir,
 ) {
   if $facts['os']['family'] == 'RedHat' and $facts['os']['selinux']['enabled'] == true {
     $seltype = 'postgresql_db_t'
