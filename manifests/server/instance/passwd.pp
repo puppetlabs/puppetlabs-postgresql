@@ -27,7 +27,7 @@ define postgresql::server::instance::passwd (
   # psql will default to connecting as $user if you don't specify name
   $_datbase_user_same = $database == $user
   $_dboption = $_datbase_user_same ? {
-    false => " --dbname ${shell_escape($database)}",
+    false => " --dbname ${stdlib::shell_escape($database)}",
     default => ''
   }
 
@@ -37,7 +37,7 @@ define postgresql::server::instance::passwd (
     #  without specifying a password ('ident' or 'trust' security). This is
     #  the default for pg_hba.conf.
     $escaped = postgresql::postgresql_escape($real_postgres_password)
-    $exec_command = "${shell_escape($psql_path)}${_dboption} -c \"ALTER ROLE \\\"${shell_escape($user)}\\\" PASSWORD \${NEWPASSWD_ESCAPED}\"" # lint:ignore:140chars
+    $exec_command = "${stdlib::shell_escape($psql_path)}${_dboption} -c \"ALTER ROLE \\\"${stdlib::shell_escape($user)}\\\" PASSWORD \${NEWPASSWD_ESCAPED}\"" # lint:ignore:140chars
     exec { 'set_postgres_postgrespw':
       # This command works w/no password because we run it as postgres system
       # user
