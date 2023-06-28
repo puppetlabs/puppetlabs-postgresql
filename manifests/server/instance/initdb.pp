@@ -168,7 +168,7 @@ define postgresql::server::instance::initdb (
       default => "-X '${xlogdir}'"
     }
 
-    $initdb_command = "${initdb_path} ${auth_host_parameter} ${auth_local_parameter } ${data_checksums_parameter} ${datadir_parameter} ${encoding_parameter} ${lc_messages_parameter} ${locale_parameter} ${username_parameter} ${xlogdir_parameter}" # lint:ignore:140chars
+    $initdb_command = squeeze("${initdb_path} ${auth_host_parameter} ${auth_local_parameter} ${data_checksums_parameter} ${datadir_parameter} ${encoding_parameter} ${lc_messages_parameter} ${locale_parameter} ${username_parameter} ${xlogdir_parameter}", ' ') # lint:ignore:140chars
 
     # This runs the initdb command, we use the existance of the PG_VERSION
     # file to ensure we don't keep running this command.
