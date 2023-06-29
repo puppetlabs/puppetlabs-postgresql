@@ -149,7 +149,8 @@ define postgresql::server::instance::config (
   }
 
   if $listen_addresses {
-    postgresql::server::config_entry { 'listen_addresses':
+    postgresql::server::config_entry { "listen_addresses_for_instance_${name}":
+      key   => 'listen_addresses',
       value => $listen_addresses,
     }
   }
@@ -182,37 +183,42 @@ define postgresql::server::instance::config (
     exec { "/usr/sbin/semanage port -a -t postgresql_port_t -p tcp ${port}":
       command => $exec_command,
       unless  => $exec_unless,
-      before  => Postgresql::Server::Config_entry['port'],
+      before  => Postgresql::Server::Config_entry["port_for_instance_${name}"],
       require => Package[$package_name],
     }
   }
 
-  postgresql::server::config_entry { 'port':
+  postgresql::server::config_entry { "port_for_instance_${name}":
+    key   => 'port',
     value => $port,
   }
 
   if ($password_encryption) and (versioncmp($version, '10') >= 0) {
-    postgresql::server::config_entry { 'password_encryption':
+    postgresql::server::config_entry { "password_encryption_for_instance_${name}":
+      key   => 'password_encryption',
       value => $password_encryption,
     }
   }
 
-  postgresql::server::config_entry { 'data_directory':
+  postgresql::server::config_entry { "data_directory_for_instance_${name}":
+    key   => 'data_directory',
     value => $datadir,
   }
   if $timezone {
-    postgresql::server::config_entry { 'timezone':
+    postgresql::server::config_entry { "timezone_for_instance_${name}":
+      key   => 'timezone',
       value => $timezone,
     }
   }
   if $logdir {
-    postgresql::server::config_entry { 'log_directory':
+    postgresql::server::config_entry { "log_directory for instance ${name}":
       value => $logdir,
     }
   }
   # Allow timestamps in log by default
   if $log_line_prefix {
-    postgresql::server::config_entry { 'log_line_prefix':
+    postgresql::server::config_entry { "log_line_prefix_for_instance_${name}":
+      key   => 'log_line_prefix',
       value => $log_line_prefix,
     }
   }
