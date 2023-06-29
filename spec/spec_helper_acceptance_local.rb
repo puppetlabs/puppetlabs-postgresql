@@ -16,6 +16,7 @@ end
 RSpec.configure do |c|
   c.before :suite do
     install_dependencies
+    LitmusHelper.instance.apply_manifest(File.read(File.join(__dir__, 'setup_acceptance_node.pp')))
   end
 end
 
