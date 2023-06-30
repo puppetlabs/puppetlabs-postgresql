@@ -46,6 +46,12 @@ def install_dependencies
 
     # needed for netstat, for serverspec checks
     if $facts['os']['family'] in ['SLES', 'SUSE'] {
+      exec { 'Enable legacy repos':
+        path    => '/bin:/usr/bin/:/sbin:/usr/sbin',
+        command => 'SUSEConnect --product sle-module-legacy/15.4/x86_64',
+        unless  => 'SUSEConnect --status-text | grep sle-module-legacy/15.4/x86_64',
+      }
+
       package { 'net-tools-deprecated':
         ensure   => 'latest',
       }
