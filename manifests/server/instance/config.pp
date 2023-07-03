@@ -86,40 +86,40 @@ define postgresql::server::instance::config (
       }
 
       postgresql::server::pg_hba_rule {
-        'local access as postgres user':
+        "local access as postgres user for instance ${name}":
           type        => 'local',
           user        => $user,
           auth_method => 'ident',
           auth_option => $local_auth_option,
           order       => 1;
 
-        'local access to database with same name':
+        "local access to database with same name for instance ${name}":
           type        => 'local',
           auth_method => 'ident',
           auth_option => $local_auth_option,
           order       => 2;
 
-        'allow localhost TCP access to postgresql user':
+        "allow localhost TCP access to postgresql user for instance ${name}":
           type        => 'host',
           user        => $user,
           address     => '127.0.0.1/32',
           auth_method => 'md5',
           order       => 3;
 
-        'deny access to postgresql user':
+        "deny access to postgresql user for instance ${name}":
           type        => 'host',
           user        => $user,
           address     => $ip_mask_deny_postgres_user,
           auth_method => 'reject',
           order       => 4;
 
-        'allow access to all users':
+        "allow access to all users for instance ${name}":
           type        => 'host',
           address     => $ip_mask_allow_all_users,
           auth_method => 'md5',
           order       => 100;
 
-        'allow access to ipv6 localhost':
+        "allow access to ipv6 localhost for instance ${name}":
           type        => 'host',
           address     => '::1/128',
           auth_method => 'md5',

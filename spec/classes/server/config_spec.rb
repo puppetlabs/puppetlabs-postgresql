@@ -173,7 +173,7 @@ describe 'postgresql::server::config' do
     end
 
     it 'has hba rule default' do
-      expect(subject).to contain_postgresql__server__pg_hba_rule('local access as postgres user')
+      expect(subject).to contain_postgresql__server__pg_hba_rule('local access as postgres user for instance main')
     end
 
     it 'has hba rule ipv4acls' do
