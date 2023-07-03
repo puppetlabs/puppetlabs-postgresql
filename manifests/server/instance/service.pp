@@ -25,7 +25,7 @@ define postgresql::server::instance::service (
   Variant[String[1], Stdlib::Absolutepath]     $psql_path        = $postgresql::server::psql_path,
   Hash                                         $connect_settings = $postgresql::server::default_connect_settings,
 ) {
-  anchor { 'postgresql::server::service::begin': }
+  anchor { "postgresql::server::service::begin::${name}": }
 
   if $service_manage {
     service { 'postgresqld':
@@ -52,11 +52,11 @@ define postgresql::server::instance::service (
         tries            => 60,
         psql_path        => $psql_path,
         require          => Service['postgresqld'],
-        before           => Anchor['postgresql::server::service::end'],
+        before           => Anchor["postgresql::server::service::end::${name}"],
       }
       Postgresql::Server::Database <| title == $default_database |> -> Postgresql_conn_validator['validate_service_is_running']
     }
   }
 
-  anchor { 'postgresql::server::service::end': }
+  anchor { "postgresql::server::service::end::${name}": }
 }

@@ -38,6 +38,6 @@ define postgresql::server::instance::late_initdb (
       WHERE datname = 'template1'",
     unless  => "SELECT datname FROM pg_database WHERE
       datname = 'template1' AND encoding = pg_char_to_encoding('${encoding}')",
-    before  => Anchor['postgresql::server::service::end'],
+    before  => Anchor["postgresql::server::service::end::${name}"],
   }
 }
