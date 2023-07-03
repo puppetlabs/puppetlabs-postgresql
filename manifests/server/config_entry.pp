@@ -1,11 +1,13 @@
 # @summary Manage a postgresql.conf entry.
 #
 # @param ensure Removes an entry if set to 'absent'.
+# @param key Defines the key/name for the setting. Defaults to $name
 # @param value Defines the value for the setting.
 # @param path Path for postgresql.conf
 #
 define postgresql::server::config_entry (
   Enum['present', 'absent']                               $ensure = 'present',
+  String[1]                                               $key    = $name,
   Optional[Variant[String[1], Numeric, Array[String[1]]]] $value  = undef,
   Variant[Boolean, String[1]]                             $path   = false
 ) {
@@ -70,9 +72,9 @@ define postgresql::server::config_entry (
     'max_pred_locks_per_transaction'      => undef,
   }
 
-  if ! ($name in $requires_restart_until and (
-      ! $requires_restart_until[$name] or
-      versioncmp($postgresql::server::_version, $requires_restart_until[$name]) < 0
+  if ! ($key in $requires_restart_until and (
+      ! $requires_restart_until[$key] or
+      versioncmp($postgresql::server::_version, $requires_restart_until[$key]) < 0
   )) {
     Postgresql_conf {
       notify => Class['postgresql::server::reload'],
@@ -90,6 +92,7 @@ define postgresql::server::config_entry (
   postgresql_conf { $name:
     ensure  => $ensure,
     target  => $target,
+    name    => $key,
     value   => $value,
     require => Class['postgresql::server::initdb'],
   }

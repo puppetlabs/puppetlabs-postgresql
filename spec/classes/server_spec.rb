@@ -114,7 +114,7 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server') }
 
     it {
-      expect(subject).not_to contain_Postgresql_conf('data_directory').that_notifies('Class[postgresql::server::service]')
+      expect(subject).not_to contain_Postgresql_conf('data_directory_for_instance_main').that_notifies('Class[postgresql::server::service]')
     }
 
     it 'validates connection' do
@@ -129,8 +129,10 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server') }
 
     it {
-      expect(subject).to contain_Postgresql_conf('data_directory').that_notifies('Class[postgresql::server::service]')
+      expect(subject).to contain_Postgresql_conf('data_directory_for_instance_main').that_notifies('Class[postgresql::server::service]')
     }
+
+    it { is_expected.to contain_postgresql__server__config_entry('data_directory_for_instance_main') }
 
     it 'validates connection' do
       expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
