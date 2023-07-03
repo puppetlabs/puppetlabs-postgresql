@@ -15,7 +15,7 @@ describe 'postgresql::server::config' do
 
       expect(subject).to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
-        .that_comes_before('Postgresql::Server::Config_entry[port]')
+        .that_comes_before('Postgresql::Server::Config_entry[port_for_instance_main]')
         .that_requires('Package[policycoreutils-python]')
     end
 
@@ -60,7 +60,7 @@ describe 'postgresql::server::config' do
 
       expect(subject).to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
-        .that_comes_before('Postgresql::Server::Config_entry[port]')
+        .that_comes_before('Postgresql::Server::Config_entry[port_for_instance_main]')
         .that_requires('Package[policycoreutils-python-utils]')
     end
 
@@ -105,7 +105,7 @@ describe 'postgresql::server::config' do
 
       expect(subject).to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
-        .that_comes_before('Postgresql::Server::Config_entry[port]')
+        .that_comes_before('Postgresql::Server::Config_entry[port_for_instance_main]')
         .that_requires('Package[policycoreutils-python-utils]')
     end
 
@@ -150,7 +150,7 @@ describe 'postgresql::server::config' do
 
       expect(subject).to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
         .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
-        .that_comes_before('Postgresql::Server::Config_entry[port]')
+        .that_comes_before('Postgresql::Server::Config_entry[port_for_instance_main]')
         .that_requires('Package[policycoreutils]')
     end
   end
