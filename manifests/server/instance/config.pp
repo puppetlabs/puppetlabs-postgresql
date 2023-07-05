@@ -211,7 +211,7 @@ define postgresql::server::instance::config (
     }
   }
   if $logdir {
-    postgresql::server::config_entry { "log_directory for instance ${name}":
+    postgresql::server::config_entry { "log_directory_for_instance_${name}":
       value => $logdir,
     }
   }
