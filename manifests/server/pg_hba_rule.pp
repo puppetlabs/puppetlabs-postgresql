@@ -32,9 +32,6 @@ define postgresql::server::pg_hba_rule (
   String[1] $description          = 'none',
   Optional[String] $auth_option   = undef,
   Variant[String, Integer] $order = 150,
-
-  # Needed for testing primarily, support for multiple files is not really
-  # working.
   Stdlib::Absolutepath $target  = $postgresql::server::pg_hba_conf_path,
   String $postgresql_version    = $postgresql::server::_version
 ) {

@@ -94,7 +94,8 @@ define postgresql::server::instance::config (
     if $pg_hba_conf_defaults {
       Postgresql::Server::Pg_hba_rule {
         database => 'all',
-        user => 'all',
+        target   => $pg_hba_conf_path,
+        user     => 'all',
       }
 
       postgresql::server::pg_hba_rule {
@@ -135,6 +136,10 @@ define postgresql::server::instance::config (
           auth_method => $_pg_hba_auth_password_encryption,
           order       => 101;
       }
+    } else {
+      Postgresql::Server::Pg_hba_rule {
+        target   => $pg_hba_conf_path,
+      }
     }
 
     # $ipv4acls and $ipv6acls are arrays of rule strings
@@ -147,6 +152,11 @@ define postgresql::server::instance::config (
         * => $attrs,
       }
     }
+  }
+  # set default postgresql_conf_path here so the path is configurable in instances for
+  # default values like port or listen_address
+  Postgresql::Server::Config_entry {
+    path => $postgresql_conf_path,
   }
 
   if $manage_postgresql_conf_perms {
