@@ -24,13 +24,13 @@ describe Puppet::Type.type(:postgresql_conf) do
   end
 
   describe 'when validating attributes' do
-    [:name, :provider].each do |param|
+    [:name, :provider, :target].each do |param|
       it "has a #{param} parameter" do
         expect(described_class.attrtype(param)).to eq(:param)
       end
     end
 
-    [:value, :target].each do |property|
+    [:value, :comment].each do |property|
       it "has a #{property} property" do
         expect(described_class.attrtype(property)).to eq(:property)
       end
