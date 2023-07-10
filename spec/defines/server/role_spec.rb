@@ -24,7 +24,7 @@ describe 'postgresql::server::role' do
 
     it 'has create role for "test" user with password as ****' do
       expect(subject).to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-        .with('command' => 'Sensitive [value redacted]',
+        .with('command' => sensitive(%(CREATE ROLE "test" ENCRYPTED PASSWORD 'new-pa$s' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1)),
               'sensitive' => 'true',
               'unless' => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
               'port' => '5432')
@@ -32,9 +32,9 @@ describe 'postgresql::server::role' do
 
     it 'has alter role for "test" user with password as ****' do
       expect(subject).to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
-        .with('command' => 'Sensitive [value redacted]',
+        .with('command' => sensitive(%(ALTER ROLE "test" ENCRYPTED PASSWORD 'md5b6f7fcbbabb4befde4588a26c1cfd2fa')),
               'sensitive' => 'true',
-              'unless' => 'Sensitive [value redacted]',
+              'unless' => sensitive(%(SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa')),
               'port' => '5432')
     end
   end
@@ -50,7 +50,7 @@ describe 'postgresql::server::role' do
 
     it 'has create role for "test" user with password as ****' do
       expect(subject).to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-        .with('command' => 'Sensitive [value redacted]',
+        .with('command' => sensitive(%(CREATE ROLE "test" ENCRYPTED PASSWORD 'new-pa$s' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1)),
               'sensitive' => 'true',
               'unless' => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
               'port' => '5432')
@@ -58,9 +58,11 @@ describe 'postgresql::server::role' do
 
     it 'has alter role for "test" user with password as ****' do
       expect(subject).to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
-        .with('command' => 'Sensitive [value redacted]',
+        .with('command' => sensitive(%(ALTER ROLE "test" ENCRYPTED PASSWORD 'Sensitive [value redacted]')),
+              # FIXME: This is obviously wrong                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
               'sensitive' => 'true',
-              'unless' => 'Sensitive [value redacted]',
+              'unless' => sensitive(%(SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'Sensitive [value redacted]')),
+              # FIXME: This is obviously wrong                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
               'port' => '5432')
     end
   end
@@ -84,7 +86,7 @@ describe 'postgresql::server::role' do
 
     it 'has create role for "test" user with password as ****' do
       expect(subject).to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-        .with_command('Sensitive [value redacted]')
+        .with_command(sensitive(%(CREATE ROLE "test" ENCRYPTED PASSWORD 'new-pa$s' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1)))
         .with_sensitive('true')
         .with_unless("SELECT 1 FROM pg_roles WHERE rolname = 'test'")
         .with_port(5432)
@@ -94,8 +96,8 @@ describe 'postgresql::server::role' do
 
     it 'has alter role for "test" user with password as ****' do
       expect(subject).to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
-        .with('command' => 'Sensitive [value redacted]', 'sensitive' => 'true',
-              'unless' => 'Sensitive [value redacted]', 'port' => '5432',
+        .with('command' => sensitive(%(ALTER ROLE "test" ENCRYPTED PASSWORD 'md5b6f7fcbbabb4befde4588a26c1cfd2fa')), 'sensitive' => 'true',
+              'unless' => sensitive(%(SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa')), 'port' => '5432',
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
                                       'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
     end
@@ -121,7 +123,7 @@ describe 'postgresql::server::role' do
 
     it 'has create role for "test" user with password as ****' do
       expect(subject).to contain_postgresql_psql('CREATE ROLE test ENCRYPTED PASSWORD ****')
-        .with('command' => 'Sensitive [value redacted]',
+        .with('command' => sensitive(%(CREATE ROLE "test" ENCRYPTED PASSWORD 'new-pa$s' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1)),
               'sensitive' => 'true', 'unless' => "SELECT 1 FROM pg_roles WHERE rolname = 'test'",
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
                                       'PGPORT' => '1234', 'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
@@ -129,8 +131,8 @@ describe 'postgresql::server::role' do
 
     it 'has alter role for "test" user with password as ****' do
       expect(subject).to contain_postgresql_psql('ALTER ROLE test ENCRYPTED PASSWORD ****')
-        .with('command' => 'Sensitive [value redacted]', 'sensitive' => 'true',
-              'unless' => 'Sensitive [value redacted]',
+        .with('command' => sensitive(%(ALTER ROLE "test" ENCRYPTED PASSWORD 'md5b6f7fcbbabb4befde4588a26c1cfd2fa')), 'sensitive' => 'true',
+              'unless' => sensitive(%(SELECT 1 FROM pg_shadow WHERE usename = 'test' AND passwd = 'md5b6f7fcbbabb4befde4588a26c1cfd2fa')),
               'connect_settings' => { 'PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1',
                                       'PGPORT' => '1234', 'PGUSER' => 'login-user', 'PGPASSWORD' => 'login-pass' })
     end
