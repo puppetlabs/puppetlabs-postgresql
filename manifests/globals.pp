@@ -168,7 +168,8 @@ class postgresql::globals (
   $default_version = $facts['os']['family'] ? {
     /^(RedHat|Linux)/ => $facts['os']['name'] ? {
       'Fedora' => $facts['os']['release']['major'] ? {
-        /^(36)$/       => '14',
+        /^(38)$/       => '15',
+        /^(36|37)$/    => '14',
         /^(34|35)$/    => '13',
         /^(32|33)$/    => '12',
         /^(31)$/       => '11.6',
