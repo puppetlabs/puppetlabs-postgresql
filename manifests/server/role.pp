@@ -166,7 +166,7 @@ define postgresql::server::role (
         $pwd_hash_sql = postgresql::postgresql_password(
           $username,
           $password_hash,
-          $password_hash =~ Sensitive[String],
+          false,
           $hash,
           $salt,
         )
