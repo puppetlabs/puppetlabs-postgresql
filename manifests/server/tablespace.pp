@@ -65,7 +65,7 @@ define postgresql::server::tablespace (
 
   if $owner {
     postgresql_psql { "ALTER TABLESPACE \"${spcname}\" OWNER TO \"${owner}\"":
-      unless  => "SELECT 1 FROM pg_tablespace JOIN pg_roles rol ON spcowner = rol.oid WHERE spcname = '${spcname}' AND rolname = '${owner}'",
+      unless  => "SELECT 1 FROM pg_tablespace JOIN pg_roles rol ON spcowner = rol.oid WHERE spcname = '${spcname}' AND rolname = '${owner}'", # lint:ignore:140chars
       require => Postgresql_psql["CREATE TABLESPACE \"${spcname}\""],
     }
 

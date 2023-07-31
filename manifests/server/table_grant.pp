@@ -1,6 +1,8 @@
 # @summary This resource wraps the grant resource to manage table grants specifically.
 #
-# @param privilege Specifies comma-separated list of privileges to grant. Valid options: 'ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER'.
+# @param privilege
+#   Specifies comma-separated list of privileges to grant.
+#   Valid options: 'ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER'.
 # @param table Specifies the table to which you are granting access.
 # @param db Specifies which database the table is in.
 # @param role Specifies the role or user to whom you are granting access.
@@ -11,7 +13,8 @@
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param onlyif_exists Create grant only if it doesn't exist.
 define postgresql::server::table_grant (
-  Enum['ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'all', 'select', 'insert', 'update', 'delete', 'truncate', 'references', 'trigger'] $privilege,
+  Enum['ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'all', 'select', 'insert', 'update', 'delete',
+  'truncate', 'references', 'trigger'] $privilege,
   String[1]                                           $table,
   String[1]                                           $db,
   String[1]                                           $role,

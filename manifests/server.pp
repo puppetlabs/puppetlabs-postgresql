@@ -1,6 +1,8 @@
 # @summary This installs a PostgreSQL server
 #
-# @param postgres_password Sets the password for the postgres user to your specified value. By default, this setting uses the superuser account in the Postgres database, with a user called postgres and no password.
+# @param postgres_password
+#   Sets the password for the postgres user to your specified value. By default, this setting uses the superuser account in the Postgres
+#   database, with a user called postgres and no password.
 # @param package_name Specifies the name of the package to use for installing the server software.
 # @param package_ensure Passes a value through to the package resource when creating the server instance.
 #
@@ -11,22 +13,33 @@
 # @param service_enable Enable the PostgreSQL service
 # @param service_manage Defines whether or not Puppet should manage the service.
 # @param service_name Overrides the default PostgreSQL service name.
-# @param service_restart_on_change Overrides the default behavior to restart your PostgreSQL service when a config entry has been changed that requires a service restart to become active.
+# @param service_restart_on_change
+#   Overrides the default behavior to restart your PostgreSQL service when a config entry has been changed that requires a service restart
+#   to become active.
 # @param service_provider Overrides the default PostgreSQL service provider.
 # @param service_reload Overrides the default reload command for your PostgreSQL service.
 # @param service_status Overrides the default status check command for your PostgreSQL service.
 # @param default_database Specifies the name of the default database to connect with. On most systems this is 'postgres'.
-# @param default_connect_settings Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as postgresql::server::role.
+# @param default_connect_settings
+#   Specifies a hash of environment variables used when connecting to a remote server. Becomes the default for other defined types, such as
+#   postgresql::server::role.
 #
 # @param listen_addresses Address list on which the PostgreSQL service will listen
-# @param port Specifies the port for the PostgreSQL server to listen on. Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems, changing the port causes the server to come to a full stop before being able to make the change.
+# @param port
+#   Specifies the port for the PostgreSQL server to listen on.
+#   Note: The same port number is used for all IP addresses the server listens on.
+#   Also, for Red Hat systems and early Debian systems, changing the port causes the server to come to a full stop before being able to make
+#   the change.
 #   Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
 #
 # @param ip_mask_deny_postgres_user Specifies the IP mask from which remote connections should be denied for the postgres superuser.
 #   Default value: '0.0.0.0/0', which denies any remote connection.
 #
-# @param ip_mask_allow_all_users Overrides PostgreSQL defaults for remote connections. By default, PostgreSQL does not allow database user accounts to connect via TCP from remote machines. If you'd like to allow this, you can override this setting.
-#   Set to '0.0.0.0/0' to allow database users to connect from any remote machine, or '192.168.0.0/1' to allow connections from any machine on your local '192.168' subnet.
+# @param ip_mask_allow_all_users
+#   Overrides PostgreSQL defaults for remote connections. By default, PostgreSQL does not allow database user accounts to connect via TCP
+#   from remote machines. If you'd like to allow this, you can override this setting.
+#   Set to '0.0.0.0/0' to allow database users to connect from any remote machine, or '192.168.0.0/1' to allow connections from any machine
+#   on your local '192.168' subnet.
 #   Default value: '127.0.0.1/32'.
 #
 # @param ipv4acls Lists strings for access control for connection method, users, databases, IPv4 addresses;
@@ -47,17 +60,26 @@
 #
 # @param log_line_prefix PostgreSQL log line prefix
 #
-# @param pg_hba_conf_defaults If false, disables the defaults supplied with the module for pg_hba.conf. This is useful if you disagree with the defaults and wish to override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform basic psql operations for example.
+# @param pg_hba_conf_defaults
+#   If false, disables the defaults supplied with the module for pg_hba.conf. This is useful if you disagree with the defaults and wish to
+#   override them yourself. Be sure that your changes of course align with the rest of the module, as some access is required to perform
+#   basic psql operations for example.
 #
 # @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 # @param group Overrides the default postgres user group to be used for related files in the file system.
 #
 # @param needs_initdb Explicitly calls the initdb operation after server package is installed, and before the PostgreSQL service is started.
 #
-# @param encoding Sets the default encoding for all databases created with this module. On certain operating systems this is also used during the template1 initialization, so it becomes a default outside of the module as well.
-# @param locale Sets the default database locale for all databases created with this module. On certain operating systems this is used during the template1 initialization as well, so it becomes a default outside of the module.
-# @param data_checksums Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
-#   Warning: This option is used during initialization by initdb, and cannot be changed later. If set, checksums are calculated for all objects, in all databases.
+# @param encoding
+#   Sets the default encoding for all databases created with this module. On certain operating systems this is also used during the
+#   template1 initialization, so it becomes a default outside of the module as well.
+# @param locale
+#   Sets the default database locale for all databases created with this module. On certain operating systems this is used during the
+#   template1 initialization as well, so it becomes a default outside of the module.
+# @param data_checksums
+#   Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
+#   Warning: This option is used during initialization by initdb, and cannot be changed later.
+#   If set, checksums are calculated for all objects, in all databases.
 #
 # @param timezone Set timezone for the PostgreSQL instance
 #
@@ -86,7 +108,8 @@
 #
 # @param version Deprecated. Use postgresql::globals instead. Sets PostgreSQL version
 #
-# @param extra_systemd_config Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
+# @param extra_systemd_config
+#   Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
 # @param auth_host auth method used by default for host authorization
 # @param auth_local  auth method used by default for local authorization
 # @param lc_messages locale used for logging and system messages
@@ -95,7 +118,7 @@
 class postgresql::server (
   Optional[Variant[String[1], Sensitive[String[1]], Integer]] $postgres_password = undef,
 
-  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $package_ensure = $postgresql::params::package_ensure,
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $package_ensure = $postgresql::params::package_ensure, # lint:ignore:140chars
   String[1]                                          $package_name                 = $postgresql::params::server_package_name,
 
   Optional[String[1]]                                $plperl_package_name          = $postgresql::params::plperl_package_name,
@@ -159,7 +182,7 @@ class postgresql::server (
   Boolean                                            $manage_datadir               = $postgresql::params::manage_datadir,
   Boolean                                            $manage_logdir                = $postgresql::params::manage_logdir,
   Boolean                                            $manage_xlogdir               = $postgresql::params::manage_xlogdir,
-  Optional[String]                                   $password_encryption          = $postgresql::params::password_encryption,
+  Optional[Postgresql::Pg_password_encryption]       $password_encryption          = $postgresql::params::password_encryption,
   Optional[String]                                   $extra_systemd_config         = $postgresql::params::extra_systemd_config,
 
   Hash[String, Hash]                                 $roles                        = {},
@@ -172,7 +195,6 @@ class postgresql::server (
 
   #Deprecated
   Optional[String[1]] $version = undef,
-
 ) inherits postgresql::params {
   if $version != undef {
     warning('Passing "version" to postgresql::server is deprecated; please use postgresql::globals instead.')

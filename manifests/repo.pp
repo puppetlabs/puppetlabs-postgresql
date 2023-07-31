@@ -18,7 +18,7 @@ class postgresql::repo (
     }
 
     default: {
-      fail("Unsupported managed repository for osfamily: ${facts['os']['family']}, operatingsystem: ${facts['os']['name']}, module ${module_name} currently only supports managing repos for osfamily RedHat and Debian")
+      fail("Unsupported managed repository for osfamily: ${facts['os']['family']}, operatingsystem: ${facts['os']['name']}, module ${module_name} currently only supports managing repos for osfamily RedHat and Debian") # lint:ignore:140chars
     }
   }
 }

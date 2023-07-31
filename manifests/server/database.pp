@@ -108,7 +108,7 @@ define postgresql::server::database (
     }
     Postgresql_psql["CREATE DATABASE \"${dbname}\""]
     -> postgresql_psql { "COMMENT ON DATABASE \"${dbname}\" IS '${comment}'":
-      unless => "SELECT 1 FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'",
+      unless => "SELECT 1 FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'", # lint:ignore:140chars
       db     => $dbname,
     }
   }
@@ -126,7 +126,7 @@ define postgresql::server::database (
 
   if $tablespace {
     postgresql_psql { "ALTER DATABASE \"${dbname}\" SET ${tablespace_option}":
-      unless  => "SELECT 1 FROM pg_database JOIN pg_tablespace spc ON dattablespace = spc.oid WHERE datname = '${dbname}' AND spcname = '${tablespace}'",
+      unless  => "SELECT 1 FROM pg_database JOIN pg_tablespace spc ON dattablespace = spc.oid WHERE datname = '${dbname}' AND spcname = '${tablespace}'", # lint:ignore:140chars
       require => Postgresql_psql["CREATE DATABASE \"${dbname}\""],
     }
 
