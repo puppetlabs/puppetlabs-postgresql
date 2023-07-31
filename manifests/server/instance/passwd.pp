@@ -1,13 +1,18 @@
-# lint:ignore:140chars
+# @summary Overrides the default PostgreSQL superuser
+#
 # @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 # @param group Overrides the default postgres user group to be used for related files in the file system.
 #   Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
 # @param psql_path Specifies the path to the psql command.
-# @param port Specifies the port for the PostgreSQL server to listen on. Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems, changing the port causes the server to come to a full stop before being able to make the change.
+# @param port
+#   Specifies the port for the PostgreSQL server to listen on.
+#   Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems,
+#   changing the port causes the server to come to a full stop before being able to make the change.
 # @param database Specifies the name of the database to connect with. On most systems this is 'postgres'.
 # @param module_workdir Working directory for the PostgreSQL module
-# @param postgres_password Sets the password for the postgres user to your specified value. By default, this setting uses the superuser account in the Postgres database, with a user called postgres and no password.
-# lint:endignore:140chars
+# @param postgres_password
+#   Sets the password for the postgres user to your specified value. By default, this setting uses the superuser account in the Postgres
+#   database, with a user called postgres and no password.
 define postgresql::server::instance::passwd (
   String[1]                                                   $user              = $postgresql::server::user,
   String[1]                                                   $group             = $postgresql::server::group,
@@ -16,7 +21,6 @@ define postgresql::server::instance::passwd (
   String[1]                                                   $database          = $postgresql::server::default_database,
   String[1]                                                   $module_workdir    = $postgresql::server::module_workdir,
   Optional[Variant[String[1], Sensitive[String[1]], Integer]] $postgres_password = $postgresql::server::postgres_password,
-
 ) {
   $real_postgres_password = if $postgres_password =~ Sensitive {
     $postgres_password.unwrap

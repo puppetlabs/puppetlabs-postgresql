@@ -1,12 +1,16 @@
-# lint:ignore:140chars
 # @summary Manage the default encoding when database initialization is managed by the package
-# @param encoding Sets the default encoding for all databases created with this module. On certain operating systems this is also used during the template1 initialization, so it becomes a default outside of the module as well.
+#
+# @param encoding
+#   Sets the default encoding for all databases created with this module. On certain operating systems this is also used during the
+#   template1 initialization, so it becomes a default outside of the module as well.
 # @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 # @param group Overrides the default postgres user group to be used for related files in the file system.
 # @param psql_path Specifies the path to the psql command.
-# @param port Specifies the port for the PostgreSQL server to listen on. Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems, changing the port causes the server to come to a full stop before being able to make the change.
+# @param port
+#   Specifies the port for the PostgreSQL server to listen on.
+#   Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems,
+#   changing the port causes the server to come to a full stop before being able to make the change.
 # @param module_workdir Working directory for the PostgreSQL module
-# lint:endignore:140chars
 define postgresql::server::instance::late_initdb (
   Optional[String[1]]                       $encoding       = $postgresql::server::encoding,
   String[1]                                 $user           = $postgresql::server::user,

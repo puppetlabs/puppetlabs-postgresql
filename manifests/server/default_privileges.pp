@@ -23,7 +23,7 @@ define postgresql::server::default_privileges (
     /(?i:^SEQUENCES$)/,
     /(?i:^TABLES$)/,
     /(?i:^TYPES$)/,
-    /(?i:^SCHEMAS$)/ # lint:ignore:trailing_comma
+    /(?i:^SCHEMAS$)/
   ] $object_type,
   String                                    $schema            = 'public',
   String                                    $psql_db           = $postgresql::server::default_database,
@@ -159,8 +159,8 @@ define postgresql::server::default_privileges (
   }
 
   $_unless = $ensure ? {
-    'absent' => "SELECT 1 WHERE NOT EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '%s=%s%s' = ANY (defaclacl)%s and defaclobjtype = '%s')",
-    default  => "SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '%s=%s%s' = ANY (defaclacl)%s and defaclobjtype = '%s')"
+    'absent' => "SELECT 1 WHERE NOT EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '%s=%s%s' = ANY (defaclacl)%s and defaclobjtype = '%s')", # lint:ignore:140chars
+    default  => "SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '%s=%s%s' = ANY (defaclacl)%s and defaclobjtype = '%s')", # lint:ignore:140chars
   }
 
   $unless_cmd = sprintf($_unless, $role, $_check_privilege, $_check_target_role, $_check_schema, $_check_type)
