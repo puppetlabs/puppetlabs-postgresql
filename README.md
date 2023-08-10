@@ -401,8 +401,6 @@ And then run the unit tests:
 bundle exec rake spec
 ```
 
-The unit tests are run in Travis-CI as well. If you want to see the results of your own tests, register the service hook through Travis-CI via the accounts section for your GitHub clone of this project.
-
 To run the system tests, make sure you also have:
 
 * Vagrant > 1.2.x
