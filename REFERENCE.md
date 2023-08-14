@@ -1403,7 +1403,7 @@ Data type: `Optional[String[1]]`
 
 username of user running the postgres instance
 
-Default value: `undef`
+Default value: `$user`
 
 ### <a name="postgresql--server--contrib"></a>`postgresql::server::contrib`
 
