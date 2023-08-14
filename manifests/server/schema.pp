@@ -15,6 +15,7 @@
 # @param module_workdir
 #   Specifies working directory under which the psql command should be executed.
 #   May need to specify if '/tmp' is on volume mounted with noexec option.
+# @param instance The name of the Postgresql database instance.
 # @example
 #   postgresql::server::schema {'private':
 #       db => 'template1',
@@ -29,6 +30,7 @@ define postgresql::server::schema (
   String[1]            $group            = $postgresql::server::group,
   Stdlib::Absolutepath $psql_path        = $postgresql::server::psql_path,
   Stdlib::Absolutepath $module_workdir   = $postgresql::server::module_workdir,
+  String[1]            $instance         = 'main',
 ) {
   Postgresql::Server::Db <| dbname == $db |> -> Postgresql::Server::Schema[$name]
 
@@ -36,13 +38,14 @@ define postgresql::server::schema (
   $port_override = pick($connect_settings['PGPORT'], $port)
 
   Postgresql_psql {
-    db         => $db,
-    psql_user  => $user,
-    psql_group => $group,
-    psql_path  => $psql_path,
-    port       => $port_override,
-    cwd        => $module_workdir,
+    db               => $db,
+    psql_user        => $user,
+    psql_group       => $group,
+    psql_path        => $psql_path,
+    port             => $port_override,
+    cwd              => $module_workdir,
     connect_settings => $connect_settings,
+    instance         => $instance,
   }
 
   postgresql_psql { "${db}: CREATE SCHEMA \"${schema}\"":

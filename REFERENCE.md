@@ -1585,6 +1585,7 @@ The following parameters are available in the `postgresql::server::database` def
 * [`encoding`](#-postgresql--server--database--encoding)
 * [`locale`](#-postgresql--server--database--locale)
 * [`istemplate`](#-postgresql--server--database--istemplate)
+* [`instance`](#-postgresql--server--database--instance)
 * [`connect_settings`](#-postgresql--server--database--connect_settings)
 * [`psql_path`](#-postgresql--server--database--psql_path)
 * [`default_db`](#-postgresql--server--database--default_db)
@@ -1655,6 +1656,14 @@ Data type: `Boolean`
 Defines the database as a template if set to true.
 
 Default value: `false`
+
+##### <a name="-postgresql--server--database--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
 
 ##### <a name="-postgresql--server--database--connect_settings"></a>`connect_settings`
 
@@ -1810,6 +1819,7 @@ The following parameters are available in the `postgresql::server::db` defined t
 * [`port`](#-postgresql--server--db--port)
 * [`psql_user`](#-postgresql--server--db--psql_user)
 * [`psql_group`](#-postgresql--server--db--psql_group)
+* [`instance`](#-postgresql--server--db--instance)
 
 ##### <a name="-postgresql--server--db--user"></a>`user`
 
@@ -1921,6 +1931,14 @@ Overrides the default PostgreSQL user group to be used for related files in the 
 
 Default value: `$postgresql::server::group`
 
+##### <a name="-postgresql--server--db--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
+
 ### <a name="postgresql--server--default_privileges"></a>`postgresql::server::default_privileges`
 
 Manage a database defaults privileges. Only works with PostgreSQL version 9.6 and above.
@@ -1941,6 +1959,7 @@ The following parameters are available in the `postgresql::server::default_privi
 * [`psql_path`](#-postgresql--server--default_privileges--psql_path)
 * [`port`](#-postgresql--server--default_privileges--port)
 * [`connect_settings`](#-postgresql--server--default_privileges--connect_settings)
+* [`instance`](#-postgresql--server--default_privileges--instance)
 * [`group`](#-postgresql--server--default_privileges--group)
 
 ##### <a name="-postgresql--server--default_privileges--target_role"></a>`target_role`
@@ -2042,6 +2061,14 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
+##### <a name="-postgresql--server--default_privileges--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
+
 ##### <a name="-postgresql--server--default_privileges--group"></a>`group`
 
 Data type: `String`
@@ -2068,6 +2095,7 @@ The following parameters are available in the `postgresql::server::extension` de
 * [`port`](#-postgresql--server--extension--port)
 * [`connect_settings`](#-postgresql--server--extension--connect_settings)
 * [`database_resource_name`](#-postgresql--server--extension--database_resource_name)
+* [`instance`](#-postgresql--server--extension--instance)
 * [`psql_path`](#-postgresql--server--extension--psql_path)
 * [`user`](#-postgresql--server--extension--user)
 * [`group`](#-postgresql--server--extension--group)
@@ -2158,6 +2186,14 @@ Specifies the resource name of the DB being managed. Defaults to the parameter $
 
 Default value: `$database`
 
+##### <a name="-postgresql--server--extension--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
+
 ##### <a name="-postgresql--server--extension--psql_path"></a>`psql_path`
 
 Data type: `Stdlib::Absolutepath`
@@ -2204,6 +2240,7 @@ The following parameters are available in the `postgresql::server::grant` define
 * [`ensure`](#-postgresql--server--grant--ensure)
 * [`group`](#-postgresql--server--grant--group)
 * [`psql_path`](#-postgresql--server--grant--psql_path)
+* [`instance`](#-postgresql--server--grant--instance)
 
 ##### <a name="-postgresql--server--grant--role"></a>`role`
 
@@ -2333,6 +2370,14 @@ Sets the path to psql command
 
 Default value: `$postgresql::server::psql_path`
 
+##### <a name="-postgresql--server--grant--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
+
 ### <a name="postgresql--server--grant_role"></a>`postgresql::server::grant_role`
 
 Define for granting membership to a role.
@@ -2348,6 +2393,7 @@ The following parameters are available in the `postgresql::server::grant_role` d
 * [`psql_user`](#-postgresql--server--grant_role--psql_user)
 * [`port`](#-postgresql--server--grant_role--port)
 * [`connect_settings`](#-postgresql--server--grant_role--connect_settings)
+* [`instance`](#-postgresql--server--grant_role--instance)
 
 ##### <a name="-postgresql--server--grant_role--group"></a>`group`
 
@@ -2402,6 +2448,14 @@ Data type: `Hash`
 Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: `$postgresql::server::default_connect_settings`
+
+##### <a name="-postgresql--server--grant_role--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
 
 ### <a name="postgresql--server--instance--config"></a>`postgresql::server::instance::config`
 
@@ -3340,6 +3394,7 @@ The following parameters are available in the `postgresql::server::reassign_owne
 * [`connect_settings`](#-postgresql--server--reassign_owned_by--connect_settings)
 * [`group`](#-postgresql--server--reassign_owned_by--group)
 * [`psql_path`](#-postgresql--server--reassign_owned_by--psql_path)
+* [`instance`](#-postgresql--server--reassign_owned_by--instance)
 
 ##### <a name="-postgresql--server--reassign_owned_by--old_role"></a>`old_role`
 
@@ -3398,6 +3453,14 @@ Data type: `Stdlib::Absolutepath`
 Sets the path to psql command
 
 Default value: `$postgresql::server::psql_path`
+
+##### <a name="-postgresql--server--reassign_owned_by--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
 
 ### <a name="postgresql--server--recovery"></a>`postgresql::server::recovery`
 
@@ -3588,6 +3651,7 @@ The following parameters are available in the `postgresql::server::role` defined
 * [`module_workdir`](#-postgresql--server--role--module_workdir)
 * [`hash`](#-postgresql--server--role--hash)
 * [`salt`](#-postgresql--server--role--salt)
+* [`instance`](#-postgresql--server--role--instance)
 
 ##### <a name="-postgresql--server--role--update_password"></a>`update_password`
 
@@ -3750,6 +3814,14 @@ Specify the salt use for the scram-sha-256 encoding password (default username)
 
 Default value: `undef`
 
+##### <a name="-postgresql--server--role--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
+
 ### <a name="postgresql--server--schema"></a>`postgresql::server::schema`
 
 Create a new schema.
@@ -3779,6 +3851,7 @@ The following parameters are available in the `postgresql::server::schema` defin
 * [`group`](#-postgresql--server--schema--group)
 * [`psql_path`](#-postgresql--server--schema--psql_path)
 * [`module_workdir`](#-postgresql--server--schema--module_workdir)
+* [`instance`](#-postgresql--server--schema--instance)
 
 ##### <a name="-postgresql--server--schema--db"></a>`db`
 
@@ -3852,6 +3925,14 @@ Specifies working directory under which the psql command should be executed.
 May need to specify if '/tmp' is on volume mounted with noexec option.
 
 Default value: `$postgresql::server::module_workdir`
+
+##### <a name="-postgresql--server--schema--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
 
 ### <a name="postgresql--server--table_grant"></a>`postgresql::server::table_grant`
 
@@ -3968,6 +4049,7 @@ The following parameters are available in the `postgresql::server::tablespace` d
 * [`group`](#-postgresql--server--tablespace--group)
 * [`psql_path`](#-postgresql--server--tablespace--psql_path)
 * [`module_workdir`](#-postgresql--server--tablespace--module_workdir)
+* [`instance`](#-postgresql--server--tablespace--instance)
 
 ##### <a name="-postgresql--server--tablespace--location"></a>`location`
 
@@ -4047,6 +4129,14 @@ Specifies working directory under which the psql command should be executed.
 May need to specify if '/tmp' is on volume mounted with noexec option.
 
 Default value: `$postgresql::server::module_workdir`
+
+##### <a name="-postgresql--server--tablespace--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
 
 ### <a name="postgresql--server_instance"></a>`postgresql::server_instance`
 
