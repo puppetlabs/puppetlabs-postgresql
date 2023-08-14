@@ -21,6 +21,7 @@
 # @param port Port to use when connecting.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param database_resource_name Specifies the resource name of the DB being managed. Defaults to the parameter $database, if left blank.
+# @param instance The name of the Postgresql database instance.
 # @param psql_path Specifies the path to the psql command.
 # @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 # @param group Overrides the default postgres user group to be used for related files in the file system.
@@ -35,6 +36,7 @@ define postgresql::server::extension (
   Stdlib::Port $port = postgresql::default('port'),
   Hash                                                $connect_settings       = postgresql::default('default_connect_settings'),
   String[1]                                           $database_resource_name = $database,
+  String[1]                                           $instance               = 'main',
   String[1]                                           $user                   = postgresql::default('user'),
   String[1]                                           $group                  = postgresql::default('group'),
   Stdlib::Absolutepath                                $psql_path              = postgresql::default('psql_path'),
@@ -86,6 +88,7 @@ define postgresql::server::extension (
     db               => $database,
     port             => $port_override,
     command          => $command,
+    instance         => $instance,
     unless           => "SELECT 1 WHERE ${unless_mod}EXISTS (SELECT 1 FROM pg_extension WHERE extname = '${extension}')",
     require          => $psql_cmd_require,
     before           => $psql_cmd_before,
@@ -113,6 +116,7 @@ define postgresql::server::extension (
       connect_settings => $connect_settings,
       db               => $database,
       port             => $port_override,
+      instance         => $instance,
       require          => Postgresql_psql["${database}: ${command}"],
     }
 
@@ -146,6 +150,7 @@ define postgresql::server::extension (
       psql_path        => $psql_path,
       connect_settings => $connect_settings,
       command          => $alter_extension_sql,
+      instance         => $instance,
       unless           => $update_unless,
     }
   }

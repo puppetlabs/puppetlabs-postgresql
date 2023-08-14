@@ -14,6 +14,7 @@
 # @param port Specifies the port where the PostgreSQL server is listening on.
 # @param psql_user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 # @param psql_group Overrides the default PostgreSQL user group to be used for related files in the file system.
+# @param instance The name of the Postgresql database instance.
 define postgresql::server::db (
   String[1]                                    $user,
   Optional[Variant[String, Sensitive[String]]] $password   = undef,
@@ -29,6 +30,7 @@ define postgresql::server::db (
   Optional[Stdlib::Port] $port = undef,
   String[1] $psql_user = $postgresql::server::user,
   String[1] $psql_group = $postgresql::server::group,
+  String[1] $instance = 'main',
 ) {
   if ! defined(Postgresql::Server::Database[$dbname]) {
     postgresql::server::database { $dbname:

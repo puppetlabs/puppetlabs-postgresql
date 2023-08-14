@@ -23,6 +23,7 @@
 #   May need to specify if '/tmp' is on volume mounted with noexec option.
 # @param hash Specify the hash method for pg password
 # @param salt Specify the salt use for the scram-sha-256 encoding password (default username)
+# @param instance The name of the Postgresql database instance.
 define postgresql::server::role (
   Boolean                                     $update_password  = true,
   Variant[Boolean, String, Sensitive[String]] $password_hash    = false,
@@ -44,6 +45,7 @@ define postgresql::server::role (
   Enum['present', 'absent']                   $ensure           = 'present',
   Optional[Enum['md5', 'scram-sha-256']]      $hash             = undef,
   Optional[Variant[String[1], Integer]]       $salt             = undef,
+  String[1]                                   $instance         = 'main',
 ) {
   $password_hash_unsensitive = if $password_hash =~ Sensitive[String] {
     $password_hash.unwrap
@@ -54,14 +56,15 @@ define postgresql::server::role (
   $version = pick($connect_settings['DBVERSION'], postgresql::default('version'))
 
   Postgresql_psql {
-    db         => $db,
-    port       => $port_override,
-    psql_user  => $psql_user,
-    psql_group => $psql_group,
-    psql_path  => $psql_path,
+    db               => $db,
+    port             => $port_override,
+    psql_user        => $psql_user,
+    psql_group       => $psql_group,
+    psql_path        => $psql_path,
     connect_settings => $connect_settings,
-    cwd        => $module_workdir,
-    require    => Postgresql_psql["CREATE ROLE ${username} ENCRYPTED PASSWORD ****"],
+    instance         => $instance,
+    cwd              => $module_workdir,
+    require          => Postgresql_psql["CREATE ROLE ${username} ENCRYPTED PASSWORD ****"],
   }
 
   if $ensure == 'present' {

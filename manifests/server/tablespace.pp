@@ -12,6 +12,7 @@
 # @param module_workdir
 #   Specifies working directory under which the psql command should be executed.
 #   May need to specify if '/tmp' is on volume mounted with noexec option.
+# @param instance The name of the Postgresql database instance.
 define postgresql::server::tablespace (
   String[1]            $location,
   Boolean              $manage_location = true,
@@ -23,6 +24,7 @@ define postgresql::server::tablespace (
   String[1]            $group            = $postgresql::server::group,
   Stdlib::Absolutepath $psql_path        = $postgresql::server::psql_path,
   String[1]            $module_workdir   = $postgresql::server::module_workdir,
+  String[1]            $instance         = 'main',
 ) {
   # If the connection settings do not contain a port, then use the local server port
   $port_override = pick($connect_settings['PGPORT'], $port)
@@ -34,6 +36,7 @@ define postgresql::server::tablespace (
     port             => $port_override,
     connect_settings => $connect_settings,
     cwd              => $module_workdir,
+    instance         => $instance,
   }
 
   if($manage_location) {

@@ -10,6 +10,7 @@
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param group Sets the OS group to run psql
 # @param psql_path Sets the path to psql command
+# @param instance The name of the Postgresql database instance.
 define postgresql::server::reassign_owned_by (
   String $old_role,
   String $new_role,
@@ -19,6 +20,7 @@ define postgresql::server::reassign_owned_by (
   Hash $connect_settings          = $postgresql::server::default_connect_settings,
   String[1] $group                = $postgresql::server::group,
   Stdlib::Absolutepath $psql_path = $postgresql::server::psql_path,
+  String[1] $instance             = 'main',
 ) {
   $sql_command = "REASSIGN OWNED BY \"${old_role}\" TO \"${new_role}\""
 
@@ -43,6 +45,7 @@ define postgresql::server::reassign_owned_by (
     psql_user        => $psql_user,
     psql_group       => $group,
     psql_path        => $psql_path,
+    instance         => $instance,
     onlyif           => $onlyif,
   }
 
