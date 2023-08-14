@@ -167,7 +167,7 @@ class postgresql::server (
   Optional[String[1]]                                $locale                       = $postgresql::params::locale,
   Optional[String[1]]                                $lc_messages                  = undef,
   Optional[Boolean]                                  $data_checksums               = $postgresql::params::data_checksums,
-  Optional[String[1]]                                $username                     = undef,
+  Optional[String[1]]                                $username                     = $user,
   Optional[String[1]]                                $timezone                     = $postgresql::params::timezone,
 
   Boolean                                            $manage_pg_hba_conf           = $postgresql::params::manage_pg_hba_conf,
