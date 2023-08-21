@@ -252,12 +252,11 @@ define postgresql::server::instance::config (
       notify => Class['postgresql::server::reload'],
     }
   }
-  # RHEL based systems and Gentoo need variables set for $PGPORT, $DATA_DIR or $PGDATA via a drop-in file
-  if $facts['os']['family'] == 'RedHat' or ($facts['os']['family'] == 'Gentoo' and $facts['service_provider'] == 'systemd') {
-    postgresql::server::instance::systemd { $service_name:
-      port                 => $port,
-      datadir              => $datadir,
-      extra_systemd_config => $extra_systemd_config,
-    }
+
+  postgresql::server::instance::systemd { $name:
+    port                 => $port,
+    datadir              => $datadir,
+    extra_systemd_config => $extra_systemd_config,
+    service_name         => $service_name,
   }
 }
