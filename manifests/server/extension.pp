@@ -29,7 +29,7 @@ define postgresql::server::extension (
   Optional[String[1]]                                 $version                = undef,
   Enum['present', 'absent']                           $ensure                 = 'present',
   Optional[String[1]]                                 $package_name           = undef,
-  Variant[String[1], Stdlib::Port, Integer]           $port                   = $postgresql::server::port,
+  Optional[Variant[String[1], Stdlib::Port, Integer]] $port                   = undef,
   Hash                                                $connect_settings       = postgresql::default('default_connect_settings'),
   String[1]                                           $database_resource_name = $database,
 ) {
@@ -73,12 +73,7 @@ define postgresql::server::extension (
       fail("Unknown value for ensure '${ensure}'.")
     }
   }
-
-  if $connect_settings != undef and 'PGPORT' in $connect_settings {
-    $port_override = $port
-  } else {
-    $port_override = $port
-  }
+  $port_override = pick($port, $postgresql::server::port)
 
   postgresql_psql { "${database}: ${command}":
     psql_user        => $user,

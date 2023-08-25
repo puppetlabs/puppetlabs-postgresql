@@ -13,7 +13,7 @@ define postgresql::server::reassign_owned_by (
   String $new_role,
   String $db,
   String $psql_user                               = $postgresql::server::user,
-  Variant[String[1], Stdlib::Port, Integer] $port = $postgresql::server::port,
+  Optional[Variant[String[1], Stdlib::Port, Integer]] $port = undef,
   Hash $connect_settings                          = $postgresql::server::default_connect_settings,
 ) {
   $sql_command = "REASSIGN OWNED BY \"${old_role}\" TO \"${new_role}\""
@@ -21,11 +21,7 @@ define postgresql::server::reassign_owned_by (
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
 
-  if $connect_settings != undef and 'PGPORT' in $connect_settings {
-    $port_override = $port
-  } else {
-    $port_override = $port
-  }
+  $port_override = pick($port, $postgresql::server::port)
 
   $onlyif = "SELECT tablename FROM pg_catalog.pg_tables WHERE
                schemaname NOT IN ('pg_catalog', 'information_schema') AND

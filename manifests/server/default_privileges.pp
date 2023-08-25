@@ -28,7 +28,7 @@ define postgresql::server::default_privileges (
   String                                    $schema            = 'public',
   String                                    $psql_db           = $postgresql::server::default_database,
   String                                    $psql_user         = $postgresql::server::user,
-  Variant[String[1], Stdlib::Port, Integer] $port              = $postgresql::server::port,
+  Optional[Variant[String[1], Stdlib::Port, Integer]] $port    = undef,
   Hash                                      $connect_settings  = $postgresql::server::default_connect_settings,
   Enum['present', 'absent']                 $ensure            = 'present',
   String                                    $group             = $postgresql::server::group,
@@ -59,11 +59,7 @@ define postgresql::server::default_privileges (
     }
   }
 
-  if $connect_settings != undef and 'PGPORT' in $connect_settings {
-    $port_override = $port
-  } else {
-    $port_override = $port
-  }
+  $port_override = pick($port, $postgresql::server::port)
 
   if $target_role != undef {
     $_target_role = " FOR ROLE ${target_role}"

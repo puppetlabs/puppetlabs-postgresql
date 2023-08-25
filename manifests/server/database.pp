@@ -20,7 +20,7 @@ define postgresql::server::database (
   Optional[String[1]] $locale           = $postgresql::server::locale,
   Boolean             $istemplate       = false,
   Hash                $connect_settings = $postgresql::server::default_connect_settings,
-  Variant[String[1], Stdlib::Port, Integer] $port = $postgresql::params::port,
+  Optional[Variant[String[1], Stdlib::Port, Integer]] $port = undef,
 ) {
   $createdb_path = $postgresql::server::createdb_path
   $user          = $postgresql::server::user
@@ -36,11 +36,7 @@ define postgresql::server::database (
     $version = $postgresql::server::_version
   }
 
-  if $connect_settings != undef and 'PGPORT' in $connect_settings {
-    $port_override = $port
-  } else {
-    $port_override = $port
-  }
+  $port_override = pick($port, $postgresql::server::port)
 
   # Set the defaults for the postgresql_psql resource
   Postgresql_psql {
