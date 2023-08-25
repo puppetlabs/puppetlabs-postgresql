@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::server', type: :class do
@@ -10,13 +12,11 @@ describe 'postgresql::server', type: :class do
           full: '8.0',
           major: '8',
         },
+        distro: { 'codename' => 'jessie' },
       },
       osfamily: 'Debian',
-      operatingsystem: 'Debian',
       lsbdistid: 'Debian',
       lsbdistcodename: 'jessie',
-      operatingsystemrelease: '8.0',
-      concat_basedir: tmpfilename('server'),
       kernel: 'Linux',
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
@@ -26,6 +26,7 @@ describe 'postgresql::server', type: :class do
   describe 'with no parameters' do
     it { is_expected.to contain_class('postgresql::params') }
     it { is_expected.to contain_class('postgresql::server') }
+    it { is_expected.to contain_file('/var/lib/postgresql/9.4/main') }
     it {
       is_expected.to contain_exec('postgresql_reload').with('command' => 'service postgresql reload')
     }
@@ -34,10 +35,73 @@ describe 'postgresql::server', type: :class do
     end
   end
 
+  describe 'with manage_dnf_module true' do
+    let(:facts) do
+      {
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { 'full' => '8.3', 'major' => '8' },
+          selinux: {
+            enabled: true,
+          }
+        },
+        osfamily: 'RedHat',
+      }
+    end
+
+    let(:pre_condition) do
+      <<-PUPPET
+      class { 'postgresql::globals':
+        manage_dnf_module => true,
+      }
+      PUPPET
+    end
+
+    it { is_expected.to contain_package('postgresql dnf module').with_ensure('10').that_comes_before('Package[postgresql-server]') }
+    it { is_expected.to contain_package('postgresql-server').with_name('postgresql-server') }
+
+    describe 'with version set' do
+      let(:pre_condition) do
+        <<-PUPPET
+        class { 'postgresql::globals':
+          manage_dnf_module => true,
+          version           => '12',
+        }
+        PUPPET
+      end
+
+      it { is_expected.to contain_package('postgresql dnf module').with_ensure('12').that_comes_before('Package[postgresql-server]') }
+      it { is_expected.to contain_package('postgresql-server').with_name('postgresql-server') }
+    end
+  end
+
   describe 'service_ensure => running' do
     let(:params) do
       {
         service_ensure: 'running',
+        postgres_password: 'new-p@s$word-to-set',
+      }
+    end
+
+    it { is_expected.to contain_class('postgresql::params') }
+    it { is_expected.to contain_class('postgresql::server') }
+    it { is_expected.to contain_class('postgresql::server::passwd') }
+    it 'validates connection' do
+      is_expected.to contain_postgresql_conn_validator('validate_service_is_running')
+    end
+    it 'sets postgres password' do
+      is_expected.to contain_exec('set_postgres_postgrespw').with('command' => '/usr/bin/psql -c "ALTER ROLE \"postgres\" PASSWORD ${NEWPASSWD_ESCAPED}"',
+                                                                  'user'        => 'postgres',
+                                                                  'environment' => ['PGPASSWORD=new-p@s$word-to-set', 'PGPORT=5432', 'NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$'],
+                                                                  'unless' => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null")
+    end
+  end
+
+  describe 'service_ensure => true' do
+    let(:params) do
+      {
+        service_ensure: true,
         postgres_password: 'new-p@s$word-to-set',
       }
     end
@@ -161,6 +225,9 @@ describe 'postgresql::server', type: :class do
 
     it 'contains the correct package version' do
       is_expected.to contain_class('postgresql::repo').with_version('99.5')
+      is_expected.to contain_file('/var/lib/postgresql/99.5/main') # FIXME: be more precise
+      is_expected.to contain_concat('/etc/postgresql/99.5/main/pg_hba.conf') # FIXME: be more precise
+      is_expected.to contain_concat('/etc/postgresql/99.5/main/pg_ident.conf') # FIXME: be more precise
     end
   end
 
@@ -183,13 +250,15 @@ describe 'postgresql::server', type: :class do
         config_entries: {
           fsync: 'off',
           checkpoint_segments: '20',
+          remove_me: :undef,
         },
       }
     end
 
     it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_postgresql__server__config_entry('fsync').with_value('off') }
-    it { is_expected.to contain_postgresql__server__config_entry('checkpoint_segments').with_value('20') }
+    it { is_expected.to contain_postgresql__server__config_entry('fsync').with_value('off').with_ensure('present') }
+    it { is_expected.to contain_postgresql__server__config_entry('checkpoint_segments').with_value('20').with_ensure('present') }
+    it { is_expected.to contain_postgresql__server__config_entry('remove_me').with_value(nil).with_ensure('absent') }
   end
 
   describe 'additional pg_hba_rules' do

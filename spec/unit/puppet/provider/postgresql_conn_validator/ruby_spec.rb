@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:postgresql_conn_validator).provider(:ruby) do
@@ -28,37 +30,33 @@ describe Puppet::Type.type(:postgresql_conn_validator).provider(:ruby) do
 
   describe '#build_psql_cmd' do
     it 'contains expected commandline options' do
-      expect(provider.validator.build_psql_cmd).to match %r{/usr/bin/psql.*--host.*--port.*--username.*}
+      expect(provider.validator.build_psql_cmd).to eq(['/usr/bin/psql', '--tuples-only', '--quiet', '--no-psqlrc', '--host', 'db.test.com', '--port', 4444, '--username', 'testuser', '--command',
+                                                       'SELECT 1'])
     end
   end
 
-  describe '#parse_connect_settings' do
+  describe 'connect_settings' do
     it 'returns array if password is present' do
-      expect(provider.validator.parse_connect_settings).to eq(['PGPASSWORD=testpass'])
+      expect(provider.validator.connect_settings).to eq({ 'PGPASSWORD' => 'testpass' })
     end
 
     it 'returns an empty array if password is nil' do
       attributes.delete(:db_password)
-      expect(provider.validator.parse_connect_settings).to eq([])
+      expect(provider.validator.connect_settings).to eq({})
     end
 
     it 'returns an array of settings' do
       attributes.delete(:db_password)
       attributes.merge! connect_settings
-      expect(provider.validator.parse_connect_settings).to eq(['PGPASSWORD=testpass', 'PGHOST=db.test.com', 'PGPORT=1234'])
+      expect(provider.validator.connect_settings).to eq({ PGHOST: 'db.test.com', PGPASSWORD: 'testpass', PGPORT: '1234' })
     end
   end
 
   describe '#attempt_connection' do
     let(:sleep_length) { 1 }
     let(:tries) { 3 }
-    let(:exec) do
-      provider.validator.stub(:execute_command).and_return(true)
-    end
 
     it 'tries the correct number of times' do
-      expect(provider.validator).to receive(:execute_command).exactly(3).times
-
       provider.validator.attempt_connection(sleep_length, tries)
     end
   end

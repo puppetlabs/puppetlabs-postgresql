@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::schema:', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql::server::schema:' do
   let(:version) do
     if os[:family] == 'redhat' && os[:release].start_with?('5')
       '8.1'
@@ -21,7 +23,7 @@ describe 'postgresql::server::schema:', unless: UNSUPPORTED_PLATFORMS.include?(o
       }
 
       postgresql::server::role { $user:
-        password_hash => postgresql_password($user, $password),
+        password_hash => postgresql::postgresql_password($user, $password),
       }
 
       postgresql::server::database { $db:
@@ -55,7 +57,7 @@ describe 'postgresql::server::schema:', unless: UNSUPPORTED_PLATFORMS.include?(o
 
   it 'creates a schema for a user' do
     begin
-      idempotent_apply(default, pp)
+      idempotent_apply(pp)
 
       ## Check that the user can create a table in the database
       psql('--command="create table psql_schema_tester.foo (foo int)" schema_test', 'psql_schema_tester') do |r|

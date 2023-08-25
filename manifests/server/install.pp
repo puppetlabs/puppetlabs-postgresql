@@ -18,5 +18,4 @@ class postgresql::server::install {
     # careful about its removal
     tag    => 'puppetlabs-postgresql',
   }
-
 }

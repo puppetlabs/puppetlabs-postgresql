@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::validate_db_connection', type: :define do
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0', 'major' => '8' },
+      },
     }
   end
 

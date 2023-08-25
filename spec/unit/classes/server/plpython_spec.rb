@@ -1,12 +1,16 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::server::plpython', type: :class do
   let :facts do
     {
-      osfamily: 'RedHat',
-      operatingsystem: 'CentOS',
-      operatingsystemrelease: '6.0',
-      concat_basedir: tmpfilename('plpython'),
+      os: {
+        family: 'RedHat',
+        name: 'CentOS',
+        release: { 'full' => '6.8', 'major' => '6' },
+        selinux: { 'enabled' => true },
+      },
       kernel: 'Linux',
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',

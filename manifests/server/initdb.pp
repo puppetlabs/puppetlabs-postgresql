@@ -5,6 +5,9 @@ class postgresql::server::initdb {
   $datadir        = $postgresql::server::datadir
   $xlogdir        = $postgresql::server::xlogdir
   $logdir         = $postgresql::server::logdir
+  $manage_datadir = $postgresql::server::manage_datadir
+  $manage_logdir  = $postgresql::server::manage_logdir
+  $manage_xlogdir = $postgresql::server::manage_xlogdir
   $encoding       = $postgresql::server::encoding
   $locale         = $postgresql::server::locale
   $data_checksums = $postgresql::server::data_checksums
@@ -23,7 +26,7 @@ class postgresql::server::initdb {
     cwd        => $module_workdir,
   }
 
-  if $::osfamily == 'RedHat' and $::selinux == true {
+  if $facts['os']['family'] == 'RedHat' and $facts['os']['selinux']['enabled'] == true {
     $seltype = 'postgresql_db_t'
     $logdir_type = 'postgresql_log_t'
   }
@@ -33,18 +36,18 @@ class postgresql::server::initdb {
     $logdir_type = undef
   }
 
-  # Make sure the data directory exists, and has the correct permissions.
-  file { $datadir:
-    ensure  => directory,
-    owner   => $user,
-    group   => $group,
-    mode    => '0700',
-    seltype => $seltype,
-  }
-
-  if($xlogdir) {
-    # Make sure the xlog directory exists, and has the correct permissions.
-    file { $xlogdir:
+  if($manage_datadir) {
+    # Make sure the data directory exists, and has the correct permissions.
+    file { $datadir:
+      ensure  => directory,
+      owner   => $user,
+      group   => $group,
+      mode    => '0700',
+      seltype => $seltype,
+    }
+  } else {
+    # changes an already defined datadir
+    File <| title == $datadir |> {
       ensure  => directory,
       owner   => $user,
       group   => $group,
@@ -53,13 +56,45 @@ class postgresql::server::initdb {
     }
   }
 
+  if($xlogdir) {
+    if($manage_xlogdir) {
+      # Make sure the xlog directory exists, and has the correct permissions.
+      file { $xlogdir:
+        ensure  => directory,
+        owner   => $user,
+        group   => $group,
+        mode    => '0700',
+        seltype => $seltype,
+      }
+    } else {
+      # changes an already defined xlogdir
+      File <| title == $xlogdir |> {
+        ensure  => directory,
+        owner   => $user,
+        group   => $group,
+        mode    => '0700',
+        seltype => $seltype,
+      }
+    }
+  }
+
   if($logdir) {
-    # Make sure the log directory exists, and has the correct permissions.
-    file { $logdir:
-      ensure  => directory,
-      owner   => $user,
-      group   => $group,
-      seltype => $logdir_type,
+    if($manage_logdir) {
+      # Make sure the log directory exists, and has the correct permissions.
+      file { $logdir:
+        ensure  => directory,
+        owner   => $user,
+        group   => $group,
+        seltype => $logdir_type,
+      }
+    } else {
+      # changes an already defined logdir
+      File <| title == $logdir |> {
+        ensure  => directory,
+        owner   => $user,
+        group   => $group,
+        seltype => $logdir_type,
+      }
     }
   }
 
@@ -113,14 +148,14 @@ class postgresql::server::initdb {
     }
     # The package will take care of this for us the first time, but if we
     # ever need to init a new db we need to copy these files explicitly
-    if $::operatingsystem == 'Debian' or $::operatingsystem == 'Ubuntu' {
-      if $::operatingsystemrelease =~ /^6/ or $::operatingsystemrelease =~ /^7/ or $::operatingsystemrelease =~ /^10\.04/ or $::operatingsystemrelease =~ /^12\.04/ {
+    if $facts['os']['name'] == 'Debian' or $facts['os']['name'] == 'Ubuntu' {
+      if $facts['os']['release']['major'] in ['6', '7', '10.04', '12.04'] {
         file { 'server.crt':
           ensure  => file,
           path    => "${datadir}/server.crt",
           source  => 'file:///etc/ssl/certs/ssl-cert-snakeoil.pem',
-          owner   => $::postgresql::server::user,
-          group   => $::postgresql::server::group,
+          owner   => $postgresql::server::user,
+          group   => $postgresql::server::group,
           mode    => '0644',
           require => Exec['postgresql_initdb'],
         }
@@ -128,8 +163,8 @@ class postgresql::server::initdb {
           ensure  => file,
           path    => "${datadir}/server.key",
           source  => 'file:///etc/ssl/private/ssl-cert-snakeoil.key',
-          owner   => $::postgresql::server::user,
-          group   => $::postgresql::server::group,
+          owner   => $postgresql::server::user,
+          group   => $postgresql::server::group,
           mode    => '0600',
           require => Exec['postgresql_initdb'],
         }

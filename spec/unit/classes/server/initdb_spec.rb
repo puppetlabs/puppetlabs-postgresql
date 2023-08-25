@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::server::initdb', type: :class do
@@ -8,10 +10,12 @@ describe 'postgresql::server::initdb', type: :class do
   describe 'on RedHat' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'CentOS',
-        operatingsystemrelease: '6.0',
-        concat_basedir: tmpfilename('server'),
+        os: {
+          family: 'RedHat',
+          name: 'CentOS',
+          release: { 'full' => '6.0', 'major' => '6' },
+          selinux: { 'enabled' => true },
+        },
         kernel: 'Linux',
         id: 'root',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
@@ -20,14 +24,38 @@ describe 'postgresql::server::initdb', type: :class do
     end
 
     it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory') }
+
+    context 'with (log,manage,xlog)_datadir set to false' do
+      let :pre_condition do
+        "
+        class {'postgresql::server':
+          manage_logdir  => false,
+          manage_datadir => false,
+          manage_xlogdir => false,
+          logdir         => '/var/lib/pgsql/data/log',
+          xlogdir        => '/var/lib/pgsql/data/xlog',
+        }
+        file {'/var/lib/pgsql/data': ensure => 'directory'}
+        file {'/var/lib/pgsql/data/log': ensure => 'directory'}
+        file {'/var/lib/pgsql/data/xlog': ensure => 'directory'}
+        "
+      end
+
+      it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory') }
+      it { is_expected.to contain_file('/var/lib/pgsql/data/log').with_ensure('directory') }
+      it { is_expected.to contain_file('/var/lib/pgsql/data/xlog').with_ensure('directory') }
+    end
   end
+
   describe 'on Amazon' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'Amazon',
-        operatingsystemrelease: '1.0',
-        concat_basedir: tmpfilename('server'),
+        os: {
+          family: 'RedHat',
+          name: 'Amazon',
+          release: { 'full' => '1.0', 'major' => '1' },
+          selinux: { 'enabled' => true },
+        },
         kernel: 'Linux',
         id: 'root',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
@@ -36,15 +64,30 @@ describe 'postgresql::server::initdb', type: :class do
     end
 
     it { is_expected.to contain_file('/var/lib/pgsql92/data').with_ensure('directory') }
+
+    context 'with manage_datadir set to false' do
+      let :pre_condition do
+        "
+        class {'postgresql::server':
+          manage_datadir => false,
+        }
+        file {'/var/lib/pgsql92/data': ensure => 'directory'}
+        "
+      end
+
+      it { is_expected.to contain_file('/var/lib/pgsql92/data').with_ensure('directory') }
+    end
   end
 
   describe 'exec with module_workdir => /var/tmp' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'CentOS',
-        operatingsystemrelease: '6.0',
-        concat_basedir: tmpfilename('server'),
+        os: {
+          family: 'RedHat',
+          name: 'CentOS',
+          release: { 'full' => '6.0', 'major' => '6' },
+          selinux: { 'enabled' => true },
+        },
         kernel: 'Linux',
         id: 'root',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
@@ -70,10 +113,12 @@ describe 'postgresql::server::initdb', type: :class do
   describe 'exec with module_workdir => undef' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'CentOS',
-        operatingsystemrelease: '6.0',
-        concat_basedir: tmpfilename('server'),
+        os: {
+          family: 'RedHat',
+          name: 'CentOS',
+          release: { 'full' => '6.0', 'major' => '6' },
+          selinux: { 'enabled' => true },
+        },
         kernel: 'Linux',
         id: 'root',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
@@ -98,10 +143,12 @@ describe 'postgresql::server::initdb', type: :class do
   describe 'postgresql_psql with module_workdir => /var/tmp' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'CentOS',
-        operatingsystemrelease: '6.0',
-        concat_basedir: tmpfilename('server'),
+        os: {
+          family: 'RedHat',
+          name: 'CentOS',
+          release: { 'full' => '6.0', 'major' => '6' },
+          selinux: { 'enabled' => true },
+        },
         kernel: 'Linux',
         id: 'root',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',

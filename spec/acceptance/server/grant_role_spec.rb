@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql::server::grant_role:' do
   let(:db) { 'grant_role_test' }
   let(:user) { 'psql_grant_role_tester' }
   let(:group) { 'test_group' }
@@ -26,7 +28,7 @@ describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.includ
       }
 
       postgresql::server::role { $user:
-        password_hash => postgresql_password($user, $password),
+        password_hash => postgresql::postgresql_password($user, $password),
       }
 
       postgresql::server::database { $db:
@@ -80,7 +82,7 @@ describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.includ
       }
 
       postgresql::server::role { $user:
-        password_hash => postgresql_password($user, $password),
+        password_hash => postgresql::postgresql_password($user, $password),
       }
 
       postgresql::server::database { $db:
@@ -157,42 +159,36 @@ describe 'postgresql::server::grant_role:', unless: UNSUPPORTED_PLATFORMS.includ
   end
 
   it 'grants a role to a user/superuser' do
-    begin
-      idempotent_apply(default, pp_one)
+    idempotent_apply(pp_one)
 
-      ## Check that the role was granted to the user
-      psql('--command="SELECT 1 WHERE pg_has_role(\'psql_grant_role_tester\', \'test_group\', \'MEMBER\') = true" grant_role_test', 'psql_grant_role_tester') do |r|
-        expect(r.stdout).to match(%r{\(1 row\)})
-        expect(r.stderr).to eq('')
-      end
-      ## Check that the role was granted to the user
-      psql('--command="SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = \'test_group\' AND r_role.rolname = \'psql_grant_role_tester\'" grant_role_test', 'psql_grant_role_tester') do |r| # rubocop:disable Metrics/LineLength
-        expect(r.stdout).to match(%r{\(1 row\)})
-        expect(r.stderr).to eq('')
-      end
+    ## Check that the role was granted to the user
+    psql('--command="SELECT 1 WHERE pg_has_role(\'psql_grant_role_tester\', \'test_group\', \'MEMBER\') = true" grant_role_test', 'psql_grant_role_tester') do |r|
+      expect(r.stdout).to match(%r{\(1 row\)})
+      expect(r.stderr).to eq('')
+    end
+    ## Check that the role was granted to the user
+    psql('--command="SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = \'test_group\' AND r_role.rolname = \'psql_grant_role_tester\'" grant_role_test', 'psql_grant_role_tester') do |r| # rubocop:disable Layout/LineLength
+      expect(r.stdout).to match(%r{\(1 row\)})
+      expect(r.stderr).to eq('')
     end
   end
 
   it 'revokes a role from a user' do
-    begin
-      apply_manifest(pp_two, catch_failures: true)
-      apply_manifest(pp_two, expect_changes: true)
+    apply_manifest(pp_two, catch_failures: true)
+    apply_manifest(pp_two, expect_changes: true)
 
-      psql('--command="SELECT 1 WHERE pg_has_role(\'psql_grant_role_tester\', \'test_group\', \'MEMBER\') = true" grant_role_test', 'psql_grant_role_tester') do |r|
-        expect(r.stdout).to match(%r{\(0 rows\)})
-        expect(r.stderr).to eq('')
-      end
+    psql('--command="SELECT 1 WHERE pg_has_role(\'psql_grant_role_tester\', \'test_group\', \'MEMBER\') = true" grant_role_test', 'psql_grant_role_tester') do |r|
+      expect(r.stdout).to match(%r{\(0 rows\)})
+      expect(r.stderr).to eq('')
     end
   end
 
   it 'does not grant permission to a nonexistent user' do
-    begin
-      apply_manifest(pp_three, expect_failures: true)
+    apply_manifest(pp_three, expect_failures: true)
 
-      psql('--command="SELECT 1 WHERE pg_has_role(\'psql_grant_role_tester\', \'test_group\', \'MEMBER\') = true" grant_role_test', 'psql_grant_role_tester') do |r|
-        expect(r.stdout).to match(%r{\(0 rows\)})
-        expect(r.stderr).to eq('')
-      end
+    psql('--command="SELECT 1 WHERE pg_has_role(\'psql_grant_role_tester\', \'test_group\', \'MEMBER\') = true" grant_role_test', 'psql_grant_role_tester') do |r|
+      expect(r.stdout).to match(%r{\(0 rows\)})
+      expect(r.stderr).to eq('')
     end
   end
 end

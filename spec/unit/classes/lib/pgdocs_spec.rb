@@ -1,12 +1,16 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::lib::docs', type: :class do
   describe 'on a redhat based os' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemrelease: '6.4',
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { 'full' => '6.4', 'major' => '6' },
+        },
       }
     end
 

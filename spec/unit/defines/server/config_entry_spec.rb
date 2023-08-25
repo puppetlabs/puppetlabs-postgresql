@@ -1,13 +1,21 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::server::config_entry', type: :define do
   let :facts do
     {
-      osfamily: 'RedHat',
-      operatingsystem: 'RedHat',
-      operatingsystemrelease: '6.4',
+      os: {
+        family: 'RedHat',
+        name: 'RedHat',
+        release: {
+          'full'  => '6.4',
+          'major' => '6',
+          'minor' => '4',
+        },
+        selinux: { 'enabled' => true },
+      },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('contrib'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       selinux: true,
@@ -34,11 +42,13 @@ describe 'postgresql::server::config_entry', type: :define do
     context 'redhat 6' do
       let :facts do
         {
-          osfamily: 'RedHat',
-          operatingsystem: 'RedHat',
-          operatingsystemrelease: '6.4',
+          os: {
+            family: 'RedHat',
+            name: 'RedHat',
+            release: { 'full' => '6.4', 'major' => '6' },
+            selinux: { 'enabled' => true },
+          },
           kernel: 'Linux',
-          concat_basedir: tmpfilename('contrib'),
           id: 'root',
           path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           selinux: true,
@@ -56,45 +66,27 @@ describe 'postgresql::server::config_entry', type: :define do
     context 'redhat 7' do
       let :facts do
         {
-          osfamily: 'RedHat',
-          operatingsystem: 'RedHat',
-          operatingsystemrelease: '7.0',
+          os: {
+            family: 'RedHat',
+            name: 'RedHat',
+            release: {
+              'full'  => '7.9.2009',
+              'major' => '7',
+              'minor' => '9',
+            },
+            selinux: { 'enabled' => true },
+          },
           kernel: 'Linux',
-          concat_basedir: tmpfilename('contrib'),
           id: 'root',
           path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           selinux: true,
+          service_provider: 'systemd',
         }
       end
       let(:params) { { ensure: 'present', name: 'port_spec', value: '5432' } }
 
       it 'stops postgresql and changes the port #file' do
         is_expected.to contain_file('systemd-override')
-      end
-      it 'stops postgresql and changes the port #exec' do
-        is_expected.to contain_exec('restart-systemd')
-      end
-    end
-    context 'fedora 19' do
-      let :facts do
-        {
-          osfamily: 'RedHat',
-          operatingsystem: 'Fedora',
-          operatingsystemrelease: '19',
-          kernel: 'Linux',
-          concat_basedir: tmpfilename('contrib'),
-          id: 'root',
-          path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          selinux: true,
-        }
-      end
-      let(:params) { { ensure: 'present', name: 'port_spec', value: '5432' } }
-
-      it 'stops postgresql and changes the port #file' do
-        is_expected.to contain_file('systemd-override')
-      end
-      it 'stops postgresql and changes the port #exec' do
-        is_expected.to contain_exec('restart-systemd')
       end
     end
   end
@@ -122,11 +114,13 @@ describe 'postgresql::server::config_entry', type: :define do
   context 'unix_socket_directories' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemrelease: '7.0',
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { 'full' => '7.0', 'major' => '7' },
+          selinux: { 'enabled' => true },
+        },
         kernel: 'Linux',
-        concat_basedir: tmpfilename('contrib'),
         id: 'root',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         selinux: true,

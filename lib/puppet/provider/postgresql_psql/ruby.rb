@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   desc 'Postgres psql provider'
   def run_unless_sql_command(sql)
     # for the 'unless' queries, we wrap the user's query in a 'SELECT COUNT',
     # which makes it easier to parse and process the output.
-    run_sql_command('SELECT COUNT(*) FROM (' << sql << ') count')
+    run_sql_command('SELECT COUNT(*) FROM (' + sql + ') count')
   end
 
   def run_sql_command(sql)
@@ -14,9 +16,9 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
     command = [resource[:psql_path]]
     command.push('-d', resource[:db]) if resource[:db]
     command.push('-p', resource[:port]) if resource[:port]
-    command.push('-t', '-X', '-c', '"' + sql.gsub('"', '\"') + '"')
+    command.push('-t', '-X', '-c', sql)
 
-    environment = get_environment
+    environment = fetch_environment
 
     if resource[:cwd]
       Dir.chdir resource[:cwd] do
@@ -29,7 +31,7 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
 
   private
 
-  def get_environment # rubocop:disable Style/AccessorMethodName : Refactor does not work correctly
+  def fetch_environment
     environment = (resource[:connect_settings] || {}).dup
     envlist = resource[:environment]
     return environment unless envlist
@@ -55,13 +57,13 @@ Puppet::Type.type(:postgresql_psql).provide(:ruby) do
   end
 
   def run_command(command, user, group, environment)
-    command = command.join ' '
     output = Puppet::Util::Execution.execute(command, uid: user,
                                                       gid: group,
                                                       failonfail: false,
                                                       combine: true,
                                                       override_locale: true,
-                                                      custom_environment: environment)
+                                                      custom_environment: environment,
+                                                      sensitive: resource[:sensitive] == :true)
     [output, $CHILD_STATUS.dup]
   end
 end

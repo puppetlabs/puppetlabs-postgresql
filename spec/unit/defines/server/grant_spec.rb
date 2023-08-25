@@ -1,13 +1,16 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::server::grant', type: :define do
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0', 'major' => '8' },
+      },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('contrib'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
@@ -99,7 +102,7 @@ describe 'postgresql::server::grant', type: :define do
     it do
       is_expected.to contain_postgresql_psql('grant:test')
         .with_command(%r{GRANT USAGE ON ALL SEQUENCES IN SCHEMA "public" TO\s* "test"}m)
-        .with_unless(%r{SELECT 1 WHERE NOT EXISTS \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\)}m) # rubocop:disable Metrics/LineLength
+        .with_unless(%r{SELECT 1 WHERE NOT EXISTS \(\s*SELECT sequence_name\s* FROM information_schema\.sequences\s* WHERE sequence_schema='public'\s* EXCEPT DISTINCT\s* SELECT object_name as sequence_name\s* FROM .* WHERE .*grantee='test'\s* AND object_schema='public'\s* AND privilege_type='USAGE'\s*\)}m) # rubocop:disable Layout/LineLength
     end
   end
 
@@ -212,6 +215,106 @@ describe 'postgresql::server::grant', type: :define do
       is_expected.to contain_postgresql_psql('grant:test') \
         .that_requires(['Class[postgresql::server::service]', 'Postgresql::Server::Role[test]'])
     end
+  end
+
+  context 'with a role defined to PUBLIC' do
+    let :params do
+      {
+        db: 'test',
+        role: 'PUBLIC',
+        privilege: 'all',
+        object_name: ['myschema', 'mytable'],
+        object_type: 'table',
+      }
+    end
+
+    let :pre_condition do
+      <<-EOS
+      class {'postgresql::server':}
+      postgresql::server::role { 'test': }
+      EOS
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it { is_expected.to contain_postgresql__server__role('test') }
+    it do
+      is_expected.to contain_postgresql_psql('grant:test')
+        .with_command(%r{GRANT ALL ON TABLE "myschema"."mytable" TO\s* "PUBLIC"}m)
+        .with_unless(%r{SELECT 1 WHERE has_table_privilege\('public',\s*'myschema.mytable', 'INSERT'\)}m)
+    end
+  end
+
+  context 'function' do
+    let :params do
+      {
+        db: 'test',
+        role: 'test',
+        privilege: 'execute',
+        object_name: 'test',
+        object_arguments: ['text', 'boolean'],
+        object_type: 'function',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it do
+      is_expected.to contain_postgresql_psql('grant:test')
+        .with_command(%r{GRANT EXECUTE ON FUNCTION test\(text,boolean\) TO\s* "test"}m)
+        .with_unless(%r{SELECT 1 WHERE has_function_privilege\('test',\s* 'test\(text,boolean\)', 'EXECUTE'\)}m)
+    end
+  end
+
+  context 'function with schema' do
+    let :params do
+      {
+        db: 'test',
+        role: 'test',
+        privilege: 'execute',
+        object_name: ['myschema', 'test'],
+        object_arguments: ['text', 'boolean'],
+        object_type: 'function',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__grant('test') }
+    it do
+      is_expected.to contain_postgresql_psql('grant:test')
+        .with_command(%r{GRANT EXECUTE ON FUNCTION myschema.test\(text,boolean\) TO\s* "test"}m)
+        .with_unless(%r{SELECT 1 WHERE has_function_privilege\('test',\s* 'myschema.test\(text,boolean\)', 'EXECUTE'\)}m)
+    end
+  end
+
+  context 'standalone not managing server' do
+    let :params do
+      {
+        db: 'test',
+        role: 'test',
+        privilege: 'execute',
+        object_name: ['myschema', 'test'],
+        object_arguments: ['text', 'boolean'],
+        object_type: 'function',
+        group: 'postgresql',
+        psql_path: '/usr/bin',
+        psql_user: 'postgres',
+        psql_db: 'db',
+        port: 1542,
+        connect_settings: {},
+      }
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.not_to contain_class('postgresql::server') }
   end
 
   context 'invalid object_type' do

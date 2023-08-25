@@ -1,11 +1,13 @@
-# @summary This module creates tablespace. 
+# @summary This module creates tablespace.
 #
 # @param location Specifies the path to locate this tablespace.
+# @param manage_location Set to false if you have file{ $location: } already defined
 # @param owner Specifies the default owner of the tablespace.
 # @param spcname Specifies the name of the tablespace.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
-define postgresql::server::tablespace(
+define postgresql::server::tablespace (
   $location,
+  $manage_location = true,
   $owner   = undef,
   $spcname = $title,
   $connect_settings = $postgresql::server::default_connect_settings,
@@ -31,15 +33,28 @@ define postgresql::server::tablespace(
     cwd              => $module_workdir,
   }
 
-  file { $location:
-    ensure  => directory,
-    owner   => $user,
-    group   => $group,
-    mode    => '0700',
-    seluser => 'system_u',
-    selrole => 'object_r',
-    seltype => 'postgresql_db_t',
-    require => Class['postgresql::server'],
+  if($manage_location) {
+    file { $location:
+      ensure  => directory,
+      owner   => $user,
+      group   => $group,
+      mode    => '0700',
+      seluser => 'system_u',
+      selrole => 'object_r',
+      seltype => 'postgresql_db_t',
+      require => Class['postgresql::server'],
+    }
+  } else {
+    File <| title == $location |> {
+      ensure  => directory,
+      owner   => $user,
+      group   => $group,
+      mode    => '0700',
+      seluser => 'system_u',
+      selrole => 'object_r',
+      seltype => 'postgresql_db_t',
+      require => Class['postgresql::server'],
+    }
   }
 
   postgresql_psql { "CREATE TABLESPACE \"${spcname}\"":

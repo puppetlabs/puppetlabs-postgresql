@@ -17,7 +17,6 @@ class postgresql::client (
   String[1] $package_name                    = $postgresql::params::client_package_name,
   String[1] $package_ensure                  = 'present'
 ) inherits postgresql::params {
-
   if $package_name != 'UNSET' {
     package { 'postgresql-client':
       ensure => $package_ensure,
@@ -33,5 +32,4 @@ class postgresql::client (
     group  => 0,
     mode   => '0755',
   }
-
 }

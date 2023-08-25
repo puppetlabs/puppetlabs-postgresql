@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
-  # rubocop:disable Metrics/LineLength
+describe 'postgresql::server::db' do
   it 'creates a database' do
     begin
-      tmpdir = default.tmpdir('postgresql')
+      tmpdir = run_shell('mktemp').stdout
       pp = <<-MANIFEST
         class { 'postgresql::server':
           postgres_password => 'space password',
@@ -20,35 +21,28 @@ describe 'postgresql::server::db', unless: UNSUPPORTED_PLATFORMS.include?(os[:fa
         }
       MANIFEST
 
-      idempotent_apply(default, pp)
+      idempotent_apply(pp)
 
       # Verify that the postgres password works
-      shell("echo 'localhost:*:*:postgres:\'space password\'' > /root/.pgpass")
-      shell('chmod 600 /root/.pgpass')
-      shell("psql -U postgres -h localhost --command='\\l'")
+      run_shell("echo 'localhost:*:*:postgres:\'space password\'' > /root/.pgpass")
+      run_shell('chmod 600 /root/.pgpass')
+      run_shell("psql -U postgres -h localhost --command='\\l'")
 
-      psql('--command="select datname from pg_database" "postgresql-test-db"') do |r|
-        expect(r.stdout).to match(%r{postgresql-test-db})
-        expect(r.stderr).to eq('')
-      end
+      result = psql('--command="select datname from pg_database" "postgresql-test-db"')
+      expect(result.stdout).to match(%r{postgresql-test-db})
+      expect(result.stderr).to eq('')
 
-      psql('--command="SELECT 1 FROM pg_roles WHERE rolname=\'test-user\'"') do |r|
-        expect(r.stdout).to match(%r{\(1 row\)})
-      end
-
-      result = shell('psql --version')
-      version = result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
-      comment_information_function = if version.to_f > 8.1
+      result = psql('--command="SELECT 1 FROM pg_roles WHERE rolname=\'test-user\'"')
+      expect(result.stdout).to match(%r{\(1 row\)})
+      comment_information_function = if Gem::Version.new(postgresql_version) > Gem::Version.new('8.1')
                                        'shobj_description'
                                      else
                                        'obj_description'
                                      end
-      psql("--dbname postgresql-test-db --command=\"SELECT pg_catalog.#{comment_information_function}(d.oid, 'pg_database') FROM pg_catalog.pg_database d WHERE datname = 'postgresql-test-db' AND pg_catalog.#{comment_information_function}(d.oid, 'pg_database') = 'testcomment'\"") do |r|
-        expect(r.stdout).to match(%r{\(1 row\)})
-      end
+      result = psql("--dbname postgresql-test-db --command=\"SELECT pg_catalog.#{comment_information_function}(d.oid, 'pg_database') FROM pg_catalog.pg_database d WHERE datname = 'postgresql-test-db' AND pg_catalog.#{comment_information_function}(d.oid, 'pg_database') = 'testcomment'\"") # rubocop:disable Layout/LineLength
+      expect(result.stdout).to match(%r{\(1 row\)})
     ensure
-      psql('--command=\'drop database "postgresql-test-db" postgres\'')
-      psql('--command="DROP USER test"')
+      psql('--command=\'drop database "postgresql-test-db"\'')
     end
   end
 end

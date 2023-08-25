@@ -24,7 +24,6 @@ define postgresql::server::db (
   $istemplate = false,
   $owner      = undef
 ) {
-
   if ! defined(Postgresql::Server::Database[$dbname]) {
     postgresql::server::database { $dbname:
       comment    => $comment,

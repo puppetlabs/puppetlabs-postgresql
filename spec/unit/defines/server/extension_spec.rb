@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::server::extension', type: :define do # rubocop:disable RSpec/MultipleDescribes
@@ -10,11 +12,12 @@ describe 'postgresql::server::extension', type: :define do # rubocop:disable RSp
 
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0', 'major' => '8' },
+      },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('postgis'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
@@ -126,11 +129,12 @@ describe 'postgresql::server::extension', type: :define do
 
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '6.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '6.0', 'major' => '6' },
+      },
       kernel: 'Linux',
-      concat_basedir: tmpfilename('postgis'),
       id: 'root',
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     }
@@ -144,10 +148,128 @@ describe 'postgresql::server::extension', type: :define do
     }
   end
 
+  it { is_expected.to contain_file('/var/lib/postgresql/8.4/main') } # FIXME: be more precise
+  it { is_expected.to contain_concat('/etc/postgresql/8.4/main/pg_hba.conf') } # FIXME: be more precise
+  it { is_expected.to contain_concat('/etc/postgresql/8.4/main/pg_ident.conf') } # FIXME: be more precise
+
   context 'with mandatory arguments only' do
     it {
       is_expected.to contain_postgresql_psql('template_postgis2: CREATE EXTENSION "postgis"')
         .with(db: 'template_postgis2', command: 'CREATE EXTENSION "postgis"').that_requires('Postgresql::Server::Database[template_postgis2]')
+    }
+  end
+end
+
+describe 'postgresql::server::extension', type: :define do
+  let :facts do
+    {
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '6.0', 'major' => '6' },
+      },
+      kernel: 'Linux',
+      id: 'root',
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+    }
+  end
+
+  let(:title) { 'pg_repack' }
+  let(:params) do
+    {
+      database: 'postgres',
+      extension: 'pg_repack',
+    }
+  end
+
+  context 'without including postgresql::server' do
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it {
+      is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
+        .with(db: 'postgres', command: 'CREATE EXTENSION "pg_repack"')
+    }
+  end
+
+  context 'default port' do
+    let :params do
+      {
+        database: 'postgres',
+        extension: 'pg_repack',
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"').with_port('5432') }
+  end
+
+  context 'port overriden by explicit parameter' do
+    let :params do
+      {
+        database: 'postgres',
+        extension: 'pg_repack',
+        port: 1234,
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"').with_port('1234') }
+  end
+
+  context 'with specific db connection settings' do
+    let :params do
+      {
+        database: 'postgres',
+        extension: 'pg_repack',
+        connect_settings: { 'PGHOST' => 'postgres-db-server',
+                            'DBVERSION' => '9.1',
+                            'PGPORT' => '1234' },
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it {
+      is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
+        .with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234')
+        .with_port(nil)
+    }
+  end
+
+  context 'with specific db connection settings - port overriden by explicit parameter' do
+    let :params do
+      {
+        database: 'postgres',
+        extension: 'pg_repack',
+        connect_settings: { 'PGHOST' => 'postgres-db-server',
+                            'DBVERSION' => '9.1',
+                            'PGPORT' => '1234' },
+        port: 5678,
+      }
+    end
+
+    let :pre_condition do
+      "class {'postgresql::server':}"
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it {
+      is_expected.to contain_postgresql_psql('postgres: CREATE EXTENSION "pg_repack"')
+        .with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234')
+        .with_port('5678')
     }
   end
 end

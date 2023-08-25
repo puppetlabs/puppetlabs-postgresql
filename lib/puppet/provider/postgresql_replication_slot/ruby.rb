@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:postgresql_replication_slot).provide(:ruby) do
   desc 'For confinement'
   commands psql: 'psql'
 
   def self.instances
-    run_sql_command('SELECT * FROM pg_replication_slots;')[0].split("\n").select { |l| l =~ %r{\|} }.map do |l|
+    run_sql_command('SELECT * FROM pg_replication_slots;')[0].split("\n").select { |l| l.include?('|') }.map do |l|
       name, *_others = l.strip.split(%r{\s+\|\s+})
       new(name: name,
           ensure: :present)

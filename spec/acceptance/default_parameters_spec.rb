@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 # These tests are designed to ensure that the module, when ran with defaults,
 # sets up everything correctly and allows us to connect to Postgres.
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql::server' do
   it 'with defaults' do
     pp = <<-MANIFEST
       class { 'postgresql::server': }
     MANIFEST
 
-    idempotent_apply(default, pp)
+    idempotent_apply(pp)
   end
 
   describe port(5432) do

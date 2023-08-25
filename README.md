@@ -81,7 +81,7 @@ class { 'postgresql::server':
 
 postgresql::server::db { 'mydatabasename':
   user     => 'mydatabaseuser',
-  password => postgresql_password('mydatabaseuser', 'mypassword'),
+  password => postgresql::postgresql_password('mydatabaseuser', 'mypassword'),
 }
 ```
 
@@ -94,7 +94,7 @@ class { 'postgresql::server':
 }
 
 postgresql::server::role { 'marmot':
-  password_hash => postgresql_password('marmot', 'mypasswd'),
+  password_hash => postgresql::postgresql_password('marmot', 'mypasswd'),
 }
 
 postgresql::server::database_grant { 'test1':
@@ -316,13 +316,13 @@ exec { 'rake db:migrate':
 
 ## Reference
 
-For information on the classes and types, see the [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-postgresql/blob/master/REFERENCE.md)
+For information on the classes and types, see the [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-postgresql/blob/main/REFERENCE.md)
 
 ## Limitations
 
-Works with versions of PostgreSQL from 8.1 through 9.5.
+Works with versions of PostgreSQL on supported OSes.  
 
-For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-postgresql/blob/master/metadata.json)
+For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-postgresql/blob/main/metadata.json)
 
 ### Apt module support
 
@@ -333,9 +333,9 @@ While this module supports both 1.x and 2.x versions of the 'puppetlabs-apt' mod
 
 PostGIS is currently considered an unsupported feature, as it doesn't work on all platforms correctly.
 
-### All versions of RHEL/CentOS
+### All versions of RHEL/CentOS with manage_selinux => false
 
-If you have SELinux enabled you must add any custom ports you use to the `postgresql_port_t` context.  You can do this as follows:
+If you have SELinux enabled and you are *not* using the selinux module to manage SELinux (this is the default configuration) you will need to label any custom ports you use with the `postgresql_port_t` context.  The postgresql service will not start until this is done.  To label a port use the semanage command as follows:
 
 ```shell
 semanage port -a -t postgresql_port_t -p tcp $customport
@@ -343,7 +343,7 @@ semanage port -a -t postgresql_port_t -p tcp $customport
 
 ## Development
 
-Puppet Labs modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. We can’t access the huge number of platforms and myriad hardware, software, and deployment configurations that Puppet is intended to serve. We want to keep it as easy as possible to contribute changes so that our modules work in your environment. There are a few guidelines that we need contributors to follow so that we can have a chance of keeping on top of things. For more information, see our [module contribution guide](https://docs.puppetlabs.com/forge/contributing.html).
+Puppet Labs modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. We can’t access the huge number of platforms and myriad hardware, software, and deployment configurations that Puppet is intended to serve. We want to keep it as easy as possible to contribute changes so that our modules work in your environment. There are a few guidelines that we need contributors to follow so that we can have a chance of keeping on top of things. For more information, see our [module contribution guide](https://puppet.com/docs/puppet/latest/contributing.html).
 
 ### Tests
 

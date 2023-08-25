@@ -1,13 +1,16 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 # These tests are designed to ensure that the module, when ran overrides,
 # sets up everything correctly and allows us to connect to Postgres.
-describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
-  pp = <<-MANIFEST
+describe 'postgresql::server' do
+  let(:pp) do
+    <<-MANIFEST
     class { 'postgresql::server':
       roles          => {
         'testusername' => {
-          password_hash => postgresql_password('testusername', 'supersecret'),
+          password_hash => postgresql::postgresql_password('testusername', 'supersecret'),
           createdb      => true,
         },
       },
@@ -29,24 +32,12 @@ describe 'postgresql::server', unless: UNSUPPORTED_PLATFORMS.include?(os[:family
       owner => 'testusername',
     }
   MANIFEST
+  end
 
   it 'with additional hiera entries' do
-    idempotent_apply(default, pp)
-  end
-
-  describe port(5432) do
-    it { is_expected.to be_listening }
-  end
-
-  it 'can connect with psql' do
-    psql('--command="\l" postgres', 'postgres') do |r|
-      expect(r.stdout).to match(%r{List of databases})
-    end
-  end
-
-  it 'can connect with psql as testusername' do
-    shell('PGPASSWORD=supersecret psql -U testusername -h localhost --command="\l"') do |r|
-      expect(r.stdout).to match(%r{List of databases})
-    end
+    idempotent_apply(pp)
+    expect(port(5432)).to be_listening
+    expect(psql('--command="\l" postgres', 'postgres').stdout).to match(%r{List of databases})
+    expect(run_shell('PGPASSWORD=supersecret psql -U testusername -h localhost --command="\l"').stdout).to match 'List of databases'
   end
 end

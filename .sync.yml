@@ -1,44 +1,49 @@
 ---
-.gitignore:
-  required:
-    - ---.project
-
-.gitlab-ci.yml:
-  unmanaged: true
-
-.travis.yml:
-  docker_sets:
-    - set: docker/centos-7
-    - set: docker/ubuntu-14.04
-  docker_defaults:
-    bundler_args: ""
-  secure: ""
+".gitlab-ci.yml":
+  delete: true
+".travis.yml":
+  global_env:
+    - HONEYCOMB_WRITEKEY="7f3c63a70eecc61d635917de46bea4e6",HONEYCOMB_DATASET="litmus tests"
+  deploy_to_forge:
+    enabled: false
+  user: puppet
+  secure: ''
   branches:
-    - release
-
+  - release
+  use_litmus: true
+  litmus:
+    provision_list:
+    - ---travis_el
+    - travis_deb
+    - travis_el7
+    complex:
+    - collection:
+        puppet_collection:
+        - puppet6
+        provision_list:
+        - travis_ub_6
+  simplecov: true
+  notifications:
+    slack:
+      secure: sulU0RHAFNMVQyQnqcyRHLRjL7Zl1Ao7ywuObL/qTsCiIweRsFiHX0BdTrurxobhjgdHQizx9G2IakkvhE120AOlLbCV9Nw45tvyuzdV4HhdPSKtwdWWKXgU4IvP2tSblZ4hCOEG4CuEKPvFtoY8UEW2ODmvvwFlQz+GOYOBYMw=
 appveyor.yml:
   delete: true
-
 Gemfile:
-  required:
-    ':system_tests':
-      - gem: 'puppet-module-posix-system-r#{minor_version}'
-        platforms: ruby
-      - gem: 'puppet-module-win-system-r#{minor_version}'
-        platforms:
-          - mswin
-          - mingw
-          - x64_mingw
   optional:
-    ':development':
-      - gem: 'github_changelog_generator'
-        git: 'https://github.com/skywinder/github-changelog-generator'
-        ref: '20ee04ba1234e9e83eb2ffb5056e23d641c7a018'
-        condition: "Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('2.2.2')"
-
+    ":development":
+    - gem: github_changelog_generator
 Rakefile:
   changelog_user: puppetlabs
-
 spec/spec_helper.rb:
-  mock_with: ':rspec'
+  mock_with: ":rspec"
   coverage_report: true
+.github/workflows/nightly.yml:
+  unmanaged: false
+.github/workflows/pr_test.yml:
+  unmanaged: false
+.gitpod.Dockerfile:
+  unmanaged: false
+.gitpod.yml:
+  unmanaged: false
+.github/workflows/auto_release.yml:
+  unmanaged: false

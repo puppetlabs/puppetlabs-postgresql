@@ -38,6 +38,7 @@
 # @param pg_hba_conf_path Specifies the path to your pg_hba.conf file.
 # @param pg_ident_conf_path Specifies the path to your pg_ident.conf file.
 # @param postgresql_conf_path Specifies the path to your postgresql.conf file.
+# @param postgresql_conf_mode Sets the mode of your postgresql.conf file. Only relevant if manage_postgresql_conf_perms is true.
 # @param recovery_conf_path Specifies the path to your recovery.conf file.
 #
 # @param datadir PostgreSQL data directory
@@ -63,71 +64,89 @@
 # @param manage_pg_hba_conf Boolean. Whether to manage the pg_hba.conf.
 # @param manage_pg_ident_conf Boolean. Overwrites the pg_ident.conf file.
 # @param manage_recovery_conf Boolean. Specifies whether or not manage the recovery.conf.
-# @param module_workdir Working directory for the PostgreSQL module 
+# @param manage_postgresql_conf_perms
+#   Whether to manage the postgresql conf file permissions. This means owner,
+#   group and mode. Contents are not managed but should be managed through
+#   postgresql::server::config_entry.
+# @param module_workdir Working directory for the PostgreSQL module
+#
+# @param manage_datadir Set to false if you have file{ $datadir: } already defined
+# @param manage_logdir Set to false if you have file{ $logdir: } already defined
+# @param manage_xlogdir Set to false if you have file{ $xlogdir: } already defined
 #
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
 #
-# @param version Sets PostgreSQL version 
+# @param version Deprecated. Use postgresql::globals instead. Sets PostgreSQL version
 #
+# @param extra_systemd_config Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
 #
 class postgresql::server (
-  $postgres_password          = undef,
+  $postgres_password                               = undef,
 
-  $package_name               = $postgresql::params::server_package_name,
-  $package_ensure             = $postgresql::params::package_ensure,
+  $package_name                                    = $postgresql::params::server_package_name,
+  $package_ensure                                  = $postgresql::params::package_ensure,
 
-  $plperl_package_name        = $postgresql::params::plperl_package_name,
-  $plpython_package_name      = $postgresql::params::plpython_package_name,
+  $plperl_package_name                             = $postgresql::params::plperl_package_name,
+  $plpython_package_name                           = $postgresql::params::plpython_package_name,
 
-  $service_ensure             = $postgresql::params::service_ensure,
-  $service_enable             = $postgresql::params::service_enable,
-  $service_manage             = $postgresql::params::service_manage,
-  $service_name               = $postgresql::params::service_name,
-  $service_restart_on_change  = $postgresql::params::service_restart_on_change,
-  $service_provider           = $postgresql::params::service_provider,
-  $service_reload             = $postgresql::params::service_reload,
-  $service_status             = $postgresql::params::service_status,
-  $default_database           = $postgresql::params::default_database,
-  $default_connect_settings   = $postgresql::globals::default_connect_settings,
-  $listen_addresses           = $postgresql::params::listen_addresses,
-  $port                       = $postgresql::params::port,
-  $ip_mask_deny_postgres_user = $postgresql::params::ip_mask_deny_postgres_user,
-  $ip_mask_allow_all_users    = $postgresql::params::ip_mask_allow_all_users,
-  $ipv4acls                   = $postgresql::params::ipv4acls,
-  $ipv6acls                   = $postgresql::params::ipv6acls,
+  $service_ensure                                  = $postgresql::params::service_ensure,
+  $service_enable                                  = $postgresql::params::service_enable,
+  $service_manage                                  = $postgresql::params::service_manage,
+  $service_name                                    = $postgresql::params::service_name,
+  $service_restart_on_change                       = $postgresql::params::service_restart_on_change,
+  $service_provider                                = $postgresql::params::service_provider,
+  $service_reload                                  = $postgresql::params::service_reload,
+  $service_status                                  = $postgresql::params::service_status,
+  $default_database                                = $postgresql::params::default_database,
+  $default_connect_settings                        = $postgresql::globals::default_connect_settings,
+  $listen_addresses                                = $postgresql::params::listen_addresses,
+  $port                                            = $postgresql::params::port,
+  $ip_mask_deny_postgres_user                      = $postgresql::params::ip_mask_deny_postgres_user,
+  $ip_mask_allow_all_users                         = $postgresql::params::ip_mask_allow_all_users,
+  Array[String[1]] $ipv4acls                       = $postgresql::params::ipv4acls,
+  Array[String[1]] $ipv6acls                       = $postgresql::params::ipv6acls,
 
-  $initdb_path                = $postgresql::params::initdb_path,
-  $createdb_path              = $postgresql::params::createdb_path,
-  $psql_path                  = $postgresql::params::psql_path,
-  $pg_hba_conf_path           = $postgresql::params::pg_hba_conf_path,
-  $pg_ident_conf_path         = $postgresql::params::pg_ident_conf_path,
-  $postgresql_conf_path       = $postgresql::params::postgresql_conf_path,
-  $recovery_conf_path         = $postgresql::params::recovery_conf_path,
+  $initdb_path                                     = $postgresql::params::initdb_path,
+  $createdb_path                                   = $postgresql::params::createdb_path,
+  $psql_path                                       = $postgresql::params::psql_path,
+  $pg_hba_conf_path                                = $postgresql::params::pg_hba_conf_path,
+  $pg_ident_conf_path                              = $postgresql::params::pg_ident_conf_path,
+  $postgresql_conf_path                            = $postgresql::params::postgresql_conf_path,
+  Optional[Stdlib::Filemode] $postgresql_conf_mode = $postgresql::params::postgresql_conf_mode,
+  $recovery_conf_path                              = $postgresql::params::recovery_conf_path,
 
-  $datadir                    = $postgresql::params::datadir,
-  $xlogdir                    = $postgresql::params::xlogdir,
-  $logdir                     = $postgresql::params::logdir,
+  $datadir                                         = $postgresql::params::datadir,
+  $xlogdir                                         = $postgresql::params::xlogdir,
+  $logdir                                          = $postgresql::params::logdir,
 
-  $log_line_prefix            = $postgresql::params::log_line_prefix,
+  $log_line_prefix                                 = $postgresql::params::log_line_prefix,
 
-  $pg_hba_conf_defaults       = $postgresql::params::pg_hba_conf_defaults,
+  $pg_hba_conf_defaults                            = $postgresql::params::pg_hba_conf_defaults,
 
-  $user                       = $postgresql::params::user,
-  $group                      = $postgresql::params::group,
+  $user                                            = $postgresql::params::user,
+  $group                                           = $postgresql::params::group,
 
-  $needs_initdb               = $postgresql::params::needs_initdb,
+  $needs_initdb                                    = $postgresql::params::needs_initdb,
 
-  $encoding                   = $postgresql::params::encoding,
-  $locale                     = $postgresql::params::locale,
-  $data_checksums             = $postgresql::params::data_checksums,
-  $timezone                   = $postgresql::params::timezone,
+  $encoding                                        = $postgresql::params::encoding,
+  $locale                                          = $postgresql::params::locale,
+  $data_checksums                                  = $postgresql::params::data_checksums,
+  $timezone                                        = $postgresql::params::timezone,
 
-  $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
-  $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
-  $manage_recovery_conf       = $postgresql::params::manage_recovery_conf,
-  $module_workdir             = $postgresql::params::module_workdir,
+  $manage_pg_hba_conf                              = $postgresql::params::manage_pg_hba_conf,
+  $manage_pg_ident_conf                            = $postgresql::params::manage_pg_ident_conf,
+  $manage_recovery_conf                            = $postgresql::params::manage_recovery_conf,
+  Boolean $manage_postgresql_conf_perms            = $postgresql::params::manage_postgresql_conf_perms,
+  Boolean $manage_selinux                          = $postgresql::params::manage_selinux,
+  $module_workdir                                  = $postgresql::params::module_workdir,
+
+  $manage_datadir                                  = $postgresql::params::manage_datadir,
+  $manage_logdir                                   = $postgresql::params::manage_logdir,
+  $manage_xlogdir                                  = $postgresql::params::manage_xlogdir,
+  $password_encryption                             = $postgresql::params::password_encryption,
+  $extra_systemd_config                            = $postgresql::params::extra_systemd_config,
 
   Hash[String, Hash] $roles         = {},
   Hash[String, Any] $config_entries = {},
@@ -143,7 +162,7 @@ class postgresql::server (
     $_version = $postgresql::params::version
   }
 
-  if $createdb_path != undef{
+  if $createdb_path != undef {
     warning('Passing "createdb_path" to postgresql::server is deprecated, it can be removed safely for the same behaviour')
   }
 
@@ -172,7 +191,8 @@ class postgresql::server (
 
   $config_entries.each |$entry, $value| {
     postgresql::server::config_entry { $entry:
-      value => $value,
+      ensure => bool2str($value =~ Undef, 'absent', 'present'),
+      value  => $value,
     }
   }
 

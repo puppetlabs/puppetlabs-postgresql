@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::lib::devel', type: :class do
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0', 'major' => '8' },
+      },
     }
   end
 
@@ -32,10 +36,11 @@ describe 'postgresql::lib::devel', type: :class do
   describe 'should not link pg_config on RedHat with default version' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'CentOS',
-        operatingsystemrelease: '6.3',
-        operatingsystemmajrelease: '6',
+        os: {
+          family: 'RedHat',
+          name: 'CentOS',
+          release: { 'full' => '6.3', 'major' => '6' },
+        },
       }
     end
 
@@ -45,10 +50,11 @@ describe 'postgresql::lib::devel', type: :class do
   describe 'link pg_config on RedHat with non-default version' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'CentOS',
-        operatingsystemrelease: '6.3',
-        operatingsystemmajrelease: '6',
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { 'full' => '6.3', 'major' => '6' },
+        },
       }
     end
     let :pre_condition do
@@ -65,8 +71,10 @@ describe 'postgresql::lib::devel', type: :class do
   describe 'on Gentoo' do
     let :facts do
       {
-        osfamily: 'Gentoo',
-        operatingsystem: 'Gentoo',
+        os: {
+          family: 'Gentoo',
+          name: 'Gentoo',
+        },
       }
     end
     let :params do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::globals', type: :class do
@@ -11,10 +13,9 @@ describe 'postgresql::globals', type: :class do
             full: '8.0',
             major: '8',
           },
+          distro: { 'codename' => 'jessie' },
         },
         osfamily: 'Debian',
-        operatingsystem: 'Debian',
-        operatingsystemrelease: '8.0',
         lsbdistid: 'Debian',
         lsbdistcodename: 'jessie',
       }
@@ -42,9 +43,12 @@ describe 'postgresql::globals', type: :class do
   context 'on redhat family systems' do
     let(:facts) do
       {
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { 'full' => '7.1', 'major' => '7' },
+        },
         osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemrelease: '7.1',
       }
     end
 

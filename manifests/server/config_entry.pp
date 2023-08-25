@@ -5,7 +5,7 @@
 # @param path Path for postgresql.conf 
 #
 define postgresql::server::config_entry (
-  $ensure = 'present',
+  Enum['present', 'absent'] $ensure = 'present',
   $value  = undef,
   $path   = false
 ) {
@@ -75,8 +75,8 @@ define postgresql::server::config_entry (
   }
 
   if ! ($name in $requires_restart_until and (
-    ! $requires_restart_until[$name] or
-    versioncmp($postgresql::server::_version, $requires_restart_until[$name]) < 0
+      ! $requires_restart_until[$name] or
+      versioncmp($postgresql::server::_version, $requires_restart_until[$name]) < 0
   )) {
     Postgresql_conf {
       notify => Class['postgresql::server::reload'],
@@ -96,35 +96,35 @@ define postgresql::server::config_entry (
   # we stop the service completely. On RHEL 7 we either have to create
   # a systemd override for the port or update the sysconfig file, but this
   # is managed for us in postgresql::server::config.
-  if $::operatingsystem == 'Debian' or $::operatingsystem == 'Ubuntu' {
-    if $name == 'port' and ( $::operatingsystemrelease =~ /^6/ or $::operatingsystemrelease =~ /^10\.04/ ) {
-        exec { "postgresql_stop_${name}":
-          command => "service ${::postgresql::server::service_name} stop",
-          onlyif  => "service ${::postgresql::server::service_name} status",
-          unless  => "grep 'port = ${value}' ${::postgresql::server::postgresql_conf_path}",
-          path    => '/usr/sbin:/sbin:/bin:/usr/bin:/usr/local/bin',
-          before  => Postgresql_conf[$name],
-        }
+  if $facts['os']['name'] == 'Debian' or $facts['os']['name'] == 'Ubuntu' {
+    if $name == 'port' and $facts['os']['release']['major'] in ['6', '10.04'] {
+      exec { "postgresql_stop_${name}":
+        command => "service ${postgresql::server::service_name} stop",
+        onlyif  => "service ${postgresql::server::service_name} status",
+        unless  => "grep 'port = ${value}' ${postgresql::server::postgresql_conf_path}",
+        path    => '/usr/sbin:/sbin:/bin:/usr/bin:/usr/local/bin',
+        before  => Postgresql_conf[$name],
+      }
     }
     elsif $name == 'data_directory' {
       exec { "postgresql_stop_${name}":
-        command => "service ${::postgresql::server::service_name} stop",
-        onlyif  => "service ${::postgresql::server::service_name} status",
-        unless  => "grep \"data_directory = '${value}'\" ${::postgresql::server::postgresql_conf_path}",
+        command => "service ${postgresql::server::service_name} stop",
+        onlyif  => "service ${postgresql::server::service_name} status",
+        unless  => "grep \"data_directory = '${value}'\" ${postgresql::server::postgresql_conf_path}",
         path    => '/usr/sbin:/sbin:/bin:/usr/bin:/usr/local/bin',
         before  => Postgresql_conf[$name],
       }
     }
   }
-  if $::osfamily == 'RedHat' {
-    if ! ($::operatingsystemrelease =~ /^7|^8/ or $::operatingsystem == 'Fedora') {
+  if $facts['os']['family'] == 'RedHat' {
+    if ! ($facts['os']['release']['major'] in ['7', '8'] or $facts['os']['name'] == 'Fedora') {
       if $name == 'port' {
         # We need to force postgresql to stop before updating the port
         # because puppet becomes confused and is unable to manage the
         # service appropriately.
         exec { "postgresql_stop_${name}":
-          command => "service ${::postgresql::server::service_name} stop",
-          onlyif  => "service ${::postgresql::server::service_name} status",
+          command => "service ${postgresql::server::service_name} stop",
+          onlyif  => "service ${postgresql::server::service_name} status",
           unless  => "grep 'PGPORT=${value}' /etc/sysconfig/pgsql/postgresql",
           path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
           require => File['/etc/sysconfig/pgsql/postgresql'],
@@ -142,8 +142,8 @@ define postgresql::server::config_entry (
         # We need to force postgresql to stop before updating the data directory
         # otherwise init script breaks
         exec { "postgresql_${name}":
-          command => "service ${::postgresql::server::service_name} stop",
-          onlyif  => "service ${::postgresql::server::service_name} status",
+          command => "service ${postgresql::server::service_name} stop",
+          onlyif  => "service ${postgresql::server::service_name} status",
           unless  => "grep 'PGDATA=${value}' /etc/sysconfig/pgsql/postgresql",
           path    => '/sbin:/bin:/usr/bin:/usr/local/bin',
           require => File['/etc/sysconfig/pgsql/postgresql'],
@@ -161,18 +161,10 @@ define postgresql::server::config_entry (
     }
   }
 
-  case $ensure {
-    /present|absent/: {
-      postgresql_conf { $name:
-        ensure  => $ensure,
-        target  => $target,
-        value   => $value,
-        require => Class['postgresql::server::initdb'],
-      }
-    }
-
-    default: {
-      fail("Unknown value for ensure '${ensure}'.")
-    }
+  postgresql_conf { $name:
+    ensure  => $ensure,
+    target  => $target,
+    value   => $value,
+    require => Class['postgresql::server::initdb'],
   }
 }

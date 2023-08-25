@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
-describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(os[:family]) do
+describe 'postgresql_conn_validator' do
   let(:install_pp) do
     <<-MANIFEST
       class { 'postgresql::server':
         postgres_password => 'space password',
       }->
       postgresql::server::role { 'testuser':
-        password_hash => postgresql_password('testuser','test1'),
+        password_hash => postgresql::postgresql_password('testuser','test1'),
       }->
       postgresql::server::database { 'testdb':
         owner   => 'testuser',
@@ -34,7 +36,7 @@ describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(os[
         }
       MANIFEST
 
-      idempotent_apply(default, pp)
+      idempotent_apply(pp)
     end
 
     it 'works with connect settings hash' do
@@ -52,7 +54,7 @@ describe 'postgresql_conn_validator', unless: UNSUPPORTED_PLATFORMS.include?(os[
         }
       MANIFEST
 
-      idempotent_apply(default, pp)
+      idempotent_apply(pp)
     end
 
     it 'fails gracefully' do

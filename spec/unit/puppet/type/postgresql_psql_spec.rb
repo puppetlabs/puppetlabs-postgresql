@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:postgresql_psql) do # rubocop:disable RSpec/MultipleDescribes
   context 'when validating attributes' do
     [:name, :unless, :db, :psql_path, :psql_user, :psql_group, :connect_settings].each do |attr|
-      it "should have a #{attr} parameter" do
+      it "has a #{attr} parameter" do
         expect(Puppet::Type.type(:postgresql_psql).attrtype(attr)).to eq(:param)
       end
     end
 
     [:command].each do |attr|
-      it "should have a #{attr} property" do
+      it "has a #{attr} property" do
         expect(Puppet::Type.type(:postgresql_psql).attrtype(attr)).to eq(:property)
       end
     end
@@ -164,7 +166,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
   end
 
   describe "#should_run_sql with matching 'unless'" do
-    before(:each) { expect(subject.parameter(:unless)).to receive(:matches).with('SELECT something').and_return(true) } # rubocop:disable RSpec/ExpectInHook
+    before(:each) { expect(subject.parameter(:unless)).to receive(:matches).with('SELECT something').and_return(true) }
 
     [true, :true].each do |refreshonly|
       context "refreshonly => #{refreshonly.inspect}" do
@@ -206,7 +208,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
   end
 
   describe "#should_run_sql when not matching 'unless'" do
-    before(:each) { expect(subject.parameter(:unless)).to receive(:matches).with('SELECT something').and_return(false) } # rubocop:disable RSpec/ExpectInHook
+    before(:each) { expect(subject.parameter(:unless)).to receive(:matches).with('SELECT something').and_return(false) }
 
     [true, :true].each do |refreshonly|
       context "refreshonly => #{refreshonly.inspect}" do

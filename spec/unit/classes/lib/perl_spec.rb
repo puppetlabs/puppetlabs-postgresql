@@ -1,12 +1,16 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::lib::perl', type: :class do
   describe 'on a redhat based os' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemrelease: '6.4',
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { 'full' => '6.4', 'major' => '6' },
+        },
       }
     end
 
@@ -21,9 +25,11 @@ describe 'postgresql::lib::perl', type: :class do
   describe 'on a debian based os' do
     let :facts do
       {
-        osfamily: 'Debian',
-        operatingsystem: 'Debian',
-        operatingsystemrelease: '8.0',
+        os: {
+          family: 'Debian',
+          name: 'Debian',
+          release: { 'full' => '8.0', 'major' => '8' },
+        },
       }
     end
 

@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::client', type: :class do
   let :facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0', 'major' => '8' },
+      },
     }
   end
 
@@ -37,6 +41,18 @@ describe 'postgresql::client', type: :class do
     it 'creates package with postgresql tag' do
       is_expected.to contain_package('postgresql-client').with(tag: 'puppetlabs-postgresql')
     end
+  end
+
+  describe 'with manage_dnf_module true' do
+    let(:pre_condition) do
+      <<-PUPPET
+      class { 'postgresql::globals':
+        manage_dnf_module => true,
+      }
+      PUPPET
+    end
+
+    it { is_expected.to contain_package('postgresql dnf module').that_comes_before('Package[postgresql-client]') }
   end
 
   describe 'with client package name explicitly set undef' do

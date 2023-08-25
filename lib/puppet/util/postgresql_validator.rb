@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet::Util
   # postgresql_validator.rb
   class PostgresqlValidator
@@ -8,40 +10,41 @@ module Puppet::Util
     end
 
     def build_psql_cmd
-      final_cmd = []
+      cmd = [@resource[:psql_path], '--tuples-only', '--quiet', '--no-psqlrc']
 
-      cmd_init = "#{@resource[:psql_path]} --tuples-only --quiet --no-psqlrc"
-
-      final_cmd.push cmd_init
-
-      cmd_parts = {
-        host: "--host #{@resource[:host]}",
-        port: "--port #{@resource[:port]}",
-        db_username: "--username #{@resource[:db_username]}",
-        db_name: "--dbname #{@resource[:db_name]}",
-        command: "--command '#{@resource[:command]}'",
+      args = {
+        host: '--host',
+        port: '--port',
+        db_username: '--username',
+        db_name: '--dbname',
+        command: '--command',
       }
 
-      cmd_parts.each do |k, v|
-        final_cmd.push v if @resource[k]
+      args.each do |k, v|
+        if @resource[k]
+          cmd.push v
+          cmd.push @resource[k]
+        end
       end
 
-      final_cmd.join ' '
+      cmd
     end
 
-    def parse_connect_settings
-      c_settings = @resource[:connect_settings] || {}
-      c_settings['PGPASSWORD'] = @resource[:db_password] if @resource[:db_password]
-      c_settings.map { |k, v| "#{k}=#{v}" }
+    def connect_settings
+      result = @resource[:connect_settings] || {}
+      result['PGPASSWORD'] = @resource[:db_password] if @resource[:db_password]
+      result
     end
 
     def attempt_connection(sleep_length, tries)
       (0..tries - 1).each do |_try|
         Puppet.debug "PostgresqlValidator.attempt_connection: Attempting connection to #{@resource[:db_name]}"
-        Puppet.debug "PostgresqlValidator.attempt_connection: #{build_validate_cmd}"
-        result = execute_command
+        cmd = build_psql_cmd
+        Puppet.debug "PostgresqlValidator.attempt_connection: #{cmd.inspect}"
+        result = Execution.execute(cmd, custom_environment: connect_settings, uid: @resource[:run_as])
+
         if result && !result.empty?
-          Puppet.debug "PostgresqlValidator.attempt_connection: Connection to #{@resource[:db_name] || parse_connect_settings.select { |elem| elem.match %r{PGDATABASE} }} successful!"
+          Puppet.debug "PostgresqlValidator.attempt_connection: Connection to #{@resource[:db_name] || connect_settings.select { |elem| elem.include?('PGDATABASE') }} successful!"
           return true
         else
           Puppet.warning "PostgresqlValidator.attempt_connection: Sleeping for #{sleep_length} seconds"
@@ -49,16 +52,6 @@ module Puppet::Util
         end
       end
       false
-    end
-
-    private
-
-    def execute_command
-      Execution.execute(build_validate_cmd, uid: @resource[:run_as])
-    end
-
-    def build_validate_cmd
-      "#{parse_connect_settings.join(' ')} #{build_psql_cmd} "
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'postgresql::server::grant_role', type: :define do
@@ -6,12 +8,16 @@ describe 'postgresql::server::grant_role', type: :define do
   end
 
   let(:facts) do
-    { osfamily: 'Debian',
-      operatingsystem: 'Debian',
-      operatingsystemrelease: '8.0',
-      kernel: 'Linux', concat_basedir: tmpfilename('postgis'),
+    {
+      os: {
+        family: 'Debian',
+        name: 'Debian',
+        release: { 'full' => '8.0', 'major' => '8' },
+      },
+      kernel: 'Linux',
       id: 'root',
-      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' }
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+    }
   end
 
   let(:title) { 'test' }
@@ -27,7 +33,7 @@ describe 'postgresql::server::grant_role', type: :define do
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}")
         .with(command: "GRANT \"#{params[:group]}\" TO \"#{params[:role]}\"",
-              unless: "SELECT 1 WHERE EXISTS (SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = '#{params[:group]}' AND r_role.rolname = '#{params[:role]}') = true") # rubocop:disable Metrics/LineLength
+              unless: "SELECT 1 WHERE EXISTS (SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = '#{params[:group]}' AND r_role.rolname = '#{params[:role]}') = true") # rubocop:disable Layout/LineLength
         .that_requires('Class[postgresql::server]')
     }
   end
@@ -42,7 +48,7 @@ describe 'postgresql::server::grant_role', type: :define do
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}")
         .with(command: "GRANT \"#{params[:group]}\" TO \"#{params[:role]}\"",
-              unless: "SELECT 1 WHERE EXISTS (SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = '#{params[:group]}' AND r_role.rolname = '#{params[:role]}') = true", # rubocop:disable Metrics/LineLength
+              unless: "SELECT 1 WHERE EXISTS (SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = '#{params[:group]}' AND r_role.rolname = '#{params[:role]}') = true", # rubocop:disable Layout/LineLength
               db: params[:psql_db], psql_user: params[:psql_user],
               port: params[:port]).that_requires('Class[postgresql::server]')
     }
@@ -56,7 +62,7 @@ describe 'postgresql::server::grant_role', type: :define do
     it {
       is_expected.to contain_postgresql_psql("grant_role:#{title}")
         .with(command: "REVOKE \"#{params[:group]}\" FROM \"#{params[:role]}\"",
-              unless: "SELECT 1 WHERE EXISTS (SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = '#{params[:group]}' AND r_role.rolname = '#{params[:role]}') != true") # rubocop:disable Metrics/LineLength
+              unless: "SELECT 1 WHERE EXISTS (SELECT 1 FROM pg_roles AS r_role JOIN pg_auth_members AS am ON r_role.oid = am.member JOIN pg_roles AS r_group ON r_group.oid = am.roleid WHERE r_group.rolname = '#{params[:group]}' AND r_role.rolname = '#{params[:role]}') != true") # rubocop:disable Layout/LineLength
         .that_requires('Class[postgresql::server]')
     }
   end

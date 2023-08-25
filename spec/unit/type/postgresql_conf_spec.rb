@@ -1,4 +1,6 @@
 #! /usr/bin/env ruby # rubocop:disable Lint/ScriptPermission
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:postgresql_conf) do
@@ -22,13 +24,13 @@ describe Puppet::Type.type(:postgresql_conf) do
 
   describe 'when validating attributes' do
     [:name, :provider].each do |param|
-      it "should have a #{param} parameter" do
+      it "has a #{param} parameter" do
         expect(described_class.attrtype(param)).to eq(:param)
       end
     end
 
     [:value, :target].each do |property|
-      it "should have a #{property} property" do
+      it "has a #{property} property" do
         expect(described_class.attrtype(property)).to eq(:property)
       end
     end
