@@ -29,7 +29,7 @@ define postgresql::server::role (
   Boolean                                             $createdb         = false,
   Boolean                                             $createrole       = false,
   String[1]                                           $db               = $postgresql::server::default_database,
-  Optional[Variant[String[1], Stdlib::Port, Integer]] $port             = undef,
+  Variant[String[1], Stdlib::Port, Integer]           $port             = $postgresql::server::port,
   Boolean                                             $login            = true,
   Boolean                                             $inherit          = true,
   Boolean                                             $superuser        = false,
@@ -50,15 +50,11 @@ define postgresql::server::role (
   } else {
     $password_hash
   }
-  #
-  # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
-  #
-  if $port != undef {
+
+  if $connect_settings != undef and 'PGPORT' in $connect_settings {
     $port_override = $port
-  } elsif $connect_settings != undef and 'PGPORT' in $connect_settings {
-    $port_override = undef
   } else {
-    $port_override = $postgresql::server::port
+    $port_override = $port
   }
 
   # If possible use the version of the remote database, otherwise

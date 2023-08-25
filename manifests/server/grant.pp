@@ -12,7 +12,7 @@
 # @param object_arguments Specifies any arguments to be passed alongisde the access grant.
 # @param psql_db Specifies the database to execute the grant against. This should not ordinarily be changed from the default
 # @param psql_user Sets the OS user to run psql.
-# @param port Port to use when connecting.
+# @param port Specifies the port for the PostgreSQL server port to connect to, default is 5432.
 # @param onlyif_exists Create grant only if doesn't exist
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param ensure Specifies whether to grant or revoke the privilege. Default is to grant the privilege. Valid values: 'present', 'absent'.
@@ -74,15 +74,10 @@ define postgresql::server::grant (
     $_object_name = $object_name
   }
 
-  #
-  # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
-  #
-  if $port != undef {
+  if $connect_settings != undef and 'PGPORT' in $connect_settings {
     $port_override = $port
-  } elsif $connect_settings != undef and 'PGPORT' in $connect_settings {
-    $port_override = undef
   } else {
-    $port_override = $postgresql::server::port
+    $port_override = $port
   }
 
   ## Munge the input values

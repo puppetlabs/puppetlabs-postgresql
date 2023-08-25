@@ -18,7 +18,7 @@
 # @param package_ensure
 #   Overrides default package deletion behavior. By default, the package specified with package_name is installed when the extension is
 #   activated and removed when the extension is deactivated. To override this behavior, set the ensure value for the package.
-# @param port Port to use when connecting.
+# @param port Specifies the port for the PostgreSQL server port to connect to, default is 5432.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param database_resource_name Specifies the resource name of the DB being managed. Defaults to the parameter $database, if left blank.
 define postgresql::server::extension (
@@ -29,7 +29,7 @@ define postgresql::server::extension (
   Optional[String[1]]                                 $version                = undef,
   Enum['present', 'absent']                           $ensure                 = 'present',
   Optional[String[1]]                                 $package_name           = undef,
-  Optional[Variant[String[1], Stdlib::Port, Integer]] $port                   = undef,
+  Variant[String[1], Stdlib::Port, Integer]           $port                   = $postgresql::server::port,
   Hash                                                $connect_settings       = postgresql::default('default_connect_settings'),
   String[1]                                           $database_resource_name = $database,
 ) {
@@ -74,24 +74,17 @@ define postgresql::server::extension (
     }
   }
 
-  #
-  # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
-  #
-  if $port != undef {
+  if $connect_settings != undef and 'PGPORT' in $connect_settings {
     $port_override = $port
-  } elsif $connect_settings != undef and 'PGPORT' in $connect_settings {
-    $port_override = undef
   } else {
-    $port_override = $postgresql::server::port
+    $port_override = $port
   }
 
   postgresql_psql { "${database}: ${command}":
-
     psql_user        => $user,
     psql_group       => $group,
     psql_path        => $psql_path,
     connect_settings => $connect_settings,
-
     db               => $database,
     port             => $port_override,
     command          => $command,

@@ -9,6 +9,7 @@
 # @param locale Overrides the locale during creation of the database.
 # @param istemplate Defines the database as a template if set to true.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param port Specifies the port for the PostgreSQL server port to connect to, default is 5432.
 define postgresql::server::database (
   Optional[String[1]] $comment          = undef,
   String[1]           $dbname           = $title,
@@ -19,6 +20,7 @@ define postgresql::server::database (
   Optional[String[1]] $locale           = $postgresql::server::locale,
   Boolean             $istemplate       = false,
   Hash                $connect_settings = $postgresql::server::default_connect_settings,
+  Variant[String[1], Stdlib::Port, Integer] $port = $postgresql::params::port,
 ) {
   $createdb_path = $postgresql::server::createdb_path
   $user          = $postgresql::server::user
@@ -34,11 +36,10 @@ define postgresql::server::database (
     $version = $postgresql::server::_version
   }
 
-  # If the connection settings do not contain a port, then use the local server port
   if $connect_settings != undef and 'PGPORT' in $connect_settings {
-    $port = undef
+    $port_override = $port
   } else {
-    $port = $postgresql::server::port
+    $port_override = $port
   }
 
   # Set the defaults for the postgresql_psql resource
@@ -47,7 +48,7 @@ define postgresql::server::database (
     psql_user        => $user,
     psql_group       => $group,
     psql_path        => $psql_path,
-    port             => $port,
+    port             => $port_override,
     connect_settings => $connect_settings,
   }
 

@@ -1,12 +1,12 @@
 # @summary Define for reassigning the ownership of objects within a database.
 # @note
 #   This enables us to force the a particular ownership for objects within a database
-# 
+#
 # @param old_role Specifies the role or user who is the current owner of the objects in the specified db
 # @param new_role Specifies the role or user who will be the new owner of these objects
 # @param db Specifies the database to which the 'REASSIGN OWNED' will be applied
 # @param psql_user Specifies the OS user for running psql.
-# @param port Port to use when connecting.
+# @param port Specifies the port for the PostgreSQL server port to connect to, default is 5432.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 define postgresql::server::reassign_owned_by (
   String $old_role,
@@ -21,15 +21,10 @@ define postgresql::server::reassign_owned_by (
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
 
-  #
-  # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
-  #
-  if $port != undef {
+  if $connect_settings != undef and 'PGPORT' in $connect_settings {
     $port_override = $port
-  } elsif $connect_settings != undef and 'PGPORT' in $connect_settings {
-    $port_override = undef
   } else {
-    $port_override = $postgresql::server::port
+    $port_override = $port
   }
 
   $onlyif = "SELECT tablename FROM pg_catalog.pg_tables WHERE

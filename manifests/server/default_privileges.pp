@@ -10,7 +10,7 @@
 # @param psql_db Defines the database to execute the grant against. This should not ordinarily be changed from the default.
 # @param psql_user Specifies the OS user for running psql. Default value: The default user for the module, usually 'postgres'.
 # @param psql_path Specifies the OS user for running psql. Default value: The default user for the module, usually 'postgres'.
-# @param port Specifies the port to access the server. Default value: The default user for the module, usually '5432'.
+# @param port Specifies the port for the PostgreSQL server port to connect to, default is 5432.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param group Specifies the user group to which the privileges will be granted.
 define postgresql::server::default_privileges (
@@ -59,15 +59,10 @@ define postgresql::server::default_privileges (
     }
   }
 
-  #
-  # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
-  #
-  if $port != undef {
+  if $connect_settings != undef and 'PGPORT' in $connect_settings {
     $port_override = $port
-  } elsif $connect_settings != undef and 'PGPORT' in $connect_settings {
-    $port_override = undef
   } else {
-    $port_override = $postgresql::server::port
+    $port_override = $port
   }
 
   if $target_role != undef {
