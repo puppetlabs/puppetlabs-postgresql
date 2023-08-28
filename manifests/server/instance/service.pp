@@ -25,7 +25,7 @@ define postgresql::server::instance::service (
   Optional[String[1]]                          $service_provider = $postgresql::server::service_provider,
   String[1]                                    $service_status   = $postgresql::server::service_status,
   String[1]                                    $user             = $postgresql::server::user,
-  Variant[String[1], Stdlib::Port, Integer]    $port             = $postgresql::server::port,
+  Variant[String[1], Stdlib::Port]             $port             = $postgresql::server::port,
   String[1]                                    $default_database = $postgresql::server::default_database,
   Variant[String[1], Stdlib::Absolutepath]     $psql_path        = $postgresql::server::psql_path,
   Hash                                         $connect_settings = $postgresql::server::default_connect_settings,

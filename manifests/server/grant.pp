@@ -41,7 +41,7 @@ define postgresql::server::grant (
   Array[String[1],0]                             $object_arguments  = [],
   String                                         $psql_db           = $postgresql::server::default_database,
   String                                         $psql_user         = $postgresql::server::user,
-  Variant[String[1], Stdlib::Port, Integer]      $port              = $postgresql::server::port,
+  Variant[String[1], Stdlib::Port]               $port              = $postgresql::server::port,
   Boolean                                        $onlyif_exists     = false,
   Hash                                           $connect_settings  = $postgresql::server::default_connect_settings,
   Enum['present', 'absent']                      $ensure            = 'present',

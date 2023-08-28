@@ -29,7 +29,7 @@ define postgresql::server::role (
   Boolean                                             $createdb         = false,
   Boolean                                             $createrole       = false,
   String[1]                                           $db               = $postgresql::server::default_database,
-  Optional[Variant[String[1], Stdlib::Port, Integer]] $port             = undef,
+  Optional[Variant[String[1], Stdlib::Port]]          $port             = undef,
   Boolean                                             $login            = true,
   Boolean                                             $inherit          = true,
   Boolean                                             $superuser        = false,

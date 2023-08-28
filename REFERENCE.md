@@ -1031,7 +1031,7 @@ Default value: `$postgresql::params::listen_addresses`
 
 ##### <a name="-postgresql--server--port"></a>`port`
 
-Data type: `Variant[String[1], Stdlib::Port, Integer]`
+Data type: `Variant[String[1], Stdlib::Port]`
 
 Specifies the port for the PostgreSQL server to listen on.
 Note: The same port number is used for all IP addresses the server listens on.
@@ -1946,7 +1946,7 @@ Default value: `$postgresql::server::psql_path`
 
 ##### <a name="-postgresql--server--default_privileges--port"></a>`port`
 
-Data type: `Variant[String[1], Stdlib::Port, Integer]`
+Data type: `Variant[String[1], Stdlib::Port]`
 
 Specifies the port to access the server. Default value: The default user for the module, usually '5432'.
 
@@ -2051,7 +2051,7 @@ Default value: `undef`
 
 ##### <a name="-postgresql--server--extension--port"></a>`port`
 
-Data type: `Optional[Variant[String[1], Stdlib::Port, Integer]]`
+Data type: `Optional[Variant[String[1], Stdlib::Port]]`
 
 Port to use when connecting.
 
@@ -2178,7 +2178,7 @@ Default value: `$postgresql::server::user`
 
 ##### <a name="-postgresql--server--grant--port"></a>`port`
 
-Data type: `Variant[String[1], Stdlib::Port, Integer]`
+Data type: `Variant[String[1], Stdlib::Port]`
 
 Port to use when connecting.
 
@@ -2280,7 +2280,7 @@ Default value: `$postgresql::server::user`
 
 ##### <a name="-postgresql--server--grant_role--port"></a>`port`
 
-Data type: `Variant[String[1], Stdlib::Port, Integer]`
+Data type: `Variant[String[1], Stdlib::Port]`
 
 Port to use when connecting.
 
@@ -2361,7 +2361,7 @@ Default value: `$postgresql::server::listen_addresses`
 
 ##### <a name="-postgresql--server--instance--config--port"></a>`port`
 
-Data type: `Variant[String[1], Stdlib::Port, Integer]`
+Data type: `Variant[String[1], Stdlib::Port]`
 
 Specifies the port for the PostgreSQL server to listen on.
 Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems,
@@ -2785,7 +2785,7 @@ Default value: `$postgresql::server::psql_path`
 
 ##### <a name="-postgresql--server--instance--late_initdb--port"></a>`port`
 
-Data type: `Variant[String[1], Stdlib::Port, Integer]`
+Data type: `Variant[String[1], Stdlib::Port]`
 
 Specifies the port for the PostgreSQL server to listen on.
 Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems,
@@ -2844,7 +2844,7 @@ Default value: `$postgresql::server::psql_path`
 
 ##### <a name="-postgresql--server--instance--passwd--port"></a>`port`
 
-Data type: `Variant[String[1], Stdlib::Port, Integer]`
+Data type: `Variant[String[1], Stdlib::Port]`
 
 Specifies the port for the PostgreSQL server to listen on.
 Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems,
@@ -2982,7 +2982,7 @@ Default value: `$postgresql::server::user`
 
 ##### <a name="-postgresql--server--instance--service--port"></a>`port`
 
-Data type: `Variant[String[1], Stdlib::Port, Integer]`
+Data type: `Variant[String[1], Stdlib::Port]`
 
 Specifies the port for the PostgreSQL server to listen on.
 Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems,
@@ -3219,7 +3219,7 @@ Default value: `$postgresql::server::user`
 
 ##### <a name="-postgresql--server--reassign_owned_by--port"></a>`port`
 
-Data type: `Variant[String[1], Stdlib::Port, Integer]`
+Data type: `Variant[String[1], Stdlib::Port]`
 
 Port to use when connecting.
 
@@ -3465,7 +3465,7 @@ Default value: `$postgresql::server::default_database`
 
 ##### <a name="-postgresql--server--role--port"></a>`port`
 
-Data type: `Optional[Variant[String[1], Stdlib::Port, Integer]]`
+Data type: `Optional[Variant[String[1], Stdlib::Port]]`
 
 Port to use when connecting.
 
@@ -3700,7 +3700,7 @@ Default value: `undef`
 
 ##### <a name="-postgresql--server--table_grant--port"></a>`port`
 
-Data type: `Optional[Variant[String[1], Stdlib::Port, Integer]]`
+Data type: `Optional[Variant[String[1], Stdlib::Port]]`
 
 Port to use when connecting.
 
