@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v9.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v9.2.0) - 2023-08-28
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.1.0...v9.2.0)
+
+### Added
+
+- Add Debian 12 compatibility [#1460](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1460) ([bastelfreak](https://github.com/bastelfreak))
+- puppet/systemd: Allow 5.x & puppetlabs/concat: Allow 9.x [#1448](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1448) ([bastelfreak](https://github.com/bastelfreak))
+- Add default version for Fedora 37, 38 [#1421](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1421) ([lweller](https://github.com/lweller))
+- Defaulting password encryption for version above 14 [#1406](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1406) ([cruelsmith](https://github.com/cruelsmith))
+
+### Changed
+- puppetlabs/stdlib: Require 9.x [#1449](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1449) ([bastelfreak](https://github.com/bastelfreak))
+
+### Fixed
+
+- (CAT-1262)-updated legacy repo for SUSE [#1462](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1462) ([praj1001](https://github.com/praj1001))
+- Fix log directory config entry name [#1457](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1457) ([chillinger](https://github.com/chillinger))
+- Make anchors in defined resources unique [#1455](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1455) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+- implement key parameter for config_entry defined resource [#1454](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1454) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+- Fix default value for $service_status on ArchLinux [#1410](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1410) ([smortex](https://github.com/smortex))
+- Fix wrong Sensitive handling for updating role passwords [#1404](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1404) ([cruelsmith](https://github.com/cruelsmith))
+
+### Other
+
+- reassign_owned_by: Cleanup puppet-strings documentation [#1475](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1475) ([bastelfreak](https://github.com/bastelfreak))
+- port parameter: log warning when its a string [#1474](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1474) ([bastelfreak](https://github.com/bastelfreak))
+- pg_hba.conf: Introduce a newline after each rule [#1472](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1472) ([bastelfreak](https://github.com/bastelfreak))
+- port parameter: Cleanup datatype [#1471](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1471) ([bastelfreak](https://github.com/bastelfreak))
+- add missing parameters to initdb [#1451](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1451) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+
 ## [v9.1.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v9.1.0) - 2023-06-12
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.0.3...v9.1.0)
