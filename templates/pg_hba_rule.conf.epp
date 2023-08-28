@@ -13,3 +13,4 @@
 # Description: <%= $description %>
 # Order: <%= $order %>
 <%= $type %>	<%= $database %>	<%= $user %>	<%= $address %>	<%= $auth_method %>	<%= $auth_option %>
+
