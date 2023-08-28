@@ -25,14 +25,11 @@ define postgresql::server::instance::service (
   Optional[String[1]]                          $service_provider = $postgresql::server::service_provider,
   String[1]                                    $service_status   = $postgresql::server::service_status,
   String[1]                                    $user             = $postgresql::server::user,
-  Variant[String[1], Stdlib::Port]             $port             = $postgresql::server::port,
+  Stdlib::Port                                 $port             = $postgresql::server::port,
   String[1]                                    $default_database = $postgresql::server::default_database,
   Variant[String[1], Stdlib::Absolutepath]     $psql_path        = $postgresql::server::psql_path,
   Hash                                         $connect_settings = $postgresql::server::default_connect_settings,
 ) {
-  if $port =~ String {
-    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
-  }
   anchor { "postgresql::server::service::begin::${name}": }
 
   if $service_manage {

@@ -13,12 +13,9 @@ define postgresql::server::reassign_owned_by (
   String $new_role,
   String $db,
   String $psql_user                      = $postgresql::server::user,
-  Variant[String[1], Stdlib::Port] $port = $postgresql::server::port,
+  Stdlib::Port $port                     = $postgresql::server::port,
   Hash $connect_settings                 = $postgresql::server::default_connect_settings,
 ) {
-  if $port =~ String {
-    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
-  }
   $sql_command = "REASSIGN OWNED BY \"${old_role}\" TO \"${new_role}\""
 
   $group     = $postgresql::server::group
@@ -27,7 +24,7 @@ define postgresql::server::reassign_owned_by (
   #
   # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
   #
-  if $port != undef {
+  if $port {
     $port_override = $port
   } elsif $connect_settings != undef and 'PGPORT' in $connect_settings {
     $port_override = undef
