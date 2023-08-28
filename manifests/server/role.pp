@@ -45,6 +45,9 @@ define postgresql::server::role (
   Optional[Enum['md5', 'scram-sha-256']]              $hash             = undef,
   Optional[Variant[String[1], Integer]]               $salt             = undef,
 ) {
+  if $port =~ String {
+    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
+  }
   $password_hash_unsensitive = if $password_hash =~ Sensitive[String] {
     $password_hash.unwrap
   } else {

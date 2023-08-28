@@ -10,6 +10,9 @@ define postgresql::server::instance::systemd (
   Enum[present, absent] $drop_in_ensure     = 'present',
 
 ) {
+  if $port =~ String {
+    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
+  }
   # Template uses:
   # - $port
   # - $datadir

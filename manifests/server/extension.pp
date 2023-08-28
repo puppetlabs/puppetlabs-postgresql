@@ -33,6 +33,9 @@ define postgresql::server::extension (
   Hash                                                $connect_settings       = postgresql::default('default_connect_settings'),
   String[1]                                           $database_resource_name = $database,
 ) {
+  if $port =~ String {
+    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
+  }
   $user             = postgresql::default('user')
   $group            = postgresql::default('group')
   $psql_path        = postgresql::default('psql_path')
