@@ -70,7 +70,7 @@ define postgresql::server::instance::config (
   Boolean                                        $service_enable               = $postgresql::server::service_enable,
   Optional[String[1]]                            $log_line_prefix              = $postgresql::server::log_line_prefix,
   Optional[String[1]]                            $timezone                     = $postgresql::server::timezone,
-  Optional[Postgresql::Pg_password_encryption]   $password_encryption          = $postgresql::server::password_encryption,
+  Postgresql::Pg_password_encryption             $password_encryption          = $postgresql::server::password_encryption,
   Optional[String]                               $extra_systemd_config         = $postgresql::server::extra_systemd_config,
 ) {
   if ($manage_pg_hba_conf == true) {
@@ -105,7 +105,7 @@ define postgresql::server::instance::config (
           type        => 'host',
           user        => $user,
           address     => '127.0.0.1/32',
-          auth_method => 'md5',
+          auth_method => $password_encryption,
           order       => 3;
 
         "deny access to postgresql user for instance ${name}":
@@ -118,13 +118,13 @@ define postgresql::server::instance::config (
         "allow access to all users for instance ${name}":
           type        => 'host',
           address     => $ip_mask_allow_all_users,
-          auth_method => 'md5',
+          auth_method => $password_encryption,
           order       => 100;
 
         "allow access to ipv6 localhost for instance ${name}":
           type        => 'host',
           address     => '::1/128',
-          auth_method => 'md5',
+          auth_method => $password_encryption,
           order       => 101;
       }
     }
