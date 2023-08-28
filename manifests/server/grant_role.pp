@@ -13,7 +13,7 @@ define postgresql::server::grant_role (
   Enum['present', 'absent']                 $ensure           = 'present',
   String[1]                                 $psql_db          = $postgresql::server::default_database,
   String[1]                                 $psql_user        = $postgresql::server::user,
-  Variant[String[1], Stdlib::Port, Integer] $port             = $postgresql::server::port,
+  Variant[String[1], Stdlib::Port]          $port             = $postgresql::server::port,
   Hash                                      $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   case $ensure {

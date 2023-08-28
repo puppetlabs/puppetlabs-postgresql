@@ -19,7 +19,7 @@ define postgresql::server::table_grant (
   String[1]                                           $db,
   String[1]                                           $role,
   Optional[Enum['present', 'absent']]                 $ensure           = undef,
-  Optional[Variant[String[1], Stdlib::Port, Integer]] $port             = undef,
+  Optional[Variant[String[1], Stdlib::Port]]          $port             = undef,
   Optional[String[1]]                                 $psql_db          = undef,
   Optional[String[1]]                                 $psql_user        = undef,
   Optional[Hash]                                      $connect_settings = undef,

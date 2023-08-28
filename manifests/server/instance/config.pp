@@ -48,7 +48,7 @@ define postgresql::server::instance::config (
   String[1]                                      $ip_mask_deny_postgres_user   = $postgresql::server::ip_mask_deny_postgres_user,
   String[1]                                      $ip_mask_allow_all_users      = $postgresql::server::ip_mask_allow_all_users,
   Optional[Variant[String[1], Array[String[1]]]] $listen_addresses             = $postgresql::server::listen_addresses,
-  Variant[String[1], Stdlib::Port, Integer]      $port                         = $postgresql::server::port,
+  Variant[String[1], Stdlib::Port]               $port                         = $postgresql::server::port,
   Array[String[1]]                               $ipv4acls                     = $postgresql::server::ipv4acls,
   Array[String[1]]                               $ipv6acls                     = $postgresql::server::ipv6acls,
   Variant[String[1], Stdlib::Absolutepath]       $pg_hba_conf_path             = $postgresql::server::pg_hba_conf_path,

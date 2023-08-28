@@ -12,9 +12,9 @@ define postgresql::server::reassign_owned_by (
   String $old_role,
   String $new_role,
   String $db,
-  String $psql_user                               = $postgresql::server::user,
-  Variant[String[1], Stdlib::Port, Integer] $port = $postgresql::server::port,
-  Hash $connect_settings                          = $postgresql::server::default_connect_settings,
+  String $psql_user                      = $postgresql::server::user,
+  Variant[String[1], Stdlib::Port] $port = $postgresql::server::port,
+  Hash $connect_settings                 = $postgresql::server::default_connect_settings,
 ) {
   $sql_command = "REASSIGN OWNED BY \"${old_role}\" TO \"${new_role}\""
 
