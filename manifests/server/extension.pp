@@ -29,7 +29,7 @@ define postgresql::server::extension (
   Optional[String[1]]                                 $version                = undef,
   Enum['present', 'absent']                           $ensure                 = 'present',
   Optional[String[1]]                                 $package_name           = undef,
-  Optional[Variant[String[1], Stdlib::Port, Integer]] $port                   = undef,
+  Optional[Variant[String[1], Stdlib::Port]]          $port                   = undef,
   Hash                                                $connect_settings       = postgresql::default('default_connect_settings'),
   String[1]                                           $database_resource_name = $database,
 ) {
