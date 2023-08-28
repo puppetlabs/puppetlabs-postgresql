@@ -35,6 +35,9 @@ define postgresql::server::default_privileges (
   Variant[String[1], Stdlib::Absolutepath]  $psql_path         = $postgresql::server::psql_path,
   Optional[String]                          $target_role       = undef,
 ) {
+  if $port =~ String {
+    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
+  }
   # If possible use the version of the remote database, otherwise
   # fallback to our local DB version
   if $connect_settings != undef and 'DBVERSION' in $connect_settings {

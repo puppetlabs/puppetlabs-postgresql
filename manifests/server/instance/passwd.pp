@@ -22,6 +22,9 @@ define postgresql::server::instance::passwd (
   String[1]                                                   $module_workdir    = $postgresql::server::module_workdir,
   Optional[Variant[String[1], Sensitive[String[1]], Integer]] $postgres_password = $postgresql::server::postgres_password,
 ) {
+  if $port =~ String {
+    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
+  }
   $real_postgres_password = if $postgres_password =~ Sensitive {
     $postgres_password.unwrap
   } else {

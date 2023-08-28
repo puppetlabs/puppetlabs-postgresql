@@ -48,6 +48,9 @@ define postgresql::server::grant (
   String                                         $group             = $postgresql::server::group,
   Variant[String[1], Stdlib::Absolutepath]       $psql_path         = $postgresql::server::psql_path,
 ) {
+  if $port =~ String {
+    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
+  }
   case $ensure {
     default: {
       # default is 'present'

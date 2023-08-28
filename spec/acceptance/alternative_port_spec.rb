@@ -7,7 +7,7 @@ require 'spec_helper_acceptance'
 describe 'postgresql::server' do
   it 'on an alternative port' do
     pp = <<-MANIFEST
-    class { 'postgresql::server': port => '55433', manage_selinux => true }
+    class { 'postgresql::server': port => 55433, manage_selinux => true }
     MANIFEST
     if os[:family] == 'redhat' && os[:release].start_with?('8')
       apply_manifest(pp, expect_failures: false)

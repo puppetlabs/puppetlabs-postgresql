@@ -31,7 +31,7 @@ describe 'postgresql::server::grant_role' do
     let(:params) do
       super().merge(psql_db: 'postgres',
                     psql_user: 'postgres',
-                    port: '5432')
+                    port: 5432)
     end
 
     it {
