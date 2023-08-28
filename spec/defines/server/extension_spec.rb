@@ -198,7 +198,7 @@ describe 'postgresql::server::extension' do
         extension: 'pg_repack',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
-                            'PGPORT' => '1234' }
+                            'PGPORT' => 1234 }
       }
     end
 
@@ -222,7 +222,7 @@ describe 'postgresql::server::extension' do
         extension: 'pg_repack',
         connect_settings: { 'PGHOST' => 'postgres-db-server',
                             'DBVERSION' => '9.1',
-                            'PGPORT' => '1234' },
+                            'PGPORT' => 1234 },
         port: 5678
       }
     end
