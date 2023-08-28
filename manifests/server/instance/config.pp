@@ -48,7 +48,7 @@ define postgresql::server::instance::config (
   String[1]                                      $ip_mask_deny_postgres_user   = $postgresql::server::ip_mask_deny_postgres_user,
   String[1]                                      $ip_mask_allow_all_users      = $postgresql::server::ip_mask_allow_all_users,
   Optional[Variant[String[1], Array[String[1]]]] $listen_addresses             = $postgresql::server::listen_addresses,
-  Variant[String[1], Stdlib::Port]               $port                         = $postgresql::server::port,
+  Stdlib::Port                                   $port                         = $postgresql::server::port,
   Array[String[1]]                               $ipv4acls                     = $postgresql::server::ipv4acls,
   Array[String[1]]                               $ipv6acls                     = $postgresql::server::ipv6acls,
   Variant[String[1], Stdlib::Absolutepath]       $pg_hba_conf_path             = $postgresql::server::pg_hba_conf_path,
@@ -73,9 +73,6 @@ define postgresql::server::instance::config (
   Optional[Postgresql::Pg_password_encryption]   $password_encryption          = $postgresql::server::password_encryption,
   Optional[String]                               $extra_systemd_config         = $postgresql::server::extra_systemd_config,
 ) {
-  if $port =~ String {
-    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
-  }
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
     concat { $pg_hba_conf_path:

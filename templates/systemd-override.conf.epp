@@ -1,5 +1,5 @@
 <%- |
-  Variant[String[1], Stdlib::Port] $port,
+  Stdlib::Port $port,
   Stdlib::Absolutepath             $datadir,
   Optional[String[1]]              $extra_systemd_config,
 | -%>
