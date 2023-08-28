@@ -1,7 +1,7 @@
 # @summary Define for reassigning the ownership of objects within a database.
-# @note
-#   This enables us to force the a particular ownership for objects within a database
-# 
+#
+# @note This enables us to force the a particular ownership for objects within a database
+#
 # @param old_role Specifies the role or user who is the current owner of the objects in the specified db
 # @param new_role Specifies the role or user who will be the new owner of these objects
 # @param db Specifies the database to which the 'REASSIGN OWNED' will be applied
