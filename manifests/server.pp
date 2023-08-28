@@ -196,6 +196,9 @@ class postgresql::server (
   #Deprecated
   Optional[String[1]] $version = undef,
 ) inherits postgresql::params {
+  if $port =~ String {
+    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
+  }
   if $version != undef {
     warning('Passing "version" to postgresql::server is deprecated; please use postgresql::globals instead.')
     $_version = $version

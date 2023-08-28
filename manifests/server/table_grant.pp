@@ -25,6 +25,9 @@ define postgresql::server::table_grant (
   Optional[Hash]                                      $connect_settings = undef,
   Boolean                                             $onlyif_exists    = false,
 ) {
+  if $port =~ String {
+    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
+  }
   postgresql::server::grant { "table:${name}":
     ensure           => $ensure,
     role             => $role,

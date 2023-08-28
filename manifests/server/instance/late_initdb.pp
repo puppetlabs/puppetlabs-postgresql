@@ -19,6 +19,9 @@ define postgresql::server::instance::late_initdb (
   Variant[String[1], Stdlib::Port]          $port           = $postgresql::server::port,
   String[1]                                 $module_workdir = $postgresql::server::module_workdir,
 ) {
+  if $port =~ String {
+    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
+  }
   # Set the defaults for the postgresql_psql resource
   Postgresql_psql {
     psql_user  => $user,
