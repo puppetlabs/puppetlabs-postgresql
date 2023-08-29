@@ -26,7 +26,7 @@ describe 'postgresql::server' do
           type        => 'host',
           database    => 'mydb',
           user        => 'myuser',
-          auth_method => 'md5',
+          auth_method => $postgresql::server::password_encryption,
           address     => '192.0.2.100/32',
         },
       },
