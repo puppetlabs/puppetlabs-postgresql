@@ -5,7 +5,7 @@ require 'spec_helper_acceptance'
 describe 'postgresql::server::recovery', skip: 'IAC-1286' do
   describe 'should manage recovery' do
     before(:all) do
-      pre_run
+      LitmusHelper.instance.apply_manifest("class { 'postgresql::server': postgres_password => 'postgres' }", catch_failures: true)
     end
 
     after(:all) do

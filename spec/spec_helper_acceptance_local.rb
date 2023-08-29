@@ -26,10 +26,6 @@ def export_locales(locale)
   LitmusHelper.instance.run_shell('source ~/.bashrc')
 end
 
-def pre_run
-  LitmusHelper.instance.apply_manifest("class { 'postgresql::server': postgres_password => 'postgres' }", catch_failures: true)
-end
-
 def postgresql_version
   result = LitmusHelper.instance.run_shell('psql --version')
   result.stdout.match(%r{\s(\d{1,2}\.\d)})[1]
