@@ -189,7 +189,7 @@ define postgresql::server::instance::config (
       }
     }
 
-    stdlib::ensure_packages([$package_name])
+    ensure_packages([$package_name])
 
     $exec_command = ['/usr/sbin/semanage', 'port', '-a', '-t', 'postgresql_port_t', '-p', 'tcp', $port]
     $exec_unless = "/usr/sbin/semanage port -l | grep -qw ${port}"
