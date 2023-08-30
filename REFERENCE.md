@@ -181,7 +181,6 @@ The following parameters are available in the `postgresql::globals` class:
 * [`default_database`](#-postgresql--globals--default_database)
 * [`validcon_script_path`](#-postgresql--globals--validcon_script_path)
 * [`initdb_path`](#-postgresql--globals--initdb_path)
-* [`createdb_path`](#-postgresql--globals--createdb_path)
 * [`psql_path`](#-postgresql--globals--psql_path)
 * [`pg_hba_conf_path`](#-postgresql--globals--pg_hba_conf_path)
 * [`pg_ident_conf_path`](#-postgresql--globals--pg_ident_conf_path)
@@ -353,14 +352,6 @@ Default value: `undef`
 Data type: `Optional[Variant[String[1], Stdlib::Absolutepath]]`
 
 Path to the initdb command.
-
-Default value: `undef`
-
-##### <a name="-postgresql--globals--createdb_path"></a>`createdb_path`
-
-Data type: `Optional[Variant[String[1], Stdlib::Absolutepath]]`
-
-Deprecated. Path to the createdb command.
 
 Default value: `undef`
 
@@ -856,7 +847,6 @@ The following parameters are available in the `postgresql::server` class:
 * [`ipv4acls`](#-postgresql--server--ipv4acls)
 * [`ipv6acls`](#-postgresql--server--ipv6acls)
 * [`initdb_path`](#-postgresql--server--initdb_path)
-* [`createdb_path`](#-postgresql--server--createdb_path)
 * [`psql_path`](#-postgresql--server--psql_path)
 * [`pg_hba_conf_path`](#-postgresql--server--pg_hba_conf_path)
 * [`pg_ident_conf_path`](#-postgresql--server--pg_ident_conf_path)
@@ -1084,14 +1074,6 @@ Data type: `Variant[String[1], Stdlib::Absolutepath]`
 Specifies the path to the initdb command.
 
 Default value: `$postgresql::params::initdb_path`
-
-##### <a name="-postgresql--server--createdb_path"></a>`createdb_path`
-
-Data type: `Optional[Variant[String[1], Stdlib::Absolutepath]]`
-
-Deprecated. Specifies the path to the createdb command.
-
-Default value: `$postgresql::params::createdb_path`
 
 ##### <a name="-postgresql--server--psql_path"></a>`psql_path`
 

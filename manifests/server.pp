@@ -46,7 +46,6 @@
 # @param ipv6acls Lists strings for access control for connection method, users, databases, IPv6 addresses.
 #
 # @param initdb_path Specifies the path to the initdb command.
-# @param createdb_path Deprecated. Specifies the path to the createdb command.
 # @param psql_path Specifies the path to the psql command.
 # @param pg_hba_conf_path Specifies the path to your pg_hba.conf file.
 # @param pg_ident_conf_path Specifies the path to your pg_ident.conf file.
@@ -140,7 +139,6 @@ class postgresql::server (
   Array[String[1]]                                   $ipv6acls                     = $postgresql::params::ipv6acls,
 
   Variant[String[1], Stdlib::Absolutepath]           $initdb_path                  = $postgresql::params::initdb_path,
-  Optional[Variant[String[1], Stdlib::Absolutepath]] $createdb_path                = $postgresql::params::createdb_path,
   Variant[String[1], Stdlib::Absolutepath]           $psql_path                    = $postgresql::params::psql_path,
   Variant[String[1], Stdlib::Absolutepath]           $pg_hba_conf_path             = $postgresql::params::pg_hba_conf_path,
   Variant[String[1], Stdlib::Absolutepath]           $pg_ident_conf_path           = $postgresql::params::pg_ident_conf_path,
@@ -192,9 +190,6 @@ class postgresql::server (
   Enum['pg_dump']                                    $backup_provider              = $postgresql::params::backup_provider,
 ) inherits postgresql::params {
   $_version = $postgresql::params::version
-  if $createdb_path != undef {
-    warning('Passing "createdb_path" to postgresql::server is deprecated, it can be removed safely for the same behaviour')
-  }
 
   # Reload has its own ordering, specified by other defines
   class { 'postgresql::server::reload':
