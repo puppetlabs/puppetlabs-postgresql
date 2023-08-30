@@ -52,16 +52,11 @@ define postgresql::server::database (
 
   # Optionally set the locale switch. Older versions of createdb may not accept
   # --locale, so if the parameter is undefined its safer not to pass it.
-  if ($version != '8.1') {
-    $locale_option = $locale ? {
-      undef   => '',
-      default => "LC_COLLATE = '${locale}' LC_CTYPE = '${locale}'",
-    }
-    $public_revoke_privilege = 'CONNECT'
-  } else {
-    $locale_option = ''
-    $public_revoke_privilege = 'ALL'
+  $locale_option = $locale ? {
+    undef   => '',
+    default => "LC_COLLATE = '${locale}' LC_CTYPE = '${locale}'",
   }
+  $public_revoke_privilege = 'CONNECT'
 
   $template_option = $template ? {
     undef   => '',
@@ -96,14 +91,9 @@ define postgresql::server::database (
   }
 
   if $comment {
-    # The shobj_description function was only introduced with 8.2
-    $comment_information_function =  $version ? {
-      '8.1'   => 'obj_description',
-      default => 'shobj_description',
-    }
     Postgresql_psql["CREATE DATABASE \"${dbname}\""]
     -> postgresql_psql { "COMMENT ON DATABASE \"${dbname}\" IS '${comment}'":
-      unless => "SELECT 1 FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.${comment_information_function}(d.oid, 'pg_database') = '${comment}'", # lint:ignore:140chars
+      unless => "SELECT 1 FROM pg_catalog.pg_database d WHERE datname = '${dbname}' AND pg_catalog.shobj_description(d.oid, 'pg_database') = '${comment}'", # lint:ignore:140chars
       db     => $dbname,
     }
   }
