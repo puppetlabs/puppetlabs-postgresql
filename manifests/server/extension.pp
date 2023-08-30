@@ -77,9 +77,9 @@ define postgresql::server::extension (
   #
   # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
   #
-  if $port != undef {
+  if $port {
     $port_override = $port
-  } elsif $connect_settings != undef and 'PGPORT' in $connect_settings {
+  } elsif 'PGPORT' in $connect_settings {
     $port_override = undef
   } else {
     $port_override = $postgresql::server::port
