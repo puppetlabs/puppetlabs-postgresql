@@ -891,7 +891,6 @@ The following parameters are available in the `postgresql::server` class:
 * [`backup_enable`](#-postgresql--server--backup_enable)
 * [`backup_options`](#-postgresql--server--backup_options)
 * [`backup_provider`](#-postgresql--server--backup_provider)
-* [`version`](#-postgresql--server--version)
 * [`extra_systemd_config`](#-postgresql--server--extra_systemd_config)
 * [`auth_host`](#-postgresql--server--auth_host)
 * [`auth_local`](#-postgresql--server--auth_local)
@@ -1373,14 +1372,6 @@ Data type: `Enum['pg_dump']`
 Specifies the backup provider to use.
 
 Default value: `$postgresql::params::backup_provider`
-
-##### <a name="-postgresql--server--version"></a>`version`
-
-Data type: `Optional[String[1]]`
-
-Deprecated. Use postgresql::globals instead. Sets PostgreSQL version
-
-Default value: `undef`
 
 ##### <a name="-postgresql--server--extra_systemd_config"></a>`extra_systemd_config`
 
