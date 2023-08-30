@@ -133,7 +133,7 @@ class postgresql::server (
   String[1]                                          $default_database             = $postgresql::params::default_database,
   Hash                                               $default_connect_settings     = $postgresql::globals::default_connect_settings,
   Optional[Variant[String[1], Array[String[1]]]]     $listen_addresses             = $postgresql::params::listen_addresses,
-  Variant[String[1], Stdlib::Port]                   $port                         = $postgresql::params::port,
+  Stdlib::Port                                       $port                         = $postgresql::params::port,
   String[1]                                          $ip_mask_deny_postgres_user   = $postgresql::params::ip_mask_deny_postgres_user,
   String[1]                                          $ip_mask_allow_all_users      = $postgresql::params::ip_mask_allow_all_users,
   Array[String[1]]                                   $ipv4acls                     = $postgresql::params::ipv4acls,
@@ -191,11 +191,7 @@ class postgresql::server (
   Hash                                               $backup_options               = {},
   Enum['pg_dump']                                    $backup_provider              = $postgresql::params::backup_provider,
 ) inherits postgresql::params {
-  if $port =~ String {
-    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
-  }
   $_version = $postgresql::params::version
-
   if $createdb_path != undef {
     warning('Passing "createdb_path" to postgresql::server is deprecated, it can be removed safely for the same behaviour')
   }
