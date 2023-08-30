@@ -68,13 +68,13 @@ class postgresql::backup::pg_dump (
 ) {
   # Install required packages
   if $package_name {
-    ensure_packages($package_name)
+    stdlib::ensure_packages($package_name)
   }
   if $install_cron {
     if $facts['os']['family'] == 'RedHat' {
-      ensure_packages('cronie')
+      stdlib::ensure_packages('cronie')
     } elsif $facts['os']['family'] != 'FreeBSD' {
-      ensure_packages('cron')
+      stdlib::ensure_packages('cron')
     }
   }
 
