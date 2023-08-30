@@ -20,7 +20,6 @@ define postgresql::server::database (
   Boolean             $istemplate       = false,
   Hash                $connect_settings = $postgresql::server::default_connect_settings,
 ) {
-  $createdb_path = $postgresql::server::createdb_path
   $user          = $postgresql::server::user
   $group         = $postgresql::server::group
   $psql_path     = $postgresql::server::psql_path
@@ -77,10 +76,6 @@ define postgresql::server::database (
   $tablespace_option = $tablespace ? {
     undef   => '',
     default => "TABLESPACE \"${tablespace}\"",
-  }
-
-  if $createdb_path != undef {
-    warning('Passing "createdb_path" to postgresql::database is deprecated, it can be removed safely for the same behaviour')
   }
 
   postgresql_psql { "CREATE DATABASE \"${dbname}\"":

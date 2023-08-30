@@ -26,7 +26,6 @@
 # @param validcon_script_path Scipt path for the connection validation check.
 #
 # @param initdb_path Path to the initdb command.
-# @param createdb_path Deprecated. Path to the createdb command.
 # @param psql_path Sets the path to the psql command.
 # @param pg_hba_conf_path Specifies the path to your pg_hba.conf file.
 # @param pg_ident_conf_path Specifies the path to your pg_ident.conf file.
@@ -124,7 +123,6 @@ class postgresql::globals (
   Optional[String[1]] $validcon_script_path        = undef,
 
   Optional[Variant[String[1], Stdlib::Absolutepath]] $initdb_path                 = undef,
-  Optional[Variant[String[1], Stdlib::Absolutepath]] $createdb_path               = undef,
   Optional[Variant[String[1], Stdlib::Absolutepath]] $psql_path                   = undef,
   Optional[Variant[String[1], Stdlib::Absolutepath]] $pg_hba_conf_path            = undef,
   Optional[Variant[String[1], Stdlib::Absolutepath]] $pg_ident_conf_path          = undef,
