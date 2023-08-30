@@ -27,14 +27,14 @@ define postgresql::server::database (
 
   # If possible use the version of the remote database, otherwise
   # fallback to our local DB version
-  if $connect_settings != undef and 'DBVERSION' in $connect_settings {
+  if 'DBVERSION' in $connect_settings {
     $version = $connect_settings['DBVERSION']
   } else {
     $version = $postgresql::server::_version
   }
 
   # If the connection settings do not contain a port, then use the local server port
-  if $connect_settings != undef and 'PGPORT' in $connect_settings {
+  if 'PGPORT' in $connect_settings {
     $port = undef
   } else {
     $port = $postgresql::server::port
