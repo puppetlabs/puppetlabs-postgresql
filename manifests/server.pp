@@ -106,8 +106,6 @@
 # @param backup_options A hash of options that should be passed through to the backup provider.
 # @param backup_provider Specifies the backup provider to use.
 #
-# @param version Deprecated. Use postgresql::globals instead. Sets PostgreSQL version
-#
 # @param extra_systemd_config
 #   Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
 # @param auth_host auth method used by default for host authorization
@@ -192,19 +190,11 @@ class postgresql::server (
   Boolean                                            $backup_enable                = $postgresql::params::backup_enable,
   Hash                                               $backup_options               = {},
   Enum['pg_dump']                                    $backup_provider              = $postgresql::params::backup_provider,
-
-  #Deprecated
-  Optional[String[1]] $version = undef,
 ) inherits postgresql::params {
   if $port =~ String {
     deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
   }
-  if $version != undef {
-    warning('Passing "version" to postgresql::server is deprecated; please use postgresql::globals instead.')
-    $_version = $version
-  } else {
-    $_version = $postgresql::params::version
-  }
+  $_version = $postgresql::params::version
 
   if $createdb_path != undef {
     warning('Passing "createdb_path" to postgresql::server is deprecated, it can be removed safely for the same behaviour')
