@@ -17,14 +17,11 @@ define postgresql::server::instance::passwd (
   String[1]                                                   $user              = $postgresql::server::user,
   String[1]                                                   $group             = $postgresql::server::group,
   Variant[String[1], Stdlib::Absolutepath]                    $psql_path         = $postgresql::server::psql_path,
-  Variant[String[1], Stdlib::Port]                            $port              = $postgresql::server::port,
+  Stdlib::Port                                                $port              = $postgresql::server::port,
   String[1]                                                   $database          = $postgresql::server::default_database,
   String[1]                                                   $module_workdir    = $postgresql::server::module_workdir,
   Optional[Variant[String[1], Sensitive[String[1]], Integer]] $postgres_password = $postgresql::server::postgres_password,
 ) {
-  if $port =~ String {
-    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
-  }
   $real_postgres_password = if $postgres_password =~ Sensitive {
     $postgres_password.unwrap
   } else {

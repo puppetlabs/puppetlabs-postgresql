@@ -29,13 +29,10 @@ define postgresql::server::extension (
   Optional[String[1]]                                 $version                = undef,
   Enum['present', 'absent']                           $ensure                 = 'present',
   Optional[String[1]]                                 $package_name           = undef,
-  Optional[Variant[String[1], Stdlib::Port]]          $port                   = undef,
+  Optional[Stdlib::Port]                              $port                   = undef,
   Hash                                                $connect_settings       = postgresql::default('default_connect_settings'),
   String[1]                                           $database_resource_name = $database,
 ) {
-  if $port =~ String {
-    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
-  }
   $user             = postgresql::default('user')
   $group            = postgresql::default('group')
   $psql_path        = postgresql::default('psql_path')

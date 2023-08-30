@@ -13,12 +13,9 @@ define postgresql::server::grant_role (
   Enum['present', 'absent']                 $ensure           = 'present',
   String[1]                                 $psql_db          = $postgresql::server::default_database,
   String[1]                                 $psql_user        = $postgresql::server::user,
-  Variant[String[1], Stdlib::Port]          $port             = $postgresql::server::port,
+  Stdlib::Port                              $port             = $postgresql::server::port,
   Hash                                      $connect_settings = $postgresql::server::default_connect_settings,
 ) {
-  if $port =~ String {
-    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
-  }
   case $ensure {
     'present': {
       $command = "GRANT \"${group}\" TO \"${role}\""

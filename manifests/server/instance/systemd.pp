@@ -3,16 +3,12 @@
 # @param drop_in_ensure sets the Systemd drop-in file to present or absent
 # @api private
 define postgresql::server::instance::systemd (
-  Variant[String[1], Stdlib::Port] $port,
+  Stdlib::Port $port,
   Stdlib::Absolutepath $datadir,
   Optional[String[1]] $extra_systemd_config = undef,
   String[1] $service_name                   = $name,
   Enum[present, absent] $drop_in_ensure     = 'present',
-
 ) {
-  if $port =~ String {
-    deprecation('postgres_port', 'Passing a string to the port parameter is deprecated. Stdlib::Port will be the enforced datatype in the next major release')
-  }
   # Template uses:
   # - $port
   # - $datadir
