@@ -134,7 +134,7 @@ define postgresql::server::extension (
       default => $package_ensure,
     }
 
-    ensure_packages($package_name, {
+    stdlib::ensure_packages($package_name, {
         ensure  => $_package_ensure,
         tag     => 'puppetlabs-postgresql',
     })
