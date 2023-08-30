@@ -63,7 +63,6 @@
 * [`postgresql::server::schema`](#postgresql--server--schema): Create a new schema.
 * [`postgresql::server::table_grant`](#postgresql--server--table_grant): This resource wraps the grant resource to manage table grants specifically.
 * [`postgresql::server::tablespace`](#postgresql--server--tablespace): This module creates tablespace.
-* [`postgresql::validate_db_connection`](#postgresql--validate_db_connection): This type validates that a successful postgres connection.
 
 #### Private Defined types
 
@@ -3762,107 +3761,6 @@ Data type: `Hash`
 Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: `$postgresql::server::default_connect_settings`
-
-### <a name="postgresql--validate_db_connection"></a>`postgresql::validate_db_connection`
-
-This validated if the postgres connection can be established
-between the node on which this resource is run and a specified postgres
-instance (host/port/user/password/database name).
-
-#### Parameters
-
-The following parameters are available in the `postgresql::validate_db_connection` defined type:
-
-* [`database_host`](#-postgresql--validate_db_connection--database_host)
-* [`database_name`](#-postgresql--validate_db_connection--database_name)
-* [`database_password`](#-postgresql--validate_db_connection--database_password)
-* [`database_username`](#-postgresql--validate_db_connection--database_username)
-* [`database_port`](#-postgresql--validate_db_connection--database_port)
-* [`connect_settings`](#-postgresql--validate_db_connection--connect_settings)
-* [`run_as`](#-postgresql--validate_db_connection--run_as)
-* [`sleep`](#-postgresql--validate_db_connection--sleep)
-* [`tries`](#-postgresql--validate_db_connection--tries)
-* [`create_db_first`](#-postgresql--validate_db_connection--create_db_first)
-
-##### <a name="-postgresql--validate_db_connection--database_host"></a>`database_host`
-
-Data type: `Optional[String[1]]`
-
-Database host address
-
-Default value: `undef`
-
-##### <a name="-postgresql--validate_db_connection--database_name"></a>`database_name`
-
-Data type: `Optional[String[1]]`
-
-Specifies the name of the database you wish to test.
-
-Default value: `undef`
-
-##### <a name="-postgresql--validate_db_connection--database_password"></a>`database_password`
-
-Data type: `Optional[Variant[String, Sensitive[String]]]`
-
-Specifies the password to connect with.
-
-Default value: `undef`
-
-##### <a name="-postgresql--validate_db_connection--database_username"></a>`database_username`
-
-Data type: `Optional[String[1]]`
-
-Specifies the username to connect with.
-
-Default value: `undef`
-
-##### <a name="-postgresql--validate_db_connection--database_port"></a>`database_port`
-
-Data type: `Optional[Variant[String[1], Integer]]`
-
-Defines the port to use when connecting.
-
-Default value: `undef`
-
-##### <a name="-postgresql--validate_db_connection--connect_settings"></a>`connect_settings`
-
-Data type: `Optional[Hash]`
-
-Specifies a hash of environment variables used when connecting to a remote server.
-
-Default value: `undef`
-
-##### <a name="-postgresql--validate_db_connection--run_as"></a>`run_as`
-
-Data type: `Optional[String[1]]`
-
-Specifies the user to run the psql command as.
-
-Default value: `undef`
-
-##### <a name="-postgresql--validate_db_connection--sleep"></a>`sleep`
-
-Data type: `Integer`
-
-Sets the number of seconds to sleep for before trying again after a failure.
-
-Default value: `2`
-
-##### <a name="-postgresql--validate_db_connection--tries"></a>`tries`
-
-Data type: `Integer`
-
-Sets the number of attempts after failure before giving up and failing the resource.
-
-Default value: `10`
-
-##### <a name="-postgresql--validate_db_connection--create_db_first"></a>`create_db_first`
-
-Data type: `Boolean`
-
-Creates the database when obtaining a successful connection.
-
-Default value: `true`
 
 ## Resource types
 
