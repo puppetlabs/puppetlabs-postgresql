@@ -21,15 +21,10 @@ define postgresql::server::reassign_owned_by (
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
 
-  #
-  # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
-  #
-  if $port {
-    $port_override = $port
-  } elsif $connect_settings != undef and 'PGPORT' in $connect_settings {
+  if 'PGPORT' in $connect_settings {
     $port_override = undef
   } else {
-    $port_override = $postgresql::server::port
+    $port_override = $port
   }
 
   $onlyif = "SELECT tablename FROM pg_catalog.pg_tables WHERE
@@ -54,14 +49,14 @@ define postgresql::server::reassign_owned_by (
     onlyif           => $onlyif,
   }
 
-  if($old_role != undef and defined(Postgresql::Server::Role[$old_role])) {
+  if defined(Postgresql::Server::Role[$old_role]) {
     Postgresql::Server::Role[$old_role] -> Postgresql_psql["reassign_owned_by:${db}:${sql_command}"]
   }
   if($new_role != undef and defined(Postgresql::Server::Role[$new_role])) {
     Postgresql::Server::Role[$new_role] -> Postgresql_psql["reassign_owned_by:${db}:${sql_command}"]
   }
 
-  if($db != undef and defined(Postgresql::Server::Database[$db])) {
+  if defined(Postgresql::Server::Database[$db]) {
     Postgresql::Server::Database[$db] -> Postgresql_psql["reassign_owned_by:${db}:${sql_command}"]
   }
 }

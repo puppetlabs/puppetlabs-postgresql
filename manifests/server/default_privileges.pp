@@ -37,7 +37,7 @@ define postgresql::server::default_privileges (
 ) {
   # If possible use the version of the remote database, otherwise
   # fallback to our local DB version
-  if $connect_settings != undef and 'DBVERSION' in $connect_settings {
+  if 'DBVERSION' in $connect_settings {
     $version = $connect_settings['DBVERSION']
   } else {
     $version = $postgresql::server::_version
@@ -62,15 +62,15 @@ define postgresql::server::default_privileges (
   #
   # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
   #
-  if $port != undef {
+  if $port {
     $port_override = $port
-  } elsif $connect_settings != undef and 'PGPORT' in $connect_settings {
+  } elsif 'PGPORT' in $connect_settings {
     $port_override = undef
   } else {
     $port_override = $postgresql::server::port
   }
 
-  if $target_role != undef {
+  if $target_role {
     $_target_role = " FOR ROLE ${target_role}"
     $_check_target_role = "/${target_role}"
   } else {
@@ -178,11 +178,11 @@ define postgresql::server::default_privileges (
     environment      => 'PGOPTIONS=--client-min-messages=error',
   }
 
-  if($role != undef and defined(Postgresql::Server::Role[$role])) {
+  if defined(Postgresql::Server::Role[$role]) {
     Postgresql::Server::Role[$role] -> Postgresql_psql["default_privileges:${name}"]
   }
 
-  if($db != undef and defined(Postgresql::Server::Database[$db])) {
+  if defined(Postgresql::Server::Database[$db]) {
     Postgresql::Server::Database[$db] -> Postgresql_psql["default_privileges:${name}"]
   }
 }
