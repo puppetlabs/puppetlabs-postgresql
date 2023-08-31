@@ -79,16 +79,14 @@ describe 'postgresql::server::grant:' do
       end
 
       it 'is expected to run idempotently' do
-        idempotent_apply(pp) if Gem::Version.new(postgresql_version) >= Gem::Version.new('8.4.0')
+        idempotent_apply(pp)
       end
 
       it 'is expected to GRANT USAGE ON LANGUAGE plpgsql to ROLE' do
-        if Gem::Version.new(postgresql_version) >= Gem::Version.new('8.4.0')
-          ## Check that the privilege was granted to the user
-          psql("-d #{db} --command=\"SELECT 1 WHERE has_language_privilege('#{user}', 'plpgsql', 'USAGE')\"", superuser) do |r|
-            expect(r.stdout).to match(%r{\(1 row\)})
-            expect(r.stderr).to eq('')
-          end
+        ## Check that the privilege was granted to the user
+        psql("-d #{db} --command=\"SELECT 1 WHERE has_language_privilege('#{user}', 'plpgsql', 'USAGE')\"", superuser) do |r|
+          expect(r.stdout).to match(%r{\(1 row\)})
+          expect(r.stderr).to eq('')
         end
       end
     end
