@@ -89,24 +89,16 @@ define postgresql::server::instance::config (
         user => 'all',
       }
 
-      # Lets setup the base rules
-      $local_auth_option = $version ? {
-        '8.1'   => 'sameuser',
-        default => undef,
-      }
-
       postgresql::server::pg_hba_rule {
         "local access as postgres user for instance ${name}":
           type        => 'local',
           user        => $user,
           auth_method => 'ident',
-          auth_option => $local_auth_option,
           order       => 1;
 
         "local access to database with same name for instance ${name}":
           type        => 'local',
           auth_method => 'ident',
-          auth_option => $local_auth_option,
           order       => 2;
 
         "allow localhost TCP access to postgresql user for instance ${name}":
@@ -174,7 +166,6 @@ define postgresql::server::instance::config (
         }
         else {
           $package_name = $facts['os']['release']['major'] ? {
-            '5'     => 'policycoreutils',
             '6'     => 'policycoreutils-python',
             '7'     => 'policycoreutils-python',
             default => 'policycoreutils-python-utils',

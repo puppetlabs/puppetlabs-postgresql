@@ -37,12 +37,8 @@ describe 'postgresql::server::db' do
 
     result = psql('--command="SELECT 1 FROM pg_roles WHERE rolname=\'test-user\'"')
     expect(result.stdout).to match(%r{\(1 row\)})
-    comment_information_function = if Gem::Version.new(postgresql_version) > Gem::Version.new('8.1')
-                                     'shobj_description'
-                                   else
-                                     'obj_description'
-                                   end
-    result = psql("--dbname postgresql-test-db --command=\"SELECT pg_catalog.#{comment_information_function}(d.oid, 'pg_database') FROM pg_catalog.pg_database d WHERE datname = 'postgresql-test-db' AND pg_catalog.#{comment_information_function}(d.oid, 'pg_database') = 'testcomment'\"") # rubocop:disable Layout/LineLength
+
+    result = psql("--dbname postgresql-test-db --command=\"SELECT pg_catalog.shobj_description(d.oid, 'pg_database') FROM pg_catalog.pg_database d WHERE datname = 'postgresql-test-db' AND pg_catalog.shobj_description(d.oid, 'pg_database') = 'testcomment'\"") # rubocop:disable Layout/LineLength
     expect(result.stdout).to match(%r{\(1 row\)})
   ensure
     psql('--command=\'drop database "postgresql-test-db"\'')
