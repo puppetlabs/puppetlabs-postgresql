@@ -47,7 +47,6 @@
 * [`postgresql::server::db`](#postgresql--server--db): Define for conveniently creating a role, database and assigning the correctpermissions.
 * [`postgresql::server::default_privileges`](#postgresql--server--default_privileges): Manage a database defaults privileges. Only works with PostgreSQL version 9.6 and above.
 * [`postgresql::server::extension`](#postgresql--server--extension): Activate an extension on a postgresql database.
-* [`postgresql::server::grant`](#postgresql--server--grant): Define for granting permissions to roles.
 * [`postgresql::server::grant_role`](#postgresql--server--grant_role): Define for granting membership to a role.
 * [`postgresql::server::instance::config`](#postgresql--server--instance--config): Manages the config for a postgresql::server instance
 * [`postgresql::server::instance::initdb`](#postgresql--server--instance--initdb): Manages initdb feature for a postgresql::server instance
@@ -348,7 +347,7 @@ Default value: `undef`
 
 ##### <a name="-postgresql--globals--initdb_path"></a>`initdb_path`
 
-Data type: `Optional[Variant[String[1], Stdlib::Absolutepath]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Path to the initdb command.
 
@@ -356,7 +355,7 @@ Default value: `undef`
 
 ##### <a name="-postgresql--globals--psql_path"></a>`psql_path`
 
-Data type: `Optional[Variant[String[1], Stdlib::Absolutepath]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Sets the path to the psql command.
 
@@ -364,7 +363,7 @@ Default value: `undef`
 
 ##### <a name="-postgresql--globals--pg_hba_conf_path"></a>`pg_hba_conf_path`
 
-Data type: `Optional[Variant[String[1], Stdlib::Absolutepath]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Specifies the path to your pg_hba.conf file.
 
@@ -372,7 +371,7 @@ Default value: `undef`
 
 ##### <a name="-postgresql--globals--pg_ident_conf_path"></a>`pg_ident_conf_path`
 
-Data type: `Optional[Variant[String[1], Stdlib::Absolutepath]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Specifies the path to your pg_ident.conf file.
 
@@ -380,7 +379,7 @@ Default value: `undef`
 
 ##### <a name="-postgresql--globals--postgresql_conf_path"></a>`postgresql_conf_path`
 
-Data type: `Optional[Variant[String[1], Stdlib::Absolutepath]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Sets the path to your postgresql.conf file.
 
@@ -396,7 +395,7 @@ Default value: `undef`
 
 ##### <a name="-postgresql--globals--recovery_conf_path"></a>`recovery_conf_path`
 
-Data type: `Optional[Variant[String[1], Stdlib::Absolutepath]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Path to your recovery.conf file.
 
@@ -1068,7 +1067,7 @@ Default value: `$postgresql::params::ipv6acls`
 
 ##### <a name="-postgresql--server--initdb_path"></a>`initdb_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to the initdb command.
 
@@ -1076,7 +1075,7 @@ Default value: `$postgresql::params::initdb_path`
 
 ##### <a name="-postgresql--server--psql_path"></a>`psql_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to the psql command.
 
@@ -1084,7 +1083,7 @@ Default value: `$postgresql::params::psql_path`
 
 ##### <a name="-postgresql--server--pg_hba_conf_path"></a>`pg_hba_conf_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to your pg_hba.conf file.
 
@@ -1092,7 +1091,7 @@ Default value: `$postgresql::params::pg_hba_conf_path`
 
 ##### <a name="-postgresql--server--pg_ident_conf_path"></a>`pg_ident_conf_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to your pg_ident.conf file.
 
@@ -1100,7 +1099,7 @@ Default value: `$postgresql::params::pg_ident_conf_path`
 
 ##### <a name="-postgresql--server--postgresql_conf_path"></a>`postgresql_conf_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to your postgresql.conf file.
 
@@ -1116,7 +1115,7 @@ Default value: `$postgresql::params::postgresql_conf_mode`
 
 ##### <a name="-postgresql--server--recovery_conf_path"></a>`recovery_conf_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to your recovery.conf file.
 
@@ -1543,11 +1542,11 @@ Default value: `undef`
 
 ##### <a name="-postgresql--server--config_entry--path"></a>`path`
 
-Data type: `Variant[Boolean, String[1]]`
+Data type: `Stdlib::Absolutepath`
 
 Path for postgresql.conf
 
-Default value: `false`
+Default value: `$postgresql::server::postgresql_conf_path`
 
 ### <a name="postgresql--server--database"></a>`postgresql::server::database`
 
@@ -1910,7 +1909,7 @@ Default value: `$postgresql::server::user`
 
 ##### <a name="-postgresql--server--default_privileges--psql_path"></a>`psql_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the OS user for running psql. Default value: The default user for the module, usually 'postgres'.
 
@@ -2044,157 +2043,6 @@ Data type: `String[1]`
 Specifies the resource name of the DB being managed. Defaults to the parameter $database, if left blank.
 
 Default value: `$database`
-
-### <a name="postgresql--server--grant"></a>`postgresql::server::grant`
-
-Define for granting permissions to roles.
-
-#### Parameters
-
-The following parameters are available in the `postgresql::server::grant` defined type:
-
-* [`role`](#-postgresql--server--grant--role)
-* [`db`](#-postgresql--server--grant--db)
-* [`privilege`](#-postgresql--server--grant--privilege)
-* [`object_type`](#-postgresql--server--grant--object_type)
-* [`object_name`](#-postgresql--server--grant--object_name)
-* [`object_arguments`](#-postgresql--server--grant--object_arguments)
-* [`psql_db`](#-postgresql--server--grant--psql_db)
-* [`psql_user`](#-postgresql--server--grant--psql_user)
-* [`port`](#-postgresql--server--grant--port)
-* [`onlyif_exists`](#-postgresql--server--grant--onlyif_exists)
-* [`connect_settings`](#-postgresql--server--grant--connect_settings)
-* [`ensure`](#-postgresql--server--grant--ensure)
-* [`group`](#-postgresql--server--grant--group)
-* [`psql_path`](#-postgresql--server--grant--psql_path)
-
-##### <a name="-postgresql--server--grant--role"></a>`role`
-
-Data type: `String`
-
-Specifies the role or user whom you are granting access to.
-
-##### <a name="-postgresql--server--grant--db"></a>`db`
-
-Data type: `String`
-
-Specifies the database to which you are granting access.
-
-##### <a name="-postgresql--server--grant--privilege"></a>`privilege`
-
-Data type: `String`
-
-Specifies the privilege to grant. Valid options: 'ALL', 'ALL PRIVILEGES' or 'object_type' dependent string.
-
-Default value: `''`
-
-##### <a name="-postgresql--server--grant--object_type"></a>`object_type`
-
-Data type:
-
-```puppet
-Pattern[#/(?i:^COLUMN$)/,
-    /(?i:^ALL SEQUENCES IN SCHEMA$)/,
-    /(?i:^ALL TABLES IN SCHEMA$)/,
-    /(?i:^DATABASE$)/,
-    #/(?i:^FOREIGN DATA WRAPPER$)/,
-    #/(?i:^FOREIGN SERVER$)/,
-    /(?i:^FUNCTION$)/,
-    /(?i:^LANGUAGE$)/,
-    #/(?i:^PROCEDURAL LANGUAGE$)/,
-    /(?i:^TABLE$)/,
-    #/(?i:^TABLESPACE$)/,
-    /(?i:^SCHEMA$)/,
-    /(?i:^SEQUENCE$)/
-    #/(?i:^VIEW$)/
-  ]
-```
-
-Specifies the type of object to which you are granting privileges.
-Valid options: 'DATABASE', 'SCHEMA', 'SEQUENCE', 'ALL SEQUENCES IN SCHEMA', 'TABLE' or 'ALL TABLES IN SCHEMA'.
-
-Default value: `'database'`
-
-##### <a name="-postgresql--server--grant--object_name"></a>`object_name`
-
-Data type: `Optional[Variant[Array[String,2,2],String[1]]]`
-
-Specifies name of object_type to which to grant access, can be either a string or a two element array.
-String: 'object_name' Array: ['schema_name', 'object_name']
-
-Default value: `undef`
-
-##### <a name="-postgresql--server--grant--object_arguments"></a>`object_arguments`
-
-Data type: `Array[String[1],0]`
-
-Specifies any arguments to be passed alongisde the access grant.
-
-Default value: `[]`
-
-##### <a name="-postgresql--server--grant--psql_db"></a>`psql_db`
-
-Data type: `String`
-
-Specifies the database to execute the grant against. This should not ordinarily be changed from the default
-
-Default value: `$postgresql::server::default_database`
-
-##### <a name="-postgresql--server--grant--psql_user"></a>`psql_user`
-
-Data type: `String`
-
-Sets the OS user to run psql.
-
-Default value: `$postgresql::server::user`
-
-##### <a name="-postgresql--server--grant--port"></a>`port`
-
-Data type: `Stdlib::Port`
-
-Port to use when connecting.
-
-Default value: `$postgresql::server::port`
-
-##### <a name="-postgresql--server--grant--onlyif_exists"></a>`onlyif_exists`
-
-Data type: `Boolean`
-
-Create grant only if doesn't exist
-
-Default value: `false`
-
-##### <a name="-postgresql--server--grant--connect_settings"></a>`connect_settings`
-
-Data type: `Hash`
-
-Specifies a hash of environment variables used when connecting to a remote server.
-
-Default value: `$postgresql::server::default_connect_settings`
-
-##### <a name="-postgresql--server--grant--ensure"></a>`ensure`
-
-Data type: `Enum['present', 'absent']`
-
-Specifies whether to grant or revoke the privilege. Default is to grant the privilege. Valid values: 'present', 'absent'.
-
-Default value: `'present'`
-
-##### <a name="-postgresql--server--grant--group"></a>`group`
-
-Data type: `String`
-
-Sets the OS group to run psql
-
-Default value: `$postgresql::server::group`
-
-##### <a name="-postgresql--server--grant--psql_path"></a>`psql_path`
-
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
-
-Sets the path to psql command
-
-Default value: `$postgresql::server::psql_path`
 
 ### <a name="postgresql--server--grant_role"></a>`postgresql::server::grant_role`
 
@@ -2360,7 +2208,7 @@ Default value: `$postgresql::server::ipv6acls`
 
 ##### <a name="-postgresql--server--instance--config--pg_hba_conf_path"></a>`pg_hba_conf_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to your pg_hba.conf file.
 
@@ -2368,7 +2216,7 @@ Default value: `$postgresql::server::pg_hba_conf_path`
 
 ##### <a name="-postgresql--server--instance--config--pg_ident_conf_path"></a>`pg_ident_conf_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to your pg_ident.conf file.
 
@@ -2376,7 +2224,7 @@ Default value: `$postgresql::server::pg_ident_conf_path`
 
 ##### <a name="-postgresql--server--instance--config--postgresql_conf_path"></a>`postgresql_conf_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to your postgresql.conf file.
 
@@ -2392,7 +2240,7 @@ Default value: `$postgresql::server::postgresql_conf_mode`
 
 ##### <a name="-postgresql--server--instance--config--recovery_conf_path"></a>`recovery_conf_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to your recovery.conf file.
 
@@ -2609,7 +2457,7 @@ Default value: `$postgresql::server::group`
 
 ##### <a name="-postgresql--server--instance--initdb--initdb_path"></a>`initdb_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to the initdb command.
 
@@ -2749,7 +2597,7 @@ Default value: `$postgresql::server::group`
 
 ##### <a name="-postgresql--server--instance--late_initdb--psql_path"></a>`psql_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to the psql command.
 
@@ -2808,7 +2656,7 @@ Default value: `$postgresql::server::group`
 
 ##### <a name="-postgresql--server--instance--passwd--psql_path"></a>`psql_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to the psql command.
 
@@ -2973,7 +2821,7 @@ Default value: `$postgresql::server::default_database`
 
 ##### <a name="-postgresql--server--instance--service--psql_path"></a>`psql_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Specifies the path to the psql command.
 
@@ -3140,7 +2988,7 @@ Default value: `'150'`
 
 ##### <a name="-postgresql--server--pg_ident_rule--target"></a>`target`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Provides the target for the rule and is generally an internal only property. Use with caution.
 
@@ -3360,7 +3208,7 @@ Default value: `undef`
 
 ##### <a name="-postgresql--server--recovery--target"></a>`target`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Provides the target for the rule, and is generally an internal only property. Use with caution.
 
@@ -3525,7 +3373,7 @@ Default value: `$postgresql::server::group`
 
 ##### <a name="-postgresql--server--role--psql_path"></a>`psql_path`
 
-Data type: `Variant[String[1], Stdlib::Absolutepath]`
+Data type: `Stdlib::Absolutepath`
 
 Sets path to psql command
 
