@@ -47,6 +47,7 @@
 * [`postgresql::server::db`](#postgresql--server--db): Define for conveniently creating a role, database and assigning the correctpermissions.
 * [`postgresql::server::default_privileges`](#postgresql--server--default_privileges): Manage a database defaults privileges. Only works with PostgreSQL version 9.6 and above.
 * [`postgresql::server::extension`](#postgresql--server--extension): Activate an extension on a postgresql database.
+* [`postgresql::server::grant`](#postgresql--server--grant): Define for granting permissions to roles.
 * [`postgresql::server::grant_role`](#postgresql--server--grant_role): Define for granting membership to a role.
 * [`postgresql::server::instance::config`](#postgresql--server--instance--config): Manages the config for a postgresql::server instance
 * [`postgresql::server::instance::initdb`](#postgresql--server--instance--initdb): Manages initdb feature for a postgresql::server instance
@@ -1565,6 +1566,11 @@ The following parameters are available in the `postgresql::server::database` def
 * [`locale`](#-postgresql--server--database--locale)
 * [`istemplate`](#-postgresql--server--database--istemplate)
 * [`connect_settings`](#-postgresql--server--database--connect_settings)
+* [`psql_path`](#-postgresql--server--database--psql_path)
+* [`default_db`](#-postgresql--server--database--default_db)
+* [`user`](#-postgresql--server--database--user)
+* [`group`](#-postgresql--server--database--group)
+* [`port`](#-postgresql--server--database--port)
 
 ##### <a name="-postgresql--server--database--comment"></a>`comment`
 
@@ -1638,6 +1644,46 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
+##### <a name="-postgresql--server--database--psql_path"></a>`psql_path`
+
+Data type: `Stdlib::Absolutepath`
+
+Specifies the path to the psql command.
+
+Default value: `$postgresql::server::psql_path`
+
+##### <a name="-postgresql--server--database--default_db"></a>`default_db`
+
+Data type: `String[1]`
+
+Specifies the name of the default database to connect with. On most systems this is 'postgres'.
+
+Default value: `$postgresql::server::default_database`
+
+##### <a name="-postgresql--server--database--user"></a>`user`
+
+Data type: `String[1]`
+
+Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
+
+Default value: `$postgresql::server::user`
+
+##### <a name="-postgresql--server--database--group"></a>`group`
+
+Data type: `String[1]`
+
+Overrides the default postgres user group to be used for related files in the file system.
+
+Default value: `$postgresql::server::group`
+
+##### <a name="-postgresql--server--database--port"></a>`port`
+
+Data type: `Stdlib::Port`
+
+Specifies the port for the PostgreSQL server to listen on.
+
+Default value: `$postgresql::server::port`
+
 ### <a name="postgresql--server--database_grant"></a>`postgresql::server::database_grant`
 
 Manage a database grant.
@@ -1652,7 +1698,9 @@ The following parameters are available in the `postgresql::server::database_gran
 * [`ensure`](#-postgresql--server--database_grant--ensure)
 * [`psql_db`](#-postgresql--server--database_grant--psql_db)
 * [`psql_user`](#-postgresql--server--database_grant--psql_user)
+* [`psql_group`](#-postgresql--server--database_grant--psql_group)
 * [`connect_settings`](#-postgresql--server--database_grant--connect_settings)
+* [`port`](#-postgresql--server--database_grant--port)
 
 ##### <a name="-postgresql--server--database_grant--privilege"></a>`privilege`
 
@@ -1690,17 +1738,33 @@ Default value: `undef`
 
 ##### <a name="-postgresql--server--database_grant--psql_user"></a>`psql_user`
 
-Data type: `Optional[String[1]]`
+Data type: `String[1]`
 
 Specifies the OS user for running psql. Default value: The default user for the module, usually 'postgres'.
 
-Default value: `undef`
+Default value: `$postgresql::server::user`
+
+##### <a name="-postgresql--server--database_grant--psql_group"></a>`psql_group`
+
+Data type: `String[1]`
+
+Overrides the default postgres user group to be used for related files in the file system.
+
+Default value: `$postgresql::server::group`
 
 ##### <a name="-postgresql--server--database_grant--connect_settings"></a>`connect_settings`
 
 Data type: `Optional[Hash]`
 
 Specifies a hash of environment variables used when connecting to a remote server.
+
+Default value: `undef`
+
+##### <a name="-postgresql--server--database_grant--port"></a>`port`
+
+Data type: `Optional[Stdlib::Port]`
+
+Port to use when connecting.
 
 Default value: `undef`
 
@@ -1957,6 +2021,9 @@ The following parameters are available in the `postgresql::server::extension` de
 * [`port`](#-postgresql--server--extension--port)
 * [`connect_settings`](#-postgresql--server--extension--connect_settings)
 * [`database_resource_name`](#-postgresql--server--extension--database_resource_name)
+* [`psql_path`](#-postgresql--server--extension--psql_path)
+* [`user`](#-postgresql--server--extension--user)
+* [`group`](#-postgresql--server--extension--group)
 
 ##### <a name="-postgresql--server--extension--database"></a>`database`
 
@@ -2043,6 +2110,181 @@ Data type: `String[1]`
 Specifies the resource name of the DB being managed. Defaults to the parameter $database, if left blank.
 
 Default value: `$database`
+
+##### <a name="-postgresql--server--extension--psql_path"></a>`psql_path`
+
+Data type: `Stdlib::Absolutepath`
+
+Specifies the path to the psql command.
+
+Default value: `postgresql::default('psql_path')`
+
+##### <a name="-postgresql--server--extension--user"></a>`user`
+
+Data type: `String[1]`
+
+Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
+
+Default value: `postgresql::default('user')`
+
+##### <a name="-postgresql--server--extension--group"></a>`group`
+
+Data type: `String[1]`
+
+Overrides the default postgres user group to be used for related files in the file system.
+
+Default value: `postgresql::default('group')`
+
+### <a name="postgresql--server--grant"></a>`postgresql::server::grant`
+
+Define for granting permissions to roles.
+
+#### Parameters
+
+The following parameters are available in the `postgresql::server::grant` defined type:
+
+* [`role`](#-postgresql--server--grant--role)
+* [`db`](#-postgresql--server--grant--db)
+* [`privilege`](#-postgresql--server--grant--privilege)
+* [`object_type`](#-postgresql--server--grant--object_type)
+* [`object_name`](#-postgresql--server--grant--object_name)
+* [`object_arguments`](#-postgresql--server--grant--object_arguments)
+* [`psql_db`](#-postgresql--server--grant--psql_db)
+* [`psql_user`](#-postgresql--server--grant--psql_user)
+* [`port`](#-postgresql--server--grant--port)
+* [`onlyif_exists`](#-postgresql--server--grant--onlyif_exists)
+* [`connect_settings`](#-postgresql--server--grant--connect_settings)
+* [`ensure`](#-postgresql--server--grant--ensure)
+* [`group`](#-postgresql--server--grant--group)
+* [`psql_path`](#-postgresql--server--grant--psql_path)
+
+##### <a name="-postgresql--server--grant--role"></a>`role`
+
+Data type: `String`
+
+Specifies the role or user whom you are granting access to.
+
+##### <a name="-postgresql--server--grant--db"></a>`db`
+
+Data type: `String`
+
+Specifies the database to which you are granting access.
+
+##### <a name="-postgresql--server--grant--privilege"></a>`privilege`
+
+Data type: `String`
+
+Specifies the privilege to grant. Valid options: 'ALL', 'ALL PRIVILEGES' or 'object_type' dependent string.
+
+Default value: `''`
+
+##### <a name="-postgresql--server--grant--object_type"></a>`object_type`
+
+Data type:
+
+```puppet
+Pattern[#/(?i:^COLUMN$)/,
+    /(?i:^ALL SEQUENCES IN SCHEMA$)/,
+    /(?i:^ALL TABLES IN SCHEMA$)/,
+    /(?i:^DATABASE$)/,
+    #/(?i:^FOREIGN DATA WRAPPER$)/,
+    #/(?i:^FOREIGN SERVER$)/,
+    /(?i:^FUNCTION$)/,
+    /(?i:^LANGUAGE$)/,
+    #/(?i:^PROCEDURAL LANGUAGE$)/,
+    /(?i:^TABLE$)/,
+    #/(?i:^TABLESPACE$)/,
+    /(?i:^SCHEMA$)/,
+    /(?i:^SEQUENCE$)/
+    #/(?i:^VIEW$)/
+  ]
+```
+
+Specifies the type of object to which you are granting privileges.
+Valid options: 'DATABASE', 'SCHEMA', 'SEQUENCE', 'ALL SEQUENCES IN SCHEMA', 'TABLE' or 'ALL TABLES IN SCHEMA'.
+
+Default value: `'database'`
+
+##### <a name="-postgresql--server--grant--object_name"></a>`object_name`
+
+Data type: `Optional[Variant[Array[String,2,2],String[1]]]`
+
+Specifies name of object_type to which to grant access, can be either a string or a two element array.
+String: 'object_name' Array: ['schema_name', 'object_name']
+
+Default value: `undef`
+
+##### <a name="-postgresql--server--grant--object_arguments"></a>`object_arguments`
+
+Data type: `Array[String[1],0]`
+
+Specifies any arguments to be passed alongisde the access grant.
+
+Default value: `[]`
+
+##### <a name="-postgresql--server--grant--psql_db"></a>`psql_db`
+
+Data type: `String`
+
+Specifies the database to execute the grant against. This should not ordinarily be changed from the default
+
+Default value: `$postgresql::server::default_database`
+
+##### <a name="-postgresql--server--grant--psql_user"></a>`psql_user`
+
+Data type: `String`
+
+Sets the OS user to run psql.
+
+Default value: `$postgresql::server::user`
+
+##### <a name="-postgresql--server--grant--port"></a>`port`
+
+Data type: `Optional[Stdlib::Port]`
+
+Port to use when connecting.
+
+Default value: `undef`
+
+##### <a name="-postgresql--server--grant--onlyif_exists"></a>`onlyif_exists`
+
+Data type: `Boolean`
+
+Create grant only if doesn't exist
+
+Default value: `false`
+
+##### <a name="-postgresql--server--grant--connect_settings"></a>`connect_settings`
+
+Data type: `Hash`
+
+Specifies a hash of environment variables used when connecting to a remote server.
+
+Default value: `$postgresql::server::default_connect_settings`
+
+##### <a name="-postgresql--server--grant--ensure"></a>`ensure`
+
+Data type: `Enum['present', 'absent']`
+
+Specifies whether to grant or revoke the privilege. Default is to grant the privilege. Valid values: 'present', 'absent'.
+
+Default value: `'present'`
+
+##### <a name="-postgresql--server--grant--group"></a>`group`
+
+Data type: `String`
+
+Sets the OS group to run psql
+
+Default value: `$postgresql::server::group`
+
+##### <a name="-postgresql--server--grant--psql_path"></a>`psql_path`
+
+Data type: `Stdlib::Absolutepath`
+
+Sets the path to psql command
+
+Default value: `$postgresql::server::psql_path`
 
 ### <a name="postgresql--server--grant_role"></a>`postgresql::server::grant_role`
 
