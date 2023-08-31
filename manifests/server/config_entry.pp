@@ -9,15 +9,8 @@ define postgresql::server::config_entry (
   Enum['present', 'absent']                               $ensure = 'present',
   String[1]                                               $key    = $name,
   Optional[Variant[String[1], Numeric, Array[String[1]]]] $value  = undef,
-  Variant[Boolean, String[1]]                             $path   = false
+  Stdlib::Absolutepath                                    $path   = $postgresql::server::postgresql_conf_path
 ) {
-  $postgresql_conf_path = $postgresql::server::postgresql_conf_path
-
-  $target = $path ? {
-    false   => $postgresql_conf_path,
-    default => $path,
-  }
-
   # Those are the variables that are marked as "(change requires restart)"
   # on postgresql.conf.  Items are ordered as on postgresql.conf.
   #
@@ -91,7 +84,7 @@ define postgresql::server::config_entry (
 
   postgresql_conf { $name:
     ensure  => $ensure,
-    target  => $target,
+    target  => $path,
     name    => $key,
     value   => $value,
     require => Class['postgresql::server::initdb'],
