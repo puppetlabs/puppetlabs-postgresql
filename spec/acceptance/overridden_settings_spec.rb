@@ -8,9 +8,9 @@ describe 'postgresql::server' do
   before(:all) do
     LitmusHelper.instance.run_shell("cd /tmp; su 'postgres' -c 'pg_ctl stop -D /var/lib/pgsql/data/ -m fast'", acceptable_exit_codes: [0, 1]) unless os[:family].match?(%r{debian|ubuntu})
   end
-
   let(:pp) do
     <<-MANIFEST
+    $auth_method = $facts['os']['release']['major'] ? { '7' => 'md5', default => 'scram-sha-256'}
     class { 'postgresql::server':
       roles          => {
         'testusername' => {
@@ -26,7 +26,7 @@ describe 'postgresql::server' do
           type        => 'host',
           database    => 'mydb',
           user        => 'myuser',
-          auth_method => 'scram-sha-256',
+          auth_method => $auth_method,
           address     => '192.0.2.100/32',
         },
       },
