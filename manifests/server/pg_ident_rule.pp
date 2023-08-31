@@ -19,7 +19,7 @@ define postgresql::server::pg_ident_rule (
 
   # Needed for testing primarily, support for multiple files is not really
   # working.
-  Variant[String[1], Stdlib::Absolutepath] $target = $postgresql::server::pg_ident_conf_path
+  Stdlib::Absolutepath $target = $postgresql::server::pg_ident_conf_path
 ) {
   if $postgresql::server::manage_pg_ident_conf == false {
     fail('postgresql::server::manage_pg_ident_conf has been disabled, so this resource is now unused and redundant, either enable that option or remove this resource from your manifests') # lint:ignore:140chars

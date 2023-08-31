@@ -27,7 +27,7 @@ define postgresql::server::instance::service (
   String[1]                                    $user             = $postgresql::server::user,
   Stdlib::Port                                 $port             = $postgresql::server::port,
   String[1]                                    $default_database = $postgresql::server::default_database,
-  Variant[String[1], Stdlib::Absolutepath]     $psql_path        = $postgresql::server::psql_path,
+  Stdlib::Absolutepath                         $psql_path        = $postgresql::server::psql_path,
   Hash                                         $connect_settings = $postgresql::server::default_connect_settings,
 ) {
   anchor { "postgresql::server::service::begin::${name}": }
