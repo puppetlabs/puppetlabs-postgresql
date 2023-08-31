@@ -25,15 +25,15 @@ define postgresql::server::default_privileges (
     /(?i:^TYPES$)/,
     /(?i:^SCHEMAS$)/
   ] $object_type,
-  String                                    $schema            = 'public',
-  String                                    $psql_db           = $postgresql::server::default_database,
-  String                                    $psql_user         = $postgresql::server::user,
-  Stdlib::Port                              $port              = $postgresql::server::port,
-  Hash                                      $connect_settings  = $postgresql::server::default_connect_settings,
-  Enum['present', 'absent']                 $ensure            = 'present',
-  String                                    $group             = $postgresql::server::group,
-  Variant[String[1], Stdlib::Absolutepath]  $psql_path         = $postgresql::server::psql_path,
-  Optional[String]                          $target_role       = undef,
+  String                    $schema            = 'public',
+  String                    $psql_db           = $postgresql::server::default_database,
+  String                    $psql_user         = $postgresql::server::user,
+  Stdlib::Port              $port              = $postgresql::server::port,
+  Hash                      $connect_settings  = $postgresql::server::default_connect_settings,
+  Enum['present', 'absent'] $ensure            = 'present',
+  String                    $group             = $postgresql::server::group,
+  Stdlib::Absolutepath      $psql_path         = $postgresql::server::psql_path,
+  Optional[String]          $target_role       = undef,
 ) {
   # If possible use the version of the remote database, otherwise
   # fallback to our local DB version

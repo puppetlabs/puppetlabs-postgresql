@@ -32,7 +32,7 @@ define postgresql::server::instance::initdb (
   String[1]                                $datadir        = $postgresql::server::datadir,
   Optional[String[1]]                      $encoding       = $postgresql::server::encoding,
   String[1]                                $group          = $postgresql::server::group,
-  Variant[String[1], Stdlib::Absolutepath] $initdb_path    = $postgresql::server::initdb_path,
+  Stdlib::Absolutepath                     $initdb_path    = $postgresql::server::initdb_path,
   Optional[String[1]]                      $lc_messages    = $postgresql::server::lc_messages,
   Optional[String[1]]                      $locale         = $postgresql::server::locale,
   Optional[String[1]]                      $logdir         = $postgresql::server::logdir,
