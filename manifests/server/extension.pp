@@ -21,6 +21,9 @@
 # @param port Port to use when connecting.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param database_resource_name Specifies the resource name of the DB being managed. Defaults to the parameter $database, if left blank.
+# @param psql_path Specifies the path to the psql command.
+# @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
+# @param group Overrides the default postgres user group to be used for related files in the file system.
 define postgresql::server::extension (
   String[1]                                           $database,
   Optional[Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]] $package_ensure = undef,
@@ -32,11 +35,10 @@ define postgresql::server::extension (
   Optional[Stdlib::Port]                              $port                   = undef,
   Hash                                                $connect_settings       = postgresql::default('default_connect_settings'),
   String[1]                                           $database_resource_name = $database,
+  String[1]                                           $user                   = postgresql::default('user'),
+  String[1]                                           $group                  = postgresql::default('group'),
+  Stdlib::Absolutepath                                $psql_path              = postgresql::default('psql_path'),
 ) {
-  $user             = postgresql::default('user')
-  $group            = postgresql::default('group')
-  $psql_path        = postgresql::default('psql_path')
-
   if( $database != 'postgres' ) {
     # The database postgres cannot managed by this module, so it is exempt from this dependency
     $default_psql_require = Postgresql::Server::Database[$database_resource_name]
@@ -86,12 +88,10 @@ define postgresql::server::extension (
   }
 
   postgresql_psql { "${database}: ${command}":
-
     psql_user        => $user,
     psql_group       => $group,
     psql_path        => $psql_path,
     connect_settings => $connect_settings,
-
     db               => $database,
     port             => $port_override,
     command          => $command,
