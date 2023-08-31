@@ -6,7 +6,24 @@ describe 'postgresql::server::db' do
   include_examples 'Debian 11'
 
   let :title do
-    'test'
+    'testdb'
+  end
+  let :pre_condition do
+    "class {'postgresql::server':}"
+  end
+
+  context 'with minimal params' do
+    let :params do
+      {
+        user: 'foo'
+      }
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__db('testdb').without_port.with_user('foo').with_psql_user('postgres').with_psql_group('postgres') }
+    it { is_expected.to contain_postgresql__server__database('testdb').without_owner.with_user('postgres').with_group('postgres') }
+    it { is_expected.to contain_postgresql__server__role('foo').that_comes_before('Postgresql::Server::Database[testdb]').without_port.with_psql_user('postgres').with_psql_group('postgres') }
+    it { is_expected.to contain_postgresql__server__database_grant('GRANT foo - ALL - testdb').without_port.with_psql_user('postgres').with_psql_group('postgres') }
   end
 
   context 'without dbname param' do
@@ -18,14 +35,10 @@ describe 'postgresql::server::db' do
       }
     end
 
-    let :pre_condition do
-      "class {'postgresql::server':}"
-    end
-
-    it { is_expected.to contain_postgresql__server__db('test') }
-    it { is_expected.to contain_postgresql__server__database('test').with_owner('tester') }
-    it { is_expected.to contain_postgresql__server__role('test').that_comes_before('Postgresql::Server::Database[test]') }
-    it { is_expected.to contain_postgresql__server__database_grant('GRANT test - ALL - test') }
+    it { is_expected.to contain_postgresql__server__db('testdb') }
+    it { is_expected.to contain_postgresql__server__database('testdb').with_owner('tester') }
+    it { is_expected.to contain_postgresql__server__role('test').that_comes_before('Postgresql::Server::Database[testdb]') }
+    it { is_expected.to contain_postgresql__server__database_grant('GRANT test - ALL - testdb') }
   end
 
   context 'dbname' do
