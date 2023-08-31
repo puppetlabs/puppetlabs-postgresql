@@ -122,14 +122,14 @@ class postgresql::globals (
 
   Optional[String[1]] $validcon_script_path        = undef,
 
-  Optional[Variant[String[1], Stdlib::Absolutepath]] $initdb_path                 = undef,
-  Optional[Variant[String[1], Stdlib::Absolutepath]] $psql_path                   = undef,
-  Optional[Variant[String[1], Stdlib::Absolutepath]] $pg_hba_conf_path            = undef,
-  Optional[Variant[String[1], Stdlib::Absolutepath]] $pg_ident_conf_path          = undef,
-  Optional[Variant[String[1], Stdlib::Absolutepath]] $postgresql_conf_path        = undef,
-  Optional[Stdlib::Filemode]                         $postgresql_conf_mode        = undef,
-  Optional[Variant[String[1], Stdlib::Absolutepath]] $recovery_conf_path          = undef,
-  Hash                                               $default_connect_settings    = {},
+  Optional[Stdlib::Absolutepath] $initdb_path          = undef,
+  Optional[Stdlib::Absolutepath] $psql_path            = undef,
+  Optional[Stdlib::Absolutepath] $pg_hba_conf_path     = undef,
+  Optional[Stdlib::Absolutepath] $pg_ident_conf_path   = undef,
+  Optional[Stdlib::Absolutepath] $postgresql_conf_path = undef,
+  Optional[Stdlib::Filemode] $postgresql_conf_mode     = undef,
+  Optional[Stdlib::Absolutepath] $recovery_conf_path   = undef,
+  Hash $default_connect_settings                       = {},
 
   Optional[Boolean] $pg_hba_conf_defaults          = undef,
 

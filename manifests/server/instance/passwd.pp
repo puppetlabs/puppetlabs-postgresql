@@ -16,7 +16,7 @@
 define postgresql::server::instance::passwd (
   String[1]                                                   $user              = $postgresql::server::user,
   String[1]                                                   $group             = $postgresql::server::group,
-  Variant[String[1], Stdlib::Absolutepath]                    $psql_path         = $postgresql::server::psql_path,
+  Stdlib::Absolutepath                                        $psql_path         = $postgresql::server::psql_path,
   Stdlib::Port                                                $port              = $postgresql::server::port,
   String[1]                                                   $database          = $postgresql::server::default_database,
   String[1]                                                   $module_workdir    = $postgresql::server::module_workdir,
