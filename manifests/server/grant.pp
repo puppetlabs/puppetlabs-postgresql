@@ -46,7 +46,7 @@ define postgresql::server::grant (
   Hash                                           $connect_settings  = $postgresql::server::default_connect_settings,
   Enum['present', 'absent']                      $ensure            = 'present',
   String                                         $group             = $postgresql::server::group,
-  Variant[String[1], Stdlib::Absolutepath]       $psql_path         = $postgresql::server::psql_path,
+  Stdlib::Absolutepath                           $psql_path         = $postgresql::server::psql_path,
 ) {
   case $ensure {
     default: {

@@ -15,7 +15,7 @@ define postgresql::server::instance::late_initdb (
   Optional[String[1]]                       $encoding       = $postgresql::server::encoding,
   String[1]                                 $user           = $postgresql::server::user,
   String[1]                                 $group          = $postgresql::server::group,
-  Variant[String[1], Stdlib::Absolutepath]  $psql_path      = $postgresql::server::psql_path,
+  Stdlib::Absolutepath                      $psql_path      = $postgresql::server::psql_path,
   Stdlib::Port                              $port           = $postgresql::server::port,
   String[1]                                 $module_workdir = $postgresql::server::module_workdir,
 ) {
