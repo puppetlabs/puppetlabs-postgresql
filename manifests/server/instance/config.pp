@@ -42,6 +42,9 @@
 # @param log_line_prefix PostgreSQL log line prefix
 # @param timezone Set timezone for the PostgreSQL instance
 # @param password_encryption Specify the type of encryption set for the password.
+# @param pg_hba_auth_password_encryption
+#   Specify the type of encryption set for the password in pg_hba_conf,
+#   this value is usefull if you want to start enforcing scram-sha-256, but give users transition time.
 # @param extra_systemd_config
 #   Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
 define postgresql::server::instance::config (
@@ -71,8 +74,15 @@ define postgresql::server::instance::config (
   Optional[String[1]]                            $log_line_prefix              = $postgresql::server::log_line_prefix,
   Optional[String[1]]                            $timezone                     = $postgresql::server::timezone,
   Postgresql::Pg_password_encryption             $password_encryption          = $postgresql::server::password_encryption,
+  Postgresql::Pg_password_encryption             $pg_hba_auth_password_encryption = $postgresql::server::pg_hba_auth_password_encryption,
   Optional[String]                               $extra_systemd_config         = $postgresql::server::extra_systemd_config,
 ) {
+  if $pg_hba_auth_password_encryption {
+    $override_pg_hba_auth_password_encryption = $pg_hba_auth_password_encryption
+  } else {
+    $override_pg_hba_auth_password_encryption = $password_encryption
+  }
+
   if ($manage_pg_hba_conf == true) {
     # Prepare the main pg_hba file
     concat { $pg_hba_conf_path:

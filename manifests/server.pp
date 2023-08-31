@@ -96,7 +96,9 @@
 # @param manage_logdir Set to false if you have file{ $logdir: } already defined
 # @param manage_xlogdir Set to false if you have file{ $xlogdir: } already defined
 # @param password_encryption Specify the type of encryption set for the password.
-#
+# @param pg_hba_auth_password_encryption
+#   Specify the type of encryption set for the password in pg_hba_conf,
+#   this value is usefull if you want to start enforcing scram-sha-256, but give users transition time.
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
@@ -179,6 +181,7 @@ class postgresql::server (
   Boolean                                            $manage_logdir                = $postgresql::params::manage_logdir,
   Boolean                                            $manage_xlogdir               = $postgresql::params::manage_xlogdir,
   Postgresql::Pg_password_encryption                 $password_encryption          = $postgresql::params::password_encryption,
+  Postgresql::Pg_password_encryption                 $pg_hba_auth_password_encryption = undef,
   Optional[String]                                   $extra_systemd_config         = $postgresql::params::extra_systemd_config,
 
   Hash[String, Hash]                                 $roles                        = {},
