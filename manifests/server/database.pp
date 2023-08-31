@@ -9,22 +9,27 @@
 # @param locale Overrides the locale during creation of the database.
 # @param istemplate Defines the database as a template if set to true.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param psql_path Specifies the path to the psql command.
+# @param default_db Specifies the name of the default database to connect with. On most systems this is 'postgres'.
+# @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
+# @param group Overrides the default postgres user group to be used for related files in the file system.
+# @param port Specifies the port for the PostgreSQL server to listen on.
 define postgresql::server::database (
-  Optional[String[1]] $comment          = undef,
-  String[1]           $dbname           = $title,
-  Optional[String[1]] $owner            = undef,
-  Optional[String[1]] $tablespace       = undef,
-  String[1]           $template         = 'template0',
-  Optional[String[1]] $encoding         = $postgresql::server::encoding,
-  Optional[String[1]] $locale           = $postgresql::server::locale,
-  Boolean             $istemplate       = false,
-  Hash                $connect_settings = $postgresql::server::default_connect_settings,
+  Optional[String[1]]  $comment          = undef,
+  String[1]            $dbname           = $title,
+  Optional[String[1]]  $owner            = undef,
+  Optional[String[1]]  $tablespace       = undef,
+  String[1]            $template         = 'template0',
+  Optional[String[1]]  $encoding         = $postgresql::server::encoding,
+  Optional[String[1]]  $locale           = $postgresql::server::locale,
+  Boolean              $istemplate       = false,
+  Hash                 $connect_settings = $postgresql::server::default_connect_settings,
+  String[1]            $user             = $postgresql::server::user,
+  String[1]            $group            = $postgresql::server::group,
+  Stdlib::Absolutepath $psql_path        = $postgresql::server::psql_path,
+  String[1]            $default_db       = $postgresql::server::default_database,
+  Stdlib::Port         $port             = $postgresql::server::port
 ) {
-  $user          = $postgresql::server::user
-  $group         = $postgresql::server::group
-  $psql_path     = $postgresql::server::psql_path
-  $default_db    = $postgresql::server::default_database
-
   # If possible use the version of the remote database, otherwise
   # fallback to our local DB version
   if 'DBVERSION' in $connect_settings {
@@ -35,9 +40,9 @@ define postgresql::server::database (
 
   # If the connection settings do not contain a port, then use the local server port
   if 'PGPORT' in $connect_settings {
-    $port = undef
+    $port_override = undef
   } else {
-    $port = $postgresql::server::port
+    $port_override = $port
   }
 
   # Set the defaults for the postgresql_psql resource
@@ -46,7 +51,7 @@ define postgresql::server::database (
     psql_user        => $user,
     psql_group       => $group,
     psql_path        => $psql_path,
-    port             => $port,
+    port             => $port_override,
     connect_settings => $connect_settings,
   }
 
