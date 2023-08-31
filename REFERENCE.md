@@ -44,7 +44,7 @@
 * [`postgresql::server::config_entry`](#postgresql--server--config_entry): Manage a postgresql.conf entry.
 * [`postgresql::server::database`](#postgresql--server--database): Define for creating a database.
 * [`postgresql::server::database_grant`](#postgresql--server--database_grant): Manage a database grant.
-* [`postgresql::server::db`](#postgresql--server--db): Define for conveniently creating a role, database and assigning the correctpermissions.
+* [`postgresql::server::db`](#postgresql--server--db): Define for conveniently creating a role, database and assigning the correct permissions.
 * [`postgresql::server::default_privileges`](#postgresql--server--default_privileges): Manage a database defaults privileges. Only works with PostgreSQL version 9.6 and above.
 * [`postgresql::server::extension`](#postgresql--server--extension): Activate an extension on a postgresql database.
 * [`postgresql::server::grant`](#postgresql--server--grant): Define for granting permissions to roles.
@@ -1770,7 +1770,7 @@ Default value: `undef`
 
 ### <a name="postgresql--server--db"></a>`postgresql::server::db`
 
-Define for conveniently creating a role, database and assigning the correctpermissions.
+Define for conveniently creating a role, database and assigning the correct permissions.
 
 #### Parameters
 
@@ -1787,6 +1787,9 @@ The following parameters are available in the `postgresql::server::db` defined t
 * [`template`](#-postgresql--server--db--template)
 * [`istemplate`](#-postgresql--server--db--istemplate)
 * [`owner`](#-postgresql--server--db--owner)
+* [`port`](#-postgresql--server--db--port)
+* [`psql_user`](#-postgresql--server--db--psql_user)
+* [`psql_group`](#-postgresql--server--db--psql_group)
 
 ##### <a name="-postgresql--server--db--user"></a>`user`
 
@@ -1873,6 +1876,30 @@ Data type: `Optional[String[1]]`
 Sets a user as the owner of the database.
 
 Default value: `undef`
+
+##### <a name="-postgresql--server--db--port"></a>`port`
+
+Data type: `Optional[Stdlib::Port]`
+
+Specifies the port where the PostgreSQL server is listening on.
+
+Default value: `undef`
+
+##### <a name="-postgresql--server--db--psql_user"></a>`psql_user`
+
+Data type: `String[1]`
+
+Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
+
+Default value: `$postgresql::server::user`
+
+##### <a name="-postgresql--server--db--psql_group"></a>`psql_group`
+
+Data type: `String[1]`
+
+Overrides the default PostgreSQL user group to be used for related files in the file system.
+
+Default value: `$postgresql::server::group`
 
 ### <a name="postgresql--server--default_privileges"></a>`postgresql::server::default_privileges`
 
