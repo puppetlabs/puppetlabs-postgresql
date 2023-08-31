@@ -9,6 +9,10 @@
 # @param locale Overrides the locale during creation of the database.
 # @param istemplate Defines the database as a template if set to true.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
+# @param group Overrides the default postgres user group to be used for related files in the file system.
+# @param default_db Specifies the name of the default database to connect with. On most systems this is 'postgres'.
+# @param psql_path Specifies the path to the psql command.
 define postgresql::server::database (
   Optional[String[1]] $comment          = undef,
   String[1]           $dbname           = $title,
@@ -19,12 +23,11 @@ define postgresql::server::database (
   Optional[String[1]] $locale           = $postgresql::server::locale,
   Boolean             $istemplate       = false,
   Hash                $connect_settings = $postgresql::server::default_connect_settings,
+  String[1] $user = $postgresql::server::user,
+  String[1] $group = $postgresql::server::group,
+  String[1] $default_db = $postgresql::server::default_database,
+  Stdlib::Absolutepath $psql_path = $postgresql::server::psql_path,
 ) {
-  $user          = $postgresql::server::user
-  $group         = $postgresql::server::group
-  $psql_path     = $postgresql::server::psql_path
-  $default_db    = $postgresql::server::default_database
-
   # If possible use the version of the remote database, otherwise
   # fallback to our local DB version
   if 'DBVERSION' in $connect_settings {
