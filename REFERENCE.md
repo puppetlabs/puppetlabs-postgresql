@@ -8,18 +8,18 @@
 
 #### Public Classes
 
-* [`postgresql::client`](#postgresql--client): Installs PostgreSQL client software. Set the following parameters if you have a custom version you would like to install.
-* [`postgresql::globals`](#postgresql--globals): Class for setting cross-class global overrides.
-* [`postgresql::lib::devel`](#postgresql--lib--devel): This class installs postgresql development libraries.
-* [`postgresql::lib::docs`](#postgresql--lib--docs): Installs PostgreSQL bindings for Postgres-Docs. Set the following parameters if you have a custom version you would like to install.
-* [`postgresql::lib::java`](#postgresql--lib--java): This class installs the postgresql jdbc connector.
-* [`postgresql::lib::perl`](#postgresql--lib--perl): This class installs the perl libs for postgresql.
-* [`postgresql::lib::python`](#postgresql--lib--python): This class installs the python libs for postgresql.
-* [`postgresql::server`](#postgresql--server): This installs a PostgreSQL server
-* [`postgresql::server::contrib`](#postgresql--server--contrib): Install the contrib postgresql packaging.
-* [`postgresql::server::plperl`](#postgresql--server--plperl): This class installs the PL/Perl procedural language for postgresql.
-* [`postgresql::server::plpython`](#postgresql--server--plpython): This class installs the PL/Python procedural language for postgresql.
-* [`postgresql::server::postgis`](#postgresql--server--postgis): Install the postgis postgresql packaging.
+* [`postgresql::client`](#postgresqlclient): Installs PostgreSQL client software. Set the following parameters if you have a custom version you would like to install.
+* [`postgresql::globals`](#postgresqlglobals): Class for setting cross-class global overrides.
+* [`postgresql::lib::devel`](#postgresqllibdevel): This class installs postgresql development libraries.
+* [`postgresql::lib::docs`](#postgresqllibdocs): Installs PostgreSQL bindings for Postgres-Docs. Set the following parameters if you have a custom version you would like to install.
+* [`postgresql::lib::java`](#postgresqllibjava): This class installs the postgresql jdbc connector.
+* [`postgresql::lib::perl`](#postgresqllibperl): This class installs the perl libs for postgresql.
+* [`postgresql::lib::python`](#postgresqllibpython): This class installs the python libs for postgresql.
+* [`postgresql::server`](#postgresqlserver): This installs a PostgreSQL server
+* [`postgresql::server::contrib`](#postgresqlservercontrib): Install the contrib postgresql packaging.
+* [`postgresql::server::plperl`](#postgresqlserverplperl): This class installs the PL/Perl procedural language for postgresql.
+* [`postgresql::server::plpython`](#postgresqlserverplpython): This class installs the PL/Python procedural language for postgresql.
+* [`postgresql::server::postgis`](#postgresqlserverpostgis): Install the postgis postgresql packaging.
 
 #### Private Classes
 
@@ -41,28 +41,28 @@
 
 #### Public Defined types
 
-* [`postgresql::server::config_entry`](#postgresql--server--config_entry): Manage a postgresql.conf entry.
-* [`postgresql::server::database`](#postgresql--server--database): Define for creating a database.
-* [`postgresql::server::database_grant`](#postgresql--server--database_grant): Manage a database grant.
-* [`postgresql::server::db`](#postgresql--server--db): Define for conveniently creating a role, database and assigning the correct permissions.
-* [`postgresql::server::default_privileges`](#postgresql--server--default_privileges): Manage a database defaults privileges. Only works with PostgreSQL version 9.6 and above.
-* [`postgresql::server::extension`](#postgresql--server--extension): Activate an extension on a postgresql database.
-* [`postgresql::server::grant`](#postgresql--server--grant): Define for granting permissions to roles.
-* [`postgresql::server::grant_role`](#postgresql--server--grant_role): Define for granting membership to a role.
-* [`postgresql::server::instance::config`](#postgresql--server--instance--config): Manages the config for a postgresql::server instance
-* [`postgresql::server::instance::initdb`](#postgresql--server--instance--initdb): Manages initdb feature for a postgresql::server instance
-* [`postgresql::server::instance::late_initdb`](#postgresql--server--instance--late_initdb): Manage the default encoding when database initialization is managed by the package
-* [`postgresql::server::instance::passwd`](#postgresql--server--instance--passwd): Overrides the default PostgreSQL superuser
-* [`postgresql::server::instance::reload`](#postgresql--server--instance--reload): Overrides the default reload or status command for your PostgreSQL service
-* [`postgresql::server::instance::service`](#postgresql--server--instance--service): Manages the service for the postgres main instance (default) or additional instances
-* [`postgresql::server::pg_hba_rule`](#postgresql--server--pg_hba_rule): This resource manages an individual rule that applies to the file defined in target.
-* [`postgresql::server::pg_ident_rule`](#postgresql--server--pg_ident_rule): This resource manages an individual rule that applies to the file defined in target.
-* [`postgresql::server::reassign_owned_by`](#postgresql--server--reassign_owned_by): Define for reassigning the ownership of objects within a database.
-* [`postgresql::server::recovery`](#postgresql--server--recovery): This resource manages the parameters that applies to the recovery.conf template.
-* [`postgresql::server::role`](#postgresql--server--role): Define for creating a database role.
-* [`postgresql::server::schema`](#postgresql--server--schema): Create a new schema.
-* [`postgresql::server::table_grant`](#postgresql--server--table_grant): This resource wraps the grant resource to manage table grants specifically.
-* [`postgresql::server::tablespace`](#postgresql--server--tablespace): This module creates tablespace.
+* [`postgresql::server::config_entry`](#postgresqlserverconfig_entry): Manage a postgresql.conf entry.
+* [`postgresql::server::database`](#postgresqlserverdatabase): Define for creating a database.
+* [`postgresql::server::database_grant`](#postgresqlserverdatabase_grant): Manage a database grant.
+* [`postgresql::server::db`](#postgresqlserverdb): Define for conveniently creating a role, database and assigning the correct permissions.
+* [`postgresql::server::default_privileges`](#postgresqlserverdefault_privileges): Manage a database defaults privileges. Only works with PostgreSQL version 9.6 and above.
+* [`postgresql::server::extension`](#postgresqlserverextension): Activate an extension on a postgresql database.
+* [`postgresql::server::grant`](#postgresqlservergrant): Define for granting permissions to roles.
+* [`postgresql::server::grant_role`](#postgresqlservergrant_role): Define for granting membership to a role.
+* [`postgresql::server::instance::config`](#postgresqlserverinstanceconfig): Manages the config for a postgresql::server instance
+* [`postgresql::server::instance::initdb`](#postgresqlserverinstanceinitdb): Manages initdb feature for a postgresql::server instance
+* [`postgresql::server::instance::late_initdb`](#postgresqlserverinstancelate_initdb): Manage the default encoding when database initialization is managed by the package
+* [`postgresql::server::instance::passwd`](#postgresqlserverinstancepasswd): Overrides the default PostgreSQL superuser
+* [`postgresql::server::instance::reload`](#postgresqlserverinstancereload): Overrides the default reload or status command for your PostgreSQL service
+* [`postgresql::server::instance::service`](#postgresqlserverinstanceservice): Manages the service for the postgres main instance (default) or additional instances
+* [`postgresql::server::pg_hba_rule`](#postgresqlserverpg_hba_rule): This resource manages an individual rule that applies to the file defined in target.
+* [`postgresql::server::pg_ident_rule`](#postgresqlserverpg_ident_rule): This resource manages an individual rule that applies to the file defined in target.
+* [`postgresql::server::reassign_owned_by`](#postgresqlserverreassign_owned_by): Define for reassigning the ownership of objects within a database.
+* [`postgresql::server::recovery`](#postgresqlserverrecovery): This resource manages the parameters that applies to the recovery.conf template.
+* [`postgresql::server::role`](#postgresqlserverrole): Define for creating a database role.
+* [`postgresql::server::schema`](#postgresqlserverschema): Create a new schema.
+* [`postgresql::server::table_grant`](#postgresqlservertable_grant): This resource wraps the grant resource to manage table grants specifically.
+* [`postgresql::server::tablespace`](#postgresqlservertablespace): This module creates tablespace.
 
 #### Private Defined types
 
@@ -79,10 +79,10 @@
 
 #### Public Functions
 
-* [`postgresql::default`](#postgresql--default): This function pull default values from the `params` class  or `globals` class if the value is not present in `params`.
-* [`postgresql::postgresql_escape`](#postgresql--postgresql_escape): This function escapes a string using [Dollar Quoting](https://www.postgresql.org/docs/12/sql-syntax-lexical.html#SQL-SYNTAX-DOLLAR-QUOTING) using a randomly generated tag if required.
-* [`postgresql::postgresql_password`](#postgresql--postgresql_password): This function returns the postgresql password hash from the clear text username / password
-* [`postgresql::prepend_sql_password`](#postgresql--prepend_sql_password): This function exists for usage of a role password that is a deferred function
+* [`postgresql::default`](#postgresqldefault): This function pull default values from the `params` class  or `globals` class if the value is not present in `params`.
+* [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape): This function escapes a string using [Dollar Quoting](https://www.postgresql.org/docs/12/sql-syntax-lexical.html#SQL-SYNTAX-DOLLAR-QUOTING) using a randomly generated tag if required.
+* [`postgresql::postgresql_password`](#postgresqlpostgresql_password): This function returns the postgresql password hash from the clear text username / password
+* [`postgresql::prepend_sql_password`](#postgresqlprepend_sql_password): This function exists for usage of a role password that is a deferred function
 * [`postgresql_escape`](#postgresql_escape): DEPRECATED.  Use the namespaced function [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape) instead.
 * [`postgresql_password`](#postgresql_password): DEPRECATED.  Use the namespaced function [`postgresql::postgresql_password`](#postgresqlpostgresql_password) instead.
 
@@ -92,11 +92,11 @@
 
 ### Data types
 
-* [`Postgresql::Pg_hba_rule`](#Postgresql--Pg_hba_rule): type for all parameters in the postgresql::server::hba_rule defined resource
-* [`Postgresql::Pg_hba_rule_address`](#Postgresql--Pg_hba_rule_address): Supported address types
-* [`Postgresql::Pg_hba_rule_type`](#Postgresql--Pg_hba_rule_type): enum for all different types for the pg_hba_conf
-* [`Postgresql::Pg_hba_rules`](#Postgresql--Pg_hba_rules): validates a hash of entries for postgresql::server::pg_hab_conf
-* [`Postgresql::Pg_password_encryption`](#Postgresql--Pg_password_encryption): the supported password_encryption
+* [`Postgresql::Pg_hba_rule`](#postgresqlpg_hba_rule): type for all parameters in the postgresql::server::hba_rule defined resource
+* [`Postgresql::Pg_hba_rule_address`](#postgresqlpg_hba_rule_address): Supported address types
+* [`Postgresql::Pg_hba_rule_type`](#postgresqlpg_hba_rule_type): enum for all different types for the pg_hba_conf
+* [`Postgresql::Pg_hba_rules`](#postgresqlpg_hba_rules): validates a hash of entries for postgresql::server::pg_hab_conf
+* [`Postgresql::Pg_password_encryption`](#postgresqlpg_password_encryption): the supported password_encryption
 
 ### Tasks
 
@@ -104,7 +104,7 @@
 
 ## Classes
 
-### <a name="postgresql--client"></a>`postgresql::client`
+### <a name="postgresqlclient"></a>`postgresql::client`
 
 Installs PostgreSQL client software. Set the following parameters if you have a custom version you would like to install.
 
@@ -114,12 +114,12 @@ Installs PostgreSQL client software. Set the following parameters if you have a 
 
 The following parameters are available in the `postgresql::client` class:
 
-* [`file_ensure`](#-postgresql--client--file_ensure)
-* [`validcon_script_path`](#-postgresql--client--validcon_script_path)
-* [`package_name`](#-postgresql--client--package_name)
-* [`package_ensure`](#-postgresql--client--package_ensure)
+* [`file_ensure`](#file_ensure)
+* [`validcon_script_path`](#validcon_script_path)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
 
-##### <a name="-postgresql--client--file_ensure"></a>`file_ensure`
+##### <a name="file_ensure"></a>`file_ensure`
 
 Data type: `Enum['file', 'absent']`
 
@@ -127,7 +127,7 @@ Ensure the connection validation script is present
 
 Default value: `'file'`
 
-##### <a name="-postgresql--client--validcon_script_path"></a>`validcon_script_path`
+##### <a name="validcon_script_path"></a>`validcon_script_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -135,7 +135,7 @@ Optional. Absolute path for the postgresql connection validation script.
 
 Default value: `$postgresql::params::validcon_script_path`
 
-##### <a name="-postgresql--client--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String[1]`
 
@@ -143,7 +143,7 @@ Sets the name of the PostgreSQL client package.
 
 Default value: `$postgresql::params::client_package_name`
 
-##### <a name="-postgresql--client--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]`
 
@@ -151,7 +151,7 @@ Ensure the client package is installed
 
 Default value: `'present'`
 
-### <a name="postgresql--globals"></a>`postgresql::globals`
+### <a name="postgresqlglobals"></a>`postgresql::globals`
 
 Class for setting cross-class global overrides.
 
@@ -163,246 +163,246 @@ as version or manage_package_repo.
 
 The following parameters are available in the `postgresql::globals` class:
 
-* [`client_package_name`](#-postgresql--globals--client_package_name)
-* [`server_package_name`](#-postgresql--globals--server_package_name)
-* [`contrib_package_name`](#-postgresql--globals--contrib_package_name)
-* [`devel_package_name`](#-postgresql--globals--devel_package_name)
-* [`java_package_name`](#-postgresql--globals--java_package_name)
-* [`docs_package_name`](#-postgresql--globals--docs_package_name)
-* [`perl_package_name`](#-postgresql--globals--perl_package_name)
-* [`plperl_package_name`](#-postgresql--globals--plperl_package_name)
-* [`plpython_package_name`](#-postgresql--globals--plpython_package_name)
-* [`python_package_name`](#-postgresql--globals--python_package_name)
-* [`postgis_package_name`](#-postgresql--globals--postgis_package_name)
-* [`service_name`](#-postgresql--globals--service_name)
-* [`service_provider`](#-postgresql--globals--service_provider)
-* [`service_status`](#-postgresql--globals--service_status)
-* [`default_database`](#-postgresql--globals--default_database)
-* [`validcon_script_path`](#-postgresql--globals--validcon_script_path)
-* [`initdb_path`](#-postgresql--globals--initdb_path)
-* [`psql_path`](#-postgresql--globals--psql_path)
-* [`pg_hba_conf_path`](#-postgresql--globals--pg_hba_conf_path)
-* [`pg_ident_conf_path`](#-postgresql--globals--pg_ident_conf_path)
-* [`postgresql_conf_path`](#-postgresql--globals--postgresql_conf_path)
-* [`postgresql_conf_mode`](#-postgresql--globals--postgresql_conf_mode)
-* [`recovery_conf_path`](#-postgresql--globals--recovery_conf_path)
-* [`default_connect_settings`](#-postgresql--globals--default_connect_settings)
-* [`pg_hba_conf_defaults`](#-postgresql--globals--pg_hba_conf_defaults)
-* [`datadir`](#-postgresql--globals--datadir)
-* [`confdir`](#-postgresql--globals--confdir)
-* [`bindir`](#-postgresql--globals--bindir)
-* [`xlogdir`](#-postgresql--globals--xlogdir)
-* [`logdir`](#-postgresql--globals--logdir)
-* [`log_line_prefix`](#-postgresql--globals--log_line_prefix)
-* [`user`](#-postgresql--globals--user)
-* [`group`](#-postgresql--globals--group)
-* [`version`](#-postgresql--globals--version)
-* [`postgis_version`](#-postgresql--globals--postgis_version)
-* [`repo_proxy`](#-postgresql--globals--repo_proxy)
-* [`repo_baseurl`](#-postgresql--globals--repo_baseurl)
-* [`yum_repo_commonurl`](#-postgresql--globals--yum_repo_commonurl)
-* [`needs_initdb`](#-postgresql--globals--needs_initdb)
-* [`encoding`](#-postgresql--globals--encoding)
-* [`locale`](#-postgresql--globals--locale)
-* [`data_checksums`](#-postgresql--globals--data_checksums)
-* [`timezone`](#-postgresql--globals--timezone)
-* [`manage_pg_hba_conf`](#-postgresql--globals--manage_pg_hba_conf)
-* [`manage_pg_ident_conf`](#-postgresql--globals--manage_pg_ident_conf)
-* [`manage_recovery_conf`](#-postgresql--globals--manage_recovery_conf)
-* [`manage_postgresql_conf_perms`](#-postgresql--globals--manage_postgresql_conf_perms)
-* [`manage_selinux`](#-postgresql--globals--manage_selinux)
-* [`manage_datadir`](#-postgresql--globals--manage_datadir)
-* [`manage_logdir`](#-postgresql--globals--manage_logdir)
-* [`manage_xlogdir`](#-postgresql--globals--manage_xlogdir)
-* [`manage_package_repo`](#-postgresql--globals--manage_package_repo)
-* [`manage_dnf_module`](#-postgresql--globals--manage_dnf_module)
-* [`module_workdir`](#-postgresql--globals--module_workdir)
+* [`client_package_name`](#client_package_name)
+* [`server_package_name`](#server_package_name)
+* [`contrib_package_name`](#contrib_package_name)
+* [`devel_package_name`](#devel_package_name)
+* [`java_package_name`](#java_package_name)
+* [`docs_package_name`](#docs_package_name)
+* [`perl_package_name`](#perl_package_name)
+* [`plperl_package_name`](#plperl_package_name)
+* [`plpython_package_name`](#plpython_package_name)
+* [`python_package_name`](#python_package_name)
+* [`postgis_package_name`](#postgis_package_name)
+* [`service_name`](#service_name)
+* [`service_provider`](#service_provider)
+* [`service_status`](#service_status)
+* [`default_database`](#default_database)
+* [`validcon_script_path`](#validcon_script_path)
+* [`initdb_path`](#initdb_path)
+* [`psql_path`](#psql_path)
+* [`pg_hba_conf_path`](#pg_hba_conf_path)
+* [`pg_ident_conf_path`](#pg_ident_conf_path)
+* [`postgresql_conf_path`](#postgresql_conf_path)
+* [`postgresql_conf_mode`](#postgresql_conf_mode)
+* [`recovery_conf_path`](#recovery_conf_path)
+* [`default_connect_settings`](#default_connect_settings)
+* [`pg_hba_conf_defaults`](#pg_hba_conf_defaults)
+* [`datadir`](#datadir)
+* [`confdir`](#confdir)
+* [`bindir`](#bindir)
+* [`xlogdir`](#xlogdir)
+* [`logdir`](#logdir)
+* [`log_line_prefix`](#log_line_prefix)
+* [`user`](#user)
+* [`group`](#group)
+* [`version`](#version)
+* [`postgis_version`](#postgis_version)
+* [`repo_proxy`](#repo_proxy)
+* [`repo_baseurl`](#repo_baseurl)
+* [`yum_repo_commonurl`](#yum_repo_commonurl)
+* [`needs_initdb`](#needs_initdb)
+* [`encoding`](#encoding)
+* [`locale`](#locale)
+* [`data_checksums`](#data_checksums)
+* [`timezone`](#timezone)
+* [`manage_pg_hba_conf`](#manage_pg_hba_conf)
+* [`manage_pg_ident_conf`](#manage_pg_ident_conf)
+* [`manage_recovery_conf`](#manage_recovery_conf)
+* [`manage_postgresql_conf_perms`](#manage_postgresql_conf_perms)
+* [`manage_selinux`](#manage_selinux)
+* [`manage_datadir`](#manage_datadir)
+* [`manage_logdir`](#manage_logdir)
+* [`manage_xlogdir`](#manage_xlogdir)
+* [`manage_package_repo`](#manage_package_repo)
+* [`manage_dnf_module`](#manage_dnf_module)
+* [`module_workdir`](#module_workdir)
 
-##### <a name="-postgresql--globals--client_package_name"></a>`client_package_name`
+##### <a name="client_package_name"></a>`client_package_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL client package name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--server_package_name"></a>`server_package_name`
+##### <a name="server_package_name"></a>`server_package_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL server package name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--contrib_package_name"></a>`contrib_package_name`
+##### <a name="contrib_package_name"></a>`contrib_package_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL contrib package name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--devel_package_name"></a>`devel_package_name`
+##### <a name="devel_package_name"></a>`devel_package_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL devel package name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--java_package_name"></a>`java_package_name`
+##### <a name="java_package_name"></a>`java_package_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL java package name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--docs_package_name"></a>`docs_package_name`
+##### <a name="docs_package_name"></a>`docs_package_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL docs package name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--perl_package_name"></a>`perl_package_name`
+##### <a name="perl_package_name"></a>`perl_package_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL Perl package name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--plperl_package_name"></a>`plperl_package_name`
+##### <a name="plperl_package_name"></a>`plperl_package_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL PL/Perl package name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--plpython_package_name"></a>`plpython_package_name`
+##### <a name="plpython_package_name"></a>`plpython_package_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL PL/Python package name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--python_package_name"></a>`python_package_name`
+##### <a name="python_package_name"></a>`python_package_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL Python package name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--postgis_package_name"></a>`postgis_package_name`
+##### <a name="postgis_package_name"></a>`postgis_package_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL PostGIS package name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--service_name"></a>`service_name`
+##### <a name="service_name"></a>`service_name`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL service name.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--service_provider"></a>`service_provider`
+##### <a name="service_provider"></a>`service_provider`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL service provider.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--service_status"></a>`service_status`
+##### <a name="service_status"></a>`service_status`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default status check command for your PostgreSQL service.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--default_database"></a>`default_database`
+##### <a name="default_database"></a>`default_database`
 
 Data type: `Optional[String[1]]`
 
 Specifies the name of the default database to connect with.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--validcon_script_path"></a>`validcon_script_path`
+##### <a name="validcon_script_path"></a>`validcon_script_path`
 
 Data type: `Optional[String[1]]`
 
 Scipt path for the connection validation check.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--initdb_path"></a>`initdb_path`
+##### <a name="initdb_path"></a>`initdb_path`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
 Path to the initdb command.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
 Sets the path to the psql command.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--pg_hba_conf_path"></a>`pg_hba_conf_path`
+##### <a name="pg_hba_conf_path"></a>`pg_hba_conf_path`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
 Specifies the path to your pg_hba.conf file.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--pg_ident_conf_path"></a>`pg_ident_conf_path`
+##### <a name="pg_ident_conf_path"></a>`pg_ident_conf_path`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
 Specifies the path to your pg_ident.conf file.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--postgresql_conf_path"></a>`postgresql_conf_path`
+##### <a name="postgresql_conf_path"></a>`postgresql_conf_path`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
 Sets the path to your postgresql.conf file.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--postgresql_conf_mode"></a>`postgresql_conf_mode`
+##### <a name="postgresql_conf_mode"></a>`postgresql_conf_mode`
 
 Data type: `Optional[Stdlib::Filemode]`
 
 Sets the mode of your postgresql.conf file. Only relevant if manage_postgresql_conf_perms is true.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--recovery_conf_path"></a>`recovery_conf_path`
+##### <a name="recovery_conf_path"></a>`recovery_conf_path`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
 Path to your recovery.conf file.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--default_connect_settings"></a>`default_connect_settings`
+##### <a name="default_connect_settings"></a>`default_connect_settings`
 
 Data type: `Hash`
 
@@ -410,17 +410,17 @@ Default connection settings.
 
 Default value: `{}`
 
-##### <a name="-postgresql--globals--pg_hba_conf_defaults"></a>`pg_hba_conf_defaults`
+##### <a name="pg_hba_conf_defaults"></a>`pg_hba_conf_defaults`
 
 Data type: `Optional[Boolean]`
 
 Disables the defaults supplied with the module for pg_hba.conf if set to false.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--datadir"></a>`datadir`
+##### <a name="datadir"></a>`datadir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Overrides the default PostgreSQL data directory for the target platform.
 Changing the datadir after installation causes the server to come to a full stop before making the change.
@@ -430,113 +430,113 @@ defaults to true on other systems).
 Warning! If datadir is changed from the default, Puppet does not manage purging of the original data directory, which causes it to fail
 if the data directory is changed back to the original
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--confdir"></a>`confdir`
+##### <a name="confdir"></a>`confdir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Overrides the default PostgreSQL configuration directory for the target platform.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--bindir"></a>`bindir`
+##### <a name="bindir"></a>`bindir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Overrides the default PostgreSQL binaries directory for the target platform.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--xlogdir"></a>`xlogdir`
+##### <a name="xlogdir"></a>`xlogdir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Overrides the default PostgreSQL xlog directory.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--logdir"></a>`logdir`
+##### <a name="logdir"></a>`logdir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Overrides the default PostgreSQL log directory.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--log_line_prefix"></a>`log_line_prefix`
+##### <a name="log_line_prefix"></a>`log_line_prefix`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL log prefix.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--group"></a>`group`
+##### <a name="group"></a>`group`
 
 Data type: `Optional[String[1]]`
 
 Overrides the default postgres user group to be used for related files in the file system.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--version"></a>`version`
+##### <a name="version"></a>`version`
 
 Data type: `Optional[String[1]]`
 
 The version of PostgreSQL to install and manage.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--postgis_version"></a>`postgis_version`
+##### <a name="postgis_version"></a>`postgis_version`
 
 Data type: `Optional[String[1]]`
 
 Defines the version of PostGIS to install, if you install PostGIS.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--repo_proxy"></a>`repo_proxy`
+##### <a name="repo_proxy"></a>`repo_proxy`
 
 Data type: `Optional[String[1]]`
 
 Sets the proxy option for the official PostgreSQL yum-repositories only.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--repo_baseurl"></a>`repo_baseurl`
+##### <a name="repo_baseurl"></a>`repo_baseurl`
 
 Data type: `Optional[String[1]]`
 
 Sets the baseurl for the PostgreSQL repository. Useful if you host your own mirror of the repository.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--yum_repo_commonurl"></a>`yum_repo_commonurl`
+##### <a name="yum_repo_commonurl"></a>`yum_repo_commonurl`
 
 Data type: `Optional[String[1]]`
 
 Sets the url for the PostgreSQL common Yum repository. Useful if you host your own mirror of the YUM repository.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--needs_initdb"></a>`needs_initdb`
+##### <a name="needs_initdb"></a>`needs_initdb`
 
 Data type: `Optional[Boolean]`
 
 Explicitly calls the initdb operation after the server package is installed and before the PostgreSQL service is started.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--encoding"></a>`encoding`
+##### <a name="encoding"></a>`encoding`
 
 Data type: `Optional[String[1]]`
 
@@ -544,9 +544,9 @@ Sets the default encoding for all databases created with this module.
 On certain operating systems, this is also used during the template1 initialization,
 so it becomes a default outside of the module as well.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--locale"></a>`locale`
+##### <a name="locale"></a>`locale`
 
 Data type: `Optional[String[1]]`
 
@@ -555,50 +555,50 @@ On certain operating systems, this is also used during the template1 initializat
 so it becomes a default outside of the module as well.
 On Debian, you'll need to ensure that the 'locales-all' package is installed for full functionality of PostgreSQL.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--data_checksums"></a>`data_checksums`
+##### <a name="data_checksums"></a>`data_checksums`
 
 Data type: `Optional[Boolean]`
 
 Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
 Warning: This option is used during initialization by initdb, and cannot be changed later.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--timezone"></a>`timezone`
+##### <a name="timezone"></a>`timezone`
 
 Data type: `Optional[String[1]]`
 
 Sets the default timezone of the postgresql server. The postgresql built-in default is taking the systems timezone information.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--manage_pg_hba_conf"></a>`manage_pg_hba_conf`
+##### <a name="manage_pg_hba_conf"></a>`manage_pg_hba_conf`
 
 Data type: `Optional[Boolean]`
 
 Allow Puppet to manage the pg_hba.conf file.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--manage_pg_ident_conf"></a>`manage_pg_ident_conf`
+##### <a name="manage_pg_ident_conf"></a>`manage_pg_ident_conf`
 
 Data type: `Optional[Boolean]`
 
 Allow Puppet to manage the pg_ident.conf file.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--manage_recovery_conf"></a>`manage_recovery_conf`
+##### <a name="manage_recovery_conf"></a>`manage_recovery_conf`
 
 Data type: `Optional[Boolean]`
 
 Allow Puppet to manage the recovery.conf file.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--manage_postgresql_conf_perms"></a>`manage_postgresql_conf_perms`
+##### <a name="manage_postgresql_conf_perms"></a>`manage_postgresql_conf_perms`
 
 Data type: `Optional[Boolean]`
 
@@ -606,49 +606,49 @@ Whether to manage the postgresql conf file permissions. This means owner,
 group and mode. Contents are not managed but should be managed through
 postgresql::server::config_entry.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--manage_selinux"></a>`manage_selinux`
+##### <a name="manage_selinux"></a>`manage_selinux`
 
 Data type: `Optional[Boolean]`
 
 Allows Puppet to manage the appropriate configuration file for selinux.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--manage_datadir"></a>`manage_datadir`
+##### <a name="manage_datadir"></a>`manage_datadir`
 
 Data type: `Optional[Boolean]`
 
 Set to false if you have file{ $datadir: } already defined
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--manage_logdir"></a>`manage_logdir`
+##### <a name="manage_logdir"></a>`manage_logdir`
 
 Data type: `Optional[Boolean]`
 
 Set to false if you have file{ $logdir: } already defined
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--manage_xlogdir"></a>`manage_xlogdir`
+##### <a name="manage_xlogdir"></a>`manage_xlogdir`
 
 Data type: `Optional[Boolean]`
 
 Set to false if you have file{ $xlogdir: } already defined
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--manage_package_repo"></a>`manage_package_repo`
+##### <a name="manage_package_repo"></a>`manage_package_repo`
 
 Data type: `Optional[Boolean]`
 
 Sets up official PostgreSQL repositories on your host if set to true.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--globals--manage_dnf_module"></a>`manage_dnf_module`
+##### <a name="manage_dnf_module"></a>`manage_dnf_module`
 
 Data type: `Boolean`
 
@@ -656,18 +656,18 @@ Manage the DNF module. This only makes sense on distributions that use DNF
 package manager, such as EL8 or Fedora. It also requires Puppet 5.5.20+ or
 Puppet 6.15.0+ since they ship the dnfmodule provider.
 
-Default value: `false`
+Default value: ``false``
 
-##### <a name="-postgresql--globals--module_workdir"></a>`module_workdir`
+##### <a name="module_workdir"></a>`module_workdir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Specifies working directory under which the psql command should be executed.
 May need to specify if '/tmp' is on volume mounted with noexec option.
 
-Default value: `undef`
+Default value: ``undef``
 
-### <a name="postgresql--lib--devel"></a>`postgresql::lib::devel`
+### <a name="postgresqllibdevel"></a>`postgresql::lib::devel`
 
 This class installs postgresql development libraries.
 
@@ -675,11 +675,11 @@ This class installs postgresql development libraries.
 
 The following parameters are available in the `postgresql::lib::devel` class:
 
-* [`package_name`](#-postgresql--lib--devel--package_name)
-* [`package_ensure`](#-postgresql--lib--devel--package_ensure)
-* [`link_pg_config`](#-postgresql--lib--devel--link_pg_config)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+* [`link_pg_config`](#link_pg_config)
 
-##### <a name="-postgresql--lib--devel--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -687,7 +687,7 @@ Override devel package name
 
 Default value: `$postgresql::params::devel_package_name`
 
-##### <a name="-postgresql--lib--devel--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]`
 
@@ -695,7 +695,7 @@ Ensure the development libraries are installed
 
 Default value: `'present'`
 
-##### <a name="-postgresql--lib--devel--link_pg_config"></a>`link_pg_config`
+##### <a name="link_pg_config"></a>`link_pg_config`
 
 Data type: `Boolean`
 
@@ -704,7 +704,7 @@ into usr/bin (not applicable to Debian systems). Set to false to disable this be
 
 Default value: `$postgresql::params::link_pg_config`
 
-### <a name="postgresql--lib--docs"></a>`postgresql::lib::docs`
+### <a name="postgresqllibdocs"></a>`postgresql::lib::docs`
 
 Installs PostgreSQL bindings for Postgres-Docs. Set the following parameters if you have a custom version you would like to install.
 
@@ -714,10 +714,10 @@ Installs PostgreSQL bindings for Postgres-Docs. Set the following parameters if 
 
 The following parameters are available in the `postgresql::lib::docs` class:
 
-* [`package_name`](#-postgresql--lib--docs--package_name)
-* [`package_ensure`](#-postgresql--lib--docs--package_ensure)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
 
-##### <a name="-postgresql--lib--docs--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -725,7 +725,7 @@ Specifies the name of the PostgreSQL docs package.
 
 Default value: `$postgresql::params::docs_package_name`
 
-##### <a name="-postgresql--lib--docs--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]`
 
@@ -733,7 +733,7 @@ Whether the PostgreSQL docs package resource should be present.
 
 Default value: `'present'`
 
-### <a name="postgresql--lib--java"></a>`postgresql::lib::java`
+### <a name="postgresqllibjava"></a>`postgresql::lib::java`
 
 This class installs the postgresql jdbc connector.
 
@@ -743,10 +743,10 @@ This class installs the postgresql jdbc connector.
 
 The following parameters are available in the `postgresql::lib::java` class:
 
-* [`package_name`](#-postgresql--lib--java--package_name)
-* [`package_ensure`](#-postgresql--lib--java--package_ensure)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
 
-##### <a name="-postgresql--lib--java--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -754,7 +754,7 @@ Specifies the name of the PostgreSQL java package.
 
 Default value: `$postgresql::params::java_package_name`
 
-##### <a name="-postgresql--lib--java--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]`
 
@@ -762,7 +762,7 @@ Specifies whether the package is present.
 
 Default value: `'present'`
 
-### <a name="postgresql--lib--perl"></a>`postgresql::lib::perl`
+### <a name="postgresqllibperl"></a>`postgresql::lib::perl`
 
 This class installs the perl libs for postgresql.
 
@@ -770,10 +770,10 @@ This class installs the perl libs for postgresql.
 
 The following parameters are available in the `postgresql::lib::perl` class:
 
-* [`package_name`](#-postgresql--lib--perl--package_name)
-* [`package_ensure`](#-postgresql--lib--perl--package_ensure)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
 
-##### <a name="-postgresql--lib--perl--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -781,7 +781,7 @@ Specifies the name of the PostgreSQL perl package to install.
 
 Default value: `$postgresql::params::perl_package_name`
 
-##### <a name="-postgresql--lib--perl--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]`
 
@@ -789,7 +789,7 @@ Ensure the perl libs for postgresql are installed.
 
 Default value: `'present'`
 
-### <a name="postgresql--lib--python"></a>`postgresql::lib::python`
+### <a name="postgresqllibpython"></a>`postgresql::lib::python`
 
 This class installs the python libs for postgresql.
 
@@ -797,10 +797,10 @@ This class installs the python libs for postgresql.
 
 The following parameters are available in the `postgresql::lib::python` class:
 
-* [`package_name`](#-postgresql--lib--python--package_name)
-* [`package_ensure`](#-postgresql--lib--python--package_ensure)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
 
-##### <a name="-postgresql--lib--python--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String[1]`
 
@@ -808,7 +808,7 @@ The name of the PostgreSQL Python package.
 
 Default value: `$postgresql::params::python_package_name`
 
-##### <a name="-postgresql--lib--python--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]`
 
@@ -816,7 +816,7 @@ Ensure the python libs for postgresql are installed.
 
 Default value: `'present'`
 
-### <a name="postgresql--server"></a>`postgresql::server`
+### <a name="postgresqlserver"></a>`postgresql::server`
 
 This installs a PostgreSQL server
 
@@ -824,78 +824,78 @@ This installs a PostgreSQL server
 
 The following parameters are available in the `postgresql::server` class:
 
-* [`postgres_password`](#-postgresql--server--postgres_password)
-* [`package_name`](#-postgresql--server--package_name)
-* [`package_ensure`](#-postgresql--server--package_ensure)
-* [`plperl_package_name`](#-postgresql--server--plperl_package_name)
-* [`plpython_package_name`](#-postgresql--server--plpython_package_name)
-* [`service_ensure`](#-postgresql--server--service_ensure)
-* [`service_enable`](#-postgresql--server--service_enable)
-* [`service_manage`](#-postgresql--server--service_manage)
-* [`service_name`](#-postgresql--server--service_name)
-* [`service_restart_on_change`](#-postgresql--server--service_restart_on_change)
-* [`service_provider`](#-postgresql--server--service_provider)
-* [`service_reload`](#-postgresql--server--service_reload)
-* [`service_status`](#-postgresql--server--service_status)
-* [`default_database`](#-postgresql--server--default_database)
-* [`default_connect_settings`](#-postgresql--server--default_connect_settings)
-* [`listen_addresses`](#-postgresql--server--listen_addresses)
-* [`port`](#-postgresql--server--port)
-* [`ip_mask_deny_postgres_user`](#-postgresql--server--ip_mask_deny_postgres_user)
-* [`ip_mask_allow_all_users`](#-postgresql--server--ip_mask_allow_all_users)
-* [`ipv4acls`](#-postgresql--server--ipv4acls)
-* [`ipv6acls`](#-postgresql--server--ipv6acls)
-* [`initdb_path`](#-postgresql--server--initdb_path)
-* [`psql_path`](#-postgresql--server--psql_path)
-* [`pg_hba_conf_path`](#-postgresql--server--pg_hba_conf_path)
-* [`pg_ident_conf_path`](#-postgresql--server--pg_ident_conf_path)
-* [`postgresql_conf_path`](#-postgresql--server--postgresql_conf_path)
-* [`postgresql_conf_mode`](#-postgresql--server--postgresql_conf_mode)
-* [`recovery_conf_path`](#-postgresql--server--recovery_conf_path)
-* [`datadir`](#-postgresql--server--datadir)
-* [`xlogdir`](#-postgresql--server--xlogdir)
-* [`logdir`](#-postgresql--server--logdir)
-* [`log_line_prefix`](#-postgresql--server--log_line_prefix)
-* [`pg_hba_conf_defaults`](#-postgresql--server--pg_hba_conf_defaults)
-* [`user`](#-postgresql--server--user)
-* [`group`](#-postgresql--server--group)
-* [`needs_initdb`](#-postgresql--server--needs_initdb)
-* [`encoding`](#-postgresql--server--encoding)
-* [`locale`](#-postgresql--server--locale)
-* [`data_checksums`](#-postgresql--server--data_checksums)
-* [`timezone`](#-postgresql--server--timezone)
-* [`manage_pg_hba_conf`](#-postgresql--server--manage_pg_hba_conf)
-* [`manage_pg_ident_conf`](#-postgresql--server--manage_pg_ident_conf)
-* [`manage_recovery_conf`](#-postgresql--server--manage_recovery_conf)
-* [`manage_postgresql_conf_perms`](#-postgresql--server--manage_postgresql_conf_perms)
-* [`manage_selinux`](#-postgresql--server--manage_selinux)
-* [`module_workdir`](#-postgresql--server--module_workdir)
-* [`manage_datadir`](#-postgresql--server--manage_datadir)
-* [`manage_logdir`](#-postgresql--server--manage_logdir)
-* [`manage_xlogdir`](#-postgresql--server--manage_xlogdir)
-* [`password_encryption`](#-postgresql--server--password_encryption)
-* [`roles`](#-postgresql--server--roles)
-* [`config_entries`](#-postgresql--server--config_entries)
-* [`pg_hba_rules`](#-postgresql--server--pg_hba_rules)
-* [`backup_enable`](#-postgresql--server--backup_enable)
-* [`backup_options`](#-postgresql--server--backup_options)
-* [`backup_provider`](#-postgresql--server--backup_provider)
-* [`extra_systemd_config`](#-postgresql--server--extra_systemd_config)
-* [`auth_host`](#-postgresql--server--auth_host)
-* [`auth_local`](#-postgresql--server--auth_local)
-* [`lc_messages`](#-postgresql--server--lc_messages)
-* [`username`](#-postgresql--server--username)
+* [`postgres_password`](#postgres_password)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+* [`plperl_package_name`](#plperl_package_name)
+* [`plpython_package_name`](#plpython_package_name)
+* [`service_ensure`](#service_ensure)
+* [`service_enable`](#service_enable)
+* [`service_manage`](#service_manage)
+* [`service_name`](#service_name)
+* [`service_restart_on_change`](#service_restart_on_change)
+* [`service_provider`](#service_provider)
+* [`service_reload`](#service_reload)
+* [`service_status`](#service_status)
+* [`default_database`](#default_database)
+* [`default_connect_settings`](#default_connect_settings)
+* [`listen_addresses`](#listen_addresses)
+* [`port`](#port)
+* [`ip_mask_deny_postgres_user`](#ip_mask_deny_postgres_user)
+* [`ip_mask_allow_all_users`](#ip_mask_allow_all_users)
+* [`ipv4acls`](#ipv4acls)
+* [`ipv6acls`](#ipv6acls)
+* [`initdb_path`](#initdb_path)
+* [`psql_path`](#psql_path)
+* [`pg_hba_conf_path`](#pg_hba_conf_path)
+* [`pg_ident_conf_path`](#pg_ident_conf_path)
+* [`postgresql_conf_path`](#postgresql_conf_path)
+* [`postgresql_conf_mode`](#postgresql_conf_mode)
+* [`recovery_conf_path`](#recovery_conf_path)
+* [`datadir`](#datadir)
+* [`xlogdir`](#xlogdir)
+* [`logdir`](#logdir)
+* [`log_line_prefix`](#log_line_prefix)
+* [`pg_hba_conf_defaults`](#pg_hba_conf_defaults)
+* [`user`](#user)
+* [`group`](#group)
+* [`needs_initdb`](#needs_initdb)
+* [`encoding`](#encoding)
+* [`locale`](#locale)
+* [`data_checksums`](#data_checksums)
+* [`timezone`](#timezone)
+* [`manage_pg_hba_conf`](#manage_pg_hba_conf)
+* [`manage_pg_ident_conf`](#manage_pg_ident_conf)
+* [`manage_recovery_conf`](#manage_recovery_conf)
+* [`manage_postgresql_conf_perms`](#manage_postgresql_conf_perms)
+* [`manage_selinux`](#manage_selinux)
+* [`module_workdir`](#module_workdir)
+* [`manage_datadir`](#manage_datadir)
+* [`manage_logdir`](#manage_logdir)
+* [`manage_xlogdir`](#manage_xlogdir)
+* [`password_encryption`](#password_encryption)
+* [`roles`](#roles)
+* [`config_entries`](#config_entries)
+* [`pg_hba_rules`](#pg_hba_rules)
+* [`backup_enable`](#backup_enable)
+* [`backup_options`](#backup_options)
+* [`backup_provider`](#backup_provider)
+* [`extra_systemd_config`](#extra_systemd_config)
+* [`auth_host`](#auth_host)
+* [`auth_local`](#auth_local)
+* [`lc_messages`](#lc_messages)
+* [`username`](#username)
 
-##### <a name="-postgresql--server--postgres_password"></a>`postgres_password`
+##### <a name="postgres_password"></a>`postgres_password`
 
 Data type: `Optional[Variant[String[1], Sensitive[String[1]], Integer]]`
 
 Sets the password for the postgres user to your specified value. By default, this setting uses the superuser account in the Postgres
 database, with a user called postgres and no password.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String[1]`
 
@@ -903,7 +903,7 @@ Specifies the name of the package to use for installing the server software.
 
 Default value: `$postgresql::params::server_package_name`
 
-##### <a name="-postgresql--server--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]`
 
@@ -911,7 +911,7 @@ Passes a value through to the package resource when creating the server instance
 
 Default value: `$postgresql::params::package_ensure`
 
-##### <a name="-postgresql--server--plperl_package_name"></a>`plperl_package_name`
+##### <a name="plperl_package_name"></a>`plperl_package_name`
 
 Data type: `Optional[String[1]]`
 
@@ -919,7 +919,7 @@ Sets the default package name for the PL/Perl extension.
 
 Default value: `$postgresql::params::plperl_package_name`
 
-##### <a name="-postgresql--server--plpython_package_name"></a>`plpython_package_name`
+##### <a name="plpython_package_name"></a>`plpython_package_name`
 
 Data type: `Optional[String[1]]`
 
@@ -927,7 +927,7 @@ Sets the default package name for the PL/Python extension.
 
 Default value: `$postgresql::params::plpython_package_name`
 
-##### <a name="-postgresql--server--service_ensure"></a>`service_ensure`
+##### <a name="service_ensure"></a>`service_ensure`
 
 Data type: `Variant[Enum['running', 'stopped'], Boolean]`
 
@@ -935,7 +935,7 @@ Ensure service is installed
 
 Default value: `$postgresql::params::service_ensure`
 
-##### <a name="-postgresql--server--service_enable"></a>`service_enable`
+##### <a name="service_enable"></a>`service_enable`
 
 Data type: `Boolean`
 
@@ -943,7 +943,7 @@ Enable the PostgreSQL service
 
 Default value: `$postgresql::params::service_enable`
 
-##### <a name="-postgresql--server--service_manage"></a>`service_manage`
+##### <a name="service_manage"></a>`service_manage`
 
 Data type: `Boolean`
 
@@ -951,7 +951,7 @@ Defines whether or not Puppet should manage the service.
 
 Default value: `$postgresql::params::service_manage`
 
-##### <a name="-postgresql--server--service_name"></a>`service_name`
+##### <a name="service_name"></a>`service_name`
 
 Data type: `String[1]`
 
@@ -959,7 +959,7 @@ Overrides the default PostgreSQL service name.
 
 Default value: `$postgresql::params::service_name`
 
-##### <a name="-postgresql--server--service_restart_on_change"></a>`service_restart_on_change`
+##### <a name="service_restart_on_change"></a>`service_restart_on_change`
 
 Data type: `Boolean`
 
@@ -968,7 +968,7 @@ to become active.
 
 Default value: `$postgresql::params::service_restart_on_change`
 
-##### <a name="-postgresql--server--service_provider"></a>`service_provider`
+##### <a name="service_provider"></a>`service_provider`
 
 Data type: `Optional[String[1]]`
 
@@ -976,7 +976,7 @@ Overrides the default PostgreSQL service provider.
 
 Default value: `$postgresql::params::service_provider`
 
-##### <a name="-postgresql--server--service_reload"></a>`service_reload`
+##### <a name="service_reload"></a>`service_reload`
 
 Data type: `String[1]`
 
@@ -984,7 +984,7 @@ Overrides the default reload command for your PostgreSQL service.
 
 Default value: `$postgresql::params::service_reload`
 
-##### <a name="-postgresql--server--service_status"></a>`service_status`
+##### <a name="service_status"></a>`service_status`
 
 Data type: `Optional[String[1]]`
 
@@ -992,7 +992,7 @@ Overrides the default status check command for your PostgreSQL service.
 
 Default value: `$postgresql::params::service_status`
 
-##### <a name="-postgresql--server--default_database"></a>`default_database`
+##### <a name="default_database"></a>`default_database`
 
 Data type: `String[1]`
 
@@ -1000,7 +1000,7 @@ Specifies the name of the default database to connect with. On most systems this
 
 Default value: `$postgresql::params::default_database`
 
-##### <a name="-postgresql--server--default_connect_settings"></a>`default_connect_settings`
+##### <a name="default_connect_settings"></a>`default_connect_settings`
 
 Data type: `Hash`
 
@@ -1009,7 +1009,7 @@ postgresql::server::role.
 
 Default value: `$postgresql::globals::default_connect_settings`
 
-##### <a name="-postgresql--server--listen_addresses"></a>`listen_addresses`
+##### <a name="listen_addresses"></a>`listen_addresses`
 
 Data type: `Optional[Variant[String[1], Array[String[1]]]]`
 
@@ -1017,7 +1017,7 @@ Address list on which the PostgreSQL service will listen
 
 Default value: `$postgresql::params::listen_addresses`
 
-##### <a name="-postgresql--server--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Stdlib::Port`
 
@@ -1029,7 +1029,7 @@ Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
 
 Default value: `$postgresql::params::port`
 
-##### <a name="-postgresql--server--ip_mask_deny_postgres_user"></a>`ip_mask_deny_postgres_user`
+##### <a name="ip_mask_deny_postgres_user"></a>`ip_mask_deny_postgres_user`
 
 Data type: `String[1]`
 
@@ -1038,7 +1038,7 @@ Default value: '0.0.0.0/0', which denies any remote connection.
 
 Default value: `$postgresql::params::ip_mask_deny_postgres_user`
 
-##### <a name="-postgresql--server--ip_mask_allow_all_users"></a>`ip_mask_allow_all_users`
+##### <a name="ip_mask_allow_all_users"></a>`ip_mask_allow_all_users`
 
 Data type: `String[1]`
 
@@ -1050,7 +1050,7 @@ Default value: '127.0.0.1/32'.
 
 Default value: `$postgresql::params::ip_mask_allow_all_users`
 
-##### <a name="-postgresql--server--ipv4acls"></a>`ipv4acls`
+##### <a name="ipv4acls"></a>`ipv4acls`
 
 Data type: `Array[String[1]]`
 
@@ -1058,7 +1058,7 @@ Lists strings for access control for connection method, users, databases, IPv4 a
 
 Default value: `$postgresql::params::ipv4acls`
 
-##### <a name="-postgresql--server--ipv6acls"></a>`ipv6acls`
+##### <a name="ipv6acls"></a>`ipv6acls`
 
 Data type: `Array[String[1]]`
 
@@ -1066,7 +1066,7 @@ Lists strings for access control for connection method, users, databases, IPv6 a
 
 Default value: `$postgresql::params::ipv6acls`
 
-##### <a name="-postgresql--server--initdb_path"></a>`initdb_path`
+##### <a name="initdb_path"></a>`initdb_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -1074,7 +1074,7 @@ Specifies the path to the initdb command.
 
 Default value: `$postgresql::params::initdb_path`
 
-##### <a name="-postgresql--server--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -1082,7 +1082,7 @@ Specifies the path to the psql command.
 
 Default value: `$postgresql::params::psql_path`
 
-##### <a name="-postgresql--server--pg_hba_conf_path"></a>`pg_hba_conf_path`
+##### <a name="pg_hba_conf_path"></a>`pg_hba_conf_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -1090,7 +1090,7 @@ Specifies the path to your pg_hba.conf file.
 
 Default value: `$postgresql::params::pg_hba_conf_path`
 
-##### <a name="-postgresql--server--pg_ident_conf_path"></a>`pg_ident_conf_path`
+##### <a name="pg_ident_conf_path"></a>`pg_ident_conf_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -1098,7 +1098,7 @@ Specifies the path to your pg_ident.conf file.
 
 Default value: `$postgresql::params::pg_ident_conf_path`
 
-##### <a name="-postgresql--server--postgresql_conf_path"></a>`postgresql_conf_path`
+##### <a name="postgresql_conf_path"></a>`postgresql_conf_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -1106,7 +1106,7 @@ Specifies the path to your postgresql.conf file.
 
 Default value: `$postgresql::params::postgresql_conf_path`
 
-##### <a name="-postgresql--server--postgresql_conf_mode"></a>`postgresql_conf_mode`
+##### <a name="postgresql_conf_mode"></a>`postgresql_conf_mode`
 
 Data type: `Optional[Stdlib::Filemode]`
 
@@ -1114,7 +1114,7 @@ Sets the mode of your postgresql.conf file. Only relevant if manage_postgresql_c
 
 Default value: `$postgresql::params::postgresql_conf_mode`
 
-##### <a name="-postgresql--server--recovery_conf_path"></a>`recovery_conf_path`
+##### <a name="recovery_conf_path"></a>`recovery_conf_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -1122,31 +1122,31 @@ Specifies the path to your recovery.conf file.
 
 Default value: `$postgresql::params::recovery_conf_path`
 
-##### <a name="-postgresql--server--datadir"></a>`datadir`
+##### <a name="datadir"></a>`datadir`
 
-Data type: `String[1]`
+Data type: `Stdlib::Absolutepath`
 
 PostgreSQL data directory
 
 Default value: `$postgresql::params::datadir`
 
-##### <a name="-postgresql--server--xlogdir"></a>`xlogdir`
+##### <a name="xlogdir"></a>`xlogdir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 PostgreSQL xlog directory
 
 Default value: `$postgresql::params::xlogdir`
 
-##### <a name="-postgresql--server--logdir"></a>`logdir`
+##### <a name="logdir"></a>`logdir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 PostgreSQL log directory
 
 Default value: `$postgresql::params::logdir`
 
-##### <a name="-postgresql--server--log_line_prefix"></a>`log_line_prefix`
+##### <a name="log_line_prefix"></a>`log_line_prefix`
 
 Data type: `Optional[String[1]]`
 
@@ -1154,7 +1154,7 @@ PostgreSQL log line prefix
 
 Default value: `$postgresql::params::log_line_prefix`
 
-##### <a name="-postgresql--server--pg_hba_conf_defaults"></a>`pg_hba_conf_defaults`
+##### <a name="pg_hba_conf_defaults"></a>`pg_hba_conf_defaults`
 
 Data type: `Boolean`
 
@@ -1164,7 +1164,7 @@ basic psql operations for example.
 
 Default value: `$postgresql::params::pg_hba_conf_defaults`
 
-##### <a name="-postgresql--server--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `String[1]`
 
@@ -1172,7 +1172,7 @@ Overrides the default PostgreSQL super user and owner of PostgreSQL related file
 
 Default value: `$postgresql::params::user`
 
-##### <a name="-postgresql--server--group"></a>`group`
+##### <a name="group"></a>`group`
 
 Data type: `String[1]`
 
@@ -1180,7 +1180,7 @@ Overrides the default postgres user group to be used for related files in the fi
 
 Default value: `$postgresql::params::group`
 
-##### <a name="-postgresql--server--needs_initdb"></a>`needs_initdb`
+##### <a name="needs_initdb"></a>`needs_initdb`
 
 Data type: `Boolean`
 
@@ -1188,7 +1188,7 @@ Explicitly calls the initdb operation after server package is installed, and bef
 
 Default value: `$postgresql::params::needs_initdb`
 
-##### <a name="-postgresql--server--encoding"></a>`encoding`
+##### <a name="encoding"></a>`encoding`
 
 Data type: `Optional[String[1]]`
 
@@ -1197,7 +1197,7 @@ template1 initialization, so it becomes a default outside of the module as well.
 
 Default value: `$postgresql::params::encoding`
 
-##### <a name="-postgresql--server--locale"></a>`locale`
+##### <a name="locale"></a>`locale`
 
 Data type: `Optional[String[1]]`
 
@@ -1206,7 +1206,7 @@ template1 initialization as well, so it becomes a default outside of the module.
 
 Default value: `$postgresql::params::locale`
 
-##### <a name="-postgresql--server--data_checksums"></a>`data_checksums`
+##### <a name="data_checksums"></a>`data_checksums`
 
 Data type: `Optional[Boolean]`
 
@@ -1216,7 +1216,7 @@ If set, checksums are calculated for all objects, in all databases.
 
 Default value: `$postgresql::params::data_checksums`
 
-##### <a name="-postgresql--server--timezone"></a>`timezone`
+##### <a name="timezone"></a>`timezone`
 
 Data type: `Optional[String[1]]`
 
@@ -1224,7 +1224,7 @@ Set timezone for the PostgreSQL instance
 
 Default value: `$postgresql::params::timezone`
 
-##### <a name="-postgresql--server--manage_pg_hba_conf"></a>`manage_pg_hba_conf`
+##### <a name="manage_pg_hba_conf"></a>`manage_pg_hba_conf`
 
 Data type: `Boolean`
 
@@ -1232,7 +1232,7 @@ Boolean. Whether to manage the pg_hba.conf.
 
 Default value: `$postgresql::params::manage_pg_hba_conf`
 
-##### <a name="-postgresql--server--manage_pg_ident_conf"></a>`manage_pg_ident_conf`
+##### <a name="manage_pg_ident_conf"></a>`manage_pg_ident_conf`
 
 Data type: `Boolean`
 
@@ -1240,7 +1240,7 @@ Boolean. Overwrites the pg_ident.conf file.
 
 Default value: `$postgresql::params::manage_pg_ident_conf`
 
-##### <a name="-postgresql--server--manage_recovery_conf"></a>`manage_recovery_conf`
+##### <a name="manage_recovery_conf"></a>`manage_recovery_conf`
 
 Data type: `Boolean`
 
@@ -1248,7 +1248,7 @@ Boolean. Specifies whether or not manage the recovery.conf.
 
 Default value: `$postgresql::params::manage_recovery_conf`
 
-##### <a name="-postgresql--server--manage_postgresql_conf_perms"></a>`manage_postgresql_conf_perms`
+##### <a name="manage_postgresql_conf_perms"></a>`manage_postgresql_conf_perms`
 
 Data type: `Boolean`
 
@@ -1258,7 +1258,7 @@ postgresql::server::config_entry.
 
 Default value: `$postgresql::params::manage_postgresql_conf_perms`
 
-##### <a name="-postgresql--server--manage_selinux"></a>`manage_selinux`
+##### <a name="manage_selinux"></a>`manage_selinux`
 
 Data type: `Boolean`
 
@@ -1266,15 +1266,15 @@ Specifies whether or not manage the conf file for selinux.
 
 Default value: `$postgresql::params::manage_selinux`
 
-##### <a name="-postgresql--server--module_workdir"></a>`module_workdir`
+##### <a name="module_workdir"></a>`module_workdir`
 
-Data type: `String[1]`
+Data type: `Stdlib::Absolutepath`
 
 Working directory for the PostgreSQL module
 
 Default value: `$postgresql::params::module_workdir`
 
-##### <a name="-postgresql--server--manage_datadir"></a>`manage_datadir`
+##### <a name="manage_datadir"></a>`manage_datadir`
 
 Data type: `Boolean`
 
@@ -1282,7 +1282,7 @@ Set to false if you have file{ $datadir: } already defined
 
 Default value: `$postgresql::params::manage_datadir`
 
-##### <a name="-postgresql--server--manage_logdir"></a>`manage_logdir`
+##### <a name="manage_logdir"></a>`manage_logdir`
 
 Data type: `Boolean`
 
@@ -1290,7 +1290,7 @@ Set to false if you have file{ $logdir: } already defined
 
 Default value: `$postgresql::params::manage_logdir`
 
-##### <a name="-postgresql--server--manage_xlogdir"></a>`manage_xlogdir`
+##### <a name="manage_xlogdir"></a>`manage_xlogdir`
 
 Data type: `Boolean`
 
@@ -1298,7 +1298,7 @@ Set to false if you have file{ $xlogdir: } already defined
 
 Default value: `$postgresql::params::manage_xlogdir`
 
-##### <a name="-postgresql--server--password_encryption"></a>`password_encryption`
+##### <a name="password_encryption"></a>`password_encryption`
 
 Data type: `Optional[Postgresql::Pg_password_encryption]`
 
@@ -1306,7 +1306,7 @@ Specify the type of encryption set for the password.
 
 Default value: `$postgresql::params::password_encryption`
 
-##### <a name="-postgresql--server--roles"></a>`roles`
+##### <a name="roles"></a>`roles`
 
 Data type: `Hash[String, Hash]`
 
@@ -1314,7 +1314,7 @@ Specifies a hash from which to generate postgresql::server::role resources.
 
 Default value: `{}`
 
-##### <a name="-postgresql--server--config_entries"></a>`config_entries`
+##### <a name="config_entries"></a>`config_entries`
 
 Data type: `Hash[String, Any]`
 
@@ -1322,7 +1322,7 @@ Specifies a hash from which to generate postgresql::server::config_entry resourc
 
 Default value: `{}`
 
-##### <a name="-postgresql--server--pg_hba_rules"></a>`pg_hba_rules`
+##### <a name="pg_hba_rules"></a>`pg_hba_rules`
 
 Data type: `Postgresql::Pg_hba_rules`
 
@@ -1330,7 +1330,7 @@ Specifies a hash from which to generate postgresql::server::pg_hba_rule resource
 
 Default value: `{}`
 
-##### <a name="-postgresql--server--backup_enable"></a>`backup_enable`
+##### <a name="backup_enable"></a>`backup_enable`
 
 Data type: `Boolean`
 
@@ -1338,7 +1338,7 @@ Whether a backup job should be enabled.
 
 Default value: `$postgresql::params::backup_enable`
 
-##### <a name="-postgresql--server--backup_options"></a>`backup_options`
+##### <a name="backup_options"></a>`backup_options`
 
 Data type: `Hash`
 
@@ -1346,7 +1346,7 @@ A hash of options that should be passed through to the backup provider.
 
 Default value: `{}`
 
-##### <a name="-postgresql--server--backup_provider"></a>`backup_provider`
+##### <a name="backup_provider"></a>`backup_provider`
 
 Data type: `Enum['pg_dump']`
 
@@ -1354,7 +1354,7 @@ Specifies the backup provider to use.
 
 Default value: `$postgresql::params::backup_provider`
 
-##### <a name="-postgresql--server--extra_systemd_config"></a>`extra_systemd_config`
+##### <a name="extra_systemd_config"></a>`extra_systemd_config`
 
 Data type: `Optional[String]`
 
@@ -1362,39 +1362,39 @@ Adds extra config to systemd config file, can for instance be used to add extra 
 
 Default value: `$postgresql::params::extra_systemd_config`
 
-##### <a name="-postgresql--server--auth_host"></a>`auth_host`
+##### <a name="auth_host"></a>`auth_host`
 
 Data type: `Optional[String[1]]`
 
 auth method used by default for host authorization
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--auth_local"></a>`auth_local`
+##### <a name="auth_local"></a>`auth_local`
 
 Data type: `Optional[String[1]]`
 
 auth method used by default for local authorization
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--lc_messages"></a>`lc_messages`
+##### <a name="lc_messages"></a>`lc_messages`
 
 Data type: `Optional[String[1]]`
 
 locale used for logging and system messages
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--username"></a>`username`
+##### <a name="username"></a>`username`
 
 Data type: `Optional[String[1]]`
 
 username of user running the postgres instance
 
-Default value: `undef`
+Default value: ``undef``
 
-### <a name="postgresql--server--contrib"></a>`postgresql::server::contrib`
+### <a name="postgresqlservercontrib"></a>`postgresql::server::contrib`
 
 Install the contrib postgresql packaging.
 
@@ -1402,10 +1402,10 @@ Install the contrib postgresql packaging.
 
 The following parameters are available in the `postgresql::server::contrib` class:
 
-* [`package_name`](#-postgresql--server--contrib--package_name)
-* [`package_ensure`](#-postgresql--server--contrib--package_ensure)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
 
-##### <a name="-postgresql--server--contrib--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `Optional[String[1]]`
 
@@ -1413,7 +1413,7 @@ The name of the PostgreSQL contrib package.
 
 Default value: `$postgresql::params::contrib_package_name`
 
-##### <a name="-postgresql--server--contrib--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]`
 
@@ -1421,7 +1421,7 @@ Ensure the contrib package is installed.
 
 Default value: `'present'`
 
-### <a name="postgresql--server--plperl"></a>`postgresql::server::plperl`
+### <a name="postgresqlserverplperl"></a>`postgresql::server::plperl`
 
 This class installs the PL/Perl procedural language for postgresql.
 
@@ -1429,10 +1429,10 @@ This class installs the PL/Perl procedural language for postgresql.
 
 The following parameters are available in the `postgresql::server::plperl` class:
 
-* [`package_ensure`](#-postgresql--server--plperl--package_ensure)
-* [`package_name`](#-postgresql--server--plperl--package_name)
+* [`package_ensure`](#package_ensure)
+* [`package_name`](#package_name)
 
-##### <a name="-postgresql--server--plperl--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]`
 
@@ -1440,7 +1440,7 @@ The ensure parameter passed on to PostgreSQL PL/Perl package resource.
 
 Default value: `'present'`
 
-##### <a name="-postgresql--server--plperl--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `Optional[String[1]]`
 
@@ -1448,7 +1448,7 @@ The name of the PostgreSQL PL/Perl package.
 
 Default value: `$postgresql::server::plperl_package_name`
 
-### <a name="postgresql--server--plpython"></a>`postgresql::server::plpython`
+### <a name="postgresqlserverplpython"></a>`postgresql::server::plpython`
 
 This class installs the PL/Python procedural language for postgresql.
 
@@ -1456,10 +1456,10 @@ This class installs the PL/Python procedural language for postgresql.
 
 The following parameters are available in the `postgresql::server::plpython` class:
 
-* [`package_ensure`](#-postgresql--server--plpython--package_ensure)
-* [`package_name`](#-postgresql--server--plpython--package_name)
+* [`package_ensure`](#package_ensure)
+* [`package_name`](#package_name)
 
-##### <a name="-postgresql--server--plpython--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]`
 
@@ -1467,7 +1467,7 @@ Specifies whether the package is present.
 
 Default value: `'present'`
 
-##### <a name="-postgresql--server--plpython--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `Optional[String[1]]`
 
@@ -1475,7 +1475,7 @@ Specifies the name of the postgresql PL/Python package.
 
 Default value: `$postgresql::server::plpython_package_name`
 
-### <a name="postgresql--server--postgis"></a>`postgresql::server::postgis`
+### <a name="postgresqlserverpostgis"></a>`postgresql::server::postgis`
 
 Install the postgis postgresql packaging.
 
@@ -1483,10 +1483,10 @@ Install the postgis postgresql packaging.
 
 The following parameters are available in the `postgresql::server::postgis` class:
 
-* [`package_name`](#-postgresql--server--postgis--package_name)
-* [`package_ensure`](#-postgresql--server--postgis--package_ensure)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
 
-##### <a name="-postgresql--server--postgis--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -1494,7 +1494,7 @@ Sets the package name.
 
 Default value: `$postgresql::params::postgis_package_name`
 
-##### <a name="-postgresql--server--postgis--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]`
 
@@ -1504,7 +1504,7 @@ Default value: `'present'`
 
 ## Defined types
 
-### <a name="postgresql--server--config_entry"></a>`postgresql::server::config_entry`
+### <a name="postgresqlserverconfig_entry"></a>`postgresql::server::config_entry`
 
 Manage a postgresql.conf entry.
 
@@ -1512,12 +1512,12 @@ Manage a postgresql.conf entry.
 
 The following parameters are available in the `postgresql::server::config_entry` defined type:
 
-* [`ensure`](#-postgresql--server--config_entry--ensure)
-* [`key`](#-postgresql--server--config_entry--key)
-* [`value`](#-postgresql--server--config_entry--value)
-* [`path`](#-postgresql--server--config_entry--path)
+* [`ensure`](#ensure)
+* [`key`](#key)
+* [`value`](#value)
+* [`path`](#path)
 
-##### <a name="-postgresql--server--config_entry--ensure"></a>`ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -1525,7 +1525,7 @@ Removes an entry if set to 'absent'.
 
 Default value: `'present'`
 
-##### <a name="-postgresql--server--config_entry--key"></a>`key`
+##### <a name="key"></a>`key`
 
 Data type: `String[1]`
 
@@ -1533,15 +1533,15 @@ Defines the key/name for the setting. Defaults to $name
 
 Default value: `$name`
 
-##### <a name="-postgresql--server--config_entry--value"></a>`value`
+##### <a name="value"></a>`value`
 
 Data type: `Optional[Variant[String[1], Numeric, Array[String[1]]]]`
 
 Defines the value for the setting.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--config_entry--path"></a>`path`
+##### <a name="path"></a>`path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -1549,7 +1549,7 @@ Path for postgresql.conf
 
 Default value: `$postgresql::server::postgresql_conf_path`
 
-### <a name="postgresql--server--database"></a>`postgresql::server::database`
+### <a name="postgresqlserverdatabase"></a>`postgresql::server::database`
 
 Define for creating a database.
 
@@ -1557,30 +1557,30 @@ Define for creating a database.
 
 The following parameters are available in the `postgresql::server::database` defined type:
 
-* [`comment`](#-postgresql--server--database--comment)
-* [`dbname`](#-postgresql--server--database--dbname)
-* [`owner`](#-postgresql--server--database--owner)
-* [`tablespace`](#-postgresql--server--database--tablespace)
-* [`template`](#-postgresql--server--database--template)
-* [`encoding`](#-postgresql--server--database--encoding)
-* [`locale`](#-postgresql--server--database--locale)
-* [`istemplate`](#-postgresql--server--database--istemplate)
-* [`connect_settings`](#-postgresql--server--database--connect_settings)
-* [`psql_path`](#-postgresql--server--database--psql_path)
-* [`default_db`](#-postgresql--server--database--default_db)
-* [`user`](#-postgresql--server--database--user)
-* [`group`](#-postgresql--server--database--group)
-* [`port`](#-postgresql--server--database--port)
+* [`comment`](#comment)
+* [`dbname`](#dbname)
+* [`owner`](#owner)
+* [`tablespace`](#tablespace)
+* [`template`](#template)
+* [`encoding`](#encoding)
+* [`locale`](#locale)
+* [`istemplate`](#istemplate)
+* [`connect_settings`](#connect_settings)
+* [`psql_path`](#psql_path)
+* [`default_db`](#default_db)
+* [`user`](#user)
+* [`group`](#group)
+* [`port`](#port)
 
-##### <a name="-postgresql--server--database--comment"></a>`comment`
+##### <a name="comment"></a>`comment`
 
 Data type: `Optional[String[1]]`
 
 Sets a comment on the database.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--database--dbname"></a>`dbname`
+##### <a name="dbname"></a>`dbname`
 
 Data type: `String[1]`
 
@@ -1588,23 +1588,23 @@ Sets the name of the database.
 
 Default value: `$title`
 
-##### <a name="-postgresql--server--database--owner"></a>`owner`
+##### <a name="owner"></a>`owner`
 
 Data type: `Optional[String[1]]`
 
 Sets name of the database owner.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--database--tablespace"></a>`tablespace`
+##### <a name="tablespace"></a>`tablespace`
 
 Data type: `Optional[String[1]]`
 
 Sets tablespace for where to create this database.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--database--template"></a>`template`
+##### <a name="template"></a>`template`
 
 Data type: `String[1]`
 
@@ -1612,7 +1612,7 @@ Specifies the name of the template database from which to build this database. D
 
 Default value: `'template0'`
 
-##### <a name="-postgresql--server--database--encoding"></a>`encoding`
+##### <a name="encoding"></a>`encoding`
 
 Data type: `Optional[String[1]]`
 
@@ -1620,7 +1620,7 @@ Overrides the character set during creation of the database.
 
 Default value: `$postgresql::server::encoding`
 
-##### <a name="-postgresql--server--database--locale"></a>`locale`
+##### <a name="locale"></a>`locale`
 
 Data type: `Optional[String[1]]`
 
@@ -1628,15 +1628,15 @@ Overrides the locale during creation of the database.
 
 Default value: `$postgresql::server::locale`
 
-##### <a name="-postgresql--server--database--istemplate"></a>`istemplate`
+##### <a name="istemplate"></a>`istemplate`
 
 Data type: `Boolean`
 
 Defines the database as a template if set to true.
 
-Default value: `false`
+Default value: ``false``
 
-##### <a name="-postgresql--server--database--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -1644,7 +1644,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-##### <a name="-postgresql--server--database--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -1652,7 +1652,7 @@ Specifies the path to the psql command.
 
 Default value: `$postgresql::server::psql_path`
 
-##### <a name="-postgresql--server--database--default_db"></a>`default_db`
+##### <a name="default_db"></a>`default_db`
 
 Data type: `String[1]`
 
@@ -1660,7 +1660,7 @@ Specifies the name of the default database to connect with. On most systems this
 
 Default value: `$postgresql::server::default_database`
 
-##### <a name="-postgresql--server--database--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `String[1]`
 
@@ -1668,7 +1668,7 @@ Overrides the default PostgreSQL super user and owner of PostgreSQL related file
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--database--group"></a>`group`
+##### <a name="group"></a>`group`
 
 Data type: `String[1]`
 
@@ -1676,7 +1676,7 @@ Overrides the default postgres user group to be used for related files in the fi
 
 Default value: `$postgresql::server::group`
 
-##### <a name="-postgresql--server--database--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Stdlib::Port`
 
@@ -1684,7 +1684,7 @@ Specifies the port for the PostgreSQL server to listen on.
 
 Default value: `$postgresql::server::port`
 
-### <a name="postgresql--server--database_grant"></a>`postgresql::server::database_grant`
+### <a name="postgresqlserverdatabase_grant"></a>`postgresql::server::database_grant`
 
 Manage a database grant.
 
@@ -1692,51 +1692,51 @@ Manage a database grant.
 
 The following parameters are available in the `postgresql::server::database_grant` defined type:
 
-* [`privilege`](#-postgresql--server--database_grant--privilege)
-* [`db`](#-postgresql--server--database_grant--db)
-* [`role`](#-postgresql--server--database_grant--role)
-* [`ensure`](#-postgresql--server--database_grant--ensure)
-* [`psql_db`](#-postgresql--server--database_grant--psql_db)
-* [`psql_user`](#-postgresql--server--database_grant--psql_user)
-* [`psql_group`](#-postgresql--server--database_grant--psql_group)
-* [`connect_settings`](#-postgresql--server--database_grant--connect_settings)
-* [`port`](#-postgresql--server--database_grant--port)
+* [`privilege`](#privilege)
+* [`db`](#db)
+* [`role`](#role)
+* [`ensure`](#ensure)
+* [`psql_db`](#psql_db)
+* [`psql_user`](#psql_user)
+* [`psql_group`](#psql_group)
+* [`connect_settings`](#connect_settings)
+* [`port`](#port)
 
-##### <a name="-postgresql--server--database_grant--privilege"></a>`privilege`
+##### <a name="privilege"></a>`privilege`
 
 Data type: `Enum['ALL', 'CREATE', 'CONNECT', 'TEMPORARY', 'TEMP', 'all', 'create', 'connect', 'temporary', 'temp']`
 
 Specifies comma-separated list of privileges to grant. Valid options: 'ALL', 'CREATE', 'CONNECT', 'TEMPORARY', 'TEMP'.
 
-##### <a name="-postgresql--server--database_grant--db"></a>`db`
+##### <a name="db"></a>`db`
 
 Data type: `String[1]`
 
 Specifies the database to which you are granting access.
 
-##### <a name="-postgresql--server--database_grant--role"></a>`role`
+##### <a name="role"></a>`role`
 
 Data type: `String[1]`
 
 Specifies the role or user whom you are granting access to.
 
-##### <a name="-postgresql--server--database_grant--ensure"></a>`ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Optional[Enum['present', 'absent']]`
 
 Specifies whether to grant or revoke the privilege. Revoke or 'absent' works only in PostgreSQL version 9.1.24 or later.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--database_grant--psql_db"></a>`psql_db`
+##### <a name="psql_db"></a>`psql_db`
 
 Data type: `Optional[String[1]]`
 
 Defines the database to execute the grant against. This should not ordinarily be changed from the default
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--database_grant--psql_user"></a>`psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `String[1]`
 
@@ -1744,7 +1744,7 @@ Specifies the OS user for running psql. Default value: The default user for the 
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--database_grant--psql_group"></a>`psql_group`
+##### <a name="psql_group"></a>`psql_group`
 
 Data type: `String[1]`
 
@@ -1752,23 +1752,23 @@ Overrides the default postgres user group to be used for related files in the fi
 
 Default value: `$postgresql::server::group`
 
-##### <a name="-postgresql--server--database_grant--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Optional[Hash]`
 
 Specifies a hash of environment variables used when connecting to a remote server.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--database_grant--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Optional[Stdlib::Port]`
 
 Port to use when connecting.
 
-Default value: `undef`
+Default value: ``undef``
 
-### <a name="postgresql--server--db"></a>`postgresql::server::db`
+### <a name="postgresqlserverdb"></a>`postgresql::server::db`
 
 Define for conveniently creating a role, database and assigning the correct permissions.
 
@@ -1776,44 +1776,44 @@ Define for conveniently creating a role, database and assigning the correct perm
 
 The following parameters are available in the `postgresql::server::db` defined type:
 
-* [`user`](#-postgresql--server--db--user)
-* [`password`](#-postgresql--server--db--password)
-* [`comment`](#-postgresql--server--db--comment)
-* [`dbname`](#-postgresql--server--db--dbname)
-* [`encoding`](#-postgresql--server--db--encoding)
-* [`locale`](#-postgresql--server--db--locale)
-* [`grant`](#-postgresql--server--db--grant)
-* [`tablespace`](#-postgresql--server--db--tablespace)
-* [`template`](#-postgresql--server--db--template)
-* [`istemplate`](#-postgresql--server--db--istemplate)
-* [`owner`](#-postgresql--server--db--owner)
-* [`port`](#-postgresql--server--db--port)
-* [`psql_user`](#-postgresql--server--db--psql_user)
-* [`psql_group`](#-postgresql--server--db--psql_group)
+* [`user`](#user)
+* [`password`](#password)
+* [`comment`](#comment)
+* [`dbname`](#dbname)
+* [`encoding`](#encoding)
+* [`locale`](#locale)
+* [`grant`](#grant)
+* [`tablespace`](#tablespace)
+* [`template`](#template)
+* [`istemplate`](#istemplate)
+* [`owner`](#owner)
+* [`port`](#port)
+* [`psql_user`](#psql_user)
+* [`psql_group`](#psql_group)
 
-##### <a name="-postgresql--server--db--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `String[1]`
 
 User to assign access to the database upon creation (will be created if not defined elsewhere). Mandatory.
 
-##### <a name="-postgresql--server--db--password"></a>`password`
+##### <a name="password"></a>`password`
 
 Data type: `Optional[Variant[String, Sensitive[String]]]`
 
 Sets the password for the created user (if a user is created).
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--db--comment"></a>`comment`
+##### <a name="comment"></a>`comment`
 
 Data type: `Optional[String[1]]`
 
 Defines a comment to be stored about the database using the PostgreSQL COMMENT command.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--db--dbname"></a>`dbname`
+##### <a name="dbname"></a>`dbname`
 
 Data type: `String[1]`
 
@@ -1821,7 +1821,7 @@ Sets the name of the database to be created.
 
 Default value: `$title`
 
-##### <a name="-postgresql--server--db--encoding"></a>`encoding`
+##### <a name="encoding"></a>`encoding`
 
 Data type: `Optional[String[1]]`
 
@@ -1829,7 +1829,7 @@ Overrides the character set during creation of the database.
 
 Default value: `$postgresql::server::encoding`
 
-##### <a name="-postgresql--server--db--locale"></a>`locale`
+##### <a name="locale"></a>`locale`
 
 Data type: `Optional[String[1]]`
 
@@ -1837,7 +1837,7 @@ Overrides the locale during creation of the database.
 
 Default value: `$postgresql::server::locale`
 
-##### <a name="-postgresql--server--db--grant"></a>`grant`
+##### <a name="grant"></a>`grant`
 
 Data type: `Variant[String[1], Array[String[1]]]`
 
@@ -1845,15 +1845,15 @@ Specifies the permissions to grant during creation. Default value: 'ALL'.
 
 Default value: `'ALL'`
 
-##### <a name="-postgresql--server--db--tablespace"></a>`tablespace`
+##### <a name="tablespace"></a>`tablespace`
 
 Data type: `Optional[String[1]]`
 
 Defines the name of the tablespace to allocate the created database to.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--db--template"></a>`template`
+##### <a name="template"></a>`template`
 
 Data type: `String[1]`
 
@@ -1861,31 +1861,31 @@ Specifies the name of the template database from which to build this database. D
 
 Default value: `'template0'`
 
-##### <a name="-postgresql--server--db--istemplate"></a>`istemplate`
+##### <a name="istemplate"></a>`istemplate`
 
 Data type: `Boolean`
 
 Specifies that the database is a template, if set to true.
 
-Default value: `false`
+Default value: ``false``
 
-##### <a name="-postgresql--server--db--owner"></a>`owner`
+##### <a name="owner"></a>`owner`
 
 Data type: `Optional[String[1]]`
 
 Sets a user as the owner of the database.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--db--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Optional[Stdlib::Port]`
 
 Specifies the port where the PostgreSQL server is listening on.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--db--psql_user"></a>`psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `String[1]`
 
@@ -1893,7 +1893,7 @@ Overrides the default PostgreSQL super user and owner of PostgreSQL related file
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--db--psql_group"></a>`psql_group`
+##### <a name="psql_group"></a>`psql_group`
 
 Data type: `String[1]`
 
@@ -1901,7 +1901,7 @@ Overrides the default PostgreSQL user group to be used for related files in the 
 
 Default value: `$postgresql::server::group`
 
-### <a name="postgresql--server--default_privileges"></a>`postgresql::server::default_privileges`
+### <a name="postgresqlserverdefault_privileges"></a>`postgresql::server::default_privileges`
 
 Manage a database defaults privileges. Only works with PostgreSQL version 9.6 and above.
 
@@ -1909,29 +1909,29 @@ Manage a database defaults privileges. Only works with PostgreSQL version 9.6 an
 
 The following parameters are available in the `postgresql::server::default_privileges` defined type:
 
-* [`target_role`](#-postgresql--server--default_privileges--target_role)
-* [`ensure`](#-postgresql--server--default_privileges--ensure)
-* [`role`](#-postgresql--server--default_privileges--role)
-* [`db`](#-postgresql--server--default_privileges--db)
-* [`object_type`](#-postgresql--server--default_privileges--object_type)
-* [`privilege`](#-postgresql--server--default_privileges--privilege)
-* [`schema`](#-postgresql--server--default_privileges--schema)
-* [`psql_db`](#-postgresql--server--default_privileges--psql_db)
-* [`psql_user`](#-postgresql--server--default_privileges--psql_user)
-* [`psql_path`](#-postgresql--server--default_privileges--psql_path)
-* [`port`](#-postgresql--server--default_privileges--port)
-* [`connect_settings`](#-postgresql--server--default_privileges--connect_settings)
-* [`group`](#-postgresql--server--default_privileges--group)
+* [`target_role`](#target_role)
+* [`ensure`](#ensure)
+* [`role`](#role)
+* [`db`](#db)
+* [`object_type`](#object_type)
+* [`privilege`](#privilege)
+* [`schema`](#schema)
+* [`psql_db`](#psql_db)
+* [`psql_user`](#psql_user)
+* [`psql_path`](#psql_path)
+* [`port`](#port)
+* [`connect_settings`](#connect_settings)
+* [`group`](#group)
 
-##### <a name="-postgresql--server--default_privileges--target_role"></a>`target_role`
+##### <a name="target_role"></a>`target_role`
 
 Data type: `Optional[String]`
 
 Target role whose created objects will receive the default privileges. Defaults to the current user.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--default_privileges--ensure"></a>`ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -1939,42 +1939,38 @@ Specifies whether to grant or revoke the privilege.
 
 Default value: `'present'`
 
-##### <a name="-postgresql--server--default_privileges--role"></a>`role`
+##### <a name="role"></a>`role`
 
 Data type: `String`
 
 Specifies the role or user whom you are granting access to.
 
-##### <a name="-postgresql--server--default_privileges--db"></a>`db`
+##### <a name="db"></a>`db`
 
 Data type: `String`
 
 Specifies the database to which you are granting access.
 
-##### <a name="-postgresql--server--default_privileges--object_type"></a>`object_type`
+##### <a name="object_type"></a>`object_type`
 
-Data type:
-
-```puppet
-Pattern[
+Data type: `Pattern[
     /(?i:^FUNCTIONS$)/,
     /(?i:^ROUTINES$)/,
     /(?i:^SEQUENCES$)/,
     /(?i:^TABLES$)/,
     /(?i:^TYPES$)/,
     /(?i:^SCHEMAS$)/
-  ]
-```
+  ]`
 
 Specify target object type: 'FUNCTIONS', 'ROUTINES', 'SEQUENCES', 'TABLES', 'TYPES'.
 
-##### <a name="-postgresql--server--default_privileges--privilege"></a>`privilege`
+##### <a name="privilege"></a>`privilege`
 
 Data type: `String`
 
 Specifies comma-separated list of privileges to grant. Valid options: depends on object type.
 
-##### <a name="-postgresql--server--default_privileges--schema"></a>`schema`
+##### <a name="schema"></a>`schema`
 
 Data type: `String`
 
@@ -1982,7 +1978,7 @@ Target schema. Defaults to 'public'. Can be set to '' to apply to all schemas.
 
 Default value: `'public'`
 
-##### <a name="-postgresql--server--default_privileges--psql_db"></a>`psql_db`
+##### <a name="psql_db"></a>`psql_db`
 
 Data type: `String`
 
@@ -1990,7 +1986,7 @@ Defines the database to execute the grant against. This should not ordinarily be
 
 Default value: `$postgresql::server::default_database`
 
-##### <a name="-postgresql--server--default_privileges--psql_user"></a>`psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `String`
 
@@ -1998,7 +1994,7 @@ Specifies the OS user for running psql. Default value: The default user for the 
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--default_privileges--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2006,7 +2002,7 @@ Specifies the OS user for running psql. Default value: The default user for the 
 
 Default value: `$postgresql::server::psql_path`
 
-##### <a name="-postgresql--server--default_privileges--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Stdlib::Port`
 
@@ -2014,7 +2010,7 @@ Specifies the port to access the server. Default value: The default user for the
 
 Default value: `$postgresql::server::port`
 
-##### <a name="-postgresql--server--default_privileges--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -2022,7 +2018,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-##### <a name="-postgresql--server--default_privileges--group"></a>`group`
+##### <a name="group"></a>`group`
 
 Data type: `String`
 
@@ -2030,7 +2026,7 @@ Specifies the user group to which the privileges will be granted.
 
 Default value: `$postgresql::server::group`
 
-### <a name="postgresql--server--extension"></a>`postgresql::server::extension`
+### <a name="postgresqlserverextension"></a>`postgresql::server::extension`
 
 Activate an extension on a postgresql database.
 
@@ -2038,27 +2034,27 @@ Activate an extension on a postgresql database.
 
 The following parameters are available in the `postgresql::server::extension` defined type:
 
-* [`database`](#-postgresql--server--extension--database)
-* [`extension`](#-postgresql--server--extension--extension)
-* [`schema`](#-postgresql--server--extension--schema)
-* [`version`](#-postgresql--server--extension--version)
-* [`ensure`](#-postgresql--server--extension--ensure)
-* [`package_name`](#-postgresql--server--extension--package_name)
-* [`package_ensure`](#-postgresql--server--extension--package_ensure)
-* [`port`](#-postgresql--server--extension--port)
-* [`connect_settings`](#-postgresql--server--extension--connect_settings)
-* [`database_resource_name`](#-postgresql--server--extension--database_resource_name)
-* [`psql_path`](#-postgresql--server--extension--psql_path)
-* [`user`](#-postgresql--server--extension--user)
-* [`group`](#-postgresql--server--extension--group)
+* [`database`](#database)
+* [`extension`](#extension)
+* [`schema`](#schema)
+* [`version`](#version)
+* [`ensure`](#ensure)
+* [`package_name`](#package_name)
+* [`package_ensure`](#package_ensure)
+* [`port`](#port)
+* [`connect_settings`](#connect_settings)
+* [`database_resource_name`](#database_resource_name)
+* [`psql_path`](#psql_path)
+* [`user`](#user)
+* [`group`](#group)
 
-##### <a name="-postgresql--server--extension--database"></a>`database`
+##### <a name="database"></a>`database`
 
 Data type: `String[1]`
 
 Specifies the database on which to activate the extension.
 
-##### <a name="-postgresql--server--extension--extension"></a>`extension`
+##### <a name="extension"></a>`extension`
 
 Data type: `String[1]`
 
@@ -2066,15 +2062,15 @@ Specifies the extension to activate. If left blank, uses the name of the resourc
 
 Default value: `$name`
 
-##### <a name="-postgresql--server--extension--schema"></a>`schema`
+##### <a name="schema"></a>`schema`
 
 Data type: `Optional[String[1]]`
 
 Specifies the schema on which to activate the extension.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--extension--version"></a>`version`
+##### <a name="version"></a>`version`
 
 Data type: `Optional[String[1]]`
 
@@ -2087,9 +2083,9 @@ eg. If extension is set to postgis and version is set to 2.3.3, this will apply 
 this database only.
 version may be omitted, in which case no ALTER EXTENSION... SQL is applied, and the version will be left unchanged.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--extension--ensure"></a>`ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -2097,32 +2093,32 @@ Specifies whether to activate or deactivate the extension. Valid options: 'prese
 
 Default value: `'present'`
 
-##### <a name="-postgresql--server--extension--package_name"></a>`package_name`
+##### <a name="package_name"></a>`package_name`
 
 Data type: `Optional[String[1]]`
 
 Specifies a package to install prior to activating the extension.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--extension--package_ensure"></a>`package_ensure`
+##### <a name="package_ensure"></a>`package_ensure`
 
 Data type: `Optional[Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]]`
 
 Overrides default package deletion behavior. By default, the package specified with package_name is installed when the extension is
 activated and removed when the extension is deactivated. To override this behavior, set the ensure value for the package.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--extension--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Optional[Stdlib::Port]`
 
 Port to use when connecting.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--extension--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -2130,7 +2126,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `postgresql::default('default_connect_settings')`
 
-##### <a name="-postgresql--server--extension--database_resource_name"></a>`database_resource_name`
+##### <a name="database_resource_name"></a>`database_resource_name`
 
 Data type: `String[1]`
 
@@ -2138,7 +2134,7 @@ Specifies the resource name of the DB being managed. Defaults to the parameter $
 
 Default value: `$database`
 
-##### <a name="-postgresql--server--extension--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2146,7 +2142,7 @@ Specifies the path to the psql command.
 
 Default value: `postgresql::default('psql_path')`
 
-##### <a name="-postgresql--server--extension--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `String[1]`
 
@@ -2154,7 +2150,7 @@ Overrides the default PostgreSQL super user and owner of PostgreSQL related file
 
 Default value: `postgresql::default('user')`
 
-##### <a name="-postgresql--server--extension--group"></a>`group`
+##### <a name="group"></a>`group`
 
 Data type: `String[1]`
 
@@ -2162,7 +2158,7 @@ Overrides the default postgres user group to be used for related files in the fi
 
 Default value: `postgresql::default('group')`
 
-### <a name="postgresql--server--grant"></a>`postgresql::server::grant`
+### <a name="postgresqlservergrant"></a>`postgresql::server::grant`
 
 Define for granting permissions to roles.
 
@@ -2170,34 +2166,34 @@ Define for granting permissions to roles.
 
 The following parameters are available in the `postgresql::server::grant` defined type:
 
-* [`role`](#-postgresql--server--grant--role)
-* [`db`](#-postgresql--server--grant--db)
-* [`privilege`](#-postgresql--server--grant--privilege)
-* [`object_type`](#-postgresql--server--grant--object_type)
-* [`object_name`](#-postgresql--server--grant--object_name)
-* [`object_arguments`](#-postgresql--server--grant--object_arguments)
-* [`psql_db`](#-postgresql--server--grant--psql_db)
-* [`psql_user`](#-postgresql--server--grant--psql_user)
-* [`port`](#-postgresql--server--grant--port)
-* [`onlyif_exists`](#-postgresql--server--grant--onlyif_exists)
-* [`connect_settings`](#-postgresql--server--grant--connect_settings)
-* [`ensure`](#-postgresql--server--grant--ensure)
-* [`group`](#-postgresql--server--grant--group)
-* [`psql_path`](#-postgresql--server--grant--psql_path)
+* [`role`](#role)
+* [`db`](#db)
+* [`privilege`](#privilege)
+* [`object_type`](#object_type)
+* [`object_name`](#object_name)
+* [`object_arguments`](#object_arguments)
+* [`psql_db`](#psql_db)
+* [`psql_user`](#psql_user)
+* [`port`](#port)
+* [`onlyif_exists`](#onlyif_exists)
+* [`connect_settings`](#connect_settings)
+* [`ensure`](#ensure)
+* [`group`](#group)
+* [`psql_path`](#psql_path)
 
-##### <a name="-postgresql--server--grant--role"></a>`role`
+##### <a name="role"></a>`role`
 
 Data type: `String`
 
 Specifies the role or user whom you are granting access to.
 
-##### <a name="-postgresql--server--grant--db"></a>`db`
+##### <a name="db"></a>`db`
 
 Data type: `String`
 
 Specifies the database to which you are granting access.
 
-##### <a name="-postgresql--server--grant--privilege"></a>`privilege`
+##### <a name="privilege"></a>`privilege`
 
 Data type: `String`
 
@@ -2205,12 +2201,9 @@ Specifies the privilege to grant. Valid options: 'ALL', 'ALL PRIVILEGES' or 'obj
 
 Default value: `''`
 
-##### <a name="-postgresql--server--grant--object_type"></a>`object_type`
+##### <a name="object_type"></a>`object_type`
 
-Data type:
-
-```puppet
-Pattern[#/(?i:^COLUMN$)/,
+Data type: `Pattern[#/(?i:^COLUMN$)/,
     /(?i:^ALL SEQUENCES IN SCHEMA$)/,
     /(?i:^ALL TABLES IN SCHEMA$)/,
     /(?i:^DATABASE$)/,
@@ -2224,24 +2217,23 @@ Pattern[#/(?i:^COLUMN$)/,
     /(?i:^SCHEMA$)/,
     /(?i:^SEQUENCE$)/
     #/(?i:^VIEW$)/
-  ]
-```
+  ]`
 
 Specifies the type of object to which you are granting privileges.
 Valid options: 'DATABASE', 'SCHEMA', 'SEQUENCE', 'ALL SEQUENCES IN SCHEMA', 'TABLE' or 'ALL TABLES IN SCHEMA'.
 
 Default value: `'database'`
 
-##### <a name="-postgresql--server--grant--object_name"></a>`object_name`
+##### <a name="object_name"></a>`object_name`
 
 Data type: `Optional[Variant[Array[String,2,2],String[1]]]`
 
 Specifies name of object_type to which to grant access, can be either a string or a two element array.
 String: 'object_name' Array: ['schema_name', 'object_name']
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--grant--object_arguments"></a>`object_arguments`
+##### <a name="object_arguments"></a>`object_arguments`
 
 Data type: `Array[String[1],0]`
 
@@ -2249,7 +2241,7 @@ Specifies any arguments to be passed alongisde the access grant.
 
 Default value: `[]`
 
-##### <a name="-postgresql--server--grant--psql_db"></a>`psql_db`
+##### <a name="psql_db"></a>`psql_db`
 
 Data type: `String`
 
@@ -2257,7 +2249,7 @@ Specifies the database to execute the grant against. This should not ordinarily 
 
 Default value: `$postgresql::server::default_database`
 
-##### <a name="-postgresql--server--grant--psql_user"></a>`psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `String`
 
@@ -2265,23 +2257,23 @@ Sets the OS user to run psql.
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--grant--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Optional[Stdlib::Port]`
 
 Port to use when connecting.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--grant--onlyif_exists"></a>`onlyif_exists`
+##### <a name="onlyif_exists"></a>`onlyif_exists`
 
 Data type: `Boolean`
 
 Create grant only if doesn't exist
 
-Default value: `false`
+Default value: ``false``
 
-##### <a name="-postgresql--server--grant--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -2289,7 +2281,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-##### <a name="-postgresql--server--grant--ensure"></a>`ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -2297,7 +2289,7 @@ Specifies whether to grant or revoke the privilege. Default is to grant the priv
 
 Default value: `'present'`
 
-##### <a name="-postgresql--server--grant--group"></a>`group`
+##### <a name="group"></a>`group`
 
 Data type: `String`
 
@@ -2305,7 +2297,7 @@ Sets the OS group to run psql
 
 Default value: `$postgresql::server::group`
 
-##### <a name="-postgresql--server--grant--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2313,7 +2305,7 @@ Sets the path to psql command
 
 Default value: `$postgresql::server::psql_path`
 
-### <a name="postgresql--server--grant_role"></a>`postgresql::server::grant_role`
+### <a name="postgresqlservergrant_role"></a>`postgresql::server::grant_role`
 
 Define for granting membership to a role.
 
@@ -2321,21 +2313,21 @@ Define for granting membership to a role.
 
 The following parameters are available in the `postgresql::server::grant_role` defined type:
 
-* [`group`](#-postgresql--server--grant_role--group)
-* [`role`](#-postgresql--server--grant_role--role)
-* [`ensure`](#-postgresql--server--grant_role--ensure)
-* [`psql_db`](#-postgresql--server--grant_role--psql_db)
-* [`psql_user`](#-postgresql--server--grant_role--psql_user)
-* [`port`](#-postgresql--server--grant_role--port)
-* [`connect_settings`](#-postgresql--server--grant_role--connect_settings)
+* [`group`](#group)
+* [`role`](#role)
+* [`ensure`](#ensure)
+* [`psql_db`](#psql_db)
+* [`psql_user`](#psql_user)
+* [`port`](#port)
+* [`connect_settings`](#connect_settings)
 
-##### <a name="-postgresql--server--grant_role--group"></a>`group`
+##### <a name="group"></a>`group`
 
 Data type: `String[1]`
 
 Specifies the group role to which you are assigning a role.
 
-##### <a name="-postgresql--server--grant_role--role"></a>`role`
+##### <a name="role"></a>`role`
 
 Data type: `String[1]`
 
@@ -2343,7 +2335,7 @@ Specifies the role you want to assign to a group. If left blank, uses the name o
 
 Default value: `$name`
 
-##### <a name="-postgresql--server--grant_role--ensure"></a>`ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -2351,7 +2343,7 @@ Specifies whether to grant or revoke the membership. Valid options: 'present' or
 
 Default value: `'present'`
 
-##### <a name="-postgresql--server--grant_role--psql_db"></a>`psql_db`
+##### <a name="psql_db"></a>`psql_db`
 
 Data type: `String[1]`
 
@@ -2359,7 +2351,7 @@ Specifies the database to execute the grant against. This should not ordinarily 
 
 Default value: `$postgresql::server::default_database`
 
-##### <a name="-postgresql--server--grant_role--psql_user"></a>`psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `String[1]`
 
@@ -2367,7 +2359,7 @@ Sets the OS user to run psql.
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--grant_role--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Stdlib::Port`
 
@@ -2375,7 +2367,7 @@ Port to use when connecting.
 
 Default value: `$postgresql::server::port`
 
-##### <a name="-postgresql--server--grant_role--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -2383,7 +2375,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-### <a name="postgresql--server--instance--config"></a>`postgresql::server::instance::config`
+### <a name="postgresqlserverinstanceconfig"></a>`postgresql::server::instance::config`
 
 Manages the config for a postgresql::server instance
 
@@ -2391,35 +2383,35 @@ Manages the config for a postgresql::server instance
 
 The following parameters are available in the `postgresql::server::instance::config` defined type:
 
-* [`ip_mask_deny_postgres_user`](#-postgresql--server--instance--config--ip_mask_deny_postgres_user)
-* [`ip_mask_allow_all_users`](#-postgresql--server--instance--config--ip_mask_allow_all_users)
-* [`listen_addresses`](#-postgresql--server--instance--config--listen_addresses)
-* [`port`](#-postgresql--server--instance--config--port)
-* [`ipv4acls`](#-postgresql--server--instance--config--ipv4acls)
-* [`ipv6acls`](#-postgresql--server--instance--config--ipv6acls)
-* [`pg_hba_conf_path`](#-postgresql--server--instance--config--pg_hba_conf_path)
-* [`pg_ident_conf_path`](#-postgresql--server--instance--config--pg_ident_conf_path)
-* [`postgresql_conf_path`](#-postgresql--server--instance--config--postgresql_conf_path)
-* [`postgresql_conf_mode`](#-postgresql--server--instance--config--postgresql_conf_mode)
-* [`recovery_conf_path`](#-postgresql--server--instance--config--recovery_conf_path)
-* [`pg_hba_conf_defaults`](#-postgresql--server--instance--config--pg_hba_conf_defaults)
-* [`user`](#-postgresql--server--instance--config--user)
-* [`group`](#-postgresql--server--instance--config--group)
-* [`version`](#-postgresql--server--instance--config--version)
-* [`manage_pg_hba_conf`](#-postgresql--server--instance--config--manage_pg_hba_conf)
-* [`manage_pg_ident_conf`](#-postgresql--server--instance--config--manage_pg_ident_conf)
-* [`manage_recovery_conf`](#-postgresql--server--instance--config--manage_recovery_conf)
-* [`manage_postgresql_conf_perms`](#-postgresql--server--instance--config--manage_postgresql_conf_perms)
-* [`datadir`](#-postgresql--server--instance--config--datadir)
-* [`logdir`](#-postgresql--server--instance--config--logdir)
-* [`service_name`](#-postgresql--server--instance--config--service_name)
-* [`service_enable`](#-postgresql--server--instance--config--service_enable)
-* [`log_line_prefix`](#-postgresql--server--instance--config--log_line_prefix)
-* [`timezone`](#-postgresql--server--instance--config--timezone)
-* [`password_encryption`](#-postgresql--server--instance--config--password_encryption)
-* [`extra_systemd_config`](#-postgresql--server--instance--config--extra_systemd_config)
+* [`ip_mask_deny_postgres_user`](#ip_mask_deny_postgres_user)
+* [`ip_mask_allow_all_users`](#ip_mask_allow_all_users)
+* [`listen_addresses`](#listen_addresses)
+* [`port`](#port)
+* [`ipv4acls`](#ipv4acls)
+* [`ipv6acls`](#ipv6acls)
+* [`pg_hba_conf_path`](#pg_hba_conf_path)
+* [`pg_ident_conf_path`](#pg_ident_conf_path)
+* [`postgresql_conf_path`](#postgresql_conf_path)
+* [`postgresql_conf_mode`](#postgresql_conf_mode)
+* [`recovery_conf_path`](#recovery_conf_path)
+* [`pg_hba_conf_defaults`](#pg_hba_conf_defaults)
+* [`user`](#user)
+* [`group`](#group)
+* [`version`](#version)
+* [`manage_pg_hba_conf`](#manage_pg_hba_conf)
+* [`manage_pg_ident_conf`](#manage_pg_ident_conf)
+* [`manage_recovery_conf`](#manage_recovery_conf)
+* [`manage_postgresql_conf_perms`](#manage_postgresql_conf_perms)
+* [`datadir`](#datadir)
+* [`logdir`](#logdir)
+* [`service_name`](#service_name)
+* [`service_enable`](#service_enable)
+* [`log_line_prefix`](#log_line_prefix)
+* [`timezone`](#timezone)
+* [`password_encryption`](#password_encryption)
+* [`extra_systemd_config`](#extra_systemd_config)
 
-##### <a name="-postgresql--server--instance--config--ip_mask_deny_postgres_user"></a>`ip_mask_deny_postgres_user`
+##### <a name="ip_mask_deny_postgres_user"></a>`ip_mask_deny_postgres_user`
 
 Data type: `String[1]`
 
@@ -2428,7 +2420,7 @@ Default value: '0.0.0.0/0', which denies any remote connection.
 
 Default value: `$postgresql::server::ip_mask_deny_postgres_user`
 
-##### <a name="-postgresql--server--instance--config--ip_mask_allow_all_users"></a>`ip_mask_allow_all_users`
+##### <a name="ip_mask_allow_all_users"></a>`ip_mask_allow_all_users`
 
 Data type: `String[1]`
 
@@ -2440,7 +2432,7 @@ Default value: '127.0.0.1/32'.
 
 Default value: `$postgresql::server::ip_mask_allow_all_users`
 
-##### <a name="-postgresql--server--instance--config--listen_addresses"></a>`listen_addresses`
+##### <a name="listen_addresses"></a>`listen_addresses`
 
 Data type: `Optional[Variant[String[1], Array[String[1]]]]`
 
@@ -2448,7 +2440,7 @@ Address list on which the PostgreSQL service will listen
 
 Default value: `$postgresql::server::listen_addresses`
 
-##### <a name="-postgresql--server--instance--config--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Stdlib::Port`
 
@@ -2459,7 +2451,7 @@ Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
 
 Default value: `$postgresql::server::port`
 
-##### <a name="-postgresql--server--instance--config--ipv4acls"></a>`ipv4acls`
+##### <a name="ipv4acls"></a>`ipv4acls`
 
 Data type: `Array[String[1]]`
 
@@ -2467,7 +2459,7 @@ Lists strings for access control for connection method, users, databases, IPv4 a
 
 Default value: `$postgresql::server::ipv4acls`
 
-##### <a name="-postgresql--server--instance--config--ipv6acls"></a>`ipv6acls`
+##### <a name="ipv6acls"></a>`ipv6acls`
 
 Data type: `Array[String[1]]`
 
@@ -2475,7 +2467,7 @@ Lists strings for access control for connection method, users, databases, IPv6 a
 
 Default value: `$postgresql::server::ipv6acls`
 
-##### <a name="-postgresql--server--instance--config--pg_hba_conf_path"></a>`pg_hba_conf_path`
+##### <a name="pg_hba_conf_path"></a>`pg_hba_conf_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2483,7 +2475,7 @@ Specifies the path to your pg_hba.conf file.
 
 Default value: `$postgresql::server::pg_hba_conf_path`
 
-##### <a name="-postgresql--server--instance--config--pg_ident_conf_path"></a>`pg_ident_conf_path`
+##### <a name="pg_ident_conf_path"></a>`pg_ident_conf_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2491,7 +2483,7 @@ Specifies the path to your pg_ident.conf file.
 
 Default value: `$postgresql::server::pg_ident_conf_path`
 
-##### <a name="-postgresql--server--instance--config--postgresql_conf_path"></a>`postgresql_conf_path`
+##### <a name="postgresql_conf_path"></a>`postgresql_conf_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2499,7 +2491,7 @@ Specifies the path to your postgresql.conf file.
 
 Default value: `$postgresql::server::postgresql_conf_path`
 
-##### <a name="-postgresql--server--instance--config--postgresql_conf_mode"></a>`postgresql_conf_mode`
+##### <a name="postgresql_conf_mode"></a>`postgresql_conf_mode`
 
 Data type: `Optional[Stdlib::Filemode]`
 
@@ -2507,7 +2499,7 @@ Sets the mode of your postgresql.conf file. Only relevant if manage_postgresql_c
 
 Default value: `$postgresql::server::postgresql_conf_mode`
 
-##### <a name="-postgresql--server--instance--config--recovery_conf_path"></a>`recovery_conf_path`
+##### <a name="recovery_conf_path"></a>`recovery_conf_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2515,7 +2507,7 @@ Specifies the path to your recovery.conf file.
 
 Default value: `$postgresql::server::recovery_conf_path`
 
-##### <a name="-postgresql--server--instance--config--pg_hba_conf_defaults"></a>`pg_hba_conf_defaults`
+##### <a name="pg_hba_conf_defaults"></a>`pg_hba_conf_defaults`
 
 Data type: `Boolean`
 
@@ -2525,7 +2517,7 @@ basic psql operations for example.
 
 Default value: `$postgresql::server::pg_hba_conf_defaults`
 
-##### <a name="-postgresql--server--instance--config--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `String[1]`
 
@@ -2533,7 +2525,7 @@ Overrides the default PostgreSQL super user and owner of PostgreSQL related file
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--instance--config--group"></a>`group`
+##### <a name="group"></a>`group`
 
 Data type: `String[1]`
 
@@ -2541,7 +2533,7 @@ Overrides the default postgres user group to be used for related files in the fi
 
 Default value: `$postgresql::server::group`
 
-##### <a name="-postgresql--server--instance--config--version"></a>`version`
+##### <a name="version"></a>`version`
 
 Data type: `Optional[String[1]]`
 
@@ -2549,7 +2541,7 @@ Sets PostgreSQL version
 
 Default value: `$postgresql::server::_version`
 
-##### <a name="-postgresql--server--instance--config--manage_pg_hba_conf"></a>`manage_pg_hba_conf`
+##### <a name="manage_pg_hba_conf"></a>`manage_pg_hba_conf`
 
 Data type: `Boolean`
 
@@ -2557,7 +2549,7 @@ Boolean. Whether to manage the pg_hba.conf.
 
 Default value: `$postgresql::server::manage_pg_hba_conf`
 
-##### <a name="-postgresql--server--instance--config--manage_pg_ident_conf"></a>`manage_pg_ident_conf`
+##### <a name="manage_pg_ident_conf"></a>`manage_pg_ident_conf`
 
 Data type: `Boolean`
 
@@ -2565,7 +2557,7 @@ Boolean. Overwrites the pg_ident.conf file.
 
 Default value: `$postgresql::server::manage_pg_ident_conf`
 
-##### <a name="-postgresql--server--instance--config--manage_recovery_conf"></a>`manage_recovery_conf`
+##### <a name="manage_recovery_conf"></a>`manage_recovery_conf`
 
 Data type: `Boolean`
 
@@ -2573,7 +2565,7 @@ Boolean. Specifies whether or not manage the recovery.conf.
 
 Default value: `$postgresql::server::manage_recovery_conf`
 
-##### <a name="-postgresql--server--instance--config--manage_postgresql_conf_perms"></a>`manage_postgresql_conf_perms`
+##### <a name="manage_postgresql_conf_perms"></a>`manage_postgresql_conf_perms`
 
 Data type: `Boolean`
 
@@ -2583,23 +2575,23 @@ postgresql::server::config_entry.
 
 Default value: `$postgresql::server::manage_postgresql_conf_perms`
 
-##### <a name="-postgresql--server--instance--config--datadir"></a>`datadir`
+##### <a name="datadir"></a>`datadir`
 
-Data type: `String[1]`
+Data type: `Stdlib::Absolutepath`
 
 PostgreSQL data directory
 
 Default value: `$postgresql::server::datadir`
 
-##### <a name="-postgresql--server--instance--config--logdir"></a>`logdir`
+##### <a name="logdir"></a>`logdir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 PostgreSQL log directory
 
 Default value: `$postgresql::server::logdir`
 
-##### <a name="-postgresql--server--instance--config--service_name"></a>`service_name`
+##### <a name="service_name"></a>`service_name`
 
 Data type: `String[1]`
 
@@ -2607,7 +2599,7 @@ Overrides the default PostgreSQL service name.
 
 Default value: `$postgresql::server::service_name`
 
-##### <a name="-postgresql--server--instance--config--service_enable"></a>`service_enable`
+##### <a name="service_enable"></a>`service_enable`
 
 Data type: `Boolean`
 
@@ -2615,7 +2607,7 @@ Enable the PostgreSQL service
 
 Default value: `$postgresql::server::service_enable`
 
-##### <a name="-postgresql--server--instance--config--log_line_prefix"></a>`log_line_prefix`
+##### <a name="log_line_prefix"></a>`log_line_prefix`
 
 Data type: `Optional[String[1]]`
 
@@ -2623,7 +2615,7 @@ PostgreSQL log line prefix
 
 Default value: `$postgresql::server::log_line_prefix`
 
-##### <a name="-postgresql--server--instance--config--timezone"></a>`timezone`
+##### <a name="timezone"></a>`timezone`
 
 Data type: `Optional[String[1]]`
 
@@ -2631,7 +2623,7 @@ Set timezone for the PostgreSQL instance
 
 Default value: `$postgresql::server::timezone`
 
-##### <a name="-postgresql--server--instance--config--password_encryption"></a>`password_encryption`
+##### <a name="password_encryption"></a>`password_encryption`
 
 Data type: `Optional[Postgresql::Pg_password_encryption]`
 
@@ -2639,7 +2631,7 @@ Specify the type of encryption set for the password.
 
 Default value: `$postgresql::server::password_encryption`
 
-##### <a name="-postgresql--server--instance--config--extra_systemd_config"></a>`extra_systemd_config`
+##### <a name="extra_systemd_config"></a>`extra_systemd_config`
 
 Data type: `Optional[String]`
 
@@ -2647,7 +2639,7 @@ Adds extra config to systemd config file, can for instance be used to add extra 
 
 Default value: `$postgresql::server::extra_systemd_config`
 
-### <a name="postgresql--server--instance--initdb"></a>`postgresql::server::instance::initdb`
+### <a name="postgresqlserverinstanceinitdb"></a>`postgresql::server::instance::initdb`
 
 Manages initdb feature for a postgresql::server instance
 
@@ -2655,26 +2647,26 @@ Manages initdb feature for a postgresql::server instance
 
 The following parameters are available in the `postgresql::server::instance::initdb` defined type:
 
-* [`auth_host`](#-postgresql--server--instance--initdb--auth_host)
-* [`auth_local`](#-postgresql--server--instance--initdb--auth_local)
-* [`data_checksums`](#-postgresql--server--instance--initdb--data_checksums)
-* [`datadir`](#-postgresql--server--instance--initdb--datadir)
-* [`encoding`](#-postgresql--server--instance--initdb--encoding)
-* [`group`](#-postgresql--server--instance--initdb--group)
-* [`initdb_path`](#-postgresql--server--instance--initdb--initdb_path)
-* [`lc_messages`](#-postgresql--server--instance--initdb--lc_messages)
-* [`locale`](#-postgresql--server--instance--initdb--locale)
-* [`logdir`](#-postgresql--server--instance--initdb--logdir)
-* [`manage_datadir`](#-postgresql--server--instance--initdb--manage_datadir)
-* [`manage_logdir`](#-postgresql--server--instance--initdb--manage_logdir)
-* [`manage_xlogdir`](#-postgresql--server--instance--initdb--manage_xlogdir)
-* [`module_workdir`](#-postgresql--server--instance--initdb--module_workdir)
-* [`needs_initdb`](#-postgresql--server--instance--initdb--needs_initdb)
-* [`user`](#-postgresql--server--instance--initdb--user)
-* [`username`](#-postgresql--server--instance--initdb--username)
-* [`xlogdir`](#-postgresql--server--instance--initdb--xlogdir)
+* [`auth_host`](#auth_host)
+* [`auth_local`](#auth_local)
+* [`data_checksums`](#data_checksums)
+* [`datadir`](#datadir)
+* [`encoding`](#encoding)
+* [`group`](#group)
+* [`initdb_path`](#initdb_path)
+* [`lc_messages`](#lc_messages)
+* [`locale`](#locale)
+* [`logdir`](#logdir)
+* [`manage_datadir`](#manage_datadir)
+* [`manage_logdir`](#manage_logdir)
+* [`manage_xlogdir`](#manage_xlogdir)
+* [`module_workdir`](#module_workdir)
+* [`needs_initdb`](#needs_initdb)
+* [`user`](#user)
+* [`username`](#username)
+* [`xlogdir`](#xlogdir)
 
-##### <a name="-postgresql--server--instance--initdb--auth_host"></a>`auth_host`
+##### <a name="auth_host"></a>`auth_host`
 
 Data type: `Optional[String[1]]`
 
@@ -2682,7 +2674,7 @@ auth method used by default for host authorization
 
 Default value: `$postgresql::server::auth_host`
 
-##### <a name="-postgresql--server--instance--initdb--auth_local"></a>`auth_local`
+##### <a name="auth_local"></a>`auth_local`
 
 Data type: `Optional[String[1]]`
 
@@ -2690,7 +2682,7 @@ auth method used by default for local authorization
 
 Default value: `$postgresql::server::auth_local`
 
-##### <a name="-postgresql--server--instance--initdb--data_checksums"></a>`data_checksums`
+##### <a name="data_checksums"></a>`data_checksums`
 
 Data type: `Optional[Boolean]`
 
@@ -2698,15 +2690,15 @@ Boolean. Use checksums on data pages to help detect corruption by the I/O system
 
 Default value: `$postgresql::server::data_checksums`
 
-##### <a name="-postgresql--server--instance--initdb--datadir"></a>`datadir`
+##### <a name="datadir"></a>`datadir`
 
-Data type: `String[1]`
+Data type: `Stdlib::Absolutepath`
 
 PostgreSQL data directory
 
 Default value: `$postgresql::server::datadir`
 
-##### <a name="-postgresql--server--instance--initdb--encoding"></a>`encoding`
+##### <a name="encoding"></a>`encoding`
 
 Data type: `Optional[String[1]]`
 
@@ -2716,7 +2708,7 @@ so it becomes a default outside of the module as well.
 
 Default value: `$postgresql::server::encoding`
 
-##### <a name="-postgresql--server--instance--initdb--group"></a>`group`
+##### <a name="group"></a>`group`
 
 Data type: `String[1]`
 
@@ -2724,7 +2716,7 @@ Overrides the default postgres user group to be used for related files in the fi
 
 Default value: `$postgresql::server::group`
 
-##### <a name="-postgresql--server--instance--initdb--initdb_path"></a>`initdb_path`
+##### <a name="initdb_path"></a>`initdb_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2732,7 +2724,7 @@ Specifies the path to the initdb command.
 
 Default value: `$postgresql::server::initdb_path`
 
-##### <a name="-postgresql--server--instance--initdb--lc_messages"></a>`lc_messages`
+##### <a name="lc_messages"></a>`lc_messages`
 
 Data type: `Optional[String[1]]`
 
@@ -2740,7 +2732,7 @@ locale used for logging and system messages
 
 Default value: `$postgresql::server::lc_messages`
 
-##### <a name="-postgresql--server--instance--initdb--locale"></a>`locale`
+##### <a name="locale"></a>`locale`
 
 Data type: `Optional[String[1]]`
 
@@ -2751,15 +2743,15 @@ If set, checksums are calculated for all objects, in all databases.
 
 Default value: `$postgresql::server::locale`
 
-##### <a name="-postgresql--server--instance--initdb--logdir"></a>`logdir`
+##### <a name="logdir"></a>`logdir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 PostgreSQL log directory
 
 Default value: `$postgresql::server::logdir`
 
-##### <a name="-postgresql--server--instance--initdb--manage_datadir"></a>`manage_datadir`
+##### <a name="manage_datadir"></a>`manage_datadir`
 
 Data type: `Boolean`
 
@@ -2767,7 +2759,7 @@ Set to false if you have file{ $datadir: } already defined
 
 Default value: `$postgresql::server::manage_datadir`
 
-##### <a name="-postgresql--server--instance--initdb--manage_logdir"></a>`manage_logdir`
+##### <a name="manage_logdir"></a>`manage_logdir`
 
 Data type: `Boolean`
 
@@ -2775,7 +2767,7 @@ Set to false if you have file{ $logdir: } already defined
 
 Default value: `$postgresql::server::manage_logdir`
 
-##### <a name="-postgresql--server--instance--initdb--manage_xlogdir"></a>`manage_xlogdir`
+##### <a name="manage_xlogdir"></a>`manage_xlogdir`
 
 Data type: `Boolean`
 
@@ -2783,15 +2775,15 @@ Set to false if you have file{ $xlogdir: } already defined
 
 Default value: `$postgresql::server::manage_xlogdir`
 
-##### <a name="-postgresql--server--instance--initdb--module_workdir"></a>`module_workdir`
+##### <a name="module_workdir"></a>`module_workdir`
 
-Data type: `String[1]`
+Data type: `Stdlib::Absolutepath`
 
 Working directory for the PostgreSQL module
 
 Default value: `$postgresql::server::module_workdir`
 
-##### <a name="-postgresql--server--instance--initdb--needs_initdb"></a>`needs_initdb`
+##### <a name="needs_initdb"></a>`needs_initdb`
 
 Data type: `Boolean`
 
@@ -2800,7 +2792,7 @@ and before the PostgreSQL service is started.
 
 Default value: `$postgresql::server::needs_initdb`
 
-##### <a name="-postgresql--server--instance--initdb--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `String[1]`
 
@@ -2808,7 +2800,7 @@ Overrides the default PostgreSQL super user and owner of PostgreSQL related file
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--instance--initdb--username"></a>`username`
+##### <a name="username"></a>`username`
 
 Data type: `Optional[String[1]]`
 
@@ -2816,15 +2808,15 @@ username of user running the postgres instance
 
 Default value: `$postgresql::server::username`
 
-##### <a name="-postgresql--server--instance--initdb--xlogdir"></a>`xlogdir`
+##### <a name="xlogdir"></a>`xlogdir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 PostgreSQL xlog/WAL directory
 
 Default value: `$postgresql::server::xlogdir`
 
-### <a name="postgresql--server--instance--late_initdb"></a>`postgresql::server::instance::late_initdb`
+### <a name="postgresqlserverinstancelate_initdb"></a>`postgresql::server::instance::late_initdb`
 
 Manage the default encoding when database initialization is managed by the package
 
@@ -2832,14 +2824,14 @@ Manage the default encoding when database initialization is managed by the packa
 
 The following parameters are available in the `postgresql::server::instance::late_initdb` defined type:
 
-* [`encoding`](#-postgresql--server--instance--late_initdb--encoding)
-* [`user`](#-postgresql--server--instance--late_initdb--user)
-* [`group`](#-postgresql--server--instance--late_initdb--group)
-* [`psql_path`](#-postgresql--server--instance--late_initdb--psql_path)
-* [`port`](#-postgresql--server--instance--late_initdb--port)
-* [`module_workdir`](#-postgresql--server--instance--late_initdb--module_workdir)
+* [`encoding`](#encoding)
+* [`user`](#user)
+* [`group`](#group)
+* [`psql_path`](#psql_path)
+* [`port`](#port)
+* [`module_workdir`](#module_workdir)
 
-##### <a name="-postgresql--server--instance--late_initdb--encoding"></a>`encoding`
+##### <a name="encoding"></a>`encoding`
 
 Data type: `Optional[String[1]]`
 
@@ -2848,7 +2840,7 @@ template1 initialization, so it becomes a default outside of the module as well.
 
 Default value: `$postgresql::server::encoding`
 
-##### <a name="-postgresql--server--instance--late_initdb--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `String[1]`
 
@@ -2856,7 +2848,7 @@ Overrides the default PostgreSQL super user and owner of PostgreSQL related file
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--instance--late_initdb--group"></a>`group`
+##### <a name="group"></a>`group`
 
 Data type: `String[1]`
 
@@ -2864,7 +2856,7 @@ Overrides the default postgres user group to be used for related files in the fi
 
 Default value: `$postgresql::server::group`
 
-##### <a name="-postgresql--server--instance--late_initdb--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2872,7 +2864,7 @@ Specifies the path to the psql command.
 
 Default value: `$postgresql::server::psql_path`
 
-##### <a name="-postgresql--server--instance--late_initdb--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Stdlib::Port`
 
@@ -2882,15 +2874,15 @@ changing the port causes the server to come to a full stop before being able to 
 
 Default value: `$postgresql::server::port`
 
-##### <a name="-postgresql--server--instance--late_initdb--module_workdir"></a>`module_workdir`
+##### <a name="module_workdir"></a>`module_workdir`
 
-Data type: `String[1]`
+Data type: `Stdlib::Absolutepath`
 
 Working directory for the PostgreSQL module
 
 Default value: `$postgresql::server::module_workdir`
 
-### <a name="postgresql--server--instance--passwd"></a>`postgresql::server::instance::passwd`
+### <a name="postgresqlserverinstancepasswd"></a>`postgresql::server::instance::passwd`
 
 Overrides the default PostgreSQL superuser
 
@@ -2898,15 +2890,15 @@ Overrides the default PostgreSQL superuser
 
 The following parameters are available in the `postgresql::server::instance::passwd` defined type:
 
-* [`user`](#-postgresql--server--instance--passwd--user)
-* [`group`](#-postgresql--server--instance--passwd--group)
-* [`psql_path`](#-postgresql--server--instance--passwd--psql_path)
-* [`port`](#-postgresql--server--instance--passwd--port)
-* [`database`](#-postgresql--server--instance--passwd--database)
-* [`module_workdir`](#-postgresql--server--instance--passwd--module_workdir)
-* [`postgres_password`](#-postgresql--server--instance--passwd--postgres_password)
+* [`user`](#user)
+* [`group`](#group)
+* [`psql_path`](#psql_path)
+* [`port`](#port)
+* [`database`](#database)
+* [`module_workdir`](#module_workdir)
+* [`postgres_password`](#postgres_password)
 
-##### <a name="-postgresql--server--instance--passwd--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `String[1]`
 
@@ -2914,7 +2906,7 @@ Overrides the default PostgreSQL super user and owner of PostgreSQL related file
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--instance--passwd--group"></a>`group`
+##### <a name="group"></a>`group`
 
 Data type: `String[1]`
 
@@ -2923,7 +2915,7 @@ Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
 
 Default value: `$postgresql::server::group`
 
-##### <a name="-postgresql--server--instance--passwd--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2931,7 +2923,7 @@ Specifies the path to the psql command.
 
 Default value: `$postgresql::server::psql_path`
 
-##### <a name="-postgresql--server--instance--passwd--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Stdlib::Port`
 
@@ -2941,7 +2933,7 @@ changing the port causes the server to come to a full stop before being able to 
 
 Default value: `$postgresql::server::port`
 
-##### <a name="-postgresql--server--instance--passwd--database"></a>`database`
+##### <a name="database"></a>`database`
 
 Data type: `String[1]`
 
@@ -2949,15 +2941,15 @@ Specifies the name of the database to connect with. On most systems this is 'pos
 
 Default value: `$postgresql::server::default_database`
 
-##### <a name="-postgresql--server--instance--passwd--module_workdir"></a>`module_workdir`
+##### <a name="module_workdir"></a>`module_workdir`
 
-Data type: `String[1]`
+Data type: `Stdlib::Absolutepath`
 
 Working directory for the PostgreSQL module
 
 Default value: `$postgresql::server::module_workdir`
 
-##### <a name="-postgresql--server--instance--passwd--postgres_password"></a>`postgres_password`
+##### <a name="postgres_password"></a>`postgres_password`
 
 Data type: `Optional[Variant[String[1], Sensitive[String[1]], Integer]]`
 
@@ -2966,7 +2958,7 @@ database, with a user called postgres and no password.
 
 Default value: `$postgresql::server::postgres_password`
 
-### <a name="postgresql--server--instance--reload"></a>`postgresql::server::instance::reload`
+### <a name="postgresqlserverinstancereload"></a>`postgresql::server::instance::reload`
 
 Overrides the default reload or status command for your PostgreSQL service
 
@@ -2974,10 +2966,10 @@ Overrides the default reload or status command for your PostgreSQL service
 
 The following parameters are available in the `postgresql::server::instance::reload` defined type:
 
-* [`service_reload`](#-postgresql--server--instance--reload--service_reload)
-* [`service_status`](#-postgresql--server--instance--reload--service_status)
+* [`service_reload`](#service_reload)
+* [`service_status`](#service_status)
 
-##### <a name="-postgresql--server--instance--reload--service_reload"></a>`service_reload`
+##### <a name="service_reload"></a>`service_reload`
 
 Data type: `String[1]`
 
@@ -2985,7 +2977,7 @@ Overrides the default reload command for your PostgreSQL service.
 
 Default value: `$postgresql::server::service_reload`
 
-##### <a name="-postgresql--server--instance--reload--service_status"></a>`service_status`
+##### <a name="service_status"></a>`service_status`
 
 Data type: `String[1]`
 
@@ -2993,7 +2985,7 @@ Overrides the default status check command for your PostgreSQL service.
 
 Default value: `$postgresql::server::service_status`
 
-### <a name="postgresql--server--instance--service"></a>`postgresql::server::instance::service`
+### <a name="postgresqlserverinstanceservice"></a>`postgresql::server::instance::service`
 
 Manages the service for the postgres main instance (default) or additional instances
 
@@ -3001,19 +2993,19 @@ Manages the service for the postgres main instance (default) or additional insta
 
 The following parameters are available in the `postgresql::server::instance::service` defined type:
 
-* [`service_ensure`](#-postgresql--server--instance--service--service_ensure)
-* [`service_enable`](#-postgresql--server--instance--service--service_enable)
-* [`service_manage`](#-postgresql--server--instance--service--service_manage)
-* [`service_name`](#-postgresql--server--instance--service--service_name)
-* [`service_provider`](#-postgresql--server--instance--service--service_provider)
-* [`service_status`](#-postgresql--server--instance--service--service_status)
-* [`user`](#-postgresql--server--instance--service--user)
-* [`port`](#-postgresql--server--instance--service--port)
-* [`default_database`](#-postgresql--server--instance--service--default_database)
-* [`psql_path`](#-postgresql--server--instance--service--psql_path)
-* [`connect_settings`](#-postgresql--server--instance--service--connect_settings)
+* [`service_ensure`](#service_ensure)
+* [`service_enable`](#service_enable)
+* [`service_manage`](#service_manage)
+* [`service_name`](#service_name)
+* [`service_provider`](#service_provider)
+* [`service_status`](#service_status)
+* [`user`](#user)
+* [`port`](#port)
+* [`default_database`](#default_database)
+* [`psql_path`](#psql_path)
+* [`connect_settings`](#connect_settings)
 
-##### <a name="-postgresql--server--instance--service--service_ensure"></a>`service_ensure`
+##### <a name="service_ensure"></a>`service_ensure`
 
 Data type: `Variant[Enum['running', 'stopped'], Boolean]`
 
@@ -3021,7 +3013,7 @@ Ensure service is installed
 
 Default value: `$postgresql::server::service_ensure`
 
-##### <a name="-postgresql--server--instance--service--service_enable"></a>`service_enable`
+##### <a name="service_enable"></a>`service_enable`
 
 Data type: `Boolean`
 
@@ -3029,7 +3021,7 @@ Enable the PostgreSQL service
 
 Default value: `$postgresql::server::service_enable`
 
-##### <a name="-postgresql--server--instance--service--service_manage"></a>`service_manage`
+##### <a name="service_manage"></a>`service_manage`
 
 Data type: `Boolean`
 
@@ -3037,7 +3029,7 @@ Defines whether or not Puppet should manage the service.
 
 Default value: `$postgresql::server::service_manage`
 
-##### <a name="-postgresql--server--instance--service--service_name"></a>`service_name`
+##### <a name="service_name"></a>`service_name`
 
 Data type: `String[1]`
 
@@ -3045,7 +3037,7 @@ Overrides the default PostgreSQL service name.
 
 Default value: `$postgresql::server::service_name`
 
-##### <a name="-postgresql--server--instance--service--service_provider"></a>`service_provider`
+##### <a name="service_provider"></a>`service_provider`
 
 Data type: `Optional[String[1]]`
 
@@ -3053,7 +3045,7 @@ Overrides the default PostgreSQL service provider.
 
 Default value: `$postgresql::server::service_provider`
 
-##### <a name="-postgresql--server--instance--service--service_status"></a>`service_status`
+##### <a name="service_status"></a>`service_status`
 
 Data type: `String[1]`
 
@@ -3061,7 +3053,7 @@ Overrides the default status check command for your PostgreSQL service.
 
 Default value: `$postgresql::server::service_status`
 
-##### <a name="-postgresql--server--instance--service--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `String[1]`
 
@@ -3069,7 +3061,7 @@ Overrides the default PostgreSQL super user and owner of PostgreSQL related file
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--instance--service--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Stdlib::Port`
 
@@ -3080,7 +3072,7 @@ Default value: 5432. Meaning the Postgres server listens on TCP port 5432.
 
 Default value: `$postgresql::server::port`
 
-##### <a name="-postgresql--server--instance--service--default_database"></a>`default_database`
+##### <a name="default_database"></a>`default_database`
 
 Data type: `String[1]`
 
@@ -3088,7 +3080,7 @@ Specifies the name of the default database to connect with. On most systems this
 
 Default value: `$postgresql::server::default_database`
 
-##### <a name="-postgresql--server--instance--service--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -3096,7 +3088,7 @@ Specifies the path to the psql command.
 
 Default value: `$postgresql::server::psql_path`
 
-##### <a name="-postgresql--server--instance--service--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -3105,7 +3097,7 @@ such as postgresql::server::role.
 
 Default value: `$postgresql::server::default_connect_settings`
 
-### <a name="postgresql--server--pg_hba_rule"></a>`postgresql::server::pg_hba_rule`
+### <a name="postgresqlserverpg_hba_rule"></a>`postgresql::server::pg_hba_rule`
 
 This resource manages an individual rule that applies to the file defined in target.
 
@@ -3113,43 +3105,43 @@ This resource manages an individual rule that applies to the file defined in tar
 
 The following parameters are available in the `postgresql::server::pg_hba_rule` defined type:
 
-* [`type`](#-postgresql--server--pg_hba_rule--type)
-* [`database`](#-postgresql--server--pg_hba_rule--database)
-* [`user`](#-postgresql--server--pg_hba_rule--user)
-* [`auth_method`](#-postgresql--server--pg_hba_rule--auth_method)
-* [`address`](#-postgresql--server--pg_hba_rule--address)
-* [`description`](#-postgresql--server--pg_hba_rule--description)
-* [`auth_option`](#-postgresql--server--pg_hba_rule--auth_option)
-* [`order`](#-postgresql--server--pg_hba_rule--order)
-* [`target`](#-postgresql--server--pg_hba_rule--target)
-* [`postgresql_version`](#-postgresql--server--pg_hba_rule--postgresql_version)
+* [`type`](#type)
+* [`database`](#database)
+* [`user`](#user)
+* [`auth_method`](#auth_method)
+* [`address`](#address)
+* [`description`](#description)
+* [`auth_option`](#auth_option)
+* [`order`](#order)
+* [`target`](#target)
+* [`postgresql_version`](#postgresql_version)
 
-##### <a name="-postgresql--server--pg_hba_rule--type"></a>`type`
+##### <a name="type"></a>`type`
 
 Data type: `Postgresql::Pg_hba_rule_type`
 
 Sets the type of rule.
 
-##### <a name="-postgresql--server--pg_hba_rule--database"></a>`database`
+##### <a name="database"></a>`database`
 
 Data type: `String[1]`
 
 Sets a comma-separated list of databases that this rule matches.
 
-##### <a name="-postgresql--server--pg_hba_rule--user"></a>`user`
+##### <a name="user"></a>`user`
 
 Data type: `String[1]`
 
 Sets a comma-separated list of users that this rule matches.
 
-##### <a name="-postgresql--server--pg_hba_rule--auth_method"></a>`auth_method`
+##### <a name="auth_method"></a>`auth_method`
 
 Data type: `String[1]`
 
 Provides the method that is used for authentication for the connection that this rule matches.
 Described further in the PostgreSQL pg_hba.conf documentation.
 
-##### <a name="-postgresql--server--pg_hba_rule--address"></a>`address`
+##### <a name="address"></a>`address`
 
 Data type: `Optional[Postgresql::Pg_hba_rule_address]`
 
@@ -3157,9 +3149,9 @@ Sets a address for this rule matching when the type is not 'local'.
 Value can either be IPv4 CIDR, IPv6 CIDR, a FQDN, the strings 'all', 'samehost' or 'samenet' or a domain either with or without starting
 dot (.) https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--pg_hba_rule--description"></a>`description`
+##### <a name="description"></a>`description`
 
 Data type: `String[1]`
 
@@ -3168,16 +3160,16 @@ Default value: 'none'.
 
 Default value: `'none'`
 
-##### <a name="-postgresql--server--pg_hba_rule--auth_option"></a>`auth_option`
+##### <a name="auth_option"></a>`auth_option`
 
 Data type: `Optional[String]`
 
 For certain auth_method settings there are extra options that can be passed. Consult the PostgreSQL pg_hba.conf documentation for
 further details.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--pg_hba_rule--order"></a>`order`
+##### <a name="order"></a>`order`
 
 Data type: `Variant[String, Integer]`
 
@@ -3188,7 +3180,7 @@ Default value: 150.
 
 Default value: `150`
 
-##### <a name="-postgresql--server--pg_hba_rule--target"></a>`target`
+##### <a name="target"></a>`target`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -3196,7 +3188,7 @@ Provides the target for the rule, and is generally an internal only property. Us
 
 Default value: `$postgresql::server::pg_hba_conf_path`
 
-##### <a name="-postgresql--server--pg_hba_rule--postgresql_version"></a>`postgresql_version`
+##### <a name="postgresql_version"></a>`postgresql_version`
 
 Data type: `String`
 
@@ -3204,7 +3196,7 @@ Manages pg_hba.conf without managing the entire PostgreSQL instance.
 
 Default value: `$postgresql::server::_version`
 
-### <a name="postgresql--server--pg_ident_rule"></a>`postgresql::server::pg_ident_rule`
+### <a name="postgresqlserverpg_ident_rule"></a>`postgresql::server::pg_ident_rule`
 
 This resource manages an individual rule that applies to the file defined in target.
 
@@ -3212,33 +3204,33 @@ This resource manages an individual rule that applies to the file defined in tar
 
 The following parameters are available in the `postgresql::server::pg_ident_rule` defined type:
 
-* [`map_name`](#-postgresql--server--pg_ident_rule--map_name)
-* [`system_username`](#-postgresql--server--pg_ident_rule--system_username)
-* [`database_username`](#-postgresql--server--pg_ident_rule--database_username)
-* [`description`](#-postgresql--server--pg_ident_rule--description)
-* [`order`](#-postgresql--server--pg_ident_rule--order)
-* [`target`](#-postgresql--server--pg_ident_rule--target)
+* [`map_name`](#map_name)
+* [`system_username`](#system_username)
+* [`database_username`](#database_username)
+* [`description`](#description)
+* [`order`](#order)
+* [`target`](#target)
 
-##### <a name="-postgresql--server--pg_ident_rule--map_name"></a>`map_name`
+##### <a name="map_name"></a>`map_name`
 
 Data type: `String[1]`
 
 Sets the name of the user map that is used to refer to this mapping in pg_hba.conf.
 
-##### <a name="-postgresql--server--pg_ident_rule--system_username"></a>`system_username`
+##### <a name="system_username"></a>`system_username`
 
 Data type: `String[1]`
 
 Specifies the operating system user name (the user name used to connect to the database).
 
-##### <a name="-postgresql--server--pg_ident_rule--database_username"></a>`database_username`
+##### <a name="database_username"></a>`database_username`
 
 Data type: `String[1]`
 
 Specifies the user name of the database user.
 The system_username is mapped to this user name.
 
-##### <a name="-postgresql--server--pg_ident_rule--description"></a>`description`
+##### <a name="description"></a>`description`
 
 Data type: `String[1]`
 
@@ -3247,7 +3239,7 @@ This description is placed in the comments above the rule in pg_ident.conf.
 
 Default value: `'none'`
 
-##### <a name="-postgresql--server--pg_ident_rule--order"></a>`order`
+##### <a name="order"></a>`order`
 
 Data type: `String[1]`
 
@@ -3255,7 +3247,7 @@ Defines an order for placing the mapping in pg_ident.conf. Default value: 150.
 
 Default value: `'150'`
 
-##### <a name="-postgresql--server--pg_ident_rule--target"></a>`target`
+##### <a name="target"></a>`target`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -3263,7 +3255,7 @@ Provides the target for the rule and is generally an internal only property. Use
 
 Default value: `$postgresql::server::pg_ident_conf_path`
 
-### <a name="postgresql--server--reassign_owned_by"></a>`postgresql::server::reassign_owned_by`
+### <a name="postgresqlserverreassign_owned_by"></a>`postgresql::server::reassign_owned_by`
 
 Define for reassigning the ownership of objects within a database.
 
@@ -3273,32 +3265,32 @@ Define for reassigning the ownership of objects within a database.
 
 The following parameters are available in the `postgresql::server::reassign_owned_by` defined type:
 
-* [`old_role`](#-postgresql--server--reassign_owned_by--old_role)
-* [`new_role`](#-postgresql--server--reassign_owned_by--new_role)
-* [`db`](#-postgresql--server--reassign_owned_by--db)
-* [`psql_user`](#-postgresql--server--reassign_owned_by--psql_user)
-* [`port`](#-postgresql--server--reassign_owned_by--port)
-* [`connect_settings`](#-postgresql--server--reassign_owned_by--connect_settings)
+* [`old_role`](#old_role)
+* [`new_role`](#new_role)
+* [`db`](#db)
+* [`psql_user`](#psql_user)
+* [`port`](#port)
+* [`connect_settings`](#connect_settings)
 
-##### <a name="-postgresql--server--reassign_owned_by--old_role"></a>`old_role`
+##### <a name="old_role"></a>`old_role`
 
 Data type: `String`
 
 Specifies the role or user who is the current owner of the objects in the specified db
 
-##### <a name="-postgresql--server--reassign_owned_by--new_role"></a>`new_role`
+##### <a name="new_role"></a>`new_role`
 
 Data type: `String`
 
 Specifies the role or user who will be the new owner of these objects
 
-##### <a name="-postgresql--server--reassign_owned_by--db"></a>`db`
+##### <a name="db"></a>`db`
 
 Data type: `String`
 
 Specifies the database to which the 'REASSIGN OWNED' will be applied
 
-##### <a name="-postgresql--server--reassign_owned_by--psql_user"></a>`psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `String`
 
@@ -3306,7 +3298,7 @@ Specifies the OS user for running psql.
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--reassign_owned_by--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Stdlib::Port`
 
@@ -3314,7 +3306,7 @@ Port to use when connecting.
 
 Default value: `$postgresql::server::port`
 
-##### <a name="-postgresql--server--reassign_owned_by--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -3322,7 +3314,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-### <a name="postgresql--server--recovery"></a>`postgresql::server::recovery`
+### <a name="postgresqlserverrecovery"></a>`postgresql::server::recovery`
 
 This resource manages the parameters that applies to the recovery.conf template.
 
@@ -3337,145 +3329,145 @@ manage_recovery_conf is set to true.
 
 The following parameters are available in the `postgresql::server::recovery` defined type:
 
-* [`restore_command`](#-postgresql--server--recovery--restore_command)
-* [`archive_cleanup_command`](#-postgresql--server--recovery--archive_cleanup_command)
-* [`recovery_end_command`](#-postgresql--server--recovery--recovery_end_command)
-* [`recovery_target_name`](#-postgresql--server--recovery--recovery_target_name)
-* [`recovery_target_time`](#-postgresql--server--recovery--recovery_target_time)
-* [`recovery_target_xid`](#-postgresql--server--recovery--recovery_target_xid)
-* [`recovery_target_inclusive`](#-postgresql--server--recovery--recovery_target_inclusive)
-* [`recovery_target`](#-postgresql--server--recovery--recovery_target)
-* [`recovery_target_timeline`](#-postgresql--server--recovery--recovery_target_timeline)
-* [`pause_at_recovery_target`](#-postgresql--server--recovery--pause_at_recovery_target)
-* [`standby_mode`](#-postgresql--server--recovery--standby_mode)
-* [`primary_conninfo`](#-postgresql--server--recovery--primary_conninfo)
-* [`primary_slot_name`](#-postgresql--server--recovery--primary_slot_name)
-* [`trigger_file`](#-postgresql--server--recovery--trigger_file)
-* [`recovery_min_apply_delay`](#-postgresql--server--recovery--recovery_min_apply_delay)
-* [`target`](#-postgresql--server--recovery--target)
+* [`restore_command`](#restore_command)
+* [`archive_cleanup_command`](#archive_cleanup_command)
+* [`recovery_end_command`](#recovery_end_command)
+* [`recovery_target_name`](#recovery_target_name)
+* [`recovery_target_time`](#recovery_target_time)
+* [`recovery_target_xid`](#recovery_target_xid)
+* [`recovery_target_inclusive`](#recovery_target_inclusive)
+* [`recovery_target`](#recovery_target)
+* [`recovery_target_timeline`](#recovery_target_timeline)
+* [`pause_at_recovery_target`](#pause_at_recovery_target)
+* [`standby_mode`](#standby_mode)
+* [`primary_conninfo`](#primary_conninfo)
+* [`primary_slot_name`](#primary_slot_name)
+* [`trigger_file`](#trigger_file)
+* [`recovery_min_apply_delay`](#recovery_min_apply_delay)
+* [`target`](#target)
 
-##### <a name="-postgresql--server--recovery--restore_command"></a>`restore_command`
+##### <a name="restore_command"></a>`restore_command`
 
 Data type: `Optional[String]`
 
 The shell command to execute to retrieve an archived segment of the WAL file series.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--archive_cleanup_command"></a>`archive_cleanup_command`
+##### <a name="archive_cleanup_command"></a>`archive_cleanup_command`
 
 Data type: `Optional[String[1]]`
 
 This optional parameter specifies a shell command that will be executed at every restartpoint.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--recovery_end_command"></a>`recovery_end_command`
+##### <a name="recovery_end_command"></a>`recovery_end_command`
 
 Data type: `Optional[String[1]]`
 
 This parameter specifies a shell command that will be executed once only at the end of recovery.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--recovery_target_name"></a>`recovery_target_name`
+##### <a name="recovery_target_name"></a>`recovery_target_name`
 
 Data type: `Optional[String[1]]`
 
 This parameter specifies the named restore point (created with pg_create_restore_point()) to which recovery will proceed.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--recovery_target_time"></a>`recovery_target_time`
+##### <a name="recovery_target_time"></a>`recovery_target_time`
 
 Data type: `Optional[String[1]]`
 
 This parameter specifies the time stamp up to which recovery will proceed.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--recovery_target_xid"></a>`recovery_target_xid`
+##### <a name="recovery_target_xid"></a>`recovery_target_xid`
 
 Data type: `Optional[String[1]]`
 
 This parameter specifies the transaction ID up to which recovery will proceed.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--recovery_target_inclusive"></a>`recovery_target_inclusive`
+##### <a name="recovery_target_inclusive"></a>`recovery_target_inclusive`
 
 Data type: `Optional[Boolean]`
 
 Specifies whether to stop just after the specified recovery target (true), or just before the recovery target (false).
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--recovery_target"></a>`recovery_target`
+##### <a name="recovery_target"></a>`recovery_target`
 
 Data type: `Optional[String[1]]`
 
 This parameter specifies that recovery should end as soon as a consistent state is reached, i.e. as early as possible.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--recovery_target_timeline"></a>`recovery_target_timeline`
+##### <a name="recovery_target_timeline"></a>`recovery_target_timeline`
 
 Data type: `Optional[String[1]]`
 
 Specifies recovering into a particular timeline.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--pause_at_recovery_target"></a>`pause_at_recovery_target`
+##### <a name="pause_at_recovery_target"></a>`pause_at_recovery_target`
 
 Data type: `Optional[Boolean]`
 
 Specifies whether recovery should pause when the recovery target is reached.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--standby_mode"></a>`standby_mode`
+##### <a name="standby_mode"></a>`standby_mode`
 
 Data type: `Optional[String[1]]`
 
 Specifies whether to start the PostgreSQL server as a standby.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--primary_conninfo"></a>`primary_conninfo`
+##### <a name="primary_conninfo"></a>`primary_conninfo`
 
 Data type: `Optional[String[1]]`
 
 Specifies a connection string to be used for the standby server to connect with the primary.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--primary_slot_name"></a>`primary_slot_name`
+##### <a name="primary_slot_name"></a>`primary_slot_name`
 
 Data type: `Optional[String[1]]`
 
 Optionally specifies an existing replication slot to be used when connecting to the primary via streaming replication to control
 resource removal on the upstream node.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--trigger_file"></a>`trigger_file`
+##### <a name="trigger_file"></a>`trigger_file`
 
 Data type: `Optional[String[1]]`
 
 Specifies a trigger file whose presence ends recovery in the standby.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--recovery_min_apply_delay"></a>`recovery_min_apply_delay`
+##### <a name="recovery_min_apply_delay"></a>`recovery_min_apply_delay`
 
 Data type: `Optional[Integer]`
 
 This parameter allows you to delay recovery by a fixed period of time, measured in milliseconds if no unit is specified.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--recovery--target"></a>`target`
+##### <a name="target"></a>`target`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -3483,7 +3475,7 @@ Provides the target for the rule, and is generally an internal only property. Us
 
 Default value: `$postgresql::server::recovery_conf_path`
 
-### <a name="postgresql--server--role"></a>`postgresql::server::role`
+### <a name="postgresqlserverrole"></a>`postgresql::server::role`
 
 Define for creating a database role.
 
@@ -3491,60 +3483,60 @@ Define for creating a database role.
 
 The following parameters are available in the `postgresql::server::role` defined type:
 
-* [`update_password`](#-postgresql--server--role--update_password)
-* [`password_hash`](#-postgresql--server--role--password_hash)
-* [`createdb`](#-postgresql--server--role--createdb)
-* [`createrole`](#-postgresql--server--role--createrole)
-* [`db`](#-postgresql--server--role--db)
-* [`port`](#-postgresql--server--role--port)
-* [`login`](#-postgresql--server--role--login)
-* [`inherit`](#-postgresql--server--role--inherit)
-* [`superuser`](#-postgresql--server--role--superuser)
-* [`replication`](#-postgresql--server--role--replication)
-* [`connection_limit`](#-postgresql--server--role--connection_limit)
-* [`username`](#-postgresql--server--role--username)
-* [`connect_settings`](#-postgresql--server--role--connect_settings)
-* [`ensure`](#-postgresql--server--role--ensure)
-* [`psql_user`](#-postgresql--server--role--psql_user)
-* [`psql_group`](#-postgresql--server--role--psql_group)
-* [`psql_path`](#-postgresql--server--role--psql_path)
-* [`module_workdir`](#-postgresql--server--role--module_workdir)
-* [`hash`](#-postgresql--server--role--hash)
-* [`salt`](#-postgresql--server--role--salt)
+* [`update_password`](#update_password)
+* [`password_hash`](#password_hash)
+* [`createdb`](#createdb)
+* [`createrole`](#createrole)
+* [`db`](#db)
+* [`port`](#port)
+* [`login`](#login)
+* [`inherit`](#inherit)
+* [`superuser`](#superuser)
+* [`replication`](#replication)
+* [`connection_limit`](#connection_limit)
+* [`username`](#username)
+* [`connect_settings`](#connect_settings)
+* [`ensure`](#ensure)
+* [`psql_user`](#psql_user)
+* [`psql_group`](#psql_group)
+* [`psql_path`](#psql_path)
+* [`module_workdir`](#module_workdir)
+* [`hash`](#hash)
+* [`salt`](#salt)
 
-##### <a name="-postgresql--server--role--update_password"></a>`update_password`
+##### <a name="update_password"></a>`update_password`
 
 Data type: `Boolean`
 
 If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.
 
-Default value: `true`
+Default value: ``true``
 
-##### <a name="-postgresql--server--role--password_hash"></a>`password_hash`
+##### <a name="password_hash"></a>`password_hash`
 
 Data type: `Variant[Boolean, String, Sensitive[String]]`
 
 Sets the hash to use during password creation.
 
-Default value: `false`
+Default value: ``false``
 
-##### <a name="-postgresql--server--role--createdb"></a>`createdb`
+##### <a name="createdb"></a>`createdb`
 
 Data type: `Boolean`
 
 Specifies whether to grant the ability to create new databases with this role.
 
-Default value: `false`
+Default value: ``false``
 
-##### <a name="-postgresql--server--role--createrole"></a>`createrole`
+##### <a name="createrole"></a>`createrole`
 
 Data type: `Boolean`
 
 Specifies whether to grant the ability to create new roles with this role.
 
-Default value: `false`
+Default value: ``false``
 
-##### <a name="-postgresql--server--role--db"></a>`db`
+##### <a name="db"></a>`db`
 
 Data type: `String[1]`
 
@@ -3552,47 +3544,47 @@ Database used to connect to.
 
 Default value: `$postgresql::server::default_database`
 
-##### <a name="-postgresql--server--role--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Optional[Stdlib::Port]`
 
 Port to use when connecting.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--role--login"></a>`login`
+##### <a name="login"></a>`login`
 
 Data type: `Boolean`
 
 Specifies whether to grant login capability for the new role.
 
-Default value: `true`
+Default value: ``true``
 
-##### <a name="-postgresql--server--role--inherit"></a>`inherit`
+##### <a name="inherit"></a>`inherit`
 
 Data type: `Boolean`
 
 Specifies whether to grant inherit capability for the new role.
 
-Default value: `true`
+Default value: ``true``
 
-##### <a name="-postgresql--server--role--superuser"></a>`superuser`
+##### <a name="superuser"></a>`superuser`
 
 Data type: `Boolean`
 
 Specifies whether to grant super user capability for the new role.
 
-Default value: `false`
+Default value: ``false``
 
-##### <a name="-postgresql--server--role--replication"></a>`replication`
+##### <a name="replication"></a>`replication`
 
 Data type: `Boolean`
 
 Provides provides replication capabilities for this role if set to true.
 
-Default value: `false`
+Default value: ``false``
 
-##### <a name="-postgresql--server--role--connection_limit"></a>`connection_limit`
+##### <a name="connection_limit"></a>`connection_limit`
 
 Data type: `String[1]`
 
@@ -3600,7 +3592,7 @@ Specifies how many concurrent connections the role can make. Default value: '-1'
 
 Default value: `'-1'`
 
-##### <a name="-postgresql--server--role--username"></a>`username`
+##### <a name="username"></a>`username`
 
 Data type: `String[1]`
 
@@ -3608,7 +3600,7 @@ Defines the username of the role to create.
 
 Default value: `$title`
 
-##### <a name="-postgresql--server--role--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -3616,7 +3608,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-##### <a name="-postgresql--server--role--ensure"></a>`ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -3624,7 +3616,7 @@ Specify whether to create or drop the role. Specifying 'present' creates the rol
 
 Default value: `'present'`
 
-##### <a name="-postgresql--server--role--psql_user"></a>`psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `String[1]`
 
@@ -3632,7 +3624,7 @@ Sets the OS user to run psql
 
 Default value: `$postgresql::server::user`
 
-##### <a name="-postgresql--server--role--psql_group"></a>`psql_group`
+##### <a name="psql_group"></a>`psql_group`
 
 Data type: `String[1]`
 
@@ -3640,7 +3632,7 @@ Sets the OS group to run psql
 
 Default value: `$postgresql::server::group`
 
-##### <a name="-postgresql--server--role--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -3648,7 +3640,7 @@ Sets path to psql command
 
 Default value: `$postgresql::server::psql_path`
 
-##### <a name="-postgresql--server--role--module_workdir"></a>`module_workdir`
+##### <a name="module_workdir"></a>`module_workdir`
 
 Data type: `String[1]`
 
@@ -3657,23 +3649,23 @@ May need to specify if '/tmp' is on volume mounted with noexec option.
 
 Default value: `$postgresql::server::module_workdir`
 
-##### <a name="-postgresql--server--role--hash"></a>`hash`
+##### <a name="hash"></a>`hash`
 
 Data type: `Optional[Enum['md5', 'scram-sha-256']]`
 
 Specify the hash method for pg password
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--role--salt"></a>`salt`
+##### <a name="salt"></a>`salt`
 
 Data type: `Optional[Variant[String[1], Integer]]`
 
 Specify the salt use for the scram-sha-256 encoding password (default username)
 
-Default value: `undef`
+Default value: ``undef``
 
-### <a name="postgresql--server--schema"></a>`postgresql::server::schema`
+### <a name="postgresqlserverschema"></a>`postgresql::server::schema`
 
 Create a new schema.
 
@@ -3693,12 +3685,12 @@ postgresql::server::schema {'private':
 
 The following parameters are available in the `postgresql::server::schema` defined type:
 
-* [`db`](#-postgresql--server--schema--db)
-* [`owner`](#-postgresql--server--schema--owner)
-* [`schema`](#-postgresql--server--schema--schema)
-* [`connect_settings`](#-postgresql--server--schema--connect_settings)
+* [`db`](#db)
+* [`owner`](#owner)
+* [`schema`](#schema)
+* [`connect_settings`](#connect_settings)
 
-##### <a name="-postgresql--server--schema--db"></a>`db`
+##### <a name="db"></a>`db`
 
 Data type: `String[1]`
 
@@ -3706,15 +3698,15 @@ Required. Sets the name of the database in which to create this schema.
 
 Default value: `$postgresql::server::default_database`
 
-##### <a name="-postgresql--server--schema--owner"></a>`owner`
+##### <a name="owner"></a>`owner`
 
 Data type: `Optional[String[1]]`
 
 Sets the default owner of the schema.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--schema--schema"></a>`schema`
+##### <a name="schema"></a>`schema`
 
 Data type: `String[1]`
 
@@ -3722,7 +3714,7 @@ Sets the name of the schema.
 
 Default value: `$title`
 
-##### <a name="-postgresql--server--schema--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -3730,7 +3722,7 @@ Specifies a hash of environment variables used when connecting to a remote serve
 
 Default value: `$postgresql::server::default_connect_settings`
 
-### <a name="postgresql--server--table_grant"></a>`postgresql::server::table_grant`
+### <a name="postgresqlservertable_grant"></a>`postgresql::server::table_grant`
 
 This resource wraps the grant resource to manage table grants specifically.
 
@@ -3738,96 +3730,92 @@ This resource wraps the grant resource to manage table grants specifically.
 
 The following parameters are available in the `postgresql::server::table_grant` defined type:
 
-* [`privilege`](#-postgresql--server--table_grant--privilege)
-* [`table`](#-postgresql--server--table_grant--table)
-* [`db`](#-postgresql--server--table_grant--db)
-* [`role`](#-postgresql--server--table_grant--role)
-* [`ensure`](#-postgresql--server--table_grant--ensure)
-* [`port`](#-postgresql--server--table_grant--port)
-* [`psql_db`](#-postgresql--server--table_grant--psql_db)
-* [`psql_user`](#-postgresql--server--table_grant--psql_user)
-* [`connect_settings`](#-postgresql--server--table_grant--connect_settings)
-* [`onlyif_exists`](#-postgresql--server--table_grant--onlyif_exists)
+* [`privilege`](#privilege)
+* [`table`](#table)
+* [`db`](#db)
+* [`role`](#role)
+* [`ensure`](#ensure)
+* [`port`](#port)
+* [`psql_db`](#psql_db)
+* [`psql_user`](#psql_user)
+* [`connect_settings`](#connect_settings)
+* [`onlyif_exists`](#onlyif_exists)
 
-##### <a name="-postgresql--server--table_grant--privilege"></a>`privilege`
+##### <a name="privilege"></a>`privilege`
 
-Data type:
-
-```puppet
-Enum['ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'all', 'select', 'insert', 'update', 'delete',
-  'truncate', 'references', 'trigger']
-```
+Data type: `Enum['ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'all', 'select', 'insert', 'update', 'delete',
+  'truncate', 'references', 'trigger']`
 
 Specifies comma-separated list of privileges to grant.
 Valid options: 'ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER'.
 
-##### <a name="-postgresql--server--table_grant--table"></a>`table`
+##### <a name="table"></a>`table`
 
 Data type: `String[1]`
 
 Specifies the table to which you are granting access.
 
-##### <a name="-postgresql--server--table_grant--db"></a>`db`
+##### <a name="db"></a>`db`
 
 Data type: `String[1]`
 
 Specifies which database the table is in.
 
-##### <a name="-postgresql--server--table_grant--role"></a>`role`
+##### <a name="role"></a>`role`
 
 Data type: `String[1]`
 
 Specifies the role or user to whom you are granting access.
 
-##### <a name="-postgresql--server--table_grant--ensure"></a>`ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Optional[Enum['present', 'absent']]`
 
 Specifies whether to grant or revoke the privilege. Default is to grant the privilege.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--table_grant--port"></a>`port`
+##### <a name="port"></a>`port`
 
 Data type: `Optional[Stdlib::Port]`
 
 Port to use when connecting.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--table_grant--psql_db"></a>`psql_db`
+##### <a name="psql_db"></a>`psql_db`
 
 Data type: `Optional[String[1]]`
 
 Specifies the database to execute the grant against. This should not ordinarily be changed from the default.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--table_grant--psql_user"></a>`psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 Data type: `Optional[String[1]]`
 
 Specifies the OS user for running psql.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--table_grant--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Optional[Hash]`
 
 Specifies a hash of environment variables used when connecting to a remote server.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--table_grant--onlyif_exists"></a>`onlyif_exists`
+##### <a name="onlyif_exists"></a>`onlyif_exists`
 
 Data type: `Boolean`
 
 Create grant only if it doesn't exist.
 
-Default value: `false`
+Default value: ``false``
 
-### <a name="postgresql--server--tablespace"></a>`postgresql::server::tablespace`
+### <a name="postgresqlservertablespace"></a>`postgresql::server::tablespace`
 
 This module creates tablespace.
 
@@ -3835,35 +3823,35 @@ This module creates tablespace.
 
 The following parameters are available in the `postgresql::server::tablespace` defined type:
 
-* [`location`](#-postgresql--server--tablespace--location)
-* [`manage_location`](#-postgresql--server--tablespace--manage_location)
-* [`owner`](#-postgresql--server--tablespace--owner)
-* [`spcname`](#-postgresql--server--tablespace--spcname)
-* [`connect_settings`](#-postgresql--server--tablespace--connect_settings)
+* [`location`](#location)
+* [`manage_location`](#manage_location)
+* [`owner`](#owner)
+* [`spcname`](#spcname)
+* [`connect_settings`](#connect_settings)
 
-##### <a name="-postgresql--server--tablespace--location"></a>`location`
+##### <a name="location"></a>`location`
 
 Data type: `String[1]`
 
 Specifies the path to locate this tablespace.
 
-##### <a name="-postgresql--server--tablespace--manage_location"></a>`manage_location`
+##### <a name="manage_location"></a>`manage_location`
 
 Data type: `Boolean`
 
 Set to false if you have file{ $location: } already defined
 
-Default value: `true`
+Default value: ``true``
 
-##### <a name="-postgresql--server--tablespace--owner"></a>`owner`
+##### <a name="owner"></a>`owner`
 
 Data type: `Optional[String[1]]`
 
 Specifies the default owner of the tablespace.
 
-Default value: `undef`
+Default value: ``undef``
 
-##### <a name="-postgresql--server--tablespace--spcname"></a>`spcname`
+##### <a name="spcname"></a>`spcname`
 
 Data type: `String[1]`
 
@@ -3871,7 +3859,7 @@ Specifies the name of the tablespace.
 
 Default value: `$title`
 
-##### <a name="-postgresql--server--tablespace--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Data type: `Hash`
 
@@ -3909,10 +3897,10 @@ The value to set for this parameter.
 
 The following parameters are available in the `postgresql_conf` type.
 
-* [`name`](#-postgresql_conf--name)
-* [`provider`](#-postgresql_conf--provider)
+* [`name`](#name)
+* [`provider`](#provider)
 
-##### <a name="-postgresql_conf--name"></a>`name`
+##### <a name="name"></a>`name`
 
 Valid values: `%r{^[\w.]+$}`
 
@@ -3920,7 +3908,7 @@ namevar
 
 The postgresql parameter name to manage.
 
-##### <a name="-postgresql_conf--provider"></a>`provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `postgresql_conf` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
@@ -3949,76 +3937,76 @@ Default value: `present`
 
 The following parameters are available in the `postgresql_conn_validator` type.
 
-* [`command`](#-postgresql_conn_validator--command)
-* [`connect_settings`](#-postgresql_conn_validator--connect_settings)
-* [`db_name`](#-postgresql_conn_validator--db_name)
-* [`db_password`](#-postgresql_conn_validator--db_password)
-* [`db_username`](#-postgresql_conn_validator--db_username)
-* [`host`](#-postgresql_conn_validator--host)
-* [`name`](#-postgresql_conn_validator--name)
-* [`port`](#-postgresql_conn_validator--port)
-* [`provider`](#-postgresql_conn_validator--provider)
-* [`psql_path`](#-postgresql_conn_validator--psql_path)
-* [`run_as`](#-postgresql_conn_validator--run_as)
-* [`sleep`](#-postgresql_conn_validator--sleep)
-* [`tries`](#-postgresql_conn_validator--tries)
+* [`command`](#command)
+* [`connect_settings`](#connect_settings)
+* [`db_name`](#db_name)
+* [`db_password`](#db_password)
+* [`db_username`](#db_username)
+* [`host`](#host)
+* [`name`](#name)
+* [`port`](#port)
+* [`provider`](#provider)
+* [`psql_path`](#psql_path)
+* [`run_as`](#run_as)
+* [`sleep`](#sleep)
+* [`tries`](#tries)
 
-##### <a name="-postgresql_conn_validator--command"></a>`command`
+##### <a name="command"></a>`command`
 
 Command to run against target database.
 
 Default value: `SELECT 1`
 
-##### <a name="-postgresql_conn_validator--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Hash of environment variables for connection to a db.
 
-##### <a name="-postgresql_conn_validator--db_name"></a>`db_name`
+##### <a name="db_name"></a>`db_name`
 
 The name of the database you are trying to validate a connection with.
 
-##### <a name="-postgresql_conn_validator--db_password"></a>`db_password`
+##### <a name="db_password"></a>`db_password`
 
 The password required to access the target PostgreSQL database.
 
-##### <a name="-postgresql_conn_validator--db_username"></a>`db_username`
+##### <a name="db_username"></a>`db_username`
 
 A user that has access to the target PostgreSQL database.
 
-##### <a name="-postgresql_conn_validator--host"></a>`host`
+##### <a name="host"></a>`host`
 
 The DNS name or IP address of the server where PostgreSQL should be running.
 
-##### <a name="-postgresql_conn_validator--name"></a>`name`
+##### <a name="name"></a>`name`
 
 namevar
 
 An arbitrary name used as the identity of the resource.
 
-##### <a name="-postgresql_conn_validator--port"></a>`port`
+##### <a name="port"></a>`port`
 
 The port that the PostgreSQL server should be listening on.
 
-##### <a name="-postgresql_conn_validator--provider"></a>`provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `postgresql_conn_validator` resource. You will seldom need to specify this ---
 Puppet will usually discover the appropriate provider for your platform.
 
-##### <a name="-postgresql_conn_validator--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 Path to the psql command.
 
-##### <a name="-postgresql_conn_validator--run_as"></a>`run_as`
+##### <a name="run_as"></a>`run_as`
 
 System user that will run the psql command.
 
-##### <a name="-postgresql_conn_validator--sleep"></a>`sleep`
+##### <a name="sleep"></a>`sleep`
 
 The length of sleep time between connection tries.
 
 Default value: `2`
 
-##### <a name="-postgresql_conn_validator--tries"></a>`tries`
+##### <a name="tries"></a>`tries`
 
 The number of tries to validate the connection to the target PostgreSQL database.
 
@@ -4040,104 +4028,104 @@ The SQL command to execute via psql.
 
 The following parameters are available in the `postgresql_psql` type.
 
-* [`connect_settings`](#-postgresql_psql--connect_settings)
-* [`cwd`](#-postgresql_psql--cwd)
-* [`db`](#-postgresql_psql--db)
-* [`environment`](#-postgresql_psql--environment)
-* [`name`](#-postgresql_psql--name)
-* [`onlyif`](#-postgresql_psql--onlyif)
-* [`port`](#-postgresql_psql--port)
-* [`provider`](#-postgresql_psql--provider)
-* [`psql_group`](#-postgresql_psql--psql_group)
-* [`psql_path`](#-postgresql_psql--psql_path)
-* [`psql_user`](#-postgresql_psql--psql_user)
-* [`refreshonly`](#-postgresql_psql--refreshonly)
-* [`search_path`](#-postgresql_psql--search_path)
-* [`sensitive`](#-postgresql_psql--sensitive)
-* [`unless`](#-postgresql_psql--unless)
+* [`connect_settings`](#connect_settings)
+* [`cwd`](#cwd)
+* [`db`](#db)
+* [`environment`](#environment)
+* [`name`](#name)
+* [`onlyif`](#onlyif)
+* [`port`](#port)
+* [`provider`](#provider)
+* [`psql_group`](#psql_group)
+* [`psql_path`](#psql_path)
+* [`psql_user`](#psql_user)
+* [`refreshonly`](#refreshonly)
+* [`search_path`](#search_path)
+* [`sensitive`](#sensitive)
+* [`unless`](#unless)
 
-##### <a name="-postgresql_psql--connect_settings"></a>`connect_settings`
+##### <a name="connect_settings"></a>`connect_settings`
 
 Connection settings that will be used when connecting to postgres
 
-##### <a name="-postgresql_psql--cwd"></a>`cwd`
+##### <a name="cwd"></a>`cwd`
 
 The working directory under which the psql command should be executed.
 
 Default value: `/tmp`
 
-##### <a name="-postgresql_psql--db"></a>`db`
+##### <a name="db"></a>`db`
 
 The name of the database to execute the SQL command against, this overrides any PGDATABASE value in connect_settings
 
-##### <a name="-postgresql_psql--environment"></a>`environment`
+##### <a name="environment"></a>`environment`
 
 Any additional environment variables you want to set for a
 SQL command. Multiple environment variables should be
 specified as an array.
 
-##### <a name="-postgresql_psql--name"></a>`name`
+##### <a name="name"></a>`name`
 
 namevar
 
 An arbitrary tag for your own reference; the name of the message.
 
-##### <a name="-postgresql_psql--onlyif"></a>`onlyif`
+##### <a name="onlyif"></a>`onlyif`
 
 An optional SQL command to execute prior to the main :command;
 this is generally intended to be used for idempotency, to check
 for the existence of an object in the database to determine whether
 or not the main SQL command needs to be executed at all.
 
-##### <a name="-postgresql_psql--port"></a>`port`
+##### <a name="port"></a>`port`
 
 The port of the database server to execute the SQL command against, this overrides any PGPORT value in connect_settings.
 
-##### <a name="-postgresql_psql--provider"></a>`provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `postgresql_psql` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### <a name="-postgresql_psql--psql_group"></a>`psql_group`
+##### <a name="psql_group"></a>`psql_group`
 
 The system user group account under which the psql command should be executed.
 
 Default value: `postgres`
 
-##### <a name="-postgresql_psql--psql_path"></a>`psql_path`
+##### <a name="psql_path"></a>`psql_path`
 
 The path to psql executable.
 
 Default value: `psql`
 
-##### <a name="-postgresql_psql--psql_user"></a>`psql_user`
+##### <a name="psql_user"></a>`psql_user`
 
 The system user account under which the psql command should be executed.
 
 Default value: `postgres`
 
-##### <a name="-postgresql_psql--refreshonly"></a>`refreshonly`
+##### <a name="refreshonly"></a>`refreshonly`
 
-Valid values: `true`, `false`
+Valid values: ``true``, ``false``
 
 If 'true', then the SQL will only be executed via a notify/subscribe event.
 
-Default value: `false`
+Default value: ``false``
 
-##### <a name="-postgresql_psql--search_path"></a>`search_path`
+##### <a name="search_path"></a>`search_path`
 
 The schema search path to use when executing the SQL command
 
-##### <a name="-postgresql_psql--sensitive"></a>`sensitive`
+##### <a name="sensitive"></a>`sensitive`
 
-Valid values: `true`, `false`
+Valid values: ``true``, ``false``
 
 If 'true', then the executed command will not be echoed into the log. Use this to protect sensitive information passing
 through.
 
-Default value: `false`
+Default value: ``false``
 
-##### <a name="-postgresql_psql--unless"></a>`unless`
+##### <a name="unless"></a>`unless`
 
 An optional SQL command to execute prior to the main :command;
 this is generally intended to be used for idempotency, to check
@@ -4166,10 +4154,10 @@ Default value: `present`
 
 The following parameters are available in the `postgresql_replication_slot` type.
 
-* [`name`](#-postgresql_replication_slot--name)
-* [`provider`](#-postgresql_replication_slot--provider)
+* [`name`](#name)
+* [`provider`](#provider)
 
-##### <a name="-postgresql_replication_slot--name"></a>`name`
+##### <a name="name"></a>`name`
 
 Valid values: `%r{^[a-z0-9_]+$}`
 
@@ -4177,14 +4165,14 @@ namevar
 
 The name of the slot to create. Must be a valid replication slot name.
 
-##### <a name="-postgresql_replication_slot--provider"></a>`provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `postgresql_replication_slot` resource. You will seldom need to specify this ---
 Puppet will usually discover the appropriate provider for your platform.
 
 ## Functions
 
-### <a name="postgresql--default"></a>`postgresql::default`
+### <a name="postgresqldefault"></a>`postgresql::default`
 
 Type: Puppet Language
 
@@ -4218,7 +4206,7 @@ Data type: `String`
 
 
 
-### <a name="postgresql--postgresql_escape"></a>`postgresql::postgresql_escape`
+### <a name="postgresqlpostgresql_escape"></a>`postgresql::postgresql_escape`
 
 Type: Ruby 4.x API
 
@@ -4236,7 +4224,7 @@ Data type: `String[1]`
 
 The unescaped string you want to escape using `dollar quoting`
 
-### <a name="postgresql--postgresql_password"></a>`postgresql::postgresql_password`
+### <a name="postgresqlpostgresql_password"></a>`postgresql::postgresql_password`
 
 Type: Ruby 4.x API
 
@@ -4278,7 +4266,7 @@ Data type: `Optional[Optional[Variant[String[1], Integer]]]`
 
 Use a specific salt value for scram-sha-256, default is username
 
-### <a name="postgresql--prepend_sql_password"></a>`postgresql::prepend_sql_password`
+### <a name="postgresqlprepend_sql_password"></a>`postgresql::prepend_sql_password`
 
 Type: Ruby 4.x API
 
@@ -4334,7 +4322,7 @@ Data type: `Any`
 
 ## Data types
 
-### <a name="Postgresql--Pg_hba_rule"></a>`Postgresql::Pg_hba_rule`
+### <a name="postgresqlpg_hba_rule"></a>`Postgresql::Pg_hba_rule`
 
 type for all parameters in the postgresql::server::hba_rule defined resource
 
@@ -4358,38 +4346,54 @@ Struct[{
 }]
 ```
 
-### <a name="Postgresql--Pg_hba_rule_address"></a>`Postgresql::Pg_hba_rule_address`
+### <a name="postgresqlpg_hba_rule_address"></a>`Postgresql::Pg_hba_rule_address`
 
 Supported address types
 
 * **See also**
   * https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
 
-Alias of `Variant[Stdlib::IP::Address::V4::CIDR, Stdlib::IP::Address::V6::CIDR, Stdlib::Fqdn, Enum['all', 'samehost', 'samenet'], Pattern[/^\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]$/]]`
+Alias of
 
-### <a name="Postgresql--Pg_hba_rule_type"></a>`Postgresql::Pg_hba_rule_type`
+```puppet
+Variant[Stdlib::IP::Address::V4::CIDR, Stdlib::IP::Address::V6::CIDR, Stdlib::Fqdn, Enum['all', 'samehost', 'samenet'], Pattern[/^\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]$/]]
+```
+
+### <a name="postgresqlpg_hba_rule_type"></a>`Postgresql::Pg_hba_rule_type`
 
 enum for all different types for the pg_hba_conf
 
 * **See also**
   * https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
 
-Alias of `Enum['local', 'host', 'hostssl', 'hostnossl', 'hostgssenc', 'hostnogssenc']`
+Alias of
 
-### <a name="Postgresql--Pg_hba_rules"></a>`Postgresql::Pg_hba_rules`
+```puppet
+Enum['local', 'host', 'hostssl', 'hostnossl', 'hostgssenc', 'hostnogssenc']
+```
+
+### <a name="postgresqlpg_hba_rules"></a>`Postgresql::Pg_hba_rules`
 
 validates a hash of entries for postgresql::server::pg_hab_conf
 
 * **See also**
   * https://github.com/puppetlabs/puppetlabs-postgresql/blob/main/manifests/server/pg_hba_rule.pp
 
-Alias of `Hash[String[1], Postgresql::Pg_hba_rule]`
+Alias of
 
-### <a name="Postgresql--Pg_password_encryption"></a>`Postgresql::Pg_password_encryption`
+```puppet
+Hash[String[1], Postgresql::Pg_hba_rule]
+```
+
+### <a name="postgresqlpg_password_encryption"></a>`Postgresql::Pg_password_encryption`
 
 the supported password_encryption
 
-Alias of `Enum['md5', 'scram-sha-256']`
+Alias of
+
+```puppet
+Enum['md5', 'scram-sha-256']
+```
 
 ## Tasks
 
