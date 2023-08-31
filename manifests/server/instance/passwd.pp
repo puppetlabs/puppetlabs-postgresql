@@ -19,7 +19,7 @@ define postgresql::server::instance::passwd (
   Stdlib::Absolutepath                                        $psql_path         = $postgresql::server::psql_path,
   Stdlib::Port                                                $port              = $postgresql::server::port,
   String[1]                                                   $database          = $postgresql::server::default_database,
-  String[1]                                                   $module_workdir    = $postgresql::server::module_workdir,
+  Stdlib::Absolutepath                                        $module_workdir    = $postgresql::server::module_workdir,
   Optional[Variant[String[1], Sensitive[String[1]], Integer]] $postgres_password = $postgresql::server::postgres_password,
 ) {
   $real_postgres_password = if $postgres_password =~ Sensitive {
