@@ -8,6 +8,7 @@ describe 'postgresql::server' do
   before(:all) do
     LitmusHelper.instance.run_shell("cd /tmp; su 'postgres' -c 'pg_ctl stop -D /var/lib/pgsql/data/ -m fast'", acceptable_exit_codes: [0, 1]) unless os[:family].match?(%r{debian|ubuntu})
   end
+
   let(:pp) do
     <<-MANIFEST
     $auth_method = $facts['os']['release']['major'] ? { '7' => 'md5', default => 'scram-sha-256'}
