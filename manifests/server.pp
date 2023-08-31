@@ -181,7 +181,7 @@ class postgresql::server (
   Boolean                                            $manage_logdir                = $postgresql::params::manage_logdir,
   Boolean                                            $manage_xlogdir               = $postgresql::params::manage_xlogdir,
   Postgresql::Pg_password_encryption                 $password_encryption          = $postgresql::params::password_encryption,
-  Postgresql::Pg_password_encryption                 $pg_hba_auth_password_encryption = undef,
+  Optional[Postgresql::Pg_password_encryption]       $pg_hba_auth_password_encryption = undef,
   Optional[String]                                   $extra_systemd_config         = $postgresql::params::extra_systemd_config,
 
   Hash[String, Hash]                                 $roles                        = {},

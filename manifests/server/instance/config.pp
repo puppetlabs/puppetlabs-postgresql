@@ -74,7 +74,7 @@ define postgresql::server::instance::config (
   Optional[String[1]]                            $log_line_prefix              = $postgresql::server::log_line_prefix,
   Optional[String[1]]                            $timezone                     = $postgresql::server::timezone,
   Postgresql::Pg_password_encryption             $password_encryption          = $postgresql::server::password_encryption,
-  Postgresql::Pg_password_encryption             $pg_hba_auth_password_encryption = $postgresql::server::pg_hba_auth_password_encryption,
+  Optional[Postgresql::Pg_password_encryption]   $pg_hba_auth_password_encryption = $postgresql::server::pg_hba_auth_password_encryption,
   Optional[String]                               $extra_systemd_config         = $postgresql::server::extra_systemd_config,
 ) {
   if $pg_hba_auth_password_encryption {
