@@ -133,11 +133,11 @@ class postgresql::globals (
 
   Optional[Boolean] $pg_hba_conf_defaults          = undef,
 
-  Optional[String[1]] $datadir                     = undef,
-  Optional[String[1]] $confdir                     = undef,
-  Optional[String[1]] $bindir                      = undef,
-  Optional[String[1]] $xlogdir                     = undef,
-  Optional[String[1]] $logdir                      = undef,
+  Optional[Stdlib::Absolutepath] $datadir          = undef,
+  Optional[Stdlib::Absolutepath] $confdir          = undef,
+  Optional[Stdlib::Absolutepath] $bindir           = undef,
+  Optional[Stdlib::Absolutepath] $xlogdir          = undef,
+  Optional[Stdlib::Absolutepath] $logdir           = undef,
   Optional[String[1]] $log_line_prefix             = undef,
   Optional[Boolean] $manage_datadir                = undef,
   Optional[Boolean] $manage_logdir                 = undef,
@@ -167,7 +167,7 @@ class postgresql::globals (
 
   Optional[Boolean] $manage_package_repo           = undef,
   Boolean $manage_dnf_module                       = false,
-  Optional[String[1]] $module_workdir              = undef,
+  Optional[Stdlib::Absolutepath] $module_workdir   = undef,
 ) {
   # We are determining this here, because it is needed by the package repo
   # class.

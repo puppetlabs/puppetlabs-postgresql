@@ -17,7 +17,7 @@ define postgresql::server::instance::late_initdb (
   String[1]                                 $group          = $postgresql::server::group,
   Stdlib::Absolutepath                      $psql_path      = $postgresql::server::psql_path,
   Stdlib::Port                              $port           = $postgresql::server::port,
-  String[1]                                 $module_workdir = $postgresql::server::module_workdir,
+  Stdlib::Absolutepath                      $module_workdir = $postgresql::server::module_workdir,
 ) {
   # Set the defaults for the postgresql_psql resource
   Postgresql_psql {
