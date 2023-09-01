@@ -146,9 +146,9 @@ class postgresql::server (
   Optional[Stdlib::Filemode]                         $postgresql_conf_mode         = $postgresql::params::postgresql_conf_mode,
   Stdlib::Absolutepath                               $recovery_conf_path           = $postgresql::params::recovery_conf_path,
 
-  String[1]                                          $datadir                      = $postgresql::params::datadir,
-  Optional[String[1]]                                $xlogdir                      = $postgresql::params::xlogdir,
-  Optional[String[1]]                                $logdir                       = $postgresql::params::logdir,
+  Stdlib::Absolutepath                               $datadir                      = $postgresql::params::datadir,
+  Optional[Stdlib::Absolutepath]                     $xlogdir                      = $postgresql::params::xlogdir,
+  Optional[Stdlib::Absolutepath]                     $logdir                       = $postgresql::params::logdir,
 
   Optional[String[1]]                                $log_line_prefix              = $postgresql::params::log_line_prefix,
 
@@ -173,7 +173,7 @@ class postgresql::server (
   Boolean                                            $manage_recovery_conf         = $postgresql::params::manage_recovery_conf,
   Boolean                                            $manage_postgresql_conf_perms = $postgresql::params::manage_postgresql_conf_perms,
   Boolean                                            $manage_selinux               = $postgresql::params::manage_selinux,
-  String[1]                                          $module_workdir               = $postgresql::params::module_workdir,
+  Stdlib::Absolutepath                               $module_workdir               = $postgresql::params::module_workdir,
 
   Boolean                                            $manage_datadir               = $postgresql::params::manage_datadir,
   Boolean                                            $manage_logdir                = $postgresql::params::manage_logdir,
