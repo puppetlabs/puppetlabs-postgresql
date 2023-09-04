@@ -6,7 +6,7 @@ define postgresql::server::instance::reload (
   String[1] $service_status = $postgresql::server::service_status,
   String[1] $service_reload = $postgresql::server::service_reload,
 ) {
-  exec { 'postgresql_reload':
+  exec { "postgresql_reload_${name}":
     path        => '/usr/bin:/usr/sbin:/bin:/sbin',
     command     => $service_reload,
     onlyif      => $service_status,

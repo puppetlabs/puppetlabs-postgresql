@@ -175,7 +175,7 @@ define postgresql::server::instance::initdb (
 
     # This runs the initdb command, we use the existance of the PG_VERSION
     # file to ensure we don't keep running this command.
-    exec { 'postgresql_initdb':
+    exec { "postgresql_initdb_instance_${name}":
       command   => $initdb_command,
       creates   => "${datadir}/PG_VERSION",
       user      => $user,
@@ -185,6 +185,11 @@ define postgresql::server::instance::initdb (
       cwd       => $module_workdir,
     }
   } elsif $encoding != undef {
-    include postgresql::server::late_initdb
+    postgresql::server::instance::late_initdb { $name:
+      encoding       => $encoding,
+      user           => $user,
+      group          => $group,
+      module_workdir => $module_workdir,
+    }
   }
 }

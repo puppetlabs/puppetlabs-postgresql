@@ -11,7 +11,7 @@ describe 'postgresql::server' do
     it { is_expected.to contain_file('/var/lib/postgresql/13/main') }
 
     it {
-      expect(subject).to contain_exec('postgresql_reload').with('command' => 'systemctl reload postgresql')
+      expect(subject).to contain_exec('postgresql_reload_main').with('command' => 'systemctl reload postgresql')
     }
 
     it 'validates connection' do
@@ -65,10 +65,10 @@ describe 'postgresql::server' do
     end
 
     it 'sets postgres password' do
-      expect(subject).to contain_exec('set_postgres_postgrespw').with('command' => '/usr/bin/psql -c "ALTER ROLE \"postgres\" PASSWORD ${NEWPASSWD_ESCAPED}"',
-                                                                      'user' => 'postgres',
-                                                                      'environment' => ['PGPASSWORD=new-p@s$word-to-set', 'PGPORT=5432', 'NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$'],
-                                                                      'unless' => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null")
+      expect(subject).to contain_exec('set_postgres_postgrespw_main').with('command' => '/usr/bin/psql -c "ALTER ROLE \"postgres\" PASSWORD ${NEWPASSWD_ESCAPED}"',
+                                                                           'user' => 'postgres',
+                                                                           'environment' => ['PGPASSWORD=new-p@s$word-to-set', 'PGPORT=5432', 'NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$'],
+                                                                           'unless' => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null")
     end
   end
 
@@ -89,10 +89,10 @@ describe 'postgresql::server' do
     end
 
     it 'sets postgres password' do
-      expect(subject).to contain_exec('set_postgres_postgrespw').with('command' => ['/usr/bin/psql -c "ALTER ROLE \"postgres\" PASSWORD ${NEWPASSWD_ESCAPED}"'],
-                                                                      'user' => 'postgres',
-                                                                      'environment' => ['PGPASSWORD=new-p@s$word-to-set', 'PGPORT=5432', 'NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$'],
-                                                                      'unless' => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null")
+      expect(subject).to contain_exec('set_postgres_postgrespw_main').with('command' => ['/usr/bin/psql -c "ALTER ROLE \"postgres\" PASSWORD ${NEWPASSWD_ESCAPED}"'],
+                                                                           'user' => 'postgres',
+                                                                           'environment' => ['PGPASSWORD=new-p@s$word-to-set', 'PGPORT=5432', 'NEWPASSWD_ESCAPED=$$new-p@s$word-to-set$$'],
+                                                                           'unless' => "/usr/bin/psql -h localhost -p 5432 -c 'select 1' > /dev/null")
     end
   end
 
@@ -146,7 +146,7 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server') }
 
     it {
-      expect(subject).to contain_exec('postgresql_reload').with('command' => '/bin/true')
+      expect(subject).to contain_exec('postgresql_reload_main').with('command' => '/bin/true')
     }
 
     it 'validates connection' do
@@ -194,7 +194,7 @@ describe 'postgresql::server' do
     end
 
     it 'contains proper initdb exec' do
-      expect(subject).to contain_exec('postgresql_initdb')
+      expect(subject).to contain_exec('postgresql_initdb_instance_main')
     end
   end
 
