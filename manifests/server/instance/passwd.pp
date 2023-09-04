@@ -42,7 +42,7 @@ define postgresql::server::instance::passwd (
     #  the default for pg_hba.conf.
     $escaped = postgresql::postgresql_escape($real_postgres_password)
     $exec_command = "${stdlib::shell_escape($psql_path)}${_dboption} -c \"ALTER ROLE \\\"${stdlib::shell_escape($user)}\\\" PASSWORD \${NEWPASSWD_ESCAPED}\"" # lint:ignore:140chars
-    exec { 'set_postgres_postgrespw':
+    exec { "set_postgres_postgrespw_${name}":
       # This command works w/no password because we run it as postgres system
       # user
       command     => $exec_command,
