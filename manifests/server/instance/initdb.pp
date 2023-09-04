@@ -23,7 +23,7 @@
 # @param needs_initdb Explicitly calls the initdb operation after server package is installed
 #   and before the PostgreSQL service is started.
 # @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
-# @param username username of user running the postgres instance
+# @param instance_username username of user running the postgres instance
 # @param xlogdir PostgreSQL xlog/WAL directory
 define postgresql::server::instance::initdb (
   Optional[String[1]]                      $auth_host      = $postgresql::server::auth_host,
@@ -42,7 +42,7 @@ define postgresql::server::instance::initdb (
   Stdlib::Absolutepath                     $module_workdir = $postgresql::server::module_workdir,
   Boolean                                  $needs_initdb   = $postgresql::server::needs_initdb,
   String[1]                                $user           = $postgresql::server::user,
-  Optional[String[1]]                      $username       = $postgresql::server::username,
+  Optional[String[1]] $instance_username = $postgresql::server::instance_username,
   Optional[Stdlib::Absolutepath]           $xlogdir        = $postgresql::server::xlogdir,
 ) {
   if $facts['os']['family'] == 'RedHat' and $facts['os']['selinux']['enabled'] == true {
@@ -161,9 +161,9 @@ define postgresql::server::instance::initdb (
       default => "--locale '${locale}'"
     }
 
-    $username_parameter = $username ? {
+    $username_parameter = $instance_username ? {
       undef   => undef,
-      default => "--username '${username}'"
+      default => "--username '${instance_username}'"
     }
 
     $xlogdir_parameter = $xlogdir ? {

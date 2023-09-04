@@ -110,7 +110,7 @@
 # @param auth_host auth method used by default for host authorization
 # @param auth_local  auth method used by default for local authorization
 # @param lc_messages locale used for logging and system messages
-# @param username username of user running the postgres instance
+# @param instance_username username of user running the postgres instance
 #
 class postgresql::server (
   Optional[Variant[String[1], Sensitive[String[1]], Integer]] $postgres_password = undef,
@@ -165,7 +165,7 @@ class postgresql::server (
   Optional[String[1]]                                $locale                       = $postgresql::params::locale,
   Optional[String[1]]                                $lc_messages                  = undef,
   Optional[Boolean]                                  $data_checksums               = $postgresql::params::data_checksums,
-  Optional[String[1]]                                $username                     = undef,
+  Optional[String[1]]                                $instance_username            = $user,
   Optional[String[1]]                                $timezone                     = $postgresql::params::timezone,
 
   Boolean                                            $manage_pg_hba_conf           = $postgresql::params::manage_pg_hba_conf,
