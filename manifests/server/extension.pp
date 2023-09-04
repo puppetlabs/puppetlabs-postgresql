@@ -32,7 +32,7 @@ define postgresql::server::extension (
   Optional[String[1]]                                 $version                = undef,
   Enum['present', 'absent']                           $ensure                 = 'present',
   Optional[String[1]]                                 $package_name           = undef,
-  Optional[Stdlib::Port]                              $port                   = undef,
+  Stdlib::Port $port = postgresql::default('port'),
   Hash                                                $connect_settings       = postgresql::default('default_connect_settings'),
   String[1]                                           $database_resource_name = $database,
   String[1]                                           $user                   = postgresql::default('user'),
@@ -76,16 +76,7 @@ define postgresql::server::extension (
     }
   }
 
-  #
-  # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
-  #
-  if $port {
-    $port_override = $port
-  } elsif 'PGPORT' in $connect_settings {
-    $port_override = undef
-  } else {
-    $port_override = $postgresql::server::port
-  }
+  $port_override = pick($connect_settings['PGPORT'], $port)
 
   postgresql_psql { "${database}: ${command}":
     psql_user        => $user,

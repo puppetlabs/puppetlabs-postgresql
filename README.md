@@ -175,11 +175,15 @@ class { 'postgresql::server':
 
 ### Manage remote users, roles, and permissions
 
-Remote SQL objects are managed using the same Puppet resources as local SQL objects, along with a [`connect_settings`](#connect_settings) hash. This provides control over how Puppet connects to the remote Postgres instances and which version is used for generating SQL commands.
+Remote SQL objects are managed using the same Puppet resources as local SQL objects, along with a `$connect_settings` hash. This provides control over how Puppet connects to the remote Postgres instances and which version is used for generating SQL commands.
 
-The `connect_settings` hash can contain environment variables to control Postgres client connections, such as 'PGHOST', 'PGPORT', 'PGPASSWORD', and 'PGSSLKEY'. See the [PostgreSQL Environment Variables](http://www.postgresql.org/docs/9.4/static/libpq-envars.html)  documentation for a complete list of variables.
+The `connect_settings` hash can contain environment variables to control Postgres client connections, such as 'PGHOST', 'PGPORT', 'PGPASSWORD', 'PGUSER' and 'PGSSLKEY'. See the [PostgreSQL Environment Variables](https://www.postgresql.org/docs/current/libpq-envars.html)  documentation for a complete list of variables.
 
-Additionally, you can specify the target database version with the special value of 'DBVERSION'. If the `connect_settings` hash is omitted or empty, then Puppet connects to the local PostgreSQL instance.
+Additionally, you can specify the target database version with the special value of 'DBVERSION'. If the `$connect_settings` hash is omitted or empty, then Puppet connects to the local PostgreSQL instance.
+
+**The $connect_settings hash has priority over the explicit variables like $port and $user**
+
+When a user provides only the `$port` parameter to a resource and no `$connect_settings`, `$port` will be used. When `$connect_settings` contains `PGPORT` and `$port` is set, `$connect_settings['PGPORT']` will be used.
 
 You can provide a `connect_settings` hash for each of the Puppet resources, or you can set a default `connect_settings` hash in `postgresql::globals`. Configuring `connect_settings` per resource allows SQL objects to be created on multiple databases by multiple users.
 

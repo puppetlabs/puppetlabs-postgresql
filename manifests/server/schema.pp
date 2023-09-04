@@ -8,6 +8,7 @@
 # @param owner Sets the default owner of the schema.
 # @param schema Sets the name of the schema.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param port the post the postgresql instance is listening on.
 # @example
 #   postgresql::server::schema {'private':
 #       db => 'template1',
@@ -17,6 +18,7 @@ define postgresql::server::schema (
   Optional[String[1]] $owner            = undef,
   String[1]           $schema           = $title,
   Hash                $connect_settings = $postgresql::server::default_connect_settings,
+  Stdlib::Port $port = $postgresql::server::port,
 ) {
   $user           = $postgresql::server::user
   $group          = $postgresql::server::group
@@ -27,18 +29,14 @@ define postgresql::server::schema (
   Postgresql::Server::Db <| dbname == $db |> -> Postgresql::Server::Schema[$name]
 
   # If the connection settings do not contain a port, then use the local server port
-  if 'PGPORT' in $connect_settings {
-    $port = undef
-  } else {
-    $port = $postgresql::server::port
-  }
+  $port_override = pick($connect_settings['PGPORT'], $port)
 
   Postgresql_psql {
     db         => $db,
     psql_user  => $user,
     psql_group => $group,
     psql_path  => $psql_path,
-    port       => $port,
+    port       => $port_override,
     cwd        => $module_workdir,
     connect_settings => $connect_settings,
   }

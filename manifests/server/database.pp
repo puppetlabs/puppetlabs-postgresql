@@ -30,20 +30,8 @@ define postgresql::server::database (
   String[1]            $default_db       = $postgresql::server::default_database,
   Stdlib::Port         $port             = $postgresql::server::port
 ) {
-  # If possible use the version of the remote database, otherwise
-  # fallback to our local DB version
-  if 'DBVERSION' in $connect_settings {
-    $version = $connect_settings['DBVERSION']
-  } else {
-    $version = $postgresql::server::_version
-  }
-
-  # If the connection settings do not contain a port, then use the local server port
-  if 'PGPORT' in $connect_settings {
-    $port_override = undef
-  } else {
-    $port_override = $port
-  }
+  $version = pick($connect_settings['DBVERSION'], $postgresql::server::_version)
+  $port_override = pick($connect_settings['PGPORT'], $port)
 
   # Set the defaults for the postgresql_psql resource
   Postgresql_psql {
