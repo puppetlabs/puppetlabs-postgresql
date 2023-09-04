@@ -22,8 +22,8 @@ describe 'postgresql::server::db' do
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__db('testdb').without_port.with_user('foo').with_psql_user('postgres').with_psql_group('postgres') }
     it { is_expected.to contain_postgresql__server__database('testdb').without_owner.with_user('postgres').with_group('postgres') }
-    it { is_expected.to contain_postgresql__server__role('foo').that_comes_before('Postgresql::Server::Database[testdb]').without_port.with_psql_user('postgres').with_psql_group('postgres') }
-    it { is_expected.to contain_postgresql__server__database_grant('GRANT foo - ALL - testdb').without_port.with_psql_user('postgres').with_psql_group('postgres') }
+    it { is_expected.to contain_postgresql__server__role('foo').that_comes_before('Postgresql::Server::Database[testdb]').with_port(5432).with_psql_user('postgres').with_psql_group('postgres') }
+    it { is_expected.to contain_postgresql__server__database_grant('GRANT foo - ALL - testdb').with_port(5432).with_psql_user('postgres').with_psql_group('postgres') }
   end
 
   context 'without dbname param' do

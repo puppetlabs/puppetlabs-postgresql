@@ -24,7 +24,7 @@ describe 'postgresql::server::database_grant' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__database_grant('test') }
-    it { is_expected.to contain_postgresql__server__grant('database:test').with_psql_user('postgres').without_port.with_group('postgres') }
+    it { is_expected.to contain_postgresql__server__grant('database:test').with_psql_user('postgres').with_port(5432).with_group('postgres') }
   end
 
   context 'with different user/group/port' do

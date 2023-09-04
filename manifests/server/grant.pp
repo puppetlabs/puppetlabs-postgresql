@@ -41,7 +41,7 @@ define postgresql::server::grant (
   Array[String[1],0]                             $object_arguments  = [],
   String                                         $psql_db           = $postgresql::server::default_database,
   String                                         $psql_user         = $postgresql::server::user,
-  Optional[Stdlib::Port] $port = undef,
+  Stdlib::Port $port = $postgresql::server::port,
   Boolean                                        $onlyif_exists     = false,
   Hash                                           $connect_settings  = $postgresql::server::default_connect_settings,
   Enum['present', 'absent']                      $ensure            = 'present',
@@ -74,16 +74,7 @@ define postgresql::server::grant (
     $_object_name = $object_name
   }
 
-  #
-  # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
-  # We don't use pick() here because that would introduce a hard dependency to the postgresql::server class
-  if $port {
-    $port_override = $port
-  } elsif 'PGPORT' in $connect_settings {
-    $port_override = undef
-  } else {
-    $port_override = $postgresql::server::port
-  }
+  $port_override = pick($connect_settings['PGPORT'], $port)
 
   ## Munge the input values
   $_object_type = upcase($object_type)
