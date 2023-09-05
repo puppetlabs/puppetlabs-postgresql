@@ -21,7 +21,7 @@ describe 'postgresql::server::tablespace' do
 
   it { is_expected.to contain_file('/srv/data/foo').with_ensure('directory') }
   it { is_expected.to contain_postgresql__server__tablespace('test') }
-  it { is_expected.to contain_postgresql_psql('CREATE TABLESPACE "test"').that_requires('Service[postgresqld]') }
+  it { is_expected.to contain_postgresql_psql('CREATE TABLESPACE "test"').that_requires('Service[postgresqld_instance_main]') }
 
   context 'with different owner' do
     let :params do

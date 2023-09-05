@@ -105,7 +105,7 @@ describe 'postgresql::server::role' do
             'PGUSER' => 'login-user',
             'PGPASSWORD' => 'login-pass'
           },
-        ).that_requires('Service[postgresqld]')
+        ).that_requires('Service[postgresqld_instance_main]')
     end
 
     it 'has alter role for "test" user with password as ****' do
@@ -364,7 +364,7 @@ describe 'postgresql::server::role' do
     end
 
     it 'has drop role for "test" user if ensure absent' do
-      expect(subject).to contain_postgresql_psql('DROP ROLE "test"').that_requires('Service[postgresqld]')
+      expect(subject).to contain_postgresql_psql('DROP ROLE "test"').that_requires('Service[postgresqld_instance_main]')
     end
   end
 
