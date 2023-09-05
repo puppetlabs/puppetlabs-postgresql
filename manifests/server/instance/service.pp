@@ -33,7 +33,7 @@ define postgresql::server::instance::service (
   anchor { "postgresql::server::service::begin::${name}": }
 
   if $service_manage {
-    service { 'postgresqld':
+    service { "postgresqld_instance_${name}":
       ensure    => $service_ensure,
       enable    => $service_enable,
       name      => $service_name,
@@ -48,7 +48,7 @@ define postgresql::server::instance::service (
       #
       # Without it, we may continue doing more work before the database is
       # prepared leading to a nasty race condition.
-      postgresql_conn_validator { 'validate_service_is_running':
+      postgresql_conn_validator { "validate_service_is_running_instance_${name}":
         run_as           => $user,
         db_name          => $default_database,
         port             => $port,
@@ -56,10 +56,10 @@ define postgresql::server::instance::service (
         sleep            => 1,
         tries            => 60,
         psql_path        => $psql_path,
-        require          => Service['postgresqld'],
+        require          => Service["postgresqld_instance_${name}"],
         before           => Anchor["postgresql::server::service::end::${name}"],
       }
-      Postgresql::Server::Database <| title == $default_database |> -> Postgresql_conn_validator['validate_service_is_running']
+      Postgresql::Server::Database <| title == $default_database |> -> Postgresql_conn_validator["validate_service_is_running_instance_${name}"]
     }
   }
 
