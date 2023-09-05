@@ -21,11 +21,7 @@ define postgresql::server::reassign_owned_by (
   $group     = $postgresql::server::group
   $psql_path = $postgresql::server::psql_path
 
-  if 'PGPORT' in $connect_settings {
-    $port_override = undef
-  } else {
-    $port_override = $port
-  }
+  $port_override = pick($connect_settings['PGPORT'], $port)
 
   $onlyif = "SELECT tablename FROM pg_catalog.pg_tables WHERE
                schemaname NOT IN ('pg_catalog', 'information_schema') AND

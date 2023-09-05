@@ -16,9 +16,9 @@ define postgresql::server::database_grant (
   Optional[Enum['present', 'absent']] $ensure           = undef,
   Optional[String[1]]                 $psql_db          = undef,
   String[1]                           $psql_user        = $postgresql::server::user,
-  Optional[Hash]                      $connect_settings = undef,
+  Hash $connect_settings = $postgresql::server::default_connect_settings,
   String[1] $psql_group = $postgresql::server::group,
-  Optional[Stdlib::Port] $port = undef,
+  Stdlib::Port $port = $postgresql::server::port,
 ) {
   postgresql::server::grant { "database:${name}":
     ensure           => $ensure,

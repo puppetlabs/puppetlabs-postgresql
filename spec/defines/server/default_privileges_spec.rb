@@ -257,7 +257,7 @@ describe 'postgresql::server::default_privileges' do
 
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_postgresql__server__default_privileges('test') }
-    it { is_expected.to contain_postgresql_psql('default_privileges:test').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.6', 'PGPORT' => '1234').with_port('5678') }
+    it { is_expected.to contain_postgresql_psql('default_privileges:test').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.6', 'PGPORT' => '1234').with_port('1234') }
   end
 
   context 'with specific schema name' do
