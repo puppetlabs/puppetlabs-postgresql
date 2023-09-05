@@ -337,7 +337,7 @@ describe 'postgresql::server::default_privileges' do
 
     it do
       expect(subject).to contain_postgresql_psql('default_privileges:test') \
-        .that_requires(['Service[postgresqld]', 'Postgresql::Server::Role[test]'])
+        .that_requires(['Service[postgresqld_instance_main]', 'Postgresql::Server::Role[test]'])
     end
   end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Puppet::Type.newtype(:postgresql_psql) do
+Puppet::Type.newtype(:postgresql_psql) do # rubocop:disable Metrics/BlockLength
   newparam(:name) do
     desc 'An arbitrary tag for your own reference; the name of the message.'
     isnamevar
@@ -122,6 +122,11 @@ Puppet::Type.newtype(:postgresql_psql) do
     newvalues(:true, :false)
   end
 
+  newparam(:instance) do
+    desc 'The postgresql instance under which the psql command should be executed.'
+    defaultto('main')
+  end
+
   newparam(:sensitive, boolean: true) do
     desc "If 'true', then the executed command will not be echoed into the log. Use this to protect sensitive information passing through."
 
@@ -129,8 +134,13 @@ Puppet::Type.newtype(:postgresql_psql) do
     newvalues(:true, :false)
   end
 
-  autorequire(:anchor) { ['postgresql::server::service::begin'] }
-  autorequire(:service) { ['postgresqld'] }
+  autorequire(:anchor) do
+    ["postgresql::server::service::begin::#{self[:instance]}"]
+  end
+
+  autorequire(:service) do
+    ["postgresqld_instance_#{self[:instance]}"]
+  end
 
   def should_run_sql(refreshing = false)
     onlyif_param = @parameters[:onlyif]
@@ -148,7 +158,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
   private
 
-  def set_sensitive_parameters(sensitive_parameters) # rubocop:disable Style/AccessorMethodName
+  def set_sensitive_parameters(sensitive_parameters) # rubocop:disable Naming/AccessorMethodName
     # Respect sensitive commands
     if sensitive_parameters.include?(:unless)
       sensitive_parameters.delete(:unless)

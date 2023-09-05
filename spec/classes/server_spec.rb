@@ -15,7 +15,7 @@ describe 'postgresql::server' do
     }
 
     it 'validates connection' do
-      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running_instance_main')
     end
   end
 
@@ -61,7 +61,7 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server::passwd') }
 
     it 'validates connection' do
-      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running_instance_main')
     end
 
     it 'sets postgres password' do
@@ -85,7 +85,7 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server::passwd') }
 
     it 'validates connection' do
-      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running_instance_main')
     end
 
     it 'sets postgres password' do
@@ -103,7 +103,7 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server') }
 
     it 'shouldnt validate connection' do
-      expect(subject).not_to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).not_to contain_postgresql_conn_validator('validate_service_is_running_instance_main')
     end
   end
 
@@ -118,7 +118,7 @@ describe 'postgresql::server' do
     }
 
     it 'validates connection' do
-      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running_instance_main')
     end
   end
 
@@ -135,7 +135,7 @@ describe 'postgresql::server' do
     it { is_expected.to contain_postgresql__server__config_entry('data_directory_for_instance_main') }
 
     it 'validates connection' do
-      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running_instance_main')
     end
   end
 
@@ -150,23 +150,23 @@ describe 'postgresql::server' do
     }
 
     it 'validates connection' do
-      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).to contain_postgresql_conn_validator('validate_service_is_running_instance_main')
     end
   end
 
   describe 'service_manage => true' do
     let(:params) { { service_manage: true } }
 
-    it { is_expected.to contain_service('postgresqld') }
+    it { is_expected.to contain_service('postgresqld_instance_main') }
   end
 
   describe 'service_manage => false' do
     let(:params) { { service_manage: false } }
 
-    it { is_expected.not_to contain_service('postgresqld') }
+    it { is_expected.not_to contain_service('postgresqld_instance_main') }
 
     it 'shouldnt validate connection' do
-      expect(subject).not_to contain_postgresql_conn_validator('validate_service_is_running')
+      expect(subject).not_to contain_postgresql_conn_validator('validate_service_is_running_instance_main')
     end
   end
 
@@ -182,7 +182,7 @@ describe 'postgresql::server' do
     end
 
     it 'stills enable the service' do
-      expect(subject).to contain_service('postgresqld').with(ensure: 'running')
+      expect(subject).to contain_service('postgresqld_instance_main').with(ensure: 'running')
     end
   end
 

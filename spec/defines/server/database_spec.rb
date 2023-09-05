@@ -13,7 +13,7 @@ describe 'postgresql::server::database' do
   end
 
   it { is_expected.to contain_postgresql__server__database('test') }
-  it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').that_requires('Service[postgresqld]') }
+  it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').that_requires('Service[postgresqld_instance_main]') }
 
   context "with comment set to 'test comment'" do
     let(:params) { { comment: 'test comment' } }
