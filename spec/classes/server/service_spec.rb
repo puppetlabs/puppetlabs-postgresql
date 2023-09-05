@@ -10,5 +10,5 @@ describe 'postgresql::server::service' do
   end
 
   it { is_expected.to contain_class('postgresql::server::service') }
-  it { is_expected.to contain_service('postgresqld').with_name('postgresql').with_status('systemctl status postgresql') }
+  it { is_expected.to contain_service('postgresqld_instance_main').with_name('postgresql').with_status('systemctl status postgresql') }
 end

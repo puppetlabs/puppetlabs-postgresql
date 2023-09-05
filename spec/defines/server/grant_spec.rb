@@ -207,7 +207,7 @@ describe 'postgresql::server::grant' do
 
     it do
       expect(subject).to contain_postgresql_psql('grant:test') \
-        .that_requires(['Service[postgresqld]', 'Postgresql::Server::Role[test]'])
+        .that_requires(['Service[postgresqld_instance_main]', 'Postgresql::Server::Role[test]'])
     end
   end
 
