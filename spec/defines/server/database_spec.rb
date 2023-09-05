@@ -47,7 +47,7 @@ describe 'postgresql::server::database' do
                             'PGPORT' => '1234' } }
     end
 
-    it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234').with_port(nil) }
+    it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.1', 'PGPORT' => '1234').with_port(1234) }
   end
 
   context 'with global db connection settings - including port' do
@@ -61,7 +61,7 @@ describe 'postgresql::server::database' do
        class {'postgresql::server':}"
     end
 
-    it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.2', 'PGPORT' => '1234').with_port(nil) }
+    it { is_expected.to contain_postgresql_psql('CREATE DATABASE "test"').with_connect_settings('PGHOST' => 'postgres-db-server', 'DBVERSION' => '9.2', 'PGPORT' => '1234').with_port(1234) }
   end
 
   context 'with different owner' do

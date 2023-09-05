@@ -35,13 +35,8 @@ define postgresql::server::default_privileges (
   Stdlib::Absolutepath      $psql_path         = $postgresql::server::psql_path,
   Optional[String]          $target_role       = undef,
 ) {
-  # If possible use the version of the remote database, otherwise
-  # fallback to our local DB version
-  if 'DBVERSION' in $connect_settings {
-    $version = $connect_settings['DBVERSION']
-  } else {
-    $version = $postgresql::server::_version
-  }
+  $version = pick($connect_settings['DBVERSION'],postgresql::default('version'))
+  $port_override = pick($connect_settings['PGPORT'], $port)
 
   if (versioncmp($version, '9.6') == -1) {
     fail 'Default_privileges is only useable with PostgreSQL >= 9.6'
@@ -57,17 +52,6 @@ define postgresql::server::default_privileges (
       $sql_command = 'ALTER DEFAULT PRIVILEGES%s%s REVOKE %s ON %s FROM "%s"'
       $unless_is = false
     }
-  }
-
-  #
-  # Port, order of precedence: $port parameter, $connect_settings[PGPORT], $postgresql::server::port
-  #
-  if $port {
-    $port_override = $port
-  } elsif 'PGPORT' in $connect_settings {
-    $port_override = undef
-  } else {
-    $port_override = $postgresql::server::port
   }
 
   if $target_role {

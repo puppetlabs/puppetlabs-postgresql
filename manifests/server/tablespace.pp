@@ -5,12 +5,14 @@
 # @param owner Specifies the default owner of the tablespace.
 # @param spcname Specifies the name of the tablespace.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param port the port of the postgresql instance that sould be used.
 define postgresql::server::tablespace (
   String[1]           $location,
   Boolean             $manage_location = true,
   Optional[String[1]] $owner   = undef,
   String[1]           $spcname = $title,
   Hash                $connect_settings = $postgresql::server::default_connect_settings,
+  Stdlib::Port $port = $postgresql::server::port,
 ) {
   $user           = $postgresql::server::user
   $group          = $postgresql::server::group
@@ -18,17 +20,13 @@ define postgresql::server::tablespace (
   $module_workdir = $postgresql::server::module_workdir
 
   # If the connection settings do not contain a port, then use the local server port
-  if 'PGPORT' in $connect_settings {
-    $port = undef
-  } else {
-    $port = $postgresql::server::port
-  }
+  $port_override = pick($connect_settings['PGPORT'], $port)
 
   Postgresql_psql {
     psql_user        => $user,
     psql_group       => $group,
     psql_path        => $psql_path,
-    port             => $port,
+    port             => $port_override,
     connect_settings => $connect_settings,
     cwd              => $module_workdir,
   }
