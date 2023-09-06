@@ -2673,6 +2673,8 @@ The following parameters are available in the `postgresql::server::instance::ini
 * [`user`](#-postgresql--server--instance--initdb--user)
 * [`username`](#-postgresql--server--instance--initdb--username)
 * [`xlogdir`](#-postgresql--server--instance--initdb--xlogdir)
+* [`port`](#-postgresql--server--instance--initdb--port)
+* [`psql_path`](#-postgresql--server--instance--initdb--psql_path)
 
 ##### <a name="-postgresql--server--instance--initdb--auth_host"></a>`auth_host`
 
@@ -2823,6 +2825,24 @@ Data type: `Optional[Stdlib::Absolutepath]`
 PostgreSQL xlog/WAL directory
 
 Default value: `$postgresql::server::xlogdir`
+
+##### <a name="-postgresql--server--instance--initdb--port"></a>`port`
+
+Data type: `Stdlib::Port`
+
+Specifies the port for the PostgreSQL server to listen on.
+Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems,
+changing the port causes the server to come to a full stop before being able to make the change.
+
+Default value: `$postgresql::server::port`
+
+##### <a name="-postgresql--server--instance--initdb--psql_path"></a>`psql_path`
+
+Data type: `Stdlib::Absolutepath`
+
+Specifies the path to the psql command.
+
+Default value: `$postgresql::server::psql_path`
 
 ### <a name="postgresql--server--instance--late_initdb"></a>`postgresql::server::instance::late_initdb`
 
