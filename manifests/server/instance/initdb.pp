@@ -25,25 +25,32 @@
 # @param user Overrides the default PostgreSQL super user and owner of PostgreSQL related files in the file system.
 # @param username username of user running the postgres instance
 # @param xlogdir PostgreSQL xlog/WAL directory
+# @param port
+#   Specifies the port for the PostgreSQL server to listen on.
+#   Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems,
+#   changing the port causes the server to come to a full stop before being able to make the change.
+# @param psql_path Specifies the path to the psql command.
 define postgresql::server::instance::initdb (
-  Optional[String[1]]                      $auth_host      = $postgresql::server::auth_host,
-  Optional[String[1]]                      $auth_local     = $postgresql::server::auth_local,
-  Optional[Boolean]                        $data_checksums = $postgresql::server::data_checksums,
-  Stdlib::Absolutepath                     $datadir        = $postgresql::server::datadir,
-  Optional[String[1]]                      $encoding       = $postgresql::server::encoding,
-  String[1]                                $group          = $postgresql::server::group,
-  Stdlib::Absolutepath                     $initdb_path    = $postgresql::server::initdb_path,
-  Optional[String[1]]                      $lc_messages    = $postgresql::server::lc_messages,
-  Optional[String[1]]                      $locale         = $postgresql::server::locale,
-  Optional[Stdlib::Absolutepath]           $logdir         = $postgresql::server::logdir,
-  Boolean                                  $manage_datadir = $postgresql::server::manage_datadir,
-  Boolean                                  $manage_logdir  = $postgresql::server::manage_logdir,
-  Boolean                                  $manage_xlogdir = $postgresql::server::manage_xlogdir,
-  Stdlib::Absolutepath                     $module_workdir = $postgresql::server::module_workdir,
-  Boolean                                  $needs_initdb   = $postgresql::server::needs_initdb,
-  String[1]                                $user           = $postgresql::server::user,
-  Optional[String[1]]                      $username       = $postgresql::server::username,
-  Optional[Stdlib::Absolutepath]           $xlogdir        = $postgresql::server::xlogdir,
+  Optional[String[1]]            $auth_host      = $postgresql::server::auth_host,
+  Optional[String[1]]            $auth_local     = $postgresql::server::auth_local,
+  Optional[Boolean]              $data_checksums = $postgresql::server::data_checksums,
+  Stdlib::Absolutepath           $datadir        = $postgresql::server::datadir,
+  Optional[String[1]]            $encoding       = $postgresql::server::encoding,
+  String[1]                      $group          = $postgresql::server::group,
+  Stdlib::Absolutepath           $initdb_path    = $postgresql::server::initdb_path,
+  Optional[String[1]]            $lc_messages    = $postgresql::server::lc_messages,
+  Optional[String[1]]            $locale         = $postgresql::server::locale,
+  Optional[Stdlib::Absolutepath] $logdir         = $postgresql::server::logdir,
+  Boolean                        $manage_datadir = $postgresql::server::manage_datadir,
+  Boolean                        $manage_logdir  = $postgresql::server::manage_logdir,
+  Boolean                        $manage_xlogdir = $postgresql::server::manage_xlogdir,
+  Stdlib::Absolutepath           $module_workdir = $postgresql::server::module_workdir,
+  Boolean                        $needs_initdb   = $postgresql::server::needs_initdb,
+  String[1]                      $user           = $postgresql::server::user,
+  Optional[String[1]]            $username       = $postgresql::server::username,
+  Optional[Stdlib::Absolutepath] $xlogdir        = $postgresql::server::xlogdir,
+  Stdlib::Port                   $port           = $postgresql::server::port,
+  Stdlib::Absolutepath           $psql_path      = $postgresql::server::psql_path,
 ) {
   if $facts['os']['family'] == 'RedHat' and $facts['os']['selinux']['enabled'] == true {
     $seltype = 'postgresql_db_t'
@@ -190,6 +197,8 @@ define postgresql::server::instance::initdb (
       user           => $user,
       group          => $group,
       module_workdir => $module_workdir,
+      psql_path      => $psql_path,
+      port           => $port,
     }
   }
 }
