@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Puppet::Type.newtype(:postgresql_psql) do # rubocop:disable Metrics/BlockLength
+Puppet::Type.newtype(:postgresql_psql) do
   newparam(:name) do
     desc 'An arbitrary tag for your own reference; the name of the message.'
     isnamevar
@@ -158,7 +158,7 @@ Puppet::Type.newtype(:postgresql_psql) do # rubocop:disable Metrics/BlockLength
 
   private
 
-  def set_sensitive_parameters(sensitive_parameters) # rubocop:disable Naming/AccessorMethodName
+  def set_sensitive_parameters(sensitive_parameters)
     # Respect sensitive commands
     if sensitive_parameters.include?(:unless)
       sensitive_parameters.delete(:unless)
