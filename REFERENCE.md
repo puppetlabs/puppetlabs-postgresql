@@ -3279,6 +3279,8 @@ The following parameters are available in the `postgresql::server::reassign_owne
 * [`psql_user`](#-postgresql--server--reassign_owned_by--psql_user)
 * [`port`](#-postgresql--server--reassign_owned_by--port)
 * [`connect_settings`](#-postgresql--server--reassign_owned_by--connect_settings)
+* [`group`](#-postgresql--server--reassign_owned_by--group)
+* [`psql_path`](#-postgresql--server--reassign_owned_by--psql_path)
 
 ##### <a name="-postgresql--server--reassign_owned_by--old_role"></a>`old_role`
 
@@ -3321,6 +3323,22 @@ Data type: `Hash`
 Specifies a hash of environment variables used when connecting to a remote server.
 
 Default value: `$postgresql::server::default_connect_settings`
+
+##### <a name="-postgresql--server--reassign_owned_by--group"></a>`group`
+
+Data type: `String[1]`
+
+Sets the OS group to run psql
+
+Default value: `$postgresql::server::group`
+
+##### <a name="-postgresql--server--reassign_owned_by--psql_path"></a>`psql_path`
+
+Data type: `Stdlib::Absolutepath`
+
+Sets the path to psql command
+
+Default value: `$postgresql::server::psql_path`
 
 ### <a name="postgresql--server--recovery"></a>`postgresql::server::recovery`
 
@@ -3698,6 +3716,10 @@ The following parameters are available in the `postgresql::server::schema` defin
 * [`schema`](#-postgresql--server--schema--schema)
 * [`connect_settings`](#-postgresql--server--schema--connect_settings)
 * [`port`](#-postgresql--server--schema--port)
+* [`user`](#-postgresql--server--schema--user)
+* [`group`](#-postgresql--server--schema--group)
+* [`psql_path`](#-postgresql--server--schema--psql_path)
+* [`module_workdir`](#-postgresql--server--schema--module_workdir)
 
 ##### <a name="-postgresql--server--schema--db"></a>`db`
 
@@ -3738,6 +3760,39 @@ Data type: `Stdlib::Port`
 the post the postgresql instance is listening on.
 
 Default value: `$postgresql::server::port`
+
+##### <a name="-postgresql--server--schema--user"></a>`user`
+
+Data type: `String[1]`
+
+Sets the OS user to run psql
+
+Default value: `$postgresql::server::user`
+
+##### <a name="-postgresql--server--schema--group"></a>`group`
+
+Data type: `String[1]`
+
+Sets the OS group to run psql
+
+Default value: `$postgresql::server::group`
+
+##### <a name="-postgresql--server--schema--psql_path"></a>`psql_path`
+
+Data type: `Stdlib::Absolutepath`
+
+Sets path to psql command
+
+Default value: `$postgresql::server::psql_path`
+
+##### <a name="-postgresql--server--schema--module_workdir"></a>`module_workdir`
+
+Data type: `Stdlib::Absolutepath`
+
+Specifies working directory under which the psql command should be executed.
+May need to specify if '/tmp' is on volume mounted with noexec option.
+
+Default value: `$postgresql::server::module_workdir`
 
 ### <a name="postgresql--server--table_grant"></a>`postgresql::server::table_grant`
 
@@ -3850,6 +3905,10 @@ The following parameters are available in the `postgresql::server::tablespace` d
 * [`spcname`](#-postgresql--server--tablespace--spcname)
 * [`connect_settings`](#-postgresql--server--tablespace--connect_settings)
 * [`port`](#-postgresql--server--tablespace--port)
+* [`user`](#-postgresql--server--tablespace--user)
+* [`group`](#-postgresql--server--tablespace--group)
+* [`psql_path`](#-postgresql--server--tablespace--psql_path)
+* [`module_workdir`](#-postgresql--server--tablespace--module_workdir)
 
 ##### <a name="-postgresql--server--tablespace--location"></a>`location`
 
@@ -3896,6 +3955,39 @@ Data type: `Stdlib::Port`
 the port of the postgresql instance that sould be used.
 
 Default value: `$postgresql::server::port`
+
+##### <a name="-postgresql--server--tablespace--user"></a>`user`
+
+Data type: `String[1]`
+
+Sets the OS user to run psql
+
+Default value: `$postgresql::server::user`
+
+##### <a name="-postgresql--server--tablespace--group"></a>`group`
+
+Data type: `String[1]`
+
+Sets the OS group to run psql
+
+Default value: `$postgresql::server::group`
+
+##### <a name="-postgresql--server--tablespace--psql_path"></a>`psql_path`
+
+Data type: `Stdlib::Absolutepath`
+
+Sets path to psql command
+
+Default value: `$postgresql::server::psql_path`
+
+##### <a name="-postgresql--server--tablespace--module_workdir"></a>`module_workdir`
+
+Data type: `String[1]`
+
+Specifies working directory under which the psql command should be executed.
+May need to specify if '/tmp' is on volume mounted with noexec option.
+
+Default value: `$postgresql::server::module_workdir`
 
 ## Resource types
 
@@ -4062,6 +4154,7 @@ The following parameters are available in the `postgresql_psql` type.
 * [`cwd`](#-postgresql_psql--cwd)
 * [`db`](#-postgresql_psql--db)
 * [`environment`](#-postgresql_psql--environment)
+* [`instance`](#-postgresql_psql--instance)
 * [`name`](#-postgresql_psql--name)
 * [`onlyif`](#-postgresql_psql--onlyif)
 * [`port`](#-postgresql_psql--port)
@@ -4093,6 +4186,12 @@ The name of the database to execute the SQL command against, this overrides any 
 Any additional environment variables you want to set for a
 SQL command. Multiple environment variables should be
 specified as an array.
+
+##### <a name="-postgresql_psql--instance"></a>`instance`
+
+The postgresql instance under which the psql command should be executed.
+
+Default value: `main`
 
 ##### <a name="-postgresql_psql--name"></a>`name`
 
