@@ -184,7 +184,7 @@ define postgresql::server::instance::initdb (
       require   => File[$require_before_initdb],
       cwd       => $module_workdir,
     }
-  } elsif $encoding != undef {
+  } elsif $encoding {
     postgresql::server::instance::late_initdb { $name:
       encoding       => $encoding,
       user           => $user,
