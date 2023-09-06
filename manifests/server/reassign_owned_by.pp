@@ -8,18 +8,19 @@
 # @param psql_user Specifies the OS user for running psql.
 # @param port Port to use when connecting.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param group Sets the OS group to run psql
+# @param psql_path Sets the path to psql command
 define postgresql::server::reassign_owned_by (
   String $old_role,
   String $new_role,
   String $db,
-  String $psql_user                      = $postgresql::server::user,
-  Stdlib::Port $port                     = $postgresql::server::port,
-  Hash $connect_settings                 = $postgresql::server::default_connect_settings,
+  String $psql_user               = $postgresql::server::user,
+  Stdlib::Port $port              = $postgresql::server::port,
+  Hash $connect_settings          = $postgresql::server::default_connect_settings,
+  String[1] $group                = $postgresql::server::group,
+  Stdlib::Absolutepath $psql_path = $postgresql::server::psql_path,
 ) {
   $sql_command = "REASSIGN OWNED BY \"${old_role}\" TO \"${new_role}\""
-
-  $group     = $postgresql::server::group
-  $psql_path = $postgresql::server::psql_path
 
   $port_override = pick($connect_settings['PGPORT'], $port)
 

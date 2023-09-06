@@ -9,22 +9,27 @@
 # @param schema Sets the name of the schema.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param port the post the postgresql instance is listening on.
+# @param user Sets the OS user to run psql
+# @param group Sets the OS group to run psql
+# @param psql_path Sets path to psql command
+# @param module_workdir
+#   Specifies working directory under which the psql command should be executed.
+#   May need to specify if '/tmp' is on volume mounted with noexec option.
 # @example
 #   postgresql::server::schema {'private':
 #       db => 'template1',
 #   }
 define postgresql::server::schema (
-  String[1]           $db               = $postgresql::server::default_database,
-  Optional[String[1]] $owner            = undef,
-  String[1]           $schema           = $title,
-  Hash                $connect_settings = $postgresql::server::default_connect_settings,
-  Stdlib::Port $port = $postgresql::server::port,
+  String[1]            $db               = $postgresql::server::default_database,
+  Optional[String[1]]  $owner            = undef,
+  String[1]            $schema           = $title,
+  Hash                 $connect_settings = $postgresql::server::default_connect_settings,
+  Stdlib::Port         $port             = $postgresql::server::port,
+  String[1]            $user             = $postgresql::server::user,
+  String[1]            $group            = $postgresql::server::group,
+  Stdlib::Absolutepath $psql_path        = $postgresql::server::psql_path,
+  Stdlib::Absolutepath $module_workdir   = $postgresql::server::module_workdir,
 ) {
-  $user           = $postgresql::server::user
-  $group          = $postgresql::server::group
-  $psql_path      = $postgresql::server::psql_path
-  $module_workdir = $postgresql::server::module_workdir
-
   Postgresql::Server::Db <| dbname == $db |> -> Postgresql::Server::Schema[$name]
 
   # If the connection settings do not contain a port, then use the local server port
