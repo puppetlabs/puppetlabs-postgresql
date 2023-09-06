@@ -6,19 +6,24 @@
 # @param spcname Specifies the name of the tablespace.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param port the port of the postgresql instance that sould be used.
+# @param user Sets the OS user to run psql
+# @param group Sets the OS group to run psql
+# @param psql_path Sets path to psql command
+# @param module_workdir
+#   Specifies working directory under which the psql command should be executed.
+#   May need to specify if '/tmp' is on volume mounted with noexec option.
 define postgresql::server::tablespace (
-  String[1]           $location,
-  Boolean             $manage_location = true,
-  Optional[String[1]] $owner   = undef,
-  String[1]           $spcname = $title,
-  Hash                $connect_settings = $postgresql::server::default_connect_settings,
-  Stdlib::Port $port = $postgresql::server::port,
+  String[1]            $location,
+  Boolean              $manage_location = true,
+  Optional[String[1]]  $owner   = undef,
+  String[1]            $spcname = $title,
+  Hash                 $connect_settings = $postgresql::server::default_connect_settings,
+  Stdlib::Port         $port             = $postgresql::server::port,
+  String[1]            $user             = $postgresql::server::user,
+  String[1]            $group            = $postgresql::server::group,
+  Stdlib::Absolutepath $psql_path        = $postgresql::server::psql_path,
+  String[1]            $module_workdir   = $postgresql::server::module_workdir,
 ) {
-  $user           = $postgresql::server::user
-  $group          = $postgresql::server::group
-  $psql_path      = $postgresql::server::psql_path
-  $module_workdir = $postgresql::server::module_workdir
-
   # If the connection settings do not contain a port, then use the local server port
   $port_override = pick($connect_settings['PGPORT'], $port)
 
