@@ -23,7 +23,6 @@ define postgresql::server::schema (
   $user           = $postgresql::server::user
   $group          = $postgresql::server::group
   $psql_path      = $postgresql::server::psql_path
-  $version        = $postgresql::server::_version
   $module_workdir = $postgresql::server::module_workdir
 
   Postgresql::Server::Db <| dbname == $db |> -> Postgresql::Server::Schema[$name]
