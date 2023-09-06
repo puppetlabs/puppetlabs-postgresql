@@ -13,6 +13,8 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
   #   If the Postgresql-Passwordhash should be of Datatype Sensitive[String]
   # @param hash
   #   Set type for password hash
+  #
+  #   Default value comes from `postgresql::params::password_encryption` and changes based on the `postgresql::globals::version`.
   # @param salt
   #   Use a specific salt value for scram-sha-256, default is username
   #
@@ -27,7 +29,8 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
     return_type 'Variant[String, Sensitive[String]]'
   end
 
-  def default_impl(username, password, sensitive = false, hash = 'md5', salt = nil)
+  def default_impl(username, password, sensitive = false, hash = nil, salt = nil)
+    hash = call_function(:'postgresql::default', 'password_encryption') if hash.nil?
     password = password.unwrap if password.respond_to?(:unwrap)
     if password.is_a?(String) && password.match?(%r{^(md5[0-9a-f]{32}$|SCRAM-SHA-256\$)})
       return Puppet::Pops::Types::PSensitiveType::Sensitive.new(password) if sensitive

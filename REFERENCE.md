@@ -4429,6 +4429,8 @@ Data type: `Optional[Optional[Postgresql::Pg_password_encryption]]`
 
 Set type for password hash
 
+Default value comes from `postgresql::params::password_encryption` and changes based on the `postgresql::globals::version`.
+
 ##### `salt`
 
 Data type: `Optional[Optional[Variant[String[1], Integer]]]`
