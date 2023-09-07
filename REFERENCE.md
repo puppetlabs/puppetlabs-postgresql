@@ -874,6 +874,7 @@ The following parameters are available in the `postgresql::server` class:
 * [`manage_logdir`](#-postgresql--server--manage_logdir)
 * [`manage_xlogdir`](#-postgresql--server--manage_xlogdir)
 * [`password_encryption`](#-postgresql--server--password_encryption)
+* [`pg_hba_auth_password_encryption`](#-postgresql--server--pg_hba_auth_password_encryption)
 * [`roles`](#-postgresql--server--roles)
 * [`config_entries`](#-postgresql--server--config_entries)
 * [`pg_hba_rules`](#-postgresql--server--pg_hba_rules)
@@ -1300,11 +1301,20 @@ Default value: `$postgresql::params::manage_xlogdir`
 
 ##### <a name="-postgresql--server--password_encryption"></a>`password_encryption`
 
-Data type: `Optional[Postgresql::Pg_password_encryption]`
+Data type: `Postgresql::Pg_password_encryption`
 
 Specify the type of encryption set for the password.
 
 Default value: `$postgresql::params::password_encryption`
+
+##### <a name="-postgresql--server--pg_hba_auth_password_encryption"></a>`pg_hba_auth_password_encryption`
+
+Data type: `Optional[Postgresql::Pg_password_encryption]`
+
+Specify the type of encryption set for the password in pg_hba_conf,
+this value is usefull if you want to start enforcing scram-sha-256, but give users transition time.
+
+Default value: `undef`
 
 ##### <a name="-postgresql--server--roles"></a>`roles`
 
@@ -2417,6 +2427,7 @@ The following parameters are available in the `postgresql::server::instance::con
 * [`log_line_prefix`](#-postgresql--server--instance--config--log_line_prefix)
 * [`timezone`](#-postgresql--server--instance--config--timezone)
 * [`password_encryption`](#-postgresql--server--instance--config--password_encryption)
+* [`pg_hba_auth_password_encryption`](#-postgresql--server--instance--config--pg_hba_auth_password_encryption)
 * [`extra_systemd_config`](#-postgresql--server--instance--config--extra_systemd_config)
 
 ##### <a name="-postgresql--server--instance--config--ip_mask_deny_postgres_user"></a>`ip_mask_deny_postgres_user`
@@ -2633,11 +2644,20 @@ Default value: `$postgresql::server::timezone`
 
 ##### <a name="-postgresql--server--instance--config--password_encryption"></a>`password_encryption`
 
-Data type: `Optional[Postgresql::Pg_password_encryption]`
+Data type: `Postgresql::Pg_password_encryption`
 
 Specify the type of encryption set for the password.
 
 Default value: `$postgresql::server::password_encryption`
+
+##### <a name="-postgresql--server--instance--config--pg_hba_auth_password_encryption"></a>`pg_hba_auth_password_encryption`
+
+Data type: `Optional[Postgresql::Pg_password_encryption]`
+
+Specify the type of encryption set for the password in pg_hba_conf,
+this value is usefull if you want to start enforcing scram-sha-256, but give users transition time.
+
+Default value: `$postgresql::server::pg_hba_auth_password_encryption`
 
 ##### <a name="-postgresql--server--instance--config--extra_systemd_config"></a>`extra_systemd_config`
 
@@ -4408,6 +4428,8 @@ If the Postgresql-Passwordhash should be of Datatype Sensitive[String]
 Data type: `Optional[Optional[Postgresql::Pg_password_encryption]]`
 
 Set type for password hash
+
+Default value comes from `postgresql::params::password_encryption` and changes based on the `postgresql::globals::version`.
 
 ##### `salt`
 
