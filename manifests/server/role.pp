@@ -142,7 +142,7 @@ define postgresql::server::role (
     $_hash = if $hash {
       $hash
     } elsif $connect_settings != undef and 'DBVERSION' in $connect_settings {
-      if (versioncmp($version, '14') >= 0) { 'scram-sha-256' } else { undef }
+      versioncmp($version, '14') ? { -1 => 'md5', default => 'scram-sha-256' }
     } else {
       $postgresql::server::password_encryption
     }
