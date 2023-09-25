@@ -2429,6 +2429,7 @@ The following parameters are available in the `postgresql::server::instance::con
 * [`password_encryption`](#-postgresql--server--instance--config--password_encryption)
 * [`pg_hba_auth_password_encryption`](#-postgresql--server--instance--config--pg_hba_auth_password_encryption)
 * [`extra_systemd_config`](#-postgresql--server--instance--config--extra_systemd_config)
+* [`manage_selinux`](#-postgresql--server--instance--config--manage_selinux)
 
 ##### <a name="-postgresql--server--instance--config--ip_mask_deny_postgres_user"></a>`ip_mask_deny_postgres_user`
 
@@ -2666,6 +2667,14 @@ Data type: `Optional[String]`
 Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
 
 Default value: `$postgresql::server::extra_systemd_config`
+
+##### <a name="-postgresql--server--instance--config--manage_selinux"></a>`manage_selinux`
+
+Data type: `Boolean`
+
+Specifies whether or not manage the conf file for selinux.
+
+Default value: `$postgresql::server::manage_selinux`
 
 ### <a name="postgresql--server--instance--initdb"></a>`postgresql::server::instance::initdb`
 

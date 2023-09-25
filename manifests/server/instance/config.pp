@@ -47,6 +47,7 @@
 #   this value is usefull if you want to start enforcing scram-sha-256, but give users transition time.
 # @param extra_systemd_config
 #   Adds extra config to systemd config file, can for instance be used to add extra openfiles. This can be a multi line string
+# @param manage_selinux Specifies whether or not manage the conf file for selinux.
 define postgresql::server::instance::config (
   String[1]                                      $ip_mask_deny_postgres_user   = $postgresql::server::ip_mask_deny_postgres_user,
   String[1]                                      $ip_mask_allow_all_users      = $postgresql::server::ip_mask_allow_all_users,
@@ -76,6 +77,7 @@ define postgresql::server::instance::config (
   Postgresql::Pg_password_encryption             $password_encryption          = $postgresql::server::password_encryption,
   Optional[Postgresql::Pg_password_encryption]   $pg_hba_auth_password_encryption = $postgresql::server::pg_hba_auth_password_encryption,
   Optional[String]                               $extra_systemd_config         = $postgresql::server::extra_systemd_config,
+  Boolean                                        $manage_selinux               = $postgresql::server::manage_selinux,
 ) {
   $_pg_hba_auth_password_encryption = pick($pg_hba_auth_password_encryption,$password_encryption)
 
@@ -164,7 +166,7 @@ define postgresql::server::instance::config (
   }
 
   # ensure that SELinux has a proper label for the port defined
-  if $postgresql::server::manage_selinux == true and $facts['os']['selinux']['enabled'] == true {
+  if $manage_selinux and $facts['os']['selinux']['enabled'] {
     case $facts['os']['family'] {
       'RedHat', 'Linux': {
         if $facts['os']['name'] == 'Amazon' {
