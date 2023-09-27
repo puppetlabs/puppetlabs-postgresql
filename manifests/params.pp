@@ -99,7 +99,7 @@ class postgresql::params inherits postgresql::globals {
 
       if $postgresql::globals::postgis_package_name {
         $postgis_package_name = $postgresql::globals::postgis_package_name
-      } elsif $facts['os']['release']['major'] == '5' {
+      } elsif $facts['os']['name'] == 'Fedora' {
         $postgis_package_name = 'postgis'
       } elsif $postgis_version and versioncmp($postgis_version, '2') < 0 {
         $postgis_package_name = "postgis${package_version}"
