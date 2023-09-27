@@ -199,19 +199,9 @@ class postgresql::params inherits postgresql::globals {
     }
 
     'FreeBSD': {
-      case $version {
-        '94', '95': {
-          $user                 = pick($user, 'pgsql')
-          $group                = pick($group, 'pgsql')
-          $datadir              = pick($datadir, '/usr/local/pgsql/data')
-        }
-        default: {
-          $user                 = pick($user, 'postgres')
-          $group                = pick($group, 'postgres')
-          $datadir              = pick($datadir, "/var/db/postgres/data${version}")
-        }
-      }
-
+      $user                 = pick($user, 'postgres')
+      $group                = pick($group, 'postgres')
+      $datadir              = pick($datadir, "/var/db/postgres/data${version}")
       $link_pg_config       = true
       $client_package_name  = pick($client_package_name, "databases/postgresql${version}-client")
       $server_package_name  = pick($server_package_name, "databases/postgresql${version}-server")
