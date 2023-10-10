@@ -8,6 +8,7 @@
 # @param encoding Overrides the character set during creation of the database.
 # @param locale Overrides the locale during creation of the database.
 # @param istemplate Defines the database as a template if set to true.
+# @param instance The name of the Postgresql database instance.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param psql_path Specifies the path to the psql command.
 # @param default_db Specifies the name of the default database to connect with. On most systems this is 'postgres'.
@@ -23,6 +24,7 @@ define postgresql::server::database (
   Optional[String[1]]  $encoding         = $postgresql::server::encoding,
   Optional[String[1]]  $locale           = $postgresql::server::locale,
   Boolean              $istemplate       = false,
+  String[1]            $instance         = 'main',
   Hash                 $connect_settings = $postgresql::server::default_connect_settings,
   String[1]            $user             = $postgresql::server::user,
   String[1]            $group            = $postgresql::server::group,
@@ -41,6 +43,7 @@ define postgresql::server::database (
     psql_path        => $psql_path,
     port             => $port_override,
     connect_settings => $connect_settings,
+    instance         => $instance,
   }
 
   # Optionally set the locale switch. Older versions of createdb may not accept
