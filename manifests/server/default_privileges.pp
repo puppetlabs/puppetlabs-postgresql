@@ -12,6 +12,7 @@
 # @param psql_path Specifies the OS user for running psql. Default value: The default user for the module, usually 'postgres'.
 # @param port Specifies the port to access the server. Default value: The default user for the module, usually '5432'.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param instance The name of the Postgresql database instance.
 # @param group Specifies the user group to which the privileges will be granted.
 define postgresql::server::default_privileges (
   String $role,
@@ -34,6 +35,7 @@ define postgresql::server::default_privileges (
   String                    $group             = $postgresql::server::group,
   Stdlib::Absolutepath      $psql_path         = $postgresql::server::psql_path,
   Optional[String]          $target_role       = undef,
+  String[1]                 $instance          = 'main',
 ) {
   $version = pick($connect_settings['DBVERSION'],postgresql::default('version'))
   $port_override = pick($connect_settings['PGPORT'], $port)
@@ -160,6 +162,7 @@ define postgresql::server::default_privileges (
     psql_path        => $psql_path,
     unless           => $unless_cmd,
     environment      => 'PGOPTIONS=--client-min-messages=error',
+    instance         => $instance,
   }
 
   if defined(Postgresql::Server::Role[$role]) {

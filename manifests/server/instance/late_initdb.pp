@@ -25,6 +25,7 @@ define postgresql::server::instance::late_initdb (
     psql_group => $group,
     psql_path  => $psql_path,
     port       => $port,
+    instance   => $name,
     cwd        => $module_workdir,
   }
 

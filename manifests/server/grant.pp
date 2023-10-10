@@ -18,6 +18,7 @@
 # @param ensure Specifies whether to grant or revoke the privilege. Default is to grant the privilege. Valid values: 'present', 'absent'.
 # @param group Sets the OS group to run psql
 # @param psql_path Sets the path to psql command
+# @param instance The name of the Postgresql database instance.
 define postgresql::server::grant (
   String $role,
   String $db,
@@ -47,6 +48,7 @@ define postgresql::server::grant (
   Enum['present', 'absent']                      $ensure            = 'present',
   String                                         $group             = $postgresql::server::group,
   Stdlib::Absolutepath                           $psql_path         = $postgresql::server::psql_path,
+  String[1]                                      $instance          = 'main',
 ) {
   case $ensure {
     default: {
@@ -470,6 +472,7 @@ define postgresql::server::grant (
     psql_user        => $psql_user,
     psql_group       => $group,
     psql_path        => $psql_path,
+    instance         => $instance,
     unless           => $_unless,
     onlyif           => $_onlyif,
   }
