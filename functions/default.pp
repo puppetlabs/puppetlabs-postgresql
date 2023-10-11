@@ -10,6 +10,5 @@ function postgresql::default(
 
   #search for the variable name in params first
   #then fall back to globals if not found
-  pick( getvar("postgresql::params::${parameter_name}"),
-  "postgresql::globals::${parameter_name}")
+  pick(getvar("postgresql::params::${parameter_name}"), getvar("postgresql::globals::${parameter_name}"))
 }
