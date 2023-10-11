@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.0.0) - 2023-10-11
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.2.0...v10.0.0)
+
+### Changed
+- postgis: Drop EL5 leftovers and fix package name for Fedora [#1521](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1521) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL SLES 11.4 code [#1520](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1520) ([bastelfreak](https://github.com/bastelfreak))
+- Drop code for Debian without systemd [#1514](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1514) ([bastelfreak](https://github.com/bastelfreak))
+- puppet/systemd: Allow 6.x [#1505](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1505) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+- set datatype for directories to Stdlib::Absolutepath [#1499](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1499) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+- Drop postgresql 8.4/RHEL6 specific code [#1489](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1489) ([bastelfreak](https://github.com/bastelfreak))
+- Drop postgresql 8.1/RHEL5 specific code [#1486](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1486) ([bastelfreak](https://github.com/bastelfreak))
+- Delete deprecated validate_db_connection() defined resource [#1484](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1484) ([bastelfreak](https://github.com/bastelfreak))
+- postgresql::server: Remove deprecated createdb_path parameter [#1483](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1483) ([bastelfreak](https://github.com/bastelfreak))
+- postgresql::server: Remove deprecated version parameter [#1482](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1482) ([bastelfreak](https://github.com/bastelfreak))
+- puppetlabs/stdlib: Require 9.x [#1481](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1481) ([bastelfreak](https://github.com/bastelfreak))
+- port: Enforce Stdlib::Port datatype [#1473](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1473) ([bastelfreak](https://github.com/bastelfreak))
+- Add Server Instance Feature [#1450](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1450) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+
+### Added
+
+- Drop EoL FreeBSD 9.4/9.5 specific code [#1519](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1519) ([bastelfreak](https://github.com/bastelfreak))
+- Drop code compatibility for non-systemd Red Hat [#1518](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1518) ([ekohl](https://github.com/ekohl))
+- add $manage_selinux as a parameter, keep default, simpler condition [#1516](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1516) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+- add port and psql_path parameter to initdb define [#1510](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1510) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+- PDK update 2.7.0->3.0.0 [#1508](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1508) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+- variables to parameters for tablespace/schema/reassign_owned_by [#1507](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1507) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+- server::schema: Drop unused $version variable [#1506](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1506) ([bastelfreak](https://github.com/bastelfreak))
+- Prefer $connect_settings over explicit parameters [#1498](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1498) ([bastelfreak](https://github.com/bastelfreak))
+- server::extension: make user/group/psql_path configureable [#1497](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1497) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+- server::db: Make port/user/group configureable [#1494](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1494) ([bastelfreak](https://github.com/bastelfreak))
+- server::database_grant: Always set default user/group and expose port as parameter [#1493](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1493) ([bastelfreak](https://github.com/bastelfreak))
+- server::database: make user/group/psql_path/default_db configureable [#1492](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1492) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+- Provide a default for config_entry's path and enforce absolute path [#1490](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1490) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+
+### Fixed
+
+- Fix password_encryption for DBVERSION in server::role [#1515](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1515) ([cruelsmith](https://github.com/cruelsmith))
+- Flexible password encryption in pg hba conf [#1512](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1512) ([cruelsmith](https://github.com/cruelsmith))
+- service name should be unique to allow instances [#1504](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1504) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+- server::grant: make port optional/restore connect_settings feature [#1496](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1496) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v9.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v9.2.0) - 2023-08-30
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.1.0...v9.2.0)
@@ -146,6 +188,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.5.0...v8.0.0)
 
+### Changed
+- Support setting default_privileges on all schemas [#1298](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1298) ([fish-face](https://github.com/fish-face))
+
 ### Added
 
 - add default version for Fedora 35 [#1317](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1317) ([jflorian](https://github.com/jflorian))
@@ -158,9 +203,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - pdksync - (IAC-1751) - Add Support for Rocky 8 [#1305](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1305) ([david22swan](https://github.com/david22swan))
 - Default privileges support schemas [#1300](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1300) ([fish-face](https://github.com/fish-face))
 - Support target_role in default_privileges [#1297](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1297) ([fish-face](https://github.com/fish-face))
-
-### Changed
-- Support setting default_privileges on all schemas [#1298](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1298) ([fish-face](https://github.com/fish-face))
 
 ### Fixed
 
@@ -256,14 +298,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.10.2...v7.0.0)
 
-### Added
-
-- Add DNF module management [#1239](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1239) ([ekohl](https://github.com/ekohl))
-
 ### Changed
 - pdksync - (MAINT) Remove SLES 11 support [#1247](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1247) ([sanfrancrisko](https://github.com/sanfrancrisko))
 - pdksync - (MAINT) Remove RHEL 5 family support [#1246](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1246) ([sanfrancrisko](https://github.com/sanfrancrisko))
 - pdksync - Remove Puppet 5 from testing and bump minimal version to 6.0.0 [#1238](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1238) ([carabasdaniel](https://github.com/carabasdaniel))
+
+### Added
+
+- Add DNF module management [#1239](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1239) ([ekohl](https://github.com/ekohl))
 
 ## [v6.10.2](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v6.10.2) - 2021-02-22
 
@@ -422,14 +464,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.12.1...v6.0.0)
 
+### Changed
+- pdksync - (MODULES-8444) - Raise lower Puppet bound [#1070](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1070) ([david22swan](https://github.com/david22swan))
+- (maint) remove inconsistent extra variable [#1044](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1044) ([binford2k](https://github.com/binford2k))
+
 ### Added
 
 - Add Fedora 30 compatibility [#1067](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1067) ([blackknight36](https://github.com/blackknight36))
 - Include EL8 version for config checks [#1060](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1060) ([ehelms](https://github.com/ehelms))
-
-### Changed
-- pdksync - (MODULES-8444) - Raise lower Puppet bound [#1070](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1070) ([david22swan](https://github.com/david22swan))
-- (maint) remove inconsistent extra variable [#1044](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1044) ([binford2k](https://github.com/binford2k))
 
 ### Fixed
 
@@ -520,14 +562,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.4.0...5.5.0)
 
+### Changed
+- Fix creation of recovery.conf file when recovery configuration is not specified [#995](https://github.com/puppetlabs/puppetlabs-postgresql/pull/995) ([cdloh](https://github.com/cdloh))
+
 ### Added
 
 - Add compatibility for Fedora 28 [#994](https://github.com/puppetlabs/puppetlabs-postgresql/pull/994) ([jflorian](https://github.com/jflorian))
 - (MODULES-5994) Add debian 9 [#992](https://github.com/puppetlabs/puppetlabs-postgresql/pull/992) ([hunner](https://github.com/hunner))
 - Adding default Postgresql version for Ubuntu 18.04 [#981](https://github.com/puppetlabs/puppetlabs-postgresql/pull/981) ([lutaylor](https://github.com/lutaylor))
-
-### Changed
-- Fix creation of recovery.conf file when recovery configuration is not specified [#995](https://github.com/puppetlabs/puppetlabs-postgresql/pull/995) ([cdloh](https://github.com/cdloh))
 
 ### Fixed
 
@@ -605,16 +647,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/4.9.0...5.0.0)
 
+### Changed
+- Unset default log_line_prefix [#870](https://github.com/puppetlabs/puppetlabs-postgresql/pull/870) ([hasegeli](https://github.com/hasegeli))
+- Let listen_addresses be defined independently [#865](https://github.com/puppetlabs/puppetlabs-postgresql/pull/865) ([hasegeli](https://github.com/hasegeli))
+
 ### Added
 
 - (MODULES-1394) replace validate_db_connection type with custom type [#879](https://github.com/puppetlabs/puppetlabs-postgresql/pull/879) ([eputnam](https://github.com/eputnam))
 - [msync] 786266 Implement puppet-module-gems, a45803 Remove metadata.json from locales config [#860](https://github.com/puppetlabs/puppetlabs-postgresql/pull/860) ([wilson208](https://github.com/wilson208))
 - (FM-6116) - Adding POT file for metadata.json [#857](https://github.com/puppetlabs/puppetlabs-postgresql/pull/857) ([pmcmaw](https://github.com/pmcmaw))
 - Allowo to disable managing passwords for users [#846](https://github.com/puppetlabs/puppetlabs-postgresql/pull/846) ([bjoernhaeuser](https://github.com/bjoernhaeuser))
-
-### Changed
-- Unset default log_line_prefix [#870](https://github.com/puppetlabs/puppetlabs-postgresql/pull/870) ([hasegeli](https://github.com/hasegeli))
-- Let listen_addresses be defined independently [#865](https://github.com/puppetlabs/puppetlabs-postgresql/pull/865) ([hasegeli](https://github.com/hasegeli))
 
 ### Fixed
 
