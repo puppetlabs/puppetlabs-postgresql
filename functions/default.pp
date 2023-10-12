@@ -8,8 +8,7 @@ function postgresql::default(
 ) {
   include postgresql::params
 
-  #search for the variable name in params first
-  #then fall back to globals if not found
-  pick( getvar("postgresql::params::${parameter_name}"),
-  "postgresql::globals::${parameter_name}")
+  # Search for the variable name in params.
+  # params inherits from globals, so it will also catch these variables.
+  pick(getvar("postgresql::params::${parameter_name}"))
 }
