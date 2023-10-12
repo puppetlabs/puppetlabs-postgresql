@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.0.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.0.1) - 2023-10-12
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.0.0...v10.0.1)
+
+### Fixed
+
+- Fix `postgresql::default()` return value for unknown parameters [#1530](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1530) ([smortex](https://github.com/smortex))
+- Fix the `postgresql::postgresql_password()` function [#1529](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1529) ([smortex](https://github.com/smortex))
+
 ## [v10.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.0.0) - 2023-10-11
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.2.0...v10.0.0)
