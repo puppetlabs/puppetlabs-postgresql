@@ -1,6 +1,6 @@
 # @summary Manage the DNF module
 #
-# On EL8 and Fedora DNF can manage modules. This is a method of providing
+# On EL8 and newer and Fedora DNF can manage modules. This is a method of providing
 # multiple versions on the same OS. Only one DNF module can be active at the
 # same time.
 #
