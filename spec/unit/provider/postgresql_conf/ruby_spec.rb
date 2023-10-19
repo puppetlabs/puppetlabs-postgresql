@@ -30,6 +30,16 @@ describe provider_class do
     expect(provider).to respond_to(:exists?)
   end
 
+  describe 'duplicate keys in postgresql.conf' do
+    it 'stubs the parse_config method' do
+      allow(provider).to receive(:parse_config).and_return([{ key: 'foo', line: 1 }, { key: 'foo', line: 2 }])
+      expect(provider).to have_received(:parse_config)
+    end
+    it 'raises an exception' do
+      expect { provider.exists? }.to raise_error(Puppet::Error, 'found multiple config items of foo found, please fix this')
+    end
+  end
+
   it 'has a method create' do
     expect(provider).to respond_to(:create)
   end
