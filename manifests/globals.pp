@@ -96,8 +96,7 @@
 # @param manage_package_repo Sets up official PostgreSQL repositories on your host if set to true.
 # @param manage_dnf_module
 #   Manage the DNF module. This only makes sense on distributions that use DNF
-#   package manager, such as EL8 or Fedora. It also requires Puppet 5.5.20+ or
-#   Puppet 6.15.0+ since they ship the dnfmodule provider.
+#   package manager, such as EL8, EL9 or Fedora.
 # @param module_workdir
 #   Specifies working directory under which the psql command should be executed.
 #   May need to specify if '/tmp' is on volume mounted with noexec option.

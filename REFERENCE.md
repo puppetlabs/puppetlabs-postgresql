@@ -654,8 +654,7 @@ Default value: `undef`
 Data type: `Boolean`
 
 Manage the DNF module. This only makes sense on distributions that use DNF
-package manager, such as EL8 or Fedora. It also requires Puppet 5.5.20+ or
-Puppet 6.15.0+ since they ship the dnfmodule provider.
+package manager, such as EL8, EL9 or Fedora.
 
 Default value: `false`
 
