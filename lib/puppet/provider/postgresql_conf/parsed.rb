@@ -14,7 +14,7 @@ Puppet::Type.type(:postgresql_conf).provide(
   text_line :blank, match: %r{^\s*$}
 
   record_line :parsed,
-              fields: ['name', 'value', 'comment'],
+              fields: ['key', 'value', 'comment'],
               optional: ['comment'],
               match: %r{^\s*([\w.]+)\s*=?\s*(.*?)(?:\s*#\s*(.*))?\s*$},
               to_line: proc { |h|
@@ -28,9 +28,9 @@ Puppet::Type.type(:postgresql_conf).provide(
                         h[:value]
                       end
                 dontneedquote = val.match(%r{^(\d+.?\d+|\w+)$})
-                dontneedequal = h[:name].match(%r{^(include|include_if_exists)$}i)
+                dontneedequal = h[:key].match(%r{^(include|include_if_exists)$}i)
 
-                str =  h[:name].downcase # normalize case
+                str =  h[:key].downcase # normalize case
                 str += dontneedequal ? ' ' : ' = '
                 str += "'" unless dontneedquote && !dontneedequal
                 str += val
@@ -39,7 +39,7 @@ Puppet::Type.type(:postgresql_conf).provide(
                 str
               },
               post_parse: proc { |h|
-                h[:name].downcase! # normalize case
+                h[:key].downcase! # normalize case
                 h[:value].gsub!(%r{(^'|'$)}, '') # strip out quotes
               }
 end
