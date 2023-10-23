@@ -4,14 +4,12 @@
 # @param key Defines the key/name for the setting. Defaults to $name
 # @param value Defines the value for the setting.
 # @param path Path for postgresql.conf
-# @param comment Defines the comment for the setting. The # is added by default.
 #
 define postgresql::server::config_entry (
-  Enum['present', 'absent']                               $ensure  = 'present',
-  String[1]                                               $key     = $name,
-  Optional[Variant[String[1], Numeric, Array[String[1]]]] $value   = undef,
-  Stdlib::Absolutepath                                    $path    = $postgresql::server::postgresql_conf_path,
-  Optional[String[1]]                                     $comment = undef,
+  Enum['present', 'absent']                               $ensure = 'present',
+  String[1]                                               $key    = $name,
+  Optional[Variant[String[1], Numeric, Array[String[1]]]] $value  = undef,
+  Stdlib::Absolutepath                                    $path   = $postgresql::server::postgresql_conf_path
 ) {
   # Those are the variables that are marked as "(change requires restart)"
   # on postgresql.conf.  Items are ordered as on postgresql.conf.
@@ -87,9 +85,8 @@ define postgresql::server::config_entry (
   postgresql_conf { $name:
     ensure  => $ensure,
     target  => $path,
-    key     => $key,
+    name    => $key,
     value   => $value,
-    comment => $comment,
     require => Class['postgresql::server::initdb'],
   }
 }

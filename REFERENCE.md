@@ -1526,7 +1526,6 @@ The following parameters are available in the `postgresql::server::config_entry`
 * [`key`](#-postgresql--server--config_entry--key)
 * [`value`](#-postgresql--server--config_entry--value)
 * [`path`](#-postgresql--server--config_entry--path)
-* [`comment`](#-postgresql--server--config_entry--comment)
 
 ##### <a name="-postgresql--server--config_entry--ensure"></a>`ensure`
 
@@ -1559,14 +1558,6 @@ Data type: `Stdlib::Absolutepath`
 Path for postgresql.conf
 
 Default value: `$postgresql::server::postgresql_conf_path`
-
-##### <a name="-postgresql--server--config_entry--comment"></a>`comment`
-
-Data type: `Optional[String[1]]`
-
-Defines the comment for the setting. The # is added by default.
-
-Default value: `undef`
 
 ### <a name="postgresql--server--database"></a>`postgresql::server::database`
 
@@ -4309,12 +4300,6 @@ This type allows puppet to manage postgresql.conf parameters.
 
 The following properties are available in the `postgresql_conf` type.
 
-##### `comment`
-
-Valid values: `%r{^[\w\W]+$}`
-
-The comment to set for this parameter.
-
 ##### `ensure`
 
 Valid values: `present`, `absent`
@@ -4323,9 +4308,11 @@ The basic property that the resource should be in.
 
 Default value: `present`
 
-##### `value`
+##### `target`
 
-Valid values: `%r{^\S(.*\S)?$}`
+The path to postgresql.conf
+
+##### `value`
 
 The value to set for this parameter.
 
@@ -4333,16 +4320,8 @@ The value to set for this parameter.
 
 The following parameters are available in the `postgresql_conf` type.
 
-* [`key`](#-postgresql_conf--key)
 * [`name`](#-postgresql_conf--name)
 * [`provider`](#-postgresql_conf--provider)
-* [`target`](#-postgresql_conf--target)
-
-##### <a name="-postgresql_conf--key"></a>`key`
-
-Valid values: `%r{^[\w.]+$}`
-
-The Postgresql parameter to manage.
 
 ##### <a name="-postgresql_conf--name"></a>`name`
 
@@ -4350,18 +4329,12 @@ Valid values: `%r{^[\w.]+$}`
 
 namevar
 
-A unique title for the resource.
+The postgresql parameter name to manage.
 
 ##### <a name="-postgresql_conf--provider"></a>`provider`
 
 The specific backend to use for this `postgresql_conf` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
-
-##### <a name="-postgresql_conf--target"></a>`target`
-
-Valid values: `%r{^/\S+[a-z0-9(/)-]*\w+.conf$}`
-
-The path to the postgresql config file
 
 ### <a name="postgresql_conn_validator"></a>`postgresql_conn_validator`
 
