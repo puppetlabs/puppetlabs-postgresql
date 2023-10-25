@@ -51,5 +51,68 @@ describe Puppet::Type.type(:postgresql_conf) do
         expect { described_class.new(name: 'foo', ensure: :foo) }.to raise_error(Puppet::Error, %r{Invalid value})
       end
     end
+    # boolean https://www.postgresql.org/docs/current/datatype-boolean.html
+    describe 'validate boolean values with newvalues function' do
+      it 'validates log_checkpoints with value on' do
+        expect { described_class.new(name: 'log_checkpoints', value: 'on') }.not_to raise_error
+      end
+      it 'validates log_checkpoints with value off' do
+        expect { described_class.new(name: 'log_checkpoints', value: 'off') }.not_to raise_error
+      end
+      it 'validates log_checkpoints with value true' do
+        expect { described_class.new(name: 'log_checkpoints', value: 'true') }.not_to raise_error
+      end
+      it 'validates log_checkpoints with value false' do
+        expect { described_class.new(name: 'log_checkpoints', value: 'false') }.not_to raise_error
+      end
+      it 'validates log_checkpoints with value yes' do
+        expect { described_class.new(name: 'log_checkpoints', value: 'yes') }.not_to raise_error
+      end
+      it 'validates log_checkpoints with value no' do
+        expect { described_class.new(name: 'log_checkpoints', value: 'no') }.not_to raise_error
+      end
+      it 'validates log_checkpoints with value 1' do
+        expect { described_class.new(name: 'log_checkpoints', value: '1') }.not_to raise_error
+      end
+      it 'validates log_checkpoints with value 0' do
+        expect { described_class.new(name: 'log_checkpoints', value: '0') }.not_to raise_error
+      end
+    end
+    # enums https://www.postgresql.org/docs/current/datatype-enum.html
+    describe 'validate enum values with newvalues function' do
+      it 'validates ssl_min_protocol_version with value TLSv1.3' do
+        expect { described_class.new(name: 'ssl_min_protocol_version', value: 'TLSv1.3') }.not_to raise_error
+      end
+      it 'validates ssl_min_protocol_version with value TLSv1.1' do
+        expect { described_class.new(name: 'ssl_min_protocol_version', value: 'TLSv1.1') }.not_to raise_error
+      end
+    end
+    # integer https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-INT
+    describe 'validate integer values with newvalues function' do
+      it 'validates max_connections with value 1000' do
+        expect { described_class.new(name: 'max_connections', value: '1000') }.not_to raise_error
+      end
+    end
+    # real https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-FLOAT
+    describe 'validate real values with newvalues function' do
+      it 'validates parallel_tuple_cost with value 0.3' do
+        expect { described_class.new(name: 'parallel_tuple_cost', value: '0.3') }.not_to raise_error
+      end
+    end
+    # string https://www.postgresql.org/docs/current/datatype-character.html
+    describe 'validate complex string values with newvalues function' do
+      it 'validates log_filename with value psql_01-%Y-%m-%d.log' do
+        expect { described_class.new(name: 'log_filename', value: 'psql_01-%Y-%m-%d.log') }.not_to raise_error
+      end
+    end
+    # string https://www.postgresql.org/docs/current/datatype-character.html
+    describe 'validate string values with newvalues function' do
+      it 'validates log_timezone with value UTC' do
+        expect { described_class.new(name: 'log_timezone', value: 'UTC') }.not_to raise_error
+      end
+      it 'validates ssl_ciphers with value HIGH:MEDIUM:+3DES:!aNULL' do
+        expect { described_class.new(name: 'ssl_ciphers', value: 'HIGH:MEDIUM:+3DES:!aNULL') }.not_to raise_error
+      end
+    end
   end
 end
