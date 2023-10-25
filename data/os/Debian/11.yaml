@@ -1,0 +1,4 @@
+--- 
+# Defaults for Debian Bullseye (11)
+
+postgresql::globals::python_package_name: 'python3-psycopg2'
