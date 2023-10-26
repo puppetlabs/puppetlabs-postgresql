@@ -101,6 +101,12 @@ describe Puppet::Type.type(:postgresql_conf) do
     end
     # string https://www.postgresql.org/docs/current/datatype-character.html
     describe 'validate complex string values with newvalues function' do
+      it 'validates log_line_prefix with value [%p] %q:%u:%d:%' do
+        expect { described_class.new(name: 'log_line_prefix', value: '[%p] %q:%u:%d:%x ') }.not_to raise_error
+      end
+      it 'validates log_line_prefix with value %t %q%u@%d %p %i' do
+        expect { described_class.new(name: 'log_line_prefix', value: '%t %q%u@%d %p %i ') }.not_to raise_error
+      end
       it 'validates log_filename with value psql_01-%Y-%m-%d.log' do
         expect { described_class.new(name: 'log_filename', value: 'psql_01-%Y-%m-%d.log') }.not_to raise_error
       end
