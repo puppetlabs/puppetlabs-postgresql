@@ -16,7 +16,7 @@ Puppet::Type.newtype(:postgresql_conf) do
 
   newproperty(:value) do
     desc 'The value to set for this parameter.'
-    newvalues(%r{^\S(.*\S)?$})
+    newvalues(%r{^(\S.*)?$})
 
     munge do |value|
       if value.to_i.to_s == value
