@@ -4325,7 +4325,7 @@ Default value: `present`
 
 ##### `value`
 
-Valid values: `%r{^\S(.*\S)?$}`
+Valid values: `%r{^(\S.*)?$}`
 
 The value to set for this parameter.
 

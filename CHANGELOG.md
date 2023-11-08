@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.0.2](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.0.2) - 2023-11-08
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.0.1...v10.0.2)
+
+### Fixed
+
+- postgresql_conf: Fix regex for value param and add tests [#1544](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1544) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+
 ## [v10.0.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.0.1) - 2023-10-12
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.0.0...v10.0.1)
