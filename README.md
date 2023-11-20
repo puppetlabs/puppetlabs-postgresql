@@ -19,10 +19,11 @@
     * [Backups](#backups)
 4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Development - Guide for contributing to the module](#development)
+6. [License](#license)
+7. [Development - Guide for contributing to the module](#development)
     * [Contributors - List of module contributors](#contributors)
-7. [Tests](#tests)
-8. [Contributors - List of module contributors](#contributors)
+8. [Tests](#tests)
+9. [Contributors - List of module contributors](#contributors)
 
 ## Module description
 
@@ -558,6 +559,10 @@ If you have SELinux enabled and you are *not* using the selinux module to manage
 ```shell
 semanage port -a -t postgresql_port_t -p tcp $customport
 ```
+
+## License
+
+This codebase is licensed under the Apache2.0 licensing, however due to the nature of the codebase the open source dependencies may also use a combination of [AGPL](https://www.gnu.org/licenses/agpl-3.0.en.html), [BSD-2](https://opensource.org/license/bsd-2-claus), [BSD-3](https://opensource.org/license/bsd-3-claus), [GPL2.0](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html), [LGPL](https://opensource.org/license/lgpl-3-0/), [MIT](https://opensource.org/license/mit/) and [MPL](https://opensource.org/license/mpl-2-0/) Licensing.
 
 ## Development
 
