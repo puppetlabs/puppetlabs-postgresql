@@ -159,7 +159,15 @@ class postgresql::params inherits postgresql::globals {
       $perl_package_name      = pick($perl_package_name, 'libdbd-pg-perl')
       $plperl_package_name    = pick($plperl_package_name, "postgresql-plperl-${version}")
       $plpython_package_name  = pick($plpython_package_name, "postgresql-plpython-${version}")
-      $python_package_name    = pick($python_package_name, 'python-psycopg2')
+
+      $_ubuntu_2204 = ($facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['full'], '22.04') >= 0)
+      $_debian_12 = ($facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['full'], '12') >= 0)
+
+      if $_ubuntu_2204 or $_debian_12 {
+        $python_package_name = pick($python_package_name, 'python3-psycopg2')
+      } else {
+        $python_package_name = pick($python_package_name, 'python-psycopg2')
+      }
 
       $bindir                 = pick($bindir, "/usr/lib/postgresql/${version}/bin")
       $datadir                = pick($datadir, "/var/lib/postgresql/${version}/main")
