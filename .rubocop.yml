@@ -1,12 +1,11 @@
 ---
-inherit_from: .rubocop_todo.yml
-
 require:
 - rubocop-performance
 - rubocop-rspec
 AllCops:
+  NewCops: enable
   DisplayCopNames: true
-  TargetRubyVersion: '2.6'
+  TargetRubyVersion: '2.7'
   Include:
   - "**/*.rb"
   Exclude:
@@ -20,6 +19,7 @@ AllCops:
   - "**/Puppetfile"
   - "**/Vagrantfile"
   - "**/Guardfile"
+inherit_from: ".rubocop_todo.yml"
 Layout/LineLength:
   Description: People have wide screens, use them.
   Max: 200

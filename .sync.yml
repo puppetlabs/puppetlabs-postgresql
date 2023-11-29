@@ -6,7 +6,8 @@
     - 140chars-check
 appveyor.yml:
   delete: true
-
+.rubocop.yml:
+  include_todos: true
 Gemfile:
   optional:
     ":development":
@@ -15,6 +16,9 @@ Gemfile:
 Rakefile:
   changelog_user: puppetlabs
   changelog_max_issues: 500
+  extra_disabled_lint_checks:
+    - anchor_resource
+    - params_empty_string_assignment
 spec/spec_helper.rb:
   mock_with: ":rspec"
   coverage_report: true
@@ -45,7 +49,3 @@ spec/spec_helper.rb:
   unmanaged: false
 .travis.yml:
   delete: true
-Rakefile:
-  extra_disabled_lint_checks:
-    - anchor_resource
-    - params_empty_string_assignment
