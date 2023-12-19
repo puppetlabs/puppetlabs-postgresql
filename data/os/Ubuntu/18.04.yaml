@@ -1,0 +1,3 @@
+---
+postgresql::repo::baseurl: https://apt-archive.postgresql.org/pub/repos/apt/
+postgresql::repo::release: "%{facts.os.distro.codename}-pgdg-archive"
