@@ -7,8 +7,10 @@ class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
   # http://www.postgresql.org/download/linux/debian/
   #
   $default_baseurl = 'https://apt.postgresql.org/pub/repos/apt/'
-
   $_baseurl = pick($postgresql::repo::baseurl, $default_baseurl)
+
+  $default_release = "${facts['os']['distro']['codename']}-pgdg"
+  $_release = pick($postgresql::repo::release, $default_release)
 
   apt::pin { 'apt_postgresql_org':
     originator => 'apt.postgresql.org',
@@ -16,7 +18,7 @@ class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
   }
   -> apt::source { 'apt.postgresql.org':
     location     => $_baseurl,
-    release      => "${facts['os']['distro']['codename']}-pgdg",
+    release      => $_release,
     repos        => 'main',
     architecture => $facts['os']['architecture'],
     key          => {
