@@ -22,8 +22,9 @@ class postgresql::repo::apt_postgresql_org inherits postgresql::repo {
     repos        => 'main',
     architecture => $facts['os']['architecture'],
     key          => {
-      id     => 'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
-      source => 'https://www.postgresql.org/media/keys/ACCC4CF8.asc',
+      name    => 'apt.postgresql.org.asc',
+      # https://www.postgresql.org/media/keys/ACCC4CF8.asc
+      content => file("${module_name}/ACCC4CF8.asc"),
     },
     include      => {
       src => false,
