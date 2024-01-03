@@ -138,10 +138,6 @@ Puppet::Type.newtype(:postgresql_psql) do
     ["postgresql::server::service::end::#{self[:instance]}"]
   end
 
-  autorequire(:service) do
-    ["postgresqld_instance_#{self[:instance]}"]
-  end
-
   def should_run_sql(refreshing = false)
     onlyif_param = @parameters[:onlyif]
     unless_param = @parameters[:unless]
