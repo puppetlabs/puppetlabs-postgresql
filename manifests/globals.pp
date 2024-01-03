@@ -60,6 +60,7 @@
 #
 # @param repo_baseurl Sets the baseurl for the PostgreSQL repository. Useful if you host your own mirror of the repository.
 # @param yum_repo_commonurl Sets the url for the PostgreSQL common Yum repository. Useful if you host your own mirror of the YUM repository.
+# @param apt_source_release Overrides the default release for the apt source.
 #
 # @param needs_initdb
 #   Explicitly calls the initdb operation after the server package is installed and before the PostgreSQL service is started.
@@ -150,6 +151,7 @@ class postgresql::globals (
   Optional[String[1]] $repo_proxy                  = undef,
   Optional[String[1]] $repo_baseurl                = undef,
   Optional[String[1]] $yum_repo_commonurl          = undef,
+  Optional[String[1]] $apt_source_release          = undef,
 
   Optional[Boolean] $needs_initdb                  = undef,
 
@@ -271,6 +273,7 @@ class postgresql::globals (
       proxy     => $repo_proxy,
       baseurl   => $repo_baseurl,
       commonurl => $yum_repo_commonurl,
+      release   => $apt_source_release,
     }
   }
 

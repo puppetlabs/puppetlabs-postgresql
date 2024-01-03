@@ -1,6 +1,7 @@
 # @api private
 class postgresql::repo (
   Optional[String[1]] $version = undef,
+  Optional[String[1]] $release = undef,
   Optional[String[1]] $proxy = undef,
   Optional[String[1]] $baseurl = undef,
   Optional[String[1]] $commonurl = undef,
