@@ -42,6 +42,10 @@ define postgresql::server::instance::service (
       status    => $service_status,
     }
 
+    Anchor["postgresql::server::service::begin::${name}"]
+    -> Service["postgresqld_instance_${name}"]
+    -> Anchor["postgresql::server::service::end::${name}"]
+
     if $service_ensure in ['running', true] {
       # This blocks the class before continuing if chained correctly, making
       # sure the service really is 'up' before continuing.
@@ -56,10 +60,13 @@ define postgresql::server::instance::service (
         sleep            => 1,
         tries            => 60,
         psql_path        => $psql_path,
-        require          => Service["postgresqld_instance_${name}"],
-        before           => Anchor["postgresql::server::service::end::${name}"],
       }
-      Postgresql::Server::Database <| title == $default_database |> -> Postgresql_conn_validator["validate_service_is_running_instance_${name}"]
+
+      Anchor["postgresql::server::service::begin::${name}"]
+      -> Service["postgresqld_instance_${name}"]
+      -> Postgresql::Server::Database <| title == $default_database |>
+      -> Postgresql_conn_validator["validate_service_is_running_instance_${name}"]
+      -> Anchor["postgresql::server::service::end::${name}"]
     }
   }
 
