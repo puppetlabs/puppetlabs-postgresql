@@ -27,9 +27,7 @@ def export_locales(locale)
   LitmusHelper.instance.run_shell("echo export LANGUAGE=#{locale} >> /etc/profile.d/my-custom.lang.sh")
   LitmusHelper.instance.run_shell('echo export LC_COLLATE=C >> /etc/profile.d/my-custom.lang.sh')
   LitmusHelper.instance.run_shell("echo export LC_CTYPE=#{locale} >> /etc/profile.d/my-custom.lang.sh")
-  LitmusHelper.instance.run_shell('source /etc/profile.d/my-custom.lang.sh')
   LitmusHelper.instance.run_shell('echo export LC_ALL="C" >> ~/.bashrc')
-  LitmusHelper.instance.run_shell('source ~/.bashrc')
 end
 
 def pre_run
