@@ -1,8 +1,9 @@
 # @api private
 class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
-  $version_parts   = split($postgresql::repo::version, '[.]')
-  $package_version = "${version_parts[0]}${version_parts[1]}"
-  $gpg_key_path    = "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}"
+  $version_parts       = split($postgresql::repo::version, '[.]')
+  $package_version     = "${version_parts[0]}${version_parts[1]}"
+  $gpg_key_path        = "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}"
+  $gpg_key_path_common = '/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-common'
 
   $gpg_key_file = $facts['os']['release']['major'] ? {
     '7'     => 'postgresql/RPM-GPG-KEY-PGDG-7',
@@ -15,6 +16,14 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     group   => 'root',
     mode    => '0644',
     before  => Yumrepo['yum.postgresql.org'],
+  }
+
+  file { $gpg_key_path_common:
+    content => file('postgresql/RPM-GPG-KEY-PGDG-common'),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    before  => Yumrepo['pgdg-common'],
   }
 
   if($facts['os']['name'] == 'Fedora') {
