@@ -40,6 +40,7 @@ define postgresql::server::instance::service (
       provider  => $service_provider,
       hasstatus => true,
       status    => $service_status,
+      timeout   => 1800,
     }
 
     if $service_ensure in ['running', true] {
