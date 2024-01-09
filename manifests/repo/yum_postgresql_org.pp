@@ -4,8 +4,13 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
   $package_version = "${version_parts[0]}${version_parts[1]}"
   $gpg_key_path    = "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}"
 
+  $gpg_key_file = $facts['os']['release']['major'] ? {
+    '7'     => 'postgresql/RPM-GPG-KEY-PGDG-7',
+    default => 'postgresql/RPM-GPG-KEY-PGDG',
+  }
+
   file { $gpg_key_path:
-    content => file('postgresql/RPM-GPG-KEY-PGDG'),
+    content => file($gpg_key_file),
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
@@ -30,7 +35,7 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     baseurl  => $_baseurl,
     enabled  => 1,
     gpgcheck => 1,
-    gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}",
+    gpgkey   => "file://${gpg_key_path}",
     proxy    => $postgresql::repo::proxy,
   }
 
@@ -39,7 +44,7 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     baseurl  => $_commonurl,
     enabled  => 1,
     gpgcheck => 1,
-    gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${package_version}",
+    gpgkey   => "file://${gpg_key_path}",
     proxy    => $postgresql::repo::proxy,
   }
 
