@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.0.3](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.0.3) - 2024-01-09
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.0.2...v10.0.3)
+
+### Fixed
+
+- support for a custom apt source release [#1561](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1561) ([h0tw1r3](https://github.com/h0tw1r3))
+- (#1556) Fix Python package name for Ubuntu >= 22.04 [#1557](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1557) ([antaflos](https://github.com/antaflos))
+- Unconfine postgresql_conf [#1551](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1551) ([smortex](https://github.com/smortex))
+
 ## [v10.0.2](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.0.2) - 2023-11-08
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.0.1...v10.0.2)

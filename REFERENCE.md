@@ -202,6 +202,7 @@ The following parameters are available in the `postgresql::globals` class:
 * [`repo_proxy`](#-postgresql--globals--repo_proxy)
 * [`repo_baseurl`](#-postgresql--globals--repo_baseurl)
 * [`yum_repo_commonurl`](#-postgresql--globals--yum_repo_commonurl)
+* [`apt_source_release`](#-postgresql--globals--apt_source_release)
 * [`needs_initdb`](#-postgresql--globals--needs_initdb)
 * [`encoding`](#-postgresql--globals--encoding)
 * [`locale`](#-postgresql--globals--locale)
@@ -526,6 +527,14 @@ Default value: `undef`
 Data type: `Optional[String[1]]`
 
 Sets the url for the PostgreSQL common Yum repository. Useful if you host your own mirror of the YUM repository.
+
+Default value: `undef`
+
+##### <a name="-postgresql--globals--apt_source_release"></a>`apt_source_release`
+
+Data type: `Optional[String[1]]`
+
+Overrides the default release for the apt source.
 
 Default value: `undef`
 
