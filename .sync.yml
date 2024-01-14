@@ -8,11 +8,7 @@ appveyor.yml:
   delete: true
 .rubocop.yml:
   include_todos: true
-Gemfile:
-  optional:
-    ":development":
-    - gem: github_changelog_generator
-      version: '= 1.15.2'
+
 Rakefile:
   changelog_user: puppetlabs
   changelog_max_issues: 500
