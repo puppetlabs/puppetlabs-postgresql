@@ -74,7 +74,7 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
   # check, if resource exists in postgresql.conf file
   def exists?
     select = parse_config.select { |hash| hash[:key] == resource[:key] }
-    raise ParserError, "found multiple config items of #{resource[:key]} found, please fix this" if select.length > 1
+    raise ParseError, "found multiple config items of #{resource[:key]} found, please fix this" if select.length > 1
     return false if select.empty?
 
     @result = select.first
