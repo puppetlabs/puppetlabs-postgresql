@@ -103,7 +103,7 @@ define postgresql::server::instance::config (
           type        => 'host',
           user        => $user,
           address     => '127.0.0.1/32',
-          auth_method => 'md5',
+          auth_method => 'scram-sha-256',
           order       => 3;
 
         'deny access to postgresql user':
@@ -116,13 +116,13 @@ define postgresql::server::instance::config (
         'allow access to all users':
           type        => 'host',
           address     => $ip_mask_allow_all_users,
-          auth_method => 'md5',
+          auth_method => 'scram-sha-256',
           order       => 100;
 
         'allow access to ipv6 localhost':
           type        => 'host',
           address     => '::1/128',
-          auth_method => 'md5',
+          auth_method => 'scram-sha-256',
           order       => 101;
       }
     }

@@ -39,7 +39,7 @@ define postgresql::server::role (
   Variant[String[1], Stdlib::Absolutepath]              $psql_path        = $postgresql::server::psql_path,
   String[1]                                             $module_workdir   = $postgresql::server::module_workdir,
   Enum['present', 'absent']                             $ensure           = 'present',
-  Enum['md5', 'scram-sha-256']                          $hash             = 'md5',
+  Enum['md5', 'scram-sha-256']                          $hash             = 'scram-sha-256',
   Optional[Variant[String[1], Integer]]                 $salt             = undef,
 ) {
   $password_hash_unsensitive = if $password_hash =~ Sensitive[String] {

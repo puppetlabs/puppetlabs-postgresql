@@ -27,7 +27,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
     return_type 'Variant[String, Sensitive[String]]'
   end
 
-  def default_impl(username, password, sensitive = false, hash = 'md5', salt = nil)
+  def default_impl(username, password, sensitive = false, hash = 'scram-sha-256', salt = nil)
     if password.is_a?(String) && password.match?(%r{^(md5|SCRAM-SHA-256).+})
       return password
     end
