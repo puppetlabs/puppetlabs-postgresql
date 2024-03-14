@@ -10,7 +10,7 @@
 Puppet::Type.type(:postgresql_conf).provide(:ruby) do
   desc 'Set keys, values and comments in a postgresql config file.'
 
-  # The function pareses the postgresql.conf and figures out which active settings exist in a config file and returns an array of hashes
+  # The function parses the postgresql.conf and figures out which active settings exist in a config file and returns an array of hashes
   #
   def parse_config
     # open the config file
