@@ -3,6 +3,9 @@
   Stdlib::Absolutepath             $datadir,
   Optional[String[1]]              $extra_systemd_config,
 | -%>
+[Unit]
+RequiresMountsFor=<%= $datadir %>
+
 [Service]
 Environment=PGPORT=<%= $port %>
 <%- if $facts['os']['family'] == 'Gentoo' { -%>
