@@ -211,6 +211,7 @@ class postgresql::globals (
         /^(20.04)$/ => '12',
         /^(21.04|21.10)$/ => '13',
         /^(22.04)$/ => '14',
+        /^(24.04)$/ => '16',
         default => undef,
       },
       default => undef,
@@ -259,6 +260,7 @@ class postgresql::globals (
     '10'    => '2.4',
     '11'    => '3.0',
     '12'    => '3.0',
+    '16'    => '3.4',
     default => undef,
   }
   $globals_postgis_version = $postgis_version ? {
