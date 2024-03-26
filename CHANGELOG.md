@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.1.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.1.0) - 2024-03-26
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.0.3...v10.1.0)
+
+### Added
+
+- Add a global password_encryption parameter [#1584](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1584) ([ekohl](https://github.com/ekohl))
+- Use RequiresMountsFor on datadir [#1582](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1582) ([ekohl](https://github.com/ekohl))
+- Support Ubuntu 24.04 and postgis for postgresql 16 [#1581](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1581) ([bmiklautz](https://github.com/bmiklautz))
+- Add Fedora 39 support [#1580](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1580) ([lweller](https://github.com/lweller))
+
+### Other
+
+- Fix typo in postgresql_conf provider docs [#1579](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1579) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v10.0.3](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.0.3) - 2024-01-09
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.0.2...v10.0.3)
