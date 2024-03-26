@@ -208,6 +208,7 @@ The following parameters are available in the `postgresql::globals` class:
 * [`locale`](#-postgresql--globals--locale)
 * [`data_checksums`](#-postgresql--globals--data_checksums)
 * [`timezone`](#-postgresql--globals--timezone)
+* [`password_encryption`](#-postgresql--globals--password_encryption)
 * [`manage_pg_hba_conf`](#-postgresql--globals--manage_pg_hba_conf)
 * [`manage_pg_ident_conf`](#-postgresql--globals--manage_pg_ident_conf)
 * [`manage_recovery_conf`](#-postgresql--globals--manage_recovery_conf)
@@ -581,6 +582,15 @@ Default value: `undef`
 Data type: `Optional[String[1]]`
 
 Sets the default timezone of the postgresql server. The postgresql built-in default is taking the systems timezone information.
+
+Default value: `undef`
+
+##### <a name="-postgresql--globals--password_encryption"></a>`password_encryption`
+
+Data type: `Optional[Postgresql::Pg_password_encryption]`
+
+Specify the type of encryption set for the password.
+Defaults to scram-sha-256 for PostgreSQL >= 14, otherwise md5.
 
 Default value: `undef`
 
