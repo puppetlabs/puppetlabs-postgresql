@@ -25,7 +25,7 @@ class postgresql::params inherits postgresql::globals {
   $manage_selinux               = pick($manage_selinux, false)
   $package_ensure               = 'present'
   $module_workdir               = pick($module_workdir,'/tmp')
-  $password_encryption          = versioncmp($version, '14') ? { -1 => 'md5', default => 'scram-sha-256' }
+  $password_encryption          = pick($password_encryption, versioncmp($version, '14') ? { -1 => 'md5', default => 'scram-sha-256' })
   $extra_systemd_config         = undef
   $manage_datadir               = true
   $manage_logdir                = true
