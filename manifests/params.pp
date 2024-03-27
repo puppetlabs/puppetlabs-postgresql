@@ -85,7 +85,6 @@ class postgresql::params inherits postgresql::globals {
         $postgresql_conf_mode   = pick($postgresql_conf_mode, '0600')
       }
 
-      $service_reload = "systemctl reload ${service_name}"
       $service_status = pick($service_status, "systemctl status ${service_name}")
 
       $psql_path           = pick($psql_path, "${bindir}/psql")
@@ -131,7 +130,6 @@ class postgresql::params inherits postgresql::globals {
       $psql_path              = pick($psql_path, "${bindir}/psql")
 
       $service_status         = pick($service_status, "systemctl status ${service_name}")
-      $service_reload         = "systemctl reload ${service_name}"
       $python_package_name    = pick($python_package_name, 'python-psycopg2')
       # Archlinux does not have a perl::DBD::Pg package
       $perl_package_name      = pick($perl_package_name, 'undef')
@@ -172,7 +170,6 @@ class postgresql::params inherits postgresql::globals {
       $bindir                 = pick($bindir, "/usr/lib/postgresql/${version}/bin")
       $datadir                = pick($datadir, "/var/lib/postgresql/${version}/main")
       $confdir                = pick($confdir, "/etc/postgresql/${version}/main")
-      $service_reload         = "systemctl reload ${service_name}"
       $service_status         = pick($service_status, "systemctl status ${service_name}")
       $psql_path              = pick($psql_path, '/usr/bin/psql')
       $postgresql_conf_mode   = pick($postgresql_conf_mode, '0644')
@@ -195,7 +192,6 @@ class postgresql::params inherits postgresql::globals {
       $datadir              = pick($datadir, "/var/lib/postgresql/${version}_data")
       $confdir              = pick($confdir, "/etc/postgresql-${version}")
       $service_status       = pick($service_status, "systemctl status ${service_name}")
-      $service_reload       = "systemctl reload ${service_name}"
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $needs_initdb         = pick($needs_initdb, true)
@@ -219,7 +215,6 @@ class postgresql::params inherits postgresql::globals {
       $bindir               = pick($bindir, '/usr/local/bin')
       $confdir              = pick($confdir, $datadir)
       $service_status       = pick($service_status, "/usr/local/etc/rc.d/${service_name} onestatus")
-      $service_reload       = "service ${service_name} reload"
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $needs_initdb         = pick($needs_initdb, true)
@@ -243,7 +238,6 @@ class postgresql::params inherits postgresql::globals {
       $datadir              = pick($datadir, '/var/postgresql/data')
       $confdir              = pick($confdir, $datadir)
       $service_status       = pick($service_status, "/etc/rc.d/${service_name} check")
-      $service_reload       = "/etc/rc.d/${service_name} reload"
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $needs_initdb         = pick($needs_initdb, true)
@@ -268,7 +262,6 @@ class postgresql::params inherits postgresql::globals {
       $datadir              = pick($datadir, '/var/lib/pgsql/data')
       $confdir              = pick($confdir, $datadir)
       $service_status       = pick($service_status, "systemctl status ${service_name}")
-      $service_reload       = "systemctl reload ${service_name}"
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
       $needs_initdb         = pick($needs_initdb, true)
@@ -304,4 +297,10 @@ class postgresql::params inherits postgresql::globals {
   $postgresql_conf_path = pick($postgresql_conf_path, "${confdir}/postgresql.conf")
   $recovery_conf_path   = pick($recovery_conf_path, "${datadir}/recovery.conf")
   $default_database     = pick($default_database, 'postgres')
+
+  $service_reload = if $facts['service_provider'] == 'systemd' {
+    "systemctl reload ${service_name}"
+  } else {
+    "rcctl reload ${service_name}"
+  }
 }
