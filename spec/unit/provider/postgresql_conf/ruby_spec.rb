@@ -7,13 +7,6 @@ describe provider_class do
   let(:resource) { Puppet::Type.type(:postgresql_conf).new(name: 'foo', value: 'bar') }
   let(:provider) { resource.provider }
 
-  before(:each) do
-    allow(provider).to receive(:file_path).and_return('/tmp/foo')
-    allow(provider).to receive(:read_file).and_return('foo = bar')
-    allow(provider).to receive(:write_file).and_return(true)
-  end
-  # rubocop:enable RSpec/ReceiveMessages
-
   it 'has a method parse_config' do
     expect(provider).to respond_to(:parse_config)
   end
