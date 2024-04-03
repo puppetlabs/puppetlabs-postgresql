@@ -66,6 +66,10 @@ define postgresql::server_instance (
     port => $config_settings['port'],
     user => $instance_user,
   }
+  postgresql::server::instance::reload { $instance_name:
+    service_status => $service_settings['service_status'],
+    service_reload => "systemctl reload ${service_settings['service_name']}.service",
+  }
   postgresql::server::instance::passwd { $instance_name:
     * => $passwd_settings,
   }
