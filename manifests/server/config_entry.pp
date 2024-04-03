@@ -5,6 +5,7 @@
 # @param value Defines the value for the setting.
 # @param path Path for postgresql.conf
 # @param comment Defines the comment for the setting. The # is added by default.
+# @param instance_name The name of the instance.
 #
 define postgresql::server::config_entry (
   Enum['present', 'absent']                               $ensure  = 'present',
