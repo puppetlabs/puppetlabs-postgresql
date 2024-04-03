@@ -88,11 +88,12 @@ define postgresql::server_instance (
     $value   = $settings['value']
     $comment = $settings['comment']
     postgresql::server::config_entry { "${entry}_${$instance_name}":
-      ensure  => bool2str($value =~ Undef, 'absent', 'present'),
-      key     => $entry,
-      value   => $value,
-      comment => $comment,
-      path    => $config_settings['postgresql_conf_path'],
+      ensure        => bool2str($value =~ Undef, 'absent', 'present'),
+      key           => $entry,
+      value         => $value,
+      comment       => $comment,
+      path          => $config_settings['postgresql_conf_path'],
+      instance_name => $instance_name,
     }
   }
   $pg_hba_rules.each |String[1] $rule_name, Postgresql::Pg_hba_rule $rule| {

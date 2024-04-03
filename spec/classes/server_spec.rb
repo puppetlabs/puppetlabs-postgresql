@@ -129,7 +129,7 @@ describe 'postgresql::server' do
     it { is_expected.to contain_class('postgresql::server') }
 
     it {
-      expect(subject).to contain_Postgresql_conf('data_directory_for_instance_main').that_notifies('Class[postgresql::server::service]')
+      expect(subject).to contain_Postgresql_conf('data_directory_for_instance_main').that_notifies('Postgresql::Server::Instance::Service[main]')
     }
 
     it { is_expected.to contain_postgresql__server__config_entry('data_directory_for_instance_main') }
