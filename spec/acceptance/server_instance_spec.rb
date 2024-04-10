@@ -3,7 +3,7 @@
 # run a test task
 require 'spec_helper_acceptance'
 
-describe 'postgresql instance test1', if: os[:family] == 'redhat' && os[:release].start_with?('8') do
+describe 'postgresql instance test1', if: os[:family] == 'redhat' && !os[:release].start_with?('7') do
   pp = <<-MANIFEST
   # set global defaults
   class { 'postgresql::globals':
