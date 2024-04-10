@@ -156,6 +156,6 @@ describe 'postgresql instance test1', if: os[:family] == 'redhat' && os[:release
 
   it 'installs postgres instance test1' do
     export_locales('en_US.UTF-8 ')
-    apply_manifest(pp, catch_failures: true)
+    idempotent_apply(pp)
   end
 end
