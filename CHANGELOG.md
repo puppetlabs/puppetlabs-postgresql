@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.2.0) - 2024-04-11
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.1.0...v10.2.0)
+
+### Added
+
+- Use modern APT keyrings on Debian family; require puppetlabs/apt 9.2 [#1563](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1563) ([kenyon](https://github.com/kenyon))
+- List Debian 12 as supported system [#1488](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1488) ([deric](https://github.com/deric))
+
+### Fixed
+
+- acceptance tests: ensure code is idempotent [#1589](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1589) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v10.1.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.1.0) - 2024-03-26
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.0.3...v10.1.0)
