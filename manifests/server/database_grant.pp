@@ -9,6 +9,7 @@
 # @param psql_group Overrides the default postgres user group to be used for related files in the file system.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param port Port to use when connecting.
+# @param instance The name of the Postgresql database instance.
 define postgresql::server::database_grant (
   Enum['ALL', 'CREATE', 'CONNECT', 'TEMPORARY', 'TEMP', 'all', 'create', 'connect', 'temporary', 'temp'] $privilege,
   String[1]                           $db,
@@ -19,6 +20,7 @@ define postgresql::server::database_grant (
   Hash $connect_settings = $postgresql::server::default_connect_settings,
   String[1] $psql_group = $postgresql::server::group,
   Stdlib::Port $port = $postgresql::server::port,
+  String[1] $instance = 'main',
 ) {
   postgresql::server::grant { "database:${name}":
     ensure           => $ensure,
@@ -32,5 +34,6 @@ define postgresql::server::database_grant (
     group            => $psql_group,
     port             => $port,
     connect_settings => $connect_settings,
+    instance         => $instance,
   }
 }

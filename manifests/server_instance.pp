@@ -113,10 +113,11 @@ define postgresql::server_instance (
   }
   $databases.each |$database, $database_details| {
     postgresql::server::database { $database:
-      *     => $database_details,
-      user  => $instance_user,
-      group => $instance_group,
-      port  => $config_settings['port'],
+      *        => $database_details,
+      user     => $instance_user,
+      group    => $instance_group,
+      port     => $config_settings['port'],
+      instance => $instance_name,
     }
   }
   $database_grants.each |$db_grant_title, $dbgrants| {
@@ -125,6 +126,7 @@ define postgresql::server_instance (
       psql_user  => $instance_user,
       psql_group => $instance_group,
       port       => $config_settings['port'],
+      instance   => $instance_name,
     }
   }
   $table_grants.each |$table_grant_title, $tgrants| {
@@ -132,6 +134,7 @@ define postgresql::server_instance (
       *         => $tgrants,
       psql_user => $instance_user,
       port      => $config_settings['port'],
+      instance  => $instance_name,
     }
   }
 }
