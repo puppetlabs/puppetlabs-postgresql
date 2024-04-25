@@ -32,8 +32,8 @@ define postgresql::server::instance::systemd (
             extra_systemd_config => $extra_systemd_config,
           }
         ),
-        notify  => Class['postgresql::server::service'],
-        before  => Class['postgresql::server::reload'],
+        notify  => Postgresql::Server::Instance::Service[$name],
+        before  => Postgresql::Server::Instance::Reload[$name],
       }
     }
   }

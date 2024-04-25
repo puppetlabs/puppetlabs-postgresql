@@ -44,6 +44,7 @@ define postgresql::server::db (
       port       => $port,
       user       => $psql_user,
       group      => $psql_group,
+      instance   => $instance,
     }
   }
 
@@ -54,6 +55,7 @@ define postgresql::server::db (
       psql_user     => $psql_user,
       psql_group    => $psql_group,
       before        => Postgresql::Server::Database[$dbname],
+      instance      => $instance,
     }
   }
 
@@ -65,6 +67,7 @@ define postgresql::server::db (
       port       => $port,
       psql_user  => $psql_user,
       psql_group => $psql_group,
+      instance   => $instance,
     } -> Postgresql_conn_validator<| db_name == $dbname |>
   }
 

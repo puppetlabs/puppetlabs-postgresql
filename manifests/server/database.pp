@@ -72,7 +72,7 @@ define postgresql::server::database (
   postgresql_psql { "CREATE DATABASE \"${dbname}\"":
     command => "CREATE DATABASE \"${dbname}\" WITH ${template_option} ${encoding_option} ${locale_option} ${tablespace_option}",
     unless  => "SELECT 1 FROM pg_database WHERE datname = '${dbname}'",
-    require => Class['postgresql::server::service'],
+    require => Postgresql::Server::Instance::Service[$instance],
   }
 
   # This will prevent users from connecting to the database unless they've been

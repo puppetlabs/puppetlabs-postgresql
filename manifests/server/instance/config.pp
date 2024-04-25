@@ -88,7 +88,7 @@ define postgresql::server::instance::config (
       group  => $group,
       mode   => '0640',
       warn   => true,
-      notify => Class['postgresql::server::reload'],
+      notify => Postgresql::Server::Instance::Reload[$name],
     }
 
     if $pg_hba_conf_defaults {
@@ -249,7 +249,7 @@ define postgresql::server::instance::config (
       group  => $group,
       mode   => '0640',
       warn   => true,
-      notify => Class['postgresql::server::reload'],
+      notify => Postgresql::Server::Instance::Reload[$name],
     }
   }
 
