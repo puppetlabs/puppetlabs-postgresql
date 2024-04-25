@@ -12,6 +12,7 @@
 # @param psql_user Specifies the OS user for running psql.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param onlyif_exists Create grant only if it doesn't exist.
+# @param instance The name of the Postgresql database instance.
 define postgresql::server::table_grant (
   Enum['ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'all', 'select', 'insert', 'update', 'delete',
   'truncate', 'references', 'trigger'] $privilege,
@@ -24,6 +25,7 @@ define postgresql::server::table_grant (
   Optional[String[1]]                                 $psql_user        = undef,
   Optional[Hash]                                      $connect_settings = undef,
   Boolean                                             $onlyif_exists    = false,
+  String[1]                                           $instance         = 'main',
 ) {
   postgresql::server::grant { "table:${name}":
     ensure           => $ensure,
@@ -37,5 +39,6 @@ define postgresql::server::table_grant (
     psql_user        => $psql_user,
     onlyif_exists    => $onlyif_exists,
     connect_settings => $connect_settings,
+    instance         => $instance,
   }
 }

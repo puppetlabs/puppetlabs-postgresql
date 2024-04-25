@@ -11,6 +11,6 @@ define postgresql::server::instance::reload (
     command     => $service_reload,
     onlyif      => $service_status,
     refreshonly => true,
-    require     => Class['postgresql::server::service'],
+    require     => Postgresql::Server::Instance::Service[$name],
   }
 }

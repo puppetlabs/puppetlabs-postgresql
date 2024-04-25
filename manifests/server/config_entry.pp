@@ -5,6 +5,7 @@
 # @param value Defines the value for the setting.
 # @param path Path for postgresql.conf
 # @param comment Defines the comment for the setting. The # is added by default.
+# @param instance_name The name of the instance.
 #
 define postgresql::server::config_entry (
   Enum['present', 'absent']                               $ensure  = 'present',
@@ -12,6 +13,7 @@ define postgresql::server::config_entry (
   Optional[Variant[String[1], Numeric, Array[String[1]]]] $value   = undef,
   Stdlib::Absolutepath                                    $path    = $postgresql::server::postgresql_conf_path,
   Optional[String[1]]                                     $comment = undef,
+  String[1]                                               $instance_name = 'main',
 ) {
   # Those are the variables that are marked as "(change requires restart)"
   # on postgresql.conf.  Items are ordered as on postgresql.conf.
@@ -72,15 +74,15 @@ define postgresql::server::config_entry (
       versioncmp($postgresql::server::_version, $requires_restart_until[$key]) < 0
   )) {
     Postgresql_conf {
-      notify => Class['postgresql::server::reload'],
+      notify => Postgresql::Server::Instance::Reload[$instance_name],
     }
   } elsif $postgresql::server::service_restart_on_change {
     Postgresql_conf {
-      notify => Class['postgresql::server::service'],
+      notify => Postgresql::Server::Instance::Service[$instance_name],
     }
   } else {
     Postgresql_conf {
-      before => Class['postgresql::server::service'],
+      before => Postgresql::Server::Instance::Service[$instance_name],
     }
   }
 
@@ -90,6 +92,6 @@ define postgresql::server::config_entry (
     key     => $key,
     value   => $value,
     comment => $comment,
-    require => Class['postgresql::server::initdb'],
+    require => Postgresql::Server::Instance::Initdb[$instance_name],
   }
 }

@@ -66,6 +66,10 @@ define postgresql::server_instance (
     port => $config_settings['port'],
     user => $instance_user,
   }
+  postgresql::server::instance::reload { $instance_name:
+    service_status => $service_settings['service_status'],
+    service_reload => "systemctl reload ${service_settings['service_name']}.service",
+  }
   postgresql::server::instance::passwd { $instance_name:
     * => $passwd_settings,
   }
@@ -84,11 +88,12 @@ define postgresql::server_instance (
     $value   = $settings['value']
     $comment = $settings['comment']
     postgresql::server::config_entry { "${entry}_${$instance_name}":
-      ensure  => bool2str($value =~ Undef, 'absent', 'present'),
-      key     => $entry,
-      value   => $value,
-      comment => $comment,
-      path    => $config_settings['postgresql_conf_path'],
+      ensure        => bool2str($value =~ Undef, 'absent', 'present'),
+      key           => $entry,
+      value         => $value,
+      comment       => $comment,
+      path          => $config_settings['postgresql_conf_path'],
+      instance_name => $instance_name,
     }
   }
   $pg_hba_rules.each |String[1] $rule_name, Postgresql::Pg_hba_rule $rule| {
@@ -108,10 +113,11 @@ define postgresql::server_instance (
   }
   $databases.each |$database, $database_details| {
     postgresql::server::database { $database:
-      *     => $database_details,
-      user  => $instance_user,
-      group => $instance_group,
-      port  => $config_settings['port'],
+      *        => $database_details,
+      user     => $instance_user,
+      group    => $instance_group,
+      port     => $config_settings['port'],
+      instance => $instance_name,
     }
   }
   $database_grants.each |$db_grant_title, $dbgrants| {
@@ -120,6 +126,7 @@ define postgresql::server_instance (
       psql_user  => $instance_user,
       psql_group => $instance_group,
       port       => $config_settings['port'],
+      instance   => $instance_name,
     }
   }
   $table_grants.each |$table_grant_title, $tgrants| {
@@ -127,6 +134,7 @@ define postgresql::server_instance (
       *         => $tgrants,
       psql_user => $instance_user,
       port      => $config_settings['port'],
+      instance  => $instance_name,
     }
   }
 }

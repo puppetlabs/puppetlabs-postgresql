@@ -76,7 +76,7 @@ describe 'postgresql::server::config_entry' do
       expect(subject).to contain_postgresql_conf('unix_socket_directories')
         .with(name: 'unix_socket_directories',
               value: '/var/pgsql, /opt/postgresql, /root/')
-        .that_notifies('Class[postgresql::server::service]')
+        .that_notifies('Postgresql::Server::Instance::Service[main]')
     end
   end
 end
