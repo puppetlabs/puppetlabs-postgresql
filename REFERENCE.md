@@ -1546,6 +1546,7 @@ The following parameters are available in the `postgresql::server::config_entry`
 * [`value`](#-postgresql--server--config_entry--value)
 * [`path`](#-postgresql--server--config_entry--path)
 * [`comment`](#-postgresql--server--config_entry--comment)
+* [`instance_name`](#-postgresql--server--config_entry--instance_name)
 
 ##### <a name="-postgresql--server--config_entry--ensure"></a>`ensure`
 
@@ -1586,6 +1587,14 @@ Data type: `Optional[String[1]]`
 Defines the comment for the setting. The # is added by default.
 
 Default value: `undef`
+
+##### <a name="-postgresql--server--config_entry--instance_name"></a>`instance_name`
+
+Data type: `String[1]`
+
+The name of the instance.
+
+Default value: `'main'`
 
 ### <a name="postgresql--server--database"></a>`postgresql::server::database`
 
@@ -1748,6 +1757,7 @@ The following parameters are available in the `postgresql::server::database_gran
 * [`psql_group`](#-postgresql--server--database_grant--psql_group)
 * [`connect_settings`](#-postgresql--server--database_grant--connect_settings)
 * [`port`](#-postgresql--server--database_grant--port)
+* [`instance`](#-postgresql--server--database_grant--instance)
 
 ##### <a name="-postgresql--server--database_grant--privilege"></a>`privilege`
 
@@ -1814,6 +1824,14 @@ Data type: `Stdlib::Port`
 Port to use when connecting.
 
 Default value: `$postgresql::server::port`
+
+##### <a name="-postgresql--server--database_grant--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
 
 ### <a name="postgresql--server--db"></a>`postgresql::server::db`
 
@@ -3970,6 +3988,7 @@ The following parameters are available in the `postgresql::server::table_grant` 
 * [`psql_user`](#-postgresql--server--table_grant--psql_user)
 * [`connect_settings`](#-postgresql--server--table_grant--connect_settings)
 * [`onlyif_exists`](#-postgresql--server--table_grant--onlyif_exists)
+* [`instance`](#-postgresql--server--table_grant--instance)
 
 ##### <a name="-postgresql--server--table_grant--privilege"></a>`privilege`
 
@@ -4048,6 +4067,14 @@ Data type: `Boolean`
 Create grant only if it doesn't exist.
 
 Default value: `false`
+
+##### <a name="-postgresql--server--table_grant--instance"></a>`instance`
+
+Data type: `String[1]`
+
+The name of the Postgresql database instance.
+
+Default value: `'main'`
 
 ### <a name="postgresql--server--tablespace"></a>`postgresql::server::tablespace`
 

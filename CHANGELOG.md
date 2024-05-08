@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.3.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.3.0) - 2024-05-08
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.2.0...v10.3.0)
+
+### Added
+
+- allow puppet-systemd version 7 [#1595](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1595) ([TheMeier](https://github.com/TheMeier))
+
+### Fixed
+
+- Fix instance reload [#1588](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1588) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+
 ## [v10.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.2.0) - 2024-04-11
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.1.0...v10.2.0)
@@ -65,6 +77,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.2.0...v10.0.0)
 
 ### Changed
+
 - postgis: Drop EL5 leftovers and fix package name for Fedora [#1521](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1521) ([bastelfreak](https://github.com/bastelfreak))
 - Drop EoL SLES 11.4 code [#1520](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1520) ([bastelfreak](https://github.com/bastelfreak))
 - Drop code for Debian without systemd [#1514](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1514) ([bastelfreak](https://github.com/bastelfreak))
@@ -165,6 +178,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v8.3.0...v9.0.0)
 
 ### Changed
+
 - (CONT-792) - Add Puppet 8/Drop Puppet 6 [#1414](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1414) ([jordanbreen28](https://github.com/jordanbreen28))
 
 ## [v8.3.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v8.3.0) - 2023-04-21
@@ -244,6 +258,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v7.5.0...v8.0.0)
 
 ### Changed
+
 - Support setting default_privileges on all schemas [#1298](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1298) ([fish-face](https://github.com/fish-face))
 
 ### Added
@@ -251,7 +266,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - add default version for Fedora 35 [#1317](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1317) ([jflorian](https://github.com/jflorian))
 - add scram-sha-256 support [#1313](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1313) ([fe80](https://github.com/fe80))
 - add support for Ubuntu Hirsute and Impish [#1312](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1312) ([nicholascioli](https://github.com/nicholascioli))
-- Allow systemd to mask postgresql service file [#1310](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1310) ([kim-sondrup](https://github.com/kim-sondrup))
+- Allow systemd to mask postgresql service file [#1310](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1310) ([kimsondrup](https://github.com/kimsondrup))
 - Make ::contrib a noop on OSes without a contrib package [#1309](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1309) ([carlosduelo](https://github.com/carlosduelo))
 - pdksync - (IAC-1753) - Add Support for AlmaLinux 8 [#1308](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1308) ([david22swan](https://github.com/david22swan))
 - MODULES-11201: add service_name for Ubuntu 18.04 and later [#1306](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1306) ([moritz-makandra](https://github.com/moritz-makandra))
@@ -354,6 +369,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v6.10.2...v7.0.0)
 
 ### Changed
+
 - pdksync - (MAINT) Remove SLES 11 support [#1247](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1247) ([sanfrancrisko](https://github.com/sanfrancrisko))
 - pdksync - (MAINT) Remove RHEL 5 family support [#1246](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1246) ([sanfrancrisko](https://github.com/sanfrancrisko))
 - pdksync - Remove Puppet 5 from testing and bump minimal version to 6.0.0 [#1238](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1238) ([carabasdaniel](https://github.com/carabasdaniel))
@@ -520,6 +536,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.12.1...v6.0.0)
 
 ### Changed
+
 - pdksync - (MODULES-8444) - Raise lower Puppet bound [#1070](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1070) ([david22swan](https://github.com/david22swan))
 - (maint) remove inconsistent extra variable [#1044](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1044) ([binford2k](https://github.com/binford2k))
 
@@ -618,6 +635,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/5.4.0...5.5.0)
 
 ### Changed
+
 - Fix creation of recovery.conf file when recovery configuration is not specified [#995](https://github.com/puppetlabs/puppetlabs-postgresql/pull/995) ([cdloh](https://github.com/cdloh))
 
 ### Added
@@ -703,6 +721,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/4.9.0...5.0.0)
 
 ### Changed
+
 - Unset default log_line_prefix [#870](https://github.com/puppetlabs/puppetlabs-postgresql/pull/870) ([hasegeli](https://github.com/hasegeli))
 - Let listen_addresses be defined independently [#865](https://github.com/puppetlabs/puppetlabs-postgresql/pull/865) ([hasegeli](https://github.com/hasegeli))
 
