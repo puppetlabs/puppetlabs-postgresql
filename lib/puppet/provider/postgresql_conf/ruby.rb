@@ -19,8 +19,7 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
     active_settings = []
     # iterate the file and construct a hash for every matching/active setting
     # the hash is pushed to the array and the array is returned
-    File.foreach(resource[:target]).with_index do |line, index|
-      line_number = index + 1
+    File.foreach(resource[:target]).with_index(1) do |line, line_number|
       matches = line.match(active_values_regex)
       if matches
         value = if matches[:value].to_i.to_s == matches[:value]
