@@ -36,7 +36,7 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
         active_settings.push(attributes_hash)
       end
     end
-    Puppet.debug("DEBUG: parse_config Active Settings found in Postgreql config file: #{active_settings}")
+    Puppet.debug("DEBUG: parse_config Active Settings found in PostgreSQL config file: #{active_settings}")
     active_settings
   end
 
