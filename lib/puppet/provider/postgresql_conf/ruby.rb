@@ -13,16 +13,13 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
   # The function parses the postgresql.conf and figures out which active settings exist in a config file and returns an array of hashes
   #
   def parse_config
-    # open the config file
-    file = File.open(resource[:target])
     # regex to match active keys, values and comments
     active_values_regex = %r{^\s*(?<key>[\w.]+)\s*=?\s*(?<value>.*?)(?:\s*#\s*(?<comment>.*))?\s*$}
     # empty array to be filled with hashes
     active_settings = []
     # iterate the file and construct a hash for every matching/active setting
     # the hash is pushed to the array and the array is returned
-    File.foreach(file).with_index do |line, index|
-      line_number = index + 1
+    File.foreach(resource[:target]).with_index(1) do |line, line_number|
       matches = line.match(active_values_regex)
       if matches
         value = if matches[:value].to_i.to_s == matches[:value]
@@ -36,7 +33,7 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
         active_settings.push(attributes_hash)
       end
     end
-    Puppet.debug("DEBUG: parse_config Active Settings found in Postgreql config file: #{active_settings}")
+    Puppet.debug("DEBUG: parse_config Active Settings found in PostgreSQL config file: #{active_settings}")
     active_settings
   end
 
@@ -63,12 +60,11 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
 
   # This function writes the config file, it removes the old header, adds a new one and writes the file
   #
-  # @param [File] the file object of the postgresql configuration file
   # @param [Array] lines of the parsed postgresql configuration file
-  def write_config(file, lines)
+  def write_config(lines)
     lines = delete_header(lines)
     lines = add_header(lines)
-    File.write(file, lines.join)
+    File.write(resource[:target], lines.join)
   end
 
   # check, if resource exists in postgresql.conf file
@@ -85,23 +81,21 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
   # remove resource if exists and is set to absent
   def destroy
     entry_regex = %r{#{resource[:key]}.*=.*#{resource[:value]}}
-    file = File.open(resource[:target])
-    lines = File.readlines(file)
+    lines = File.readlines(resource[:target])
 
     lines.delete_if do |entry|
       entry.match?(entry_regex)
     end
-    write_config(file, lines)
+    write_config(lines)
   end
 
   # create resource if it does not exists
   def create
-    file = File.open(resource[:target])
-    lines = File.readlines(file)
+    lines = File.readlines(resource[:target])
     new_line = line(key: resource[:key], value: resource[:value], comment: resource[:comment])
 
     lines.push(new_line)
-    write_config(file, lines)
+    write_config(lines)
   end
 
   # getter - get value of a resource
@@ -116,8 +110,7 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
 
   # setter - set value of a resource
   def value=(_value)
-    file = File.open(resource[:target])
-    lines = File.readlines(file)
+    lines = File.readlines(resource[:target])
     active_values_regex = %r{^\s*(?<key>[\w.]+)\s*=?\s*(?<value>.*?)(?:\s*#\s*(?<comment>.*))?\s*$}
     new_line = line(key: resource[:key], value: resource[:value], comment: resource[:comment])
 
@@ -125,13 +118,12 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
       matches = line.to_s.match(active_values_regex)
       lines[index] = new_line if matches && (matches[:key] == resource[:key] && matches[:value] != resource[:value])
     end
-    write_config(file, lines)
+    write_config(lines)
   end
 
   # setter - set comment of a resource
   def comment=(_comment)
-    file = File.open(resource[:target])
-    lines = File.readlines(file)
+    lines = File.readlines(resource[:target])
     active_values_regex = %r{^\s*(?<key>[\w.]+)\s*=?\s*(?<value>.*?)(?:\s*#\s*(?<comment>.*))?\s*$}
     new_line = line(key: resource[:key], value: resource[:value], comment: resource[:comment])
 
@@ -139,7 +131,7 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
       matches = line.to_s.match(active_values_regex)
       lines[index] = new_line if matches && (matches[:key] == resource[:key] && matches[:comment] != resource[:comment])
     end
-    write_config(file, lines)
+    write_config(lines)
   end
 
   private
