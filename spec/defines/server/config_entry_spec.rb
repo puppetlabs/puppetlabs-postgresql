@@ -79,4 +79,13 @@ describe 'postgresql::server::config_entry' do
         .that_notifies('Postgresql::Server::Instance::Service[main]')
     end
   end
+
+  context 'set a config entry value to the empty string' do
+    let(:params) { { ensure: 'present', name: 'mydatabase.app_specific_parameter', value: '' } }
+
+    it 'sets value to the empty string' do
+      expect(subject).to contain_postgresql_conf('mydatabase.app_specific_parameter').with(name: 'mydatabase.app_specific_parameter',
+                                                                                           value: '')
+    end
+  end
 end
