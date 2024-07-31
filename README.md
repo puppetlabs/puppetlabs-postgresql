@@ -95,7 +95,7 @@ creating a new instance has the following advantages:
 * main instance can be disabled
 
 
-Here is a profile which can be used to create instaces
+Here is a profile which can be used to create instances
 
 ```puppet
 class profiles::postgres (
