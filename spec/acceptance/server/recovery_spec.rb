@@ -5,11 +5,11 @@ require 'spec_helper_acceptance'
 describe 'postgresql::server::recovery', skip: 'IAC-1286' do
   describe 'should manage recovery' do
     before(:all) do
-      pre_run
+      LitmusHelper.instance.apply_manifest("class { 'postgresql::server': postgres_password => 'postgres' }", catch_failures: true)
     end
 
     after(:all) do
-      pp = <<-MANIFEST.unindent
+      pp = <<~MANIFEST
         file { '/tmp/recovery.conf':
           ensure => absent,
         }
@@ -18,7 +18,7 @@ describe 'postgresql::server::recovery', skip: 'IAC-1286' do
       apply_manifest(pp, catch_failures: true)
     end
 
-    pp = <<-MANIFEST.unindent
+    pp = <<~MANIFEST
       class { 'postgresql::globals':
         recovery_conf_path => '/tmp/recovery.conf',
         manage_recovery_conf => true,
@@ -45,7 +45,7 @@ describe 'postgresql::server::recovery', skip: 'IAC-1286' do
 
   describe 'should not create recovery if recovery config not specified' do
     it 'does not add conf file' do
-      pp = <<-EOS.unindent
+      pp = <<~EOS
         class { 'postgresql::globals':
           recovery_conf_path => '/tmp/recovery.conf',
           manage_recovery_conf => true,
