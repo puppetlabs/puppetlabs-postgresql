@@ -40,6 +40,9 @@ describe 'postgresql::server' do
 
   it 'with additional hiera entries' do
     idempotent_apply(pp)
+    puts '-------------- overridden_settings_spec.rb -----------------'
+    puts LitmusHelper.instance.run_shell('ss -lntp').stdout
+    puts '-------------------------------'
     expect(port(5432)).to be_listening
     expect(psql('--command="\l" postgres', 'postgres').stdout).to match(%r{List of databases})
     expect(run_shell('PGPASSWORD=supersecret psql -U testusername -h localhost --command="\l"').stdout).to match 'List of databases'
