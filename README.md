@@ -78,10 +78,10 @@ For more details about server configuration parameters, consult the [PostgreSQL 
 
 This module supports managing multiple instances (the default instance is referred to as 'main' and managed via including the server.pp class)
 
-**NOTE:** This feature is currently tested on Centos 8 Streams/RHEL8 with DNF Modules enabled. Different Linux plattforms and/or the Postgresql.org
-packages distribute different Systemd service files or use  wrapper scripts with Systemd to start Postgres. Additional adjustmentments are needed to get this working on these plattforms.
+**NOTE:** This feature is currently tested on CentOS 8 Streams/RHEL8 with DNF Modules enabled. Different Linux platforms and/or the postgresql.org
+packages distribute different systemd service files or use wrapper scripts with systemd to start PostgreSQL. Additional adjustmentments are needed to get this working on these platforms.
 
-#### Working Plattforms
+#### Working Platforms
 
 * Centos 8 Streams
 * RHEL 8
