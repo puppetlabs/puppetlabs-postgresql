@@ -74,6 +74,42 @@ If you get an error message from these commands, your permission settings restri
 
 For more details about server configuration parameters, consult the [PostgreSQL Runtime Configuration documentation](http://www.postgresql.org/docs/current/static/runtime-config.html).
 
+#### Selecting a version
+
+The version is intended to be supplied via `postgresql::globals`.
+By default the module tries to derive the version based on the OS facts, but can be overridden.
+This is typically used with the official postgresql.org packages:
+
+```puppet
+class { 'postgresql::globals':
+  manage_package_repo => true,
+  version             => '16',
+}
+
+include postgresql::server
+```
+
+On EL 8 & 9 you can also use DNF modules:
+
+```puppet
+class { 'postgresql::globals':
+  manage_dnf_module => true,
+  version           => '16',
+}
+
+include postgresql::server
+```
+
+If you manage the repositories yourself, overriding the version is sufficient.
+
+```puppet
+class { 'postgresql::globals':
+  version => '16',
+}
+
+include postgresql::server
+```
+
 ### Configure an instance
 
 This module supports managing multiple instances (the default instance is referred to as 'main' and managed via including the server.pp class)
@@ -335,18 +371,6 @@ For example, to overwrite the default `locale` and `encoding` for all classes, u
 class { 'postgresql::globals':
   encoding => 'UTF-8',
   locale   => 'en_US.UTF-8',
-}
-
-class { 'postgresql::server':
-}
-```
-
-To use a specific version of the PostgreSQL package:
-
-```puppet
-class { 'postgresql::globals':
-  manage_package_repo => true,
-  version             => '9.2',
 }
 
 class { 'postgresql::server':
