@@ -4,7 +4,7 @@ require 'spec_helper_acceptance'
 
 describe 'postgresql::server::schema:' do
   let(:pp) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       $db = 'schema_test'
       $user = 'psql_schema_tester'
       $password = 'psql_schema_pw'

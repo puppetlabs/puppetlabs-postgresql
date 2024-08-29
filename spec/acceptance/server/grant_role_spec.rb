@@ -8,7 +8,7 @@ describe 'postgresql::server::grant_role:' do
   let(:group) { 'test_group' }
   let(:password) { 'psql_grant_role_pw' }
   let(:pp_one) do
-    <<-MANIFEST.unindent
+    <<~MANIFEST
       $db = #{db}
       $user = #{user}
       $group = #{group}
