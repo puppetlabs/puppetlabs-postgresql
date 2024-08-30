@@ -24,7 +24,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
     required_param 'Variant[String[1], Integer]', :username
     required_param 'Variant[String[1], Sensitive[String[1]], Integer]', :password
     optional_param 'Boolean', :sensitive
-    optional_param 'Optional[Postgresql::Pg_password_encryption]', :hash
+    optional_param 'Optional[Enum["md5", "scram-sha-256"]]', :hash
     optional_param 'Optional[Variant[String[1], Integer]]', :salt
     return_type 'Variant[String, Sensitive[String]]'
   end
