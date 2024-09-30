@@ -12,10 +12,98 @@ jobs:
     with:
       runs_on: "ubuntu-20.04"
     secrets: "inherit"
+  setup_matrix:
+    name: "Setup Test Matrix"
+    runs-on: "ubuntu-20.04"
+    outputs:
+      acceptance_matrix: ${{ steps.get-matrix.outputs.matrix }}
 
-  Acceptance:
-    needs: Spec
-    uses: "puppetlabs/cat-github-actions/.github/workflows/module_acceptance.yml@main"
-    with:
-      runs_on: "ubuntu-20.04"
-    secrets: "inherit"
+    env:
+      BUNDLE_WITHOUT: release_prep
+
+    steps:
+
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+      - name: "Setup ruby"
+        uses: "ruby/setup-ruby@v1"
+        with:
+          ruby-version: "2.7"
+          bundler-cache: true
+
+      - name: "Bundle environment"
+        run: |
+          echo ::group::bundler environment
+          bundle env
+          echo ::endgroup::
+
+      - name: Setup Test Matrix
+        id: get-matrix
+        run: |
+          bundle exec matrix_from_metadata_v2
+
+  acceptance:
+    name: "Acceptance tests (${{matrix.platforms.label}}, ${{matrix.collection}})"
+    needs: "setup_matrix"
+    runs-on: "ubuntu-20.04"
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson( needs.setup_matrix.outputs.acceptance_matrix ) }}
+
+    env:
+      BUNDLE_WITHOUT: release_prep
+      PUPPET_GEM_VERSION: '~> 7.24'
+      FACTER_GEM_VERSION: 'https://github.com/puppetlabs/facter#main'  # why is this set?
+      SERVICE_URL: "https://facade-bug-enable-ut8-debian-6f3kfepqcq-ew.a.run.app/v1/provision"
+
+    steps:
+
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+
+      - name: "Setup ruby"
+        uses: "ruby/setup-ruby@v1"
+        with:
+          ruby-version: "2.7"
+          bundler-cache: true
+
+      - name: "Bundle environment"
+        run: |
+          echo ::group::bundler environment
+          bundle env
+          echo ::endgroup::
+
+      - name: "Provision environment"
+        run: |
+          if [[ "true" == "true" ]] && [[ "${{matrix.platforms.provider}}" =~ docker* ]] ; then
+            DOCKER_RUN_OPTS="docker_run_opts: {'--volume': '/lib/modules/$(uname -r):/lib/modules/$(uname -r)'}"
+          else
+            DOCKER_RUN_OPTS=''
+          fi
+          bundle exec rake "litmus:provision[${{matrix.platforms.provider}},${{ matrix.platforms.image }},$DOCKER_RUN_OPTS]"
+          # Redact password
+          FILE='spec/fixtures/litmus_inventory.yaml'
+          sed -e 's/password: .*/password: "[redacted]"/' < $FILE || true
+
+      - name: "Install Puppet agent"
+        run: |
+          bundle exec rake 'litmus:install_agent[${{ matrix.collection }}]'
+
+      - name: "Install module"
+        run: |
+          bundle exec rake 'litmus:install_module'
+
+      - name: "Run acceptance tests"
+        run: |
+          bundle exec rake 'litmus:acceptance:parallel'
+
+      - name: "Remove test environment"
+        if: ${{ always() }}
+        continue-on-error: true
+        run: |
+          if [[ -f spec/fixtures/litmus_inventory.yaml ]]; then
+            bundle exec rake 'litmus:tear_down'
+          fi
