@@ -2,7 +2,7 @@
 
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server', skip: 'IAC-1286' do
+describe 'postgresql::server' do
   let(:pp) do
     <<-MANIFEST
       class { 'postgresql::globals':
