@@ -7,6 +7,7 @@
 # @param psql_user Sets the OS user to run psql.
 # @param port Port to use when connecting.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
+# @param with_admin_option Specifies if the role should be granted with admin option.
 define postgresql::server::grant_role (
   String[1] $group,
   String[1] $role                   = $name,
@@ -15,10 +16,12 @@ define postgresql::server::grant_role (
   $psql_user                        = $postgresql::server::user,
   $port                             = $postgresql::server::port,
   $connect_settings                 = $postgresql::server::default_connect_settings,
+  $with_admin_option                = false,
 ) {
   case $ensure {
     'present': {
-      $command = "GRANT \"${group}\" TO \"${role}\""
+      $with_admin_option_sql = $with_admin_option ? { true => 'WITH ADMIN OPTION', default => '' }
+      $command = "GRANT \"${group}\" TO \"${role}\" ${with_admin_option_sql}"
       $unless_comp = '='
     }
     'absent': {
