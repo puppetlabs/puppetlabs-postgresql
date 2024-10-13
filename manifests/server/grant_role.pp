@@ -17,10 +17,12 @@ define postgresql::server::grant_role (
   String[1]                                 $psql_user        = $postgresql::server::user,
   Stdlib::Port                              $port             = $postgresql::server::port,
   Hash                                      $connect_settings = $postgresql::server::default_connect_settings,
+  $with_admin_option                = false,
 ) {
   case $ensure {
     'present': {
-      $command = "GRANT \"${group}\" TO \"${role}\""
+      $with_admin_option_sql = $with_admin_option ? { true => 'WITH ADMIN OPTION', default => '' }
+      $command = "GRANT \"${group}\" TO \"${role}\" ${with_admin_option_sql}"
       $unless_comp = '='
     }
     'absent': {
