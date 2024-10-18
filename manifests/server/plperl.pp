@@ -16,5 +16,5 @@ class postgresql::server::plperl (
   -> Class['postgresql::server::install']
   -> Package['postgresql-plperl']
   -> Class['postgresql::server::service']
-  anchor { 'postgresql::server::plperl::end': }
+  -> anchor { 'postgresql::server::plperl::end': }
 }
