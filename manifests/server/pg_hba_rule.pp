@@ -30,7 +30,7 @@ define postgresql::server::pg_hba_rule (
   String[1] $auth_method,
   Optional[Postgresql::Pg_hba_rule_address] $address = undef,
   String[1] $description          = 'none',
-  Optional[String] $auth_option   = undef,
+  Optional[Variant[Sensitive[String], String]] $auth_option = undef,
   Variant[String, Integer] $order = 150,
   Stdlib::Absolutepath $target  = $postgresql::server::pg_hba_conf_path,
   String $postgresql_version    = $postgresql::server::_version
