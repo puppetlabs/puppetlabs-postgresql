@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.4.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.4.0) - 2024-11-25
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.3.0...v10.4.0)
+
+### Added
+
+- added default version for fedora 40 and 41 [#1621](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1621) ([lweller](https://github.com/lweller))
+- (CAT-2124) Add support for Ubuntu 24 [#1619](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1619) ([skyamgarp](https://github.com/skyamgarp))
+- Add EL9 support [#1591](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1591) ([bastelfreak](https://github.com/bastelfreak))
+
+### Fixed
+
+- Avoid opening the file in postgresql_conf [#1599](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1599) ([ekohl](https://github.com/ekohl))
+
+### Other
+
+- Document how to select a version as its own chapter [#1610](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1610) ([ekohl](https://github.com/ekohl))
+- Fix typo in README: instaces -> instances [#1607](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1607) ([ekohl](https://github.com/ekohl))
+
 ## [v10.3.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.3.0) - 2024-05-08
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.2.0...v10.3.0)
@@ -267,7 +286,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - add scram-sha-256 support [#1313](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1313) ([fe80](https://github.com/fe80))
 - add support for Ubuntu Hirsute and Impish [#1312](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1312) ([nicholascioli](https://github.com/nicholascioli))
 - Allow systemd to mask postgresql service file [#1310](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1310) ([kimsondrup](https://github.com/kimsondrup))
-- Make ::contrib a noop on OSes without a contrib package [#1309](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1309) ([carlosduelo](https://github.com/carlosduelo))
+- Make ::contrib a noop on OSes without a contrib package [#1309](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1309) ([cduelo](https://github.com/cduelo))
 - pdksync - (IAC-1753) - Add Support for AlmaLinux 8 [#1308](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1308) ([david22swan](https://github.com/david22swan))
 - MODULES-11201: add service_name for Ubuntu 18.04 and later [#1306](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1306) ([moritz-makandra](https://github.com/moritz-makandra))
 - pdksync - (IAC-1751) - Add Support for Rocky 8 [#1305](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1305) ([david22swan](https://github.com/david22swan))
