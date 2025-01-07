@@ -73,7 +73,9 @@ describe 'postgresql::server_instance' do
                  'app_test1': { 'login' => true },
                  'rep_test1': { 'replication' => true,
                                 'login' => true },
-                 'rou_test1': { 'login' => true }, },
+                 'rou_test1': { 'login' => true },
+                 'val_test1': { 'login' => true,
+                                'valid_until' => '2030-01-01 00:00:00+00' }, },
       'pg_hba_rules': { 'local all INSTANCE user': { 'type' => 'local',
                                                      'database' => 'all',
                                                      'user' => 'ins_test1',
@@ -214,10 +216,19 @@ describe 'postgresql::server_instance' do
     it { is_expected.to contain_postgresql_psql('ALTER ROLE "rou_test1" NOCREATEROLE') }
     it { is_expected.to contain_postgresql_psql('ALTER ROLE "rou_test1" NOREPLICATION') }
     it { is_expected.to contain_postgresql_psql('ALTER ROLE "rou_test1" NOSUPERUSER') }
+    it { is_expected.to contain_postgresql_psql('ALTER ROLE "val_test1" CONNECTION LIMIT -1') }
+    it { is_expected.to contain_postgresql_psql('ALTER ROLE "val_test1" INHERIT') }
+    it { is_expected.to contain_postgresql_psql('ALTER ROLE "val_test1" LOGIN') }
+    it { is_expected.to contain_postgresql_psql('ALTER ROLE "val_test1" NOCREATEDB') }
+    it { is_expected.to contain_postgresql_psql('ALTER ROLE "val_test1" NOCREATEROLE') }
+    it { is_expected.to contain_postgresql_psql('ALTER ROLE "val_test1" NOREPLICATION') }
+    it { is_expected.to contain_postgresql_psql('ALTER ROLE "val_test1" NOSUPERUSER') }
+    it { is_expected.to contain_postgresql_psql('ALTER ROLE "val_test1" VALID UNTIL \'2030-01-01 00:00:00+00\'') }
     it { is_expected.to contain_postgresql_psql('CREATE ROLE app_test1 ENCRYPTED PASSWORD ****') }
     it { is_expected.to contain_postgresql_psql('CREATE ROLE dba_test1 ENCRYPTED PASSWORD ****') }
     it { is_expected.to contain_postgresql_psql('CREATE ROLE ins_test1 ENCRYPTED PASSWORD ****') }
     it { is_expected.to contain_postgresql_psql('CREATE ROLE rep_test1 ENCRYPTED PASSWORD ****') }
     it { is_expected.to contain_postgresql_psql('CREATE ROLE rou_test1 ENCRYPTED PASSWORD ****') }
+    it { is_expected.to contain_postgresql_psql('CREATE ROLE val_test1 ENCRYPTED PASSWORD ****') }
   end
 end

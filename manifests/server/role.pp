@@ -11,6 +11,7 @@
 # @param inherit Specifies whether to grant inherit capability for the new role.
 # @param superuser Specifies whether to grant super user capability for the new role.
 # @param replication Provides provides replication capabilities for this role if set to true.
+# @param valid_until Specifies whether to set a valid until date for the role.
 # @param connection_limit Specifies how many concurrent connections the role can make. Default value: '-1', meaning no limit.
 # @param username Defines the username of the role to create.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
