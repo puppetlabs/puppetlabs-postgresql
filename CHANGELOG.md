@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v10.4.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.4.0) - 2024-11-25
+## [v10.5.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.5.0) - 2025-01-07
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.4.0...v10.5.0)
+
+### Added
+
+- puppet/systemd: allow 8.x [#1627](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1627) ([evgeni](https://github.com/evgeni))
+- puppetlabs/apt: allow 10.x [#1626](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1626) ([evgeni](https://github.com/evgeni))
+
+## [v10.4.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.4.0) - 2024-12-16
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.3.0...v10.4.0)
 
