@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-postgresql",
-  "version": "10.4.0",
+  "version": "10.5.0",
   "author": "puppetlabs",
   "summary": "Offers support for basic management of PostgreSQL databases.",
   "license": "Apache-2.0",
@@ -14,11 +14,11 @@
     },
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 9.2.0 < 10.0.0"
+      "version_requirement": ">= 9.2.0 < 11.0.0"
     },
     {
       "name": "puppet/systemd",
-      "version_requirement": ">= 4.0.1 < 8.0.0"
+      "version_requirement": ">= 4.0.1 < 9.0.0"
     },
     {
       "name": "puppetlabs/concat",
