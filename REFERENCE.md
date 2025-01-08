@@ -3319,7 +3319,7 @@ Default value: `'none'`
 
 ##### <a name="-postgresql--server--pg_hba_rule--auth_option"></a>`auth_option`
 
-Data type: `Optional[String]`
+Data type: `Optional[Variant[Sensitive[String], String]]`
 
 For certain auth_method settings there are extra options that can be passed. Consult the PostgreSQL pg_hba.conf documentation for
 further details.
@@ -4844,7 +4844,7 @@ Struct[{
     user                         => String,
     Optional[address]            => Optional[Postgresql::Pg_hba_rule_address],
     auth_method                  => String,
-    Optional[auth_option]        => Optional[String],
+    Optional[auth_option]        => Optional[Variant[Sensitive[String], String]],
     Optional[order]              => Variant[String,Integer],
     Optional[target]             => Stdlib::Absolutepath,
     Optional[postgresql_version] => String,
