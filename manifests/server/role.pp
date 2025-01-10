@@ -11,6 +11,7 @@
 # @param inherit Specifies whether to grant inherit capability for the new role.
 # @param superuser Specifies whether to grant super user capability for the new role.
 # @param replication Provides provides replication capabilities for this role if set to true.
+# @param valid_until Specifies whether to set a valid until date for the role.
 # @param connection_limit Specifies how many concurrent connections the role can make. Default value: '-1', meaning no limit.
 # @param username Defines the username of the role to create.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
@@ -35,6 +36,7 @@ define postgresql::server::role (
   Boolean                                     $inherit          = true,
   Boolean                                     $superuser        = false,
   Boolean                                     $replication      = false,
+  Optional[String[1]]                         $valid_until      = undef,
   String[1]                                   $connection_limit = '-1',
   String[1]                                   $username         = $title,
   Hash                                        $connect_settings = $postgresql::server::default_connect_settings,
@@ -124,6 +126,12 @@ define postgresql::server::role (
 
     postgresql_psql { "ALTER ROLE \"${username}\" ${inherit_sql}":
       unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolinherit = ${inherit}",
+    }
+
+    if $valid_until {
+      postgresql_psql { "ALTER ROLE \"${username}\" VALID UNTIL '${valid_until}'":
+        unless => "SELECT 1 FROM pg_roles WHERE rolname = '${username}' AND rolvaliduntil = '${valid_until}'",
+      }
     }
 
     if(versioncmp($version, '9.1') >= 0) {
