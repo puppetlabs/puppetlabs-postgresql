@@ -135,11 +135,7 @@ Puppet::Type.newtype(:postgresql_psql) do
   end
 
   autorequire(:anchor) do
-    ["postgresql::server::service::begin::#{self[:instance]}"]
-  end
-
-  autorequire(:service) do
-    ["postgresqld_instance_#{self[:instance]}"]
+    ["postgresql::server::service::end::#{self[:instance]}"]
   end
 
   def should_run_sql(refreshing = false)
