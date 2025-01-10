@@ -79,4 +79,19 @@ describe 'postgresql::server::config_entry' do
         .that_notifies('Postgresql::Server::Instance::Service[main]')
     end
   end
+
+  # Example use case for empty values: using transaction-bound session
+  # variables, like `SET LOCAL awesome_app.tenant_id = 92834` requires the
+  # variable to be defined in postgresql.conf and initialised with a default
+  # value (at least for PostgreSQL 13 and older, possibly also in newer
+  # versions). The default value can, and sometimes, depending on the
+  # application, should, be empty.
+  context 'set a config entry value to the empty string' do
+    let(:params) { { ensure: 'present', name: 'mydatabase.app_specific_parameter', value: '' } }
+
+    it 'sets value to the empty string' do
+      expect(subject).to contain_postgresql_conf('mydatabase.app_specific_parameter').with(name: 'mydatabase.app_specific_parameter',
+                                                                                           value: '')
+    end
+  end
 end
