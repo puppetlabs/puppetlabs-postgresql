@@ -9,11 +9,6 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     default => 'postgresql/RPM-GPG-KEY-PGDG',
   }
 
-  $gpg_key_file = $facts['os']['release']['major'] ? {
-    '7'     => 'postgresql/RPM-GPG-KEY-PGDG-7',
-    default => 'postgresql/RPM-GPG-KEY-PGDG',
-  }
-
   file { $gpg_key_path:
     content => file($gpg_key_file),
     owner   => 'root',
