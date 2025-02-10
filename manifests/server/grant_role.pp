@@ -10,14 +10,14 @@
 # @param instance The name of the Postgresql database instance.
 define postgresql::server::grant_role (
   String[1]                                 $group,
-  String[1]                                 $role             = $name,
-  Enum['present', 'absent']                 $ensure           = 'present',
-  String[1]                                 $instance         = 'main',
-  String[1]                                 $psql_db          = $postgresql::server::default_database,
-  String[1]                                 $psql_user        = $postgresql::server::user,
-  Stdlib::Port                              $port             = $postgresql::server::port,
-  Hash                                      $connect_settings = $postgresql::server::default_connect_settings,
-  $with_admin_option                = false,
+  String[1]                                 $role              = $name,
+  Enum['present', 'absent']                 $ensure            = 'present',
+  String[1]                                 $instance          = 'main',
+  String[1]                                 $psql_db           = $postgresql::server::default_database,
+  String[1]                                 $psql_user         = $postgresql::server::user,
+  Stdlib::Port                              $port              = $postgresql::server::port,
+  Hash                                      $connect_settings  = $postgresql::server::default_connect_settings,
+  Boolean                                   $with_admin_option = false,
 ) {
   case $ensure {
     'present': {
