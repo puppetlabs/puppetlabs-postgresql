@@ -219,9 +219,11 @@ define postgresql::server::instance::config (
     }
   }
 
-  postgresql::server::config_entry { "data_directory_for_instance_${name}":
-    key   => 'data_directory',
-    value => $datadir,
+  unless $facts['service_provider'] == 'systemd' and $facts['os']['family'] in ['RedHat', 'Gentoo'] {
+    postgresql::server::config_entry { "data_directory_for_instance_${name}":
+      key   => 'data_directory',
+      value => $datadir,
+    }
   }
   if $timezone {
     postgresql::server::config_entry { "timezone_for_instance_${name}":
