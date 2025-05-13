@@ -7,15 +7,14 @@ on:
   workflow_dispatch:
     
 jobs:
-  Spec:
-    uses: "puppetlabs/cat-github-actions/.github/workflows/module_ci.yml@main"
-    with:
-      runs_on: "ubuntu-24.04"
-    secrets: "inherit"
+  # Spec:
+  #   uses: "puppetlabs/cat-github-actions/.github/workflows/module_ci.yml@main"
+  #   with:
+  #     runs_on: "ubuntu-24.04"
+  #   secrets: "inherit"
 
   Acceptance:
-    needs: Spec
-    uses: "puppetlabs/cat-github-actions/.github/workflows/module_acceptance.yml@main"
+    uses: "imaqsood/cat-github-actions/.github/workflows/module_acceptance.yml@CAT-2275"
     with:
       runs_on: "ubuntu-24.04"
     secrets: "inherit"
