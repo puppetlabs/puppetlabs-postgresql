@@ -33,7 +33,7 @@ define postgresql::server::extension (
   Optional[String[1]]                                 $version                = undef,
   Enum['present', 'absent']                           $ensure                 = 'present',
   Optional[String[1]]                                 $package_name           = undef,
-  Stdlib::Port $port = postgresql::default('port'),
+  Stdlib::Port                                        $port                   = postgresql::default('port'),
   Hash                                                $connect_settings       = postgresql::default('default_connect_settings'),
   String[1]                                           $database_resource_name = $database,
   String[1]                                           $instance               = 'main',
