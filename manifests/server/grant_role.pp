@@ -8,19 +8,22 @@
 # @param port Port to use when connecting.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param instance The name of the Postgresql database instance.
+# @param with_admin_option Specifies if the role should be granted with admin option.
 define postgresql::server::grant_role (
   String[1]                                 $group,
-  String[1]                                 $role             = $name,
-  Enum['present', 'absent']                 $ensure           = 'present',
-  String[1]                                 $instance         = 'main',
-  String[1]                                 $psql_db          = $postgresql::server::default_database,
-  String[1]                                 $psql_user        = $postgresql::server::user,
-  Stdlib::Port                              $port             = $postgresql::server::port,
-  Hash                                      $connect_settings = $postgresql::server::default_connect_settings,
+  String[1]                                 $role              = $name,
+  Enum['present', 'absent']                 $ensure            = 'present',
+  String[1]                                 $instance          = 'main',
+  String[1]                                 $psql_db           = $postgresql::server::default_database,
+  String[1]                                 $psql_user         = $postgresql::server::user,
+  Stdlib::Port                              $port              = $postgresql::server::port,
+  Hash                                      $connect_settings  = $postgresql::server::default_connect_settings,
+  Boolean                                   $with_admin_option = false,
 ) {
   case $ensure {
     'present': {
-      $command = "GRANT \"${group}\" TO \"${role}\""
+      $with_admin_option_sql = $with_admin_option ? { true => 'WITH ADMIN OPTION', default => '' }
+      $command = "GRANT \"${group}\" TO \"${role}\" ${with_admin_option_sql}"
       $unless_comp = '='
     }
     'absent': {
