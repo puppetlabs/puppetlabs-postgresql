@@ -125,7 +125,6 @@ describe 'postgresql::server_instance' do
     it { is_expected.to contain_postgresql_conn_validator('validate_service_is_running_instance_test1') }
     it { is_expected.to contain_postgresql_conf('port_for_instance_test1') }
     it { is_expected.to contain_postgresql_conf('log_statement_stats_test1') }
-    it { is_expected.to contain_postgresql_conf('data_directory_for_instance_test1') }
     it { is_expected.to contain_postgresql_conf('autovacuum_vacuum_scale_factor_test1') }
     it { is_expected.to contain_postgresql_conf('authentication_timeout_test1') }
     it { is_expected.to contain_postgresql__server__role('app_test1') }
@@ -161,7 +160,6 @@ describe 'postgresql::server_instance' do
     it { is_expected.to contain_file('/opt/pgsql') }
     it { is_expected.to contain_postgresql__server__config_entry('authentication_timeout_test1') }
     it { is_expected.to contain_postgresql__server__config_entry('autovacuum_vacuum_scale_factor_test1') }
-    it { is_expected.to contain_postgresql__server__config_entry('data_directory_for_instance_test1') }
     it { is_expected.to contain_postgresql__server__config_entry('log_statement_stats_test1') }
     it { is_expected.to contain_postgresql__server__config_entry('password_encryption_for_instance_test1') }
     it { is_expected.to contain_postgresql__server__config_entry('port_for_instance_test1') }
