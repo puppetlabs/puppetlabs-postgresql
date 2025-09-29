@@ -132,7 +132,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
     [true, :true].each do |refreshonly|
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly }
+          { refreshonly: }
         end
 
         context 'not refreshing'
@@ -141,7 +141,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
 
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly }
+          { refreshonly: }
         end
 
         context 'refreshing'
@@ -152,7 +152,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
     [false, :false].each do |refreshonly|
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly }
+          { refreshonly: }
         end
 
         context 'not refreshing'
@@ -161,7 +161,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
 
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly }
+          { refreshonly: }
         end
 
         context 'refreshing'
@@ -176,7 +176,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
     [true, :true].each do |refreshonly|
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly, unless: 'SELECT something' }
+          { refreshonly:, unless: 'SELECT something' }
         end
 
         context 'not refreshing'
@@ -185,7 +185,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
 
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly, unless: 'SELECT something' }
+          { refreshonly:, unless: 'SELECT something' }
         end
 
         context 'refreshing'
@@ -196,7 +196,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
     [false, :false].each do |refreshonly|
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly, unless: 'SELECT something' }
+          { refreshonly:, unless: 'SELECT something' }
         end
 
         context 'not refreshing'
@@ -205,7 +205,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
 
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly, unless: 'SELECT something' }
+          { refreshonly:, unless: 'SELECT something' }
         end
 
         context 'refreshing'
@@ -220,7 +220,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
     [true, :true].each do |refreshonly|
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly, unless: 'SELECT something' }
+          { refreshonly:, unless: 'SELECT something' }
         end
 
         context 'not refreshing'
@@ -229,7 +229,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
 
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly, unless: 'SELECT something' }
+          { refreshonly:, unless: 'SELECT something' }
         end
 
         context 'refreshing'
@@ -240,7 +240,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
     [false, :false].each do |refreshonly|
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly, unless: 'SELECT something' }
+          { refreshonly:, unless: 'SELECT something' }
         end
 
         context 'not refreshing'
@@ -249,7 +249,7 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
 
       context "refreshonly => #{refreshonly.inspect}" do
         let(:attributes) do
-          { refreshonly: refreshonly, unless: 'SELECT something' }
+          { refreshonly:, unless: 'SELECT something' }
         end
 
         context 'refreshing'

@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
   let(:name) { 'rspec psql test' }
   let(:resource) do
-    Puppet::Type.type(:postgresql_psql).new({ name: name, provider: :ruby }.merge(attributes))
+    Puppet::Type.type(:postgresql_psql).new({ name:, provider: :ruby }.merge(attributes))
   end
   let(:provider) { resource.provider }
 
