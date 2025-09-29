@@ -66,7 +66,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
   def digest_key(password, salt)
     OpenSSL::KDF.pbkdf2_hmac(
       password,
-      salt: salt,
+      salt:,
       iterations: 4096,
       length: 32,
       hash: OpenSSL::Digest.new('SHA256'),
