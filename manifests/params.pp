@@ -161,9 +161,9 @@ class postgresql::params inherits postgresql::globals {
       $plpython_package_name  = pick($plpython_package_name, "postgresql-plpython-${version}")
 
       $_ubuntu_2204 = ($facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['full'], '22.04') >= 0)
-      $_debian_12 = ($facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['full'], '12') >= 0)
+      $_debian_11 = ($facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['full'], '11') >= 0)
 
-      if $_ubuntu_2204 or $_debian_12 {
+      if $_ubuntu_2204 or $_debian_11 {
         $python_package_name = pick($python_package_name, 'python3-psycopg2')
       } else {
         $python_package_name = pick($python_package_name, 'python-psycopg2')

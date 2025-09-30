@@ -30,7 +30,18 @@ describe 'postgresql::lib::python' do
 
     it {
       expect(subject).to contain_package('python-psycopg2').with(
-        name: 'python-psycopg2',
+        name: 'python3-psycopg2',
+        ensure: 'present',
+      )
+    }
+  end
+
+  describe 'on debian 12' do
+    include_examples 'Debian 12'
+
+    it {
+      expect(subject).to contain_package('python-psycopg2').with(
+        name: 'python3-psycopg2',
         ensure: 'present',
       )
     }
