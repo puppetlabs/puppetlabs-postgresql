@@ -3677,6 +3677,7 @@ The following parameters are available in the `postgresql::server::role` defined
 * [`inherit`](#-postgresql--server--role--inherit)
 * [`superuser`](#-postgresql--server--role--superuser)
 * [`replication`](#-postgresql--server--role--replication)
+* [`valid_until`](#-postgresql--server--role--valid_until)
 * [`connection_limit`](#-postgresql--server--role--connection_limit)
 * [`username`](#-postgresql--server--role--username)
 * [`connect_settings`](#-postgresql--server--role--connect_settings)
@@ -3768,6 +3769,14 @@ Data type: `Boolean`
 Provides provides replication capabilities for this role if set to true.
 
 Default value: `false`
+
+##### <a name="-postgresql--server--role--valid_until"></a>`valid_until`
+
+Data type: `Optional[String[1]]`
+
+Specifies whether to set a valid until date for the role.
+
+Default value: `undef`
 
 ##### <a name="-postgresql--server--role--connection_limit"></a>`connection_limit`
 
