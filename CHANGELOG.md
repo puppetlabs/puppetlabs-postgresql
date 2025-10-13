@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.6.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.6.0) - 2025-10-13
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.5.0...v10.6.0)
+
+### Added
+
+- Allow puppetlabs/apt 11.x & puppet/systemd 9.x [#1645](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1645) ([kenyon](https://github.com/kenyon))
+- Add support for Debian 13 (trixie) [#1638](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1638) ([trefzer](https://github.com/trefzer))
+- Role: Add support for valid_until [#1624](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1624) ([mooreandrew](https://github.com/mooreandrew))
+
+### Fixed
+
+- Debian 11: Use correct package name for python bindings  [#1647](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1647) ([bastelfreak](https://github.com/bastelfreak))
+- Unbreak Debian support with custom encoding [#1564](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1564) ([smortex](https://github.com/smortex))
+
+### Other
+
+- (CAT-2296) Update github runner image to ubuntu-24.04 [#1636](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1636) ([shubhamshinde360](https://github.com/shubhamshinde360))
+
 ## [v10.5.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.5.0) - 2025-01-07
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.4.0...v10.5.0)
@@ -352,7 +371,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ### Fixed
 
-- Do not add version component to repo definition [#1282](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1282) ([weastur](https://github.com/weastur))
+- Do not add version component to repo definition [#1282](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1282) ([psapezhka](https://github.com/psapezhka))
 - (MODULES-8700) Autorequire the service in postgresql_psql [#1276](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1276) ([ekohl](https://github.com/ekohl))
 
 ## [v7.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v7.2.0) - 2021-05-24
