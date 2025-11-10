@@ -22,18 +22,20 @@ define postgresql::server::instance::systemd (
       # - $datadir
       # - $extra_systemd_config
       systemd::dropin_file { "${service_name}.conf":
-        ensure  => $drop_in_ensure,
-        unit    => "${service_name}.service",
-        owner   => 'root',
-        group   => 'root',
-        content => epp('postgresql/systemd-override.conf.epp', {
+        ensure          => $drop_in_ensure,
+        unit            => "${service_name}.service",
+        owner           => 'root',
+        group           => 'root',
+        notify_service  => false,
+        daemon_reload   => true,
+        show_diff       => true,
+        content         => epp('postgresql/systemd-override.conf.epp', {
             port                 => $port,
             datadir              => $datadir,
             extra_systemd_config => $extra_systemd_config,
           }
         ),
-        notify  => Postgresql::Server::Instance::Service[$name],
-        before  => Postgresql::Server::Instance::Reload[$name],
+        before          => Postgresql::Server::Instance::Reload[$name],
       }
     }
   }
