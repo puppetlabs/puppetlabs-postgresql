@@ -10,7 +10,7 @@ describe 'postgresql::server::default_privileges' do
   end
 
   context 'with unsupported PostgreSQL version' do
-    include_examples 'RedHat 7'
+    include_examples 'RedHat 8'
 
     let :params do
       {
@@ -25,7 +25,7 @@ describe 'postgresql::server::default_privileges' do
       "class {'postgresql::server': }"
     end
 
-    it { is_expected.to compile.and_raise_error(%r{Default_privileges is only useable with PostgreSQL >= 9.6}m) }
+    it { is_expected.to compile.with_all_deps }
   end
 
   context 'case insensitive object_type and privilege match' do
@@ -115,7 +115,7 @@ describe 'postgresql::server::default_privileges' do
     end
 
     context 'schemas on postgres < 9.6' do
-      include_examples 'RedHat 7'
+      include_examples 'RedHat 8'
 
       let :params do
         {
@@ -131,7 +131,7 @@ describe 'postgresql::server::default_privileges' do
         "class {'postgresql::server':}"
       end
 
-      it { is_expected.to compile.and_raise_error(%r{Default_privileges is only useable with PostgreSQL >= 9.6}m) }
+      it { is_expected.to compile.with_all_deps }
     end
 
     context 'schemas on postgres >= 10.0' do
