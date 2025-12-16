@@ -16,5 +16,5 @@ jobs:
   Acceptance:
     uses: "puppetlabs/cat-github-actions/.github/workflows/module_acceptance.yml@main"
     with:
-      flags: '--provision-service'
+      flags: '--provision-prefer provision_service'
     secrets: "inherit"
