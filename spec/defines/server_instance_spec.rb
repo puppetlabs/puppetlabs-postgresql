@@ -42,7 +42,7 @@ describe 'postgresql::server_instance' do
                            'port' => 5433,
                            'pg_hba_conf_defaults' => false },
       'service_settings': { 'service_name' => 'postgresql@13-test1',
-                            'service_status' => 'systemctl status postgresql@13-test1.service',
+                            'service_status' => 'systemctl is-active --quiet postgresql@13-test1.service',
                             'service_ensure' => 'running',
                             'service_enable' => true },
       'initdb_settings': { 'auth_local' => 'peer',
@@ -120,7 +120,7 @@ describe 'postgresql::server_instance' do
     it { is_expected.to contain_postgresql__server_instance('test1') }
     it { is_expected.to contain_user('ins_test1') }
     it { is_expected.to contain_group('ins_test1') }
-    it { is_expected.to contain_service('postgresqld_instance_test1').with_name('postgresql@13-test1').with_status('systemctl status postgresql@13-test1.service') }
+    it { is_expected.to contain_service('postgresqld_instance_test1').with_name('postgresql@13-test1').with_status('systemctl is-active --quiet postgresql@13-test1.service') }
     it { is_expected.to contain_systemd__dropin_file('postgresql@13-test1.conf') }
     it { is_expected.to contain_postgresql_conn_validator('validate_service_is_running_instance_test1') }
     it { is_expected.to contain_postgresql_conf('port_for_instance_test1') }
