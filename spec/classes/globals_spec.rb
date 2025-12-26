@@ -25,8 +25,8 @@ describe 'postgresql::globals' do
     end
   end
 
-  context 'on redhat 7' do
-    include_examples 'RedHat 7'
+  context 'on redhat 8' do
+    include_examples 'RedHat 8'
 
     describe 'with no parameters' do
       it 'executes successfully' do

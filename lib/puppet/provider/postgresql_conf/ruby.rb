@@ -29,7 +29,7 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
                 else
                   matches[:value].delete("'")
                 end
-        attributes_hash = { line_number: line_number, key: matches[:key], ensure: 'present', value: value, comment: matches[:comment] }
+        attributes_hash = { line_number:, key: matches[:key], ensure: 'present', value:, comment: matches[:comment] }
         active_settings.push(attributes_hash)
       end
     end

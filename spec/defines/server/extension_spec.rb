@@ -108,7 +108,7 @@ describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDesc
 end
 
 describe 'postgresql::server::extension' do
-  include_examples 'Debian 10'
+  include_examples 'Debian 11'
 
   let :pre_condition do
     "class { 'postgresql::server': }
@@ -124,9 +124,9 @@ describe 'postgresql::server::extension' do
     }
   end
 
-  it { is_expected.to contain_file('/var/lib/postgresql/11/main') } # FIXME: be more precise
-  it { is_expected.to contain_concat('/etc/postgresql/11/main/pg_hba.conf') } # FIXME: be more precise
-  it { is_expected.to contain_concat('/etc/postgresql/11/main/pg_ident.conf') } # FIXME: be more precise
+  it { is_expected.to contain_file('/var/lib/postgresql/13/main') } # FIXME: be more precise
+  it { is_expected.to contain_concat('/etc/postgresql/13/main/pg_hba.conf') } # FIXME: be more precise
+  it { is_expected.to contain_concat('/etc/postgresql/13/main/pg_ident.conf') } # FIXME: be more precise
 
   context 'with mandatory arguments only' do
     it {
@@ -137,7 +137,7 @@ describe 'postgresql::server::extension' do
 end
 
 describe 'postgresql::server::extension' do
-  include_examples 'Debian 10'
+  include_examples 'Debian 11'
 
   let(:title) { 'pg_repack' }
   let(:params) do

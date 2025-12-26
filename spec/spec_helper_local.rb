@@ -154,7 +154,7 @@ include RspecPuppetFacts
 # grep defaultfor lib/puppet/provider/service/*.rb
 # See https://github.com/voxpupuli/voxpupuli-test/blob/master/lib/voxpupuli/test/facts.rb
 add_custom_fact :service_provider, ->(_os, facts) do
-  case facts[:osfamily].downcase
+  case facts[:os]['family'].downcase
   when 'archlinux', 'debian'
     'systemd'
   when 'darwin'
@@ -166,9 +166,9 @@ add_custom_fact :service_provider, ->(_os, facts) do
   when 'openbsd'
     'openbsd'
   when 'redhat'
-    (facts[:operatingsystemrelease].to_i >= 7) ? 'systemd' : 'redhat'
+    (facts[:os]['release']['full'].to_i >= 7) ? 'systemd' : 'redhat'
   when 'suse'
-    (facts[:operatingsystemmajrelease].to_i >= 12) ? 'systemd' : 'redhat'
+    (facts[:os]['release']['major'].to_i >= 12) ? 'systemd' : 'redhat'
   when 'windows'
     'windows'
   else
