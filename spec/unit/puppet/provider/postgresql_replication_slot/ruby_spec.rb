@@ -20,7 +20,7 @@ describe type.provider(:ruby) do
 
   let(:name) { 'standby' }
   let(:resource) do
-    type.new({ name: name, provider: :ruby }.merge(attributes))
+    type.new({ name:, provider: :ruby }.merge(attributes))
   end
   let(:sql_instances) do
     "abc |        | physical  |        |          | t      |      |              | 0/3000420

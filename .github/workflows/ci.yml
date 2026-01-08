@@ -5,17 +5,17 @@ on:
     branches:
       - "main"
   workflow_dispatch:
-    
+
 jobs:
   Spec:
-    uses: "puppetlabs/cat-github-actions/.github/workflows/module_ci.yml@main"
+    uses: "puppetlabs/cat-github-actions/.github/workflows/module_ci.yml@ubuntu-22-test"
     with:
       runs_on: "ubuntu-24.04"
     secrets: "inherit"
 
   Acceptance:
-    needs: Spec
-    uses: "puppetlabs/cat-github-actions/.github/workflows/module_acceptance.yml@main"
+    uses: "puppetlabs/cat-github-actions/.github/workflows/module_acceptance.yml@ubuntu-22-test"
     with:
-      runs_on: "ubuntu-24.04"
+      flags: '--provision-prefer provision_service'
+      service_url: "https://facade-main-1079112402178.europe-west1.run.app/v1/provision"
     secrets: "inherit"
