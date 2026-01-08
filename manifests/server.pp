@@ -130,7 +130,7 @@ class postgresql::server (
   Boolean                                            $service_restart_on_change    = $postgresql::params::service_restart_on_change,
   Optional[String[1]]                                $service_provider             = $postgresql::params::service_provider,
   String[1]                                          $service_reload               = $postgresql::params::service_reload,
-  Optional[String[1]]                                $service_status               = $postgresql::params::service_status,
+  Optional[Variant[Array[String[1]],String[1]]]      $service_status               = $postgresql::params::service_status,
   String[1]                                          $default_database             = $postgresql::params::default_database,
   Hash                                               $default_connect_settings     = $postgresql::globals::default_connect_settings,
   Optional[Variant[String[1], Array[String[1]]]]     $listen_addresses             = $postgresql::params::listen_addresses,
