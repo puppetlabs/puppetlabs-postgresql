@@ -17,5 +17,5 @@ jobs:
     uses: "puppetlabs/cat-github-actions/.github/workflows/module_acceptance.yml@ubuntu-22-test"
     with:
       flags: '--provision-prefer provision_service'
-      service_url: "https://facade-fix-centos-repos-1079112402178.europe-west1.run.app/v1/provision"
+      service_url: "https://facade-main-1079112402178.europe-west1.run.app/v1/provision"
     secrets: "inherit"
