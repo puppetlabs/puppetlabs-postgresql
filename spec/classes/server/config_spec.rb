@@ -7,51 +7,6 @@ describe 'postgresql::server::config' do
     'class { postgresql::server: manage_selinux => true }'
   end
 
-  describe 'on RedHat 7' do
-    include_examples 'RedHat 7'
-
-    it 'has SELinux port defined' do
-      expect(subject).to contain_package('policycoreutils-python').with(ensure: 'installed')
-
-      expect(subject).to contain_exec('/usr/sbin/semanage port -a -t postgresql_port_t -p tcp 5432')
-        .with(unless: '/usr/sbin/semanage port -l | grep -qw 5432')
-        .that_comes_before('Postgresql::Server::Config_entry[port_for_instance_main]')
-        .that_requires('Package[policycoreutils-python]')
-    end
-
-    it 'has the correct systemd-override drop file' do
-      expect(subject).to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf').with(
-        ensure: 'file', owner: 'root', group: 'root',
-      ).that_requires('File[/etc/systemd/system/postgresql.service.d]')
-    end
-
-    it 'has the correct systemd-override file #regex' do
-      expect(subject).to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf')
-    end
-
-    describe 'with manage_package_repo => true and a version' do
-      let(:pre_condition) do
-        <<-EOS
-          class { 'postgresql::globals':
-            manage_package_repo => true,
-            version => '10',
-          }->
-          class { 'postgresql::server': }
-        EOS
-      end
-
-      it 'has the correct systemd-override file' do
-        expect(subject).to contain_file('/etc/systemd/system/postgresql-10.service.d/postgresql-10.conf').with(
-          ensure: 'file', owner: 'root', group: 'root',
-        )
-      end
-
-      it 'has the correct systemd-override file #regex' do
-        expect(subject).to contain_file('/etc/systemd/system/postgresql-10.service.d/postgresql-10.conf').without_content(%r{\.include})
-      end
-    end
-  end
-
   describe 'on Redhat 8' do
     include_examples 'RedHat 8'
 
@@ -156,7 +111,7 @@ describe 'postgresql::server::config' do
   end
 
   describe 'with managed pg_hba_conf and ipv4acls' do
-    include_examples 'RedHat 7'
+    include_examples 'RedHat 8'
     let(:pre_condition) do
       <<-EOS
         class { 'postgresql::globals':

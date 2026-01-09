@@ -24,8 +24,8 @@ describe 'postgresql::server::config_entry' do
   context 'ports' do
     let(:params) { { ensure: 'present', name: 'port_spec', value: '5432' } }
 
-    context 'redhat 7' do
-      include_examples 'RedHat 7'
+    context 'redhat 8' do
+      include_examples 'RedHat 8'
 
       it 'stops postgresql and changes the port #file' do
         expect(subject).to contain_file('/etc/systemd/system/postgresql.service.d/postgresql.conf')
