@@ -16,7 +16,7 @@ describe 'postgresql::server::db' do
       include postgresql::server
       postgresql::server::db { $database:
          user     => $user,
-         password => Deferred('unwrap', [Sensitive.new($password)]),
+         password => Deferred('new', [Sensitive, 'password']),
       }
     MANIFEST
   end
