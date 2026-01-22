@@ -80,7 +80,7 @@ Puppet::Type.type(:postgresql_conf).provide(:ruby) do
 
   # remove resource if exists and is set to absent
   def destroy
-    entry_regex = %r{#{resource[:key]}.*=.*#{resource[:value]}}
+    entry_regex = %r{^\s*#{resource[:key]}\s*=}
     lines = File.readlines(resource[:target])
 
     lines.delete_if do |entry|
