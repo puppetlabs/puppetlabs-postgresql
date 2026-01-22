@@ -17,7 +17,7 @@
 # @param instance The name of the Postgresql database instance.
 define postgresql::server::db (
   String[1]                                    $user,
-  Optional[Variant[String, Sensitive[String]]] $password   = undef,
+  Optional[Variant[String, Sensitive]]         $password   = undef,
   Optional[String[1]]                          $comment    = undef,
   String[1]                                    $dbname     = $title,
   Optional[String[1]]                          $encoding   = $postgresql::server::encoding,
