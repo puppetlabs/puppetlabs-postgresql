@@ -210,6 +210,7 @@ class postgresql::globals (
         '10'    => '11',
         '11'    => '13',
         '12'    => '15',
+        '13'    => '17',
         default => undef,
       },
       'Ubuntu' => $facts['os']['release']['major'] ? {

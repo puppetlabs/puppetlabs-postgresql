@@ -1006,7 +1006,7 @@ Default value: `$postgresql::params::service_reload`
 
 ##### <a name="-postgresql--server--service_status"></a>`service_status`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Variant[Array[String[1]],String[1]]]`
 
 Overrides the default status check command for your PostgreSQL service.
 
@@ -3677,6 +3677,7 @@ The following parameters are available in the `postgresql::server::role` defined
 * [`inherit`](#-postgresql--server--role--inherit)
 * [`superuser`](#-postgresql--server--role--superuser)
 * [`replication`](#-postgresql--server--role--replication)
+* [`valid_until`](#-postgresql--server--role--valid_until)
 * [`connection_limit`](#-postgresql--server--role--connection_limit)
 * [`username`](#-postgresql--server--role--username)
 * [`connect_settings`](#-postgresql--server--role--connect_settings)
@@ -3768,6 +3769,14 @@ Data type: `Boolean`
 Provides provides replication capabilities for this role if set to true.
 
 Default value: `false`
+
+##### <a name="-postgresql--server--role--valid_until"></a>`valid_until`
+
+Data type: `Optional[String[1]]`
+
+Specifies whether to set a valid until date for the role.
+
+Default value: `undef`
 
 ##### <a name="-postgresql--server--role--connection_limit"></a>`connection_limit`
 
@@ -4733,7 +4742,7 @@ Type: Ruby 4.x API
 
 This function returns the postgresql password hash from the clear text username / password
 
-#### `postgresql::postgresql_password(Variant[String[1], Integer] $username, Variant[String[1], Sensitive[String[1]], Integer] $password, Optional[Boolean] $sensitive, Optional[Optional[Postgresql::Pg_password_encryption]] $hash, Optional[Optional[Variant[String[1], Integer]]] $salt)`
+#### `postgresql::postgresql_password(Variant[String[1], Integer] $username, Variant[String[1], Sensitive[String[1]], Integer] $password, Optional[Boolean] $sensitive, Optional[Optional[Enum["md5", "scram-sha-256"]]] $hash, Optional[Optional[Variant[String[1], Integer]]] $salt)`
 
 The postgresql::postgresql_password function.
 
@@ -4759,7 +4768,7 @@ If the Postgresql-Passwordhash should be of Datatype Sensitive[String]
 
 ##### `hash`
 
-Data type: `Optional[Optional[Postgresql::Pg_password_encryption]]`
+Data type: `Optional[Optional[Enum["md5", "scram-sha-256"]]]`
 
 Set type for password hash
 
@@ -4880,7 +4889,8 @@ Alias of `Hash[String[1], Postgresql::Pg_hba_rule]`
 
 ### <a name="Postgresql--Pg_password_encryption"></a>`Postgresql::Pg_password_encryption`
 
-the supported password_encryption
+Note that this Enum is also defined in:
+lib/puppet/functions/postgresql/postgresql_password.rb
 
 Alias of `Enum['md5', 'scram-sha-256']`
 
