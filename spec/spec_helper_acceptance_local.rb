@@ -44,14 +44,17 @@ def install_dependencies
 
     # needed for netstat, for serverspec checks
     if $facts['os']['family'] in ['SLES', 'SUSE'] {
-      exec { 'Enable legacy repos':
-        path    => '/bin:/usr/bin/:/sbin:/usr/sbin',
-        command => "SUSEConnect --product sle-module-legacy/${$facts['os']['distro']['release']['full']}/x86_64",
-        unless  => "SUSEConnect --status-text | grep sle-module-legacy/${$facts['os']['distro']['release']['full']}/x86_64",
+      # TEMPORARY FIX: Add fallback repo for unregistered SLES systems
+      exec { 'Configure zypper repo for SLES':
+        path      => '/bin:/usr/bin:/sbin:/usr/sbin',
+        command   => 'zypper --non-interactive --gpg-auto-import-keys ar http://download.opensuse.org/distribution/leap/15.6/repo/oss/ opensuse-leap-fallback && zypper --non-interactive --gpg-auto-import-keys refresh',
+        unless    => "zypper lr 2>/dev/null | grep -q 'opensuse-leap-fallback\\|http'",
+        logoutput => true,
       }
 
       package { 'net-tools-deprecated':
-        ensure   => 'latest',
+        ensure  => 'latest',
+        require => Exec['Configure zypper repo for SLES'],
       }
     }
 
