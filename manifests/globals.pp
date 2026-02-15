@@ -199,6 +199,7 @@ class postgresql::globals (
       },
       'Amazon' => '9.2',
       default => $facts['os']['release']['major'] ? {
+        '10'    => '16',
         '9'     => '13',
         '8'     => '10',
         '7'     => '9.2',
