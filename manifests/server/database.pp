@@ -52,7 +52,6 @@ define postgresql::server::database (
     undef   => '',
     default => "LC_COLLATE = '${locale}' LC_CTYPE = '${locale}'",
   }
-  $public_revoke_privilege = 'CONNECT'
 
   $template_option = $template ? {
     undef   => '',
@@ -73,12 +72,6 @@ define postgresql::server::database (
     command => "CREATE DATABASE \"${dbname}\" WITH ${template_option} ${encoding_option} ${locale_option} ${tablespace_option}",
     unless  => "SELECT 1 FROM pg_database WHERE datname = '${dbname}'",
     require => Postgresql::Server::Instance::Service[$instance],
-  }
-
-  # This will prevent users from connecting to the database unless they've been
-  #  granted privileges.
-  ~> postgresql_psql { "REVOKE ${public_revoke_privilege} ON DATABASE \"${dbname}\" FROM public":
-    refreshonly => true,
   }
 
   Postgresql_psql["CREATE DATABASE \"${dbname}\""]
