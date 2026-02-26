@@ -2,7 +2,7 @@
 
 require 'spec_helper_acceptance'
 
-describe 'postgresql::server::db:' do
+describe 'postgresql::server::db' do
   let(:user) { 'user_test' }
   let(:password) { 'deferred_password_test' }
   let(:database) { 'test_database' }
@@ -16,7 +16,7 @@ describe 'postgresql::server::db:' do
       include postgresql::server
       postgresql::server::db { $database:
          user     => $user,
-         password => Deferred('unwrap', [$password]),
+         password => Deferred('new', [Sensitive, 'password']),
       }
     MANIFEST
   end
