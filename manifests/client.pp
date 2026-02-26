@@ -6,7 +6,7 @@
 # @param file_ensure
 #   Ensure the connection validation script is present
 # @param validcon_script_path
-#   Optional. Absolute path for the postgresql connection validation script.
+#   Deprecated: absolute path for the postgresql connection validation script that is now ensured absent.
 # @param package_name
 #   Sets the name of the PostgreSQL client package.
 # @param package_ensure
@@ -26,10 +26,6 @@ class postgresql::client (
   }
 
   file { $validcon_script_path:
-    ensure  => $file_ensure,
-    content => file('postgresql/validate_postgresql_connection.sh'),
-    owner   => 0,
-    group   => 0,
-    mode    => '0755',
+    ensure => absent,
   }
 }
