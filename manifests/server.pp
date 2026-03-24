@@ -186,7 +186,7 @@ class postgresql::server (
   Optional[String]                                   $extra_systemd_config         = $postgresql::params::extra_systemd_config,
 
   Hash[String, Hash]                                 $roles                        = {},
-  Hash[String, Hash]                                 $grants                       = {},
+  Hash[String[1], Hash]                                 $grants                       = {},
   Hash[String, Any]                                  $config_entries               = {},
   Postgresql::Pg_hba_rules                           $pg_hba_rules                 = {},
 
