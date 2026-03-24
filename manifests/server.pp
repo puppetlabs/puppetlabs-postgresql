@@ -100,6 +100,7 @@
 #   Specify the type of encryption set for the password in pg_hba_conf,
 #   this value is usefull if you want to start enforcing scram-sha-256, but give users transition time.
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
+# @param grants Specifies a hash from which to generate postgresql::server::grant resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
 #
@@ -185,6 +186,7 @@ class postgresql::server (
   Optional[String]                                   $extra_systemd_config         = $postgresql::params::extra_systemd_config,
 
   Hash[String, Hash]                                 $roles                        = {},
+  Hash[String[1], Hash]                              $grants                       = {},
   Hash[String, Any]                                  $config_entries               = {},
   Postgresql::Pg_hba_rules                           $pg_hba_rules                 = {},
 
@@ -216,6 +218,13 @@ class postgresql::server (
       * => $role,
     }
   }
+
+  $grants.each |$grantname, $grant| {
+    postgresql::server::grant { $grantname:
+      * => $grant,
+    }
+  }
+
 
   $config_entries.each |$entry, $value| {
     postgresql::server::config_entry { $entry:
