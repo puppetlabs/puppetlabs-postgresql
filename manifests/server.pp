@@ -225,7 +225,6 @@ class postgresql::server (
     }
   }
 
-
   $config_entries.each |$entry, $value| {
     postgresql::server::config_entry { $entry:
       ensure => bool2str($value =~ Undef, 'absent', 'present'),
