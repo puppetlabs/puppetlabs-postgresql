@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.6.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.6.1) - 2025-12-26
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.6.0...v10.6.1)
+
+### Fixed
+
+- Replace systemctl `status` with systemctl `is-active` [#1652](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1652) ([bastelfreak](https://github.com/bastelfreak))
+- Don't use type alias in `postgresql_password` parameter [#1611](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1611) ([figless](https://github.com/figless))
+
 ## [v10.6.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.6.0) - 2025-10-13
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.5.0...v10.6.0)
