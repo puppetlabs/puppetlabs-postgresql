@@ -54,7 +54,7 @@ define postgresql::server::extension (
 
   case $ensure {
     'present': {
-      $command = inline_epp('CREATE EXTENSION "<%= $extension %>"<% if $version and $version != "latest" { %> VERSION "<%= $version %>"<% } %>', { extension => $extension, version => $version })
+      $command = inline_epp('<%- | String $extension, Optional[String] $version | -%>CREATE EXTENSION "<%= $extension %>"<% if $version and $version != "latest" { %> VERSION "<%= $version %>"<% } %>', { extension => $extension, version => $version })
       $unless_mod = undef
       $psql_cmd_require = $package_name ? {
         undef   => $default_psql_require,
