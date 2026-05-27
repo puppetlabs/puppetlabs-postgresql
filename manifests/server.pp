@@ -103,6 +103,7 @@
 # @param grants Specifies a hash from which to generate postgresql::server::grant resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
+# @param grant_roles Specifies a hash from which to generate postgresql::server::grant_role resources. 
 #
 # @param backup_enable Whether a backup job should be enabled.
 # @param backup_options A hash of options that should be passed through to the backup provider.
@@ -189,6 +190,7 @@ class postgresql::server (
   Hash[String[1], Hash]                              $grants                       = {},
   Hash[String, Any]                                  $config_entries               = {},
   Postgresql::Pg_hba_rules                           $pg_hba_rules                 = {},
+  Hash[String[1], Hash]                              $grant_roles                  = {},
 
   Boolean                                            $backup_enable                = $postgresql::params::backup_enable,
   Hash                                               $backup_options               = {},
@@ -224,6 +226,12 @@ class postgresql::server (
       * => $grant,
     }
   }
+
+ $grant_roles.each |$grantname, $grant_role| {
+   postgresql::server::grant_role { $grantname:
+     * => $grant_role, 
+   }
+ }
 
   $config_entries.each |$entry, $value| {
     postgresql::server::config_entry { $entry:
