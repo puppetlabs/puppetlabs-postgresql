@@ -227,11 +227,11 @@ class postgresql::server (
     }
   }
 
- $grant_roles.each |$grantname, $grant_role| {
-   postgresql::server::grant_role { $grantname:
-     * => $grant_role, 
-   }
- }
+  $grant_roles.each |$grantname, $grant_role| {
+    postgresql::server::grant_role { $grantname:
+      * => $grant_role,
+    }
+  }
 
   $config_entries.each |$entry, $value| {
     postgresql::server::config_entry { $entry:
