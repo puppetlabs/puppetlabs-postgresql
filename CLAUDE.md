@@ -90,7 +90,7 @@ RuboCop config lives in `.rubocop.yml` with overrides for puppet-module style. E
 
 ## Conventions when committing
 
-- Branch names follow `MODULES-<ticket>` (the Jira project key). For test-PR runs of community PRs, the convention used here is `MODULES-<ticket>-pr<upstream-pr-number>`.
+- Branch names follow `<module-id>-<short-change-related-name>`, where `<module-id>` is the Jira ticket key (e.g. `MODULES-11816-add-claude-md`, `MODULES-12345-fix-el10-default-version`). Keep the trailing slug short, kebab-cased, and descriptive of the change. For test-PR runs of community PRs, the convention used here is `<module-id>-pr<upstream-pr-number>` (e.g. `MODULES-11807-pr1650`).
 - Commit messages and PR titles start with `(MODULES-XXXX)` — the Jira automation uses this to link commits back to tickets.
 - When cherry-picking community PRs, squash to one commit and add a `Co-authored-by:` trailer for the original contributor.
 
