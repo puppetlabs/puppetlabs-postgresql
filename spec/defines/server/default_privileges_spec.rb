@@ -92,7 +92,33 @@ describe 'postgresql::server::default_privileges' do
         # rubocop:disable Layout/LineLength
         expect(subject).to contain_postgresql_psql('default_privileges:test')
           .with_command('ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO "test"')
-          .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=arwdDxt' = ANY (defaclacl) AND nspname = 'public' and defaclobjtype = 'r')")
+          .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '\"test\"=arwdDxt' = ANY (defaclacl) AND nspname = 'public' and defaclobjtype = 'r')")
+        # rubocop:enable Layout/LineLength
+      end
+    end
+
+    context 'supported privilege and a role name with a hyphen' do
+      let :params do
+        {
+          db: 'test',
+          role: 'test-foo',
+          privilege: 'all',
+          object_type: 'tables'
+        }
+      end
+
+      let :pre_condition do
+        "class {'postgresql::server':}"
+      end
+
+      it { is_expected.to compile.with_all_deps }
+      it { is_expected.to contain_postgresql__server__default_privileges('test') }
+
+      it do
+        # rubocop:disable Layout/LineLength
+        expect(subject).to contain_postgresql_psql('default_privileges:test')
+          .with_command('ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO "test-foo"')
+          .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '\"test-foo\"=arwdDxt' = ANY (defaclacl) AND nspname = 'public' and defaclobjtype = 'r')")
         # rubocop:enable Layout/LineLength
       end
     end
@@ -163,7 +189,7 @@ describe 'postgresql::server::default_privileges' do
         # rubocop:disable Layout/LineLength
         expect(subject).to contain_postgresql_psql('default_privileges:test')
           .with_command('ALTER DEFAULT PRIVILEGES GRANT ALL ON SCHEMAS TO "test"')
-          .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=UC' = ANY (defaclacl) AND nspname IS NULL and defaclobjtype = 'n')")
+          .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '\"test\"=UC' = ANY (defaclacl) AND nspname IS NULL and defaclobjtype = 'n')")
         # rubocop:enable Layout/LineLength
       end
     end
@@ -282,7 +308,7 @@ describe 'postgresql::server::default_privileges' do
       # rubocop:disable Layout/LineLength
       expect(subject).to contain_postgresql_psql('default_privileges:test')
         .with_command('ALTER DEFAULT PRIVILEGES IN SCHEMA my_schema GRANT ALL ON TABLES TO "test"')
-        .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=arwdDxt' = ANY (defaclacl) AND nspname = 'my_schema' and defaclobjtype = 'r')")
+        .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '\"test\"=arwdDxt' = ANY (defaclacl) AND nspname = 'my_schema' and defaclobjtype = 'r')")
       # rubocop:enable Layout/LineLength
     end
   end
@@ -309,7 +335,7 @@ describe 'postgresql::server::default_privileges' do
       # rubocop:disable Layout/LineLength
       expect(subject).to contain_postgresql_psql('default_privileges:test')
         .with_command('ALTER DEFAULT PRIVILEGES GRANT ALL ON TABLES TO "test"')
-        .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=arwdDxt' = ANY (defaclacl) AND nspname IS NULL and defaclobjtype = 'r')")
+        .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '\"test\"=arwdDxt' = ANY (defaclacl) AND nspname IS NULL and defaclobjtype = 'r')")
       # rubocop:enable Layout/LineLength
     end
   end
@@ -367,7 +393,7 @@ describe 'postgresql::server::default_privileges' do
       # rubocop:disable Layout/LineLength
       expect(subject).to contain_postgresql_psql('default_privileges:test')
         .with_command('ALTER DEFAULT PRIVILEGES FOR ROLE target IN SCHEMA public GRANT ALL ON TABLES TO "test"')
-        .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=arwdDxt/target' = ANY (defaclacl) AND nspname = 'public' and defaclobjtype = 'r')")
+        .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '\"test\"=arwdDxt/target' = ANY (defaclacl) AND nspname = 'public' and defaclobjtype = 'r')")
       # rubocop:enable Layout/LineLength
     end
   end
