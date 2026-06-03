@@ -100,6 +100,7 @@
 #   Specify the type of encryption set for the password in pg_hba_conf,
 #   this value is usefull if you want to start enforcing scram-sha-256, but give users transition time.
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
+# @param grants Specifies a hash from which to generate postgresql::server::grant resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
 #
@@ -130,7 +131,7 @@ class postgresql::server (
   Boolean                                            $service_restart_on_change    = $postgresql::params::service_restart_on_change,
   Optional[String[1]]                                $service_provider             = $postgresql::params::service_provider,
   String[1]                                          $service_reload               = $postgresql::params::service_reload,
-  Optional[String[1]]                                $service_status               = $postgresql::params::service_status,
+  Optional[Variant[Array[String[1]],String[1]]]      $service_status               = $postgresql::params::service_status,
   String[1]                                          $default_database             = $postgresql::params::default_database,
   Hash                                               $default_connect_settings     = $postgresql::globals::default_connect_settings,
   Optional[Variant[String[1], Array[String[1]]]]     $listen_addresses             = $postgresql::params::listen_addresses,
@@ -185,6 +186,7 @@ class postgresql::server (
   Optional[String]                                   $extra_systemd_config         = $postgresql::params::extra_systemd_config,
 
   Hash[String, Hash]                                 $roles                        = {},
+  Hash[String[1], Hash]                              $grants                       = {},
   Hash[String, Any]                                  $config_entries               = {},
   Postgresql::Pg_hba_rules                           $pg_hba_rules                 = {},
 
@@ -214,6 +216,12 @@ class postgresql::server (
   $roles.each |$rolename, $role| {
     postgresql::server::role { $rolename:
       * => $role,
+    }
+  }
+
+  $grants.each |$grantname, $grant| {
+    postgresql::server::grant { $grantname:
+      * => $grant,
     }
   }
 

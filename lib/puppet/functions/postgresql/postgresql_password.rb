@@ -24,7 +24,8 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
     required_param 'Variant[String[1], Integer]', :username
     required_param 'Variant[String[1], Sensitive[String[1]], Integer]', :password
     optional_param 'Boolean', :sensitive
-    optional_param 'Optional[Postgresql::Pg_password_encryption]', :hash
+    # The following Enum is also defined in `types/pg_password_encryption.pp` but type alias can't be used in Deferred functions.
+    optional_param 'Optional[Enum["md5", "scram-sha-256"]]', :hash
     optional_param 'Optional[Variant[String[1], Integer]]', :salt
     return_type 'Variant[String, Sensitive[String]]'
   end
@@ -65,7 +66,7 @@ Puppet::Functions.create_function(:'postgresql::postgresql_password') do
   def digest_key(password, salt)
     OpenSSL::KDF.pbkdf2_hmac(
       password,
-      salt: salt,
+      salt:,
       iterations: 4096,
       length: 32,
       hash: OpenSSL::Digest.new('SHA256'),

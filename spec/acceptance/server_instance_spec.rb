@@ -46,7 +46,7 @@ describe 'postgresql instance test1', if: os[:family] == 'redhat' && !os[:releas
     },
     service_settings     => {
       'service_name'   => 'postgresql@13-test1',
-      'service_status' => 'systemctl status postgresql@13-test1.service',
+      'service_status' => 'systemctl is-active --quiet postgresql@13-test1.service',
       'service_ensure' => 'running',
       'service_enable' => true,
     },

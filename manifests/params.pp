@@ -86,7 +86,7 @@ class postgresql::params inherits postgresql::globals {
       }
 
       $service_reload = "systemctl reload ${service_name}"
-      $service_status = pick($service_status, "systemctl status ${service_name}")
+      $service_status = pick($service_status, "systemctl is-active --quiet ${service_name}")
 
       $psql_path           = pick($psql_path, "${bindir}/psql")
 
@@ -130,7 +130,7 @@ class postgresql::params inherits postgresql::globals {
       $confdir                = pick($confdir, $datadir)
       $psql_path              = pick($psql_path, "${bindir}/psql")
 
-      $service_status         = pick($service_status, "systemctl status ${service_name}")
+      $service_status         = pick($service_status, "systemctl is-active --quiet ${service_name}")
       $service_reload         = "systemctl reload ${service_name}"
       $python_package_name    = pick($python_package_name, 'python-psycopg2')
       # Archlinux does not have a perl::DBD::Pg package
@@ -161,9 +161,9 @@ class postgresql::params inherits postgresql::globals {
       $plpython_package_name  = pick($plpython_package_name, "postgresql-plpython-${version}")
 
       $_ubuntu_2204 = ($facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['full'], '22.04') >= 0)
-      $_debian_12 = ($facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['full'], '12') >= 0)
+      $_debian_11 = ($facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['full'], '11') >= 0)
 
-      if $_ubuntu_2204 or $_debian_12 {
+      if $_ubuntu_2204 or $_debian_11 {
         $python_package_name = pick($python_package_name, 'python3-psycopg2')
       } else {
         $python_package_name = pick($python_package_name, 'python-psycopg2')
@@ -173,7 +173,7 @@ class postgresql::params inherits postgresql::globals {
       $datadir                = pick($datadir, "/var/lib/postgresql/${version}/main")
       $confdir                = pick($confdir, "/etc/postgresql/${version}/main")
       $service_reload         = "systemctl reload ${service_name}"
-      $service_status         = pick($service_status, "systemctl status ${service_name}")
+      $service_status         = pick($service_status, "systemctl is-active --quiet ${service_name}")
       $psql_path              = pick($psql_path, '/usr/bin/psql')
       $postgresql_conf_mode   = pick($postgresql_conf_mode, '0644')
     }
@@ -194,7 +194,7 @@ class postgresql::params inherits postgresql::globals {
       $bindir               = pick($bindir, "/usr/lib/postgresql-${version}/bin")
       $datadir              = pick($datadir, "/var/lib/postgresql/${version}_data")
       $confdir              = pick($confdir, "/etc/postgresql-${version}")
-      $service_status       = pick($service_status, "systemctl status ${service_name}")
+      $service_status       = pick($service_status, "systemctl is-active --quiet ${service_name}")
       $service_reload       = "systemctl reload ${service_name}"
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
@@ -267,7 +267,7 @@ class postgresql::params inherits postgresql::globals {
       $bindir               = pick($bindir, "/usr/lib/postgresql${version}/bin")
       $datadir              = pick($datadir, '/var/lib/pgsql/data')
       $confdir              = pick($confdir, $datadir)
-      $service_status       = pick($service_status, "systemctl status ${service_name}")
+      $service_status       = pick($service_status, "systemctl is-active --quiet ${service_name}")
       $service_reload       = "systemctl reload ${service_name}"
       $psql_path            = pick($psql_path, "${bindir}/psql")
 
