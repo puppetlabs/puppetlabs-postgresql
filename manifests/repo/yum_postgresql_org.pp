@@ -24,8 +24,8 @@ class postgresql::repo::yum_postgresql_org inherits postgresql::repo {
     $label1 = 'redhat'
     $label2 = 'rhel'
   }
-  $default_baseurl = "https://download.postgresql.org/pub/repos/yum/${postgresql::repo::version}/${label1}/${label2}-\$releasever-\$basearch"
-  $default_commonurl = "https://download.postgresql.org/pub/repos/yum/common/${label1}/${label2}-\$releasever-\$basearch"
+  $default_baseurl = "https://download.postgresql.org/pub/repos/yum/${postgresql::repo::version}/${label1}/${label2}-$releasever_major.$releasever_minor-\$basearch"
+  $default_commonurl = "https://download.postgresql.org/pub/repos/yum/common/${label1}/${label2}-$releasever_major.$releasever_minor-\$basearch"
 
   $_baseurl = pick($postgresql::repo::baseurl, $default_baseurl)
   $_commonurl = pick($postgresql::repo::commonurl, $default_commonurl)
