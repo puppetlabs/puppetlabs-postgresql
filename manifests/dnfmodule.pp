@@ -9,6 +9,9 @@ class postgresql::dnfmodule (
   Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $ensure = 'installed',
   String[1] $module = 'postgresql',
 ) {
+  if $facts['os']['release']['major'] == '10' {
+    fail('DNF modules are not supported on EL 10')
+  }
   package { 'postgresql dnf module':
     ensure      => $ensure,
     name        => $module,
