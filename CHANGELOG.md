@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.6.2](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.6.2) - 2026-06-25
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.6.1...v10.6.2)
+
+### Other
+
+- (MODULES-11840) Allow puppetlabs/stdlib 10.x [#1681](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1681) ([imaqsood](https://github.com/imaqsood))
+- (CI) Run acceptance tests against puppetcore8-nightly [#1680](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1680) ([SugatD](https://github.com/SugatD))
+- (MODULES-11816) Add CLAUDE.md for Claude Code guidance [#1676](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1676) ([SugatD](https://github.com/SugatD))
+- puppetlabs/concat: Allow 10.x [#1669](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1669) ([bastelfreak](https://github.com/bastelfreak))
+- grant creation via hiera through server::grant.pp  [#1668](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1668) ([ikonia](https://github.com/ikonia))
+- fix: ignore postgresql_conf resource value when set to absent [#1657](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1657) ([davidassigbi](https://github.com/davidassigbi))
+- add EL10 basic support - align EL10 PGSQL 16 default package version [#1650](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1650) ([ikonia](https://github.com/ikonia))
+- (CAT-2385) Puppetcore update [#1646](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1646) ([shubhamshinde360](https://github.com/shubhamshinde360))
+- fix formating in extension [#1641](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1641) ([elfranne](https://github.com/elfranne))
+- Rename spec file so it runs [#1634](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1634) ([traylenator](https://github.com/traylenator))
+- Configure Mend for GitHub.com [#1630](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1630) ([mend-for-github-com](https://github.com/mend-for-github-com))
+
 ## [v10.6.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.6.1) - 2025-12-26
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.6.0...v10.6.1)
@@ -1038,7 +1056,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [2.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/2.0.0) - 2013-01-15
 
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/1.0.0...2.0.0)
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/release-0.3.0...2.0.0)
 
 ### Added
 
@@ -1047,10 +1065,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Fixed
 
 - Syntax Error [#55](https://github.com/puppetlabs/puppetlabs-postgresql/pull/55) ([Spenser309](https://github.com/Spenser309))
-
-## [1.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/1.0.0) - 2012-10-24
-
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/release-0.3.0...1.0.0)
 
 ## [release-0.3.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/release-0.3.0) - 2012-09-17
 

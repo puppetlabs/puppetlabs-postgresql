@@ -895,6 +895,7 @@ The following parameters are available in the `postgresql::server` class:
 * [`password_encryption`](#-postgresql--server--password_encryption)
 * [`pg_hba_auth_password_encryption`](#-postgresql--server--pg_hba_auth_password_encryption)
 * [`roles`](#-postgresql--server--roles)
+* [`grants`](#-postgresql--server--grants)
 * [`config_entries`](#-postgresql--server--config_entries)
 * [`pg_hba_rules`](#-postgresql--server--pg_hba_rules)
 * [`backup_enable`](#-postgresql--server--backup_enable)
@@ -1340,6 +1341,14 @@ Default value: `undef`
 Data type: `Hash[String, Hash]`
 
 Specifies a hash from which to generate postgresql::server::role resources.
+
+Default value: `{}`
+
+##### <a name="-postgresql--server--grants"></a>`grants`
+
+Data type: `Hash[String[1], Hash]`
+
+Specifies a hash from which to generate postgresql::server::grant resources.
 
 Default value: `{}`
 
