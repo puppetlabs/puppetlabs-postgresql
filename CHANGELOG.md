@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v10.6.2](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.6.2) - 2026-06-25
+## [v10.6.3](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.6.3) - 2026-07-07
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.6.2...v10.6.3)
+
+### Fixed
+
+- (MODULES-11858) Restore Puppet 7 support broken by 10.6.2 [#1686](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1686) ([imaqsood](https://github.com/imaqsood))
+
+## [v10.6.2](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.6.2) - 2026-06-29
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.6.1...v10.6.2)
 
@@ -1052,11 +1060,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [2.0.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/2.0.1) - 2013-01-30
 
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/2.0.0...2.0.1)
-
-## [2.0.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/2.0.0) - 2013-01-15
-
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/release-0.3.0...2.0.0)
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/release-0.3.0...2.0.1)
 
 ### Added
 
