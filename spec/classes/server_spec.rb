@@ -274,6 +274,36 @@ describe 'postgresql::server' do
     end
   end
 
+  describe 'additional standby' do
+    let(:params) do
+      {
+        manage_recovery_conf: true,
+        standby: {
+          my_replica: {
+            primary_conninfo: 'host=primary port=5432 user=replicator',
+            primary_slot_name: 'replica1'
+          }
+        }
+      }
+    end
+
+    it { is_expected.to compile.with_all_deps }
+
+    it do
+      expect(subject).to contain_postgresql__server__recovery('my_replica')
+        .with_primary_conninfo('host=primary port=5432 user=replicator')
+        .with_primary_slot_name('replica1')
+    end
+
+    it 'wires the standby hash through to postgresql.conf GUCs (PostgreSQL 13 on the Debian 11 fixture, so the PG12+ path applies)' do
+      expect(subject).to contain_postgresql__server__config_entry('my_replica_primary_conninfo')
+        .with_value('host=primary port=5432 user=replicator')
+      expect(subject).to contain_postgresql__server__config_entry('my_replica_primary_slot_name')
+        .with_value('replica1')
+      expect(subject).to contain_file('my_replica_standby_signal')
+    end
+  end
+
   describe 'backup_enable => false' do
     let(:params) { { backup_enable: false } }
 
