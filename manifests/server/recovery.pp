@@ -91,7 +91,7 @@ define postgresql::server::recovery (
         force  => true, # do not crash if there is no recovery conf file
         mode   => '0640',
         warn   => true,
-        notify => Class['postgresql::server::reload'],
+        notify => Postgresql::Server::Instance::Reload['main'],
       }
 
       # Create the recovery.conf content
