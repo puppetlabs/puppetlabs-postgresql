@@ -108,6 +108,10 @@
 #   The hash keys are database names, and the values are hashes of extension names to extension parameters.
 # @param grant_roles Specifies a hash from which to generate postgresql::server::grant_role resources.
 # @param standby Specifies a hash from which to generate postgresql::server::recovery resources, for standby/recovery configuration.
+# @param replication_slots
+#   Specifies a hash from which to generate postgresql_replication_slot resources, for streaming replication clients to
+#   connect via primary_slot_name. Only physical slots on the default instance are supported; the underlying native
+#   resource has no port/psql_path/connect_settings parameters, so this is not multi-instance aware.
 #
 # @param backup_enable Whether a backup job should be enabled.
 # @param backup_options A hash of options that should be passed through to the backup provider.
@@ -198,6 +202,7 @@ class postgresql::server (
   Hash[String, Hash]                                 $extensions                   = {},
   Hash[String[1], Hash]                              $grant_roles                  = {},
   Postgresql::Standby                                $standby                      = {},
+  Hash[String[1], Hash]                              $replication_slots            = {},
 
   Boolean                                            $backup_enable                = $postgresql::params::backup_enable,
   Hash                                               $backup_options               = {},
@@ -249,6 +254,12 @@ class postgresql::server (
   $standby.each |$standbyname, $recovery| {
     postgresql::server::recovery { $standbyname:
       * => $recovery,
+    }
+  }
+
+  $replication_slots.each |$slotname, $slot| {
+    postgresql_replication_slot { $slotname:
+      * => $slot,
     }
   }
 
