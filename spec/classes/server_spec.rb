@@ -304,6 +304,25 @@ describe 'postgresql::server' do
     end
   end
 
+  describe 'additional replication_slots' do
+    let(:params) do
+      {
+        replication_slots: {
+          'standby1_slot' => {
+            'ensure' => 'present'
+          }
+        }
+      }
+    end
+
+    it { is_expected.to compile.with_all_deps }
+
+    it do
+      expect(subject).to contain_postgresql_replication_slot('standby1_slot')
+        .with_ensure('present')
+    end
+  end
+
   describe 'backup_enable => false' do
     let(:params) { { backup_enable: false } }
 
