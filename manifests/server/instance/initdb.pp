@@ -4,6 +4,7 @@
 # @param auth_local  auth method used by default for local authorization
 # @param data_checksums Boolean. Use checksums on data pages to help detect corruption by the I/O system that would otherwise be silent.
 # @param datadir PostgreSQL data directory
+# @param datadir_mode Overrides the default mode (permissions) of the PostgreSQL data directory.
 # @param encoding
 #   Sets the default encoding for all databases created with this module.
 #   On certain operating systems this is also used during the template1 initialization,
@@ -35,6 +36,7 @@ define postgresql::server::instance::initdb (
   Optional[String[1]]            $auth_local     = $postgresql::server::auth_local,
   Optional[Boolean]              $data_checksums = $postgresql::server::data_checksums,
   Stdlib::Absolutepath           $datadir        = $postgresql::server::datadir,
+  Stdlib::Filemode               $datadir_mode   = $postgresql::server::datadir_mode,
   Optional[String[1]]            $encoding       = $postgresql::server::encoding,
   String[1]                      $group          = $postgresql::server::group,
   Stdlib::Absolutepath           $initdb_path    = $postgresql::server::initdb_path,
@@ -66,7 +68,7 @@ define postgresql::server::instance::initdb (
       ensure  => directory,
       owner   => $user,
       group   => $group,
-      mode    => '0700',
+      mode    => $datadir_mode,
       seltype => $seltype,
     }
   } else {
@@ -75,7 +77,7 @@ define postgresql::server::instance::initdb (
       ensure  => directory,
       owner   => $user,
       group   => $group,
-      mode    => '0700',
+      mode    => $datadir_mode,
       seltype => $seltype,
     }
   }
