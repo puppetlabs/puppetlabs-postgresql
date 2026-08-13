@@ -290,7 +290,7 @@ class postgresql::server (
     $extensions_hash.each |$extension_name, $extension_params| {
       postgresql::server::extension { "${database}:${extension_name}":
         database => $database,
-          *      => $extension_params,
+            *    => $extension_params,
       }
     }
   }
