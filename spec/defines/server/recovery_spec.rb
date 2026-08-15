@@ -136,7 +136,7 @@ describe 'postgresql::server::recovery' do
           ensure: 'file',
           content: '',
           require: 'Postgresql::Server::Instance::Initdb[main]',
-          before: 'Postgresql::Server::Instance::Service[main]'
+          before: 'Postgresql::Server::Instance::Service[main]',
         )
       end
 
@@ -145,21 +145,21 @@ describe 'postgresql::server::recovery' do
           ensure: 'present',
           key: 'primary_conninfo',
           value: 'host=primary port=5432 user=replicator',
-          before: 'Postgresql::Server::Instance::Service[main]'
+          before: 'Postgresql::Server::Instance::Service[main]',
         )
       end
 
       it 'writes primary_slot_name as a postgresql.conf GUC' do
         expect(subject).to contain_postgresql__server__config_entry('test_primary_slot_name').with(
           key: 'primary_slot_name',
-          value: 'replica1'
+          value: 'replica1',
         )
       end
 
       it 'writes restore_command as a postgresql.conf GUC' do
         expect(subject).to contain_postgresql__server__config_entry('test_restore_command').with(
           key: 'restore_command',
-          value: 'restore_command'
+          value: 'restore_command',
         )
       end
 
@@ -188,7 +188,7 @@ describe 'postgresql::server::recovery' do
       it 'honors trigger_file as a fallback for promote_trigger_file' do
         expect(subject).to contain_postgresql__server__config_entry('test_promote_trigger_file').with(
           key: 'promote_trigger_file',
-          value: '/tmp/legacy_trigger'
+          value: '/tmp/legacy_trigger',
         )
       end
     end
