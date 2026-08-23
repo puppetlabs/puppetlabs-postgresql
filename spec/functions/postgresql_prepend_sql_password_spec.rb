@@ -21,7 +21,7 @@ describe 'postgresql::prepend_sql_password' do
 
     it 'prepends ENCRYPTED PASSWORD to a password with quotes' do
       expect(subject).to run.with_params("pass'word")
-                            .and_return("ENCRYPTED PASSWORD 'pass'word'")
+                            .and_return("ENCRYPTED PASSWORD 'pass''word'")
     end
   end
 
@@ -43,7 +43,7 @@ describe 'postgresql::prepend_sql_password' do
 
     it 'unwraps and prepends ENCRYPTED PASSWORD to a sensitive string with quotes' do
       expect(subject).to run.with_params(sensitive("sec'ret"))
-                            .and_return("ENCRYPTED PASSWORD 'sec'ret'")
+                            .and_return("ENCRYPTED PASSWORD 'sec''ret'")
     end
   end
 

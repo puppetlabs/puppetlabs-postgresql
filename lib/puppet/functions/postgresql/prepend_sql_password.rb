@@ -10,6 +10,6 @@ Puppet::Functions.create_function(:'postgresql::prepend_sql_password') do
   end
   def default_impl(password)
     password = password.unwrap if password.respond_to?(:unwrap)
-    "ENCRYPTED PASSWORD '#{password}'"
+    "ENCRYPTED PASSWORD '#{password.gsub("'", "''")}'"
   end
 end
