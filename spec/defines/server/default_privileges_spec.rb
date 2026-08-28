@@ -97,6 +97,33 @@ describe 'postgresql::server::default_privileges' do
       end
     end
 
+    context 'supported privilege on PostgreSQL >= 17' do
+      include_examples 'Debian 13'
+
+      let :params do
+        {
+          db: 'test',
+          role: 'test',
+          privilege: 'all',
+          object_type: 'tables'
+        }
+      end
+
+      let :pre_condition do
+        "class {'postgresql::server':}"
+      end
+
+      it { is_expected.to compile.with_all_deps }
+
+      # PostgreSQL 17 added the MAINTAIN privilege ('m'), which ALL includes
+      it do
+        # rubocop:disable Layout/LineLength
+        expect(subject).to contain_postgresql_psql('default_privileges:test')
+          .with_unless("SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE 'test=arwdDxtm' = ANY (defaclacl) AND nspname = 'public' and defaclobjtype = 'r')")
+        # rubocop:enable Layout/LineLength
+      end
+    end
+
     context 'unsupported privilege' do
       let :params do
         {

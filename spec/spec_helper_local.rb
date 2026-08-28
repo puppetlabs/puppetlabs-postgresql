@@ -188,6 +188,10 @@ shared_context 'Debian 12' do
   let(:facts) { on_supported_os['debian-12-x86_64'] }
 end
 
+shared_context 'Debian 13' do
+  let(:facts) { on_supported_os['debian-13-x86_64'] }
+end
+
 shared_context 'Ubuntu 18.04' do
   let(:facts) { on_supported_os['ubuntu-18.04-x86_64'] }
 end

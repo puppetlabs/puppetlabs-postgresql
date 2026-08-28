@@ -105,7 +105,16 @@ define postgresql::server::default_privileges (
     }
     'TABLES': {
       case $_privilege {
-        /^ALL$/: { $_check_privilege = 'arwdDxt' }
+        /^ALL$/: {
+          # Some platforms report legacy 9.x versions without the dot, e.g. '96'.
+          $_version = regsubst($version, '^9(\d)$', '9.\1')
+          # PostgreSQL 17 added the MAINTAIN privilege ('m'), which ALL includes.
+          if (versioncmp($_version, '17') == -1) {
+            $_check_privilege = 'arwdDxt'
+          } else {
+            $_check_privilege = 'arwdDxtm'
+          }
+        }
         /^DELETE$/: { $_check_privilege = 'd' }
         /^INSERT$/: { $_check_privilege = 'a' }
         /^REFERENCES$/: { $_check_privilege = 'x' }
