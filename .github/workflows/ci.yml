@@ -11,6 +11,8 @@ jobs:
     uses: "puppetlabs/cat-github-actions/.github/workflows/module_ci.yml@main"
     with:
       runs_on: "ubuntu-24.04"
+      additional_packages: "libcurl4-openssl-dev"
+      ruby_version: "3.2"
     secrets: "inherit"
 
   Acceptance:
@@ -22,4 +24,9 @@ jobs:
         --platform-exclude centos-7
         --platform-exclude oraclelinux-7
         --platform-exclude scientific-7
+        --collection-platform-exclude 9:redhat-7
+        --collection-platform-exclude 9:debian-10
+        --collection-platform-exclude 9:ubuntu-18.04
+        --collection-platform-exclude 9:ubuntu-20.04
+      ruby_version: "3.2"
     secrets: "inherit"
