@@ -8,9 +8,14 @@ describe 'postgresql::server::default_privileges:' do
   let(:group) { 'test_group' }
   let(:password) { 'psql_grant_role_pw' }
 
+  # PostgreSQL 17 added the MAINTAIN privilege ('m'), which ALL ON TABLES includes
+  let(:all_table_privileges) do
+    (Gem::Version.new(postgresql_version) >= Gem::Version.new('17')) ? 'arwdDxtm' : 'arwdDxt'
+  end
+
   # Check that the default privileges were revoked
   let(:check_command) do
-    "SELECT * FROM pg_default_acl a LEFT JOIN pg_namespace b ON a.defaclnamespace = b.oid WHERE '#{user}=arwdDxt' = ANY (defaclacl) AND nspname = 'public' and defaclobjtype = 'r';"
+    "SELECT * FROM pg_default_acl a LEFT JOIN pg_namespace b ON a.defaclnamespace = b.oid WHERE '#{user}=#{all_table_privileges}' = ANY (defaclacl) AND nspname = 'public' and defaclobjtype = 'r';"
   end
 
   let(:pp_one) do
@@ -72,7 +77,8 @@ describe 'postgresql::server::default_privileges:' do
   let(:target_password) { 'target_role_password' }
 
   let(:target_check_command) do
-    "SELECT 1 FROM pg_default_acl a LEFT JOIN pg_namespace AS b ON a.defaclnamespace = b.oid WHERE '#{user}=arwdDxt/#{target_user}' = ANY (defaclacl) AND nspname = 'public' AND defaclobjtype = 'r';"
+    acl = "#{user}=#{all_table_privileges}/#{target_user}"
+    "SELECT 1 FROM pg_default_acl a LEFT JOIN pg_namespace AS b ON a.defaclnamespace = b.oid WHERE '#{acl}' = ANY (defaclacl) AND nspname = 'public' AND defaclobjtype = 'r';"
   end
 
   let(:pp_target_role) do
@@ -229,7 +235,7 @@ describe 'postgresql::server::default_privileges:' do
   end
 
   let(:all_schemas_check_command) do
-    "SELECT * FROM pg_default_acl a WHERE '#{user}=arwdDxt' = ANY (defaclacl) AND defaclnamespace = 0 and defaclobjtype = 'r';"
+    "SELECT * FROM pg_default_acl a WHERE '#{user}=#{all_table_privileges}' = ANY (defaclacl) AND defaclnamespace = 0 and defaclobjtype = 'r';"
   end
 
   let(:pp_unset_schema) do
