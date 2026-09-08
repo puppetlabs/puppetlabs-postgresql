@@ -103,6 +103,8 @@
 # @param grants Specifies a hash from which to generate postgresql::server::grant resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
+# @param extensions Specifies a hash from which to generate postgresql::server::extension resources.
+#   The hash keys are database names, and the values are hashes of extension names to extension parameters.
 #
 # @param backup_enable Whether a backup job should be enabled.
 # @param backup_options A hash of options that should be passed through to the backup provider.
@@ -189,6 +191,7 @@ class postgresql::server (
   Hash[String[1], Hash]                              $grants                       = {},
   Hash[String, Any]                                  $config_entries               = {},
   Postgresql::Pg_hba_rules                           $pg_hba_rules                 = {},
+  Hash[String, Hash]                                 $extensions                   = {},
 
   Boolean                                            $backup_enable                = $postgresql::params::backup_enable,
   Hash                                               $backup_options               = {},
@@ -235,6 +238,25 @@ class postgresql::server (
   $pg_hba_rules.each |String[1] $rule_name, Postgresql::Pg_hba_rule $rule| {
     postgresql::server::pg_hba_rule { $rule_name:
       * => $rule,
+    }
+  }
+
+  # Create databases first if not already defined
+  $extensions.each |$database, $extensions_hash| {
+    if $database != 'postgres' and ! defined(Postgresql::Server::Database[$database]) {
+      # The database resource doesn't exist, create it
+      postgresql::server::database { $database:
+        dbname => $database,
+      }
+    }
+  }
+
+  $extensions.each |$database, $extensions_hash| {
+    $extensions_hash.each |$extension_name, $extension_params| {
+      postgresql::server::extension { "${database}:${extension_name}":
+        database => $database,
+        *        => $extension_params,
+      }
     }
   }
 
