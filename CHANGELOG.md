@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.7.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.7.0) - 2026-09-08
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.6.3...v10.7.0)
+
+### Added
+
+- (MODULES-11720) Add puppet 9 support in puppetlabs-postgresql [#1700](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1700) ([imaqsood](https://github.com/imaqsood))
+- Allow puppet/systemd 10.x [#1691](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1691) ([deric](https://github.com/deric))
+
+### Fixed
+
+- (MODULES-11935) Fix default_privileges idempotency on PostgreSQL 17 [#1701](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1701) ([imaqsood](https://github.com/imaqsood))
+
 ## [v10.6.3](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.6.3) - 2026-07-07
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.6.2...v10.6.3)
@@ -1056,11 +1069,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [2.1.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/2.1.0) - 2013-02-20
 
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/2.0.1...2.1.0)
-
-## [2.0.1](https://github.com/puppetlabs/puppetlabs-postgresql/tree/2.0.1) - 2013-01-30
-
-[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/release-0.3.0...2.0.1)
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/release-0.3.0...2.1.0)
 
 ### Added
 
