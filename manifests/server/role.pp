@@ -27,7 +27,7 @@
 # @param instance The name of the Postgresql database instance.
 define postgresql::server::role (
   Boolean                                     $update_password  = true,
-  Variant[Boolean, String, Sensitive[String]] $password_hash    = false,
+  Variant[Boolean, String, Sensitive]         $password_hash    = false,
   Boolean                                     $createdb         = false,
   Boolean                                     $createrole       = false,
   String[1]                                   $db               = $postgresql::server::default_database,
