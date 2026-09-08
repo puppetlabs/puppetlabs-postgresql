@@ -5,6 +5,7 @@ class postgresql::server::initdb {
     auth_local     => $postgresql::server::auth_local,
     data_checksums => $postgresql::server::data_checksums,
     datadir        => $postgresql::server::datadir,
+    datadir_mode   => $postgresql::server::datadir_mode,
     encoding       => $postgresql::server::encoding,
     group          => $postgresql::server::group,
     initdb_path    => $postgresql::server::initdb_path,
