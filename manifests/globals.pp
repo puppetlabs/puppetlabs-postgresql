@@ -23,7 +23,7 @@
 # @param service_status Overrides the default status check command for your PostgreSQL service.
 # @param default_database Specifies the name of the default database to connect with.
 #
-# @param validcon_script_path Scipt path for the connection validation check.
+# @param validcon_script_path Deprecated parameter for the scipt path for the connection validation check. This file will be ensured absent
 #
 # @param initdb_path Path to the initdb command.
 # @param psql_path Sets the path to the psql command.
