@@ -80,6 +80,30 @@ describe 'postgresql::server::pg_hba_rule' do
     end
   end
 
+  context 'test template 3 with sensitive Data' do
+    let :pre_condition do
+      <<-MANIFEST
+        class { 'postgresql::server': }
+      MANIFEST
+    end
+
+    let :params do
+      {
+        type: 'host',
+        database: 'all',
+        user: 'all',
+        address: '0.0.0.0/0',
+        auth_method: 'ldap',
+        auth_option: sensitive('foo=bar'),
+        target: target
+      }
+    end
+
+    it do
+      expect(subject).to contain_concat__fragment('pg_hba_rule_test').with(content: sensitive(%r{host\s+all\s+all\s+0\.0\.0\.0/0\s+ldap\s+foo=bar}))
+    end
+  end
+
   context 'validation' do
     context 'validate supported auth_method' do
       let :pre_condition do
