@@ -20,7 +20,8 @@ describe Puppet::Type.type(:postgresql_replication_slot) do
   end
 
   it 'is ensurable' do
-    expect(subject.property(:ensure)).not_to be_nil
+    ensurable = described_class.new(name: 'standby1_slot', ensure: :present)
+    expect(ensurable.property(:ensure)).not_to be_nil
   end
 
   it 'accepts ensure => present and ensure => absent' do
