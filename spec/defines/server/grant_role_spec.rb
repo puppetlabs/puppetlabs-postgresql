@@ -92,7 +92,7 @@ postgresql::server::role { '#{params[:group]}': }"
     end
 
     it {
-      expect(subject).not_to contain_postgresql_psql("grant_role:#{title}").that_requires('Class[postgresql::server]')
+      expect(subject).to contain_postgresql_psql("grant_role:#{title}").with_connect_settings('PGHOST' => 'postgres-db-server')
     }
 
     it {
