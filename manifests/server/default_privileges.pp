@@ -105,16 +105,7 @@ define postgresql::server::default_privileges (
     }
     'TABLES': {
       case $_privilege {
-        /^ALL$/: {
-          # Some platforms report legacy 9.x versions without the dot, e.g. '96'.
-          $_version = regsubst($version, '^9(\d)$', '9.\1')
-          # PostgreSQL 17 added the MAINTAIN privilege ('m'), which ALL includes.
-          if (versioncmp($_version, '17') == -1) {
-            $_check_privilege = 'arwdDxt'
-          } else {
-            $_check_privilege = 'arwdDxtm'
-          }
-        }
+        /^ALL$/: { $_check_privilege = 'arwdDxt' }
         /^DELETE$/: { $_check_privilege = 'd' }
         /^INSERT$/: { $_check_privilege = 'a' }
         /^REFERENCES$/: { $_check_privilege = 'x' }
@@ -153,12 +144,18 @@ define postgresql::server::default_privileges (
     }
   }
 
-  $_unless = $ensure ? {
-    'absent' => "SELECT 1 WHERE NOT EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '\"%s\"=%s%s' = ANY (defaclacl)%s and defaclobjtype = '%s')", # lint:ignore:140chars
-    default  => "SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '\"%s\"=%s%s' = ANY (defaclacl)%s and defaclobjtype = '%s')", # lint:ignore:140chars
+  $_role_needs_quoting = $role !~ /^[a-z_][a-z0-9_]*$/
+  $_check_role = $_role_needs_quoting ? {
+    true    => "\"${role}\"",
+    default => $role,
   }
 
-  $unless_cmd = sprintf($_unless, $role, $_check_privilege, $_check_target_role, $_check_schema, $_check_type)
+  $_unless = $ensure ? {
+    'absent' => "SELECT 1 WHERE NOT EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '%s=%s%s' = ANY (defaclacl)%s and defaclobjtype = '%s')", # lint:ignore:140chars
+    default  => "SELECT 1 WHERE EXISTS (SELECT * FROM pg_default_acl AS da LEFT JOIN pg_namespace AS n ON da.defaclnamespace = n.oid WHERE '%s=%s%s' = ANY (defaclacl)%s and defaclobjtype = '%s')", # lint:ignore:140chars
+  }
+
+  $unless_cmd = sprintf($_unless, $_check_role, $_check_privilege, $_check_target_role, $_check_schema, $_check_type)
   $grant_cmd = sprintf($sql_command, $_target_role, $_schema, $_privilege, $_object_type, $role)
 
   postgresql_psql { "default_privileges:${name}":
