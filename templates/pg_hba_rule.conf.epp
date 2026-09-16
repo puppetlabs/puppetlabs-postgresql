@@ -7,7 +7,7 @@
   String[1]                                 $user,
   Optional[Postgresql::Pg_hba_rule_address] $address,
   String[1]                                 $auth_method,
-  Optional[String]                          $auth_option,
+  Optional[Variant[Sensitive[String], String]] $auth_option,
 | -%>
 # Rule Name: <%= $name %>
 # Description: <%= $description %>
