@@ -13,6 +13,9 @@ Gemfile:
     ":development":
     - gem: github_changelog_generator
       version: '= 1.15.2'
+  overrides:
+    - gem: 'puppet_litmus'
+      version: '~> 2.0'
 Rakefile:
   changelog_user: puppetlabs
   changelog_max_issues: 500
