@@ -22,10 +22,7 @@ describe 'postgresql::client' do
     end
 
     it 'has specified validate connexion' do
-      expect(subject).to contain_file('/opt/bin/my-validate-con.sh').with(ensure: 'file',
-                                                                          owner: 0,
-                                                                          group: 0,
-                                                                          mode: '0755')
+      expect(subject).to contain_file('/opt/bin/my-validate-con.sh').with(ensure: 'absent')
     end
   end
 
