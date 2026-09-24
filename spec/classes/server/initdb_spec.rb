@@ -10,7 +10,19 @@ describe 'postgresql::server::initdb' do
   describe 'on RedHat' do
     include_examples 'RedHat 8'
 
-    it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory') }
+    it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory').with_mode('0700') }
+
+    context 'with datadir_mode set to 0750' do
+      let :pre_condition do
+        "
+        class {'postgresql::server':
+          datadir_mode => '0750',
+        }
+        "
+      end
+
+      it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory').with_mode('0750') }
+    end
 
     context 'with (log,manage,xlog)_datadir set to false' do
       let :pre_condition do

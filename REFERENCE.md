@@ -892,6 +892,7 @@ The following parameters are available in the `postgresql::server` class:
 * [`manage_datadir`](#-postgresql--server--manage_datadir)
 * [`manage_logdir`](#-postgresql--server--manage_logdir)
 * [`manage_xlogdir`](#-postgresql--server--manage_xlogdir)
+* [`datadir_mode`](#-postgresql--server--datadir_mode)
 * [`password_encryption`](#-postgresql--server--password_encryption)
 * [`pg_hba_auth_password_encryption`](#-postgresql--server--pg_hba_auth_password_encryption)
 * [`roles`](#-postgresql--server--roles)
@@ -1318,6 +1319,14 @@ Data type: `Boolean`
 Set to false if you have file{ $xlogdir: } already defined
 
 Default value: `$postgresql::params::manage_xlogdir`
+
+##### <a name="-postgresql--server--datadir_mode"></a>`datadir_mode`
+
+Data type: `Stdlib::Filemode`
+
+Overrides the default mode (permissions) of the PostgreSQL data directory.
+
+Default value: `$postgresql::params::datadir_mode`
 
 ##### <a name="-postgresql--server--password_encryption"></a>`password_encryption`
 
@@ -2797,6 +2806,7 @@ The following parameters are available in the `postgresql::server::instance::ini
 * [`auth_local`](#-postgresql--server--instance--initdb--auth_local)
 * [`data_checksums`](#-postgresql--server--instance--initdb--data_checksums)
 * [`datadir`](#-postgresql--server--instance--initdb--datadir)
+* [`datadir_mode`](#-postgresql--server--instance--initdb--datadir_mode)
 * [`encoding`](#-postgresql--server--instance--initdb--encoding)
 * [`group`](#-postgresql--server--instance--initdb--group)
 * [`initdb_path`](#-postgresql--server--instance--initdb--initdb_path)
@@ -2845,6 +2855,14 @@ Data type: `Stdlib::Absolutepath`
 PostgreSQL data directory
 
 Default value: `$postgresql::server::datadir`
+
+##### <a name="-postgresql--server--instance--initdb--datadir_mode"></a>`datadir_mode`
+
+Data type: `Stdlib::Filemode`
+
+Overrides the default mode (permissions) of the PostgreSQL data directory.
+
+Default value: `$postgresql::server::datadir_mode`
 
 ##### <a name="-postgresql--server--instance--initdb--encoding"></a>`encoding`
 
