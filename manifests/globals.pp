@@ -220,6 +220,7 @@ class postgresql::globals (
         /^(21.04|21.10)$/ => '13',
         /^(22.04)$/ => '14',
         /^(24.04)$/ => '16',
+        /^(26.04)$/ => '18',
         default => undef,
       },
       default => undef,
