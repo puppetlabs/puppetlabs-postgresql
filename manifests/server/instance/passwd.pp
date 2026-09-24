@@ -60,7 +60,7 @@ define postgresql::server::instance::passwd (
       # environment variable. If the password is correct (current), this
       # command will exit with an exit code of 0, which will prevent the main
       # command from running.
-      unless      => "${psql_path} -h localhost -p ${port} -c 'select 1' > /dev/null",
+      unless      => "${shell_escape($psql_path)}${_dboption} -h localhost -p ${port} -c 'select 1' > /dev/null",
       path        => '/usr/bin:/usr/local/bin:/bin',
     }
   }
