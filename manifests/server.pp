@@ -99,10 +99,19 @@
 # @param pg_hba_auth_password_encryption
 #   Specify the type of encryption set for the password in pg_hba_conf,
 #   this value is usefull if you want to start enforcing scram-sha-256, but give users transition time.
+# @param databases Specifies a hash from which to generate postgresql::server::database resources.
 # @param roles Specifies a hash from which to generate postgresql::server::role resources.
 # @param grants Specifies a hash from which to generate postgresql::server::grant resources.
 # @param config_entries Specifies a hash from which to generate postgresql::server::config_entry resources.
 # @param pg_hba_rules Specifies a hash from which to generate postgresql::server::pg_hba_rule resources.
+# @param extensions Specifies a hash from which to generate postgresql::server::extension resources.
+#   The hash keys are database names, and the values are hashes of extension names to extension parameters.
+# @param grant_roles Specifies a hash from which to generate postgresql::server::grant_role resources.
+# @param standby Specifies a hash from which to generate postgresql::server::recovery resources, for standby/recovery configuration.
+# @param replication_slots
+#   Specifies a hash from which to generate postgresql_replication_slot resources, for streaming replication clients to
+#   connect via primary_slot_name. Only physical slots on the default instance are supported; the underlying native
+#   resource has no port/psql_path/connect_settings parameters, so this is not multi-instance aware.
 #
 # @param backup_enable Whether a backup job should be enabled.
 # @param backup_options A hash of options that should be passed through to the backup provider.
@@ -185,10 +194,15 @@ class postgresql::server (
   Optional[Postgresql::Pg_password_encryption]       $pg_hba_auth_password_encryption = undef,
   Optional[String]                                   $extra_systemd_config         = $postgresql::params::extra_systemd_config,
 
+  Hash[String[1], Hash]                              $databases                    = {},
   Hash[String, Hash]                                 $roles                        = {},
   Hash[String[1], Hash]                              $grants                       = {},
   Hash[String, Any]                                  $config_entries               = {},
   Postgresql::Pg_hba_rules                           $pg_hba_rules                 = {},
+  Hash[String, Hash]                                 $extensions                   = {},
+  Hash[String[1], Hash]                              $grant_roles                  = {},
+  Postgresql::Standby                                $standby                      = {},
+  Hash[String[1], Hash]                              $replication_slots            = {},
 
   Boolean                                            $backup_enable                = $postgresql::params::backup_enable,
   Hash                                               $backup_options               = {},
@@ -213,6 +227,12 @@ class postgresql::server (
   -> Class['postgresql::server::service']
   -> Class['postgresql::server::passwd']
 
+  $databases.each |$databasename, $database| {
+    postgresql::server::database { $databasename:
+      * => $database,
+    }
+  }
+
   $roles.each |$rolename, $role| {
     postgresql::server::role { $rolename:
       * => $role,
@@ -222,6 +242,24 @@ class postgresql::server (
   $grants.each |$grantname, $grant| {
     postgresql::server::grant { $grantname:
       * => $grant,
+    }
+  }
+
+  $grant_roles.each |$grantname, $grant_role| {
+    postgresql::server::grant_role { $grantname:
+      * => $grant_role,
+    }
+  }
+
+  $standby.each |$standbyname, $recovery| {
+    postgresql::server::recovery { $standbyname:
+      * => $recovery,
+    }
+  }
+
+  $replication_slots.each |$slotname, $slot| {
+    postgresql_replication_slot { $slotname:
+      * => $slot,
     }
   }
 
@@ -235,6 +273,25 @@ class postgresql::server (
   $pg_hba_rules.each |String[1] $rule_name, Postgresql::Pg_hba_rule $rule| {
     postgresql::server::pg_hba_rule { $rule_name:
       * => $rule,
+    }
+  }
+
+  # Create databases first if not already defined
+  $extensions.each |$database, $extensions_hash| {
+    if $database != 'postgres' and ! defined(Postgresql::Server::Database[$database]) {
+      # The database resource doesn't exist, create it
+      postgresql::server::database { $database:
+        dbname => $database,
+      }
+    }
+  }
+
+  $extensions.each |$database, $extensions_hash| {
+    $extensions_hash.each |$extension_name, $extension_params| {
+      postgresql::server::extension { "${database}:${extension_name}":
+        database => $database,
+        *        => $extension_params,
+      }
     }
   }
 
