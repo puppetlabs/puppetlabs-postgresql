@@ -6,9 +6,9 @@ describe 'postgresql::server::extension' do
   # Choose a contrib extension that exists on this distro (name and version
   # vary, so hard-coding either would be brittle).
   def discover_extension
-    q = "SELECT name, default_version FROM pg_available_extensions " \
+    q = 'SELECT name, default_version FROM pg_available_extensions ' \
         "WHERE name IN ('unaccent', 'pg_visibility', 'pg_repack') ORDER BY name LIMIT 1"
-    ext, ver = psql("-At --command=\"#{q}\" postgres", 'postgres').stdout.strip.split(/\s+/)
+    ext, ver = psql("-At --command=\"#{q}\" postgres", 'postgres').stdout.strip.split(%r{\s+})
     raise 'no contrib extension available on this platform' if ext.nil?
 
     [ext, ver]
