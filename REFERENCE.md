@@ -83,7 +83,7 @@
 * [`postgresql::default`](#postgresql--default): This function pull default values from the `params` class  or `globals` class if the value is not present in `params`.
 * [`postgresql::postgresql_escape`](#postgresql--postgresql_escape): This function escapes a string using [Dollar Quoting](https://www.postgresql.org/docs/12/sql-syntax-lexical.html#SQL-SYNTAX-DOLLAR-QUOTING) using a randomly generated tag if required.
 * [`postgresql::postgresql_password`](#postgresql--postgresql_password): This function returns the postgresql password hash from the clear text username / password
-* [`postgresql::prepend_sql_password`](#postgresql--prepend_sql_password): This function exists for usage of a role password that is a deferred function
+* [`postgresql::prepend_sql_password`](#postgresql--prepend_sql_password): Builds the `ENCRYPTED PASSWORD '...'` clause used by `postgresql::server::role`.
 * [`postgresql_escape`](#postgresql_escape): DEPRECATED.  Use the namespaced function [`postgresql::postgresql_escape`](#postgresqlpostgresql_escape) instead.
 * [`postgresql_password`](#postgresql_password): DEPRECATED.  Use the namespaced function [`postgresql::postgresql_password`](#postgresqlpostgresql_password) instead.
 
@@ -1874,9 +1874,11 @@ User to assign access to the database upon creation (will be created if not defi
 
 ##### <a name="-postgresql--server--db--password"></a>`password`
 
-Data type: `Optional[Variant[String, Sensitive[String]]]`
+Data type: `Optional[Variant[String, Sensitive]]`
 
-Sets the password for the created user (if a user is created).
+Sets the password for the created user (if a user is created). Accepts a String, a
+Sensitive[String], or a Deferred function returning either of them; see
+`postgresql::server::role` `password_hash`.
 
 Default value: `undef`
 
@@ -3709,9 +3711,12 @@ Default value: `true`
 
 ##### <a name="-postgresql--server--role--password_hash"></a>`password_hash`
 
-Data type: `Variant[Boolean, String, Sensitive[String]]`
+Data type: `Variant[Boolean, String, Sensitive]`
 
-Sets the hash to use during password creation.
+Sets the password to use during role creation, either in clear text or as a pre-computed
+md5 / SCRAM-SHA-256 hash. Accepts a String, a Sensitive[String], or a Deferred function
+returning either of them (for example `Deferred('vault_lookup::lookup', [...])`), so that
+the secret is only resolved on the agent.
 
 Default value: `false`
 
@@ -4793,19 +4798,34 @@ Use a specific salt value for scram-sha-256, default is username
 
 Type: Ruby 4.x API
 
-This function exists for usage of a role password that is a deferred function
+The function is called either directly at compile time or as a Deferred function when
+the role password is itself Deferred. In the Deferred case the resolved password may
+arrive wrapped in `Sensitive` (for example from `vault_lookup::lookup`, or whenever the
+agent runs with `preprocess_deferred = true`), so both forms are accepted.
 
 #### `postgresql::prepend_sql_password(String $password)`
 
 The postgresql::prepend_sql_password function.
 
-Returns: `String`
+Returns: `String` The SQL clause with the password quoted as an SQL string literal
 
 ##### `password`
 
 Data type: `String`
 
 The clear text `password`
+
+#### `postgresql::prepend_sql_password(Sensitive[String] $password)`
+
+The postgresql::prepend_sql_password function.
+
+Returns: `String` The SQL clause with the password quoted as an SQL string literal
+
+##### `password`
+
+Data type: `Sensitive[String]`
+
+The clear text `password` wrapped in `Sensitive`
 
 ### <a name="postgresql_escape"></a>`postgresql_escape`
 
