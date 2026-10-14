@@ -28,7 +28,7 @@
 define postgresql::server::extension (
   String[1]                                           $database,
   Optional[Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]]] $package_ensure = undef,
-  String[1]                                           $extension              = $name,
+  String[1]                                           $extension              = split($name, ':')[1],
   Optional[String[1]]                                 $schema                 = undef,
   Optional[String[1]]                                 $version                = undef,
   Enum['present', 'absent']                           $ensure                 = 'present',
