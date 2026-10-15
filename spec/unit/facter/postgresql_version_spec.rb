@@ -4,7 +4,6 @@ require 'spec_helper'
 require 'facter/postgresql_version'
 
 describe :postgresql_version do
-
   after :each do
     Facter.clear
   end
