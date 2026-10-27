@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.8.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.8.0) - 2026-10-27
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.7.0...v10.8.0)
+
+### Added
+
+- (MODULES-12078) Allow puppet/systemd 11.x [#1722](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1722) ([imaqsood](https://github.com/imaqsood))
+
+### Fixed
+
+- Properly quote role name in default_privileges type [#1666](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1666) ([antaflos](https://github.com/antaflos))
+- Do not reveal sensitive Data [#1597](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1597) ([cocker-cc](https://github.com/cocker-cc))
+
 ## [v10.7.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.7.0) - 2026-09-08
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.6.3...v10.7.0)
