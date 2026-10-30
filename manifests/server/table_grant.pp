@@ -16,7 +16,7 @@
 define postgresql::server::table_grant (
   Enum['ALL', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'all', 'select', 'insert', 'update', 'delete',
   'truncate', 'references', 'trigger'] $privilege,
-  String[1]                                           $table,
+  Optional[Variant[Array[String,2,2],String[1]]]      $table,
   String[1]                                           $db,
   String[1]                                           $role,
   Optional[Enum['present', 'absent']]                 $ensure           = undef,
