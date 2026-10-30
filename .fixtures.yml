@@ -12,3 +12,7 @@ fixtures:
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
     yumrepo_core: "https://github.com/puppetlabs/puppetlabs-yumrepo_core.git"
     systemd: "https://github.com/voxpupuli/puppet-systemd.git"
+  symlinks:
+    # Test-only helper functions used by the unit tests (e.g. a Deferred-able function with a
+    # Sensitive return type); not part of the released module.
+    postgresql_spec: "#{source_dir}/spec/fixtures/postgresql_spec"

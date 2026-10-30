@@ -2,7 +2,11 @@
 #
 # @param update_password
 #   If set to true, updates the password on changes. Set this to false to not modify the role's password after creation.
-# @param password_hash Sets the hash to use during password creation.
+# @param password_hash
+#   Sets the password to use during role creation, either in clear text or as a pre-computed
+#   md5 / SCRAM-SHA-256 hash. Accepts a String, a Sensitive[String], or a Deferred function
+#   returning either of them (for example `Deferred('vault_lookup::lookup', [...])`), so that
+#   the secret is only resolved on the agent.
 # @param createdb Specifies whether to grant the ability to create new databases with this role.
 # @param createrole Specifies whether to grant the ability to create new roles with this role.
 # @param db Database used to connect to.
@@ -27,7 +31,12 @@
 # @param instance The name of the Postgresql database instance.
 define postgresql::server::role (
   Boolean                                     $update_password  = true,
-  Variant[Boolean, String, Sensitive[String]] $password_hash    = false,
+  # Deliberately `Sensitive` and not `Sensitive[String]`: when a Deferred value is given, Puppet
+  # validates the Deferred function's declared return type against this type, and secret lookup
+  # functions such as `vault_lookup::lookup` declare a bare `Sensitive`, which `Sensitive[String]`
+  # rejects. The values are type checked again by postgresql::prepend_sql_password and
+  # postgresql::postgresql_password once they are resolved.
+  Variant[Boolean, String, Sensitive]         $password_hash    = false,
   Boolean                                     $createdb         = false,
   Boolean                                     $createrole       = false,
   String[1]                                   $db               = $postgresql::server::default_database,
@@ -49,7 +58,10 @@ define postgresql::server::role (
   Optional[Variant[String[1], Integer]]       $salt             = undef,
   String[1]                                   $instance         = 'main',
 ) {
-  $password_hash_unsensitive = if $password_hash =~ Sensitive[String] {
+  # Unwrap once up front so that a Sensitive value (including a Sensitive wrapping a Deferred)
+  # follows the same code path as a plain value. Every command built from it is wrapped in
+  # Sensitive again before it reaches postgresql_psql.
+  $password_hash_unsensitive = if $password_hash =~ Sensitive {
     $password_hash.unwrap
   } else {
     $password_hash
