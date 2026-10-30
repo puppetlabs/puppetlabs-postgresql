@@ -30,6 +30,7 @@ class postgresql::params inherits postgresql::globals {
   $manage_datadir               = true
   $manage_logdir                = true
   $manage_xlogdir               = true
+  $datadir_mode                 = '0700'
 
   $backup_enable = false
   $backup_provider = 'pg_dump'
