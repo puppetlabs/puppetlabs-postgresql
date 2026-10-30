@@ -10,7 +10,7 @@
 define postgresql::server::config_entry (
   Enum['present', 'absent']                               $ensure  = 'present',
   String[1]                                               $key     = $name,
-  Optional[Variant[String[1], Numeric, Array[String[1]]]] $value   = undef,
+  Optional[Variant[String, Numeric, Array[String[1]]]]    $value   = undef,
   Stdlib::Absolutepath                                    $path    = $postgresql::server::postgresql_conf_path,
   Optional[String[1]]                                     $comment = undef,
   String[1]                                               $instance_name = 'main',
