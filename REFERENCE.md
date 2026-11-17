@@ -3463,7 +3463,10 @@ Specifies the database to which the 'REASSIGN OWNED' will be applied
 
 Data type: `String`
 
-Specifies the OS user for running psql.
+Specifies the OS user for running psql. If `old_role` owns a database and this user
+connects as a role that is not a superuser, that role needs the CREATEDB privilege:
+since the November 2026 PostgreSQL releases (CVE-2026-120146), REASSIGN OWNED checks
+CREATEDB before changing a database's owner and fails without it.
 
 Default value: `$postgresql::server::user`
 

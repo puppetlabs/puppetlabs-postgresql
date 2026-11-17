@@ -57,7 +57,6 @@ Puppet::Type.newtype(:postgresql_psql) do
     # Return true if a matching row is found
     def matches(value)
       output, status = provider.run_unless_sql_command(value)
-      status = output.exitcode if status.nil?
 
       raise("Error evaluating 'onlyif' clause, returned #{status}: '#{output}'") unless status.to_i.zero?
 
