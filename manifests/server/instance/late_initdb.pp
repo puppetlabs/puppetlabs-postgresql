@@ -11,6 +11,8 @@
 #   Note: The same port number is used for all IP addresses the server listens on. Also, for Red Hat systems and early Debian systems,
 #   changing the port causes the server to come to a full stop before being able to make the change.
 # @param module_workdir Working directory for the PostgreSQL module
+# @param version
+#   The PostgreSQL version whose package-created `main` cluster is started, on Debian-family systems, before the encoding is checked.
 define postgresql::server::instance::late_initdb (
   Optional[String[1]]                       $encoding       = $postgresql::server::encoding,
   String[1]                                 $user           = $postgresql::server::user,
@@ -18,7 +20,21 @@ define postgresql::server::instance::late_initdb (
   Stdlib::Absolutepath                      $psql_path      = $postgresql::server::psql_path,
   Stdlib::Port                              $port           = $postgresql::server::port,
   Stdlib::Absolutepath                      $module_workdir = $postgresql::server::module_workdir,
+  String[1]                                 $version        = $postgresql::server::_version,
 ) {
+  # The Debian packages create and normally start a `main` cluster, but the start is skipped
+  # where /usr/sbin/policy-rc.d denies it (Docker images ship one that does), which leaves
+  # nothing for psql below to connect to. Start the cluster if it exists and is stopped.
+  if $facts['os']['family'] == 'Debian' {
+    exec { "postgresql_start_package_cluster_${name}":
+      command => "pg_ctlcluster ${version} main start",
+      onlyif  => "test -f /etc/postgresql/${version}/main/postgresql.conf",
+      unless  => "pg_ctlcluster ${version} main status",
+      path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
+      before  => Postgresql_psql["Set template1 encoding to ${encoding}"],
+    }
+  }
+
   # Set the defaults for the postgresql_psql resource
   Postgresql_psql {
     psql_user  => $user,
