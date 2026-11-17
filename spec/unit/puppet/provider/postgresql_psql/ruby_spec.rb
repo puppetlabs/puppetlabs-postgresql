@@ -111,4 +111,18 @@ describe Puppet::Type.type(:postgresql_psql).provider(:ruby) do
       provider.run_unless_sql_command('SELECT 1')
     end
   end
+
+  describe('#run_command') do
+    let(:attributes) { {} }
+
+    it 'returns the exit status of a failed psql command' do
+      allow(Puppet::Util::Execution).to receive(:execute).and_return(Puppet::Util::Execution::ProcessOutput.new('ERROR:  permission denied', 1))
+      expect(provider.send(:run_command, ['psql'], 'postgres', 'postgres', {})).to eq(['ERROR:  permission denied', 1])
+    end
+
+    it 'returns 0 for a successful psql command' do
+      allow(Puppet::Util::Execution).to receive(:execute).and_return(Puppet::Util::Execution::ProcessOutput.new('REASSIGN OWNED', 0))
+      expect(provider.send(:run_command, ['psql'], 'postgres', 'postgres', {})).to eq(['REASSIGN OWNED', 0])
+    end
+  end
 end

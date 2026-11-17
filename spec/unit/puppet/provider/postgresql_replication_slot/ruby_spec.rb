@@ -4,20 +4,6 @@ require 'spec_helper'
 
 type = Puppet::Type.type(:postgresql_replication_slot)
 describe type.provider(:ruby) do
-  # class SuccessStatus
-  class SuccessStatus
-    def success?
-      true
-    end
-  end
-
-  # class FailStatus
-  class FailStatus
-    def success?
-      false
-    end
-  end
-
   let(:name) { 'standby' }
   let(:resource) do
     type.new({ name: name, provider: :ruby }.merge(attributes))
@@ -26,9 +12,18 @@ describe type.provider(:ruby) do
     "abc |        | physical  |        |          | t      |      |              | 0/3000420
 def |        | physical  |        |          | t      |      |              | 0/3000420\n"
   end
-  let(:success_status) { SuccessStatus.new }
-  let(:fail_status) { FailStatus.new }
+  let(:success_status) { 0 }
+  let(:fail_status) { 1 }
   let(:provider) { resource.provider }
+
+  describe '.run_command' do
+    let(:attributes) { {} }
+
+    it 'returns the exit status of the psql command' do
+      allow(Puppet::Util::Execution).to receive(:execute).and_return(Puppet::Util::Execution::ProcessOutput.new('ERROR:  oops', 1))
+      expect(provider.class.send(:run_command, ['psql'], 'postgres', 'postgres')).to eq(['ERROR:  oops', 1])
+    end
+  end
 
   context 'when listing instances' do
     before(:each) do

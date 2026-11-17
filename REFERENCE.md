@@ -2996,6 +2996,7 @@ The following parameters are available in the `postgresql::server::instance::lat
 * [`psql_path`](#-postgresql--server--instance--late_initdb--psql_path)
 * [`port`](#-postgresql--server--instance--late_initdb--port)
 * [`module_workdir`](#-postgresql--server--instance--late_initdb--module_workdir)
+* [`version`](#-postgresql--server--instance--late_initdb--version)
 
 ##### <a name="-postgresql--server--instance--late_initdb--encoding"></a>`encoding`
 
@@ -3047,6 +3048,14 @@ Data type: `Stdlib::Absolutepath`
 Working directory for the PostgreSQL module
 
 Default value: `$postgresql::server::module_workdir`
+
+##### <a name="-postgresql--server--instance--late_initdb--version"></a>`version`
+
+Data type: `String[1]`
+
+The PostgreSQL version whose package-created `main` cluster is started, on Debian-family systems, before the encoding is checked.
+
+Default value: `$postgresql::server::_version`
 
 ### <a name="postgresql--server--instance--passwd"></a>`postgresql::server::instance::passwd`
 
@@ -3463,7 +3472,10 @@ Specifies the database to which the 'REASSIGN OWNED' will be applied
 
 Data type: `String`
 
-Specifies the OS user for running psql.
+Specifies the OS user for running psql. If `old_role` owns a database and this user
+connects as a role that is not a superuser, that role needs the CREATEDB privilege:
+since the November 2026 PostgreSQL releases (CVE-2026-120146), REASSIGN OWNED checks
+CREATEDB before changing a database's owner and fails without it.
 
 Default value: `$postgresql::server::user`
 
