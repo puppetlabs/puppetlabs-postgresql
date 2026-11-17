@@ -105,4 +105,42 @@ describe 'postgresql::server::initdb' do
       expect(subject).to contain_postgresql_psql('Set template1 encoding to test').with(cwd: '/var/tmp')
     end
   end
+
+  describe 'late_initdb on Debian' do
+    include_examples 'Debian 12'
+
+    let(:pre_condition) do
+      <<-EOS
+        class { 'postgresql::globals':
+          encoding => 'UTF8',
+        }->
+        class { 'postgresql::server': }
+      EOS
+    end
+
+    it 'starts the package-created cluster before setting the template1 encoding' do
+      expect(subject).to contain_exec('postgresql_start_package_cluster_main').with(
+        command: 'pg_ctlcluster 15 main start',
+        onlyif: 'test -f /etc/postgresql/15/main/postgresql.conf',
+        unless: 'pg_ctlcluster 15 main status',
+      ).that_comes_before('Postgresql_psql[Set template1 encoding to UTF8]')
+    end
+  end
+
+  describe 'late_initdb on RedHat' do
+    include_examples 'RedHat 8'
+
+    let(:pre_condition) do
+      <<-EOS
+        class { 'postgresql::globals':
+          encoding     => 'UTF8',
+          needs_initdb => false,
+        }->
+        class { 'postgresql::server': }
+      EOS
+    end
+
+    it { is_expected.to contain_postgresql_psql('Set template1 encoding to UTF8') }
+    it { is_expected.not_to contain_exec('postgresql_start_package_cluster_main') }
+  end
 end
