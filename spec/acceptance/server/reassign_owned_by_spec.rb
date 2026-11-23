@@ -27,10 +27,13 @@ describe 'postgresql::server::reassign_owned_by:' do
         ensure => present,
       }
 
-      # Create a user to reassign ownership to
+      # Create a user to reassign ownership to. It runs the REASSIGN and takes over
+      # a database owned by the old owner, which needs CREATEDB since the November
+      # 2026 PostgreSQL releases (CVE-2026-120146).
       postgresql::server::role { $new_owner:
-        db      => $db,
-        require => Postgresql::Server::Database[$db],
+        db       => $db,
+        createdb => true,
+        require  => Postgresql::Server::Database[$db],
       }
 
       # Make a local user for ident auth
