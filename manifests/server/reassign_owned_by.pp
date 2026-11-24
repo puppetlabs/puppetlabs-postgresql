@@ -5,7 +5,11 @@
 # @param old_role Specifies the role or user who is the current owner of the objects in the specified db
 # @param new_role Specifies the role or user who will be the new owner of these objects
 # @param db Specifies the database to which the 'REASSIGN OWNED' will be applied
-# @param psql_user Specifies the OS user for running psql.
+# @param psql_user
+#   Specifies the OS user for running psql. If `old_role` owns a database and this user
+#   connects as a role that is not a superuser, that role needs the CREATEDB privilege:
+#   since the November 2026 PostgreSQL releases (CVE-2026-120146), REASSIGN OWNED checks
+#   CREATEDB before changing a database's owner and fails without it.
 # @param port Port to use when connecting.
 # @param connect_settings Specifies a hash of environment variables used when connecting to a remote server.
 # @param group Sets the OS group to run psql
