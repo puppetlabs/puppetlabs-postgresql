@@ -25,6 +25,28 @@ describe 'postgresql::server::extension' do # rubocop:disable RSpec/MultipleDesc
     }
   end
 
+  context 'when created with a specific version' do
+    let(:params) do
+      super().merge(version: '3.5.7')
+    end
+
+    it {
+      expect(subject).to contain_postgresql_psql('template_postgis: CREATE EXTENSION "postgis" VERSION "3.5.7"')
+        .with(db: 'template_postgis', command: 'CREATE EXTENSION "postgis" VERSION "3.5.7"').that_requires('Postgresql::Server::Database[template_postgis]')
+    }
+  end
+
+  context 'when created with version latest' do
+    let(:params) do
+      super().merge(version: 'latest')
+    end
+
+    it {
+      expect(subject).to contain_postgresql_psql('template_postgis: CREATE EXTENSION "postgis"')
+        .with(db: 'template_postgis', command: 'CREATE EXTENSION "postgis"').that_requires('Postgresql::Server::Database[template_postgis]')
+    }
+  end
+
   context 'when schema is specified' do
     let(:params) do
       super().merge(schema: 'pg_catalog')

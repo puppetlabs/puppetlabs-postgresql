@@ -7,11 +7,15 @@
 #   Specifies the version of the extension which the database uses. When an extension package is updated, this does not automatically
 #   change the effective version in each database.
 #   This needs be updated using the PostgreSQL-specific SQL ALTER EXTENSION...
-#   version may be set to latest, in which case the SQL ALTER EXTENSION "extension" UPDATE is applied to this database (only).
+#   When the extension is being created (ensure is 'present') and version is set to a specific version, the extension is created using
+#   CREATE EXTENSION "extension" VERSION 'version'. eg. If extension is set to postgis and version is set to 3.3, this will apply the SQL
+#   CREATE EXTENSION "postgis" VERSION '3.3'.
+#   version may be set to latest, in which case an extension being created uses no explicit VERSION clause, and, once created, the SQL
+#   ALTER EXTENSION "extension" UPDATE is applied to this database (only).
 #   version may be set to a specific version, in which case the extension is updated using ALTER EXTENSION "extension" UPDATE TO 'version'
 #   eg. If extension is set to postgis and version is set to 2.3.3, this will apply the SQL ALTER EXTENSION "postgis" UPDATE TO '2.3.3' to
 #   this database only.
-#   version may be omitted, in which case no ALTER EXTENSION... SQL is applied, and the version will be left unchanged.
+#   version may be omitted, in which case no version-specific SQL is applied, and the version will be left unchanged.
 #
 # @param ensure Specifies whether to activate or deactivate the extension. Valid options: 'present' or 'absent'.
 # @param package_name Specifies a package to install prior to activating the extension.
@@ -54,7 +58,7 @@ define postgresql::server::extension (
 
   case $ensure {
     'present': {
-      $command = "CREATE EXTENSION \"${extension}\""
+      $command = inline_epp('<%- | String $extension, Optional[String] $version | -%>CREATE EXTENSION "<%= $extension %>"<% if $version and $version != "latest" { %> VERSION "<%= $version %>"<% } %>', { extension => $extension, version => $version })
       $unless_mod = undef
       $psql_cmd_require = $package_name ? {
         undef   => $default_psql_require,
