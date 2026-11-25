@@ -57,4 +57,26 @@ describe 'postgresql::server::db' do
 
     it { is_expected.to contain_postgresql__server__database('testtest') }
   end
+
+  context 'with a Deferred password whose return type is Sensitive' do
+    let :params do
+      {
+        user: 'foo'
+      }
+    end
+
+    let :pre_condition do
+      <<~PUPPET
+        class { 'postgresql::server': }
+        postgresql::server::db { 'deferreddb':
+          user     => 'deferred',
+          password => Deferred('postgresql_spec::secret', ['new-pa$s']),
+        }
+      PUPPET
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_postgresql__server__role('deferred').that_comes_before('Postgresql::Server::Database[deferreddb]') }
+    it { is_expected.to contain_postgresql_psql('CREATE ROLE deferred ENCRYPTED PASSWORD ****').with_sensitive('true') }
+  end
 end

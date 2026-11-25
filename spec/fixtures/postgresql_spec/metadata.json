@@ -1,0 +1,9 @@
+{
+  "name": "postgresql_spec",
+  "version": "0.0.1",
+  "author": "puppetlabs",
+  "summary": "Test-only helpers for the puppetlabs-postgresql unit tests",
+  "license": "Apache-2.0",
+  "source": "",
+  "dependencies": []
+}

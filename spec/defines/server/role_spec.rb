@@ -399,4 +399,75 @@ describe 'postgresql::server::role' do
     it { is_expected.to compile.with_all_deps }
     it { is_expected.not_to contain_class('postgresql::server') }
   end
+
+  # Deferred values cannot be expressed through `params`, so the role under test is declared in
+  # the pre_condition instead. rspec-puppet resolves Deferred values while compiling (with
+  # preprocess_deferred enabled), so the catalogue holds the final commands and the nested
+  # postgresql::prepend_sql_password / postgresql::postgresql_password calls receive the
+  # resolved password exactly as they would on an agent.
+  shared_examples 'a role with a deferred password' do |role, password|
+    let(:md5_hash) { "md5#{Digest::MD5.hexdigest(password + role)}" }
+
+    it { is_expected.to compile.with_all_deps }
+
+    it 'resolves the deferred password into the CREATE ROLE command and keeps it sensitive' do
+      expect(subject).to contain_postgresql_psql("CREATE ROLE #{role} ENCRYPTED PASSWORD ****")
+        .with(
+          'command' => sensitive(%(CREATE ROLE "#{role}" ENCRYPTED PASSWORD '#{password}' LOGIN NOCREATEROLE NOCREATEDB NOSUPERUSER  CONNECTION LIMIT -1)),
+          'sensitive' => 'true',
+          'unless' => "SELECT 1 FROM pg_roles WHERE rolname = '#{role}'",
+        )
+    end
+
+    it 'resolves the deferred password into the ALTER ROLE command and keeps it sensitive' do
+      expect(subject).to contain_postgresql_psql("ALTER ROLE #{role} ENCRYPTED PASSWORD ****")
+        .with(
+          'command' => sensitive(%(ALTER ROLE "#{role}" ENCRYPTED PASSWORD '#{md5_hash}')),
+          'sensitive' => 'true',
+          'unless' => sensitive(%(SELECT 1 FROM pg_shadow WHERE usename = '#{role}' AND passwd = '#{md5_hash}')),
+        )
+    end
+  end
+
+  context 'with Password as a Deferred function returning a String' do
+    let :pre_condition do
+      <<~PUPPET
+        class { 'postgresql::server': }
+        postgresql::server::role { 'deferred':
+          password_hash => Deferred('unwrap', ['new-pa$s']),
+        }
+      PUPPET
+    end
+
+    it_behaves_like 'a role with a deferred password', 'deferred', 'new-pa$s'
+  end
+
+  context 'with Password as a Deferred function whose return type is Sensitive' do
+    # postgresql_spec::secret (spec/fixtures/postgresql_spec) mirrors secret lookup functions such
+    # as vault_lookup::lookup: it declares a bare `Sensitive` return type, which Puppet checks
+    # against the parameter type at compile time.
+    let :pre_condition do
+      <<~PUPPET
+        class { 'postgresql::server': }
+        postgresql::server::role { 'deferred':
+          password_hash => Deferred('postgresql_spec::secret', ['new-pa$s']),
+        }
+      PUPPET
+    end
+
+    it_behaves_like 'a role with a deferred password', 'deferred', 'new-pa$s'
+  end
+
+  context 'with Password as a Sensitive wrapping a Deferred function' do
+    let :pre_condition do
+      <<~PUPPET
+        class { 'postgresql::server': }
+        postgresql::server::role { 'deferred':
+          password_hash => Sensitive(Deferred('unwrap', ['new-pa$s'])),
+        }
+      PUPPET
+    end
+
+    it_behaves_like 'a role with a deferred password', 'deferred', 'new-pa$s'
+  end
 end
