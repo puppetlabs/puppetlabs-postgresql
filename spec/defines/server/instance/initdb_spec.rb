@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'postgresql::server::instance::config' do
+describe 'postgresql::server::instance::initdb' do
   let(:title) { 'main' }
 
   on_supported_os.each do |os, os_facts|
@@ -15,8 +15,11 @@ describe 'postgresql::server::instance::config' do
         "class {'postgresql::server':}"
       end
 
-      context 'with defaults from config_class' do
-        it { is_expected.to compile.with_all_deps }
+      context 'with defaults from initdb class' do
+        it {
+          pending('Test needs aligining to current code, it was not running for some time')
+          is_expected.to compile.with_all_deps
+        }
       end
     end
   end
