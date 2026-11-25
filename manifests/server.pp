@@ -95,6 +95,7 @@
 # @param manage_datadir Set to false if you have file{ $datadir: } already defined
 # @param manage_logdir Set to false if you have file{ $logdir: } already defined
 # @param manage_xlogdir Set to false if you have file{ $xlogdir: } already defined
+# @param datadir_mode Overrides the default mode (permissions) of the PostgreSQL data directory.
 # @param password_encryption Specify the type of encryption set for the password.
 # @param pg_hba_auth_password_encryption
 #   Specify the type of encryption set for the password in pg_hba_conf,
@@ -181,6 +182,7 @@ class postgresql::server (
   Boolean                                            $manage_datadir               = $postgresql::params::manage_datadir,
   Boolean                                            $manage_logdir                = $postgresql::params::manage_logdir,
   Boolean                                            $manage_xlogdir               = $postgresql::params::manage_xlogdir,
+  Stdlib::Filemode                                   $datadir_mode                 = $postgresql::params::datadir_mode,
   Postgresql::Pg_password_encryption                 $password_encryption          = $postgresql::params::password_encryption,
   Optional[Postgresql::Pg_password_encryption]       $pg_hba_auth_password_encryption = undef,
   Optional[String]                                   $extra_systemd_config         = $postgresql::params::extra_systemd_config,
