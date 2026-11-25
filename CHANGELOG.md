@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v10.9.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.9.0) - 2026-11-25
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.8.0...v10.9.0)
+
+### Added
+
+- feat: add support ubuntu26.04 [#1688](https://github.com/puppetlabs/puppetlabs-postgresql/pull/1688) ([Tonguechaude](https://github.com/Tonguechaude))
+
 ## [v10.8.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v10.8.0) - 2026-10-27
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v10.7.0...v10.8.0)
