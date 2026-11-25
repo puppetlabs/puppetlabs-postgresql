@@ -98,6 +98,13 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
       expect(subject.provider).to receive(:run_sql_command).with('SELECT stuff').and_return(['done', 0])
       subject.property(:command).sync
     end
+
+    it 'raises an error on sync when the sql command fails' do
+      allow(subject.provider).to receive(:run_sql_command).with('SELECT stuff').and_return(['ERROR:  permission denied to change owner of database', 1])
+      expect {
+        subject.property(:command).sync
+      }.to raise_error(%r{permission denied to change owner of database})
+    end
   end
 
   describe '#unless' do

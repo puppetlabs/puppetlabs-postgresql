@@ -2996,6 +2996,7 @@ The following parameters are available in the `postgresql::server::instance::lat
 * [`psql_path`](#-postgresql--server--instance--late_initdb--psql_path)
 * [`port`](#-postgresql--server--instance--late_initdb--port)
 * [`module_workdir`](#-postgresql--server--instance--late_initdb--module_workdir)
+* [`version`](#-postgresql--server--instance--late_initdb--version)
 
 ##### <a name="-postgresql--server--instance--late_initdb--encoding"></a>`encoding`
 
@@ -3047,6 +3048,14 @@ Data type: `Stdlib::Absolutepath`
 Working directory for the PostgreSQL module
 
 Default value: `$postgresql::server::module_workdir`
+
+##### <a name="-postgresql--server--instance--late_initdb--version"></a>`version`
+
+Data type: `String[1]`
+
+The PostgreSQL version whose package-created `main` cluster is started, on Debian-family systems, before the encoding is checked.
+
+Default value: `$postgresql::server::_version`
 
 ### <a name="postgresql--server--instance--passwd"></a>`postgresql::server::instance::passwd`
 
