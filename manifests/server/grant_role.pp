@@ -42,9 +42,6 @@ define postgresql::server::grant_role (
     connect_settings => $connect_settings,
   }
 
-  if empty($connect_settings) {
-    Class['postgresql::server'] -> Postgresql_psql["grant_role:${name}"]
-  }
   if defined(Postgresql::Server::Role[$role]) {
     Postgresql::Server::Role[$role] -> Postgresql_psql["grant_role:${name}"]
   }
