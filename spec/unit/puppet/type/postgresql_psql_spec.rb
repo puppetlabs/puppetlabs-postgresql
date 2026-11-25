@@ -274,5 +274,4 @@ describe Puppet::Type.type(:postgresql_psql), unless: Puppet.features.microsoft_
     end
   end
 end
-# rubocop:enable RSpec/NamedSubject
 # rubocop:enable RSpec/SubjectStub

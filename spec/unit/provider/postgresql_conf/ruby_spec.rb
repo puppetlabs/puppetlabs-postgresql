@@ -13,7 +13,6 @@ describe provider_class do
     allow(provider).to receive(:write_file).and_return(true)
     allow(provider).to receive(:resource).and_return(key: 'your_key', line_number: 1, value: 'foo')
   end
-  # rubocop:enable RSpec/ReceiveMessages
 
   it 'has a method parse_config' do
     expect(provider).to respond_to(:parse_config)
